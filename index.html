@@ -3,49 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Перехід до Viber</title>
+    <title>VEO MEDIA — Маркетингова агенція</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #665CAC 0%, #8f5db7 100%);
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f5f5f5;
         }
-        .container {
+        .card {
+            background: rgba(255,255,255,0.12);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border: 1px solid rgba(255,255,255,0.18);
+            padding: 40px 30px;
+            max-width: 420px;
             text-align: center;
-            padding: 20px;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-        .viber-button {
-            background-color: #665CAC;
-            color: white;
-            padding: 15px 30px;
+        .viber-logo {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            font-size: 2.1em;
+            margin-bottom: 10px;
+            color: #fff;
+        }
+        .subtitle {
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            color: #e0d7f7;
+        }
+        .services {
+            text-align: left;
+            margin: 0 auto 30px auto;
+            color: #f3eaff;
+        }
+        .services li {
+            margin-bottom: 10px;
+        }
+        .contact-btn {
+            background: #665CAC;
+            color: #fff;
             border: none;
-            border-radius: 5px;
-            font-size: 18px;
+            border-radius: 6px;
+            padding: 14px 32px;
+            font-size: 1.1em;
             cursor: pointer;
             text-decoration: none;
-            display: inline-block;
-            margin-top: 20px;
+            transition: background 0.2s;
+            box-shadow: 0 2px 8px rgba(102,92,172,0.15);
         }
-        .viber-button:hover {
-            background-color: #7B6FC5;
+        .contact-btn:hover {
+            background: #7B6FC5;
+        }
+        @media (max-width: 500px) {
+            .card { padding: 20px 8px; }
+            h1 { font-size: 1.3em; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Натисніть кнопку для переходу до Viber</h1>
-        <a href="viber://chat?number=%2B380972387188" class="viber-button">Відкрити Viber</a>
+    <div class="card">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/8/8b/Viber-logo.svg" alt="Viber Logo" class="viber-logo">
+        <h1>VEO MEDIA</h1>
+        <div class="subtitle">Маркетингова агенція</div>
+        <ul class="services">
+            <li>Офіційне просування TikTok-контенту у TikTok</li>
+            <li>Підключення месенджера Viber до профілю продавця у TikTok</li>
+        </ul>
+        <a href="0972387188.html" class="contact-btn">Підключити Viber до TikTok</a>
     </div>
-    <script>
-        // Автоматичне перенаправлення
-        window.location.href = "viber://chat?number=%2B380972387188";
-    </script>
 </body>
 </html> 
