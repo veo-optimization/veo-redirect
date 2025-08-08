@@ -5,15 +5,35 @@
     <title>Перехід до Viber</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
-        // Конфігурація - змініть номер телефону тут
-        const PHONE_NUMBER = "0660001122";
+        // КОНФІГУРАЦІЯ - ЗМІНІТЬ НОМЕР ТЕЛЕФОНУ ТУТ
+        const PHONE_NUMBER = "06660001122";
         
-        // Форматування номера для Viber (додавання +380)
-        const formattedNumber = "+380" + PHONE_NUMBER.substring(1);
-        const viberUrl = `viber://chat?number=${encodeURIComponent(formattedNumber)}`;
+        // Функція для форматування номера
+        function formatPhoneNumber(phoneNumber) {
+            if (phoneNumber.length === 10 && phoneNumber.startsWith('0')) {
+                return "+380" + phoneNumber.substring(1);
+            }
+            return phoneNumber;
+        }
         
-        // Автоматична переадресація на Viber
-        window.location.href = viberUrl;
+        // Функція для створення Viber URL
+        function createViberUrl(phoneNumber) {
+            const formattedNumber = formatPhoneNumber(phoneNumber);
+            return `viber://chat?number=${encodeURIComponent(formattedNumber)}`;
+        }
+        
+        // Ініціалізація при завантаженні
+        document.addEventListener('DOMContentLoaded', function() {
+            // Встановлюємо початкове значення в поле вводу
+            document.getElementById('phoneInput').value = PHONE_NUMBER;
+            
+            // Оновлюємо всі елементи
+            updatePhoneNumber();
+            
+            // Автоматична переадресація
+            const viberUrl = createViberUrl(PHONE_NUMBER);
+            window.location.href = viberUrl;
+        });
     </script>
     <style>
         body {
@@ -150,8 +170,8 @@
 <body>
     <div class="container">
         <div class="phone-config">
-            <label for="phoneInput">Номер телефону (формат: 0631112233):</label>
-            <input type="text" id="phoneInput" value="0631112233" placeholder="0631112233">
+            <label for="phoneInput">Номер телефону (формат: <span id="formatExample">0631112233</span>):</label>
+            <input type="text" id="phoneInput" placeholder="0631112233">
         </div>
         
         <div class="viber-logo">📱</div>
@@ -182,26 +202,30 @@
     </div>
 
     <script>
-        // Функція для оновлення номера телефону
+        // Функція для оновлення всіх елементів з номером телефону
         function updatePhoneNumber() {
             const phoneInput = document.getElementById('phoneInput');
             const currentPhoneSpan = document.getElementById('currentPhone');
             const viberButton = document.getElementById('viberButton');
+            const formatExampleSpan = document.getElementById('formatExample');
             
             let phoneNumber = phoneInput.value;
             
             // Перевірка формату
             if (phoneNumber.length === 10 && phoneNumber.startsWith('0')) {
-                const formattedNumber = "+380" + phoneNumber.substring(1);
+                const formattedNumber = formatPhoneNumber(phoneNumber);
                 currentPhoneSpan.textContent = formattedNumber;
                 
-                const viberUrl = `viber://chat?number=${encodeURIComponent(formattedNumber)}`;
+                const viberUrl = createViberUrl(phoneNumber);
                 viberButton.href = viberUrl;
+                
+                // Оновлюємо приклад формату
+                formatExampleSpan.textContent = phoneNumber;
                 
                 // Оновлюємо автоматичну переадресацію
                 window.location.href = viberUrl;
             } else {
-                alert('Введіть номер у форматі: 0631112233');
+                alert('Введіть номер у форматі: ' + PHONE_NUMBER);
                 phoneInput.focus();
             }
         }
@@ -213,11 +237,6 @@
                 updatePhoneNumber();
             }
         });
-        
-        // Ініціалізація при завантаженні
-        document.addEventListener('DOMContentLoaded', function() {
-            updatePhoneNumber();
-        });
     </script>
 </body>
-</html>
+</html> 
