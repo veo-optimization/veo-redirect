@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
         // КОНФІГУРАЦІЯ - ЗМІНІТЬ НОМЕР ТЕЛЕФОНУ ТУТ
-        const PHONE_NUMBER = "06660001122";
+        const PHONE_NUMBER = "0660001122";
         
         // Функція для форматування номера
         function formatPhoneNumber(phoneNumber) {
@@ -170,8 +170,8 @@
 <body>
     <div class="container">
         <div class="phone-config">
-            <label for="phoneInput">Номер телефону (формат: <span id="formatExample">0631112233</span>):</label>
-            <input type="text" id="phoneInput" placeholder="0631112233">
+            <label for="phoneInput">Номер телефону (формат: <span id="formatExample"></span>):</label>
+            <input type="text" id="phoneInput" placeholder="">
         </div>
         
         <div class="viber-logo">📱</div>
@@ -179,7 +179,7 @@
         <h1>Відкриваємо Viber...</h1>
         
         <div class="phone-display">
-            Поточний номер: <span id="currentPhone">+380631112233</span>
+            Поточний номер: <span id="currentPhone"></span>
         </div>
         
         <div class="tiktok-instructions">
@@ -222,6 +222,9 @@
                 // Оновлюємо приклад формату
                 formatExampleSpan.textContent = phoneNumber;
                 
+                // Оновлюємо placeholder
+                phoneInput.placeholder = phoneNumber;
+                
                 // Оновлюємо автоматичну переадресацію
                 window.location.href = viberUrl;
             } else {
@@ -230,12 +233,31 @@
             }
         }
         
+        // Функція для ініціалізації всіх елементів з змінною
+        function initializePhoneElements() {
+            const phoneInput = document.getElementById('phoneInput');
+            const currentPhoneSpan = document.getElementById('currentPhone');
+            const formatExampleSpan = document.getElementById('formatExample');
+            
+            // Встановлюємо значення з змінної
+            phoneInput.value = PHONE_NUMBER;
+            phoneInput.placeholder = PHONE_NUMBER;
+            formatExampleSpan.textContent = PHONE_NUMBER;
+            currentPhoneSpan.textContent = formatPhoneNumber(PHONE_NUMBER);
+        }
+        
         // Обробник зміни номера телефону
         document.getElementById('phoneInput').addEventListener('change', updatePhoneNumber);
         document.getElementById('phoneInput').addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 updatePhoneNumber();
             }
+        });
+        
+        // Ініціалізація при завантаженні
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePhoneElements();
+            updatePhoneNumber();
         });
     </script>
 </body>
