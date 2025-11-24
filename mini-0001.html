@@ -2,11 +2,13 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <title>Перехід до Viber</title>
+    <title>Оплата та доставка</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
-        // КОНФІГУРАЦІЯ - ЗМІНІТЬ НОМЕР ТЕЛЕФОНУ ТУТ
-        const PHONE_NUMBER = "0682211617";
+        // КОНФІГУРАЦІЯ - ЗМІНІТЬ ДАНІ ТУТ
+        const VIBER_PHONE = "0937557506"; // Номер Viber
+        const TELEGRAM_USERNAME = "7km_v_karmane"; // Telegram username (без @)
+        const TELEGRAM_USERNAME2 = "Goncharenko_Tetiana"; // Другий Telegram username
         
         // Функція для форматування номера
         function formatPhoneNumber(phoneNumber) {
@@ -22,267 +24,454 @@
             return `viber://chat?number=${encodeURIComponent(formattedNumber)}`;
         }
         
-        // Функція для копіювання номера в буфер обміну
-        function copyPhoneNumber() {
-            const formattedNumber = formatPhoneNumber(PHONE_NUMBER);
-            navigator.clipboard.writeText(formattedNumber).then(function() {
-                const button = document.getElementById('copyButton');
-                const originalText = button.textContent;
-                button.textContent = '✓ Скопійовано!';
-                button.style.background = '#28a745';
-                setTimeout(function() {
-                    button.textContent = originalText;
-                    button.style.background = 'linear-gradient(45deg, #665CAC, #7B6FC5)';
-                }, 2000);
+        // Функція для копіювання в буфер обміну
+        function copyToClipboard(text, buttonId) {
+            navigator.clipboard.writeText(text).then(function() {
+                const button = document.getElementById(buttonId);
+                if (button) {
+                    const originalText = button.textContent;
+                    button.textContent = '✓ Скопійовано!';
+                    button.style.background = '#28a745';
+                    setTimeout(function() {
+                        button.textContent = originalText;
+                        button.style.background = '';
+                    }, 2000);
+                }
             }).catch(function(err) {
-                alert('Не вдалося скопіювати номер');
+                alert('Не вдалося скопіювати');
             });
+        }
+        
+        function copyIBAN() {
+            copyToClipboard('UA253052990000026000024934962', 'copyIbanButton');
+        }
+        
+        function copyEDRPOU() {
+            copyToClipboard('3304519361', 'copyEdrpouButton');
+        }
+        
+        function copyPaymentPurpose() {
+            copyToClipboard('оплата за одяг', 'copyPurposeButton');
         }
         
         // Ініціалізація при завантаженні
         document.addEventListener('DOMContentLoaded', function() {
-            // Відображаємо номер телефону
-            const formattedNumber = formatPhoneNumber(PHONE_NUMBER);
-            document.getElementById('phoneDisplay').textContent = formattedNumber;
+            // Встановлюємо посилання для кнопок
+            const viberButtons = document.querySelectorAll('.viber-link');
+            viberButtons.forEach(function(button) {
+                button.href = createViberUrl(VIBER_PHONE);
+            });
             
-            // Автоматична переадресація
-            const viberUrl = createViberUrl(PHONE_NUMBER);
-            window.location.href = viberUrl;
+            const telegramButtons = document.querySelectorAll('.telegram-link');
+            telegramButtons.forEach(function(button) {
+                const username = button.dataset.username || TELEGRAM_USERNAME;
+                button.href = `https://t.me/${username}`;
+            });
         });
     </script>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
             min-height: 100vh;
-            margin: 0;
-            background: linear-gradient(135deg, #665CAC 0%, #7B6FC5 50%, #8B7FD5 100%);
-            color: white;
         }
         
         .container {
-            text-align: center;
-            padding: 30px;
-            background: rgba(255, 255, 255, 0.95);
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
             border-radius: 20px;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            backdrop-filter: blur(10px);
-            max-width: 400px;
-            width: 90%;
-            color: #333;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            overflow: hidden;
         }
         
-        .viber-logo {
-            width: 80px;
-            height: 80px;
-            background: #665CAC;
-            border-radius: 50%;
-            margin: 0 auto 20px;
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .content {
+            padding: 30px 20px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            color: white;
+            gap: 10px;
         }
         
-        .phone-display {
+        .fop-info {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .fop-name {
             font-size: 18px;
             font-weight: bold;
-            color: #665CAC;
-            margin: 10px 0 20px 0;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            letter-spacing: 2px;
+            color: #333;
+            margin-bottom: 10px;
         }
         
-        .or-text {
+        .copy-section {
+            background: #fff3cd;
+            border: 2px dashed #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .copy-section h3 {
+            color: #856404;
+            margin-bottom: 15px;
             font-size: 16px;
+        }
+        
+        .data-block {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid #dee2e6;
+        }
+        
+        .data-label {
+            font-size: 14px;
             color: #666;
-            margin: 20px 0 10px 0;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .data-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            margin-bottom: 10px;
         }
         
         .copy-button {
-            background: linear-gradient(45deg, #665CAC, #7B6FC5);
+            background: linear-gradient(45deg, #667eea, #764ba2);
             color: white;
-            padding: 12px 30px;
             border: none;
-            border-radius: 50px;
-            font-size: 16px;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
-            margin: 0 0 20px 0;
-            box-shadow: 0 4px 15px rgba(102, 92, 172, 0.4);
             transition: all 0.3s ease;
+            margin-top: 10px;
+            width: 100%;
+            display: block;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
         
         .copy-button:hover {
-            background: linear-gradient(45deg, #7B6FC5, #8B7FD5);
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 92, 172, 0.6);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
+            background: linear-gradient(45deg, #764ba2, #667eea);
         }
         
         .copy-button:active {
             transform: translateY(0);
         }
         
-        h1 {
-            color: #665CAC;
-            margin-bottom: 20px;
-            font-size: 24px;
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #667eea, transparent);
+            margin: 30px 0;
         }
         
-        .tiktok-instructions {
-            background: #FFF3CD;
-            border: 1px solid #FFEAA7;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 20px 0;
-            color: #856404;
-        }
-        
-        .tiktok-instructions h3 {
-            margin-top: 0;
-            color: #665CAC;
-        }
-        
-        .tiktok-instructions ol {
-            text-align: left;
-            margin: 10px 0;
-            padding-left: 20px;
-        }
-        
-        .tiktok-instructions li {
-            margin-bottom: 8px;
-        }
-        
-        .viber-button {
-            background: none;
-            color: #665CAC;
-            padding: 0;
-            border: none;
-            border-radius: 0;
-            font-size: 14px;
-            font-weight: normal;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 10px;
-            box-shadow: none;
-            transition: none;
-        }
-        
-        .viber-button:hover {
-            background: none;
-            color: #7B6FC5;
-        }
-        
-        .viber-button:active {
-            color: #665CAC;
-        }
-        
-        .status {
-            margin-top: 15px;
-            font-size: 14px;
-            color: #666;
-        }
-        
-        .tiktok-header {
-            background: linear-gradient(135deg, #000000 0%, #161823 100%);
-            color: white;
-            padding: 15px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        
-        .tiktok-header-text {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 15px;
-            color: #fff;
-        }
-        
-        .logo-transition {
+        .payment-options {
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: column;
             gap: 15px;
+            margin: 20px 0;
         }
         
-        .logo-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
+        .payment-option {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .payment-option strong {
+            color: #667eea;
+            font-size: 16px;
+        }
+        
+        .delivery-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .delivery-list li {
+            background: #f8f9fa;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+        
+        .delivery-list li strong {
+            color: #28a745;
+        }
+        
+        .return-conditions {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .return-conditions h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+        
+        .return-conditions ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .return-conditions li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ffeaa7;
+        }
+        
+        .return-conditions li:last-child {
+            border-bottom: none;
+        }
+        
+        .contact-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+        }
+        
+        .contact-section h3 {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        
+        .contact-buttons {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
         }
         
-        .tiktok-logo {
-            background: linear-gradient(135deg, #000000 0%, #161823 100%);
+        .contact-button {
+            background: rgba(255, 255, 255, 0.2);
             color: white;
-        }
-        
-        .arrow {
-            font-size: 24px;
-            color: #333;
+            border: 2px solid white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            text-align: center;
             font-weight: bold;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
         
-        .viber-logo-icon {
-            background: linear-gradient(45deg, #665CAC, #7B6FC5);
+        .contact-button:hover {
+            background: white;
+            color: #667eea;
+            transform: translateY(-2px);
+        }
+        
+        .contact-links {
+            margin-top: 15px;
+        }
+        
+        .contact-links p {
+            margin: 8px 0;
+            font-size: 14px;
+        }
+        
+        .contact-links a {
             color: white;
+            text-decoration: underline;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-style: italic;
+            font-size: 14px;
         }
         
         .footer-credit {
-            margin-top: 30px;
+            margin-top: 20px;
             padding-top: 15px;
             font-size: 10px;
             color: #ccc;
             opacity: 0.5;
             text-align: center;
         }
+        
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 0;
+            }
+            
+            .header h1 {
+                font-size: 24px;
+            }
+            
+            .section-title {
+                font-size: 20px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Відкриваємо Viber...</h1>
-        
-        <div class="tiktok-instructions">
-            <h3>⚠️ Якщо ви зайшли з TikTok і автоматична переадресація не спрацювала:</h3>
-            <ol>
-                <li>Натисніть три крапки (⋮) вгорі праворуч</li>
-                <li>Виберіть "Відкрити в браузері"</li>
-                <li>Чат у Вайбері відкриється автоматично</li>
-            </ol>
+        <div class="header">
+            <h1>💳 ОПЛАТА</h1>
         </div>
         
-        <div class="or-text">або</div>
-        
-        <div class="phone-display" id="phoneDisplay"></div>
-        
-        <button class="copy-button" id="copyButton" onclick="copyPhoneNumber()">Скопіювати номер</button>
-        
-        <a href="#" id="viberButton" class="viber-button">Написати в Viber</a>
-        
-        <div class="footer-credit">
-            Розроблено: Оптимізація ТікТок @vasil_veo 2025
+        <div class="content">
+            <div class="section">
+                <div class="fop-info">
+                    <div class="fop-name">ФОП ДУРНЄВА ТЕТЯНА ВІКТОРІВНА</div>
+                </div>
+                
+                <div class="copy-section">
+                    <h3>👇 Скопіюйте для оплати 👇</h3>
+                    
+                    <div class="data-block">
+                        <div class="data-label">IBAN (ПриватБанк):</div>
+                        <div class="data-value">UA253052990000026000024934962</div>
+                        <button class="copy-button" id="copyIbanButton" onclick="copyIBAN()">Скопіювати IBAN</button>
+                    </div>
+                    
+                    <div class="data-block">
+                        <div class="data-label">ЄДРПОУ:</div>
+                        <div class="data-value">3304519361</div>
+                        <button class="copy-button" id="copyEdrpouButton" onclick="copyEDRPOU()">Скопіювати ЄДРПОУ</button>
+                    </div>
+                    
+                    <div class="data-block">
+                        <div class="data-label">Призначення платежу:</div>
+                        <div class="data-value">оплата за одяг</div>
+                        <button class="copy-button" id="copyPurposeButton" onclick="copyPaymentPurpose()">Скопіювати призначення</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="section">
+                <div class="section-title">
+                    <span>💳</span>
+                    <span>Умови оплати та доставки</span>
+                </div>
+                
+                <h3 style="margin: 20px 0 15px 0; color: #667eea;">🔄 Варіанти оплати:</h3>
+                <div class="payment-options">
+                    <div class="payment-option">
+                        <strong>💎 Повна передоплата 100%</strong>
+                    </div>
+                    <div class="payment-option">
+                        <strong>💎 Накладний платіж</strong> з передоплатою 200 грн
+                    </div>
+                </div>
+                
+                <h3 style="margin: 25px 0 15px 0; color: #667eea;">🚚 Доставка по Україні:</h3>
+                <ul class="delivery-list">
+                    <li><strong>Нова пошта</strong> ✅</li>
+                    <li>Відправка <strong>щодня після 16:00</strong></li>
+                    <li>Термін відправки: <strong>протягом 24 годин</strong> після оплати</li>
+                </ul>
+                
+                <h3 style="margin: 25px 0 15px 0; color: #667eea;">📦 Після оплати:</h3>
+                <div class="data-block">
+                    Надішліть нам в <strong>одному повідомленні</strong>:
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>Чек/скріншот оплати (квитанцію)</li>
+                        <li>ПІБ отримувача повністю</li>
+                        <li>Місто та номер відділення Нової Пошти</li>
+                        <li>Номер мобільного телефону</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="section">
+                <div class="return-conditions">
+                    <h3>⚠️ Умови повернення:</h3>
+                    <ul>
+                        <li>❌ <strong>Повернення коштів неможливе</strong></li>
+                        <li>💡 У разі, якщо товар не підійшов, кошти залишаються на балансі для наступного замовлення</li>
+                        <li>📦 З балансу утримується вартість доставки Нової Пошти</li>
+                        <li>🎯 <strong>Рекомендуємо обов'язково міряти товар на пошті</strong></li>
+                        <li>📏 <strong>Уважно вивчайте розмірну сітку</strong> перед замовленням</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="section">
+                <div class="contact-section">
+                    <h3>📞 Зв'язок з магазином:</h3>
+                    
+                    <div class="contact-buttons">
+                        <a href="#" class="contact-button viber-link">💜 Написати в Viber</a>
+                        <a href="#" class="contact-button telegram-link" data-username="7km_v_karmane">✈️ Telegram: @7km_v_karmane</a>
+                        <a href="#" class="contact-button telegram-link" data-username="Goncharenko_Tetiana">✈️ Telegram: @Goncharenko_Tetiana</a>
+                    </div>
+                    
+                    <div class="contact-links">
+                        <p><strong>Viber:</strong> +380937557506, +380635241861</p>
+                        <p><strong>Instagram:</strong> <a href="https://instagram.com/7km_v_karmane_" target="_blank">@7km_v_karmane_</a></p>
+                        <p><strong>TikTok:</strong> <a href="https://tiktok.com/@7km_v_karmane" target="_blank">@7km_v_karmane</a>, <a href="https://tiktok.com/@7km_v_karmane2" target="_blank">@7km_v_karmane2</a></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer">
+                ✨ <em>Дякуємо за ваше замовлення! Гарних покупок! 💫</em>
+            </div>
+            
+            <div class="footer-credit">
+                Розроблено: Оптимізація ТікТок @vasil_veo 2025
+            </div>
         </div>
     </div>
-
-    <script>
-        // Встановлюємо посилання для кнопки
-        document.addEventListener('DOMContentLoaded', function() {
-            const viberButton = document.getElementById('viberButton');
-            const viberUrl = createViberUrl(PHONE_NUMBER);
-            viberButton.href = viberUrl;
-        });
-    </script>
 </body>
 </html>
 
