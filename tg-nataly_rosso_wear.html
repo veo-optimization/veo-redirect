@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Перехід до Telegram</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        // КОНФІГУРАЦІЯ - ЗМІНІТЬ ДАНІ ТУТ
+        const PHONE_NUMBER = ""; // Введіть номер телефону (наприклад: "0964904900")
+        const USERNAME = "nataly_rosso_wear"; // Введіть username (наприклад: "username" або "@channel")
+        
+        // Функція для форматування номера
+        function formatPhoneNumber(phoneNumber) {
+            if (!phoneNumber) return "";
+            if (phoneNumber.length === 10 && phoneNumber.startsWith('0')) {
+                return "+380" + phoneNumber.substring(1);
+            }
+            return phoneNumber;
+        }
+        
+        // Функція для створення Telegram URL
+        // Пріоритет: username, якщо немає - номер телефону
+        function createTelegramUrl(phoneNumber, username) {
+            if (username && username.trim() !== "") {
+                // Видаляємо @ якщо є
+                const cleanUsername = username.replace(/^@/, '');
+                return `https://t.me/${cleanUsername}`;
+            } else if (phoneNumber && phoneNumber.trim() !== "") {
+                const formattedNumber = formatPhoneNumber(phoneNumber);
+                return `tg://resolve?phone=${encodeURIComponent(formattedNumber)}`;
+            }
+            return "#";
+        }
+        
+        // Функція для копіювання в буфер обміну
+        function copyToClipboard(text, buttonId) {
+            navigator.clipboard.writeText(text).then(function() {
+                const button = document.getElementById(buttonId);
+                const originalText = button.textContent;
+                button.textContent = '✓ Скопійовано!';
+                button.style.background = '#28a745';
+                setTimeout(function() {
+                    button.textContent = originalText;
+                    button.style.background = 'linear-gradient(45deg, #0088cc, #229ED9)';
+                }, 2000);
+            }).catch(function(err) {
+                alert('Не вдалося скопіювати');
+            });
+        }
+        
+        function copyPhoneNumber() {
+            if (PHONE_NUMBER) {
+                const formattedNumber = formatPhoneNumber(PHONE_NUMBER);
+                copyToClipboard(formattedNumber, 'copyPhoneButton');
+            }
+        }
+        
+        function copyUsername() {
+            if (USERNAME) {
+                const cleanUsername = USERNAME.replace(/^@/, '');
+                copyToClipboard(cleanUsername, 'copyUsernameButton');
+            }
+        }
+        
+        // Ініціалізація при завантаженні
+        document.addEventListener('DOMContentLoaded', function() {
+            // Визначаємо що показувати: пріоритет username, якщо немає - номер телефону
+            const hasUsername = USERNAME && USERNAME.trim() !== "";
+            const hasPhone = PHONE_NUMBER && PHONE_NUMBER.trim() !== "";
+            
+            if (hasUsername) {
+                // Показуємо username
+                const cleanUsername = USERNAME.replace(/^@/, '');
+                document.getElementById('usernameDisplay').textContent = '@' + cleanUsername;
+                document.getElementById('usernameSection').style.display = 'block';
+            } else if (hasPhone) {
+                // Показуємо номер телефону
+                const formattedNumber = formatPhoneNumber(PHONE_NUMBER);
+                document.getElementById('phoneDisplay').textContent = formattedNumber;
+                document.getElementById('phoneSection').style.display = 'block';
+            }
+            
+            // Автоматична переадресація
+            const telegramUrl = createTelegramUrl(PHONE_NUMBER, USERNAME);
+            if (telegramUrl !== "#") {
+                window.location.href = telegramUrl;
+            }
+        });
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #0088cc 0%, #229ED9 50%, #40B3E0 100%);
+            color: white;
+        }
+        
+        .container {
+            text-align: center;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            max-width: 400px;
+            width: 90%;
+            color: #333;
+        }
+        
+        .telegram-logo {
+            width: 80px;
+            height: 80px;
+            background: #0088cc;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+        
+        .phone-display, .username-display {
+            font-size: 18px;
+            font-weight: bold;
+            color: #0088cc;
+            margin: 10px 0 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            letter-spacing: 2px;
+        }
+        
+        .username-display {
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+        
+        .or-text {
+            font-size: 16px;
+            color: #666;
+            margin: 20px 0 10px 0;
+        }
+        
+        .copy-button {
+            background: linear-gradient(45deg, #0088cc, #229ED9);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 0 0 20px 0;
+            box-shadow: 0 4px 15px rgba(0, 136, 204, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .copy-button:hover {
+            background: linear-gradient(45deg, #229ED9, #40B3E0);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.6);
+        }
+        
+        .copy-button:active {
+            transform: translateY(0);
+        }
+        
+        h1 {
+            color: #0088cc;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .tiktok-instructions {
+            background: #E3F2FD;
+            border: 1px solid #90CAF9;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #1565C0;
+        }
+        
+        .tiktok-instructions h3 {
+            margin-top: 0;
+            color: #0088cc;
+        }
+        
+        .tiktok-instructions ol {
+            text-align: left;
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .tiktok-instructions li {
+            margin-bottom: 8px;
+        }
+        
+        .both-fields-instruction {
+            background: #FFF3CD;
+            border: 1px solid #FFEAA7;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+            display: none;
+        }
+        
+        .both-fields-instruction h3 {
+            margin-top: 0;
+            color: #0088cc;
+        }
+        
+        .telegram-button {
+            background: none;
+            color: #0088cc;
+            padding: 0;
+            border: none;
+            border-radius: 0;
+            font-size: 9px;
+            font-weight: normal;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 0;
+            box-shadow: none;
+            transition: none;
+        }
+        
+        .telegram-button:hover {
+            background: none;
+            color: #229ED9;
+        }
+        
+        .telegram-button:active {
+            color: #0088cc;
+        }
+        
+        .status {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        #phoneSection, #usernameSection {
+            display: none;
+        }
+        
+        .tiktok-header {
+            background: linear-gradient(135deg, #000000 0%, #161823 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .tiktok-header-text {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .logo-transition {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .tiktok-logo {
+            background: linear-gradient(135deg, #000000 0%, #161823 100%);
+            color: white;
+        }
+        
+        .arrow {
+            font-size: 24px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .telegram-logo-icon {
+            background: linear-gradient(45deg, #0088cc, #229ED9);
+            color: white;
+        }
+        
+        .footer-credit {
+            margin-top: 30px;
+            padding-top: 15px;
+            font-size: 10px;
+            color: #ccc;
+            opacity: 0.5;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Відкриваємо Telegram...</h1>
+        
+        <div class="tiktok-instructions">
+            <h3>⚠️ Якщо ви зайшли з TikTok і автоматична переадресація не спрацювала:</h3>
+            <ol>
+                <li>Натисніть три крапки (···) вгорі праворуч</li>
+                <li>Виберіть "Відкрити в браузері"</li>
+                <li>Чат у Telegram відкриється автоматично</li>
+            </ol>
+        </div>
+        
+        <div class="or-text">або</div>
+        
+        <div id="phoneSection">
+            <div class="phone-display" id="phoneDisplay"></div>
+            <button class="copy-button" id="copyPhoneButton" onclick="copyPhoneNumber()">Скопіювати номер</button>
+        </div>
+        
+        <div id="usernameSection">
+            <div class="username-display" id="usernameDisplay"></div>
+            <button class="copy-button" id="copyUsernameButton" onclick="copyUsername()">Скопіювати username</button>
+        </div>
+        
+        <a href="#" id="telegramButton" class="telegram-button">Написати в Telegram</a>
+        
+        <div class="footer-credit">
+            Розроблено: Оптимізація ТікТок @vasil_veo 2025
+        </div>
+    </div>
+
+    <script>
+        // Встановлюємо посилання для кнопки
+        document.addEventListener('DOMContentLoaded', function() {
+            const telegramButton = document.getElementById('telegramButton');
+            const telegramUrl = createTelegramUrl(PHONE_NUMBER, USERNAME);
+            telegramButton.href = telegramUrl;
+        });
+    </script>
+</body>
+</html>
