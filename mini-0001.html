@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>Оплата та доставка</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         // КОНФІГУРАЦІЯ - ЗМІНІТЬ ДАНІ ТУТ
         const VIBER_PHONE = "0937557506"; // Номер Viber
@@ -77,10 +80,10 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Montserrat', sans-serif;
+            background: linear-gradient(180deg, #FFE5F1 0%, #E6D9F5 100%);
             color: #333;
-            line-height: 1.6;
+            line-height: 1.7;
             padding: 20px;
             min-height: 100vh;
         }
@@ -95,19 +98,28 @@
         }
         
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FFB6D9 0%, #D4A5E8 100%);
             color: white;
-            padding: 30px 20px;
+            padding: 35px 20px;
             text-align: center;
+            box-shadow: 0 4px 15px rgba(255, 182, 217, 0.3);
         }
         
         .header h1 {
-            font-size: 28px;
+            font-size: 32px;
             margin-bottom: 10px;
+            font-weight: 600;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .content {
-            padding: 30px 20px;
+            padding: 35px 25px;
+        }
+        
+        .content p, .content li {
+            font-size: 16px;
+            line-height: 1.7;
+            color: #4a4a4a;
         }
         
         .section {
@@ -115,28 +127,30 @@
         }
         
         .section-title {
-            font-size: 22px;
-            font-weight: bold;
-            color: #667eea;
-            margin-bottom: 15px;
+            font-size: 24px;
+            font-weight: 600;
+            color: #B886D9;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
         
         .fop-info {
-            background: #f8f9fa;
-            border-left: 4px solid #667eea;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-left: 4px solid #D4A5E8;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
         }
         
         .fop-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
+            font-size: 20px;
+            font-weight: 600;
+            color: #4a4a4a;
+            margin-bottom: 12px;
+            line-height: 1.5;
         }
         
         .copy-section {
@@ -149,55 +163,59 @@
         }
         
         .copy-section h3 {
-            color: #856404;
-            margin-bottom: 15px;
-            font-size: 16px;
+            color: #8B5A8C;
+            margin-bottom: 20px;
+            font-size: 18px;
+            font-weight: 500;
         }
         
         .data-block {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
-            border: 1px solid #dee2e6;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 18px 0;
+            border: 1px solid rgba(212, 165, 232, 0.3);
+            backdrop-filter: blur(10px);
         }
         
         .data-label {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 8px;
-            font-weight: 600;
+            font-size: 16px;
+            color: #6B5B73;
+            margin-bottom: 10px;
+            font-weight: 500;
         }
         
         .data-value {
-            font-size: 16px;
-            font-weight: bold;
-            color: #333;
-            font-family: 'Courier New', monospace;
+            font-size: 18px;
+            font-weight: 600;
+            color: #4a4a4a;
+            font-family: 'Montserrat', monospace;
             word-break: break-all;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            line-height: 1.6;
         }
         
         .copy-button {
-            background: linear-gradient(45deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #FFB6D9 0%, #D4A5E8 100%);
             color: white;
             border: none;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-size: 15px;
-            font-weight: bold;
+            padding: 14px 25px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin-top: 10px;
+            margin-top: 12px;
             width: 100%;
             display: block;
-            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 4px 12px rgba(255, 182, 217, 0.4);
+            font-family: 'Montserrat', sans-serif;
         }
         
         .copy-button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5);
-            background: linear-gradient(45deg, #764ba2, #667eea);
+            box-shadow: 0 6px 20px rgba(255, 182, 217, 0.5);
+            background: linear-gradient(135deg, #FFA8D0 0%, #C895E0 100%);
         }
         
         .copy-button:active {
@@ -206,8 +224,8 @@
         
         .divider {
             height: 2px;
-            background: linear-gradient(90deg, transparent, #667eea, transparent);
-            margin: 30px 0;
+            background: linear-gradient(90deg, transparent, #D4A5E8, transparent);
+            margin: 35px 0;
         }
         
         .payment-options {
@@ -218,15 +236,17 @@
         }
         
         .payment-option {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 18px;
+            border-radius: 15px;
+            border-left: 4px solid #D4A5E8;
+            backdrop-filter: blur(10px);
         }
         
         .payment-option strong {
-            color: #667eea;
-            font-size: 16px;
+            color: #B886D9;
+            font-size: 17px;
+            font-weight: 600;
         }
         
         .delivery-list {
@@ -235,28 +255,34 @@
         }
         
         .delivery-list li {
-            background: #f8f9fa;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 8px;
-            border-left: 4px solid #28a745;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            margin: 12px 0;
+            border-radius: 12px;
+            border-left: 4px solid #A8E6CF;
+            backdrop-filter: blur(10px);
+            font-size: 16px;
         }
         
         .delivery-list li strong {
-            color: #28a745;
+            color: #7BC4A0;
+            font-weight: 600;
         }
         
         .return-conditions {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
+            background: rgba(255, 243, 205, 0.8);
+            border: 2px solid #FFD89B;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 25px 0;
+            backdrop-filter: blur(10px);
         }
         
         .return-conditions h3 {
-            color: #856404;
-            margin-bottom: 15px;
+            color: #8B6F47;
+            margin-bottom: 18px;
+            font-size: 20px;
+            font-weight: 600;
         }
         
         .return-conditions ul {
@@ -265,8 +291,10 @@
         }
         
         .return-conditions li {
-            padding: 10px 0;
-            border-bottom: 1px solid #ffeaa7;
+            padding: 12px 0;
+            border-bottom: 1px solid #FFE5B4;
+            font-size: 16px;
+            line-height: 1.6;
         }
         
         .return-conditions li:last-child {
@@ -274,16 +302,18 @@
         }
         
         .contact-section {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #FFB6D9 0%, #D4A5E8 100%);
             color: white;
-            padding: 25px;
-            border-radius: 15px;
-            margin: 30px 0;
+            padding: 30px;
+            border-radius: 20px;
+            margin: 35px 0;
+            box-shadow: 0 6px 20px rgba(255, 182, 217, 0.3);
         }
         
         .contact-section h3 {
-            margin-bottom: 20px;
-            font-size: 20px;
+            margin-bottom: 25px;
+            font-size: 22px;
+            font-weight: 600;
         }
         
         .contact-buttons {
@@ -294,22 +324,25 @@
         }
         
         .contact-button {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
             color: white;
-            border: 2px solid white;
-            padding: 12px 20px;
-            border-radius: 25px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 14px 22px;
+            border-radius: 30px;
             text-decoration: none;
             text-align: center;
-            font-weight: bold;
+            font-weight: 500;
+            font-size: 16px;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
+            font-family: 'Montserrat', sans-serif;
         }
         
         .contact-button:hover {
-            background: white;
-            color: #667eea;
+            background: rgba(255, 255, 255, 0.9);
+            color: #B886D9;
             transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
         }
         
         .contact-links {
@@ -317,8 +350,9 @@
         }
         
         .contact-links p {
-            margin: 8px 0;
-            font-size: 14px;
+            margin: 10px 0;
+            font-size: 16px;
+            line-height: 1.6;
         }
         
         .contact-links a {
@@ -328,10 +362,12 @@
         
         .footer {
             text-align: center;
-            padding: 20px;
-            color: #666;
+            padding: 25px;
+            color: #6B5B73;
             font-style: italic;
-            font-size: 14px;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.6;
         }
         
         .footer-credit {
@@ -401,7 +437,7 @@
                     <span>Умови оплати та доставки</span>
                 </div>
                 
-                <h3 style="margin: 20px 0 15px 0; color: #667eea;">🔄 Варіанти оплати:</h3>
+                <h3 style="margin: 25px 0 18px 0; color: #B886D9; font-size: 20px; font-weight: 600;">🔄 Варіанти оплати:</h3>
                 <div class="payment-options">
                     <div class="payment-option">
                         <strong>💎 Повна передоплата 100%</strong>
@@ -411,17 +447,17 @@
                     </div>
                 </div>
                 
-                <h3 style="margin: 25px 0 15px 0; color: #667eea;">🚚 Доставка по Україні:</h3>
+                <h3 style="margin: 30px 0 18px 0; color: #B886D9; font-size: 20px; font-weight: 600;">🚚 Доставка по Україні:</h3>
                 <ul class="delivery-list">
                     <li><strong>Нова пошта</strong> ✅</li>
                     <li>Відправка <strong>щодня після 16:00</strong></li>
                     <li>Термін відправки: <strong>протягом 24 годин</strong> після оплати</li>
                 </ul>
                 
-                <h3 style="margin: 25px 0 15px 0; color: #667eea;">📦 Після оплати:</h3>
+                <h3 style="margin: 30px 0 18px 0; color: #B886D9; font-size: 20px; font-weight: 600;">📦 Після оплати:</h3>
                 <div class="data-block">
                     Надішліть нам в <strong>одному повідомленні</strong>:
-                    <ul style="margin-top: 10px; padding-left: 20px;">
+                    <ul style="margin-top: 12px; padding-left: 25px; font-size: 16px; line-height: 1.8;">
                         <li>Чек/скріншот оплати (квитанцію)</li>
                         <li>ПІБ отримувача повністю</li>
                         <li>Місто та номер відділення Нової Пошти</li>
