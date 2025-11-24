@@ -159,29 +159,28 @@
         }
         
         .viber-button {
-            background: linear-gradient(45deg, #665CAC, #7B6FC5);
-            color: white;
-            padding: 18px 40px;
+            background: none;
+            color: #665CAC;
+            padding: 0;
             border: none;
-            border-radius: 50px;
-            font-size: 18px;
-            font-weight: bold;
+            border-radius: 0;
+            font-size: 14px;
+            font-weight: normal;
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
-            margin-top: 0;
-            box-shadow: 0 4px 15px rgba(102, 92, 172, 0.4);
-            transition: all 0.3s ease;
+            margin-top: 10px;
+            box-shadow: none;
+            transition: none;
         }
         
         .viber-button:hover {
-            background: linear-gradient(45deg, #7B6FC5, #8B7FD5);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 92, 172, 0.6);
+            background: none;
+            color: #7B6FC5;
         }
         
         .viber-button:active {
-            transform: translateY(0);
+            color: #665CAC;
         }
         
         .status {
@@ -257,7 +256,7 @@
         <div class="tiktok-instructions">
             <h3>⚠️ Якщо ви зайшли з TikTok і автоматична переадресація не спрацювала:</h3>
             <ol>
-                <li>Натисніть три крапки (⋮) вгорі праворуч</li>
+                <li>Натисніть три крапки (···) вгорі праворуч</li>
                 <li>Виберіть "Відкрити в браузері"</li>
                 <li>Чат у Вайбері відкриється автоматично</li>
             </ol>
@@ -265,19 +264,19 @@
         
         <div class="or-text">або</div>
         
-        <div class="phone-display" id="phoneDisplay">+380682211617</div>
+        <div class="phone-display" id="phoneDisplay"></div>
         
         <button class="copy-button" id="copyButton" onclick="copyPhoneNumber()">Скопіювати номер</button>
         
         <a href="#" id="viberButton" class="viber-button">Написати в Viber</a>
         
         <div class="footer-credit">
-            Розроблено @vasil_veo
+            Розроблено: Оптимізація ТікТок @vasil_veo 2025
         </div>
     </div>
 
     <script>
-        // Встановлюємо посилання для кнопки
+        // Встановлюємо посилання для кнопки 
         document.addEventListener('DOMContentLoaded', function() {
             const viberButton = document.getElementById('viberButton');
             const viberUrl = createViberUrl(PHONE_NUMBER);
@@ -286,4 +285,3 @@
     </script>
 </body>
 </html>
-
