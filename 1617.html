@@ -91,11 +91,17 @@
             font-size: 18px;
             font-weight: bold;
             color: #665CAC;
-            margin: 20px 0;
+            margin: 10px 0 20px 0;
             padding: 15px;
             background: #f8f9fa;
             border-radius: 10px;
             letter-spacing: 2px;
+        }
+        
+        .or-text {
+            font-size: 16px;
+            color: #666;
+            margin: 20px 0 10px 0;
         }
         
         .copy-button {
@@ -107,7 +113,7 @@
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            margin: 10px 0 20px 0;
+            margin: 0 0 20px 0;
             box-shadow: 0 4px 15px rgba(102, 92, 172, 0.4);
             transition: all 0.3s ease;
         }
@@ -145,6 +151,7 @@
         .tiktok-instructions ol {
             text-align: left;
             margin: 10px 0;
+            padding-left: 20px;
         }
         
         .tiktok-instructions li {
@@ -162,7 +169,7 @@
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
-            margin-top: 20px;
+            margin-top: 0;
             box-shadow: 0 4px 15px rgba(102, 92, 172, 0.4);
             transition: all 0.3s ease;
         }
@@ -247,25 +254,22 @@
     <div class="container">
         <h1>Відкриваємо Viber...</h1>
         
-        <div class="phone-display" id="phoneDisplay">+380964904900</div>
-        
-        <button class="copy-button" id="copyButton" onclick="copyPhoneNumber()">Скопіювати в буфер обміну</button>
-        
         <div class="tiktok-instructions">
             <h3>⚠️ Якщо ви зайшли з TikTok і автоматична переадресація не спрацювала:</h3>
             <ol>
                 <li>Натисніть три крапки (⋮) вгорі праворуч</li>
                 <li>Виберіть "Відкрити в браузері"</li>
-                <li>Ви знову опинитесь на цій сторінці</li>
-                <li>Натисніть кнопку "Написати" нижче</li>
+                <li>Чат у Вайбері відкриється автоматично</li>
             </ol>
         </div>
         
-        <a href="#" id="viberButton" class="viber-button">Написати в Viber</a>
+        <div class="or-text">або</div>
         
-        <div class="status">
-            Переадресація відбувається автоматично...
-        </div>
+        <div class="phone-display" id="phoneDisplay">+380682211617</div>
+        
+        <button class="copy-button" id="copyButton" onclick="copyPhoneNumber()">Скопіювати номер</button>
+        
+        <a href="#" id="viberButton" class="viber-button">Написати в Viber</a>
         
         <div class="footer-credit">
             Розроблено @vasil_veo
