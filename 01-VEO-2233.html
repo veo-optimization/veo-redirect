@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script>
         // КОНФІГУРАЦІЯ - ЗМІНІТЬ НОМЕР ТЕЛЕФОНУ ТУТ
-        const PHONE_NUMBER = "0964904900";
+        const PHONE_NUMBER = "0682211617";
         
         // Функція для форматування номера
         function formatPhoneNumber(phoneNumber) {
@@ -22,8 +22,29 @@
             return `viber://chat?number=${encodeURIComponent(formattedNumber)}`;
         }
         
+        // Функція для копіювання номера в буфер обміну
+        function copyPhoneNumber() {
+            const formattedNumber = formatPhoneNumber(PHONE_NUMBER);
+            navigator.clipboard.writeText(formattedNumber).then(function() {
+                const button = document.getElementById('copyButton');
+                const originalText = button.textContent;
+                button.textContent = '✓ Скопійовано!';
+                button.style.background = '#28a745';
+                setTimeout(function() {
+                    button.textContent = originalText;
+                    button.style.background = 'linear-gradient(45deg, #665CAC, #7B6FC5)';
+                }, 2000);
+            }).catch(function(err) {
+                alert('Не вдалося скопіювати номер');
+            });
+        }
+        
         // Ініціалізація при завантаженні
         document.addEventListener('DOMContentLoaded', function() {
+            // Відображаємо номер телефону
+            const formattedNumber = formatPhoneNumber(PHONE_NUMBER);
+            document.getElementById('phoneDisplay').textContent = formattedNumber;
+            
             // Автоматична переадресація
             const viberUrl = createViberUrl(PHONE_NUMBER);
             window.location.href = viberUrl;
@@ -66,6 +87,47 @@
             color: white;
         }
         
+        .phone-display {
+            font-size: 18px;
+            font-weight: bold;
+            color: #665CAC;
+            margin: 10px 0 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            letter-spacing: 2px;
+        }
+        
+        .or-text {
+            font-size: 16px;
+            color: #666;
+            margin: 20px 0 10px 0;
+        }
+        
+        .copy-button {
+            background: linear-gradient(45deg, #665CAC, #7B6FC5);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 0 0 20px 0;
+            box-shadow: 0 4px 15px rgba(102, 92, 172, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .copy-button:hover {
+            background: linear-gradient(45deg, #7B6FC5, #8B7FD5);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 92, 172, 0.6);
+        }
+        
+        .copy-button:active {
+            transform: translateY(0);
+        }
+        
         h1 {
             color: #665CAC;
             margin-bottom: 20px;
@@ -89,6 +151,7 @@
         .tiktok-instructions ol {
             text-align: left;
             margin: 10px 0;
+            padding-left: 20px;
         }
         
         .tiktok-instructions li {
@@ -106,7 +169,7 @@
             cursor: pointer;
             text-decoration: none;
             display: inline-block;
-            margin-top: 20px;
+            margin-top: 0;
             box-shadow: 0 4px 15px rgba(102, 92, 172, 0.4);
             transition: all 0.3s ease;
         }
@@ -126,12 +189,69 @@
             font-size: 14px;
             color: #666;
         }
+        
+        .tiktok-header {
+            background: linear-gradient(135deg, #000000 0%, #161823 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        
+        .tiktok-header-text {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .logo-transition {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        
+        .tiktok-logo {
+            background: linear-gradient(135deg, #000000 0%, #161823 100%);
+            color: white;
+        }
+        
+        .arrow {
+            font-size: 24px;
+            color: #333;
+            font-weight: bold;
+        }
+        
+        .viber-logo-icon {
+            background: linear-gradient(45deg, #665CAC, #7B6FC5);
+            color: white;
+        }
+        
+        .footer-credit {
+            margin-top: 30px;
+            padding-top: 15px;
+            font-size: 10px;
+            color: #ccc;
+            opacity: 0.5;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="viber-logo">📱</div>
-        
         <h1>Відкриваємо Viber...</h1>
         
         <div class="tiktok-instructions">
@@ -139,17 +259,20 @@
             <ol>
                 <li>Натисніть три крапки (⋮) вгорі праворуч</li>
                 <li>Виберіть "Відкрити в браузері"</li>
-                <li>Ви знову опинитесь на цій сторінці</li>
-                <li>Натисніть кнопку "Написати" нижче</li>
+                <li>Чат у Вайбері відкриється автоматично</li>
             </ol>
         </div>
         
-        <p>Якщо автоматична переадресація не спрацювала, натисніть кнопку:</p>
+        <div class="or-text">або</div>
+        
+        <div class="phone-display" id="phoneDisplay">+380682211617</div>
+        
+        <button class="copy-button" id="copyButton" onclick="copyPhoneNumber()">Скопіювати номер</button>
         
         <a href="#" id="viberButton" class="viber-button">Написати в Viber</a>
         
-        <div class="status">
-            Переадресація відбувається автоматично...
+        <div class="footer-credit">
+            Розроблено @vasil_veo
         </div>
     </div>
 
@@ -162,4 +285,5 @@
         });
     </script>
 </body>
-</html> 
+</html>
+
