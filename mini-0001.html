@@ -1371,6 +1371,29 @@
             
             <div class="divider"></div>
             
+            <!-- БЛОК "ПІСЛЯ ОПЛАТИ" -->
+            <div class="section">
+                <h3 style="margin: 0 0 18px 0; color: #5A6B7D; font-size: 20px; font-weight: 600;">📦 Після оплати:</h3>
+                <div class="data-block">
+                    <p style="margin-bottom: 15px; font-size: 16px; line-height: 1.7;">
+                        Надішліть менеджеру <strong>скріншот квитанції про успішну оплату</strong>, а також <strong>заповніть шаблон</strong>:
+                    </p>
+                    
+                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #8FA3B8;">
+                        <div style="font-family: 'Montserrat', monospace; font-size: 16px; line-height: 1.8; white-space: pre-line; color: #4a4a4a;" id="paymentTemplateDisplay"></div>
+                    </div>
+                    
+                    <button class="copy-button" id="copyTemplateButton" onclick="copyPaymentTemplate()">Скопіювати текст Шаблону</button>
+                    
+                    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
+                        <p style="font-size: 15px; color: #666; margin-bottom: 10px;"><strong>Приклад заповнення шаблону:</strong></p>
+                        <div style="background: #e9ecef; padding: 15px; border-radius: 10px; font-family: 'Montserrat', monospace; font-size: 15px; line-height: 1.8; white-space: pre-line; color: #4a4a4a;" id="paymentTemplateExample"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
             <div class="section">
                 <!-- Прихований якір захисту 4 -->
                 <span id="veoAnchor4" class="veo-anchor veo-anchor-bg-white">VEO FORCE</span>
@@ -1455,33 +1478,9 @@
                     <li id="deliveryNote"></li>
                 </ul>
                 
-                <h3 style="margin: 30px 0 18px 0; color: #5A6B7D; font-size: 20px; font-weight: 600;">📦 Після оплати:</h3>
-                <div class="data-block">
-                    <p style="margin-bottom: 15px; font-size: 16px; line-height: 1.7;">
-                        Надішліть менеджеру <strong>скріншот квитанції про успішну оплату</strong>, а також <strong>заповніть шаблон</strong>:
-                    </p>
-                    
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #8FA3B8;">
-                        <div style="font-family: 'Montserrat', monospace; font-size: 16px; line-height: 1.8; white-space: pre-line; color: #4a4a4a;" id="paymentTemplateDisplay"></div>
-                    </div>
-                    
-                    <button class="copy-button" id="copyTemplateButton" onclick="copyPaymentTemplate()">Скопіювати текст Шаблону</button>
-                    
-                    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
-                        <p style="font-size: 15px; color: #666; margin-bottom: 10px;"><strong>Приклад заповнення шаблону:</strong></p>
-                        <div style="background: #e9ecef; padding: 15px; border-radius: 10px; font-family: 'Montserrat', monospace; font-size: 15px; line-height: 1.8; white-space: pre-line; color: #4a4a4a;" id="paymentTemplateExample"></div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="divider"></div>
-            
-            <div class="section">
-                <div class="return-conditions">
-                    <h3>📋 УМОВИ</h3>
+                <div class="return-conditions" style="margin-top: 30px;">
+                    <h3 style="margin-bottom: 18px; color: #8B6F47; font-size: 20px; font-weight: 600;">📋 Умови обміну та повернення:</h3>
                     <ul>
-                        <li>📦 <strong>Відправка товару:</strong> <span id="returnDeliveryTime"></span></li>
-                        <li>📸 <strong>Після оплати:</strong> надішліть скріншот квитанції про оплату в месенджер менеджеру (Viber або Telegram)</li>
                         <li>🔄 <strong>Обмін та повернення:</strong> відповідно до законодавства України, у вас є право на обмін або повернення товару протягом <strong id="returnDays"></strong> з моменту отримання</li>
                         <li>👕 <strong>Умови обміну/повернення одягу та аксесуарів:</strong>
                             <ul id="returnConditionsList" style="margin-top: 8px; padding-left: 20px; font-size: 15px;">
