@@ -810,14 +810,10 @@
                 exchangeReturnList.appendChild(noReturnLi);
             }
             
-            // Заповнюємо шаблон та приклад
+            // Заповнюємо шаблон
             const templateDisplay = document.getElementById('paymentTemplateDisplay');
             if (templateDisplay) {
                 templateDisplay.textContent = AFTER_PAYMENT_TEMPLATE;
-            }
-            const exampleDisplay = document.getElementById('paymentTemplateExample');
-            if (exampleDisplay) {
-                exampleDisplay.textContent = AFTER_PAYMENT_EXAMPLE;
             }
             
             // Завантажуємо календар подій
@@ -1650,11 +1646,6 @@
                     </div>
                     
                     <button class="copy-button" id="copyTemplateButton" onclick="copyPaymentTemplate()">Скопіювати текст шаблону</button>
-                    
-                    <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
-                        <p style="font-size: 15px; color: #666; margin-bottom: 10px;"><strong>Приклад заповнення шаблону:</strong></p>
-                        <div style="background: #e9ecef; padding: 15px; border-radius: 10px; font-family: 'Montserrat', monospace; font-size: 15px; line-height: 1.8; white-space: pre-line; color: #4a4a4a;" id="paymentTemplateExample"></div>
-                    </div>
                 </div>
             </div>
             
