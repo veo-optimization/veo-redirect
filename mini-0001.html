@@ -25,6 +25,8 @@
         // КОНТАКТИ
         const TELEGRAM_USERNAME = "veoforce_support"; // Telegram username (без @)
         const VIBER_PHONE = "0112223344"; // Номер Viber (10 цифр, починається з 0)
+        const TELEGRAM_SHOWCASE = "https://t.me/veoforce_chat"; // Посилання на Telegram вітрину
+        const INSTAGRAM_USERNAME = ""; // Instagram username (без @), якщо відсутній - залишити порожнім
         
         // КАЛЕНДАР ПРЯМИХ ЕФІРІВ
         // Вставте iCal URL календаря (наприклад: "https://calendar.google.com/calendar/ical/.../public/basic.ics")
@@ -139,6 +141,26 @@
             window.location.href = viberUrl;
         }
         
+        function openTelegramShowcase() {
+            if (!checkSecurity()) return;
+            window.open(TELEGRAM_SHOWCASE, '_blank');
+        }
+        
+        function copyTelegramShowcase() {
+            if (!checkSecurity()) return;
+            secureCopy(TELEGRAM_SHOWCASE, 'copyTelegramShowcaseButton');
+        }
+        
+        function openInstagram() {
+            if (!checkSecurity() || !INSTAGRAM_USERNAME) return;
+            window.open('https://instagram.com/' + INSTAGRAM_USERNAME, '_blank');
+        }
+        
+        function copyInstagramUsername() {
+            if (!checkSecurity() || !INSTAGRAM_USERNAME) return;
+            secureCopy('@' + INSTAGRAM_USERNAME, 'copyInstagramButton');
+        }
+        
         // ============================================
         // СИСТЕМА ЗАХИСТУ КОДУ
         // ============================================
@@ -206,6 +228,10 @@
             window.copyPaymentPurpose = function() { return false; };
             window.copyTelegramUsername = function() { return false; };
             window.copyViberPhone = function() { return false; };
+            window.openTelegramShowcase = function() { return false; };
+            window.copyTelegramShowcase = function() { return false; };
+            window.openInstagram = function() { return false; };
+            window.copyInstagramUsername = function() { return false; };
             
             // Показуємо повідомлення про помилку
             document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#E8E8E8;font-family:Montserrat,sans-serif;"><div style="text-align:center;padding:40px;background:white;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.2);"><h1 style="color:#d32f2f;margin-bottom:20px;">⚠️ Помилка завантаження</h1><p style="color:#666;font-size:18px;">Сторінка пошкоджена або модифікована.<br>Будь ласка, використовуйте оригінальну версію.</p></div></div>';
@@ -718,6 +744,15 @@
             document.getElementById('paymentPurposeValue').textContent = PAYMENT_PURPOSE;
             document.getElementById('telegramUsername').textContent = '@' + TELEGRAM_USERNAME;
             document.getElementById('viberPhone').textContent = formatPhoneNumber(VIBER_PHONE);
+            document.getElementById('telegramShowcase').textContent = TELEGRAM_SHOWCASE;
+            
+            // Instagram
+            if (INSTAGRAM_USERNAME) {
+                document.getElementById('instagramUsername').textContent = '@' + INSTAGRAM_USERNAME;
+                document.getElementById('instagramColumn').style.display = 'block';
+            } else {
+                document.getElementById('instagramColumn').style.display = 'none';
+            }
             
             // Заповнюємо умови оплати
             const paymentOptionsContainer = document.getElementById('paymentOptions');
@@ -1195,7 +1230,7 @@
         
         .contact-columns {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 12px;
             margin-top: 15px;
         }
@@ -1212,6 +1247,14 @@
         
         .contact-column-viber {
             background: linear-gradient(135deg, #665CAC 0%, #7B6FC5 100%);
+        }
+        
+        .contact-column-showcase {
+            background: linear-gradient(135deg, #0088cc 0%, #229ED9 100%);
+        }
+        
+        .contact-column-instagram {
+            background: linear-gradient(135deg, #E4405F 0%, #F56040 50%, #FCAF45 100%);
         }
         
         .contact-column-title {
@@ -1452,6 +1495,12 @@
             .contact-columns {
                 grid-template-columns: 1fr;
                 gap: 10px;
+            }
+        }
+        
+        @media (min-width: 601px) {
+            .contact-columns {
+                grid-template-columns: repeat(2, 1fr);
             }
         }
         
@@ -1702,7 +1751,7 @@
                             <div class="contact-column-title">Телеграм</div>
                             <div class="contact-info-text" id="telegramUsername"></div>
                             <div class="contact-buttons-row">
-                                <button class="contact-write-button" onclick="openTelegram()">Написати</button>
+                                <button class="contact-write-button" onclick="openTelegram()">Відкрити</button>
                                 <button class="contact-copy-button-small" id="copyTelegramButton" onclick="copyTelegramUsername()">Скопіювати<br>username</button>
                             </div>
                         </div>
@@ -1711,8 +1760,26 @@
                             <div class="contact-column-title">Вайбер</div>
                             <div class="contact-info-text" id="viberPhone"></div>
                             <div class="contact-buttons-row">
-                                <button class="contact-write-button" onclick="openViber()">Написати</button>
+                                <button class="contact-write-button" onclick="openViber()">Відкрити</button>
                                 <button class="contact-copy-button-small" id="copyViberPhoneButton" onclick="copyViberPhone()">Скопіювати<br>номер</button>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-column contact-column-showcase">
+                            <div class="contact-column-title">Вітрина</div>
+                            <div class="contact-info-text" id="telegramShowcase"></div>
+                            <div class="contact-buttons-row">
+                                <button class="contact-write-button" onclick="openTelegramShowcase()">Відкрити</button>
+                                <button class="contact-copy-button-small" id="copyTelegramShowcaseButton" onclick="copyTelegramShowcase()">Скопіювати<br>посилання</button>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-column contact-column-instagram" id="instagramColumn" style="display: none;">
+                            <div class="contact-column-title">Інстаграм</div>
+                            <div class="contact-info-text" id="instagramUsername"></div>
+                            <div class="contact-buttons-row">
+                                <button class="contact-write-button" onclick="openInstagram()">Відкрити</button>
+                                <button class="contact-copy-button-small" id="copyInstagramButton" onclick="copyInstagramUsername()">Скопіювати<br>username</button>
                             </div>
                         </div>
                     </div>
