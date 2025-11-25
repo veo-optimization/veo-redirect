@@ -24,7 +24,9 @@
         const VIBER_PHONE = "0112223344"; // Номер Viber (10 цифр, починається з 0)
         
         // КАЛЕНДАР ПРЯМИХ ЕФІРІВ
-        const GOOGLE_CALENDAR_ID = ""; // ID публічного Google Calendar (наприклад: "abc123@group.calendar.google.com")
+        // Вставте iCal URL календаря (наприклад: "https://calendar.google.com/calendar/ical/.../public/basic.ics")
+        // Або embed URL або Calendar ID - система автоматично витягне необхідні дані
+        const GOOGLE_CALENDAR_URL_OR_ID = ""; // iCal URL, embed URL або Calendar ID
         const GOOGLE_CALENDAR_API_KEY = ""; // API ключ Google Calendar (опціонально, для публічних календарів не обов'язково)
         
         // УМОВИ ОПЛАТИ
@@ -243,13 +245,57 @@
         // КАЛЕНДАР ПРЯМИХ ЕФІРІВ
         // ============================================
         
+        // Функція витягування Calendar ID з URL
+        function extractCalendarId(urlOrId) {
+            if (!urlOrId) {
+                return null;
+            }
+            
+            // Якщо це вже Calendar ID (містить @), повертаємо як є
+            if (urlOrId.includes('@') && !urlOrId.startsWith('http')) {
+                return urlOrId;
+            }
+            
+            // Якщо це URL, витягуємо Calendar ID
+            try {
+                // Для embed URL: https://calendar.google.com/calendar/embed?src=...
+                if (urlOrId.includes('/embed?')) {
+                    const url = new URL(urlOrId);
+                    const src = url.searchParams.get('src');
+                    if (src) {
+                        return decodeURIComponent(src);
+                    }
+                }
+                
+                // Для iCal URL: https://calendar.google.com/calendar/ical/.../public/basic.ics
+                if (urlOrId.includes('/ical/')) {
+                    const match = urlOrId.match(/\/ical\/([^\/]+)\//);
+                    if (match && match[1]) {
+                        return decodeURIComponent(match[1]);
+                    }
+                }
+                
+                // Якщо це простий Calendar ID
+                return urlOrId;
+            } catch (e) {
+                console.error('Помилка парсингу URL:', e);
+                return null;
+            }
+        }
+        
         // Завантаження подій з Google Calendar
         async function loadCalendarEvents() {
-            if (!GOOGLE_CALENDAR_ID) {
+            if (!GOOGLE_CALENDAR_URL_OR_ID) {
                 return;
             }
             
-            const calendarId = encodeURIComponent(GOOGLE_CALENDAR_ID);
+            const calendarIdRaw = extractCalendarId(GOOGLE_CALENDAR_URL_OR_ID);
+            if (!calendarIdRaw) {
+                console.error('Не вдалося витягти Calendar ID');
+                return;
+            }
+            
+            const calendarId = encodeURIComponent(calendarIdRaw);
             
             try {
                 // Спочатку спробуємо через Google Calendar API (якщо є ключ)
@@ -320,7 +366,6 @@
                 }
                 
                 // Налаштовуємо кнопку "Додати календар"
-                const calendarId = encodeURIComponent(GOOGLE_CALENDAR_ID);
                 const addButton = document.getElementById('addToCalendarButton');
                 addButton.href = `https://calendar.google.com/calendar/render?cid=${calendarId}`;
             } catch (error) {
@@ -498,7 +543,7 @@
             document.getElementById('paymentTemplateExample').textContent = AFTER_PAYMENT_EXAMPLE;
             
             // Завантажуємо календар подій
-            if (GOOGLE_CALENDAR_ID) {
+            if (GOOGLE_CALENDAR_URL_OR_ID) {
                 loadCalendarEvents();
             }
             
