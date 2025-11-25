@@ -41,7 +41,12 @@
         const DELIVERY_NOTE = "Термін доставки залежить від регіону отримувача";
         
         // УМОВИ ПОВЕРНЕННЯ
-        const RETURN_DAYS = "14 днів (окрім товарів, визначених законодавством)";
+        // Кількість днів для обміну та повернення (0 = відсутнє)
+        // ІНСТРУКЦІЯ: Вкажіть кількість днів для обміну та повернення товару.
+        // Якщо обмін або повернення недоступні, встановіть значення 0.
+        // Наприклад: EXCHANGE_DAYS = 14 (обмін доступний 14 днів), RETURN_DAYS = 0 (повернення недоступне)
+        const EXCHANGE_DAYS = 14; // Кількість днів для обміну товару (0 якщо обмін недоступний)
+        const RETURN_DAYS = 14; // Кількість днів для повернення товару (0 якщо повернення недоступне)
         const RETURN_CONDITIONS = [
             "Товар повинен бути в оригінальному стані (не використовуваний, без слідів носіння)",
             "Збережені всі етикетки, бирки та упаковка",
@@ -531,7 +536,7 @@
             
             calendarSection.style.display = 'block';
             if (container) {
-                container.innerHTML = '<div class="calendar-not-synced">📅 Календар LIVE-трансляцій не синхронізовано</div>';
+                container.innerHTML = '<div class="calendar-not-synced" style="text-align: center; padding: 30px; color: #8B6F47; font-size: 18px; font-weight: 600;">📅 Календар LIVE-трансляцій не синхронізовано</div>';
             }
             
             // Приховуємо кнопку "Додати календар"
@@ -609,7 +614,58 @@
             document.getElementById('deliveryMethod').textContent = DELIVERY_METHOD;
             document.getElementById('deliveryTime').textContent = DELIVERY_TIME;
             document.getElementById('deliveryNote').textContent = DELIVERY_NOTE;
-            document.getElementById('returnDeliveryTime').textContent = DELIVERY_TIME;
+            
+            // Заповнюємо умови обміну та повернення
+            const exchangeReturnList = document.getElementById('exchangeReturnList');
+            exchangeReturnList.innerHTML = '';
+            
+            // Додаємо інформацію про обмін, якщо він доступний
+            if (EXCHANGE_DAYS > 0) {
+                const exchangeLi = document.createElement('li');
+                exchangeLi.innerHTML = `🔄 <strong>Обмін:</strong> відповідно до законодавства України, у вас є право на обмін товару протягом <strong>${EXCHANGE_DAYS} днів</strong> з моменту отримання (окрім товарів, визначених законодавством)`;
+                exchangeReturnList.appendChild(exchangeLi);
+            }
+            
+            // Додаємо інформацію про повернення, якщо воно доступне
+            if (RETURN_DAYS > 0) {
+                const returnLi = document.createElement('li');
+                returnLi.innerHTML = `↩️ <strong>Повернення:</strong> відповідно до законодавства України, у вас є право на повернення товару протягом <strong>${RETURN_DAYS} днів</strong> з моменту отримання (окрім товарів, визначених законодавством)`;
+                exchangeReturnList.appendChild(returnLi);
+            }
+            
+            // Якщо обмін або повернення доступні, додаємо умови
+            if (EXCHANGE_DAYS > 0 || RETURN_DAYS > 0) {
+                const conditionsLi = document.createElement('li');
+                conditionsLi.innerHTML = `👕 <strong>Умови обміну/повернення одягу та аксесуарів:</strong>`;
+                const conditionsUl = document.createElement('ul');
+                conditionsUl.style.marginTop = '8px';
+                conditionsUl.style.paddingLeft = '20px';
+                conditionsUl.style.fontSize = '15px';
+                RETURN_CONDITIONS.forEach(function(condition) {
+                    const conditionLi = document.createElement('li');
+                    conditionLi.textContent = condition;
+                    conditionsUl.appendChild(conditionLi);
+                });
+                conditionsLi.appendChild(conditionsUl);
+                exchangeReturnList.appendChild(conditionsLi);
+                
+                const contactLi = document.createElement('li');
+                contactLi.innerHTML = `📞 <strong>Для обміну/повернення:</strong> зв'яжіться з менеджером через Viber або Telegram`;
+                exchangeReturnList.appendChild(contactLi);
+                
+                const moneyLi = document.createElement('li');
+                moneyLi.innerHTML = `💰 <strong>Повернення коштів:</strong> здійснюється на ті самі реквізити, з яких була здійснена оплата, протягом <strong>${RETURN_MONEY_TIME}</strong> після отримання товару назад`;
+                exchangeReturnList.appendChild(moneyLi);
+                
+                const deliveryCostLi = document.createElement('li');
+                deliveryCostLi.innerHTML = `🚚 <strong>Вартість доставки:</strong> ${RETURN_DELIVERY_COST}`;
+                exchangeReturnList.appendChild(deliveryCostLi);
+            } else {
+                // Якщо обмін та повернення недоступні
+                const noReturnLi = document.createElement('li');
+                noReturnLi.innerHTML = `ℹ️ <strong>Обмін та повернення товару недоступні згідно з умовами продавця.</strong>`;
+                exchangeReturnList.appendChild(noReturnLi);
+            }
             
             // Заповнюємо шаблон та приклад
             const templateDisplay = document.getElementById('paymentTemplateDisplay');
@@ -1513,7 +1569,7 @@
             
             <div class="divider"></div>
             
-            <!-- БЛОК КАЛЕНДАРЯ ПРЯМИХ ЕФІРІВ -->
+            <!-- БЛОК КАЛЕНДАРЯ ПРЯМИХ ЕФІРІВ (під контактами, над умовами) -->
             <div class="section" id="calendarSection" style="display: none;">
                 <div class="section-title">
                     <span>📅</span>
@@ -1535,10 +1591,11 @@
             
             <div class="divider"></div>
             
-            <div class="section">
+            <!-- ОБ'ЄДНАНИЙ БЛОК УМОВ ОПЛАТИ, ДОСТАВКИ ТА ПОВЕРНЕННЯ -->
+            <div class="section return-conditions">
                 <div class="section-title">
                     <span>💳</span>
-                    <span>Умови оплати та доставки</span>
+                    <span>Умови оплати, доставки та повернення</span>
                 </div>
                 
                 <h3 style="margin: 25px 0 18px 0; color: #5A6B7D; font-size: 20px; font-weight: 600;">🔄 Варіанти оплати:</h3>
@@ -1554,18 +1611,10 @@
                     <li><strong>Вартість доставки:</strong> відповідно до тарифів перевізника. Сплачує отримувач.</li>
                 </ul>
                 
-                <div class="return-conditions" style="margin-top: 30px;">
+                <div id="exchangeReturnSection" style="margin-top: 30px;">
                     <h3 style="margin-bottom: 18px; color: #8B6F47; font-size: 20px; font-weight: 600;">📋 Умови обміну та повернення:</h3>
-                    <ul>
-                        <li>🔄 <strong>Обмін та повернення:</strong> відповідно до законодавства України, у вас є право на обмін або повернення товару протягом <strong>14 днів</strong> з моменту отримання (окрім товарів, визначених законодавством)</li>
-                        <li>👕 <strong>Умови обміну/повернення одягу та аксесуарів:</strong>
-                            <ul id="returnConditionsList" style="margin-top: 8px; padding-left: 20px; font-size: 15px;">
-                                <!-- Заповнюється автоматично з константи RETURN_CONDITIONS -->
-                            </ul>
-                        </li>
-                        <li>📞 <strong>Для обміну/повернення:</strong> зв'яжіться з менеджером через Viber або Telegram</li>
-                        <li>💰 <strong>Повернення коштів:</strong> здійснюється на ті самі реквізити, з яких була здійснена оплата, протягом <strong id="returnMoneyTime"></strong> після отримання товару назад</li>
-                        <li>🚚 <strong>Вартість доставки:</strong> <span id="returnDeliveryCost"></span></li>
+                    <ul id="exchangeReturnList">
+                        <!-- Заповнюється автоматично з констант EXCHANGE_DAYS та RETURN_DAYS -->
                     </ul>
                 </div>
             </div>
