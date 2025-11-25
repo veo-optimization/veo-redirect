@@ -655,7 +655,8 @@
         // Показ повідомлення про відсутність синхронізації
         function showCalendarNotSynced() {
             const calendarSection = document.getElementById('calendarSection');
-            const container = document.getElementById('calendarEvents');
+            const calendarIframe = document.getElementById('calendarIframe');
+            const calendarContainer = document.querySelector('.calendar-container');
             
             if (!calendarSection) {
                 console.error('Блок календаря не знайдено');
@@ -663,28 +664,27 @@
             }
             
             calendarSection.style.display = 'block';
-            if (container) {
-                container.innerHTML = '<div class="calendar-not-synced" style="text-align: center; padding: 30px; color: #8B6F47; font-size: 18px; font-weight: 600;">📅 Календар LIVE-трансляцій не синхронізовано</div>';
+            
+            // Приховуємо iframe та показуємо повідомлення
+            if (calendarIframe) {
+                calendarIframe.style.display = 'none';
             }
             
-            // Налаштовуємо кнопку "Додати календар" навіть при помилці
-            const addButton = document.getElementById('addToCalendarButton');
-            if (addButton && GOOGLE_CALENDAR_URL_OR_ID && GOOGLE_CALENDAR_URL_OR_ID.trim() !== '') {
-                const calendarIdRaw = extractCalendarId(GOOGLE_CALENDAR_URL_OR_ID);
-                if (calendarIdRaw) {
-                    const calendarIdEncoded = encodeURIComponent(calendarIdRaw);
-                    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-                    
-                    if (isMobile) {
-                        addButton.href = `https://calendar.google.com/calendar/render?cid=${calendarIdEncoded}@group.calendar.google.com`;
-                    } else {
-                        addButton.href = `webcal://calendar.google.com/calendar/ical/${calendarIdEncoded}/public/basic.ics`;
-                    }
-                    addButton.style.display = 'block';
-                } else {
-                    addButton.style.display = 'none';
+            if (calendarContainer) {
+                // Створюємо повідомлення про помилку
+                let errorDiv = calendarContainer.querySelector('.calendar-error-message');
+                if (!errorDiv) {
+                    errorDiv = document.createElement('div');
+                    errorDiv.className = 'calendar-error-message';
+                    errorDiv.style.cssText = 'text-align: center; padding: 30px; color: #8B6F47; font-size: 18px; font-weight: 600; border: 1px solid #FFD89B; border-radius: 15px; background: rgba(255, 243, 205, 0.8); margin-bottom: 25px;';
+                    calendarContainer.insertBefore(errorDiv, calendarContainer.firstChild);
                 }
-            } else if (addButton) {
+                errorDiv.innerHTML = '📅 Календар LIVE-трансляцій не синхронізовано';
+            }
+            
+            // Приховуємо кнопку "Додати календар" при помилці
+            const addButton = document.getElementById('addToCalendarButton');
+            if (addButton) {
                 addButton.style.display = 'none';
             }
         }
@@ -816,17 +816,56 @@
                 templateDisplay.textContent = AFTER_PAYMENT_TEMPLATE;
             }
             
-            // Завантажуємо календар подій
+            // Налаштовуємо Google Calendar iframe та кнопку підписки
             if (GOOGLE_CALENDAR_URL_OR_ID && GOOGLE_CALENDAR_URL_OR_ID.trim() !== '') {
-                // Завантажуємо події при завантаженні сторінки
-                loadCalendarEvents();
-                
-                // Автоматичне оновлення календаря кожні 10 хвилин
-                setInterval(function() {
-                    loadCalendarEvents();
-                }, 10 * 60 * 1000); // 10 хвилин в мілісекундах
+                const calendarIdRaw = extractCalendarId(GOOGLE_CALENDAR_URL_OR_ID);
+                if (calendarIdRaw) {
+                    const calendarSection = document.getElementById('calendarSection');
+                    const calendarIframe = document.getElementById('calendarIframe');
+                    const addButton = document.getElementById('addToCalendarButton');
+                    const calendarContainer = document.querySelector('.calendar-container');
+                    
+                    if (calendarSection) {
+                        calendarSection.style.display = 'block';
+                    }
+                    
+                    // Видаляємо повідомлення про помилку, якщо воно є
+                    if (calendarContainer) {
+                        const errorDiv = calendarContainer.querySelector('.calendar-error-message');
+                        if (errorDiv) {
+                            errorDiv.remove();
+                        }
+                    }
+                    
+                    // Налаштовуємо iframe з Google Calendar Agenda View
+                    if (calendarIframe) {
+                        const calendarIdEncoded = encodeURIComponent(calendarIdRaw);
+                        const iframeUrl = `https://calendar.google.com/calendar/embed?src=${calendarIdEncoded}&ctz=Europe%2FKiev&mode=AGENDA&showNav=0&showTitle=0&showPrint=0&showCalendars=0&showTabs=0`;
+                        calendarIframe.src = iframeUrl;
+                        calendarIframe.style.display = 'block';
+                        console.log('✅ Google Calendar iframe налаштовано:', iframeUrl);
+                    }
+                    
+                    // Налаштовуємо кнопку "Додати календар"
+                    if (addButton) {
+                        const calendarIdEncoded = encodeURIComponent(calendarIdRaw);
+                        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+                        
+                        if (isMobile) {
+                            addButton.href = `https://calendar.google.com/calendar/render?cid=${calendarIdEncoded}@group.calendar.google.com`;
+                        } else {
+                            addButton.href = `webcal://calendar.google.com/calendar/ical/${calendarIdEncoded}/public/basic.ics`;
+                        }
+                        addButton.style.display = 'inline-block';
+                        console.log('✅ Кнопка підписки налаштована:', addButton.href);
+                    }
+                } else {
+                    console.error('❌ Не вдалося витягти Calendar ID');
+                    showCalendarNotSynced();
+                }
             } else {
                 // Показуємо повідомлення про відсутність синхронізації
+                console.log('⚠️ Calendar URL не вказано');
                 showCalendarNotSynced();
             }
             
@@ -1532,6 +1571,11 @@
                 border-radius: 0;
             }
             
+            #calendarIframe {
+                height: 400px !important;
+                min-height: 350px !important;
+            }
+            
             .header h1 {
                 font-size: 24px;
             }
@@ -1703,15 +1747,50 @@
                 </div>
                 
                 <div class="calendar-container">
-                    <div id="calendarEvents" class="calendar-events">
-                        <!-- Події будуть додані тут -->
+                    <!-- Google Calendar Agenda View -->
+                    <div style="border: 1px solid #dee2e6; border-radius: 15px; overflow: hidden; margin-bottom: 25px; background: white; position: relative;">
+                        <iframe 
+                            id="calendarIframe"
+                            src=""
+                            style="border: 0; width: 100%; height: 500px; display: block; min-height: 400px;"
+                            frameborder="0"
+                            scrolling="no"
+                            loading="lazy"
+                            allowfullscreen>
+                        </iframe>
                     </div>
                     
-                    <div class="calendar-actions">
-                        <a href="#" id="addToCalendarButton" class="calendar-add-button" target="_blank" rel="noopener noreferrer">
-                            📱 Додати календар на телефон
+                    <!-- Button: Add Calendar to Device -->
+                    <div style="text-align: center;">
+                        <a 
+                            href="#"
+                            id="addToCalendarButton"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="calendar-add-button"
+                            style="
+                                display: inline-block;
+                                padding: 14px 26px;
+                                background: linear-gradient(135deg, #8FA3B8 0%, #6B7A8F 100%);
+                                color: #fff;
+                                border-radius: 25px;
+                                text-decoration: none;
+                                font-size: 16px;
+                                font-weight: 600;
+                                transition: all 0.3s ease;
+                                box-shadow: 0 4px 12px rgba(107, 122, 143, 0.3);
+                                font-family: 'Montserrat', sans-serif;
+                            "
+                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(107, 122, 143, 0.4)'"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(107, 122, 143, 0.3)'"
+                        >
+                            📱 Додати календар у свій телефон
                         </a>
                     </div>
+                    
+                    <p style="text-align: center; margin-top: 15px; font-size: 14px; color: #6B7A8F; font-family: 'Montserrat', sans-serif;">
+                        Натисніть, щоб додати повний розклад прямих ефірів у свій календар (iPhone / Android / Google Calendar).
+                    </p>
                 </div>
             </div>
             
@@ -1754,7 +1833,7 @@
                 <span id="veoAnchor6" class="veo-anchor veo-anchor-bg-white">VEO FORCE</span>
                 
                 <div class="footer-credit-text">
-                    Розроблено командою <strong>VEO FORCE 2025</strong>
+                    Розроблено командою<br><strong>VEO FORCE 2025</strong>
                 </div>
                 <div style="font-size: 14px; color: #6B7A8F; margin-top: 8px;">
                     Замовити таку сторінку:
