@@ -269,7 +269,7 @@
                 
                 // Для iCal URL: https://calendar.google.com/calendar/ical/.../public/basic.ics
                 if (urlOrId.includes('/ical/')) {
-                    const match = urlOrId.match(/\/ical\/([^\/]+)\//);
+                    const match = urlOrId.match(/\/ical\/([^\/]+)/);
                     if (match && match[1]) {
                         return decodeURIComponent(match[1]);
                     }
@@ -333,14 +333,26 @@
                 }
                 
                 // Якщо API не працює або немає ключа, використовуємо iCal feed
-                const icalUrl = `https://calendar.google.com/calendar/ical/${calendarId}/public/basic.ics`;
+                // Використовуємо оригінальний URL, якщо він вже iCal, інакше формуємо
+                let icalUrl;
+                if (GOOGLE_CALENDAR_URL_OR_ID.includes('/ical/') && GOOGLE_CALENDAR_URL_OR_ID.includes('/public/basic.ics')) {
+                    icalUrl = GOOGLE_CALENDAR_URL_OR_ID;
+                } else {
+                    icalUrl = `https://calendar.google.com/calendar/ical/${calendarId}/public/basic.ics`;
+                }
                 await loadCalendarFromICal(icalUrl, calendarIdRaw);
                 
             } catch (error) {
                 console.error('Помилка завантаження календаря:', error);
                 // Спробуємо завантажити через iCal як fallback
                 try {
-                    const icalUrl = `https://calendar.google.com/calendar/ical/${calendarId}/public/basic.ics`;
+                    // Використовуємо оригінальний URL, якщо він вже iCal, інакше формуємо
+                    let icalUrl;
+                    if (GOOGLE_CALENDAR_URL_OR_ID.includes('/ical/') && GOOGLE_CALENDAR_URL_OR_ID.includes('/public/basic.ics')) {
+                        icalUrl = GOOGLE_CALENDAR_URL_OR_ID;
+                    } else {
+                        icalUrl = `https://calendar.google.com/calendar/ical/${calendarId}/public/basic.ics`;
+                    }
                     await loadCalendarFromICal(icalUrl, calendarIdRaw);
                 } catch (icalError) {
                     console.error('Помилка завантаження через iCal:', icalError);
@@ -602,11 +614,11 @@
             // Заповнюємо шаблон та приклад
             const templateDisplay = document.getElementById('paymentTemplateDisplay');
             if (templateDisplay) {
-                templateDisplay.innerHTML = AFTER_PAYMENT_TEMPLATE.replace(/(👤|📍|📦|📱)/g, '<span style="font-size: 18px;">$1</span>');
+                templateDisplay.textContent = AFTER_PAYMENT_TEMPLATE;
             }
             const exampleDisplay = document.getElementById('paymentTemplateExample');
             if (exampleDisplay) {
-                exampleDisplay.innerHTML = AFTER_PAYMENT_EXAMPLE.replace(/(👤|📍|📦|📱)/g, '<span style="font-size: 16px;">$1</span>');
+                exampleDisplay.textContent = AFTER_PAYMENT_EXAMPLE;
             }
             
             // Завантажуємо календар подій
