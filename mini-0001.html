@@ -253,11 +253,15 @@
         // Функція витягування Calendar ID з URL
         function extractCalendarId(urlOrId) {
             if (!urlOrId) {
+                console.error('extractCalendarId: URL не надано');
                 return null;
             }
             
+            console.log('extractCalendarId: обробка URL:', urlOrId);
+            
             // Якщо це вже Calendar ID (містить @), повертаємо як є
             if (urlOrId.includes('@') && !urlOrId.startsWith('http')) {
+                console.log('extractCalendarId: знайдено Calendar ID без URL');
                 return urlOrId;
             }
             
@@ -268,25 +272,39 @@
                     const url = new URL(urlOrId);
                     const src = url.searchParams.get('src');
                     if (src) {
-                        return decodeURIComponent(src);
+                        const calendarId = decodeURIComponent(src);
+                        console.log('extractCalendarId: витягнуто з embed URL:', calendarId);
+                        return calendarId;
                     }
                 }
                 
                 // Для iCal URL: https://calendar.google.com/calendar/ical/.../public/basic.ics
                 if (urlOrId.includes('/ical/')) {
                     // Витягуємо Calendar ID з URL (між /ical/ та /public/)
+                    // Може бути закодований (%40 замість @)
                     const match = urlOrId.match(/\/ical\/([^\/]+)\//);
                     if (match && match[1]) {
-                        const calendarId = decodeURIComponent(match[1]);
-                        console.log('Calendar ID витягнуто з iCal URL:', calendarId);
+                        // Декодуємо URL-кодування
+                        let calendarId = decodeURIComponent(match[1]);
+                        console.log('extractCalendarId: витягнуто з iCal URL (після декодування):', calendarId);
+                        
+                        // Перевіряємо, чи містить @ (якщо ні, можливо потрібно додати @group.calendar.google.com)
+                        if (!calendarId.includes('@')) {
+                            console.warn('extractCalendarId: Calendar ID не містить @, можливо неповний');
+                        }
+                        
                         return calendarId;
+                    } else {
+                        console.error('extractCalendarId: не вдалося знайти Calendar ID в iCal URL');
                     }
                 }
                 
                 // Якщо це простий Calendar ID
+                console.log('extractCalendarId: повертаємо як простий Calendar ID');
                 return urlOrId;
             } catch (e) {
-                console.error('Помилка парсингу URL:', e);
+                console.error('extractCalendarId: помилка парсингу URL:', e);
+                console.error('extractCalendarId: stack:', e.stack);
                 return null;
             }
         }
@@ -312,8 +330,15 @@
                 return;
             }
             
-            console.log('Calendar ID витягнуто:', calendarIdRaw);
+            console.log('✅ Calendar ID витягнуто:', calendarIdRaw);
+            
+            // Перевіряємо, чи Calendar ID містить @ (повинен бути формат: id@group.calendar.google.com)
+            if (!calendarIdRaw.includes('@')) {
+                console.warn('⚠️ Calendar ID не містить @, можливо неповний:', calendarIdRaw);
+            }
+            
             const calendarId = encodeURIComponent(calendarIdRaw);
+            console.log('📝 Calendar ID закодовано:', calendarId);
             
             try {
                 // Спочатку спробуємо через Google Calendar API (якщо є ключ)
@@ -360,14 +385,19 @@
                 // Використовуємо оригінальний URL, якщо він вже iCal, інакше формуємо
                 let icalUrl;
                 if (GOOGLE_CALENDAR_URL_OR_ID.includes('/ical/') && GOOGLE_CALENDAR_URL_OR_ID.includes('/public/basic.ics')) {
+                    // Використовуємо оригінальний URL без змін
                     icalUrl = GOOGLE_CALENDAR_URL_OR_ID;
+                    console.log('Використовуємо оригінальний iCal URL:', icalUrl);
                 } else {
+                    // Формуємо iCal URL з Calendar ID
                     icalUrl = `https://calendar.google.com/calendar/ical/${calendarId}/public/basic.ics`;
+                    console.log('Сформовано iCal URL:', icalUrl);
                 }
                 await loadCalendarFromICal(icalUrl, calendarIdRaw);
                 
             } catch (error) {
                 console.error('Помилка завантаження календаря:', error);
+                console.error('Деталі помилки:', error.message, error.stack);
                 // Спробуємо завантажити через iCal як fallback
                 try {
                     // Використовуємо оригінальний URL, якщо він вже iCal, інакше формуємо
@@ -377,9 +407,11 @@
                     } else {
                         icalUrl = `https://calendar.google.com/calendar/ical/${calendarId}/public/basic.ics`;
                     }
+                    console.log('Спроба завантажити через iCal fallback:', icalUrl);
                     await loadCalendarFromICal(icalUrl, calendarIdRaw);
                 } catch (icalError) {
-                    console.error('Помилка завантаження через iCal:', icalError);
+                    console.error('Помилка завантаження через iCal fallback:', icalError);
+                    console.error('Деталі помилки iCal:', icalError.message);
                     showCalendarNotSynced();
                 }
             }
@@ -390,17 +422,23 @@
             try {
                 console.log('Завантаження iCal з URL:', icalUrl);
                 
-                // Використовуємо проксі для обходу CORS, якщо потрібно
-                // Або використовуємо прямий запит, оскільки публічні календарі Google доступні
+                // Використовуємо прямий запит до публічного календаря Google
+                // Публічні календарі доступні без CORS обмежень
                 const response = await fetch(icalUrl, {
                     method: 'GET',
+                    mode: 'cors',
+                    cache: 'no-cache',
                     headers: {
-                        'Accept': 'text/calendar'
+                        'Accept': 'text/calendar, text/plain, */*'
                     }
                 });
                 
+                console.log('Відповідь отримано, статус:', response.status, response.statusText);
+                
                 if (!response.ok) {
-                    throw new Error('Не вдалося завантажити календар. Статус: ' + response.status);
+                    const errorText = await response.text();
+                    console.error('Помилка відповіді:', errorText);
+                    throw new Error('Не вдалося завантажити календар. Статус: ' + response.status + ', ' + response.statusText);
                 }
                 
                 const icalText = await response.text();
@@ -457,6 +495,17 @@
             } catch (error) {
                 console.error('Помилка завантаження iCal:', error);
                 console.error('Деталі помилки:', error.message);
+                console.error('Stack trace:', error.stack);
+                
+                // Показуємо повідомлення про помилку
+                const calendarSection = document.getElementById('calendarSection');
+                const container = document.getElementById('calendarEvents');
+                if (calendarSection) {
+                    calendarSection.style.display = 'block';
+                }
+                if (container) {
+                    container.innerHTML = '<div class="calendar-not-synced" style="text-align: center; padding: 30px; color: #8B6F47; font-size: 18px; font-weight: 600;">📅 Календар LIVE-трансляцій не синхронізовано<br><small style="font-size: 14px; color: #999; margin-top: 10px; display: block;">Помилка: ' + error.message + '</small></div>';
+                }
                 showCalendarNotSynced();
             }
         }
