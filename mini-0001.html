@@ -467,6 +467,21 @@
             });
         }
         
+        // Показ повідомлення про відсутність синхронізації
+        function showCalendarNotSynced() {
+            const calendarSection = document.getElementById('calendarSection');
+            const container = document.getElementById('calendarEvents');
+            
+            calendarSection.style.display = 'block';
+            container.innerHTML = '<div class="calendar-not-synced">📅 Календар LIVE-трансляцій не синхронізовано</div>';
+            
+            // Приховуємо кнопку "Додати календар"
+            const addButton = document.getElementById('addToCalendarButton');
+            if (addButton) {
+                addButton.style.display = 'none';
+            }
+        }
+        
         // Форматування дати події
         function formatEventDate(date) {
             const days = ['Неділя', 'Понеділок', 'Вівторок', 'Середа', 'Четвер', 'П\'ятниця', 'Субота'];
@@ -543,8 +558,11 @@
             document.getElementById('paymentTemplateExample').textContent = AFTER_PAYMENT_EXAMPLE;
             
             // Завантажуємо календар подій
-            if (GOOGLE_CALENDAR_URL_OR_ID) {
+            if (GOOGLE_CALENDAR_URL_OR_ID && GOOGLE_CALENDAR_URL_OR_ID.trim() !== '') {
                 loadCalendarEvents();
+            } else {
+                // Показуємо повідомлення про відсутність синхронізації
+                showCalendarNotSynced();
             }
             
             // Заповнюємо умови повернення
@@ -1203,6 +1221,18 @@
             font-size: 16px;
             background: #f8f9fa;
             border-radius: 12px;
+        }
+        
+        .calendar-not-synced {
+            text-align: center;
+            padding: 40px 20px;
+            color: #8B6F47;
+            font-size: 18px;
+            font-weight: 600;
+            background: rgba(255, 243, 205, 0.8);
+            border: 2px solid #FFD89B;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
         }
         
         .calendar-actions {
