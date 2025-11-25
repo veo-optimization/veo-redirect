@@ -70,12 +70,13 @@
         
         // Функція для копіювання в буфер обміну
         function copyToClipboard(text, buttonId) {
+            if (!checkSecurity()) return;
             navigator.clipboard.writeText(text).then(function() {
                 const button = document.getElementById(buttonId);
                 if (button) {
                     const originalText = button.textContent;
                     button.textContent = '✓ Скопійовано!';
-                    if (button.classList.contains('contact-copy-button')) {
+                    if (button.classList.contains('contact-copy-button') || button.classList.contains('contact-copy-button-small')) {
                         button.style.background = 'rgba(40, 167, 69, 0.9)';
                     } else {
                         button.style.background = '#28a745';
@@ -116,12 +117,130 @@
         }
         
         function openViber() {
+            if (!checkSecurity()) return;
             const viberUrl = createViberUrl(VIBER_PHONE);
             window.location.href = viberUrl;
         }
         
+        // ============================================
+        // СИСТЕМА ЗАХИСТУ КОДУ
+        // ============================================
+        
+        // Функція перевірки безпеки
+        function checkSecurity() {
+            try {
+                // Перевірка footer
+                const footerCredit = document.getElementById('footerCreditBlock');
+                if (!footerCredit || footerCredit.offsetParent === null) {
+                    blockPage();
+                    return false;
+                }
+                
+                // Перевірка наявності тексту про автора
+                const footerText = footerCredit.textContent || '';
+                if (!footerText.includes('VEO FORCE') || !footerText.includes('2025')) {
+                    blockPage();
+                    return false;
+                }
+                
+                // Перевірка якорів
+                const anchors = [
+                    'veoAnchor1', 'veoAnchor2', 'veoAnchor3', 
+                    'veoAnchor4', 'veoAnchor5', 'veoAnchor6'
+                ];
+                
+                for (let i = 0; i < anchors.length; i++) {
+                    const anchor = document.getElementById(anchors[i]);
+                    if (!anchor) {
+                        blockPage();
+                        return false;
+                    }
+                    
+                    // Перевірка тексту якоря
+                    const anchorText = anchor.textContent || anchor.innerText || '';
+                    if (anchorText.trim() !== 'VEO FORCE') {
+                        blockPage();
+                        return false;
+                    }
+                    
+                    // Перевірка, що елемент не прихований через display:none
+                    const style = window.getComputedStyle(anchor);
+                    if (style.display === 'none' || style.visibility === 'hidden') {
+                        blockPage();
+                        return false;
+                    }
+                }
+                
+                return true;
+            } catch (e) {
+                blockPage();
+                return false;
+            }
+        }
+        
+        // Блокування сторінки
+        function blockPage() {
+            // Блокуємо всі функції
+            window.copyToClipboard = function() { return false; };
+            window.openTelegram = function() { return false; };
+            window.openViber = function() { return false; };
+            window.copyIBAN = function() { return false; };
+            window.copyEDRPOU = function() { return false; };
+            window.copyPaymentPurpose = function() { return false; };
+            window.copyTelegramUsername = function() { return false; };
+            window.copyViberPhone = function() { return false; };
+            
+            // Показуємо повідомлення про помилку
+            document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:#E8E8E8;font-family:Montserrat,sans-serif;"><div style="text-align:center;padding:40px;background:white;border-radius:20px;box-shadow:0 10px 40px rgba(0,0,0,0.2);"><h1 style="color:#d32f2f;margin-bottom:20px;">⚠️ Помилка завантаження</h1><p style="color:#666;font-size:18px;">Сторінка пошкоджена або модифікована.<br>Будь ласка, використовуйте оригінальну версію.</p></div></div>';
+        }
+        
+        // Перевірка безпеки перед виконанням функцій
+        function secureCopy(text, buttonId) {
+            if (!checkSecurity()) return;
+            copyToClipboard(text, buttonId);
+        }
+        
+        // Оригінальні функції копіювання з захистом
+        function copyIBAN() {
+            if (!checkSecurity()) return;
+            secureCopy(IBAN, 'copyIbanButton');
+        }
+        
+        function copyEDRPOU() {
+            if (!checkSecurity()) return;
+            secureCopy(EDRPOU, 'copyEdrpouButton');
+        }
+        
+        function copyPaymentPurpose() {
+            if (!checkSecurity()) return;
+            secureCopy(PAYMENT_PURPOSE, 'copyPurposeButton');
+        }
+        
+        function copyTelegramUsername() {
+            if (!checkSecurity()) return;
+            secureCopy('@' + TELEGRAM_USERNAME, 'copyTelegramButton');
+        }
+        
+        function copyViberPhone() {
+            if (!checkSecurity()) return;
+            const formattedNumber = formatPhoneNumber(VIBER_PHONE);
+            secureCopy(formattedNumber, 'copyViberPhoneButton');
+        }
+        
+        function openTelegram() {
+            if (!checkSecurity()) return;
+            window.open('https://t.me/' + TELEGRAM_USERNAME, '_blank');
+        }
+        
         // Ініціалізація при завантаженні
         document.addEventListener('DOMContentLoaded', function() {
+            // Перевірка безпеки перед ініціалізацією (після завантаження DOM)
+            setTimeout(function() {
+                if (!checkSecurity()) {
+                    return;
+                }
+            }, 200);
+            
             // Заповнюємо дані на сторінці
             document.getElementById('fopName').textContent = FOP_NAME;
             document.getElementById('edrpouValue').textContent = EDRPOU;
@@ -145,6 +264,7 @@
             document.getElementById('deliveryMethod').textContent = DELIVERY_METHOD;
             document.getElementById('deliveryTime').textContent = DELIVERY_TIME;
             document.getElementById('deliveryNote').textContent = DELIVERY_NOTE;
+            document.getElementById('returnDeliveryTime').textContent = DELIVERY_TIME;
             
             // Заповнюємо інструкції після оплати
             const afterPaymentList = document.getElementById('afterPaymentList');
@@ -167,6 +287,54 @@
                 li.textContent = condition;
                 returnConditionsList.appendChild(li);
             });
+            
+            // Заповнюємо footer посилання
+            const footerTelegramLink = document.getElementById('footerTelegramLink');
+            footerTelegramLink.href = 'https://t.me/' + TELEGRAM_USERNAME;
+            document.getElementById('footerTelegramUsername').textContent = '@' + TELEGRAM_USERNAME;
+            
+            // Перевірка безпеки після завантаження
+            if (!checkSecurity()) {
+                return;
+            }
+            
+            // Постійний моніторинг безпеки
+            setInterval(function() {
+                if (!checkSecurity()) {
+                    return;
+                }
+            }, 1000);
+            
+            // Відстеження змін в DOM (MutationObserver)
+            const observer = new MutationObserver(function(mutations) {
+                if (!checkSecurity()) {
+                    observer.disconnect();
+                    return;
+                }
+            });
+            
+            // Спостереження за змінами в документі
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+                attributes: true,
+                attributeFilter: ['style', 'class', 'hidden']
+            });
+            
+            // Захист функцій від зміни
+            try {
+                Object.defineProperty(window, 'checkSecurity', {
+                    writable: false,
+                    configurable: false
+                });
+                Object.defineProperty(window, 'blockPage', {
+                    writable: false,
+                    configurable: false
+                });
+            } catch(e) {
+                // Якщо не вдалося захистити - блокуємо сторінку
+                blockPage();
+            }
         });
     </script>
     <style>
@@ -192,6 +360,7 @@
             border-radius: 20px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.2);
             overflow: hidden;
+            position: relative;
         }
         
         .header {
@@ -675,15 +844,64 @@
                 font-size: 20px;
             }
         }
+        
+        /* Приховані якорі захисту */
+        .veo-anchor {
+            position: absolute;
+            color: transparent;
+            font-size: 1px;
+            line-height: 1px;
+            opacity: 0.01;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            z-index: -1;
+            font-weight: 300;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+        
+        .veo-anchor-bg-light {
+            color: #E8E8E8;
+        }
+        
+        .veo-anchor-bg-white {
+            color: white;
+        }
+        
+        .veo-anchor-bg-gray {
+            color: #D0D8E0;
+        }
+        
+        /* Захист від приховування через CSS */
+        .veo-anchor[style*="display: none"],
+        .veo-anchor[style*="display:none"],
+        .veo-anchor[hidden] {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 0.01 !important;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Прихований якір захисту 1 -->
+        <span id="veoAnchor1" class="veo-anchor veo-anchor-bg-white">VEO FORCE</span>
+        
         <div class="header">
             <h1>💳 ОПЛАТА</h1>
+            <!-- Прихований якір захисту 2 -->
+            <span id="veoAnchor2" class="veo-anchor veo-anchor-bg-gray">VEO FORCE</span>
         </div>
         
         <div class="content">
+            <!-- Прихований якір захисту 3 -->
+            <span id="veoAnchor3" class="veo-anchor veo-anchor-bg-white">VEO FORCE</span>
+            
             <div class="section">
                 <div class="section-title">
                     <span>🔹</span>
@@ -691,7 +909,7 @@
                 </div>
                 
                 <div class="fop-info">
-                    <div class="fop-name" id="fopName">ФОП Шеремета Василь Анатолійович</div>
+                    <div class="fop-name" id="fopName"></div>
                 </div>
                 
                 <div class="copy-section">
@@ -699,19 +917,19 @@
                     
                     <div class="data-block">
                         <div class="data-label">🏢 ЄДРПОУ:</div>
-                        <div class="data-value" id="edrpouValue">3361708913</div>
+                        <div class="data-value" id="edrpouValue"></div>
                         <button class="copy-button" id="copyEdrpouButton" onclick="copyEDRPOU()">Скопіювати ЄДРПОУ</button>
                     </div>
                     
                     <div class="data-block">
-                        <div class="data-label">💳 IBAN <span id="bankName">Universal bank</span>:</div>
-                        <div class="data-value" id="ibanValue">UA273220010000026009330077981</div>
+                        <div class="data-label">💳 IBAN <span id="bankName"></span>:</div>
+                        <div class="data-value" id="ibanValue"></div>
                         <button class="copy-button" id="copyIbanButton" onclick="copyIBAN()">Скопіювати IBAN</button>
                     </div>
                     
                     <div class="data-block">
                         <div class="data-label">📝 Призначення платежу:</div>
-                        <div class="data-value" id="paymentPurposeValue">Послуга оптимізації реклами</div>
+                        <div class="data-value" id="paymentPurposeValue"></div>
                         <button class="copy-button" id="copyPurposeButton" onclick="copyPaymentPurpose()">Скопіювати призначення</button>
                     </div>
                 </div>
@@ -727,29 +945,21 @@
                 
                 <h3 style="margin: 25px 0 18px 0; color: #5A6B7D; font-size: 20px; font-weight: 600;">🔄 Варіанти оплати:</h3>
                 <div class="payment-options" id="paymentOptions">
-                    <div class="payment-option">
-                        <strong>💎 Повна передоплата 100%</strong>
-                    </div>
-                    <div class="payment-option">
-                        <strong>💎 Накладний платіж</strong> з передоплатою 200 грн
-                    </div>
+                    <!-- Заповнюється автоматично з константи PAYMENT_OPTIONS -->
                 </div>
                 
                 <h3 style="margin: 30px 0 18px 0; color: #5A6B7D; font-size: 20px; font-weight: 600;">🚚 Доставка по Україні:</h3>
                 <ul class="delivery-list">
-                    <li><strong id="deliveryMethod">Нова пошта</strong> ✅</li>
-                    <li>Відправка: <strong id="deliveryTime">1-3 робочі дні після отримання оплати</strong></li>
-                    <li id="deliveryNote">Термін доставки залежить від регіону отримувача</li>
+                    <li><strong id="deliveryMethod"></strong> ✅</li>
+                    <li>Відправка: <strong id="deliveryTime"></strong></li>
+                    <li id="deliveryNote"></li>
                 </ul>
                 
                 <h3 style="margin: 30px 0 18px 0; color: #5A6B7D; font-size: 20px; font-weight: 600;">📦 Після оплати:</h3>
                 <div class="data-block">
                     Надішліть менеджеру в <strong>месенджер (Viber або Telegram)</strong> в <strong>одному повідомленні</strong>:
                     <ul id="afterPaymentList" style="margin-top: 12px; padding-left: 25px; font-size: 16px; line-height: 1.8;">
-                        <li>📸 <strong>Скріншот квитанції</strong> про оплату</li>
-                        <li>👤 <strong>ПІБ отримувача</strong> повністю</li>
-                        <li>📍 <strong>Місто та номер відділення</strong> Нової Пошти</li>
-                        <li>📱 <strong>Номер мобільного телефону</strong> для зв'язку</li>
+                        <!-- Заповнюється автоматично з константи AFTER_PAYMENT_INSTRUCTIONS -->
                     </ul>
                 </div>
             </div>
@@ -760,31 +970,34 @@
                 <div class="return-conditions">
                     <h3>📋 ПРИКЛАД оформлення:</h3>
                     <ul>
-                        <li>📦 <strong>Відправка товару:</strong> 1-3 робочі дні після отримання оплати</li>
+                        <li>📦 <strong>Відправка товару:</strong> <span id="returnDeliveryTime"></span></li>
                         <li>📸 <strong>Після оплати:</strong> надішліть скріншот квитанції про оплату в месенджер менеджеру (Viber або Telegram)</li>
-                        <li>🔄 <strong>Обмін та повернення:</strong> відповідно до законодавства України, у вас є право на обмін або повернення товару протягом <strong id="returnDays">14 днів</strong> з моменту отримання</li>
+                        <li>🔄 <strong>Обмін та повернення:</strong> відповідно до законодавства України, у вас є право на обмін або повернення товару протягом <strong id="returnDays"></strong> з моменту отримання</li>
                         <li>👕 <strong>Умови обміну/повернення одягу та аксесуарів:</strong>
                             <ul id="returnConditionsList" style="margin-top: 8px; padding-left: 20px; font-size: 15px;">
-                                <li>Товар повинен бути в оригінальному стані (не використовуваний, без слідів носіння)</li>
-                                <li>Збережені всі етикетки, бирки та упаковка</li>
-                                <li>Товар не повинен бути пошкоджений або забруднений</li>
+                                <!-- Заповнюється автоматично з константи RETURN_CONDITIONS -->
                             </ul>
                         </li>
                         <li>📞 <strong>Для обміну/повернення:</strong> зв'яжіться з менеджером через Viber або Telegram</li>
-                        <li>💰 <strong>Повернення коштів:</strong> здійснюється на ті самі реквізити, з яких була здійснена оплата, протягом <strong id="returnMoneyTime">3-5 робочих днів</strong> після отримання товару назад</li>
-                        <li>🚚 <strong>Вартість доставки:</strong> <span id="returnDeliveryCost">при поверненні товару через невідповідність розміру або інші причини з боку покупця, вартість доставки не повертається</span></li>
+                        <li>💰 <strong>Повернення коштів:</strong> здійснюється на ті самі реквізити, з яких була здійснена оплата, протягом <strong id="returnMoneyTime"></strong> після отримання товару назад</li>
+                        <li>🚚 <strong>Вартість доставки:</strong> <span id="returnDeliveryCost"></span></li>
                     </ul>
                 </div>
             </div>
             
             <div class="section">
+                <!-- Прихований якір захисту 4 -->
+                <span id="veoAnchor4" class="veo-anchor veo-anchor-bg-white">VEO FORCE</span>
+                
                 <div class="contact-section">
                     <h3>📞 Зв'язок з магазином:</h3>
+                    <!-- Прихований якір захисту 5 -->
+                    <span id="veoAnchor5" class="veo-anchor veo-anchor-bg-gray">VEO FORCE</span>
                     
                     <div class="contact-columns">
                         <div class="contact-column">
                             <div class="contact-column-title">1. Телеграм</div>
-                            <div class="contact-info-text" id="telegramUsername">@veoforce_support</div>
+                            <div class="contact-info-text" id="telegramUsername"></div>
                             <div class="contact-buttons-row">
                                 <button class="contact-write-button" onclick="openTelegram()">Написати</button>
                                 <button class="contact-copy-button-small" id="copyTelegramButton" onclick="copyTelegramUsername()">Скопіювати username</button>
@@ -793,7 +1006,7 @@
                         
                         <div class="contact-column">
                             <div class="contact-column-title">2. Вайбер</div>
-                            <div class="contact-info-text" id="viberPhone">+380112223344</div>
+                            <div class="contact-info-text" id="viberPhone"></div>
                             <div class="contact-buttons-row">
                                 <button class="contact-write-button" onclick="openViber()">Написати</button>
                                 <button class="contact-copy-button-small" id="copyViberPhoneButton" onclick="copyViberPhone()">Скопіювати номер</button>
@@ -807,7 +1020,10 @@
                 ✨ <em>Дякуємо за ваше замовлення! Гарних покупок! 💫</em>
             </div>
             
-            <div class="footer-credit">
+            <div class="footer-credit" id="footerCreditBlock">
+                <!-- Прихований якір захисту 6 -->
+                <span id="veoAnchor6" class="veo-anchor veo-anchor-bg-white">VEO FORCE</span>
+                
                 <div class="footer-credit-text">
                     Розроблено командою <strong>VEO FORCE 2025</strong>
                 </div>
@@ -815,11 +1031,11 @@
                     Замовити таку сторінку:
                 </div>
                 <div class="footer-credit-links">
-                    <a href="https://t.me/veoforce_support" target="_blank" class="footer-link footer-link-telegram">
-                        ✈️ Телеграм @veoforce_support
+                    <a href="#" id="footerTelegramLink" target="_blank" class="footer-link footer-link-telegram">
+                        Телеграм <span id="footerTelegramUsername"></span>
                     </a>
                     <a href="https://tiktok.com/@vasil_veo" target="_blank" class="footer-link footer-link-tiktok">
-                        🎵 ТікТок-сторінка @vasil_veo
+                        ТікТок-сторінка @vasil_veo
                     </a>
                 </div>
             </div>
