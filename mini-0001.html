@@ -559,7 +559,13 @@
             
             // Завантажуємо календар подій
             if (GOOGLE_CALENDAR_URL_OR_ID && GOOGLE_CALENDAR_URL_OR_ID.trim() !== '') {
+                // Завантажуємо події при завантаженні сторінки
                 loadCalendarEvents();
+                
+                // Автоматичне оновлення календаря кожні 10 хвилин
+                setInterval(function() {
+                    loadCalendarEvents();
+                }, 10 * 60 * 1000); // 10 хвилин в мілісекундах
             } else {
                 // Показуємо повідомлення про відсутність синхронізації
                 showCalendarNotSynced();
