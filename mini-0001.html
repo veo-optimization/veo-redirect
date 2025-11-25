@@ -8,9 +8,51 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
+        // ============================================
         // КОНФІГУРАЦІЯ - ЗМІНІТЬ ДАНІ ТУТ
-        const VIBER_PHONE = "0112223344"; // Номер Viber
+        // ============================================
+        
+        // РЕКВІЗИТИ ФОП
+        const FOP_NAME = "ФОП Шеремета Василь Анатолійович";
+        const EDRPOU = "3361708913";
+        const IBAN = "UA273220010000026009330077981";
+        const BANK_NAME = "Universal bank";
+        const PAYMENT_PURPOSE = "Послуга оптимізації реклами";
+        
+        // КОНТАКТИ
         const TELEGRAM_USERNAME = "veoforce_support"; // Telegram username (без @)
+        const VIBER_PHONE = "0112223344"; // Номер Viber (10 цифр, починається з 0)
+        
+        // УМОВИ ОПЛАТИ
+        const PAYMENT_OPTIONS = [
+            "💎 Повна передоплата 100%",
+            "💎 Накладний платіж з передоплатою 200 грн"
+        ];
+        
+        // УМОВИ ДОСТАВКИ
+        const DELIVERY_METHOD = "Нова пошта";
+        const DELIVERY_TIME = "1-3 робочі дні після отримання оплати";
+        const DELIVERY_NOTE = "Термін доставки залежить від регіону отримувача";
+        
+        // УМОВИ ПОВЕРНЕННЯ
+        const RETURN_DAYS = "14 днів";
+        const RETURN_CONDITIONS = [
+            "Товар повинен бути в оригінальному стані (не використовуваний, без слідів носіння)",
+            "Збережені всі етикетки, бирки та упаковка",
+            "Товар не повинен бути пошкоджений або забруднений"
+        ];
+        const RETURN_MONEY_TIME = "3-5 робочих днів";
+        const RETURN_DELIVERY_COST = "при поверненні товару через невідповідність розміру або інші причини з боку покупця, вартість доставки не повертається";
+        
+        // ПІСЛЯ ОПЛАТИ - ІНСТРУКЦІЇ
+        const AFTER_PAYMENT_INSTRUCTIONS = [
+            "📸 Скріншот квитанції про оплату",
+            "👤 ПІБ отримувача повністю",
+            "📍 Місто та номер відділення Нової Пошти",
+            "📱 Номер мобільного телефону для зв'язку"
+        ];
+        
+        // ============================================
         
         // Функція для форматування номера
         function formatPhoneNumber(phoneNumber) {
@@ -49,29 +91,82 @@
         }
         
         function copyIBAN() {
-            copyToClipboard('UA273220010000026009330077981', 'copyIbanButton');
+            copyToClipboard(IBAN, 'copyIbanButton');
         }
         
         function copyEDRPOU() {
-            copyToClipboard('3361708913', 'copyEdrpouButton');
+            copyToClipboard(EDRPOU, 'copyEdrpouButton');
         }
         
         function copyPaymentPurpose() {
-            copyToClipboard('Послуга оптимізації реклами', 'copyPurposeButton');
+            copyToClipboard(PAYMENT_PURPOSE, 'copyPurposeButton');
         }
         
         function copyTelegramUsername() {
-            copyToClipboard('@veoforce_support', 'copyTelegramButton');
+            copyToClipboard('@' + TELEGRAM_USERNAME, 'copyTelegramButton');
         }
         
         function copyViberPhone() {
             const formattedNumber = formatPhoneNumber(VIBER_PHONE);
-            copyToClipboard(formattedNumber, 'copyViberButton');
+            copyToClipboard(formattedNumber, 'copyViberPhoneButton');
+        }
+        
+        function openTelegram() {
+            window.open('https://t.me/' + TELEGRAM_USERNAME, '_blank');
+        }
+        
+        function openViber() {
+            const viberUrl = createViberUrl(VIBER_PHONE);
+            window.location.href = viberUrl;
         }
         
         // Ініціалізація при завантаженні
         document.addEventListener('DOMContentLoaded', function() {
-            // Ініціалізація завершена
+            // Заповнюємо дані на сторінці
+            document.getElementById('fopName').textContent = FOP_NAME;
+            document.getElementById('edrpouValue').textContent = EDRPOU;
+            document.getElementById('ibanValue').textContent = IBAN;
+            document.getElementById('bankName').textContent = BANK_NAME;
+            document.getElementById('paymentPurposeValue').textContent = PAYMENT_PURPOSE;
+            document.getElementById('telegramUsername').textContent = '@' + TELEGRAM_USERNAME;
+            document.getElementById('viberPhone').textContent = formatPhoneNumber(VIBER_PHONE);
+            
+            // Заповнюємо умови оплати
+            const paymentOptionsContainer = document.getElementById('paymentOptions');
+            paymentOptionsContainer.innerHTML = '';
+            PAYMENT_OPTIONS.forEach(function(option) {
+                const div = document.createElement('div');
+                div.className = 'payment-option';
+                div.innerHTML = '<strong>' + option + '</strong>';
+                paymentOptionsContainer.appendChild(div);
+            });
+            
+            // Заповнюємо умови доставки
+            document.getElementById('deliveryMethod').textContent = DELIVERY_METHOD;
+            document.getElementById('deliveryTime').textContent = DELIVERY_TIME;
+            document.getElementById('deliveryNote').textContent = DELIVERY_NOTE;
+            
+            // Заповнюємо інструкції після оплати
+            const afterPaymentList = document.getElementById('afterPaymentList');
+            afterPaymentList.innerHTML = '';
+            AFTER_PAYMENT_INSTRUCTIONS.forEach(function(instruction) {
+                const li = document.createElement('li');
+                li.innerHTML = '<strong>' + instruction + '</strong>';
+                afterPaymentList.appendChild(li);
+            });
+            
+            // Заповнюємо умови повернення
+            document.getElementById('returnDays').textContent = RETURN_DAYS;
+            document.getElementById('returnMoneyTime').textContent = RETURN_MONEY_TIME;
+            document.getElementById('returnDeliveryCost').textContent = RETURN_DELIVERY_COST;
+            
+            const returnConditionsList = document.getElementById('returnConditionsList');
+            returnConditionsList.innerHTML = '';
+            RETURN_CONDITIONS.forEach(function(condition) {
+                const li = document.createElement('li');
+                li.textContent = condition;
+                returnConditionsList.appendChild(li);
+            });
         });
     </script>
     <style>
@@ -373,18 +468,96 @@
             box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
         }
         
-        .contact-info-block {
+        .contact-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .contact-column {
             background: rgba(255, 255, 255, 0.15);
-            padding: 15px;
-            border-radius: 12px;
-            margin: 15px 0;
+            padding: 20px;
+            border-radius: 15px;
             backdrop-filter: blur(10px);
+        }
+        
+        .contact-column-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-align: center;
         }
         
         .contact-info-text {
             font-size: 18px;
             font-weight: 600;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            text-align: center;
+            word-break: break-all;
+        }
+        
+        .contact-buttons-row {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .contact-write-button {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 500;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-family: 'Montserrat', sans-serif;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+        }
+        
+        .contact-write-button:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: #6B7A8F;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+        }
+        
+        .contact-copy-button-small {
+            background: rgba(255, 255, 255, 0.25);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            padding: 10px 18px;
+            border-radius: 25px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: 500;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-family: 'Montserrat', sans-serif;
+            cursor: pointer;
+            display: block;
+            width: 100%;
+            border: none;
+        }
+        
+        .contact-copy-button-small:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: #6B7A8F;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+        }
+        
+        @media (max-width: 600px) {
+            .contact-columns {
+                grid-template-columns: 1fr;
+            }
         }
         
         .contact-links {
@@ -413,12 +586,80 @@
         }
         
         .footer-credit {
-            margin-top: 20px;
-            padding-top: 15px;
-            font-size: 10px;
-            color: #ccc;
-            opacity: 0.5;
+            margin-top: 40px;
+            padding: 25px;
+            font-size: 16px;
+            color: #5A6B7D;
             text-align: center;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(107, 122, 143, 0.2);
+        }
+        
+        .footer-credit-text {
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #4a4a4a;
+        }
+        
+        .footer-credit-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+            align-items: center;
+        }
+        
+        .footer-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #6B7A8F;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(107, 122, 143, 0.1);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .footer-link:hover {
+            background: rgba(107, 122, 143, 0.2);
+            color: #5A6B7D;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(107, 122, 143, 0.3);
+            border-color: rgba(107, 122, 143, 0.3);
+        }
+        
+        .footer-link:active {
+            transform: translateY(0);
+        }
+        
+        .footer-link-telegram {
+            color: #0088cc;
+        }
+        
+        .footer-link-telegram:hover {
+            background: rgba(0, 136, 204, 0.15);
+            color: #006699;
+        }
+        
+        .footer-link-tiktok {
+            color: #000000;
+        }
+        
+        .footer-link-tiktok:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: #000000;
+        }
+        
+        @media (min-width: 500px) {
+            .footer-credit-links {
+                flex-direction: row;
+                justify-content: center;
+            }
         }
         
         @media (max-width: 600px) {
@@ -450,7 +691,7 @@
                 </div>
                 
                 <div class="fop-info">
-                    <div class="fop-name">ФОП Шеремета Василь Анатолійович</div>
+                    <div class="fop-name" id="fopName">ФОП Шеремета Василь Анатолійович</div>
                 </div>
                 
                 <div class="copy-section">
@@ -458,19 +699,19 @@
                     
                     <div class="data-block">
                         <div class="data-label">🏢 ЄДРПОУ:</div>
-                        <div class="data-value">3361708913</div>
+                        <div class="data-value" id="edrpouValue">3361708913</div>
                         <button class="copy-button" id="copyEdrpouButton" onclick="copyEDRPOU()">Скопіювати ЄДРПОУ</button>
                     </div>
                     
                     <div class="data-block">
-                        <div class="data-label">💳 IBAN Universal bank:</div>
-                        <div class="data-value">UA273220010000026009330077981</div>
+                        <div class="data-label">💳 IBAN <span id="bankName">Universal bank</span>:</div>
+                        <div class="data-value" id="ibanValue">UA273220010000026009330077981</div>
                         <button class="copy-button" id="copyIbanButton" onclick="copyIBAN()">Скопіювати IBAN</button>
                     </div>
                     
                     <div class="data-block">
                         <div class="data-label">📝 Призначення платежу:</div>
-                        <div class="data-value">Послуга оптимізації реклами</div>
+                        <div class="data-value" id="paymentPurposeValue">Послуга оптимізації реклами</div>
                         <button class="copy-button" id="copyPurposeButton" onclick="copyPaymentPurpose()">Скопіювати призначення</button>
                     </div>
                 </div>
@@ -485,7 +726,7 @@
                 </div>
                 
                 <h3 style="margin: 25px 0 18px 0; color: #5A6B7D; font-size: 20px; font-weight: 600;">🔄 Варіанти оплати:</h3>
-                <div class="payment-options">
+                <div class="payment-options" id="paymentOptions">
                     <div class="payment-option">
                         <strong>💎 Повна передоплата 100%</strong>
                     </div>
@@ -496,15 +737,15 @@
                 
                 <h3 style="margin: 30px 0 18px 0; color: #5A6B7D; font-size: 20px; font-weight: 600;">🚚 Доставка по Україні:</h3>
                 <ul class="delivery-list">
-                    <li><strong>Нова пошта</strong> ✅</li>
-                    <li>Відправка: <strong>1-3 робочі дні</strong> після отримання оплати</li>
-                    <li>Термін доставки залежить від регіону отримувача</li>
+                    <li><strong id="deliveryMethod">Нова пошта</strong> ✅</li>
+                    <li>Відправка: <strong id="deliveryTime">1-3 робочі дні після отримання оплати</strong></li>
+                    <li id="deliveryNote">Термін доставки залежить від регіону отримувача</li>
                 </ul>
                 
                 <h3 style="margin: 30px 0 18px 0; color: #5A6B7D; font-size: 20px; font-weight: 600;">📦 Після оплати:</h3>
                 <div class="data-block">
                     Надішліть менеджеру в <strong>месенджер (Viber або Telegram)</strong> в <strong>одному повідомленні</strong>:
-                    <ul style="margin-top: 12px; padding-left: 25px; font-size: 16px; line-height: 1.8;">
+                    <ul id="afterPaymentList" style="margin-top: 12px; padding-left: 25px; font-size: 16px; line-height: 1.8;">
                         <li>📸 <strong>Скріншот квитанції</strong> про оплату</li>
                         <li>👤 <strong>ПІБ отримувача</strong> повністю</li>
                         <li>📍 <strong>Місто та номер відділення</strong> Нової Пошти</li>
@@ -521,17 +762,17 @@
                     <ul>
                         <li>📦 <strong>Відправка товару:</strong> 1-3 робочі дні після отримання оплати</li>
                         <li>📸 <strong>Після оплати:</strong> надішліть скріншот квитанції про оплату в месенджер менеджеру (Viber або Telegram)</li>
-                        <li>🔄 <strong>Обмін та повернення:</strong> відповідно до законодавства України, у вас є право на обмін або повернення товару протягом <strong>14 днів</strong> з моменту отримання</li>
+                        <li>🔄 <strong>Обмін та повернення:</strong> відповідно до законодавства України, у вас є право на обмін або повернення товару протягом <strong id="returnDays">14 днів</strong> з моменту отримання</li>
                         <li>👕 <strong>Умови обміну/повернення одягу та аксесуарів:</strong>
-                            <ul style="margin-top: 8px; padding-left: 20px; font-size: 15px;">
+                            <ul id="returnConditionsList" style="margin-top: 8px; padding-left: 20px; font-size: 15px;">
                                 <li>Товар повинен бути в оригінальному стані (не використовуваний, без слідів носіння)</li>
                                 <li>Збережені всі етикетки, бирки та упаковка</li>
                                 <li>Товар не повинен бути пошкоджений або забруднений</li>
                             </ul>
                         </li>
                         <li>📞 <strong>Для обміну/повернення:</strong> зв'яжіться з менеджером через Viber або Telegram</li>
-                        <li>💰 <strong>Повернення коштів:</strong> здійснюється на ті самі реквізити, з яких була здійснена оплата, протягом 3-5 робочих днів після отримання товару назад</li>
-                        <li>🚚 <strong>Вартість доставки:</strong> при поверненні товару через невідповідність розміру або інші причини з боку покупця, вартість доставки не повертається</li>
+                        <li>💰 <strong>Повернення коштів:</strong> здійснюється на ті самі реквізити, з яких була здійснена оплата, протягом <strong id="returnMoneyTime">3-5 робочих днів</strong> після отримання товару назад</li>
+                        <li>🚚 <strong>Вартість доставки:</strong> <span id="returnDeliveryCost">при поверненні товару через невідповідність розміру або інші причини з боку покупця, вартість доставки не повертається</span></li>
                     </ul>
                 </div>
             </div>
@@ -540,14 +781,24 @@
                 <div class="contact-section">
                     <h3>📞 Зв'язок з магазином:</h3>
                     
-                    <div class="contact-info-block">
-                        <div class="contact-info-text">✈️ Telegram: @veoforce_support</div>
-                        <button class="contact-copy-button" id="copyTelegramButton" onclick="copyTelegramUsername()">Скопіювати username</button>
-                    </div>
-                    
-                    <div class="contact-info-block">
-                        <div class="contact-info-text">💜 Viber: +380112223344</div>
-                        <button class="contact-copy-button" id="copyViberButton" onclick="copyViberPhone()">Скопіювати номер</button>
+                    <div class="contact-columns">
+                        <div class="contact-column">
+                            <div class="contact-column-title">1. Телеграм</div>
+                            <div class="contact-info-text" id="telegramUsername">@veoforce_support</div>
+                            <div class="contact-buttons-row">
+                                <button class="contact-write-button" onclick="openTelegram()">Написати</button>
+                                <button class="contact-copy-button-small" id="copyTelegramButton" onclick="copyTelegramUsername()">Скопіювати username</button>
+                            </div>
+                        </div>
+                        
+                        <div class="contact-column">
+                            <div class="contact-column-title">2. Вайбер</div>
+                            <div class="contact-info-text" id="viberPhone">+380112223344</div>
+                            <div class="contact-buttons-row">
+                                <button class="contact-write-button" onclick="openViber()">Написати</button>
+                                <button class="contact-copy-button-small" id="copyViberPhoneButton" onclick="copyViberPhone()">Скопіювати номер</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -557,7 +808,20 @@
             </div>
             
             <div class="footer-credit">
-                Розроблено: Оптимізація ТікТок @vasil_veo 2025
+                <div class="footer-credit-text">
+                    Розроблено командою <strong>VEO FORCE 2025</strong>
+                </div>
+                <div style="font-size: 14px; color: #6B7A8F; margin-top: 8px;">
+                    Замовити таку сторінку:
+                </div>
+                <div class="footer-credit-links">
+                    <a href="https://t.me/veoforce_support" target="_blank" class="footer-link footer-link-telegram">
+                        ✈️ Телеграм @veoforce_support
+                    </a>
+                    <a href="https://tiktok.com/@vasil_veo" target="_blank" class="footer-link footer-link-tiktok">
+                        🎵 ТікТок-сторінка @vasil_veo
+                    </a>
+                </div>
             </div>
         </div>
     </div>
