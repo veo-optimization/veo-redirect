@@ -330,14 +330,14 @@
                 
                 // Якщо API не працює або немає ключа, використовуємо iCal feed
                 const icalUrl = `https://calendar.google.com/calendar/ical/${calendarId}/public/basic.ics`;
-                await loadCalendarFromICal(icalUrl);
+                await loadCalendarFromICal(icalUrl, calendarIdRaw);
                 
             } catch (error) {
                 console.error('Помилка завантаження календаря:', error);
                 // Спробуємо завантажити через iCal як fallback
                 try {
                     const icalUrl = `https://calendar.google.com/calendar/ical/${calendarId}/public/basic.ics`;
-                    await loadCalendarFromICal(icalUrl);
+                    await loadCalendarFromICal(icalUrl, calendarIdRaw);
                 } catch (icalError) {
                     console.error('Помилка завантаження через iCal:', icalError);
                 }
@@ -345,7 +345,7 @@
         }
         
         // Завантаження через iCal feed
-        async function loadCalendarFromICal(icalUrl) {
+        async function loadCalendarFromICal(icalUrl, calendarIdRaw) {
             try {
                 const response = await fetch(icalUrl);
                 if (!response.ok) {
@@ -366,8 +366,11 @@
                 }
                 
                 // Налаштовуємо кнопку "Додати календар"
-                const addButton = document.getElementById('addToCalendarButton');
-                addButton.href = `https://calendar.google.com/calendar/render?cid=${calendarId}`;
+                if (calendarIdRaw) {
+                    const addButton = document.getElementById('addToCalendarButton');
+                    const calendarIdEncoded = encodeURIComponent(calendarIdRaw);
+                    addButton.href = `https://calendar.google.com/calendar/render?cid=${calendarIdEncoded}`;
+                }
             } catch (error) {
                 console.error('Помилка завантаження iCal:', error);
             }
@@ -390,8 +393,12 @@
                     if (currentEvent && currentEvent.start) {
                         const startDate = new Date(currentEvent.start);
                         const now = new Date();
+                        // Встановлюємо час на початок дня для правильної фільтрації
+                        now.setHours(0, 0, 0, 0);
                         const fiveDaysLater = new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000);
+                        fiveDaysLater.setHours(23, 59, 59, 999);
                         
+                        // Перевіряємо, чи подія в межах 5 днів
                         if (startDate >= now && startDate <= fiveDaysLater) {
                             events.push({
                                 summary: currentEvent.summary || 'Подія',
@@ -421,12 +428,16 @@
         // Парсинг дати з iCal формату
         function parseICalDate(dateStr) {
             // Формат: 20240115T120000Z або 20240115
-            if (dateStr.length === 15 && dateStr.includes('T')) {
+            if (dateStr.length >= 15 && dateStr.includes('T')) {
                 const year = dateStr.substring(0, 4);
                 const month = dateStr.substring(4, 6);
                 const day = dateStr.substring(6, 8);
                 const hour = dateStr.substring(9, 11);
                 const minute = dateStr.substring(11, 13);
+                // Якщо дата в UTC (закінчується на Z), конвертуємо в ISO формат
+                if (dateStr.endsWith('Z')) {
+                    return `${year}-${month}-${day}T${hour}:${minute}:00Z`;
+                }
                 return `${year}-${month}-${day}T${hour}:${minute}:00`;
             } else if (dateStr.length === 8) {
                 const year = dateStr.substring(0, 4);
