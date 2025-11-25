@@ -290,6 +290,12 @@
         
         // Завантаження подій з Google Calendar
         async function loadCalendarEvents() {
+            // Завжди показуємо блок календаря
+            const calendarSection = document.getElementById('calendarSection');
+            if (calendarSection) {
+                calendarSection.style.display = 'block';
+            }
+            
             if (!GOOGLE_CALENDAR_URL_OR_ID || GOOGLE_CALENDAR_URL_OR_ID.trim() === '') {
                 console.log('Calendar URL не вказано');
                 showCalendarNotSynced();
@@ -331,7 +337,15 @@
                             
                             // Налаштовуємо кнопку "Додати календар"
                             const addButton = document.getElementById('addToCalendarButton');
-                            addButton.href = `https://calendar.google.com/calendar/render?cid=${calendarId}`;
+                            if (addButton) {
+                                // Використовуємо iCal URL для підписки
+                                if (GOOGLE_CALENDAR_URL_OR_ID.includes('/ical/') && GOOGLE_CALENDAR_URL_OR_ID.includes('/public/basic.ics')) {
+                                    addButton.href = GOOGLE_CALENDAR_URL_OR_ID;
+                                } else {
+                                    addButton.href = `https://calendar.google.com/calendar/ical/${calendarIdRaw}/public/basic.ics`;
+                                }
+                                addButton.style.display = 'block';
+                            }
                             return;
                         }
                     }
@@ -370,45 +384,66 @@
         async function loadCalendarFromICal(icalUrl, calendarIdRaw) {
             try {
                 console.log('Завантаження iCal з URL:', icalUrl);
-                const response = await fetch(icalUrl);
+                
+                // Використовуємо проксі для обходу CORS, якщо потрібно
+                // Або використовуємо прямий запит, оскільки публічні календарі Google доступні
+                const response = await fetch(icalUrl, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'text/calendar'
+                    }
+                });
+                
                 if (!response.ok) {
                     throw new Error('Не вдалося завантажити календар. Статус: ' + response.status);
                 }
                 
                 const icalText = await response.text();
                 console.log('iCal завантажено, розмір:', icalText.length);
+                console.log('Перші 500 символів iCal:', icalText.substring(0, 500));
+                
                 const events = parseICal(icalText);
                 console.log('Подій знайдено:', events.length);
+                if (events.length > 0) {
+                    console.log('Перша подія:', events[0]);
+                }
                 
                 const calendarSection = document.getElementById('calendarSection');
                 if (!calendarSection) {
                     console.error('Блок календаря не знайдено в DOM');
+                    showCalendarNotSynced();
                     return;
                 }
                 
+                // Завжди показуємо блок календаря
+                calendarSection.style.display = 'block';
+                
                 if (events.length > 0) {
                     displayCalendarEvents(events);
-                    calendarSection.style.display = 'block';
                 } else {
-                    // Показуємо блок навіть якщо подій немає
-                    calendarSection.style.display = 'block';
+                    // Показуємо повідомлення якщо подій немає
                     const container = document.getElementById('calendarEvents');
                     if (container) {
-                        container.innerHTML = '<div class="calendar-empty">На найближчі 5 днів ефірів не заплановано</div>';
+                        container.innerHTML = '<div class="calendar-empty" style="text-align: center; padding: 30px; color: #8B6F47; font-size: 16px;">На найближчі 5 днів ефірів не заплановано</div>';
                     }
                 }
                 
                 // Налаштовуємо кнопку "Додати календар"
-                if (calendarIdRaw) {
-                    const addButton = document.getElementById('addToCalendarButton');
-                    if (addButton) {
+                const addButton = document.getElementById('addToCalendarButton');
+                if (addButton) {
+                    // Використовуємо iCal URL для підписки на календар
+                    // Це дозволить користувачам підписатися на календар і бачити оновлення
+                    if (GOOGLE_CALENDAR_URL_OR_ID.includes('/ical/') && GOOGLE_CALENDAR_URL_OR_ID.includes('/public/basic.ics')) {
+                        addButton.href = GOOGLE_CALENDAR_URL_OR_ID;
+                    } else if (calendarIdRaw) {
                         const calendarIdEncoded = encodeURIComponent(calendarIdRaw);
-                        addButton.href = `https://calendar.google.com/calendar/render?cid=${calendarIdEncoded}`;
-                        addButton.style.display = 'block';
+                        addButton.href = `https://calendar.google.com/calendar/ical/${calendarIdEncoded}/public/basic.ics`;
                     }
+                    addButton.style.display = 'block';
                 }
             } catch (error) {
                 console.error('Помилка завантаження iCal:', error);
+                console.error('Деталі помилки:', error.message);
                 showCalendarNotSynced();
             }
         }
@@ -429,19 +464,24 @@
                 } else if (line === 'END:VEVENT') {
                     if (currentEvent && currentEvent.start) {
                         try {
+                            // Створюємо Date об'єкт з UTC дати
                             const startDate = new Date(currentEvent.start);
                             const now = new Date();
-                            // Встановлюємо час на початок дня для правильної фільтрації
-                            now.setHours(0, 0, 0, 0);
-                            const fiveDaysLater = new Date(now.getTime() + 5 * 24 * 60 * 60 * 1000);
-                            fiveDaysLater.setHours(23, 59, 59, 999);
                             
                             // Перевіряємо, чи дата валідна
                             if (isNaN(startDate.getTime())) {
                                 console.warn('Невалідна дата події:', currentEvent.start);
                             } else {
-                                // Перевіряємо, чи подія в межах 5 днів
-                                if (startDate >= now && startDate <= fiveDaysLater) {
+                                // Встановлюємо час на початок дня для правильної фільтрації (локальний час)
+                                const nowLocal = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+                                const fiveDaysLater = new Date(nowLocal.getTime() + 5 * 24 * 60 * 60 * 1000);
+                                fiveDaysLater.setHours(23, 59, 59, 999);
+                                
+                                // Конвертуємо startDate в локальний час для порівняння
+                                const startDateLocal = new Date(startDate.getTime());
+                                
+                                // Перевіряємо, чи подія в межах 5 днів (включаючи сьогодні)
+                                if (startDateLocal >= nowLocal && startDateLocal <= fiveDaysLater) {
                                     events.push({
                                         summary: currentEvent.summary || 'Подія',
                                         start: { dateTime: currentEvent.start },
@@ -457,13 +497,21 @@
                     currentEvent = null;
                 } else if (inEvent && currentEvent) {
                     if (line.startsWith('SUMMARY:')) {
-                        currentEvent.summary = line.substring(8);
-                    } else if (line.startsWith('DTSTART:')) {
-                        const dateStr = line.substring(8);
-                        currentEvent.start = parseICalDate(dateStr);
-                    } else if (line.startsWith('DTEND:')) {
-                        const dateStr = line.substring(6);
-                        currentEvent.end = parseICalDate(dateStr);
+                        currentEvent.summary = line.substring(8).trim();
+                    } else if (line.startsWith('DTSTART')) {
+                        // Може бути DTSTART;VALUE=DATE або DTSTART:...
+                        const dateStr = line.includes(':') ? line.substring(line.indexOf(':') + 1) : '';
+                        if (dateStr) {
+                            currentEvent.start = parseICalDate(dateStr);
+                        }
+                    } else if (line.startsWith('DTEND')) {
+                        // Може бути DTEND;VALUE=DATE або DTEND:...
+                        const dateStr = line.includes(':') ? line.substring(line.indexOf(':') + 1) : '';
+                        if (dateStr) {
+                            currentEvent.end = parseICalDate(dateStr);
+                        }
+                    } else if (line.startsWith('DESCRIPTION:')) {
+                        currentEvent.description = line.substring(12).trim();
                     }
                 }
             }
@@ -539,9 +587,16 @@
                 container.innerHTML = '<div class="calendar-not-synced" style="text-align: center; padding: 30px; color: #8B6F47; font-size: 18px; font-weight: 600;">📅 Календар LIVE-трансляцій не синхронізовано</div>';
             }
             
-            // Приховуємо кнопку "Додати календар"
+            // Налаштовуємо кнопку "Додати календар" навіть при помилці
             const addButton = document.getElementById('addToCalendarButton');
-            if (addButton) {
+            if (addButton && GOOGLE_CALENDAR_URL_OR_ID && GOOGLE_CALENDAR_URL_OR_ID.trim() !== '') {
+                if (GOOGLE_CALENDAR_URL_OR_ID.includes('/ical/') && GOOGLE_CALENDAR_URL_OR_ID.includes('/public/basic.ics')) {
+                    addButton.href = GOOGLE_CALENDAR_URL_OR_ID;
+                    addButton.style.display = 'block';
+                } else {
+                    addButton.style.display = 'none';
+                }
+            } else if (addButton) {
                 addButton.style.display = 'none';
             }
         }
@@ -917,10 +972,7 @@
         }
         
         .payment-option {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 18px;
-            border-radius: 15px;
-            backdrop-filter: blur(10px);
+            padding: 12px 0;
         }
         
         .payment-option strong {
@@ -935,11 +987,8 @@
         }
         
         .delivery-list li {
-            background: rgba(255, 255, 255, 0.7);
-            padding: 15px;
-            margin: 12px 0;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
+            padding: 10px 0;
+            margin: 8px 0;
             font-size: 16px;
         }
         
@@ -1512,7 +1561,7 @@
                         <div style="font-family: 'Montserrat', monospace; font-size: 16px; line-height: 1.8; white-space: pre-line; color: #4a4a4a;" id="paymentTemplateDisplay"></div>
                     </div>
                     
-                    <button class="copy-button" id="copyTemplateButton" onclick="copyPaymentTemplate()">Скопіювати текст Шаблону</button>
+                    <button class="copy-button" id="copyTemplateButton" onclick="copyPaymentTemplate()">Скопіювати текст шаблону</button>
                     
                     <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #dee2e6;">
                         <p style="font-size: 15px; color: #666; margin-bottom: 10px;"><strong>Приклад заповнення шаблону:</strong></p>
@@ -1603,10 +1652,10 @@
                 
                 <h3 style="margin: 30px 0 18px 0; color: #5A6B7D; font-size: 20px; font-weight: 600;">🚚 Доставка по Україні:</h3>
                 <ul class="delivery-list">
-                    <li><strong id="deliveryMethod"></strong> ✅</li>
-                    <li>Відправка: <strong id="deliveryTime"></strong></li>
-                    <li id="deliveryNote"></li>
-                    <li><strong>Вартість доставки:</strong> відповідно до тарифів перевізника. Сплачує отримувач.</li>
+                    <li>🔷 <strong id="deliveryMethod"></strong> ✅</li>
+                    <li>🔷 Відправка: <strong id="deliveryTime"></strong></li>
+                    <li>🔷 <span id="deliveryNote"></span></li>
+                    <li>🔷 <strong>Вартість доставки:</strong> відповідно до тарифів перевізника. Сплачує отримувач.</li>
                 </ul>
                 
                 <div id="exchangeReturnSection" style="margin-top: 30px;">
