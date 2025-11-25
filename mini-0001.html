@@ -985,7 +985,7 @@
         .copy-section h3 {
             color: #5A6B7D;
             margin-bottom: 20px;
-            font-size: 18px;
+            font-size: 13px;
             font-weight: 500;
         }
         
@@ -1011,7 +1011,7 @@
         }
         
         .data-value {
-            font-size: 15px;
+            font-size: 11px;
             font-weight: 600;
             color: #4a4a4a;
             font-family: 'Montserrat', monospace;
@@ -1066,7 +1066,7 @@
         
         .payment-option strong {
             color: #6B7A8F;
-            font-size: 17px;
+            font-size: 13px;
             font-weight: 600;
         }
         
@@ -1076,9 +1076,10 @@
         }
         
         .delivery-list li {
-            padding: 10px 0;
-            margin: 8px 0;
-            font-size: 16px;
+            padding: 8px 0;
+            margin: 6px 0;
+            font-size: 13px;
+            line-height: 1.5;
         }
         
         .delivery-list li strong {
@@ -1090,15 +1091,15 @@
             background: rgba(255, 243, 205, 0.8);
             border: 2px solid #FFD89B;
             border-radius: 15px;
-            padding: 25px;
+            padding: 20px;
             margin: 25px 0;
             backdrop-filter: blur(10px);
         }
         
         .return-conditions h3 {
             color: #8B6F47;
-            margin-bottom: 18px;
-            font-size: 20px;
+            margin-bottom: 15px;
+            font-size: 16px;
             font-weight: 600;
         }
         
@@ -1108,10 +1109,10 @@
         }
         
         .return-conditions li {
-            padding: 12px 0;
+            padding: 8px 0;
             border-bottom: 1px solid #FFE5B4;
-            font-size: 16px;
-            line-height: 1.6;
+            font-size: 13px;
+            line-height: 1.5;
         }
         
         .return-conditions li:last-child {
@@ -1623,7 +1624,7 @@
         
         <div class="header">
             <h1 id="shopNameHeader"></h1>
-            <p style="text-align: center; font-size: 16px; color: #6B7A8F; margin-top: 8px; font-weight: 500;">ТікТок-магазин</p>
+            <p style="text-align: center; font-size: 16px; color: white; margin-top: 8px; font-weight: 500;">ТікТок-магазин</p>
             <!-- Прихований якір захисту 2 -->
             <span id="veoAnchor2" class="veo-anchor veo-anchor-bg-gray">VEO FORCE</span>
         </div>
@@ -1755,17 +1756,17 @@
             
             <!-- ОБ'ЄДНАНИЙ БЛОК УМОВ ОПЛАТИ, ДОСТАВКИ ТА ПОВЕРНЕННЯ -->
             <div class="section return-conditions">
-                <div class="section-title">
+                <div class="section-title" style="font-size: 16px;">
                     <span>💳</span>
                     <span>Умови оплати, доставки та повернення</span>
                 </div>
                 
-                <h3 style="margin: 25px 0 18px 0; color: #5A6B7D; font-size: 20px; font-weight: 600;">🔄 Варіанти оплати:</h3>
+                <h3 style="margin: 20px 0 12px 0; color: #5A6B7D; font-size: 14px; font-weight: 600;">🔄 Варіанти оплати:</h3>
                 <div class="payment-options" id="paymentOptions">
                     <!-- Заповнюється автоматично з константи PAYMENT_OPTIONS -->
                 </div>
                 
-                <h3 style="margin: 30px 0 18px 0; color: #5A6B7D; font-size: 20px; font-weight: 600;">🚚 Доставка по Україні:</h3>
+                <h3 style="margin: 20px 0 12px 0; color: #5A6B7D; font-size: 14px; font-weight: 600;">🚚 Доставка по Україні:</h3>
                 <ul class="delivery-list">
                     <li>🔷 <strong id="deliveryMethod"></strong> ✅</li>
                     <li>🔷 Відправка: <strong id="deliveryTime"></strong></li>
@@ -1773,8 +1774,8 @@
                     <li>🔷 <strong>Вартість доставки:</strong> відповідно до тарифів перевізника. Сплачує отримувач.</li>
                 </ul>
                 
-                <div id="exchangeReturnSection" style="margin-top: 30px;">
-                    <h3 style="margin-bottom: 18px; color: #8B6F47; font-size: 20px; font-weight: 600;">📋 Умови обміну та повернення:</h3>
+                <div id="exchangeReturnSection" style="margin-top: 20px;">
+                    <h3 style="margin-bottom: 12px; color: #8B6F47; font-size: 14px; font-weight: 600;">📋 Умови обміну та повернення:</h3>
                     <ul id="exchangeReturnList">
                         <!-- Заповнюється автоматично з констант EXCHANGE_DAYS та RETURN_DAYS -->
                     </ul>
