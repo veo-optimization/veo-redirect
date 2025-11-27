@@ -188,35 +188,58 @@
         }
         
         // Функція для копіювання в буфер обміну
-        function copyToClipboard(text, buttonId) {
+        function copyToClipboard(text, buttonId, successMessage) {
             if (!checkSecurity()) return;
             navigator.clipboard.writeText(text).then(function() {
-                // Повідомлення про копіювання тепер відображається тільки через бейдж в рядку назви
-                // Не змінюємо кнопку, щоб уникнути дублювання повідомлення
+                const button = document.getElementById(buttonId);
+                if (button) {
+                    const originalHTML = button.innerHTML;
+                    const originalBackground = button.style.background || '';
+                    
+                    // Змінюємо текст та колір кнопки
+                    if (successMessage) {
+                        button.innerHTML = successMessage;
+                    } else {
+                        button.innerHTML = '✓ Скопійовано!';
+                    }
+                    button.style.background = '#2196F3';
+                    button.style.color = '#ffffff';
+                    
+                    // Повертаємо оригінальний вигляд через 2 секунди
+                    setTimeout(function() {
+                        button.innerHTML = originalHTML;
+                        button.style.background = originalBackground;
+                        button.style.color = '';
+                    }, 2000);
+                }
             }).catch(function(err) {
                 alert('Не вдалося скопіювати');
             });
         }
         
         function copyIBAN() {
-            copyToClipboard(IBAN, 'copyIbanButton');
+            copyToClipboard(IBAN, 'copyIbanButton', '✓ IBAN скопійовано');
         }
         
         function copyEDRPOU() {
-            copyToClipboard(EDRPOU, 'copyEdrpouButton');
+            copyToClipboard(EDRPOU, 'copyEdrpouButton', '✓ ЄДРПОУ скопійовано');
         }
         
         function copyPaymentPurpose() {
-            copyToClipboard(PAYMENT_PURPOSE, 'copyPurposeButton');
+            copyToClipboard(PAYMENT_PURPOSE, 'copyPurposeButton', '✓ Призначення скопійовано');
         }
         
         function copyTelegramUsername() {
-            copyToClipboard('@' + TELEGRAM_USERNAME, 'copyTelegramButton');
+            if (!checkSecurity()) return;
+            copyToClipboard('@' + TELEGRAM_USERNAME, 'copyTelegramButton', '✓ Username скопійовано');
+            showCopySuccess('telegramCopyBadge');
         }
         
         function copyViberPhone() {
+            if (!checkSecurity()) return;
             const formattedNumber = formatPhoneNumber(VIBER_PHONE);
-            copyToClipboard(formattedNumber, 'copyViberPhoneButton');
+            copyToClipboard(formattedNumber, 'copyViberPhoneButton', '✓ Номер скопійовано');
+            showCopySuccess('viberCopyBadge');
         }
         
         // ============================================
@@ -268,7 +291,7 @@
         
         function modalCopyContact() {
             if (!currentContactData || !checkSecurity()) return;
-            secureCopy(currentContactData.value, 'modalCopyButton');
+            secureCopy(currentContactData.value, 'modalCopyButton', '✓ Скопійовано!');
         }
         
         function modalOpenContact() {
@@ -304,7 +327,7 @@
         
         function copyTelegramShowcase() {
             if (!checkSecurity() || !TELEGRAM_SHOWCASE) return;
-            secureCopy('@' + TELEGRAM_SHOWCASE, 'copyTelegramShowcaseButton');
+            secureCopy('@' + TELEGRAM_SHOWCASE, 'copyTelegramShowcaseButton', '✓ Username скопійовано');
             showCopySuccess('showcaseCopyBadge');
         }
         
@@ -315,7 +338,7 @@
         
         function copyInstagramUsername() {
             if (!checkSecurity() || !INSTAGRAM_USERNAME) return;
-            secureCopy('@' + INSTAGRAM_USERNAME, 'copyInstagramButton');
+            secureCopy('@' + INSTAGRAM_USERNAME, 'copyInstagramButton', '✓ Username скопійовано');
             showCopySuccess('instagramCopyBadge');
         }
         
@@ -406,9 +429,9 @@
         }
         
         // Перевірка безпеки перед виконанням функцій
-        function secureCopy(text, buttonId) {
+        function secureCopy(text, buttonId, successMessage) {
             if (!checkSecurity()) return;
-            copyToClipboard(text, buttonId);
+            copyToClipboard(text, buttonId, successMessage);
         }
         
         // Оригінальні функції копіювання з захистом
@@ -443,7 +466,8 @@
         
         function copyPaymentTemplate() {
             if (!checkSecurity()) return;
-            secureCopy(AFTER_PAYMENT_TEMPLATE, 'copyTemplateButton');
+            const templateText = document.getElementById('paymentTemplateDisplay').textContent;
+            copyToClipboard(templateText, 'copyTemplateButton', '✓ Шаблон скопійовано');
         }
         
         // ============================================
