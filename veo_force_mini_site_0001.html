@@ -948,10 +948,10 @@
         
         body {
             font-family: 'Montserrat', sans-serif;
-            background: linear-gradient(135deg, #00D2FF 0%, #FF6B9D 30%, #000000 60%, #FFFFFF 100%);
-            color: #2C2C2C;
-            line-height: 1.7;
-            padding: 20px;
+            background: #1a1a1a;
+            color: #ffffff;
+            line-height: 1.6;
+            padding: 0;
             min-height: 100vh;
             position: relative;
         }
@@ -963,188 +963,128 @@
         }
         
         .container {
-            max-width: 600px;
+            max-width: 100%;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 25px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3), 0 0 0 2px rgba(255,255,255,0.1);
-            overflow: hidden;
+            background: #1a1a1a;
+            min-height: 100vh;
             position: relative;
-            backdrop-filter: blur(20px);
         }
         
         .header {
-            background: linear-gradient(135deg, #00D2FF 0%, #FF6B9D 30%, #000000 60%, #FFFFFF 100%);
+            background: #2a2a2a;
             color: white;
-            padding: 40px 20px;
+            padding: 20px 16px;
             text-align: center;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .header::before {
-            content: '';
-            position: absolute;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            position: sticky;
             top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shine 3s infinite;
-        }
-        
-        @keyframes shine {
-            0% { left: -100%; }
-            100% { left: 100%; }
+            z-index: 100;
         }
         
         .header h1 {
-            font-size: 36px;
-            margin-bottom: 10px;
+            font-size: 24px;
+            margin-bottom: 8px;
             font-weight: 700;
-            text-shadow: 
-                0 0 10px rgba(255,255,255,0.5),
-                0 2px 8px rgba(0,0,0,0.3),
-                2px 0 0 #00D2FF,
-                -2px 0 0 #FF6B9D;
-            letter-spacing: 2px;
-            position: relative;
-            z-index: 1;
+            color: #ffffff;
+            letter-spacing: 0.5px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            color: #b0b0b0;
+            margin: 0;
         }
         
         .content {
-            padding: 35px 25px;
+            padding: 16px;
+            padding-bottom: 80px;
         }
         
         .content p, .content li {
-            font-size: 16px;
-            line-height: 1.7;
-            color: #4a4a4a;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #e0e0e0;
         }
         
         .section {
-            margin-bottom: 30px;
+            margin-bottom: 16px;
         }
         
         .section-title {
-            font-size: 26px;
+            font-size: 18px;
             font-weight: 700;
-            background: linear-gradient(135deg, #FF6B9D 0%, #6C5CE7 50%, #00D2FF 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 20px;
+            color: #ffffff;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
-            gap: 10px;
-            text-shadow: 0 0 20px rgba(0,210,255,0.3);
-            position: relative;
+            gap: 8px;
+        }
+        
+        .card {
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
         .fop-info {
-            background: rgba(255, 255, 255, 0.9);
-            border-left: 4px solid;
-            border-image: linear-gradient(135deg, #FF6B9D 0%, #6C5CE7 50%, #00D2FF 100%) 1;
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 25px;
-            backdrop-filter: blur(15px);
-            box-shadow: 
-                0 4px 20px rgba(0,0,0,0.1),
-                inset 0 1px 0 rgba(255,255,255,0.6);
-            border-right: 2px solid rgba(255,255,255,0.5);
-            border-top: 2px solid rgba(255,255,255,0.5);
-            border-bottom: 2px solid rgba(255,255,255,0.5);
+            background: #2a2a2a;
+            border-left: 4px solid #4CAF50;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
         .fop-name {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 600;
-            color: #4a4a4a;
-            margin-bottom: 12px;
+            color: #ffffff;
+            margin-bottom: 8px;
             line-height: 1.5;
         }
         
         .copy-section {
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid rgba(255,255,255,0.6);
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
             text-align: center;
-            backdrop-filter: blur(15px);
-            box-shadow: 
-                0 8px 25px rgba(0,0,0,0.1),
-                inset 0 1px 0 rgba(255,255,255,0.6);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .copy-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, #FF6B9D 0%, #6C5CE7 50%, #00D2FF 100%);
-            background-size: 200% 100%;
-            animation: gradientShift 3s ease infinite;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
         .copy-section h3 {
-            color: #5A6B7D;
-            margin-bottom: 20px;
-            font-size: 13px;
+            color: #b0b0b0;
+            margin-bottom: 12px;
+            font-size: 12px;
             font-weight: 500;
         }
         
         .data-block {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 15px 18px;
-            margin: 12px 0;
-            border: 2px solid rgba(255,255,255,0.5);
-            backdrop-filter: blur(15px);
+            background: #333333;
+            border-radius: 10px;
+            padding: 12px;
+            margin: 8px 0;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
-            box-shadow: 
-                0 4px 15px rgba(0,0,0,0.1),
-                inset 0 1px 0 rgba(255,255,255,0.6);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .data-block::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0,210,255,0.1), transparent);
-            transition: left 0.5s;
-        }
-        
-        .data-block:hover::before {
-            left: 100%;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
         }
         
         .data-label {
-            font-size: 14px;
-            color: #5A6B7D;
+            font-size: 12px;
+            color: #b0b0b0;
             font-weight: 500;
             white-space: nowrap;
             flex-shrink: 0;
         }
         
         .data-value {
-            font-size: 11px;
+            font-size: 13px;
             font-weight: 600;
-            color: #4a4a4a;
+            color: #ffffff;
             font-family: 'Montserrat', monospace;
             word-break: break-all;
             flex: 1;
@@ -1153,65 +1093,36 @@
         }
         
         .copy-button {
-            background: linear-gradient(135deg, #00D2FF 0%, #6C5CE7 50%, #FF6B9D 100%);
-            background-size: 200% 200%;
-            animation: gradientShift 3s ease infinite;
+            background: #4CAF50;
             color: white;
-            border: 2px solid rgba(255,255,255,0.3);
-            padding: 10px 20px;
-            border-radius: 25px;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
             font-size: 13px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             flex-shrink: 0;
             white-space: nowrap;
-            box-shadow: 
-                0 4px 15px rgba(0,210,255,0.4),
-                0 0 0 1px rgba(255,255,255,0.2),
-                inset 0 1px 0 rgba(255,255,255,0.3);
             font-family: 'Montserrat', sans-serif;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .copy-button::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            transition: left 0.5s;
-        }
-        
-        .copy-button:hover::before {
-            left: 100%;
+            box-shadow: 0 2px 4px rgba(76,175,80,0.3);
         }
         
         .copy-button:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 
-                0 8px 25px rgba(0,210,255,0.6),
-                0 0 0 2px rgba(255,255,255,0.4),
-                inset 0 1px 0 rgba(255,255,255,0.5);
-            border-color: rgba(255,255,255,0.5);
+            background: #45a049;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(76,175,80,0.4);
         }
         
         .copy-button:active {
             transform: translateY(0);
+            background: #3d8b40;
         }
         
         .divider {
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #FF6B9D 0%, #6C5CE7 50%, #00D2FF 100%, transparent);
-            background-size: 200% 100%;
-            animation: gradientShift 4s ease infinite;
-            margin: 35px 0;
-            border-radius: 2px;
-            box-shadow: 0 2px 8px rgba(0,210,255,0.3);
+            height: 1px;
+            background: #333333;
+            margin: 16px 0;
         }
         
         .payment-options {
@@ -1222,13 +1133,14 @@
         
         .payment-option {
             padding: 8px 0;
-            margin: 6px 0;
+            margin: 4px 0;
             font-size: 13px;
             line-height: 1.5;
+            color: #e0e0e0;
         }
         
         .payment-option strong {
-            color: #6B7A8F;
+            color: #ffffff;
             font-size: 13px;
             font-weight: 600;
         }
@@ -1240,45 +1152,28 @@
         
         .delivery-list li {
             padding: 8px 0;
-            margin: 6px 0;
+            margin: 4px 0;
             font-size: 13px;
             line-height: 1.5;
+            color: #e0e0e0;
         }
         
         .delivery-list li strong {
-            color: #6B7A8F;
+            color: #ffffff;
             font-weight: 600;
         }
         
         .return-conditions {
-            background: rgba(255, 255, 255, 0.9);
-            border: 2px solid rgba(255,255,255,0.5);
-            border-radius: 20px;
-            padding: 25px;
-            margin: 25px 0;
-            backdrop-filter: blur(15px);
-            box-shadow: 
-                0 8px 30px rgba(0,0,0,0.15),
-                inset 0 1px 0 rgba(255,255,255,0.6);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .return-conditions::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #FF6B9D 0%, #6C5CE7 50%, #00D2FF 100%);
-            background-size: 200% 100%;
-            animation: gradientShift 3s ease infinite;
+            background: #2a2a2a;
+            border-radius: 12px;
+            padding: 16px;
+            margin: 12px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
         .return-conditions h3 {
-            color: #8B6F47;
-            margin-bottom: 15px;
+            color: #ffffff;
+            margin-bottom: 12px;
             font-size: 16px;
             font-weight: 600;
         }
@@ -1290,9 +1185,10 @@
         
         .return-conditions li {
             padding: 8px 0;
-            border-bottom: 1px solid #FFE5B4;
+            border-bottom: 1px solid #333333;
             font-size: 13px;
             line-height: 1.5;
+            color: #e0e0e0;
         }
         
         .return-conditions li:last-child {
@@ -1300,37 +1196,19 @@
         }
         
         .contact-section {
-            background: rgba(255, 255, 255, 0.9);
-            color: #2C2C2C;
-            padding: 25px;
-            border-radius: 20px;
-            margin: 25px 0;
-            box-shadow: 
-                0 8px 30px rgba(0,0,0,0.15),
-                inset 0 1px 0 rgba(255,255,255,0.6);
-            backdrop-filter: blur(15px);
-            border: 2px solid rgba(255,255,255,0.5);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .contact-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #FF6B9D 0%, #6C5CE7 50%, #00D2FF 100%);
-            background-size: 200% 100%;
-            animation: gradientShift 3s ease infinite;
+            background: #2a2a2a;
+            color: #ffffff;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 12px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
         .contact-section h3 {
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             font-size: 18px;
             font-weight: 600;
-            color: #5A6B7D;
+            color: #ffffff;
         }
         
         .contact-buttons {
@@ -1402,31 +1280,23 @@
         }
         
         .contact-column-telegram {
-            background: linear-gradient(135deg, #00D2FF 0%, #6C5CE7 50%, #FF6B9D 100%);
-            background-size: 200% 200%;
-            animation: gradientShift 4s ease infinite;
-            box-shadow: 0 8px 25px rgba(0,210,255,0.4);
+            background: #0088cc;
+            box-shadow: 0 2px 8px rgba(0,136,204,0.3);
         }
         
         .contact-column-viber {
-            background: linear-gradient(135deg, #FF6B9D 0%, #C44569 50%, #6C5CE7 100%);
-            background-size: 200% 200%;
-            animation: gradientShift 5s ease infinite;
-            box-shadow: 0 8px 25px rgba(255,107,157,0.4);
+            background: #665CAC;
+            box-shadow: 0 2px 8px rgba(102,92,172,0.3);
         }
         
         .contact-column-showcase {
-            background: linear-gradient(135deg, #6C5CE7 0%, #00D2FF 50%, #FF6B9D 100%);
-            background-size: 200% 200%;
-            animation: gradientShift 4.5s ease infinite;
-            box-shadow: 0 8px 25px rgba(108,92,231,0.4);
+            background: #0088cc;
+            box-shadow: 0 2px 8px rgba(0,136,204,0.3);
         }
         
         .contact-column-instagram {
-            background: linear-gradient(135deg, #FF6B9D 0%, #F56040 50%, #FCAF45 100%);
-            background-size: 200% 200%;
-            animation: gradientShift 5s ease infinite;
-            box-shadow: 0 8px 25px rgba(255,107,157,0.4);
+            background: linear-gradient(135deg, #E4405F 0%, #F56040 50%, #FCAF45 100%);
+            box-shadow: 0 2px 8px rgba(228,64,95,0.3);
         }
         
         .contact-column-title {
@@ -1453,75 +1323,57 @@
         }
         
         .contact-write-button {
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.4);
             color: white;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            padding: 10px 16px;
-            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 14px;
+            border-radius: 8px;
             text-decoration: none;
             text-align: center;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 13px;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             font-family: 'Montserrat', sans-serif;
             cursor: pointer;
             display: block;
             flex: 1;
-            backdrop-filter: blur(10px);
-            box-shadow: 
-                0 4px 15px rgba(0,0,0,0.3),
-                inset 0 1px 0 rgba(255,255,255,0.2);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
         
         .contact-write-button:hover {
-            background: rgba(0, 0, 0, 0.9);
-            border-color: rgba(255, 255, 255, 0.8);
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 
-                0 8px 25px rgba(0,0,0,0.5),
-                inset 0 1px 0 rgba(255,255,255,0.4);
+            background: rgba(0, 0, 0, 0.6);
+            border-color: rgba(255, 255, 255, 0.4);
         }
         
         .contact-copy-button-small {
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.4);
             color: white;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            padding: 10px 14px;
-            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 10px 12px;
+            border-radius: 8px;
             text-decoration: none;
             text-align: center;
-            font-weight: 700;
+            font-weight: 600;
             font-size: 12px;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             font-family: 'Montserrat', sans-serif;
             cursor: pointer;
             display: block;
             flex: 1;
             line-height: 1.3;
             white-space: normal;
-            backdrop-filter: blur(10px);
-            box-shadow: 
-                0 4px 15px rgba(0,0,0,0.3),
-                inset 0 1px 0 rgba(255,255,255,0.2);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
         }
         
         .contact-copy-button-small:hover {
-            background: rgba(0, 0, 0, 0.9);
-            border-color: rgba(255, 255, 255, 0.8);
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 
-                0 8px 25px rgba(0,0,0,0.5),
-                inset 0 1px 0 rgba(255,255,255,0.4);
+            background: rgba(0, 0, 0, 0.6);
+            border-color: rgba(255, 255, 255, 0.4);
         }
         
         .contact-unavailable-button {
-            background: rgba(128, 128, 128, 0.6);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            padding: 12px 20px;
-            border-radius: 25px;
+            background: #444444;
+            color: #999999;
+            border: 1px solid #555555;
+            padding: 10px 14px;
+            border-radius: 8px;
             text-decoration: none;
             text-align: center;
             font-weight: 600;
@@ -1531,12 +1383,7 @@
             display: block;
             width: 100%;
             margin-top: 10px;
-            backdrop-filter: blur(10px);
-            box-shadow: 
-                0 2px 10px rgba(0,0,0,0.2),
-                inset 0 1px 0 rgba(255,255,255,0.2);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-            opacity: 0.7;
+            opacity: 0.6;
         }
         
         @media (max-width: 600px) {
@@ -1546,26 +1393,18 @@
         }
         
         .tiktok-instruction {
-            margin-top: 15px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            border-left: 4px solid;
-            border-image: linear-gradient(135deg, #FF6B9D 0%, #FF0050 100%) 1;
-            backdrop-filter: blur(15px);
-            box-shadow: 
-                0 4px 20px rgba(0,0,0,0.1),
-                inset 0 1px 0 rgba(255,255,255,0.6);
-            border-right: 2px solid rgba(255,255,255,0.5);
-            border-top: 2px solid rgba(255,255,255,0.5);
-            border-bottom: 2px solid rgba(255,255,255,0.5);
+            margin-top: 12px;
+            padding: 12px;
+            background: #333333;
+            border-radius: 10px;
+            border-left: 3px solid #FF0050;
         }
         
         .tiktok-instruction-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            color: #2C2C2C;
-            margin-bottom: 8px;
+            color: #ffffff;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
             gap: 6px;
@@ -1574,11 +1413,11 @@
         .tiktok-instruction-text {
             font-size: 12px;
             line-height: 1.5;
-            color: #4a4a4a;
+            color: #b0b0b0;
         }
         
         .tiktok-instruction-text strong {
-            color: #2C2C2C;
+            color: #ffffff;
             font-weight: 600;
         }
         
@@ -1599,54 +1438,36 @@
         
         .footer {
             text-align: center;
-            padding: 25px;
-            color: #5A6B7D;
+            padding: 20px 16px;
+            color: #b0b0b0;
             font-style: italic;
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 400;
             line-height: 1.6;
         }
         
         .footer-credit {
-            margin-top: 40px;
-            padding: 30px;
-            font-size: 16px;
-            color: #2C2C2C;
+            margin-top: 20px;
+            padding: 16px;
+            font-size: 14px;
+            color: #ffffff;
             text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255,255,255,0.6);
-            box-shadow: 
-                0 8px 30px rgba(0,0,0,0.15),
-                inset 0 1px 0 rgba(255,255,255,0.6);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .footer-credit::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #FF6B9D 0%, #6C5CE7 50%, #00D2FF 100%);
-            background-size: 200% 100%;
-            animation: gradientShift 3s ease infinite;
+            background: #2a2a2a;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
         .footer-credit-text {
             font-weight: 500;
             margin-bottom: 12px;
-            color: #4a4a4a;
+            color: #ffffff;
         }
         
         .footer-credit-links {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-top: 15px;
+            gap: 10px;
+            margin-top: 12px;
             width: 100%;
         }
         
@@ -1656,51 +1477,24 @@
             align-items: center;
             justify-content: center;
             gap: 4px;
-            color: #2C2C2C;
+            color: #ffffff;
             text-decoration: none;
-            font-weight: 700;
-            padding: 16px 14px;
-            border-radius: 25px;
-            background: rgba(255, 255, 255, 0.8);
-            transition: all 0.3s ease;
-            border: 2px solid rgba(255,255,255,0.5);
+            font-weight: 600;
+            padding: 12px 10px;
+            border-radius: 10px;
+            background: #333333;
+            transition: all 0.2s ease;
             text-align: center;
-            line-height: 1.5;
+            line-height: 1.4;
             white-space: normal;
-            min-height: 70px;
+            min-height: 60px;
             width: 100%;
             box-sizing: border-box;
-            backdrop-filter: blur(10px);
-            box-shadow: 
-                0 4px 15px rgba(0,0,0,0.1),
-                inset 0 1px 0 rgba(255,255,255,0.6);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .footer-link::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0,210,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        
-        .footer-link:hover::before {
-            left: 100%;
         }
         
         .footer-link:hover {
-            background: rgba(255, 255, 255, 0.95);
-            color: #000;
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 
-                0 8px 25px rgba(0,0,0,0.2),
-                inset 0 1px 0 rgba(255,255,255,0.8);
-            border-color: rgba(255,255,255,0.8);
+            background: #3a3a3a;
+            transform: translateY(-2px);
         }
         
         .footer-link:active {
@@ -1708,21 +1502,19 @@
         }
         
         .footer-link-telegram {
-            background: linear-gradient(135deg, rgba(0,210,255,0.2) 0%, rgba(108,92,231,0.2) 100%);
+            background: #0088cc;
         }
         
         .footer-link-telegram:hover {
-            background: linear-gradient(135deg, rgba(0,210,255,0.3) 0%, rgba(108,92,231,0.3) 100%);
-            color: #0088cc;
+            background: #0077b3;
         }
         
         .footer-link-tiktok {
-            background: linear-gradient(135deg, rgba(255,107,157,0.2) 0%, rgba(196,69,105,0.2) 100%);
+            background: #FF0050;
         }
         
         .footer-link-tiktok:hover {
-            background: linear-gradient(135deg, rgba(255,107,157,0.3) 0%, rgba(196,69,105,0.3) 100%);
-            color: #000000;
+            background: #e60047;
         }
         
         @media (max-width: 600px) {
@@ -1761,82 +1553,94 @@
         }
         
         .footer-tiktok-instruction {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(255, 243, 205, 0.6);
+            margin-top: 12px;
+            padding: 12px;
+            background: #333333;
             border-radius: 10px;
-            border-left: 3px solid #FFD89B;
+            border-left: 3px solid #FF0050;
         }
         
         .footer-tiktok-instruction p {
             margin: 0;
+            color: #b0b0b0;
+            font-size: 12px;
+        }
+        
+        .footer-tiktok-instruction p strong {
+            color: #ffffff;
         }
         
         /* Стилі для календаря */
         .calendar-container {
-            margin-top: 20px;
+            margin-top: 12px;
+        }
+        
+        .calendar-container > div {
+            background: #2a2a2a;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
         .calendar-events {
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-bottom: 25px;
+            gap: 12px;
+            margin-bottom: 16px;
         }
         
         .calendar-event {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            border-left: 4px solid #8FA3B8;
-            border-radius: 12px;
-            padding: 18px;
-            transition: all 0.3s ease;
+            background: #333333;
+            border-left: 3px solid #4CAF50;
+            border-radius: 10px;
+            padding: 12px;
+            transition: all 0.2s ease;
         }
         
         .calendar-event:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateX(3px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
         .calendar-event-date {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 600;
-            color: #5A6B7D;
-            margin-bottom: 8px;
+            color: #b0b0b0;
+            margin-bottom: 6px;
         }
         
         .calendar-event-time {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
-            color: #2C2C2C;
-            margin-bottom: 8px;
+            color: #ffffff;
+            margin-bottom: 6px;
         }
         
         .calendar-event-title {
-            font-size: 17px;
+            font-size: 15px;
             font-weight: 500;
-            color: #4a4a4a;
+            color: #e0e0e0;
             line-height: 1.5;
         }
         
         .calendar-empty {
             text-align: center;
-            padding: 40px 20px;
-            color: #6B7A8F;
-            font-size: 16px;
-            background: #f8f9fa;
+            padding: 30px 16px;
+            color: #b0b0b0;
+            font-size: 14px;
+            background: #2a2a2a;
             border-radius: 12px;
         }
         
         .calendar-not-synced {
             text-align: center;
-            padding: 40px 20px;
-            color: #8B6F47;
-            font-size: 18px;
+            padding: 30px 16px;
+            color: #b0b0b0;
+            font-size: 16px;
             font-weight: 600;
-            background: rgba(255, 243, 205, 0.8);
-            border: 2px solid #FFD89B;
+            background: #2a2a2a;
+            border: 1px solid #444444;
             border-radius: 12px;
-            backdrop-filter: blur(10px);
         }
         
         .calendar-actions {
@@ -1874,11 +1678,19 @@
             }
             
             .header h1 {
-                font-size: 24px;
+                font-size: 22px;
             }
             
             .section-title {
-                font-size: 20px;
+                font-size: 16px;
+            }
+            
+            .content {
+                padding: 12px;
+            }
+            
+            .card, .fop-info, .copy-section, .contact-section, .return-conditions {
+                padding: 12px;
             }
         }
         
@@ -1946,11 +1758,12 @@
                     <span>Реквізити для оплати:</span>
                 </div>
                 
-                <div class="fop-info">
-                    <div class="fop-name" id="fopName"></div>
-                </div>
-                
-                <div class="copy-section">
+                <div class="card">
+                    <div class="fop-info">
+                        <div class="fop-name" id="fopName"></div>
+                    </div>
+                    
+                    <div class="copy-section">
                     <h3>👇 Скопіюйте для оплати 👇</h3>
                     
                     <div class="data-block">
@@ -1977,14 +1790,14 @@
             
             <!-- БЛОК "ПІСЛЯ ОПЛАТИ" -->
             <div class="section">
-                <h3 style="margin: 0 0 18px 0; color: #5A6B7D; font-size: 20px; font-weight: 600;">📦 Після оплати:</h3>
-                <div class="data-block">
-                    <p style="margin-bottom: 15px; font-size: 16px; line-height: 1.7;">
-                        Надішліть менеджеру <strong>скріншот квитанції про успішну оплату</strong>, а також <strong>заповніть шаблон</strong>:
+                <div class="card">
+                    <h3 style="margin: 0 0 12px 0; color: #ffffff; font-size: 16px; font-weight: 600;">📦 Після оплати:</h3>
+                    <p style="margin-bottom: 12px; font-size: 14px; line-height: 1.6; color: #e0e0e0;">
+                        Надішліть менеджеру <strong style="color: #ffffff;">скріншот квитанції про успішну оплату</strong>, а також <strong style="color: #ffffff;">заповніть шаблон</strong>:
                     </p>
                     
-                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin: 15px 0; border-left: 4px solid #8FA3B8;">
-                        <div style="font-family: 'Montserrat', monospace; font-size: 16px; line-height: 1.8; white-space: pre-line; color: #4a4a4a;" id="paymentTemplateDisplay"></div>
+                    <div style="background: #333333; padding: 12px; border-radius: 8px; margin: 12px 0; border-left: 3px solid #4CAF50;">
+                        <div style="font-family: 'Montserrat', monospace; font-size: 13px; line-height: 1.8; white-space: pre-line; color: #e0e0e0;" id="paymentTemplateDisplay"></div>
                     </div>
                     
                     <button class="copy-button" id="copyTemplateButton" onclick="copyPaymentTemplate()">Скопіювати текст шаблону</button>
@@ -2082,18 +1895,19 @@
             <div class="divider"></div>
             
             <!-- ОБ'ЄДНАНИЙ БЛОК УМОВ ОПЛАТИ, ДОСТАВКИ ТА ПОВЕРНЕННЯ -->
-            <div class="section return-conditions">
-                <div class="section-title" style="font-size: 16px;">
-                    <span>💳</span>
-                    <span>Умови оплати, доставки та повернення</span>
-                </div>
-                
-                <h3 style="margin: 20px 0 12px 0; color: #5A6B7D; font-size: 14px; font-weight: 600;">🔄 Варіанти оплати:</h3>
+            <div class="section">
+                <div class="return-conditions">
+                    <div class="section-title" style="font-size: 16px; margin-bottom: 16px;">
+                        <span>💳</span>
+                        <span>Умови оплати, доставки та повернення</span>
+                    </div>
+                    
+                    <h3 style="margin: 16px 0 10px 0; color: #ffffff; font-size: 14px; font-weight: 600;">🔄 Варіанти оплати:</h3>
                 <div class="payment-options" id="paymentOptions">
                     <!-- Заповнюється автоматично з константи PAYMENT_OPTIONS -->
                 </div>
                 
-                <h3 style="margin: 20px 0 12px 0; color: #5A6B7D; font-size: 14px; font-weight: 600;">🚚 Доставка по Україні:</h3>
+                    <h3 style="margin: 16px 0 10px 0; color: #ffffff; font-size: 14px; font-weight: 600;">🚚 Доставка по Україні:</h3>
                 <ul class="delivery-list">
                     <li>🔷 <strong id="deliveryMethod"></strong> ✅</li>
                     <li>🔷 Відправка: <strong id="deliveryTime"></strong></li>
@@ -2101,11 +1915,12 @@
                     <li>🔷 <strong>Вартість доставки:</strong> відповідно до тарифів перевізника. Сплачує отримувач.</li>
                 </ul>
                 
-                <div id="exchangeReturnSection" style="margin-top: 20px;">
-                    <h3 style="margin-bottom: 12px; color: #8B6F47; font-size: 14px; font-weight: 600;">📋 Умови обміну та повернення:</h3>
+                    <div id="exchangeReturnSection" style="margin-top: 16px;">
+                        <h3 style="margin-bottom: 10px; color: #ffffff; font-size: 14px; font-weight: 600;">📋 Умови обміну та повернення:</h3>
                     <ul id="exchangeReturnList">
                         <!-- Заповнюється автоматично з констант EXCHANGE_DAYS та RETURN_DAYS -->
-                    </ul>
+                        </ul>
+                    </div>
                 </div>
             </div>
             
@@ -2133,8 +1948,8 @@
                 </div>
                 
                 <div class="footer-tiktok-instruction">
-                    <p style="font-size: 13px; color: #6B7A8F; margin-top: 15px; line-height: 1.6; text-align: center;">
-                        <strong>📱 Для користувачів TikTok:</strong> щоб кнопка Телеграм спрацювала і відкрила чат - натисніть <strong>три крапки вгорі праворуч</strong> → <strong>"відкрити в браузері"</strong> → а потім натисніть на кнопку <strong>Телеграм</strong>
+                    <p style="font-size: 12px; color: #b0b0b0; margin-top: 12px; line-height: 1.6; text-align: center;">
+                        <strong style="color: #ffffff;">📱 Для користувачів TikTok:</strong> щоб кнопка Телеграм відкрила чат - натисніть <strong style="color: #ffffff;">три крапки вгорі праворуч</strong> → <strong style="color: #ffffff;">"відкрити в браузері"</strong> → а потім натисніть на кнопку <strong style="color: #ffffff;">Телеграм</strong>
                     </p>
                 </div>
             </div>
