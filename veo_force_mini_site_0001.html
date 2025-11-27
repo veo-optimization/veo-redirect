@@ -191,20 +191,8 @@
         function copyToClipboard(text, buttonId) {
             if (!checkSecurity()) return;
             navigator.clipboard.writeText(text).then(function() {
-                const button = document.getElementById(buttonId);
-                if (button) {
-                    const originalHTML = button.innerHTML;
-                    button.innerHTML = '✓ Скопійовано!';
-                    if (button.classList.contains('contact-copy-button') || button.classList.contains('contact-copy-button-small')) {
-                        button.style.background = 'rgba(40, 167, 69, 0.9)';
-                    } else {
-                        button.style.background = '#28a745';
-                    }
-                    setTimeout(function() {
-                        button.innerHTML = originalHTML;
-                        button.style.background = '';
-                    }, 2000);
-                }
+                // Повідомлення про копіювання тепер відображається тільки через бейдж в рядку назви
+                // Не змінюємо кнопку, щоб уникнути дублювання повідомлення
             }).catch(function(err) {
                 alert('Не вдалося скопіювати');
             });
@@ -1332,6 +1320,7 @@
             gap: 2px;
             line-height: 1.3;
             min-width: 90px;
+            align-self: stretch;
         }
         
         .copy-button-template span {
@@ -1358,7 +1347,7 @@
         .template-container {
             display: flex;
             gap: 12px;
-            align-items: flex-start;
+            align-items: stretch;
             margin: 12px 0;
         }
         
@@ -1369,6 +1358,13 @@
             border-left: 3px solid #4CAF50;
             flex: 1;
             min-width: 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .copy-button-template {
+            height: 100%;
+            align-self: stretch;
         }
         
         .template-text {
@@ -1542,22 +1538,22 @@
         }
         
         .contact-item-telegram .contact-icon {
-            background: rgba(0, 136, 204, 0.2);
+            background: #ffffff;
             color: #0088cc;
         }
         
         .contact-item-viber .contact-icon {
-            background: rgba(102, 92, 172, 0.2);
+            background: #ffffff;
             color: #665CAC;
         }
         
         .contact-item-showcase .contact-icon {
-            background: rgba(0, 136, 204, 0.2);
+            background: #ffffff;
             color: #0088cc;
         }
         
         .contact-item-instagram .contact-icon {
-            background: rgba(228, 64, 95, 0.2);
+            background: #ffffff;
             color: #E4405F;
         }
         
@@ -2310,7 +2306,7 @@
                             <span>Для користувачів TikTok:</span>
                         </div>
                         <div class="tiktok-instruction-text">
-                            Для роботи кнопок <strong>"Відкрити"</strong> <i class="bi bi-box-arrow-up-right" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i> <strong>та "Скопіюйте"</strong> <i class="bi bi-files" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i>: натисніть <strong>три крапки вгорі праворуч</strong> → <strong>"відкрити в браузері"</strong>. Або <strong>скопіюйте</strong> <i class="bi bi-files" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i> <strong>username/номер</strong> та знайдіть контакт вручну.
+                            Щоб кнопки <strong>"Відкрити"</strong> <i class="bi bi-box-arrow-up-right" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i> <strong>та "Скопіюйте"</strong> <i class="bi bi-files" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i> коректно працювали, натисніть <strong>три крапки вгорі праворуч</strong> → <strong>"відкрити в браузері"</strong>. Або <strong>скопіюйте</strong> <i class="bi bi-files" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i> <strong>username/номер</strong> та знайдіть контакт вручну.
                         </div>
                     </div>
                     
