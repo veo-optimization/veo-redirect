@@ -7,6 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
     <script>
         // ============================================
         // КОНФІГУРАЦІЯ - ЗМІНІТЬ ДАНІ ТУТ
@@ -756,15 +757,18 @@
             }
             
             // Instagram
-            document.getElementById('instagramColumn').style.display = 'block';
-            if (INSTAGRAM_USERNAME) {
-                document.getElementById('instagramUsername').textContent = '@' + INSTAGRAM_USERNAME;
-                document.getElementById('instagramButtons').style.display = 'flex';
-                document.getElementById('instagramUnavailable').style.display = 'none';
-            } else {
-                document.getElementById('instagramUsername').textContent = 'Не налаштовано';
-                document.getElementById('instagramButtons').style.display = 'none';
-                document.getElementById('instagramUnavailable').style.display = 'block';
+            const instagramItem = document.getElementById('instagramItem');
+            if (instagramItem) {
+                instagramItem.style.display = 'flex';
+                if (INSTAGRAM_USERNAME) {
+                    document.getElementById('instagramUsername').textContent = '@' + INSTAGRAM_USERNAME;
+                    document.getElementById('instagramButtons').style.display = 'flex';
+                    document.getElementById('instagramUnavailable').style.display = 'none';
+                } else {
+                    document.getElementById('instagramUsername').textContent = 'Не налаштовано';
+                    document.getElementById('instagramButtons').style.display = 'none';
+                    document.getElementById('instagramUnavailable').style.display = 'flex';
+                }
             }
             
             // Заповнюємо умови оплати
@@ -1211,184 +1215,172 @@
             color: #ffffff;
         }
         
-        .contact-buttons {
+        .contact-list {
             display: flex;
             flex-direction: column;
-            gap: 12px;
-            margin-top: 15px;
-        }
-        
-        .contact-button {
-            background: rgba(255, 255, 255, 0.25);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            padding: 14px 22px;
-            border-radius: 30px;
-            text-decoration: none;
-            text-align: center;
-            font-weight: 500;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            font-family: 'Montserrat', sans-serif;
-        }
-        
-        .contact-button:hover {
-            background: rgba(255, 255, 255, 0.9);
-            color: #6B7A8F;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
-        }
-        
-        .contact-copy-button {
-            background: rgba(255, 255, 255, 0.25);
-            color: white;
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            padding: 12px 20px;
-            border-radius: 30px;
-            text-decoration: none;
-            text-align: center;
-            font-weight: 500;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            font-family: 'Montserrat', sans-serif;
-            cursor: pointer;
-            display: inline-block;
-            width: 100%;
-            margin-top: 10px;
-        }
-        
-        .contact-copy-button:hover {
-            background: rgba(255, 255, 255, 0.9);
-            color: #6B7A8F;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
-        }
-        
-        .contact-columns {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            margin-top: 15px;
-        }
-        
-        .contact-column {
-            padding: 15px;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-        }
-        
-        .contact-column-telegram {
-            background: #0088cc;
-            box-shadow: 0 2px 8px rgba(0,136,204,0.3);
-        }
-        
-        .contact-column-viber {
-            background: #665CAC;
-            box-shadow: 0 2px 8px rgba(102,92,172,0.3);
-        }
-        
-        .contact-column-showcase {
-            background: #0088cc;
-            box-shadow: 0 2px 8px rgba(0,136,204,0.3);
-        }
-        
-        .contact-column-instagram {
-            background: linear-gradient(135deg, #E4405F 0%, #F56040 50%, #FCAF45 100%);
-            box-shadow: 0 2px 8px rgba(228,64,95,0.3);
-        }
-        
-        .contact-column-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            text-align: center;
-            color: white;
-        }
-        
-        .contact-info-text {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            text-align: center;
-            word-break: break-all;
-            color: white;
-        }
-        
-        .contact-buttons-row {
-            display: flex;
-            flex-direction: row;
             gap: 8px;
+            margin-top: 12px;
         }
         
-        .contact-write-button {
-            background: rgba(0, 0, 0, 0.4);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 10px 14px;
-            border-radius: 8px;
-            text-decoration: none;
-            text-align: center;
-            font-weight: 600;
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: #333333;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+        
+        .contact-item:hover {
+            background: #3a3a3a;
+            transform: translateX(2px);
+        }
+        
+        .contact-item-telegram {
+            border-left-color: #0088cc;
+        }
+        
+        .contact-item-viber {
+            border-left-color: #665CAC;
+        }
+        
+        .contact-item-showcase {
+            border-left-color: #0088cc;
+        }
+        
+        .contact-item-instagram {
+            border-left-color: #E4405F;
+        }
+        
+        .contact-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+        
+        .contact-item-telegram .contact-icon {
+            background: rgba(0, 136, 204, 0.2);
+            color: #0088cc;
+        }
+        
+        .contact-item-viber .contact-icon {
+            background: rgba(102, 92, 172, 0.2);
+            color: #665CAC;
+        }
+        
+        .contact-item-showcase .contact-icon {
+            background: rgba(0, 136, 204, 0.2);
+            color: #0088cc;
+        }
+        
+        .contact-item-instagram .contact-icon {
+            background: rgba(228, 64, 95, 0.2);
+            color: #E4405F;
+        }
+        
+        .contact-content {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .contact-name {
             font-size: 13px;
-            transition: all 0.2s ease;
-            font-family: 'Montserrat', sans-serif;
-            cursor: pointer;
-            display: block;
-            flex: 1;
-        }
-        
-        .contact-write-button:hover {
-            background: rgba(0, 0, 0, 0.6);
-            border-color: rgba(255, 255, 255, 0.4);
-        }
-        
-        .contact-copy-button-small {
-            background: rgba(0, 0, 0, 0.4);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 10px 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            text-align: center;
             font-weight: 600;
-            font-size: 12px;
+            color: #b0b0b0;
+            margin-bottom: 4px;
+        }
+        
+        .contact-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: #ffffff;
+            word-break: break-all;
+        }
+        
+        .contact-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        
+        .contact-action-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            cursor: pointer;
             transition: all 0.2s ease;
             font-family: 'Montserrat', sans-serif;
-            cursor: pointer;
-            display: block;
-            flex: 1;
-            line-height: 1.3;
-            white-space: normal;
         }
         
-        .contact-copy-button-small:hover {
-            background: rgba(0, 0, 0, 0.6);
-            border-color: rgba(255, 255, 255, 0.4);
+        .contact-action-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
         }
         
-        .contact-unavailable-button {
+        .contact-action-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .contact-open-btn:hover {
+            background: #4CAF50;
+        }
+        
+        .contact-copy-btn:hover {
+            background: #2196F3;
+        }
+        
+        .contact-unavailable-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 12px;
             background: #444444;
             color: #999999;
             border: 1px solid #555555;
-            padding: 10px 14px;
             border-radius: 8px;
-            text-decoration: none;
-            text-align: center;
-            font-weight: 600;
-            font-size: 13px;
+            font-size: 12px;
+            font-weight: 500;
             font-family: 'Montserrat', sans-serif;
             cursor: not-allowed;
-            display: block;
-            width: 100%;
-            margin-top: 10px;
             opacity: 0.6;
+            margin-left: auto;
+        }
+        
+        .contact-item {
+            position: relative;
+        }
+        
+        .contact-item .contact-unavailable-btn {
+            margin-left: auto;
+            flex-shrink: 0;
         }
         
         @media (max-width: 600px) {
-            .contact-columns {
-                grid-template-columns: 1fr;
+            .contact-item {
+                padding: 10px;
+            }
+            
+            .contact-icon {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .contact-action-btn {
+                width: 32px;
+                height: 32px;
             }
         }
         
@@ -1815,43 +1807,89 @@
                     <!-- Прихований якір захисту 5 -->
                     <span id="veoAnchor5" class="veo-anchor veo-anchor-bg-white">VEO FORCE</span>
                     
-                    <div class="contact-columns">
-                        <div class="contact-column contact-column-telegram">
-                            <div class="contact-column-title">Телеграм</div>
-                            <div class="contact-info-text" id="telegramUsername"></div>
-                            <div class="contact-buttons-row">
-                                <button class="contact-write-button" onclick="openTelegram()">Відкрити</button>
-                                <button class="contact-copy-button-small" id="copyTelegramButton" onclick="copyTelegramUsername()">Скопіювати<br>username</button>
+                    <div class="contact-list">
+                        <!-- Telegram -->
+                        <div class="contact-item contact-item-telegram">
+                            <div class="contact-icon">
+                                <iconify-icon icon="mdi:telegram" width="24" height="24"></iconify-icon>
+                            </div>
+                            <div class="contact-content">
+                                <div class="contact-name">Телеграм</div>
+                                <div class="contact-value" id="telegramUsername"></div>
+                            </div>
+                            <div class="contact-actions">
+                                <button class="contact-action-btn contact-open-btn" onclick="openTelegram()" title="Відкрити">
+                                    <iconify-icon icon="mdi:open-in-new" width="18" height="18"></iconify-icon>
+                                </button>
+                                <button class="contact-action-btn contact-copy-btn" id="copyTelegramButton" onclick="copyTelegramUsername()" title="Скопіювати">
+                                    <iconify-icon icon="mdi:content-copy" width="18" height="18"></iconify-icon>
+                                </button>
                             </div>
                         </div>
                         
-                        <div class="contact-column contact-column-viber">
-                            <div class="contact-column-title">Вайбер</div>
-                            <div class="contact-info-text" id="viberPhone"></div>
-                            <div class="contact-buttons-row">
-                                <button class="contact-write-button" onclick="openViber()">Відкрити</button>
-                                <button class="contact-copy-button-small" id="copyViberPhoneButton" onclick="copyViberPhone()">Скопіювати<br>номер</button>
+                        <!-- Viber -->
+                        <div class="contact-item contact-item-viber">
+                            <div class="contact-icon">
+                                <iconify-icon icon="simple-icons:viber" width="24" height="24"></iconify-icon>
+                            </div>
+                            <div class="contact-content">
+                                <div class="contact-name">Вайбер</div>
+                                <div class="contact-value" id="viberPhone"></div>
+                            </div>
+                            <div class="contact-actions">
+                                <button class="contact-action-btn contact-open-btn" onclick="openViber()" title="Відкрити">
+                                    <iconify-icon icon="mdi:open-in-new" width="18" height="18"></iconify-icon>
+                                </button>
+                                <button class="contact-action-btn contact-copy-btn" id="copyViberPhoneButton" onclick="copyViberPhone()" title="Скопіювати">
+                                    <iconify-icon icon="mdi:content-copy" width="18" height="18"></iconify-icon>
+                                </button>
                             </div>
                         </div>
                         
-                        <div class="contact-column contact-column-showcase">
-                            <div class="contact-column-title">Вітрина</div>
-                            <div class="contact-info-text" id="telegramShowcase"></div>
-                            <div class="contact-buttons-row" id="telegramShowcaseButtons">
-                                <button class="contact-write-button" onclick="openTelegramShowcase()">Відкрити</button>
-                                <button class="contact-copy-button-small" id="copyTelegramShowcaseButton" onclick="copyTelegramShowcase()">Скопіювати<br>username</button>
+                        <!-- Telegram Showcase -->
+                        <div class="contact-item contact-item-showcase" id="telegramShowcaseItem">
+                            <div class="contact-icon">
+                                <iconify-icon icon="mdi:storefront" width="24" height="24"></iconify-icon>
                             </div>
-                            <button class="contact-unavailable-button" id="telegramShowcaseUnavailable" style="display: none;">Недоступно</button>
+                            <div class="contact-content">
+                                <div class="contact-name">Вітрина</div>
+                                <div class="contact-value" id="telegramShowcase"></div>
+                            </div>
+                            <div class="contact-actions" id="telegramShowcaseButtons">
+                                <button class="contact-action-btn contact-open-btn" onclick="openTelegramShowcase()" title="Відкрити">
+                                    <iconify-icon icon="mdi:open-in-new" width="18" height="18"></iconify-icon>
+                                </button>
+                                <button class="contact-action-btn contact-copy-btn" id="copyTelegramShowcaseButton" onclick="copyTelegramShowcase()" title="Скопіювати">
+                                    <iconify-icon icon="mdi:content-copy" width="18" height="18"></iconify-icon>
+                                </button>
+                            </div>
+                            <div class="contact-unavailable-btn" id="telegramShowcaseUnavailable" style="display: none;">
+                                <iconify-icon icon="mdi:close-circle" width="18" height="18"></iconify-icon>
+                                <span>Недоступно</span>
+                            </div>
                         </div>
                         
-                        <div class="contact-column contact-column-instagram" id="instagramColumn">
-                            <div class="contact-column-title">Інстаграм</div>
-                            <div class="contact-info-text" id="instagramUsername"></div>
-                            <div class="contact-buttons-row" id="instagramButtons">
-                                <button class="contact-write-button" onclick="openInstagram()">Відкрити</button>
-                                <button class="contact-copy-button-small" id="copyInstagramButton" onclick="copyInstagramUsername()">Скопіювати<br>username</button>
+                        <!-- Instagram -->
+                        <div class="contact-item contact-item-instagram" id="instagramItem">
+                            <div class="contact-icon">
+                                <iconify-icon icon="mdi:instagram" width="24" height="24"></iconify-icon>
                             </div>
-                            <button class="contact-unavailable-button" id="instagramUnavailable" style="display: none;">Недоступно</button>
+                            <div class="contact-content">
+                                <div class="contact-name">Інстаграм</div>
+                                <div class="contact-value" id="instagramUsername"></div>
+                            </div>
+                            <div class="contact-actions" id="instagramButtons">
+                                <button class="contact-action-btn contact-open-btn" onclick="openInstagram()" title="Відкрити">
+                                    <iconify-icon icon="mdi:open-in-new" width="18" height="18"></iconify-icon>
+                                </button>
+                                <button class="contact-action-btn contact-copy-btn" id="copyInstagramButton" onclick="copyInstagramUsername()" title="Скопіювати">
+                                    <iconify-icon icon="mdi:content-copy" width="18" height="18"></iconify-icon>
+                                </button>
+                            </div>
+                            <div class="contact-unavailable-btn" id="instagramUnavailable" style="display: none;">
+                                <iconify-icon icon="mdi:close-circle" width="18" height="18"></iconify-icon>
+                                <span>Недоступно</span>
+                            </div>
                         </div>
                     </div>
                     
