@@ -151,24 +151,38 @@
             const modal = document.getElementById('contactModal');
             const modalTitle = document.getElementById('modalMessengerName');
             const modalValue = document.getElementById('modalContactValue');
+            const modalIcon = document.getElementById('modalIcon');
             
             modalTitle.textContent = messengerName;
             modalValue.textContent = contactValue;
             
+            // Встановлюємо іконку в залежності від типу
+            if (contactType === 'telegram') {
+                modalIcon.setAttribute('icon', 'logos:telegram');
+            } else if (contactType === 'viber') {
+                modalIcon.setAttribute('icon', 'logos:viber');
+            } else if (contactType === 'instagram') {
+                modalIcon.setAttribute('icon', 'logos:instagram-icon');
+            }
+            
             modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('show'), 10);
             document.body.style.overflow = 'hidden';
         }
         
         function closeContactModal() {
             const modal = document.getElementById('contactModal');
-            modal.style.display = 'none';
-            document.body.style.overflow = '';
-            currentContactData = null;
+            modal.classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+                currentContactData = null;
+            }, 300);
         }
         
         function modalCopyContact() {
             if (!currentContactData || !checkSecurity()) return;
-            copyToClipboard(currentContactData.value, 'modalCopyButton');
+            secureCopy(currentContactData.value, 'modalCopyButton');
         }
         
         function modalOpenContact() {
@@ -187,31 +201,34 @@
         }
         
         function openTelegram() {
-            showContactModal('Телеграм', '@' + TELEGRAM_USERNAME, 'telegram');
+            if (!checkSecurity()) return;
+            window.open('https://t.me/' + TELEGRAM_USERNAME, '_blank');
         }
         
         function openViber() {
-            showContactModal('Вайбер', formatPhoneNumber(VIBER_PHONE), 'viber');
+            if (!checkSecurity()) return;
+            const viberUrl = createViberUrl(VIBER_PHONE.replace('+380', '0').replace(/\s/g, ''));
+            window.location.href = viberUrl;
         }
         
         function openTelegramShowcase() {
             if (!checkSecurity() || !TELEGRAM_SHOWCASE) return;
-            showContactModal('Вітрина', '@' + TELEGRAM_SHOWCASE, 'telegram');
+            window.open('https://t.me/' + TELEGRAM_SHOWCASE, '_blank');
         }
         
         function copyTelegramShowcase() {
             if (!checkSecurity() || !TELEGRAM_SHOWCASE) return;
-            showContactModal('Вітрина', '@' + TELEGRAM_SHOWCASE, 'telegram');
+            secureCopy('@' + TELEGRAM_SHOWCASE, 'copyTelegramShowcaseButton');
         }
         
         function openInstagram() {
             if (!checkSecurity() || !INSTAGRAM_USERNAME) return;
-            showContactModal('Інстаграм', '@' + INSTAGRAM_USERNAME, 'instagram');
+            window.open('https://instagram.com/' + INSTAGRAM_USERNAME, '_blank');
         }
         
         function copyInstagramUsername() {
             if (!checkSecurity() || !INSTAGRAM_USERNAME) return;
-            showContactModal('Інстаграм', '@' + INSTAGRAM_USERNAME, 'instagram');
+            secureCopy('@' + INSTAGRAM_USERNAME, 'copyInstagramButton');
         }
         
         // ============================================
@@ -313,11 +330,14 @@
         }
         
         function copyTelegramUsername() {
-            showContactModal('Телеграм', '@' + TELEGRAM_USERNAME, 'telegram');
+            if (!checkSecurity()) return;
+            secureCopy('@' + TELEGRAM_USERNAME, 'copyTelegramButton');
         }
         
         function copyViberPhone() {
-            showContactModal('Вайбер', formatPhoneNumber(VIBER_PHONE), 'viber');
+            if (!checkSecurity()) return;
+            const formattedNumber = formatPhoneNumber(VIBER_PHONE);
+            secureCopy(formattedNumber, 'copyViberPhoneButton');
         }
         
         function copyPaymentTemplate() {
@@ -2160,25 +2180,13 @@
                             <span>Для користувачів TikTok:</span>
                         </div>
                         <div class="tiktok-instruction-text">
-                            Для роботи кнопок <strong>"Відкрити"</strong> <i class="bi bi-box-arrow-up-right" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i>: натисніть <strong>три крапки вгорі праворуч</strong> → <strong>"відкрити в браузері"</strong>. Або <strong>скопіюйте</strong> <i class="bi bi-files" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i> <strong>username/номер</strong> та знайдіть контакт вручну.
-                        </div>
-                    </div>
-                    
-                    <!-- Легенда з поясненням іконок -->
-                    <div class="contact-legend">
-                        <div class="legend-item">
-                            <i class="bi bi-files" style="font-size: 18px;"></i>
-                            <span>Копіювати</span>
-                        </div>
-                        <div class="legend-item">
-                            <i class="bi bi-box-arrow-up-right" style="font-size: 18px;"></i>
-                            <span>Відкрити</span>
+                            Для роботи кнопок <strong>"Відкрити"</strong> <i class="bi bi-box-arrow-up-right" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i> <strong>та "Скопіюйте"</strong> <i class="bi bi-files" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i>: натисніть <strong>три крапки вгорі праворуч</strong> → <strong>"відкрити в браузері"</strong>. Або <strong>скопіюйте</strong> <i class="bi bi-files" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i> <strong>username/номер</strong> та знайдіть контакт вручну.
                         </div>
                     </div>
                     
                     <div class="contact-list">
                         <!-- Telegram -->
-                        <div class="contact-item contact-item-telegram">
+                        <div class="contact-item contact-item-telegram" onclick="showContactModal('Телеграм', '@' + TELEGRAM_USERNAME, 'telegram')" style="cursor: pointer;">
                             <div class="contact-icon">
                                 <iconify-icon icon="logos:telegram" width="24" height="24" style="display: inline-block;"></iconify-icon>
                             </div>
@@ -2186,7 +2194,7 @@
                                 <div class="contact-name">Телеграм</div>
                                 <div class="contact-value" id="telegramUsername"></div>
                             </div>
-                            <div class="contact-actions">
+                            <div class="contact-actions" onclick="event.stopPropagation();">
                                 <button class="contact-action-btn contact-open-btn" onclick="openTelegram()" title="Відкрити">
                                     <i class="bi bi-box-arrow-up-right"></i>
                                 </button>
@@ -2197,7 +2205,7 @@
                         </div>
                         
                         <!-- Viber -->
-                        <div class="contact-item contact-item-viber">
+                        <div class="contact-item contact-item-viber" onclick="showContactModal('Вайбер', formatPhoneNumber(VIBER_PHONE), 'viber')" style="cursor: pointer;">
                             <div class="contact-icon">
                                 <iconify-icon icon="logos:viber" width="24" height="24" style="display: inline-block;"></iconify-icon>
                             </div>
@@ -2205,7 +2213,7 @@
                                 <div class="contact-name">Вайбер</div>
                                 <div class="contact-value" id="viberPhone"></div>
                             </div>
-                            <div class="contact-actions">
+                            <div class="contact-actions" onclick="event.stopPropagation();">
                                 <button class="contact-action-btn contact-open-btn" onclick="openViber()" title="Відкрити">
                                     <i class="bi bi-box-arrow-up-right"></i>
                                 </button>
@@ -2216,7 +2224,7 @@
                         </div>
                         
                         <!-- Telegram Showcase -->
-                        <div class="contact-item contact-item-showcase" id="telegramShowcaseItem">
+                        <div class="contact-item contact-item-showcase" id="telegramShowcaseItem" onclick="if(TELEGRAM_SHOWCASE) showContactModal('Вітрина', '@' + TELEGRAM_SHOWCASE, 'telegram');" style="cursor: pointer;">
                             <div class="contact-icon">
                                 <iconify-icon icon="logos:telegram" width="24" height="24" style="display: inline-block;"></iconify-icon>
                             </div>
@@ -2224,7 +2232,7 @@
                                 <div class="contact-name">Вітрина</div>
                                 <div class="contact-value" id="telegramShowcase"></div>
                             </div>
-                            <div class="contact-actions" id="telegramShowcaseButtons">
+                            <div class="contact-actions" id="telegramShowcaseButtons" onclick="event.stopPropagation();">
                                 <button class="contact-action-btn contact-open-btn" onclick="openTelegramShowcase()" title="Відкрити">
                                     <i class="bi bi-box-arrow-up-right"></i>
                                 </button>
@@ -2232,14 +2240,14 @@
                                     <i class="bi bi-files"></i>
                                 </button>
                             </div>
-                            <div class="contact-unavailable-btn" id="telegramShowcaseUnavailable" style="display: none;">
+                            <div class="contact-unavailable-btn" id="telegramShowcaseUnavailable" style="display: none;" onclick="event.stopPropagation();">
                                 <iconify-icon icon="mdi:close-circle" width="18" height="18"></iconify-icon>
                                 <span>Недоступно</span>
                             </div>
                         </div>
                         
                         <!-- Instagram -->
-                        <div class="contact-item contact-item-instagram" id="instagramItem">
+                        <div class="contact-item contact-item-instagram" id="instagramItem" onclick="if(INSTAGRAM_USERNAME) showContactModal('Інстаграм', '@' + INSTAGRAM_USERNAME, 'instagram');" style="cursor: pointer;">
                             <div class="contact-icon">
                                 <iconify-icon icon="logos:instagram-icon" width="24" height="24" style="display: inline-block;"></iconify-icon>
                             </div>
@@ -2247,7 +2255,7 @@
                                 <div class="contact-name">Інстаграм</div>
                                 <div class="contact-value" id="instagramUsername"></div>
                             </div>
-                            <div class="contact-actions" id="instagramButtons">
+                            <div class="contact-actions" id="instagramButtons" onclick="event.stopPropagation();">
                                 <button class="contact-action-btn contact-open-btn" onclick="openInstagram()" title="Відкрити">
                                     <i class="bi bi-box-arrow-up-right"></i>
                                 </button>
@@ -2255,7 +2263,7 @@
                                     <i class="bi bi-files"></i>
                                 </button>
                             </div>
-                            <div class="contact-unavailable-btn" id="instagramUnavailable" style="display: none;">
+                            <div class="contact-unavailable-btn" id="instagramUnavailable" style="display: none;" onclick="event.stopPropagation();">
                                 <iconify-icon icon="mdi:close-circle" width="18" height="18"></iconify-icon>
                                 <span>Недоступно</span>
                             </div>
@@ -2357,7 +2365,10 @@
     <div id="contactModal" class="modal-overlay" onclick="if(event.target === this) closeContactModal()">
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-header">
-                <h3 id="modalMessengerName"></h3>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <iconify-icon id="modalIcon" width="32" height="32"></iconify-icon>
+                    <h3 id="modalMessengerName"></h3>
+                </div>
                 <button class="modal-close-btn" onclick="closeContactModal()" title="Закрити">
                     <i class="bi bi-x-lg"></i>
                 </button>
