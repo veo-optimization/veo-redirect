@@ -188,29 +188,32 @@
         }
         
         // Функція для копіювання в буфер обміну
-        function copyToClipboard(text, buttonId, successMessage) {
+        function copyToClipboard(text, buttonId, successMessage, skipButtonChange) {
             if (!checkSecurity()) return;
             navigator.clipboard.writeText(text).then(function() {
-                const button = document.getElementById(buttonId);
-                if (button) {
-                    const originalHTML = button.innerHTML;
-                    const originalBackground = button.style.background || '';
-                    
-                    // Змінюємо текст та колір кнопки
-                    if (successMessage) {
-                        button.innerHTML = successMessage;
-                    } else {
-                        button.innerHTML = '✓ Скопійовано!';
+                // Якщо skipButtonChange = true, не змінюємо кнопку (для соціальних мереж, де є бейдж)
+                if (!skipButtonChange) {
+                    const button = document.getElementById(buttonId);
+                    if (button) {
+                        const originalHTML = button.innerHTML;
+                        const originalBackground = button.style.background || '';
+                        
+                        // Змінюємо текст та колір кнопки
+                        if (successMessage) {
+                            button.innerHTML = successMessage;
+                        } else {
+                            button.innerHTML = '✓ Скопійовано!';
+                        }
+                        button.style.background = '#2196F3';
+                        button.style.color = '#ffffff';
+                        
+                        // Повертаємо оригінальний вигляд через 2 секунди
+                        setTimeout(function() {
+                            button.innerHTML = originalHTML;
+                            button.style.background = originalBackground;
+                            button.style.color = '';
+                        }, 2000);
                     }
-                    button.style.background = '#2196F3';
-                    button.style.color = '#ffffff';
-                    
-                    // Повертаємо оригінальний вигляд через 2 секунди
-                    setTimeout(function() {
-                        button.innerHTML = originalHTML;
-                        button.style.background = originalBackground;
-                        button.style.color = '';
-                    }, 2000);
                 }
             }).catch(function(err) {
                 alert('Не вдалося скопіювати');
@@ -231,14 +234,14 @@
         
         function copyTelegramUsername() {
             if (!checkSecurity()) return;
-            copyToClipboard('@' + TELEGRAM_USERNAME, 'copyTelegramButton', '✓ Username скопійовано');
+            copyToClipboard('@' + TELEGRAM_USERNAME, 'copyTelegramButton', '', true);
             showCopySuccess('telegramCopyBadge');
         }
         
         function copyViberPhone() {
             if (!checkSecurity()) return;
             const formattedNumber = formatPhoneNumber(VIBER_PHONE);
-            copyToClipboard(formattedNumber, 'copyViberPhoneButton', '✓ Номер скопійовано');
+            copyToClipboard(formattedNumber, 'copyViberPhoneButton', '', true);
             showCopySuccess('viberCopyBadge');
         }
         
@@ -291,7 +294,7 @@
         
         function modalCopyContact() {
             if (!currentContactData || !checkSecurity()) return;
-            secureCopy(currentContactData.value, 'modalCopyButton', '✓ Скопійовано!');
+            secureCopy(currentContactData.value, 'modalCopyButton', '✓ Скопійовано!', false);
         }
         
         function modalOpenContact() {
@@ -327,7 +330,7 @@
         
         function copyTelegramShowcase() {
             if (!checkSecurity() || !TELEGRAM_SHOWCASE) return;
-            secureCopy('@' + TELEGRAM_SHOWCASE, 'copyTelegramShowcaseButton', '✓ Username скопійовано');
+            secureCopy('@' + TELEGRAM_SHOWCASE, 'copyTelegramShowcaseButton', '', true);
             showCopySuccess('showcaseCopyBadge');
         }
         
@@ -338,7 +341,7 @@
         
         function copyInstagramUsername() {
             if (!checkSecurity() || !INSTAGRAM_USERNAME) return;
-            secureCopy('@' + INSTAGRAM_USERNAME, 'copyInstagramButton', '✓ Username скопійовано');
+            secureCopy('@' + INSTAGRAM_USERNAME, 'copyInstagramButton', '', true);
             showCopySuccess('instagramCopyBadge');
         }
         
@@ -429,9 +432,9 @@
         }
         
         // Перевірка безпеки перед виконанням функцій
-        function secureCopy(text, buttonId, successMessage) {
+        function secureCopy(text, buttonId, successMessage, skipButtonChange) {
             if (!checkSecurity()) return;
-            copyToClipboard(text, buttonId, successMessage);
+            copyToClipboard(text, buttonId, successMessage, skipButtonChange);
         }
         
         // Оригінальні функції копіювання з захистом
