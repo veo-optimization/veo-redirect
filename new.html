@@ -1419,15 +1419,26 @@
         .payment-options {
             list-style: none;
             padding: 0;
-            margin: 0;
+            margin: 8px 0 16px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
         
         .payment-option {
-            padding: 8px 0;
-            margin: 4px 0;
+            background: #333333;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin: 0;
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.6;
             color: #e0e0e0;
+            border-left: 3px solid #4CAF50;
+            transition: all 0.2s ease;
+        }
+        
+        .payment-option:hover {
+            background: #3a3a3a;
         }
         
         .payment-option strong {
@@ -1439,14 +1450,26 @@
         .delivery-list {
             list-style: none;
             padding: 0;
+            margin: 8px 0 16px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
         
         .delivery-list li {
-            padding: 8px 0;
-            margin: 4px 0;
+            background: #333333;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin: 0;
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.6;
             color: #e0e0e0;
+            border-left: 3px solid #2196F3;
+            transition: all 0.2s ease;
+        }
+        
+        .delivery-list li:hover {
+            background: #3a3a3a;
         }
         
         .delivery-list li strong {
@@ -1457,33 +1480,53 @@
         .return-conditions {
             background: #2a2a2a;
             border-radius: 12px;
-            padding: 16px;
+            padding: 20px;
             margin: 12px 0;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
         .return-conditions h3 {
             color: #ffffff;
-            margin-bottom: 12px;
-            font-size: 16px;
+            margin: 16px 0 12px 0;
+            font-size: 14px;
             font-weight: 600;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #333333;
+        }
+        
+        .return-conditions h3:first-of-type {
+            margin-top: 0;
         }
         
         .return-conditions ul {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
         
         .return-conditions li {
-            padding: 8px 0;
-            border-bottom: 1px solid #333333;
+            background: #333333;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin: 0 0 8px 0;
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.6;
             color: #e0e0e0;
+            border-left: 3px solid #FF9800;
+            transition: all 0.2s ease;
         }
         
         .return-conditions li:last-child {
-            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .return-conditions li:hover {
+            background: #3a3a3a;
+        }
+        
+        .return-conditions li strong {
+            color: #ffffff;
+            font-weight: 600;
         }
         
         .contact-section {
@@ -2491,12 +2534,12 @@
                         <span>Умови оплати, доставки та повернення</span>
                     </div>
                     
-                    <h3 style="margin: 16px 0 10px 0; color: #ffffff; font-size: 14px; font-weight: 600;">🔄 Варіанти оплати:</h3>
+                    <h3 style="margin: 0 0 12px 0; color: #ffffff; font-size: 14px; font-weight: 600;">🔄 Варіанти оплати:</h3>
                 <div class="payment-options" id="paymentOptions">
                     <!-- Заповнюється автоматично з константи PAYMENT_OPTIONS -->
                 </div>
                 
-                    <h3 style="margin: 16px 0 10px 0; color: #ffffff; font-size: 14px; font-weight: 600;">🚚 Доставка по Україні:</h3>
+                    <h3 style="margin: 0 0 12px 0; color: #ffffff; font-size: 14px; font-weight: 600;">🚚 Доставка по Україні:</h3>
                 <ul class="delivery-list">
                     <li>🔷 <strong id="deliveryMethod"></strong> ✅</li>
                     <li>🔷 Відправка: <strong id="deliveryTime"></strong></li>
@@ -2504,8 +2547,8 @@
                     <li>🔷 <strong>Вартість доставки:</strong> відповідно до тарифів перевізника. Сплачує отримувач.</li>
                 </ul>
                 
-                    <div id="exchangeReturnSection" style="margin-top: 16px;">
-                        <h3 style="margin-bottom: 10px; color: #ffffff; font-size: 14px; font-weight: 600;">📋 Умови обміну та повернення:</h3>
+                    <div id="exchangeReturnSection" style="margin-top: 20px;">
+                        <h3 style="margin: 0 0 12px 0; color: #ffffff; font-size: 14px; font-weight: 600;">📋 Умови обміну та повернення:</h3>
                     <ul id="exchangeReturnList">
                         <!-- Заповнюється автоматично з констант EXCHANGE_DAYS та RETURN_DAYS -->
                         </ul>
