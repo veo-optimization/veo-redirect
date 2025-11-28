@@ -125,7 +125,7 @@
         // КОНТАКТИ
         const TELEGRAM_USERNAME = "veoforce_support"; // Telegram username (без @)
         const VIBER_PHONE = "0112223344"; // Номер Viber (10 цифр, починається з 0)
-        const TELEGRAM_SHOWCASE = "veoforce_chat"; // Telegram username вітрини (без @)
+        const TELEGRAM_SHOWCASE = "veoforce_chat"; // Telegram username вітрини (без @) або повне посилання (наприклад: "https://t.me/+Z-iCu_n0QYdmYTJi")
         const INSTAGRAM_USERNAME = ""; // Instagram username (без @), якщо відсутній - залишити порожнім
         
         // КАЛЕНДАР ПРЯМИХ ЕФІРІВ
@@ -319,14 +319,32 @@
         
         function modalCopyContact() {
             if (!currentContactData || !checkSecurity()) return;
-            secureCopy(currentContactData.value, 'modalCopyButton', '✓ Скопійовано!', false);
+            // Для Telegram invite links копіюємо повне посилання
+            let textToCopy = currentContactData.value;
+            if (currentContactData.type === 'telegram' && (textToCopy.includes('t.me/+') || textToCopy.includes('@'))) {
+                if (textToCopy.includes('t.me/+')) {
+                    // Це invite link - переконуємося, що це повне посилання
+                    if (!textToCopy.startsWith('http')) {
+                        textToCopy = 'https://' + textToCopy.replace(/^t\.me/, 't.me');
+                    }
+                }
+            }
+            secureCopy(textToCopy, 'modalCopyButton', '✓ Скопійовано!', false);
         }
         
         function modalOpenContact() {
             if (!currentContactData || !checkSecurity()) return;
             
             if (currentContactData.type === 'telegram') {
-                window.open('https://t.me/' + currentContactData.value.replace('@', ''), '_blank');
+                // Перевіряємо, чи це invite link або username
+                if (currentContactData.value.includes('t.me/') || currentContactData.value.startsWith('http')) {
+                    // Це посилання (invite link або повне посилання)
+                    const link = currentContactData.value.startsWith('http') ? currentContactData.value : 'https://' + currentContactData.value;
+                    window.open(link, '_blank');
+                } else {
+                    // Це username
+                    window.open('https://t.me/' + currentContactData.value.replace('@', ''), '_blank');
+                }
             } else if (currentContactData.type === 'viber') {
                 const viberUrl = createViberUrl(currentContactData.value.replace('+380', '0').replace(/\s/g, ''));
                 window.location.href = viberUrl;
@@ -348,15 +366,51 @@
             window.location.href = viberUrl;
         }
         
+        // Функція для визначення, чи є посилання invite link
+        function isTelegramInviteLink(link) {
+            if (!link) return false;
+            return link.includes('t.me/+') || link.startsWith('https://t.me/+') || link.startsWith('t.me/+');
+        }
+        
+        // Функція для отримання повного посилання Telegram
+        function getTelegramShowcaseLink() {
+            if (!TELEGRAM_SHOWCASE) return null;
+            if (isTelegramInviteLink(TELEGRAM_SHOWCASE)) {
+                // Якщо це вже повне посилання, повертаємо як є
+                if (TELEGRAM_SHOWCASE.startsWith('http')) {
+                    return TELEGRAM_SHOWCASE;
+                }
+                // Якщо без https://, додаємо
+                return 'https://' + TELEGRAM_SHOWCASE.replace(/^t\.me/, 't.me');
+            }
+            // Якщо це username, формуємо стандартне посилання
+            return 'https://t.me/' + TELEGRAM_SHOWCASE;
+        }
+        
+        // Функція для отримання тексту для відображення/копіювання
+        function getTelegramShowcaseDisplayText() {
+            if (!TELEGRAM_SHOWCASE) return null;
+            if (isTelegramInviteLink(TELEGRAM_SHOWCASE)) {
+                return getTelegramShowcaseLink();
+            }
+            return '@' + TELEGRAM_SHOWCASE;
+        }
+        
         function openTelegramShowcase() {
             if (!checkSecurity() || !TELEGRAM_SHOWCASE) return;
-            window.open('https://t.me/' + TELEGRAM_SHOWCASE, '_blank');
+            const link = getTelegramShowcaseLink();
+            if (link) {
+                window.open(link, '_blank');
+            }
         }
         
         function copyTelegramShowcase() {
             if (!checkSecurity() || !TELEGRAM_SHOWCASE) return;
-            secureCopy('@' + TELEGRAM_SHOWCASE, 'copyTelegramShowcaseButton', '', true);
-            showCopySuccess('showcaseCopyBadge');
+            const textToCopy = getTelegramShowcaseLink();
+            if (textToCopy) {
+                secureCopy(textToCopy, 'copyTelegramShowcaseButton', '', true);
+                showCopySuccess('showcaseCopyBadge');
+            }
         }
         
         function openInstagram() {
@@ -954,28 +1008,33 @@
             document.getElementById('telegramUsername').textContent = '@' + TELEGRAM_USERNAME;
             document.getElementById('viberPhone').textContent = formatPhoneNumber(VIBER_PHONE);
             // Вітрина
+            const telegramShowcaseItem = document.getElementById('telegramShowcaseItem');
             if (TELEGRAM_SHOWCASE) {
-                document.getElementById('telegramShowcase').textContent = '@' + TELEGRAM_SHOWCASE;
+                // Визначаємо, чи це invite link
+                if (isTelegramInviteLink(TELEGRAM_SHOWCASE)) {
+                    document.getElementById('telegramShowcase').textContent = 'Телеграм-спільнота';
+                } else {
+                    document.getElementById('telegramShowcase').textContent = '@' + TELEGRAM_SHOWCASE;
+                }
+                telegramShowcaseItem.style.display = 'flex';
                 document.getElementById('telegramShowcaseButtons').style.display = 'flex';
                 document.getElementById('telegramShowcaseUnavailable').style.display = 'none';
             } else {
-                document.getElementById('telegramShowcase').textContent = 'Не налаштовано';
-                document.getElementById('telegramShowcaseButtons').style.display = 'none';
-                document.getElementById('telegramShowcaseUnavailable').style.display = 'block';
+                // Приховуємо блок, якщо немає даних
+                telegramShowcaseItem.style.display = 'none';
             }
             
             // Instagram
             const instagramItem = document.getElementById('instagramItem');
             if (instagramItem) {
-                instagramItem.style.display = 'flex';
                 if (INSTAGRAM_USERNAME) {
                     document.getElementById('instagramUsername').textContent = '@' + INSTAGRAM_USERNAME;
                     document.getElementById('instagramButtons').style.display = 'flex';
                     document.getElementById('instagramUnavailable').style.display = 'none';
+                    instagramItem.style.display = 'flex';
                 } else {
-                    document.getElementById('instagramUsername').textContent = 'Не налаштовано';
-                    document.getElementById('instagramButtons').style.display = 'none';
-                    document.getElementById('instagramUnavailable').style.display = 'flex';
+                    // Приховуємо блок, якщо немає даних
+                    instagramItem.style.display = 'none';
                 }
             }
             
@@ -2441,7 +2500,7 @@
                         </div>
                         
                         <!-- Telegram Showcase -->
-                        <div class="contact-item contact-item-showcase" id="telegramShowcaseItem" onclick="if(TELEGRAM_SHOWCASE) showContactModal('Вітрина', '@' + TELEGRAM_SHOWCASE, 'telegram');" style="cursor: pointer;">
+                        <div class="contact-item contact-item-showcase" id="telegramShowcaseItem" onclick="if(TELEGRAM_SHOWCASE) { const link = getTelegramShowcaseLink(); const displayText = isTelegramInviteLink(TELEGRAM_SHOWCASE) ? link : '@' + TELEGRAM_SHOWCASE; showContactModal('Вітрина', displayText, 'telegram'); }" style="cursor: pointer;">
                             <div class="contact-icon">
                                 <!-- Telegram logo from SimpleIcons: https://simpleicons.org/icons/telegram.svg -->
                                 <!-- Official brand resources: https://brandfetch.com/telegram.org -->
