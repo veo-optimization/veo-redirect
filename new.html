@@ -195,14 +195,19 @@
                 if (!skipButtonChange) {
                     const button = document.getElementById(buttonId);
                     if (button) {
+                        // Зберігаємо всі оригінальні значення
                         const originalHTML = button.innerHTML;
                         const originalBackground = button.style.background || '';
                         const originalColor = button.style.color || '';
                         
-                        // Зберігаємо оригінальні стилі висоти та розміру
-                        const originalHeight = button.style.height || '';
-                        const originalMinHeight = button.style.minHeight || '';
-                        const originalPadding = button.style.padding || '';
+                        // Зберігаємо всі розміри та стилі
+                        const computedStyle = window.getComputedStyle(button);
+                        const originalWidth = computedStyle.width;
+                        const originalHeight = computedStyle.height;
+                        const originalMinWidth = computedStyle.minWidth;
+                        const originalMinHeight = computedStyle.minHeight;
+                        const originalPadding = computedStyle.padding;
+                        const originalBoxSizing = computedStyle.boxSizing;
                         
                         // Змінюємо текст та колір кнопки
                         if (successMessage) {
@@ -213,19 +218,25 @@
                         button.style.background = '#2196F3';
                         button.style.color = '#ffffff';
                         
-                        // Зберігаємо висоту та розмір
-                        if (originalHeight) button.style.height = originalHeight;
-                        if (originalMinHeight) button.style.minHeight = originalMinHeight;
-                        if (originalPadding) button.style.padding = originalPadding;
+                        // Фіксуємо всі розміри, щоб кнопка не змінювалася
+                        button.style.width = originalWidth;
+                        button.style.height = originalHeight;
+                        button.style.minWidth = originalMinWidth;
+                        button.style.minHeight = originalMinHeight;
+                        button.style.padding = originalPadding;
+                        button.style.boxSizing = originalBoxSizing;
                         
                         // Повертаємо оригінальний вигляд через 2 секунди
                         setTimeout(function() {
                             button.innerHTML = originalHTML;
                             button.style.background = originalBackground;
                             button.style.color = originalColor;
-                            if (originalHeight) button.style.height = originalHeight;
-                            if (originalMinHeight) button.style.minHeight = originalMinHeight;
-                            if (originalPadding) button.style.padding = originalPadding;
+                            button.style.width = '';
+                            button.style.height = '';
+                            button.style.minWidth = '';
+                            button.style.minHeight = '';
+                            button.style.padding = '';
+                            button.style.boxSizing = '';
                         }, 2000);
                     }
                 }
@@ -235,11 +246,11 @@
         }
         
         function copyIBAN() {
-            copyToClipboard(IBAN, 'copyIbanButton', '✓ IBAN скопійовано');
+            copyToClipboard(IBAN, 'copyIbanButton', '✓ IBAN скопійовано', false);
         }
         
         function copyEDRPOU() {
-            copyToClipboard(EDRPOU, 'copyEdrpouButton', '✓ ЄДРПОУ скопійовано');
+            copyToClipboard(EDRPOU, 'copyEdrpouButton', '✓ ЄДРПОУ скопійовано', false);
         }
         
         function copyPaymentPurpose() {
@@ -464,27 +475,13 @@
         
         function copyPaymentPurpose() {
             if (!checkSecurity()) return;
-            secureCopy(PAYMENT_PURPOSE, 'copyPurposeButton');
-        }
-        
-        function copyTelegramUsername() {
-            if (!checkSecurity()) return;
-            const text = '@' + TELEGRAM_USERNAME;
-            secureCopy(text, 'copyTelegramButton');
-            showCopySuccess('telegramCopyBadge');
-        }
-        
-        function copyViberPhone() {
-            if (!checkSecurity()) return;
-            const formattedNumber = formatPhoneNumber(VIBER_PHONE);
-            secureCopy(formattedNumber, 'copyViberPhoneButton');
-            showCopySuccess('viberCopyBadge');
+            secureCopy(PAYMENT_PURPOSE, 'copyPurposeButton', '✓ Призначення скопійовано', false);
         }
         
         function copyPaymentTemplate() {
             if (!checkSecurity()) return;
             const templateText = document.getElementById('paymentTemplateDisplay').textContent;
-            copyToClipboard(templateText, 'copyTemplateButton', '✓ Шаблон скопійовано');
+            copyToClipboard(templateText, 'copyTemplateButton', '✓ Шаблон скопійовано', false);
         }
         
         // ============================================
@@ -1726,12 +1723,14 @@
             
             .template-container {
                 flex-direction: row;
-                align-items: flex-start;
+                align-items: stretch;
             }
             
             .template-content {
                 flex: 1;
                 min-width: 0;
+                display: flex;
+                align-items: center;
             }
             
             .template-text {
@@ -1743,6 +1742,9 @@
                 min-width: 75px;
                 padding: 8px 10px;
                 font-size: 10px;
+                align-self: stretch;
+                height: 100%;
+                min-height: 100%;
             }
         }
         
