@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Тест: Готовність бізнесу до змін у TikTok</title>
+<style>
+  :root{--bg:#0f1724;--card:#0b1220;--muted:#9aa5b1;--accent:#06b6d4;--success:#16a34a;--danger:#ef4444}
+  body{font-family:Inter,Segoe UI,system-ui,Arial; margin:0; background:linear-gradient(180deg,#071025 0%, #071a2b 100%); color:#e6eef6; padding:20px;}
+  h1{margin:0 0 8px; font-size:20px}
+  p.lead{color:var(--muted); margin-top:0;}
+  .container{max-width:980px; margin:18px auto; padding:18px; background:rgba(255,255,255,0.02); border-radius:12px; box-shadow:0 6px 30px rgba(2,6,23,0.6);}
+  .q{background:rgba(255,255,255,0.01); padding:12px; border-radius:8px; margin-bottom:10px; border:1px solid rgba(255,255,255,0.02); display:block;}
+  .q .title{display:flex; gap:10px; align-items:flex-start}
+  .qnum{background:rgba(255,255,255,0.03); color:var(--muted); padding:6px 8px; border-radius:6px; font-weight:600; min-width:34px; text-align:center}
+  .question-text{font-weight:600; color:#e6eef6}
+  .choices{margin-top:8px; display:flex; flex-direction:column; gap:8px}
+  label.choice{display:flex; gap:10px; align-items:center; background:rgba(255,255,255,0.01); padding:8px; border-radius:8px; cursor:pointer; border:1px solid rgba(255,255,255,0.02)}
+  input[type="radio"]{accent-color:var(--accent)}
+  .feedback{margin-left:auto; display:flex; gap:8px; align-items:center}
+  .ok{color:var(--success); font-weight:700}
+  .wrong{color:var(--danger); font-weight:700}
+  .small{font-size:13px; color:var(--muted)}
+  .footer{display:flex; gap:10px; align-items:center; margin-top:12px; flex-wrap:wrap}
+  button#reset{background:transparent; border:1px solid rgba(255,255,255,0.06); color:var(--muted); padding:8px 12px; border-radius:8px; cursor:pointer;}
+  .score{margin-left:auto; padding:8px 12px; background:rgba(6,182,212,0.08); color:var(--accent); border-radius:10px; font-weight:700}
+  .modal{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(2,6,23,0.7); z-index:50;}
+  .modal .box{background:var(--card); padding:18px; border-radius:10px; width:min(720px,94%); border:1px solid rgba(255,255,255,0.04)}
+  .modal h3{margin:0 0 6px}
+  .modal p{color:var(--muted)}
+  .close-btn{margin-top:12px; background:var(--accent); color:#041226; padding:8px 12px; border-radius:8px; border:none; cursor:pointer;}
+  .summary{margin-top:18px; padding:12px; border-radius:8px; background:linear-gradient(90deg, rgba(2,6,23,0.35), rgba(255,255,255,0.02)); border:1px solid rgba(255,255,255,0.02)}
+  .risk-high{color:var(--danger); font-weight:800}
+  .risk-med{color:#f59e0b; font-weight:800}
+  .risk-low{color:var(--success); font-weight:800}
+  footer.note{margin-top:14px; color:var(--muted); font-size:13px;}
+  @media (max-width:720px){ .q .title{flex-direction:column; align-items:flex-start} .footer{flex-direction:column; align-items:flex-start} .score{margin-left:0} }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Тест: готовність бізнесу до змін у TikTok / Live-продажах</h1>
+  <p class="lead">30 питань. Оберіть одну відповідь — відразу отримаєте фідбек. Тест перевіряє практичні знання про правила, стратегії та ризики перед запуском комерції.</p>
+
+  <div id="questions"></div>
+
+  <div class="footer">
+    <button id="reset">Скинути тест</button>
+    <div class="score" id="score">Правильних з першого разу: 0 / 30</div>
+  </div>
+
+  <div class="summary" id="summary" style="display:none">
+    <h3>Результат</h3>
+    <p id="summary-text" class="small"></p>
+    <p id="summary-risk" style="margin:6px 0;font-size:16px"></p>
+    <details style="color:var(--muted)"><summary>Пояснення</summary>
+      <p class="small">Тест дає орієнтир — реальні перевірки акаунта залежать від історії порушень, локалізації, поведінки користувачів, сторонніх скарг та модерації платформи.</p>
+    </details>
+  </div>
+
+  <footer class="note">Порада: після тесту можете попросити детальний план дій по ваших слабких пунктах — я підкажу.</footer>
+</div>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="box">
+    <h3 id="modal-title">Увага</h3>
+    <p id="modal-body"></p>
+    <button class="close-btn" id="modal-close">Зрозуміло</button>
+  </div>
+</div>
+
+<script>
+// QUESTIONS DATA
+const questions = [
+  { q: "1) Який тип акаунту рекомендується для продажів у TikTok?", a: ["Персональний", "Бізнес акаунт", "Канальний (channel) тільки"], correct:1,
+    explain:"Правильно — бізнес акаунт. Для доступу до торгових функцій, аналітики і форм верифікації потрібен бізнес-акаунт."},
+  { q: "2) Якщо під час прямого трансляції ви демонструєте брендовану річ, що треба робити?", a:["Говорити вільно, бренд згадувати без позначки","Використати позначку 'branded content' / оплачуване партнерство","Приховати бренд, називати 'стильом'"], correct:1,
+    explain:"TikTok вимагає розкриття платних партнерств; також це знижує ризик санкцій за непрозору рекламу."},
+  { q: "3) Чи варто виводити в ефірі номера карт/повні телефони у стікерах?", a:["Так, для зручності покупців","Ні — це ризик шахрайства та порушення правил","Так, якщо тільки в шифрі"], correct:1,
+    explain:"Публічні персональні або фінансові дані підвищують ризик фішингу та блокувань; замість цього — вести на міні-сайт/телеграм."},
+  { q: "4) Які товари TikTok зазвичай відносить до 'регульованих'?", a:["Одяг і аксесуари","Алкоголь, тютюн, ліки, зброя, деякі косметичні препарати","Книги та журнали"], correct:1,
+    explain:"Регульовані товари — алкоголь, тютюн, лікарські засоби, медобладнання та інші, що потребують ліцензій/сертифікацій."},
+  { q: "5) Показати брудну або сильно пошкоджену річ у лайві — ризик?", a:["Ні, це нормально","Так — платформа може вважати контент 'низької якості' і знизити покази","Так, але тільки якщо це дитячий товар"], correct:1,
+    explain:"Контент з антисанітарією або сильним шоком помітно зменшує рекомендації — краще показувати чисті, відреставровані або описані дефекти коректно."},
+  { q: "6) Чи допомагає платне просування відео уникнути блокувань за порушення правил?", a:["Так, реклама вирішує все","Ні — платний трафік не захищає від порушень політик","Так, якщо витратити багато"], correct:1,
+    explain:"Платна промоція не знімає з акаунта відповідальності за порушення правил спільноти; дотримання політик важливіше."},
+  { q: "7) Що таке цифровий профіль користувача в контексті TikTok?", a:["Набір даних — поведінка, обличчя, голос, текстові патерни","Статус 'verified' тільки","Список підписок користувача"], correct:0,
+    explain:"TikTok будує цифровий профіль за багатьма сигнальними даними (поведінка, аудиторія, манера мовлення) для ранжування."},
+  { q: "8) Чи можна продавати секонд-хенд на TikTok Shop без додаткових умов?", a:["Зазвичай ні — є обмеження", "Так, без проблем", "Тільки якщо це сток від бренду"], correct:0,
+    explain:"У багатьох регіонах TikTok Shop обмежує/забороняє вживані товари — винятки дуже специфічні (лізинг люксу тощо)."},
+  { q: "9) Що робити, якщо на ефір надходить хвиля коментарів «яка ціна» і «беру»?", a:["Ігнорувати","Перевести людей на структурований канал/міні-сайт для замовлень","Гучно повторювати ціну кожні 10 секунд"], correct:1,
+    explain:"Масові заклики купувати на ефірі тривіально помічаються алгоритмом; краще мати зовнішню вітрину для замовлень."},
+  { q: "10) Чи приносить виграш 'закриті кімнати' (private rooms) абсолютний захист від модерації?", a:["Так, повний захист","Ні — політики платформи все одно діють","Так, але тільки в певних країнах"], correct:1,
+    explain:"Закриті кімнати можуть знизити видимість, але не дають імунітету від порушень правил."},
+  { q: "11) Що краще для довгострокової репутації: багато коротких живих ефірів з продажами або ударні відео + рідкі ефіри?", a:["Багато живих тільки","Ударні відео + структуровані ефіри","Жодної різниці"], correct:1,
+    explain:"Статичні відео з охопленням формують позитивну цифрову репутацію та дають більше шансів на доступ до торгових функцій."},
+  { q: "12) Якщо створювати резервні акаунти і купувати/кидати їх при блоках — чи безпечно?", a:["Так, це нормальна практика","Ні — платформа відстежує мережі акаунтів і це підвищує ризик","Тільки якщо міняти фото"], correct:1,
+    explain:"Множення акаунтів — ризик: системи розпізнають схожі обличчя/поведінку й карають."},
+  { q: "13) Що робити з особистим телефоном у шапці профілю продавця?", a:["Залишити відкритим","Приховати і перенаправити на захищений канал (чат-бот)","Писати у відкритому вигляді з пробілами"], correct:1,
+    explain:"Краще не публікувати номер у відкритому вигляді; використовувати захищені канали/боти для зв'язку."},
+  { q: "14) Чи варто стимулювати глядачів надсилати подарунки (gifts) в ефірі агресивними методами?", a:["Так, це допомагає заробити більше","Ні — це зараз регулюється і може викликати санкції","Лише у приватних кімнатах"], correct:1,
+    explain:"Нова політика обмежує агресивні стимуляції до gifting; це може привести до зниження охоплень."},
+  { q: "15) Що краще для продажів поза TikTok: Telegram-вітрина чи звичайний вебмагазин?", a:["Telegram-вітрина — простіше та зручніше для миттєвого контенту","Вебмагазин краще завжди","Ніякої різниці"], correct:0,
+    explain:"Telegram — зручний для швидкого вивантаження фото/відео і миттєвих повідомлень; вебмагазин потрібен для фіскалізації/легалізації."},
+  { q: "16) Чи потрібно маркувати контент, створений ШІ ('AI-generated')?", a:["Ні, не треба","Так — потрібно чітко позначати відредагований/AI контент","Тільки якщо це музика"], correct:1,
+    explain:"TikTok вимагає маркування контенту, створеного або істотно відредагованого штучним інтелектом."},
+  { q: "17) Що знижує ймовірність блокування при масових скаргах конкурентів?", a:["Активні відповіді в коментарях 'відповім пізніше'","Чиста історія акаунта, дотримання політик і якісний контент","Найм юристів відразу"], correct:1,
+    explain:"Найкращий захист — правомірна поведінка та дотримання правил платформи; скарги від конкурентів лише прискорюють процес."},
+  { q: "18) Чи варто показувати у відео номери карт або кодів оплати?", a:["Так, вписуйте для зручності","Ні, ніколи — ризик шахрайства","Тільки якщо підписник просить у чаті"], correct:1,
+    explain:"Публікація фінансових даних є ризиковою — використовуйте платіжні форми/боти."},
+  { q: "19) Якщо акаунт мав системні порушення у минулому — як швидко можна 'очистити' репутацію?", a:["Після одного місяця без порушень — все зникає","Це залежить: може бути місяці/роки; треба створювати якісний контент","Неможливо ніяк"], correct:1,
+    explain:"Репутація накопичується; щоб її змінити — потрібен постійний якісний контент та відсутність нових порушень."},
+  { q: "20) Що робити, якщо TikTok заблокував функцію gifting або рекомендації акаунту?", a:["Створювати пресу та скаржитися у соцмережах","Перейти на інші канали (Telegram, YouTube), працювати над профілем","Купувати рекламу, щоб обійти блок"], correct:1,
+    explain:"Правильна реакція — диверсифікація каналів та поступове виправлення профілю; скарги не завжди допомагають."},
+  { q: "21) Для affiliate-співпраці креатора з магазином — що необхідно?", a:["Тільки бажання автора","Зазвичай: верифікований магазин + товар у каталозі + домовленість про комісію","Багато лайвів"], correct:1,
+    explain:"Креатори мають працювати з товарами, котрі є в каталозі магазину; часто потрібна офіційна угода."},
+  { q: "22) Відео з 'унікальним' UGC (реальними відгуками) зазвичай:", a:["Погано ранжується","Більше довіри і кращі охоплення","За замовчуванням порушують правила"], correct:1,
+    explain:"Нативні відгуки часто краще збирають залученість та довіру."},
+  { q: "23) Чи допоможе часте оновлення опису профілю уникнути перевірок?", a:["Так, постійні зміни нівелюють перевірки","Ні — перевірки залежать від історії та сигналів; хаотичні зміни не допомагають","Так, якщо міняти номер в описі"], correct:1,
+    explain:"Стабільна, прозора інформація краща за постійні зміни; платформа відстежує поведінку з часом."},
+  { q: "24) Якщо автор хоче знімати огляди брендових речей, але не продавати їх прямо в TikTok — що краще?", a:["Називати бренд прямо та давати посилання на Telegram-вітрину","Приховувати марку і давати код товару","Імітувати огляд без згадки бренду"], correct:0,
+    explain:"Прозорість і делікатна подача — краща тактика: згадувать бренд можна, але без агресивних CTA, вести на безпечні канали продажів."},
+  { q: "25) Чи можна використовувати Telegram-боти для автоматизації прийому реквізитів доставки?", a:["Так — це хороша практика","Ні — Telegram забороняє автоматизацію","Можна тільки у приватних чатах"], correct:0,
+    explain:"Боти в Telegram часто використовуються для збору реквізитів, формування ТТН та інтеграції з платіжними шлюзами; важливо захищати дані."},
+  { q: "26) Чи впливає мова контенту на доступність TikTok Shop в різних країнах?", a:["Ні, мова не має значення","Так — локалізація, мова та регіональні правила важливі для доступу і модерації","Тільки англійська має перевагу"], correct:1,
+    explain:"Регіональні правила та мова впливають на доступність функцій та на політику модерації."},
+  { q: "27) Який найнебезпечніший підхід під час переходу на TikTok Shop?", a:["Поступова адаптація профілю і контенту","Ігнорування правил, масові продажі у лайві та множення акаунтів","Створення якісного відеоконтенту"], correct:1,
+    explain:"Агресивні продажі без дотримання політик — найшвидший шлях до блокувань."},
+  { q: "28) Чи можна одночасно вести трансляцію з двох акаунтів одним і тим самим обличчям (бути на двох стрімах)?", a:["Технічно можна, але це ризиково — алгоритм помітить співпадіння","Так, це рекомендовано","Ні — це заборонено"], correct:0,
+    explain:"Копіювання образу/манери ведення на різних акаунтах викликає підозру у систем; краще працювати легально."},
+  { q: "29) Що краще робити до запуску TikTok Shop в країні?", a:["Продовжувати тільки лайви","Адаптувати профілі: бізнес-акаунт, ударні відео, Telegram-вітрина, готовий міні-сайт","Почати масово купувати підписників"], correct:1,
+    explain:"Підготовка профілю і каналів продажів — найкраща інвестиція."},
+  { q: "30) Коли платформа розсилає повідомлення 'ви видаєтеся за іншу особу / перевірте профіль' — що це може означати?", a:["Тільки технічну помилку","Підготовку платформи до верифікації/монетизації і сигнал про необхідність виправити профіль","Автоматичний бан"], correct:1,
+    explain:"Це частіше сигнал, що платформа готується до нових функцій (монетизація) і очікує коректної інформації у профілях."}
+];
+
+// RENDER QUESTIONS
+const container = document.getElementById('questions');
+let state = questions.map(()=>({answered:false, firstTry:true, correct:false}));
+
+questions.forEach((item, idx) => {
+  const div = document.createElement('div'); div.className = 'q'; div.id = 'q'+idx;
+  div.innerHTML = `
+    <div class="title">
+      <div class="qnum">${idx+1}</div>
+      <div style="flex:1">
+        <div class="question-text">${item.q}</div>
+        <div class="small" style="margin-top:6px">Оберіть одну відповідь</div>
+      </div>
+      <div class="feedback" id="fb-${idx}"></div>
+    </div>
+    <div class="choices" id="choices-${idx}"></div>
+  `;
+  container.appendChild(div);
+  const choices = document.getElementById('choices-'+idx);
+  item.a.forEach((text, ci) => {
+    const id = `q${idx}c${ci}`;
+    const label = document.createElement('label'); label.className='choice';
+    label.innerHTML = `<input type="radio" name="q${idx}" id="${id}" data-q="${idx}" data-c="${ci}"> <div style="flex:1">${text}</div>`;
+    choices.appendChild(label);
+  });
+});
+
+// HANDLERS
+container.addEventListener('change', (e) => {
+  const target = e.target;
+  if(!target.matches('input[type="radio"]')) return;
+  const q = Number(target.dataset.q), c = Number(target.dataset.c);
+  if(state[q].answered) return; // ignore subsequent changes
+  const correct = (c === questions[q].correct);
+  state[q].answered = true;
+  state[q].correct = correct;
+  if(!correct) state[q].firstTry = true; // firstTry stays true only if correct on first attempt
+  else state[q].firstTry = true;
+  // show feedback
+  const fb = document.getElementById('fb-'+q);
+  if(correct){
+    fb.innerHTML = `<span class="ok">✅ Правильно</span>`;
+    markChoice(q, c, true);
+  } else {
+    fb.innerHTML = `<span class="wrong">❌ Неправильно</span>`;
+    markChoice(q, c, false);
+    // show modal with explanation
+    showModal("Хоч і здається правильним...", questions[q].explain || "Пояснення недоступне.");
+  }
+  updateScore();
+  // disable other inputs of this question to freeze the choice
+  Array.from(document.querySelectorAll(`input[name="q${q}"]`)).forEach(el => el.disabled = true);
+});
+
+function markChoice(q, c, ok){
+  // add style to chosen label
+  const chosen = document.getElementById(`q${q}c${c}`).closest('label');
+  if(ok){
+    chosen.style.borderColor = 'rgba(22,163,74,0.9)';
+    chosen.style.background = 'linear-gradient(90deg, rgba(16,185,129,0.06), rgba(255,255,255,0.01))';
+    chosen.insertAdjacentHTML('beforeend', `<div style="margin-left:auto;color:var(--success);font-weight:800">✔</div>`);
+  } else {
+    chosen.style.borderColor = 'rgba(239,68,68,0.9)';
+    chosen.style.background = 'linear-gradient(90deg, rgba(239,68,68,0.03), rgba(255,255,255,0.01))';
+    chosen.insertAdjacentHTML('beforeend', `<div style="margin-left:auto;color:var(--danger);font-weight:800">✖</div>`);
+  }
+}
+
+// MODAL
+const modal = document.getElementById('modal');
+const modalTitle = document.getElementById('modal-title');
+const modalBody = document.getElementById('modal-body');
+document.getElementById('modal-close').addEventListener('click', ()=> modal.style.display='none');
+function showModal(title, body){
+  modalTitle.textContent = title;
+  modalBody.textContent = body;
+  modal.style.display = 'flex';
+}
+
+// SCORE
+function updateScore(){
+  const scoreEl = document.getElementById('score');
+  let correctFirst = 0;
+  state.forEach((s, idx) => {
+    if(s.answered && s.correct && s.firstTry) correctFirst++;
+  });
+  scoreEl.textContent = `Правильних з першого разу: ${correctFirst} / ${questions.length}`;
+
+  // if all answered show summary
+  const allAnswered = state.every(s => s.answered);
+  if(allAnswered) showSummary(correctFirst);
+}
+
+function showSummary(correctFirst){
+  const summary = document.getElementById('summary');
+  const text = document.getElementById('summary-text');
+  const risk = document.getElementById('summary-risk');
+  summary.style.display = 'block';
+  text.innerHTML = `Ви дали <strong>${correctFirst}</strong> правильних відповідей із першого разу з ${questions.length}. Це показник практичної готовності профілю та процесів.`;
+  // risk assessment
+  if(correctFirst <= 10){
+    risk.innerHTML = `<span class="risk-high">Високий ризик</span> — багато слабких місць. Потрібна термінова робота над відповідністю політикам (профіль, контент, платіжні процеси).`;
+  } else if(correctFirst <=20){
+    risk.innerHTML = `<span class="risk-med">Середній ризик</span> — є точки для покращення. Зосередьтеся на підготовці профілю, структуризації продажів та диктуванні безпечних процесів.`;
+  } else {
+    risk.innerHTML = `<span class="risk-low">Низький ризик</span> — профіль має добру базу; працюйте над масштабуванням і технічною інтеграцією (боти, міні-сайт, партнери).`;
+  }
+}
+
+// RESET
+document.getElementById('reset').addEventListener('click', ()=> {
+  // reset state and UI
+  state = questions.map(()=>({answered:false, firstTry:false, correct:false}));
+  document.getElementById('questions').innerHTML = '';
+  document.getElementById('summary').style.display = 'none';
+  document.getElementById('score').textContent = `Правильних з першого разу: 0 / ${questions.length}`;
+  // re-render
+  questions.forEach((item, idx) => {
+    const div = document.createElement('div'); div.className = 'q'; div.id = 'q'+idx;
+    div.innerHTML = `
+      <div class="title">
+        <div class="qnum">${idx+1}</div>
+        <div style="flex:1">
+          <div class="question-text">${item.q}</div>
+          <div class="small" style="margin-top:6px">Оберіть одну відповідь</div>
+        </div>
+        <div class="feedback" id="fb-${idx}"></div>
+      </div>
+      <div class="choices" id="choices-${idx}"></div>
+    `;
+    container.appendChild(div);
+    const choices = document.getElementById('choices-'+idx);
+    item.a.forEach((text, ci) => {
+      const id = `q${idx}c${ci}`;
+      const label = document.createElement('label'); label.className='choice';
+      label.innerHTML = `<input type="radio" name="q${idx}" id="${id}" data-q="${idx}" data-c="${ci}"> <div style="flex:1">${text}</div>`;
+      choices.appendChild(label);
+    });
+  });
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+</script>
+</body>
+</html>
