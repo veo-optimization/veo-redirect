@@ -9,6 +9,104 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <script src="https://code.iconify.design/3/3.1.1/iconify.min.js"></script>
+    
+    <!-- 
+    ============================================
+    ОФІЦІЙНІ ДЖЕРЕЛА ЛОГОТИПІВ СОЦІАЛЬНИХ МЕРЕЖ
+    ============================================
+    
+    🔵 Telegram:
+    - SimpleIcons SVG: https://simpleicons.org/icons/telegram.svg
+    - Official brand resources: https://brandfetch.com/telegram.org
+    
+    🟣 Instagram:
+    - SimpleIcons SVG: https://simpleicons.org/icons/instagram.svg
+    - Official Meta resources: https://www.meta.com/brand/resources/instagram
+    
+    🟣 Viber:
+    - SimpleIcons SVG: https://simpleicons.org/icons/viber.svg
+    - Official brand profile: https://brandfetch.com/viber.com
+    
+    🔵 Facebook (закоментовано):
+    - SimpleIcons SVG: https://simpleicons.org/icons/facebook.svg
+    - Official Meta resources: https://www.meta.com/brand/resources/facebook
+    
+    🔴 YouTube (закоментовано):
+    - SimpleIcons SVG: https://simpleicons.org/icons/youtube.svg
+    - Official Google resources: https://www.youtube.com/howyoutubeworks/resources/brand-resources/
+    
+    🔴 TikTok (закоментовано):
+    - SimpleIcons SVG: https://simpleicons.org/icons/tiktok.svg
+    - Official brand resources: https://www.tiktok.com/about/brand-resources
+    
+    🟢 WhatsApp (закоментовано):
+    - SimpleIcons SVG: https://simpleicons.org/icons/whatsapp.svg
+    - Official Meta resources: https://www.meta.com/brand/resources/whatsapp/
+    
+    💬 Messenger (закоментовано):
+    - SimpleIcons SVG: https://simpleicons.org/icons/messenger.svg
+    - Official Meta resources: https://www.meta.com/brand/resources/messenger/
+    
+    🔵 LinkedIn (закоментовано):
+    - SimpleIcons SVG: https://simpleicons.org/icons/linkedin.svg
+    - Official brand resources: https://brand.linkedin.com/downloads
+    
+    🟢 Google Calendar (закоментовано):
+    - SimpleIcons SVG: https://simpleicons.org/icons/googlecalendar.svg
+    - Official Google Workspace: https://developers.google.com/identity/branding-guidelines
+    
+    📦 Універсальна бібліотека: https://simpleicons.org (2500+ SVG іконок брендів)
+    ============================================
+    -->
+    
+    <!-- 
+    ============================================
+    ОФІЦІЙНІ ДЖЕРЕЛА ЛОГОТИПІВ СОЦІАЛЬНИХ МЕРЕЖ
+    ============================================
+    
+    🔵 Telegram:
+    - SimpleIcons SVG: https://simpleicons.org/icons/telegram.svg
+    - Official brand resources: https://brandfetch.com/telegram.org
+    
+    🟣 Instagram:
+    - SimpleIcons SVG: https://simpleicons.org/icons/instagram.svg
+    - Official Meta resources: https://www.meta.com/brand/resources/instagram
+    
+    🟣 Viber:
+    - SimpleIcons SVG: https://simpleicons.org/icons/viber.svg
+    - Official brand profile: https://brandfetch.com/viber.com
+    
+    🔵 Facebook (закоментовано):
+    - SimpleIcons SVG: https://simpleicons.org/icons/facebook.svg
+    - Official Meta resources: https://www.meta.com/brand/resources/facebook
+    
+    🔴 YouTube (закоментовано):
+    - SimpleIcons SVG: https://simpleicons.org/icons/youtube.svg
+    - Official Google resources: https://www.youtube.com/howyoutubeworks/resources/brand-resources/
+    
+    🔴 TikTok (закоментовано):
+    - SimpleIcons SVG: https://simpleicons.org/icons/tiktok.svg
+    - Official brand resources: https://www.tiktok.com/about/brand-resources
+    
+    🟢 WhatsApp (закоментовано):
+    - SimpleIcons SVG: https://simpleicons.org/icons/whatsapp.svg
+    - Official Meta resources: https://www.meta.com/brand/resources/whatsapp/
+    
+    💬 Messenger (закоментовано):
+    - SimpleIcons SVG: https://simpleicons.org/icons/messenger.svg
+    - Official Meta resources: https://www.meta.com/brand/resources/messenger/
+    
+    🔵 LinkedIn (закоментовано):
+    - SimpleIcons SVG: https://simpleicons.org/icons/linkedin.svg
+    - Official brand resources: https://brand.linkedin.com/downloads
+    
+    🟢 Google Calendar (закоментовано):
+    - SimpleIcons SVG: https://simpleicons.org/icons/googlecalendar.svg
+    - Official Google Workspace: https://developers.google.com/identity/branding-guidelines
+    
+    📦 Універсальна бібліотека: https://simpleicons.org (2500+ SVG іконок брендів)
+    ============================================
+    -->
     <script>
         // ============================================
         // КОНФІГУРАЦІЯ - ЗМІНІТЬ ДАНІ ТУТ
@@ -26,8 +124,8 @@
         
         // КОНТАКТИ
         const TELEGRAM_USERNAME = "veoforce_support"; // Telegram username (без @)
-        const VIBER_PHONE = "0112223344"; // Номер Viber (10 цифр, починається з 0)
-        const TELEGRAM_SHOWCASE = "veoforce_chat"; // Telegram username вітрини (без @)
+        const VIBER_PHONE = "0501112233"; // Номер Viber (10 цифр, починається з 0)
+        const TELEGRAM_SHOWCASE = "veoforce_chat"; // Telegram username вітрини (без @) або повне посилання (наприклад: "https://t.me/+Z-iCu_n0QYdmYTJi")
         const INSTAGRAM_USERNAME = ""; // Instagram username (без @), якщо відсутній - залишити порожнім
         
         // КАЛЕНДАР ПРЯМИХ ЕФІРІВ
@@ -90,22 +188,57 @@
         }
         
         // Функція для копіювання в буфер обміну
-        function copyToClipboard(text, buttonId) {
+        function copyToClipboard(text, buttonId, successMessage, skipButtonChange) {
             if (!checkSecurity()) return;
             navigator.clipboard.writeText(text).then(function() {
-                const button = document.getElementById(buttonId);
-                if (button) {
-                    const originalHTML = button.innerHTML;
-                    button.innerHTML = '✓ Скопійовано!';
-                    if (button.classList.contains('contact-copy-button') || button.classList.contains('contact-copy-button-small')) {
-                        button.style.background = 'rgba(40, 167, 69, 0.9)';
-                    } else {
-                        button.style.background = '#28a745';
+                // Якщо skipButtonChange = true, не змінюємо кнопку (для соціальних мереж, де є бейдж)
+                if (!skipButtonChange) {
+                    const button = document.getElementById(buttonId);
+                    if (button) {
+                        // Зберігаємо всі оригінальні значення
+                        const originalHTML = button.innerHTML;
+                        const originalBackground = button.style.background || '';
+                        const originalColor = button.style.color || '';
+                        
+                        // Зберігаємо всі розміри та стилі
+                        const computedStyle = window.getComputedStyle(button);
+                        const originalWidth = computedStyle.width;
+                        const originalHeight = computedStyle.height;
+                        const originalMinWidth = computedStyle.minWidth;
+                        const originalMinHeight = computedStyle.minHeight;
+                        const originalPadding = computedStyle.padding;
+                        const originalBoxSizing = computedStyle.boxSizing;
+                        
+                        // Змінюємо текст та колір кнопки
+                        if (successMessage) {
+                            button.innerHTML = successMessage;
+                        } else {
+                            button.innerHTML = '✓ Скопійовано!';
+                        }
+                        button.style.background = '#2196F3';
+                        button.style.color = '#ffffff';
+                        
+                        // Фіксуємо всі розміри, щоб кнопка не змінювалася
+                        button.style.width = originalWidth;
+                        button.style.height = originalHeight;
+                        button.style.minWidth = originalMinWidth;
+                        button.style.minHeight = originalMinHeight;
+                        button.style.padding = originalPadding;
+                        button.style.boxSizing = originalBoxSizing;
+                        
+                        // Повертаємо оригінальний вигляд через 2 секунди
+                        setTimeout(function() {
+                            button.innerHTML = originalHTML;
+                            button.style.background = originalBackground;
+                            button.style.color = originalColor;
+                            button.style.width = '';
+                            button.style.height = '';
+                            button.style.minWidth = '';
+                            button.style.minHeight = '';
+                            button.style.padding = '';
+                            button.style.boxSizing = '';
+                        }, 2000);
                     }
-                    setTimeout(function() {
-                        button.innerHTML = originalHTML;
-                        button.style.background = '';
-                    }, 2000);
                 }
             }).catch(function(err) {
                 alert('Не вдалося скопіювати');
@@ -113,24 +246,28 @@
         }
         
         function copyIBAN() {
-            copyToClipboard(IBAN, 'copyIbanButton');
+            copyToClipboard(IBAN, 'copyIbanButton', '✓ IBAN скопійовано', false);
         }
         
         function copyEDRPOU() {
-            copyToClipboard(EDRPOU, 'copyEdrpouButton');
+            copyToClipboard(EDRPOU, 'copyEdrpouButton', '✓ ЄДРПОУ скопійовано', false);
         }
         
         function copyPaymentPurpose() {
-            copyToClipboard(PAYMENT_PURPOSE, 'copyPurposeButton');
+            copyToClipboard(PAYMENT_PURPOSE, 'copyPurposeButton', '✓ Призначення скопійовано');
         }
         
         function copyTelegramUsername() {
-            copyToClipboard('@' + TELEGRAM_USERNAME, 'copyTelegramButton');
+            if (!checkSecurity()) return;
+            copyToClipboard('@' + TELEGRAM_USERNAME, 'copyTelegramButton', '', true);
+            showCopySuccess('telegramCopyBadge');
         }
         
         function copyViberPhone() {
+            if (!checkSecurity()) return;
             const formattedNumber = formatPhoneNumber(VIBER_PHONE);
-            copyToClipboard(formattedNumber, 'copyViberPhoneButton');
+            copyToClipboard(formattedNumber, 'copyViberPhoneButton', '', true);
+            showCopySuccess('viberCopyBadge');
         }
         
         // ============================================
@@ -158,11 +295,11 @@
             
             // Встановлюємо іконку в залежності від типу
             if (contactType === 'telegram') {
-                modalIcon.setAttribute('icon', 'logos:telegram');
+                modalIcon.innerHTML = '<img src="https://simpleicons.org/icons/telegram.svg" alt="Telegram" width="32" height="32">';
             } else if (contactType === 'viber') {
-                modalIcon.setAttribute('icon', 'logos:viber');
+                modalIcon.innerHTML = '<img src="https://simpleicons.org/icons/viber.svg" alt="Viber" width="32" height="32">';
             } else if (contactType === 'instagram') {
-                modalIcon.setAttribute('icon', 'logos:instagram-icon');
+                modalIcon.innerHTML = '<img src="https://simpleicons.org/icons/instagram.svg" alt="Instagram" width="32" height="32">';
             }
             
             modal.style.display = 'flex';
@@ -182,14 +319,32 @@
         
         function modalCopyContact() {
             if (!currentContactData || !checkSecurity()) return;
-            secureCopy(currentContactData.value, 'modalCopyButton');
+            // Для Telegram invite links копіюємо повне посилання
+            let textToCopy = currentContactData.value;
+            if (currentContactData.type === 'telegram' && (textToCopy.includes('t.me/+') || textToCopy.includes('@'))) {
+                if (textToCopy.includes('t.me/+')) {
+                    // Це invite link - переконуємося, що це повне посилання
+                    if (!textToCopy.startsWith('http')) {
+                        textToCopy = 'https://' + textToCopy.replace(/^t\.me/, 't.me');
+                    }
+                }
+            }
+            secureCopy(textToCopy, 'modalCopyButton', '✓ Скопійовано!', false);
         }
         
         function modalOpenContact() {
             if (!currentContactData || !checkSecurity()) return;
             
             if (currentContactData.type === 'telegram') {
-                window.open('https://t.me/' + currentContactData.value.replace('@', ''), '_blank');
+                // Перевіряємо, чи це invite link або username
+                if (currentContactData.value.includes('t.me/') || currentContactData.value.startsWith('http')) {
+                    // Це посилання (invite link або повне посилання)
+                    const link = currentContactData.value.startsWith('http') ? currentContactData.value : 'https://' + currentContactData.value;
+                    window.open(link, '_blank');
+                } else {
+                    // Це username
+                    window.open('https://t.me/' + currentContactData.value.replace('@', ''), '_blank');
+                }
             } else if (currentContactData.type === 'viber') {
                 const viberUrl = createViberUrl(currentContactData.value.replace('+380', '0').replace(/\s/g, ''));
                 window.location.href = viberUrl;
@@ -211,14 +366,51 @@
             window.location.href = viberUrl;
         }
         
+        // Функція для визначення, чи є посилання invite link
+        function isTelegramInviteLink(link) {
+            if (!link) return false;
+            return link.includes('t.me/+') || link.startsWith('https://t.me/+') || link.startsWith('t.me/+');
+        }
+        
+        // Функція для отримання повного посилання Telegram
+        function getTelegramShowcaseLink() {
+            if (!TELEGRAM_SHOWCASE) return null;
+            if (isTelegramInviteLink(TELEGRAM_SHOWCASE)) {
+                // Якщо це вже повне посилання, повертаємо як є
+                if (TELEGRAM_SHOWCASE.startsWith('http')) {
+                    return TELEGRAM_SHOWCASE;
+                }
+                // Якщо без https://, додаємо
+                return 'https://' + TELEGRAM_SHOWCASE.replace(/^t\.me/, 't.me');
+            }
+            // Якщо це username, формуємо стандартне посилання
+            return 'https://t.me/' + TELEGRAM_SHOWCASE;
+        }
+        
+        // Функція для отримання тексту для відображення/копіювання
+        function getTelegramShowcaseDisplayText() {
+            if (!TELEGRAM_SHOWCASE) return null;
+            if (isTelegramInviteLink(TELEGRAM_SHOWCASE)) {
+                return getTelegramShowcaseLink();
+            }
+            return '@' + TELEGRAM_SHOWCASE;
+        }
+        
         function openTelegramShowcase() {
             if (!checkSecurity() || !TELEGRAM_SHOWCASE) return;
-            window.open('https://t.me/' + TELEGRAM_SHOWCASE, '_blank');
+            const link = getTelegramShowcaseLink();
+            if (link) {
+                window.open(link, '_blank');
+            }
         }
         
         function copyTelegramShowcase() {
             if (!checkSecurity() || !TELEGRAM_SHOWCASE) return;
-            secureCopy('@' + TELEGRAM_SHOWCASE, 'copyTelegramShowcaseButton');
+            const textToCopy = getTelegramShowcaseLink();
+            if (textToCopy) {
+                secureCopy(textToCopy, 'copyTelegramShowcaseButton', '', true);
+                showCopySuccess('showcaseCopyBadge');
+            }
         }
         
         function openInstagram() {
@@ -228,7 +420,18 @@
         
         function copyInstagramUsername() {
             if (!checkSecurity() || !INSTAGRAM_USERNAME) return;
-            secureCopy('@' + INSTAGRAM_USERNAME, 'copyInstagramButton');
+            secureCopy('@' + INSTAGRAM_USERNAME, 'copyInstagramButton', '', true);
+            showCopySuccess('instagramCopyBadge');
+        }
+        
+        function showCopySuccess(badgeId) {
+            const badge = document.getElementById(badgeId);
+            if (badge) {
+                badge.classList.add('show');
+                setTimeout(function() {
+                    badge.classList.remove('show');
+                }, 2000);
+            }
         }
         
         // ============================================
@@ -308,9 +511,9 @@
         }
         
         // Перевірка безпеки перед виконанням функцій
-        function secureCopy(text, buttonId) {
+        function secureCopy(text, buttonId, successMessage, skipButtonChange) {
             if (!checkSecurity()) return;
-            copyToClipboard(text, buttonId);
+            copyToClipboard(text, buttonId, successMessage, skipButtonChange);
         }
         
         // Оригінальні функції копіювання з захистом
@@ -326,23 +529,13 @@
         
         function copyPaymentPurpose() {
             if (!checkSecurity()) return;
-            secureCopy(PAYMENT_PURPOSE, 'copyPurposeButton');
-        }
-        
-        function copyTelegramUsername() {
-            if (!checkSecurity()) return;
-            secureCopy('@' + TELEGRAM_USERNAME, 'copyTelegramButton');
-        }
-        
-        function copyViberPhone() {
-            if (!checkSecurity()) return;
-            const formattedNumber = formatPhoneNumber(VIBER_PHONE);
-            secureCopy(formattedNumber, 'copyViberPhoneButton');
+            secureCopy(PAYMENT_PURPOSE, 'copyPurposeButton', '✓ Призначення скопійовано', false);
         }
         
         function copyPaymentTemplate() {
             if (!checkSecurity()) return;
-            secureCopy(AFTER_PAYMENT_TEMPLATE, 'copyTemplateButton');
+            const templateText = document.getElementById('paymentTemplateDisplay').textContent;
+            copyToClipboard(templateText, 'copyTemplateButton', '✓ Шаблон скопійовано', false);
         }
         
         // ============================================
@@ -815,28 +1008,33 @@
             document.getElementById('telegramUsername').textContent = '@' + TELEGRAM_USERNAME;
             document.getElementById('viberPhone').textContent = formatPhoneNumber(VIBER_PHONE);
             // Вітрина
+            const telegramShowcaseItem = document.getElementById('telegramShowcaseItem');
             if (TELEGRAM_SHOWCASE) {
-                document.getElementById('telegramShowcase').textContent = '@' + TELEGRAM_SHOWCASE;
+                // Визначаємо, чи це invite link
+                if (isTelegramInviteLink(TELEGRAM_SHOWCASE)) {
+                    document.getElementById('telegramShowcase').textContent = 'Телеграм-спільнота';
+                } else {
+                    document.getElementById('telegramShowcase').textContent = '@' + TELEGRAM_SHOWCASE;
+                }
+                telegramShowcaseItem.style.display = 'flex';
                 document.getElementById('telegramShowcaseButtons').style.display = 'flex';
                 document.getElementById('telegramShowcaseUnavailable').style.display = 'none';
             } else {
-                document.getElementById('telegramShowcase').textContent = 'Не налаштовано';
-                document.getElementById('telegramShowcaseButtons').style.display = 'none';
-                document.getElementById('telegramShowcaseUnavailable').style.display = 'block';
+                // Приховуємо блок, якщо немає даних
+                telegramShowcaseItem.style.display = 'none';
             }
             
             // Instagram
             const instagramItem = document.getElementById('instagramItem');
             if (instagramItem) {
-                instagramItem.style.display = 'flex';
                 if (INSTAGRAM_USERNAME) {
                     document.getElementById('instagramUsername').textContent = '@' + INSTAGRAM_USERNAME;
                     document.getElementById('instagramButtons').style.display = 'flex';
                     document.getElementById('instagramUnavailable').style.display = 'none';
+                    instagramItem.style.display = 'flex';
                 } else {
-                    document.getElementById('instagramUsername').textContent = 'Не налаштовано';
-                    document.getElementById('instagramButtons').style.display = 'none';
-                    document.getElementById('instagramUnavailable').style.display = 'flex';
+                    // Приховуємо блок, якщо немає даних
+                    instagramItem.style.display = 'none';
                 }
             }
             
@@ -1208,7 +1406,7 @@
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: background-color 0.2s ease, color 0.2s ease;
             flex-shrink: 0;
             font-family: 'Montserrat', sans-serif;
             box-shadow: 0 2px 4px rgba(76,175,80,0.3);
@@ -1219,6 +1417,10 @@
             gap: 2px;
             line-height: 1.3;
             min-width: 90px;
+            align-self: stretch;
+            height: 100%;
+            min-height: 100%;
+            box-sizing: border-box;
         }
         
         .copy-button-template span {
@@ -1245,7 +1447,7 @@
         .template-container {
             display: flex;
             gap: 12px;
-            align-items: flex-start;
+            align-items: stretch;
             margin: 12px 0;
         }
         
@@ -1256,6 +1458,7 @@
             border-left: 3px solid #4CAF50;
             flex: 1;
             min-width: 0;
+            box-sizing: border-box;
         }
         
         .template-text {
@@ -1275,15 +1478,26 @@
         .payment-options {
             list-style: none;
             padding: 0;
-            margin: 0;
+            margin: 8px 0 16px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
         
         .payment-option {
-            padding: 8px 0;
-            margin: 4px 0;
+            background: #333333;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin: 0;
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.6;
             color: #e0e0e0;
+            border-left: 3px solid #4CAF50;
+            transition: all 0.2s ease;
+        }
+        
+        .payment-option:hover {
+            background: #3a3a3a;
         }
         
         .payment-option strong {
@@ -1295,14 +1509,26 @@
         .delivery-list {
             list-style: none;
             padding: 0;
+            margin: 8px 0 16px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
         
         .delivery-list li {
-            padding: 8px 0;
-            margin: 4px 0;
+            background: #333333;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin: 0;
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.6;
             color: #e0e0e0;
+            border-left: 3px solid #2196F3;
+            transition: all 0.2s ease;
+        }
+        
+        .delivery-list li:hover {
+            background: #3a3a3a;
         }
         
         .delivery-list li strong {
@@ -1313,33 +1539,53 @@
         .return-conditions {
             background: #2a2a2a;
             border-radius: 12px;
-            padding: 16px;
+            padding: 20px;
             margin: 12px 0;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
         }
         
         .return-conditions h3 {
             color: #ffffff;
-            margin-bottom: 12px;
-            font-size: 16px;
+            margin: 16px 0 12px 0;
+            font-size: 14px;
             font-weight: 600;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #333333;
+        }
+        
+        .return-conditions h3:first-of-type {
+            margin-top: 0;
         }
         
         .return-conditions ul {
             list-style: none;
             padding: 0;
+            margin: 0;
         }
         
         .return-conditions li {
-            padding: 8px 0;
-            border-bottom: 1px solid #333333;
+            background: #333333;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin: 0 0 8px 0;
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.6;
             color: #e0e0e0;
+            border-left: 3px solid #FF9800;
+            transition: all 0.2s ease;
         }
         
         .return-conditions li:last-child {
-            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .return-conditions li:hover {
+            background: #3a3a3a;
+        }
+        
+        .return-conditions li strong {
+            color: #ffffff;
+            font-weight: 600;
         }
         
         .contact-section {
@@ -1429,22 +1675,22 @@
         }
         
         .contact-item-telegram .contact-icon {
-            background: rgba(0, 136, 204, 0.2);
+            background: #ffffff;
             color: #0088cc;
         }
         
         .contact-item-viber .contact-icon {
-            background: rgba(102, 92, 172, 0.2);
+            background: #ffffff;
             color: #665CAC;
         }
         
         .contact-item-showcase .contact-icon {
-            background: rgba(0, 136, 204, 0.2);
+            background: #ffffff;
             color: #0088cc;
         }
         
         .contact-item-instagram .contact-icon {
-            background: rgba(228, 64, 95, 0.2);
+            background: #ffffff;
             color: #E4405F;
         }
         
@@ -1457,7 +1703,24 @@
             font-size: 13px;
             font-weight: 600;
             color: #b0b0b0;
-            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .copy-success-badge {
+            display: none;
+            background: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .copy-success-badge.show {
+            display: inline-block;
         }
         
         .contact-value {
@@ -1560,7 +1823,7 @@
             
             .template-container {
                 flex-direction: row;
-                align-items: flex-start;
+                align-items: stretch;
             }
             
             .template-content {
@@ -1577,6 +1840,9 @@
                 min-width: 75px;
                 padding: 8px 10px;
                 font-size: 10px;
+                align-self: stretch;
+                height: 100%;
+                min-height: 100%;
             }
         }
         
@@ -2180,7 +2446,7 @@
                             <span>Для користувачів TikTok:</span>
                         </div>
                         <div class="tiktok-instruction-text">
-                            Для роботи кнопок <strong>"Відкрити"</strong> <i class="bi bi-box-arrow-up-right" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i> <strong>та "Скопіюйте"</strong> <i class="bi bi-files" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i>: натисніть <strong>три крапки вгорі праворуч</strong> → <strong>"відкрити в браузері"</strong>. Або <strong>скопіюйте</strong> <i class="bi bi-files" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i> <strong>username/номер</strong> та знайдіть контакт вручну.
+                            Щоб кнопки <strong>"Відкрити"</strong>&nbsp;<i class="bi bi-box-arrow-up-right" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i> <strong>та "Скопіюйте"</strong>&nbsp;<i class="bi bi-files" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i> коректно працювали, натисніть <strong>три крапки вгорі праворуч</strong> → <strong>"відкрити в браузері"</strong>. Або <strong>скопіюйте</strong> <i class="bi bi-files" style="font-size: 14px; vertical-align: middle; margin: 0 2px;"></i> <strong>username/номер</strong> та знайдіть контакт вручну.
                         </div>
                     </div>
                     
@@ -2188,10 +2454,15 @@
                         <!-- Telegram -->
                         <div class="contact-item contact-item-telegram" onclick="showContactModal('Телеграм', '@' + TELEGRAM_USERNAME, 'telegram')" style="cursor: pointer;">
                             <div class="contact-icon">
-                                <iconify-icon icon="logos:telegram" width="24" height="24" style="display: inline-block;"></iconify-icon>
+                                <!-- Telegram logo from SimpleIcons: https://simpleicons.org/icons/telegram.svg -->
+                                <!-- Official brand resources: https://brandfetch.com/telegram.org -->
+                                <img src="https://simpleicons.org/icons/telegram.svg" alt="Telegram" width="24" height="24" style="display: block;">
                             </div>
                             <div class="contact-content">
-                                <div class="contact-name">Телеграм</div>
+                                <div class="contact-name">
+                                    Телеграм
+                                    <span class="copy-success-badge" id="telegramCopyBadge">✓ Скопійовано!</span>
+                                </div>
                                 <div class="contact-value" id="telegramUsername"></div>
                             </div>
                             <div class="contact-actions" onclick="event.stopPropagation();">
@@ -2207,10 +2478,15 @@
                         <!-- Viber -->
                         <div class="contact-item contact-item-viber" onclick="showContactModal('Вайбер', formatPhoneNumber(VIBER_PHONE), 'viber')" style="cursor: pointer;">
                             <div class="contact-icon">
-                                <iconify-icon icon="logos:viber" width="24" height="24" style="display: inline-block;"></iconify-icon>
+                                <!-- Viber logo from SimpleIcons: https://simpleicons.org/icons/viber.svg -->
+                                <!-- Official brand profile: https://brandfetch.com/viber.com -->
+                                <img src="https://simpleicons.org/icons/viber.svg" alt="Viber" width="24" height="24" style="display: block;">
                             </div>
                             <div class="contact-content">
-                                <div class="contact-name">Вайбер</div>
+                                <div class="contact-name">
+                                    Вайбер
+                                    <span class="copy-success-badge" id="viberCopyBadge">✓ Скопійовано!</span>
+                                </div>
                                 <div class="contact-value" id="viberPhone"></div>
                             </div>
                             <div class="contact-actions" onclick="event.stopPropagation();">
@@ -2224,12 +2500,17 @@
                         </div>
                         
                         <!-- Telegram Showcase -->
-                        <div class="contact-item contact-item-showcase" id="telegramShowcaseItem" onclick="if(TELEGRAM_SHOWCASE) showContactModal('Вітрина', '@' + TELEGRAM_SHOWCASE, 'telegram');" style="cursor: pointer;">
+                        <div class="contact-item contact-item-showcase" id="telegramShowcaseItem" onclick="if(TELEGRAM_SHOWCASE) { const link = getTelegramShowcaseLink(); const displayText = isTelegramInviteLink(TELEGRAM_SHOWCASE) ? link : '@' + TELEGRAM_SHOWCASE; showContactModal('Вітрина', displayText, 'telegram'); }" style="cursor: pointer;">
                             <div class="contact-icon">
-                                <iconify-icon icon="logos:telegram" width="24" height="24" style="display: inline-block;"></iconify-icon>
+                                <!-- Telegram logo from SimpleIcons: https://simpleicons.org/icons/telegram.svg -->
+                                <!-- Official brand resources: https://brandfetch.com/telegram.org -->
+                                <img src="https://simpleicons.org/icons/telegram.svg" alt="Telegram" width="24" height="24" style="display: block;">
                             </div>
                             <div class="contact-content">
-                                <div class="contact-name">Вітрина</div>
+                                <div class="contact-name">
+                                    Вітрина
+                                    <span class="copy-success-badge" id="showcaseCopyBadge">✓ Скопійовано!</span>
+                                </div>
                                 <div class="contact-value" id="telegramShowcase"></div>
                             </div>
                             <div class="contact-actions" id="telegramShowcaseButtons" onclick="event.stopPropagation();">
@@ -2249,10 +2530,15 @@
                         <!-- Instagram -->
                         <div class="contact-item contact-item-instagram" id="instagramItem" onclick="if(INSTAGRAM_USERNAME) showContactModal('Інстаграм', '@' + INSTAGRAM_USERNAME, 'instagram');" style="cursor: pointer;">
                             <div class="contact-icon">
-                                <iconify-icon icon="logos:instagram-icon" width="24" height="24" style="display: inline-block;"></iconify-icon>
+                                <!-- Instagram logo from SimpleIcons: https://simpleicons.org/icons/instagram.svg -->
+                                <!-- Official brand resources Meta: https://www.meta.com/brand/resources/instagram -->
+                                <img src="https://simpleicons.org/icons/instagram.svg" alt="Instagram" width="24" height="24" style="display: block;">
                             </div>
                             <div class="contact-content">
-                                <div class="contact-name">Інстаграм</div>
+                                <div class="contact-name">
+                                    Інстаграм
+                                    <span class="copy-success-badge" id="instagramCopyBadge">✓ Скопійовано!</span>
+                                </div>
                                 <div class="contact-value" id="instagramUsername"></div>
                             </div>
                             <div class="contact-actions" id="instagramButtons" onclick="event.stopPropagation();">
@@ -2307,12 +2593,12 @@
                         <span>Умови оплати, доставки та повернення</span>
                     </div>
                     
-                    <h3 style="margin: 16px 0 10px 0; color: #ffffff; font-size: 14px; font-weight: 600;">🔄 Варіанти оплати:</h3>
+                    <h3 style="margin: 0 0 12px 0; color: #ffffff; font-size: 14px; font-weight: 600;">🔄 Варіанти оплати:</h3>
                 <div class="payment-options" id="paymentOptions">
                     <!-- Заповнюється автоматично з константи PAYMENT_OPTIONS -->
                 </div>
                 
-                    <h3 style="margin: 16px 0 10px 0; color: #ffffff; font-size: 14px; font-weight: 600;">🚚 Доставка по Україні:</h3>
+                    <h3 style="margin: 0 0 12px 0; color: #ffffff; font-size: 14px; font-weight: 600;">🚚 Доставка по Україні:</h3>
                 <ul class="delivery-list">
                     <li>🔷 <strong id="deliveryMethod"></strong> ✅</li>
                     <li>🔷 Відправка: <strong id="deliveryTime"></strong></li>
@@ -2320,8 +2606,8 @@
                     <li>🔷 <strong>Вартість доставки:</strong> відповідно до тарифів перевізника. Сплачує отримувач.</li>
                 </ul>
                 
-                    <div id="exchangeReturnSection" style="margin-top: 16px;">
-                        <h3 style="margin-bottom: 10px; color: #ffffff; font-size: 14px; font-weight: 600;">📋 Умови обміну та повернення:</h3>
+                    <div id="exchangeReturnSection" style="margin-top: 20px;">
+                        <h3 style="margin: 0 0 12px 0; color: #ffffff; font-size: 14px; font-weight: 600;">📋 Умови обміну та повернення:</h3>
                     <ul id="exchangeReturnList">
                         <!-- Заповнюється автоматично з констант EXCHANGE_DAYS та RETURN_DAYS -->
                         </ul>
@@ -2366,7 +2652,7 @@
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-header">
                 <div style="display: flex; align-items: center; gap: 10px;">
-                    <iconify-icon id="modalIcon" width="32" height="32"></iconify-icon>
+                    <div id="modalIcon" style="display: flex; align-items: center; justify-content: center;"></div>
                     <h3 id="modalMessengerName"></h3>
                 </div>
                 <button class="modal-close-btn" onclick="closeContactModal()" title="Закрити">
@@ -2394,4 +2680,3 @@
     </div>
 </body>
 </html>
-
