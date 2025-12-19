@@ -55,6 +55,10 @@
     - SimpleIcons SVG: https://simpleicons.org/icons/googlecalendar.svg
     - Official Google Workspace: https://developers.google.com/identity/branding-guidelines
     
+    🦕 BIGGO LIVE:
+    - Офіційна іконка відсутня в SimpleIcons, використовується SVG динозавра
+    - Посилання на сервіс: https://biggo.live
+    
     📦 Універсальна бібліотека: https://simpleicons.org (2500+ SVG іконок брендів)
     ============================================
     -->
@@ -104,6 +108,10 @@
     - SimpleIcons SVG: https://simpleicons.org/icons/googlecalendar.svg
     - Official Google Workspace: https://developers.google.com/identity/branding-guidelines
     
+    🦕 BIGGO LIVE:
+    - Офіційна іконка відсутня в SimpleIcons, використовується SVG динозавра
+    - Посилання на сервіс: https://biggo.live
+    
     📦 Універсальна бібліотека: https://simpleicons.org (2500+ SVG іконок брендів)
     ============================================
     -->
@@ -124,9 +132,10 @@
         
         // КОНТАКТИ
         const TELEGRAM_USERNAME = "veoforce_support"; // Telegram username (без @)
-        const VIBER_PHONE = "0501112233"; // Номер Viber (10 цифр, починається з 0)
+        const VIBER_PHONE = "0112223344"; // Номер Viber (10 цифр, починається з 0)
         const TELEGRAM_SHOWCASE = "veoforce_chat"; // Telegram username вітрини (без @) або повне посилання (наприклад: "https://t.me/+Z-iCu_n0QYdmYTJi")
         const INSTAGRAM_USERNAME = ""; // Instagram username (без @), якщо відсутній - залишити порожнім
+        const BIGGO_LIVE_URL = "https://t.me/c/2386408531/712"; // Посилання на BIGGO LIVE (наприклад: "https://biggo.live/..."), якщо відсутнє - залишити порожнім
         
         // КАЛЕНДАР ПРЯМИХ ЕФІРІВ
         // Вставте iCal URL календаря (наприклад: "https://calendar.google.com/calendar/ical/.../public/basic.ics")
@@ -300,6 +309,9 @@
                 modalIcon.innerHTML = '<img src="https://simpleicons.org/icons/viber.svg" alt="Viber" width="32" height="32">';
             } else if (contactType === 'instagram') {
                 modalIcon.innerHTML = '<img src="https://simpleicons.org/icons/instagram.svg" alt="Instagram" width="32" height="32">';
+            } else if (contactType === 'biggo') {
+                // Використовуємо SVG динозавра для BIGGO LIVE (якщо немає офіційної іконки)
+                modalIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm-2 12v-1h4v1h-4zm0-2V9h4v3h-4z" fill="currentColor"/></svg>';
             }
             
             modal.style.display = 'flex';
@@ -350,6 +362,8 @@
                 window.location.href = viberUrl;
             } else if (currentContactData.type === 'instagram') {
                 window.open('https://instagram.com/' + currentContactData.value.replace('@', ''), '_blank');
+            } else if (currentContactData.type === 'biggo') {
+                window.open(currentContactData.value, '_blank');
             }
             
             closeContactModal();
@@ -422,6 +436,17 @@
             if (!checkSecurity() || !INSTAGRAM_USERNAME) return;
             secureCopy('@' + INSTAGRAM_USERNAME, 'copyInstagramButton', '', true);
             showCopySuccess('instagramCopyBadge');
+        }
+        
+        function openBiggoLive() {
+            if (!checkSecurity() || !BIGGO_LIVE_URL) return;
+            window.open(BIGGO_LIVE_URL, '_blank');
+        }
+        
+        function copyBiggoLive() {
+            if (!checkSecurity() || !BIGGO_LIVE_URL) return;
+            secureCopy(BIGGO_LIVE_URL, 'copyBiggoLiveButton', '', true);
+            showCopySuccess('biggoLiveCopyBadge');
         }
         
         function showCopySuccess(badgeId) {
@@ -1035,6 +1060,31 @@
                 } else {
                     // Приховуємо блок, якщо немає даних
                     instagramItem.style.display = 'none';
+                }
+            }
+            
+            // BIGGO LIVE
+            const biggoLiveItem = document.getElementById('biggoLiveItem');
+            if (biggoLiveItem) {
+                if (BIGGO_LIVE_URL) {
+                    document.getElementById('biggoLiveValue').textContent = BIGGO_LIVE_URL;
+                    document.getElementById('biggoLiveButtons').style.display = 'flex';
+                    document.getElementById('biggoLiveUnavailable').style.display = 'none';
+                    biggoLiveItem.style.display = 'flex';
+                } else {
+                    // Приховуємо блок, якщо немає даних
+                    biggoLiveItem.style.display = 'none';
+                }
+            }
+            
+            // Перевірка TikTok-браузера та показ спливаючого вікна
+            const ua = navigator.userAgent || navigator.vendor || window.opera || '';
+            const isTikTok = ua.includes("TikTok") || ua.includes("Musical.ly") || ua.includes("Bytedance");
+            if (isTikTok) {
+                // Перевіряємо localStorage, чи користувач вже бачив це повідомлення
+                const hasSeenTikTokPopup = localStorage.getItem('tiktokPopupSeen');
+                if (!hasSeenTikTokPopup) {
+                    document.getElementById('tiktok-popup').style.display = 'block';
                 }
             }
             
@@ -1664,6 +1714,10 @@
             border-left-color: #E4405F;
         }
         
+        .contact-item-biggo {
+            border-left-color: #FF6B35;
+        }
+        
         .contact-icon {
             display: flex;
             align-items: center;
@@ -1692,6 +1746,11 @@
         .contact-item-instagram .contact-icon {
             background: #ffffff;
             color: #E4405F;
+        }
+        
+        .contact-item-biggo .contact-icon {
+            background: #ffffff;
+            color: #FF6B35;
         }
         
         .contact-content {
@@ -2352,6 +2411,90 @@
             visibility: visible !important;
             opacity: 0.01 !important;
         }
+        
+        /* TikTok Popup */
+        #tiktok-popup {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            color: #fff;
+            z-index: 10000;
+            padding: 20px;
+            box-sizing: border-box;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+        
+        #tiktok-popup .tiktok-popup-content {
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            background: #2a2a2a;
+            border-radius: 16px;
+            padding: 32px 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            animation: popupSlideIn 0.3s ease;
+        }
+        
+        @keyframes popupSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        #tiktok-popup h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+        
+        #tiktok-popup p {
+            font-size: 15px;
+            line-height: 1.6;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+        }
+        
+        #tiktok-popup .tiktok-popup-close {
+            background: #0088cc;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        
+        #tiktok-popup .tiktok-popup-close:hover {
+            background: #006ba3;
+        }
+        
+        @media (max-width: 600px) {
+            #tiktok-popup .tiktok-popup-content {
+                padding: 24px 20px;
+            }
+            
+            #tiktok-popup h2 {
+                font-size: 18px;
+            }
+            
+            #tiktok-popup p {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -2554,6 +2697,35 @@
                                 <span>Недоступно</span>
                             </div>
                         </div>
+                        
+                        <!-- BIGGO LIVE -->
+                        <div class="contact-item contact-item-biggo" id="biggoLiveItem" onclick="if(BIGGO_LIVE_URL) showContactModal('BIGGO LIVE', BIGGO_LIVE_URL, 'biggo');" style="cursor: pointer;">
+                            <div class="contact-icon">
+                                <!-- BIGGO LIVE icon - використовуємо SVG динозавра (якщо немає офіційної іконки) -->
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: block;">
+                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm-2 12v-1h4v1h-4zm0-2V9h4v3h-4z" fill="currentColor"/>
+                                </svg>
+                            </div>
+                            <div class="contact-content">
+                                <div class="contact-name">
+                                    BIGGO LIVE
+                                    <span class="copy-success-badge" id="biggoLiveCopyBadge">✓ Скопійовано!</span>
+                                </div>
+                                <div class="contact-value" id="biggoLiveValue"></div>
+                            </div>
+                            <div class="contact-actions" id="biggoLiveButtons" onclick="event.stopPropagation();">
+                                <button class="contact-action-btn contact-open-btn" onclick="openBiggoLive()" title="Відкрити">
+                                    <i class="bi bi-box-arrow-up-right"></i>
+                                </button>
+                                <button class="contact-action-btn contact-copy-btn" id="copyBiggoLiveButton" onclick="copyBiggoLive()" title="Скопіювати">
+                                    <i class="bi bi-files"></i>
+                                </button>
+                            </div>
+                            <div class="contact-unavailable-btn" id="biggoLiveUnavailable" style="display: none;" onclick="event.stopPropagation();">
+                                <iconify-icon icon="mdi:close-circle" width="18" height="18"></iconify-icon>
+                                <span>Недоступно</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2678,6 +2850,29 @@
             </div>
         </div>
     </div>
+    
+    <!-- Спливаюче вікно для TikTok-браузера -->
+    <div id="tiktok-popup" onclick="if(event.target === this) closeTikTokPopup()">
+        <div class="tiktok-popup-content" onclick="event.stopPropagation()">
+            <h2>Важливо</h2>
+            <p>
+                Щоб кнопки працювали правильно, будь ласка:
+                <br><br>
+                Натисніть <b>три крапочки</b> у правому верхньому куті
+                <br>
+                та оберіть <b>«Відкрити в браузері»</b>
+            </p>
+            <button class="tiktok-popup-close" onclick="closeTikTokPopup()">Зрозуміло</button>
+        </div>
+    </div>
+    
+    <script>
+        function closeTikTokPopup() {
+            document.getElementById('tiktok-popup').style.display = 'none';
+            // Зберігаємо в localStorage, щоб не показувати знову
+            localStorage.setItem('tiktokPopupSeen', 'true');
+        }
+    </script>
 </body>
 </html>
 
