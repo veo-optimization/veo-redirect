@@ -134,8 +134,8 @@
         const TELEGRAM_USERNAME = "veoforce_support"; // Telegram username (без @)
         const VIBER_PHONE = "0112223344"; // Номер Viber (10 цифр, починається з 0)
         const TELEGRAM_SHOWCASE = "veoforce_chat"; // Telegram username вітрини (без @) або повне посилання (наприклад: "https://t.me/+Z-iCu_n0QYdmYTJi")
-        const INSTAGRAM_USERNAME = "vasilsheremeta"; // Instagram username (без @), якщо відсутній - залишити порожнім
-        const BIGGO_LIVE_URL = "https://t.me/c/2386408531/712"; // Посилання на BIGGO LIVE (наприклад: "https://biggo.live/..."), якщо відсутнє - залишити порожнім
+        const INSTAGRAM_USERNAME = ""; // Instagram username (без @), якщо відсутній - залишити порожнім
+        const BIGGO_LIVE_URL = ""; // Посилання на BIGGO LIVE (наприклад: "https://biggo.live/..."), якщо відсутнє - залишити порожнім
         
         // КАЛЕНДАР ПРЯМИХ ЕФІРІВ
         // Вставте iCal URL календаря (наприклад: "https://calendar.google.com/calendar/ical/.../public/basic.ics")
@@ -1081,11 +1081,8 @@
             const ua = navigator.userAgent || navigator.vendor || window.opera || '';
             const isTikTok = ua.includes("TikTok") || ua.includes("Musical.ly") || ua.includes("Bytedance");
             if (isTikTok) {
-                // Перевіряємо localStorage, чи користувач вже бачив це повідомлення
-                const hasSeenTikTokPopup = localStorage.getItem('tiktokPopupSeen');
-                if (!hasSeenTikTokPopup) {
-                    document.getElementById('tiktok-popup').style.display = 'block';
-                }
+                // Показуємо вікно щоразу при відкритті в TikTok-браузері
+                document.getElementById('tiktok-popup').style.display = 'flex';
             }
             
             // Заповнюємо умови оплати
@@ -2431,20 +2428,21 @@
         }
         
         #tiktok-popup .tiktok-popup-content {
-            max-width: 400px;
+            max-width: 420px;
             width: 90%;
             text-align: center;
-            background: #2a2a2a;
-            border-radius: 16px;
-            padding: 32px 24px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            animation: popupSlideIn 0.3s ease;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1f1f1f 100%);
+            border-radius: 20px;
+            padding: 36px 28px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.7), 0 0 0 2px rgba(255, 0, 80, 0.3);
+            animation: popupSlideIn 0.4s ease;
+            border: 1px solid rgba(255, 0, 80, 0.2);
         }
         
         @keyframes popupSlideIn {
             from {
                 opacity: 0;
-                transform: scale(0.9) translateY(-20px);
+                transform: scale(0.85) translateY(-30px);
             }
             to {
                 opacity: 1;
@@ -2452,47 +2450,159 @@
             }
         }
         
+        .tiktok-popup-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #FF0050 0%, #000000 100%);
+            border-radius: 16px;
+            padding: 12px;
+            box-shadow: 0 4px 16px rgba(255, 0, 80, 0.4);
+        }
+        
+        .tiktok-popup-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
         #tiktok-popup h2 {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 16px;
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
             color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        #tiktok-popup .tiktok-popup-warning {
+            background: rgba(255, 0, 80, 0.15);
+            border-left: 3px solid #FF0050;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        #tiktok-popup .tiktok-popup-warning strong {
+            color: #FF0050;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 8px;
         }
         
         #tiktok-popup p {
             font-size: 15px;
-            line-height: 1.6;
+            line-height: 1.7;
             color: #e0e0e0;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
+        }
+        
+        #tiktok-popup .tiktok-popup-steps {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            margin: 16px 0;
+            text-align: left;
+        }
+        
+        #tiktok-popup .tiktok-popup-steps .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        #tiktok-popup .tiktok-popup-steps .step:last-child {
+            margin-bottom: 0;
+        }
+        
+        #tiktok-popup .tiktok-popup-steps .step-number {
+            background: #FF0050;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        
+        #tiktok-popup .tiktok-popup-steps .step-text {
+            flex: 1;
+            color: #e0e0e0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        #tiktok-popup .tiktok-popup-steps .step-text b {
+            color: #ffffff;
         }
         
         #tiktok-popup .tiktok-popup-close {
-            background: #0088cc;
+            background: linear-gradient(135deg, #FF0050 0%, #FF1744 100%);
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 15px;
+            padding: 14px 32px;
+            border-radius: 10px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 16px rgba(255, 0, 80, 0.3);
+            width: 100%;
+            max-width: 280px;
         }
         
         #tiktok-popup .tiktok-popup-close:hover {
-            background: #006ba3;
+            background: linear-gradient(135deg, #FF1744 0%, #FF0050 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 0, 80, 0.4);
+        }
+        
+        #tiktok-popup .tiktok-popup-close:active {
+            transform: translateY(0);
         }
         
         @media (max-width: 600px) {
             #tiktok-popup .tiktok-popup-content {
-                padding: 24px 20px;
+                padding: 28px 20px;
+                max-width: 95%;
+            }
+            
+            .tiktok-popup-icon {
+                width: 56px;
+                height: 56px;
+                margin-bottom: 16px;
             }
             
             #tiktok-popup h2 {
-                font-size: 18px;
+                font-size: 20px;
             }
             
             #tiktok-popup p {
                 font-size: 14px;
+            }
+            
+            #tiktok-popup .tiktok-popup-warning {
+                padding: 10px 14px;
+            }
+            
+            #tiktok-popup .tiktok-popup-steps {
+                padding: 12px;
+            }
+            
+            #tiktok-popup .tiktok-popup-close {
+                padding: 12px 24px;
+                font-size: 15px;
             }
         }
     </style>
@@ -2854,14 +2964,37 @@
     <!-- Спливаюче вікно для TikTok-браузера -->
     <div id="tiktok-popup" onclick="if(event.target === this) closeTikTokPopup()">
         <div class="tiktok-popup-content" onclick="event.stopPropagation()">
-            <h2>Ви зайшли з ТікТок</h2>
-            <p>
-                ВАЖЛИВО! Щоб кнопки працювали правильно, будь ласка:
-                <br><br>
-                Натисніть <b>три крапочки</b> у правому верхньому куті
-                <br>
-                та оберіть <b>«Відкрити в браузері»</b>
-            </p>
+            <div class="tiktok-popup-icon">
+                <!-- TikTok logo from SimpleIcons: https://simpleicons.org/icons/tiktok.svg -->
+                <img src="https://simpleicons.org/icons/tiktok.svg" alt="TikTok" width="40" height="40">
+            </div>
+            <h2>
+                <span>Ви зайшли з ТікТок</span>
+            </h2>
+            <div class="tiktok-popup-warning">
+                <strong>Ви зайшли з ТікТок</strong>
+                <span>⚠️ ВАЖЛИВО! Щоб кнопки працювали правильно, виконайте наступні кроки:</span>
+            </div>
+            <div class="tiktok-popup-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <div class="step-text">
+                        Натисніть <b>три крапочки</b> у правому верхньому куті екрану
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <div class="step-text">
+                        Оберіть пункт <b>«Відкрити в браузері»</b>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <div class="step-text">
+                        Після відкриття в браузері всі кнопки працюватимуть коректно
+                    </div>
+                </div>
+            </div>
             <button class="tiktok-popup-close" onclick="closeTikTokPopup()">Зрозуміло</button>
         </div>
     </div>
@@ -2869,8 +3002,6 @@
     <script>
         function closeTikTokPopup() {
             document.getElementById('tiktok-popup').style.display = 'none';
-            // Зберігаємо в localStorage, щоб не показувати знову
-            localStorage.setItem('tiktokPopupSeen', 'true');
         }
     </script>
 </body>
