@@ -135,7 +135,7 @@
         const VIBER_PHONE = "0112223344"; // Номер Viber (10 цифр, починається з 0)
         const TELEGRAM_SHOWCASE = "veoforce_chat"; // Telegram username вітрини (без @) або повне посилання (наприклад: "https://t.me/+Z-iCu_n0QYdmYTJi")
         const INSTAGRAM_USERNAME = "vasilsheremeta"; // Instagram username (без @), якщо відсутній - залишити порожнім
-        const BIGGO_LIVE_URL = "https://www.biggo.tv/user/veo_me"; // Посилання на BIGGO LIVE (наприклад: "https://biggo.live/..."), якщо відсутнє - залишити порожнім
+        const BIGGO_LIVE_URL = "https://biggo.tv/user/veo_me"; // Посилання на BIGGO LIVE (наприклад: "https://biggo.live/..."), якщо відсутнє - залишити порожнім
         
         // КАЛЕНДАР ПРЯМИХ ЕФІРІВ
         // Вставте iCal URL календаря (наприклад: "https://calendar.google.com/calendar/ical/.../public/basic.ics")
@@ -292,7 +292,7 @@
             let displayValue = contactValue;
             if (contactType === 'biggo' && BIGGO_LIVE_URL) {
                 const username = getBiggoLiveUsername();
-                displayValue = username ? '@' + username : contactValue;
+                displayValue = username || contactValue;
             }
             
             currentContactData = {
@@ -306,9 +306,25 @@
             const modalTitle = document.getElementById('modalMessengerName');
             const modalValue = document.getElementById('modalContactValue');
             const modalIcon = document.getElementById('modalIcon');
+            const modalOpenBtn = document.querySelector('.modal-open-btn');
             
             modalTitle.textContent = messengerName;
-            modalValue.textContent = displayValue;
+            
+            // Для BIGGO LIVE показуємо юзернейм та інструкцію
+            if (contactType === 'biggo' && BIGGO_LIVE_URL) {
+                const username = getBiggoLiveUsername();
+                modalValue.innerHTML = '<div style="text-align: center;"><div style="font-size: 18px; font-weight: 600; color: #ffffff; margin-bottom: 12px;">' + (username || '') + '</div><div style="font-size: 13px; color: #b0b0b0; line-height: 1.5;">Скопіюйте юзернейм та знайдіть користувача в додатку BIGGO LIVE</div></div>';
+                // Приховуємо кнопку "Відкрити" для BIGGO LIVE
+                if (modalOpenBtn) {
+                    modalOpenBtn.style.display = 'none';
+                }
+            } else {
+                modalValue.textContent = displayValue;
+                // Показуємо кнопку "Відкрити" для інших типів
+                if (modalOpenBtn) {
+                    modalOpenBtn.style.display = 'flex';
+                }
+            }
             
             // Встановлюємо іконку в залежності від типу
             if (contactType === 'telegram') {
@@ -339,9 +355,14 @@
         
         function modalCopyContact() {
             if (!currentContactData || !checkSecurity()) return;
-            // Для Telegram invite links копіюємо повне посилання
             let textToCopy = currentContactData.value;
-            if (currentContactData.type === 'telegram' && (textToCopy.includes('t.me/+') || textToCopy.includes('@'))) {
+            
+            // Для BIGGO LIVE копіюємо тільки чистий юзернейм (без @)
+            if (currentContactData.type === 'biggo') {
+                const username = getBiggoLiveUsername();
+                textToCopy = username || currentContactData.value;
+            } else if (currentContactData.type === 'telegram' && (textToCopy.includes('t.me/+') || textToCopy.includes('@'))) {
+                // Для Telegram invite links копіюємо повне посилання
                 if (textToCopy.includes('t.me/+')) {
                     // Це invite link - переконуємося, що це повне посилання
                     if (!textToCopy.startsWith('http')) {
@@ -371,7 +392,9 @@
             } else if (currentContactData.type === 'instagram') {
                 window.open('https://instagram.com/' + currentContactData.value.replace('@', ''), '_blank');
             } else if (currentContactData.type === 'biggo') {
-                window.open(currentContactData.value, '_blank');
+                // Для BIGGO LIVE не відкриваємо посилання, а показуємо модальне вікно з юзернеймом
+                // Модальне вікно вже відкрите, тому просто не закриваємо його
+                return;
             }
             
             closeContactModal();
@@ -467,7 +490,11 @@
         
         function openBiggoLive() {
             if (!checkSecurity() || !BIGGO_LIVE_URL) return;
-            window.open(BIGGO_LIVE_URL, '_blank');
+            // Для BIGGO LIVE показуємо модальне вікно з можливістю скопіювати юзернейм
+            const username = getBiggoLiveUsername();
+            if (username) {
+                showContactModal('BIGGO LIVE', BIGGO_LIVE_URL, 'biggo');
+            }
         }
         
         function copyBiggoLive() {
