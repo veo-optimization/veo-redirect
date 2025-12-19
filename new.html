@@ -288,9 +288,17 @@
         function showContactModal(messengerName, contactValue, contactType) {
             if (!checkSecurity()) return;
             
+            // Для BIGGO LIVE показуємо юзернейм замість повного URL
+            let displayValue = contactValue;
+            if (contactType === 'biggo' && BIGGO_LIVE_URL) {
+                const username = getBiggoLiveUsername();
+                displayValue = username ? '@' + username : contactValue;
+            }
+            
             currentContactData = {
                 name: messengerName,
-                value: contactValue,
+                value: contactValue, // Зберігаємо повне посилання для копіювання/відкриття
+                displayValue: displayValue, // Для відображення
                 type: contactType
             };
             
@@ -300,7 +308,7 @@
             const modalIcon = document.getElementById('modalIcon');
             
             modalTitle.textContent = messengerName;
-            modalValue.textContent = contactValue;
+            modalValue.textContent = displayValue;
             
             // Встановлюємо іконку в залежності від типу
             if (contactType === 'telegram') {
@@ -310,8 +318,8 @@
             } else if (contactType === 'instagram') {
                 modalIcon.innerHTML = '<img src="https://simpleicons.org/icons/instagram.svg" alt="Instagram" width="32" height="32">';
             } else if (contactType === 'biggo') {
-                // Використовуємо SVG динозавра для BIGGO LIVE (якщо немає офіційної іконки)
-                modalIcon.innerHTML = '<svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm-2 12v-1h4v1h-4zm0-2V9h4v3h-4z" fill="currentColor"/></svg>';
+                // Використовуємо букву "B" для BIGGO LIVE
+                modalIcon.innerHTML = '<div style="width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: #FF6B35; border-radius: 8px; color: white; font-weight: 700; font-size: 20px; font-family: Arial, sans-serif;">B</div>';
             }
             
             modal.style.display = 'flex';
@@ -436,6 +444,25 @@
             if (!checkSecurity() || !INSTAGRAM_USERNAME) return;
             secureCopy('@' + INSTAGRAM_USERNAME, 'copyInstagramButton', '', true);
             showCopySuccess('instagramCopyBadge');
+        }
+        
+        // Функція для витягування юзернейму з URL BIGGO LIVE
+        function getBiggoLiveUsername() {
+            if (!BIGGO_LIVE_URL) return '';
+            try {
+                const url = new URL(BIGGO_LIVE_URL);
+                const pathParts = url.pathname.split('/');
+                const userIndex = pathParts.indexOf('user');
+                if (userIndex !== -1 && pathParts[userIndex + 1]) {
+                    return pathParts[userIndex + 1];
+                }
+                // Якщо формат інший, спробуємо витягти останню частину
+                return pathParts[pathParts.length - 1] || '';
+            } catch (e) {
+                // Якщо не вдалося розпарсити URL, спробуємо регулярний вираз
+                const match = BIGGO_LIVE_URL.match(/\/user\/([^\/\?]+)/);
+                return match ? match[1] : '';
+            }
         }
         
         function openBiggoLive() {
@@ -1067,7 +1094,8 @@
             const biggoLiveItem = document.getElementById('biggoLiveItem');
             if (biggoLiveItem) {
                 if (BIGGO_LIVE_URL) {
-                    document.getElementById('biggoLiveValue').textContent = BIGGO_LIVE_URL;
+                    const username = getBiggoLiveUsername();
+                    document.getElementById('biggoLiveValue').textContent = username ? '@' + username : BIGGO_LIVE_URL;
                     document.getElementById('biggoLiveButtons').style.display = 'flex';
                     document.getElementById('biggoLiveUnavailable').style.display = 'none';
                     biggoLiveItem.style.display = 'flex';
@@ -2809,12 +2837,10 @@
                         </div>
                         
                         <!-- BIGGO LIVE -->
-                        <div class="contact-item contact-item-biggo" id="biggoLiveItem" onclick="if(BIGGO_LIVE_URL) showContactModal('BIGGO LIVE', BIGGO_LIVE_URL, 'biggo');" style="cursor: pointer;">
+                        <div class="contact-item contact-item-biggo" id="biggoLiveItem" onclick="if(BIGGO_LIVE_URL) { const username = getBiggoLiveUsername(); showContactModal('BIGGO LIVE', BIGGO_LIVE_URL, 'biggo'); }" style="cursor: pointer;">
                             <div class="contact-icon">
-                                <!-- BIGGO LIVE icon - використовуємо SVG динозавра (якщо немає офіційної іконки) -->
-                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: block;">
-                                    <path d="M12 2C8.13 2 5 5.13 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.87-3.13-7-7-7zm-2 12v-1h4v1h-4zm0-2V9h4v3h-4z" fill="currentColor"/>
-                                </svg>
+                                <!-- BIGGO LIVE icon - буква "B" -->
+                                <span style="display: block; font-weight: 700; font-size: 18px; font-family: Arial, sans-serif; color: currentColor;">B</span>
                             </div>
                             <div class="contact-content">
                                 <div class="contact-name">
