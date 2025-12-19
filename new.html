@@ -1132,12 +1132,60 @@
                 }
             }
             
-            // Перевірка TikTok-браузера та показ спливаючого вікна
+            // Перевірка TikTok-браузера та налаштування Intersection Observer для показу popup
             const ua = navigator.userAgent || navigator.vendor || window.opera || '';
             const isTikTok = ua.includes("TikTok") || ua.includes("Musical.ly") || ua.includes("Bytedance");
+            
             if (isTikTok) {
-                // Показуємо вікно щоразу при відкритті в TikTok-браузері
-                document.getElementById('tiktok-popup').style.display = 'flex';
+                // Знаходимо перший видимий елемент контакту
+                const contactItems = document.querySelectorAll('.contact-item');
+                let firstVisibleContact = null;
+                
+                // Шукаємо перший елемент, який відображається (не прихований)
+                for (let i = 0; i < contactItems.length; i++) {
+                    const item = contactItems[i];
+                    const style = window.getComputedStyle(item);
+                    if (style.display !== 'none' && style.visibility !== 'hidden' && item.offsetParent !== null) {
+                        firstVisibleContact = item;
+                        break;
+                    }
+                }
+                
+                // Якщо знайшли елемент, налаштовуємо Intersection Observer
+                if (firstVisibleContact) {
+                    let popupShown = false;
+                    
+                    const observer = new IntersectionObserver(function(entries) {
+                        entries.forEach(function(entry) {
+                            if (!popupShown && entry.isIntersecting) {
+                                const rect = entry.boundingClientRect;
+                                const viewportHeight = window.innerHeight;
+                                
+                                // Перевіряємо, чи елемент повністю з'явився внизу екрану
+                                // Елемент вважається видимим, коли його нижня частина видно на екрані
+                                const isVisibleAtBottom = rect.bottom <= viewportHeight && rect.bottom > 0;
+                                const isFullyVisible = rect.top >= 0 && rect.bottom <= viewportHeight;
+                                
+                                // Показуємо popup, коли елемент стає видимим (особливо внизу екрану)
+                                if ((isVisibleAtBottom || isFullyVisible) && entry.intersectionRatio >= 0.3) {
+                                    popupShown = true;
+                                    document.getElementById('tiktok-popup').style.display = 'flex';
+                                    // Відключаємо observer після показу popup
+                                    observer.disconnect();
+                                }
+                            }
+                        });
+                    }, {
+                        threshold: [0, 0.1, 0.3, 0.5, 0.7, 1.0], // Різні рівні видимості
+                        rootMargin: '0px'
+                    });
+                    
+                    // Починаємо спостерігати за першим елементом контакту
+                    observer.observe(firstVisibleContact);
+                } else {
+                    // Якщо не знайшли елемент, показуємо popup одразу (fallback)
+                    document.getElementById('tiktok-popup').style.display = 'flex';
+                }
             }
             
             // Заповнюємо умови оплати
