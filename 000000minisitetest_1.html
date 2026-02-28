@@ -11,14 +11,14 @@
 body {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(to bottom, #3f3f42, #2f2f33);
-    color: #ffffff;
+    background: linear-gradient(to bottom, #f9f9f9, #f1f1f1);
+    color: #2e2e32;
 }
 
 .container {
     max-width: 480px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 24px;
 }
 
 h1 {
@@ -29,62 +29,63 @@ h1 {
 
 .phone-block {
     text-align: center;
-    margin: 20px 0;
+    margin: 20px 0 30px;
 }
 
 .phone {
     font-size: 24px;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .copy-btn {
     margin-top: 8px;
-    background: #ffffff;
-    color: #2f2f33;
+    background: #2e2e32;
+    color: white;
     border: none;
     padding: 6px 14px;
-    border-radius: 12px;
-    font-size: 13px;
+    border-radius: 8px;
+    font-size: 12px;
     cursor: pointer;
 }
 
 .section {
-    margin: 30px 0;
+    margin-bottom: 40px;
 }
 
 .card {
-    background: rgba(255,255,255,0.06);
+    background: #ffffff;
     padding: 20px;
-    border-radius: 16px;
-    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    border: 1px solid #e5e5e5;
 }
 
 .field {
-    margin-bottom: 18px;
+    margin-bottom: 20px;
 }
 
 .field strong {
     display: block;
     margin-bottom: 6px;
+    font-weight: 600;
 }
 
 .buttons {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 14px;
 }
 
 .btn {
-    background: #444449;
-    border-radius: 16px;
-    padding: 16px;
-    text-decoration: none;
+    background: #2e2e32;
     color: white;
-    transition: 0.3s;
+    padding: 16px;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: 0.2s ease;
 }
 
 .btn:hover {
-    background: #55555c;
+    opacity: 0.85;
 }
 
 .btn-title {
@@ -93,7 +94,7 @@ h1 {
 
 .btn-sub {
     font-size: 13px;
-    opacity: 0.8;
+    opacity: 0.85;
     margin-top: 4px;
 }
 
@@ -104,15 +105,16 @@ h1 {
 }
 
 .condition-block {
-    background: rgba(255,255,255,0.05);
+    background: #ffffff;
     padding: 18px;
-    border-radius: 14px;
-    border: 1px solid rgba(255,255,255,0.07);
+    border-radius: 12px;
+    border: 1px solid #e5e5e5;
 }
 
 .condition-block h3 {
     margin-top: 0;
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 600;
 }
 
 ol, ul {
@@ -121,9 +123,8 @@ ol, ul {
 
 footer {
     text-align: center;
-    margin: 40px 0;
-    font-weight: 500;
-    opacity: 0.9;
+    margin: 40px 0 20px;
+    font-size: 14px;
 }
 </style>
 </head>
@@ -142,7 +143,7 @@ footer {
 <div class="section card">
     <div class="field">
         <strong>💳 ОПЛАТА</strong>
-        🧣😍 Шарфи та хустки 🧣<br>
+        Шарфи та хустки<br>
         ФОП Хромих Олена Михайлівна
     </div>
 
@@ -155,7 +156,6 @@ footer {
     <div class="field">
         <strong>Номер картки (ПриватБанк)</strong>
         <span id="card">5168 7456 1711 4092</span><br>
-        (Хромих Олена)<br>
         <button class="copy-btn" onclick="copyText('card')">Скопіювати</button>
     </div>
 
@@ -173,101 +173,97 @@ footer {
 </div>
 
 <div class="section">
-    <h2 style="text-align:center;">👇 ШВИДКІ КНОПКИ 👇</h2>
+<h2 style="text-align:center; font-weight:600;">Швидкі кнопки</h2>
 
-    <div class="buttons">
-        <a href="#" class="btn">
-            <div class="btn-title">Написати у Viber</div>
-            <div class="btn-sub">Відкрити чат у Viber</div>
-            <div class="btn-sub">066-555-66-77</div>
-        </a>
+<div class="buttons">
 
-        <a href="#" class="btn">
-            <div class="btn-title">Написати в Telegram</div>
-            <div class="btn-sub">Відкрити чат в Telegram</div>
-            <div class="btn-sub">@usernametelegramukraineshop</div>
-        </a>
+<a href="#" class="btn">
+<div class="btn-title">Написати у Viber</div>
+<div class="btn-sub">Відкрити чат у Viber</div>
+<div class="btn-sub">066-555-66-77</div>
+</a>
 
-        <a href="#" class="btn">
-            <div class="btn-title">Вітрина Telegram</div>
-            <div class="btn-sub">Переглянути асортимент</div>
-            <div class="btn-sub">@ukraineshoptiktok</div>
-        </a>
+<a href="#" class="btn">
+<div class="btn-title">Написати в Telegram</div>
+<div class="btn-sub">Відкрити чат в Telegram</div>
+<div class="btn-sub">@usernametelegramukraineshop</div>
+</a>
 
-        <a href="#" class="btn">
-            <div class="btn-title">TikTok</div>
-            <div class="btn-sub">Офіційна сторінка</div>
-            <div class="btn-sub">@tiktokshopUkraineTTUser</div>
-        </a>
+<a href="#" class="btn">
+<div class="btn-title">Вітрина Telegram</div>
+<div class="btn-sub">Переглянути асортимент</div>
+<div class="btn-sub">@ukraineshoptiktok</div>
+</a>
 
-        <a href="#" class="btn">
-            <div class="btn-title">Instagram</div>
-            <div class="btn-sub">Офіційна сторінка</div>
-            <div class="btn-sub">@tiktokshopUkraineTTUser</div>
-        </a>
-    </div>
+<a href="#" class="btn">
+<div class="btn-title">TikTok</div>
+<div class="btn-sub">Офіційна сторінка</div>
+<div class="btn-sub">@tiktokshopUkraineTTUser</div>
+</a>
+
+<a href="#" class="btn">
+<div class="btn-title">Instagram</div>
+<div class="btn-sub">Офіційна сторінка</div>
+<div class="btn-sub">@tiktokshopUkraineTTUser</div>
+</a>
+
+</div>
 </div>
 
 <div class="section">
-<h2 style="text-align:center;">💳 Умови оплати та доставки</h2>
+<h2 style="text-align:center; font-weight:600;">Умови оплати та доставки</h2>
 
 <div class="conditions-grid">
 
-    <div class="condition-block">
-        <h3>🔄 Варіанти оплати</h3>
-        <ul>
-            <li>Повна передоплата 100%</li>
-            <li>Накладний платіж з передоплатою 100 грн</li>
-        </ul>
-    </div>
+<div class="condition-block">
+<h3>Варіанти оплати</h3>
+<ul>
+<li>Повна передоплата 100%</li>
+<li>Накладний платіж з передоплатою 100 грн</li>
+</ul>
+</div>
 
-    <div class="condition-block">
-        <h3>🚚 Доставка по Україні</h3>
-        <ul>
-            <li>Нова пошта (відправка з м. Полтава)</li>
-            <li>Відправка протягом 2 днів після оформлення замовлення</li>
-        </ul>
-    </div>
+<div class="condition-block">
+<h3>Доставка</h3>
+<ul>
+<li>Нова пошта (відправка з м. Полтава)</li>
+<li>Відправка протягом 2 днів після оформлення</li>
+</ul>
+</div>
 
-    <div class="condition-block">
-        <h3>⚠️ Обмін та повернення</h3>
-        <ul>
-            <li>Обмін товару неможливий</li>
-            <li>Повернення товару неможливе</li>
-        </ul>
-    </div>
+<div class="condition-block">
+<h3>Обмін та повернення</h3>
+<ul>
+<li>Обмін неможливий</li>
+<li>Повернення неможливе</li>
+</ul>
+</div>
 
-    <div class="condition-block">
-        <h3>🛍️ Як оформити замовлення</h3>
-        <ol>
-            <li>Оберіть товар</li>
-            <li>Надішліть дані для доставки:
-                <ul>
-                    <li>Місто та відділення Нової Пошти</li>
-                    <li>Контактний номер телефону</li>
-                    <li>Ім'я та прізвище</li>
-                </ul>
-            </li>
-            <li>Здійсніть оплату</li>
-            <li>Надішліть скріншот оплати</li>
-            <li>Очікуйте відправку (до 2 днів)</li>
-        </ol>
-    </div>
+<div class="condition-block">
+<h3>Як оформити замовлення</h3>
+<ol>
+<li>Оберіть товар</li>
+<li>Надішліть дані для доставки</li>
+<li>Здійсніть оплату</li>
+<li>Надішліть скріншот оплати</li>
+<li>Очікуйте відправку (до 2 днів)</li>
+</ol>
+</div>
 
 </div>
 </div>
 
 <footer>
-✨ Дякуємо за ваше замовлення! Гарних покупок! 💫
+Дякуємо за ваше замовлення 💫
 </footer>
 
 </div>
 
 <script>
 function copyText(id) {
-    const text = document.getElementById(id).innerText;
-    navigator.clipboard.writeText(text);
-    alert("Скопійовано: " + text);
+const text = document.getElementById(id).innerText;
+navigator.clipboard.writeText(text);
+alert("Скопійовано: " + text);
 }
 </script>
 
