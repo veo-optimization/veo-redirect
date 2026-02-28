@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Шарфи & Хустки</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 body {
     margin: 0;
     font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(to bottom, #f8c8dc, #d8c6f2);
-    color: #2d2d2d;
+    background: linear-gradient(to bottom, #3f3f42, #2f2f33);
+    color: #ffffff;
 }
 
 .container {
@@ -27,11 +27,25 @@ h1 {
     margin-bottom: 10px;
 }
 
-.phone {
+.phone-block {
     text-align: center;
-    font-size: 26px;
-    font-weight: 700;
     margin: 20px 0;
+}
+
+.phone {
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.copy-btn {
+    margin-top: 8px;
+    background: #ffffff;
+    color: #2f2f33;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    cursor: pointer;
 }
 
 .section {
@@ -39,49 +53,77 @@ h1 {
 }
 
 .card {
-    background: rgba(255,255,255,0.35);
+    background: rgba(255,255,255,0.06);
     padding: 20px;
-    border-radius: 18px;
-    backdrop-filter: blur(6px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.field {
+    margin-bottom: 18px;
+}
+
+.field strong {
+    display: block;
+    margin-bottom: 6px;
 }
 
 .buttons {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    margin-top: 20px;
 }
 
 .btn {
-    background: linear-gradient(135deg, #6e4b5c, #4c3a54);
-    color: white;
-    padding: 16px;
+    background: #444449;
     border-radius: 16px;
+    padding: 16px;
     text-decoration: none;
-    font-weight: 600;
-    text-align: center;
+    color: white;
     transition: 0.3s;
 }
 
 .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+    background: #55555c;
 }
 
-.small-title {
+.btn-title {
     font-weight: 600;
-    margin-bottom: 10px;
 }
 
-ul {
-    padding-left: 20px;
+.btn-sub {
+    font-size: 13px;
+    opacity: 0.8;
+    margin-top: 4px;
+}
+
+.conditions-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.condition-block {
+    background: rgba(255,255,255,0.05);
+    padding: 18px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.07);
+}
+
+.condition-block h3 {
+    margin-top: 0;
+    font-size: 16px;
+}
+
+ol, ul {
+    padding-left: 18px;
 }
 
 footer {
     text-align: center;
     margin: 40px 0;
-    font-weight: 600;
+    font-weight: 500;
+    opacity: 0.9;
 }
 </style>
 </head>
@@ -92,71 +134,127 @@ footer {
 
 <h1>Шарфи & Хустки</h1>
 
-<div class="phone">099 619 03 69</div>
+<div class="phone-block">
+    <div class="phone" id="phone">099 619 03 69</div>
+    <button class="copy-btn" onclick="copyText('phone')">Копіювати</button>
+</div>
 
 <div class="section card">
-    <div class="small-title">💳 ОПЛАТА</div>
-    🧣😍 <strong>Шарфи та хустки</strong> 🧣<br><br>
-    ФОП Хромих Олена Михайлівна<br><br>
+    <div class="field">
+        <strong>💳 ОПЛАТА</strong>
+        🧣😍 Шарфи та хустки 🧣<br>
+        ФОП Хромих Олена Михайлівна
+    </div>
 
-    👇 <strong>Скопіюйте для оплати</strong> 👇<br><br>
+    <div class="field">
+        <strong>IBAN (ПриватБанк)</strong>
+        <span id="iban">UA713052990000026003021210299</span><br>
+        <button class="copy-btn" onclick="copyText('iban')">Скопіювати</button>
+    </div>
 
-    <strong>IBAN (ПриватБанк):</strong><br>
-    UA713052990000026003021210299<br><br>
+    <div class="field">
+        <strong>Номер картки (ПриватБанк)</strong>
+        <span id="card">5168 7456 1711 4092</span><br>
+        (Хромих Олена)<br>
+        <button class="copy-btn" onclick="copyText('card')">Скопіювати</button>
+    </div>
 
-    <strong>АБО Номер картки (ПриватБанк):</strong><br>
-    5168 7456 1711 4092<br>
-    (Хромих Олена)<br><br>
+    <div class="field">
+        <strong>ЄДРПОУ</strong>
+        <span id="edrpou">2860913420</span><br>
+        <button class="copy-btn" onclick="copyText('edrpou')">Скопіювати</button>
+    </div>
 
-    ЄДРПОУ: 2860913420<br><br>
-
-    <strong>Призначення платежу:</strong><br>
-    Оплата за товар<br><br>
-
-    👇 для користувачів з ТікТок 👇
+    <div class="field">
+        <strong>Призначення платежу</strong>
+        <span id="payment">Оплата за товар</span><br>
+        <button class="copy-btn" onclick="copyText('payment')">Скопіювати</button>
+    </div>
 </div>
 
 <div class="section">
     <h2 style="text-align:center;">👇 ШВИДКІ КНОПКИ 👇</h2>
 
     <div class="buttons">
-        <a href="#" class="btn">Написати у Viber</a>
-        <a href="#" class="btn">Написати у Telegram</a>
-        <a href="#" class="btn">Вітрина Telegram</a>
-        <a href="#" class="btn">TikTok</a>
-        <a href="#" class="btn">Instagram</a>
+        <a href="#" class="btn">
+            <div class="btn-title">Написати у Viber</div>
+            <div class="btn-sub">Відкрити чат у Viber</div>
+            <div class="btn-sub">066-555-66-77</div>
+        </a>
+
+        <a href="#" class="btn">
+            <div class="btn-title">Написати в Telegram</div>
+            <div class="btn-sub">Відкрити чат в Telegram</div>
+            <div class="btn-sub">@usernametelegramukraineshop</div>
+        </a>
+
+        <a href="#" class="btn">
+            <div class="btn-title">Вітрина Telegram</div>
+            <div class="btn-sub">Переглянути асортимент</div>
+            <div class="btn-sub">@ukraineshoptiktok</div>
+        </a>
+
+        <a href="#" class="btn">
+            <div class="btn-title">TikTok</div>
+            <div class="btn-sub">Офіційна сторінка</div>
+            <div class="btn-sub">@tiktokshopUkraineTTUser</div>
+        </a>
+
+        <a href="#" class="btn">
+            <div class="btn-title">Instagram</div>
+            <div class="btn-sub">Офіційна сторінка</div>
+            <div class="btn-sub">@tiktokshopUkraineTTUser</div>
+        </a>
     </div>
 </div>
 
-<div class="section card">
-    <div class="small-title">💳 Умови оплати та доставки</div>
+<div class="section">
+<h2 style="text-align:center;">💳 Умови оплати та доставки</h2>
 
-    <strong>🔄 Варіанти оплати:</strong><br>
-    💎 Повна передоплата 100%<br>
-    💎 Накладний платіж з передоплатою 100 грн<br><br>
+<div class="conditions-grid">
 
-    <strong>🚚 Доставка по Україні:</strong><br>
-    • Нова пошта ✅ (відправка з м. Полтава)<br>
-    Відправка протягом 2 днів після оформлення замовлення<br><br>
+    <div class="condition-block">
+        <h3>🔄 Варіанти оплати</h3>
+        <ul>
+            <li>Повна передоплата 100%</li>
+            <li>Накладний платіж з передоплатою 100 грн</li>
+        </ul>
+    </div>
 
-    <strong>⚠️ Умови обміну та повернення:</strong><br>
-    ❌ Обмін товару неможливий<br>
-    ❌ Повернення товару неможливе<br><br>
+    <div class="condition-block">
+        <h3>🚚 Доставка по Україні</h3>
+        <ul>
+            <li>Нова пошта (відправка з м. Полтава)</li>
+            <li>Відправка протягом 2 днів після оформлення замовлення</li>
+        </ul>
+    </div>
 
-    <strong>🛍️ Як оформити замовлення:</strong>
-    <ol>
-        <li>Оберіть товар (шарфи, хустки, останні колекції)</li>
-        <li>Надішліть дані для доставки:
-            <ul>
-                <li>Місто та відділення Нової Пошти</li>
-                <li>Контактний номер телефону</li>
-                <li>Ім'я та прізвище</li>
-            </ul>
-        </li>
-        <li>Здійсніть оплату (на IBAN або картку)</li>
-        <li>Надішліть скріншот оплати</li>
-        <li>Очікуйте на відправку (протягом 2 днів)</li>
-    </ol>
+    <div class="condition-block">
+        <h3>⚠️ Обмін та повернення</h3>
+        <ul>
+            <li>Обмін товару неможливий</li>
+            <li>Повернення товару неможливе</li>
+        </ul>
+    </div>
+
+    <div class="condition-block">
+        <h3>🛍️ Як оформити замовлення</h3>
+        <ol>
+            <li>Оберіть товар</li>
+            <li>Надішліть дані для доставки:
+                <ul>
+                    <li>Місто та відділення Нової Пошти</li>
+                    <li>Контактний номер телефону</li>
+                    <li>Ім'я та прізвище</li>
+                </ul>
+            </li>
+            <li>Здійсніть оплату</li>
+            <li>Надішліть скріншот оплати</li>
+            <li>Очікуйте відправку (до 2 днів)</li>
+        </ol>
+    </div>
+
+</div>
 </div>
 
 <footer>
@@ -164,6 +262,14 @@ footer {
 </footer>
 
 </div>
+
+<script>
+function copyText(id) {
+    const text = document.getElementById(id).innerText;
+    navigator.clipboard.writeText(text);
+    alert("Скопійовано: " + text);
+}
+</script>
 
 </body>
 </html>
