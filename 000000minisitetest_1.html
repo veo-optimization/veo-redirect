@@ -3,267 +3,247 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Шарфи & Хустки</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Офіційна сторінка замовлень</title>
 
 <style>
-body {
-    margin: 0;
-    font-family: 'Montserrat', sans-serif;
-    background: linear-gradient(to bottom, #f9f9f9, #f1f1f1);
-    color: #2e2e32;
+:root {
+  --bg:#FAFAFA;
+  --text:#2B2B2F;
+  --primary:#1E1E23;
+  --secondary:#E8E8EC;
+  --radius:14px;
 }
 
-.container {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 24px;
+body{
+  margin:0;
+  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
+  background:var(--bg);
+  color:var(--text);
 }
 
-h1 {
-    text-align: center;
-    font-weight: 700;
-    margin-bottom: 10px;
+.container{
+  max-width:480px;
+  margin:auto;
+  padding:20px 20px 120px;
 }
 
-.phone-block {
-    text-align: center;
-    margin: 20px 0 30px;
+h1{margin-bottom:6px;}
+.subtitle{opacity:0.6;margin-bottom:20px;}
+
+button,a.btn{
+  display:block;
+  width:100%;
+  padding:16px;
+  border-radius:var(--radius);
+  text-align:center;
+  text-decoration:none;
+  font-weight:600;
+  margin-bottom:14px;
+  border:none;
+  cursor:pointer;
 }
 
-.phone {
-    font-size: 24px;
-    font-weight: 600;
+.primary{
+  background:var(--primary);
+  color:white;
+  font-size:17px;
+  box-shadow:0 8px 24px rgba(0,0,0,0.08);
 }
 
-.copy-btn {
-    margin-top: 8px;
-    background: #2e2e32;
-    color: white;
-    border: none;
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 12px;
-    cursor: pointer;
+.secondary{
+  background:var(--secondary);
+  color:var(--text);
 }
 
-.section {
-    margin-bottom: 40px;
+.small{
+  font-size:14px;
+  opacity:0.7;
+  margin-top:-8px;
+  margin-bottom:18px;
 }
 
-.card {
-    background: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    border: 1px solid #e5e5e5;
+.block{
+  background:white;
+  padding:18px;
+  border-radius:var(--radius);
+  margin-bottom:18px;
+  box-shadow:0 6px 20px rgba(0,0,0,0.03);
 }
 
-.field {
-    margin-bottom: 20px;
+.copy{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:8px;
+  font-size:14px;
 }
 
-.field strong {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
+.copy span{
+  cursor:pointer;
+  opacity:0.6;
 }
 
-.buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
+.toast{
+  position:fixed;
+  bottom:100px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#1E1E23;
+  color:white;
+  padding:10px 18px;
+  border-radius:20px;
+  font-size:14px;
+  display:none;
 }
 
-.btn {
-    background: #2e2e32;
-    color: white;
-    padding: 16px;
-    border-radius: 12px;
-    text-decoration: none;
-    transition: 0.2s ease;
+.sticky{
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:white;
+  padding:12px 20px;
+  box-shadow:0 -4px 20px rgba(0,0,0,0.06);
 }
 
-.btn:hover {
-    opacity: 0.85;
+.sticky a{
+  margin:0;
 }
 
-.btn-title {
-    font-weight: 600;
+.accordion{
+  cursor:pointer;
+  font-weight:600;
+  margin-bottom:10px;
 }
 
-.btn-sub {
-    font-size: 13px;
-    opacity: 0.85;
-    margin-top: 4px;
+.panel{
+  display:none;
+  font-size:14px;
+  opacity:0.7;
+  margin-bottom:10px;
 }
 
-.conditions-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.popup{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
 }
 
-.condition-block {
-    background: #ffffff;
-    padding: 18px;
-    border-radius: 12px;
-    border: 1px solid #e5e5e5;
-}
-
-.condition-block h3 {
-    margin-top: 0;
-    font-size: 15px;
-    font-weight: 600;
-}
-
-ol, ul {
-    padding-left: 18px;
-}
-
-footer {
-    text-align: center;
-    margin: 40px 0 20px;
-    font-size: 14px;
+.popup-content{
+  background:white;
+  padding:24px;
+  border-radius:var(--radius);
+  text-align:center;
+  max-width:400px;
 }
 </style>
 </head>
 
 <body>
 
+<div class="popup" id="tiktokPopup">
+  <div class="popup-content">
+    <h3>Ви перейшли з TikTok</h3>
+    <p>Для коректної роботи бота відкрийте сторінку у браузері.</p>
+    <button class="primary" onclick="closePopup()">Зрозуміло</button>
+  </div>
+</div>
+
 <div class="container">
 
-<h1>Шарфи & Хустки</h1>
+<h1 id="storeName">Назва магазину</h1>
+<div class="subtitle">Офіційна сторінка замовлень</div>
 
-<div class="phone-block">
-    <div class="phone" id="phone">099 619 03 69</div>
-    <button class="copy-btn" onclick="copyText('phone')">Копіювати</button>
-</div>
+<a id="phoneBtn" class="secondary">📞 Подзвонити</a>
+<a id="viberBtn" class="secondary">💬 Написати у Viber</a>
 
-<div class="section card">
-    <div class="field">
-        <strong>💳 ОПЛАТА</strong>
-        Шарфи та хустки<br>
-        ФОП Хромих Олена Михайлівна
-    </div>
-
-    <div class="field">
-        <strong>IBAN (ПриватБанк)</strong>
-        <span id="iban">UA713052990000026003021210299</span><br>
-        <button class="copy-btn" onclick="copyText('iban')">Скопіювати</button>
-    </div>
-
-    <div class="field">
-        <strong>Номер картки (ПриватБанк)</strong>
-        <span id="card">5168 7456 1711 4092</span><br>
-        <button class="copy-btn" onclick="copyText('card')">Скопіювати</button>
-    </div>
-
-    <div class="field">
-        <strong>ЄДРПОУ</strong>
-        <span id="edrpou">2860913420</span><br>
-        <button class="copy-btn" onclick="copyText('edrpou')">Скопіювати</button>
-    </div>
-
-    <div class="field">
-        <strong>Призначення платежу</strong>
-        <span id="payment">Оплата за товар</span><br>
-        <button class="copy-btn" onclick="copyText('payment')">Скопіювати</button>
-    </div>
-</div>
-
-<div class="section">
-<h2 style="text-align:center; font-weight:600;">Швидкі кнопки</h2>
-
-<div class="buttons">
-
-<a href="#" class="btn">
-<div class="btn-title">Написати у Viber</div>
-<div class="btn-sub">Відкрити чат у Viber</div>
-<div class="btn-sub">066-555-66-77</div>
+<a id="telegramMain" class="btn primary">
+  🟣 Оформити замовлення через Telegram
 </a>
+<div class="small">Швидке оформлення та автоматична доставка</div>
 
-<a href="#" class="btn">
-<div class="btn-title">Написати в Telegram</div>
-<div class="btn-sub">Відкрити чат в Telegram</div>
-<div class="btn-sub">@usernametelegramukraineshop</div>
-</a>
+<a id="catalogBtn" class="secondary">📦 Відкрити каталог</a>
+<a id="accountBtn" class="secondary">👤 Кабінет покупця</a>
+<a id="updateBtn" class="secondary">🔄 Змінити дані доставки</a>
+<a id="subscribeBtn" class="secondary">📩 Підписатися на оновлення</a>
 
-<a href="#" class="btn">
-<div class="btn-title">Вітрина Telegram</div>
-<div class="btn-sub">Переглянути асортимент</div>
-<div class="btn-sub">@ukraineshoptiktok</div>
-</a>
-
-<a href="#" class="btn">
-<div class="btn-title">TikTok</div>
-<div class="btn-sub">Офіційна сторінка</div>
-<div class="btn-sub">@tiktokshopUkraineTTUser</div>
-</a>
-
-<a href="#" class="btn">
-<div class="btn-title">Instagram</div>
-<div class="btn-sub">Офіційна сторінка</div>
-<div class="btn-sub">@tiktokshopUkraineTTUser</div>
-</a>
-
-</div>
+<div class="block">
+  <strong>💳 Оплата</strong><br><br>
+  <div class="copy">IBAN <span onclick="copyText(config.iban)">Скопіювати</span></div>
+  <div class="copy">Картка <span onclick="copyText(config.card)">Скопіювати</span></div>
+  <div class="copy">ЄДРПОУ <span onclick="copyText(config.edrpou)">Скопіювати</span></div>
+  <div class="copy">Призначення <span onclick="copyText(config.paymentNote)">Скопіювати</span></div>
 </div>
 
-<div class="section">
-<h2 style="text-align:center; font-weight:600;">Умови оплати та доставки</h2>
+<div class="block">
+  <div class="accordion" onclick="toggle(this)">▸ Варіанти оплати</div>
+  <div class="panel">Оплата на IBAN або картку.</div>
 
-<div class="conditions-grid">
+  <div class="accordion" onclick="toggle(this)">▸ Доставка</div>
+  <div class="panel">Нова Пошта по Україні.</div>
 
-<div class="condition-block">
-<h3>Варіанти оплати</h3>
-<ul>
-<li>Повна передоплата 100%</li>
-<li>Накладний платіж з передоплатою 100 грн</li>
-</ul>
-</div>
+  <div class="accordion" onclick="toggle(this)">▸ Повернення</div>
+  <div class="panel">14 днів згідно законодавства.</div>
 
-<div class="condition-block">
-<h3>Доставка</h3>
-<ul>
-<li>Нова пошта (відправка з м. Полтава)</li>
-<li>Відправка протягом 2 днів після оформлення</li>
-</ul>
-</div>
-
-<div class="condition-block">
-<h3>Обмін та повернення</h3>
-<ul>
-<li>Обмін неможливий</li>
-<li>Повернення неможливе</li>
-</ul>
-</div>
-
-<div class="condition-block">
-<h3>Як оформити замовлення</h3>
-<ol>
-<li>Оберіть товар</li>
-<li>Надішліть дані для доставки</li>
-<li>Здійсніть оплату</li>
-<li>Надішліть скріншот оплати</li>
-<li>Очікуйте відправку (до 2 днів)</li>
-</ol>
+  <div class="accordion" onclick="toggle(this)">▸ Як оформити</div>
+  <div class="panel">Натисніть кнопку Telegram та дотримуйтесь інструкцій бота.</div>
 </div>
 
 </div>
+
+<div class="sticky">
+  <a id="telegramSticky" class="btn primary">🟣 Оформити через Telegram</a>
 </div>
 
-<footer>
-Дякуємо за ваше замовлення 💫
-</footer>
-
-</div>
+<div class="toast" id="toast">Скопійовано</div>
 
 <script>
-function copyText(id) {
-const text = document.getElementById(id).innerText;
-navigator.clipboard.writeText(text);
-alert("Скопійовано: " + text);
+const config = {
+  storeName: "STORE NAME",
+  botUsername: "username_bot",
+  storeID: "store123",
+  phone: "+380000000000",
+  viber: "380000000000",
+  iban: "UA123456789012345678901234567",
+  card: "0000 0000 0000 0000",
+  edrpou: "12345678",
+  paymentNote: "Оплата за товар"
+};
+
+document.getElementById("storeName").innerText = config.storeName;
+
+document.getElementById("phoneBtn").href = "tel:" + config.phone;
+document.getElementById("viberBtn").href = "viber://chat?number=%2B" + config.viber;
+
+const tgLink = `https://t.me/${config.botUsername}?start=${config.storeID}`;
+document.getElementById("telegramMain").href = tgLink;
+document.getElementById("telegramSticky").href = tgLink;
+document.getElementById("catalogBtn").href = tgLink + "_catalog";
+document.getElementById("accountBtn").href = tgLink + "_account";
+document.getElementById("updateBtn").href = tgLink + "_update";
+document.getElementById("subscribeBtn").href = tgLink + "_subscribe";
+
+function copyText(text){
+  navigator.clipboard.writeText(text);
+  const toast=document.getElementById("toast");
+  toast.style.display="block";
+  setTimeout(()=>toast.style.display="none",2000);
+}
+
+function toggle(el){
+  const panel=el.nextElementSibling;
+  panel.style.display=panel.style.display==="block"?"none":"block";
+}
+
+function closePopup(){
+  document.getElementById("tiktokPopup").style.display="none";
+}
+
+if(navigator.userAgent.includes("TikTok")){
+  document.getElementById("tiktokPopup").style.display="flex";
 }
 </script>
 
