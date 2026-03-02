@@ -1,219 +1,326 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Офіційна сторінка замовлень</title>
-
-<style>
-:root {
-  --bg:#FAFAFA;
-  --text:#2B2B2F;
-  --primary:#1E1E23;
-  --secondary:#E8E8EC;
-  --radius:14px;
-}
-
-body{
-  margin:0;
-  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
-  background:var(--bg);
-  color:var(--text);
-}
-
-.container{
-  max-width:480px;
-  margin:auto;
-  padding:20px 20px 120px;
-}
-
-h1{margin-bottom:6px;}
-.subtitle{opacity:0.6;margin-bottom:20px;}
-
-button,a.btn{
-  display:block;
-  width:100%;
-  padding:16px;
-  border-radius:var(--radius);
-  text-align:center;
-  text-decoration:none;
-  font-weight:600;
-  margin-bottom:14px;
-  border:none;
-  cursor:pointer;
-}
-
-.primary{
-  background:var(--primary);
-  color:white;
-  font-size:17px;
-  box-shadow:0 8px 24px rgba(0,0,0,0.08);
-}
-
-.secondary{
-  background:var(--secondary);
-  color:var(--text);
-}
-
-.small{
-  font-size:14px;
-  opacity:0.7;
-  margin-top:-8px;
-  margin-bottom:18px;
-}
-
-.block{
-  background:white;
-  padding:18px;
-  border-radius:var(--radius);
-  margin-bottom:18px;
-  box-shadow:0 6px 20px rgba(0,0,0,0.03);
-}
-
-.copy{
-  display:flex;
-  justify-content:space-between;
-  margin-bottom:8px;
-  font-size:14px;
-}
-
-.copy span{
-  cursor:pointer;
-  opacity:0.6;
-}
-
-.toast{
-  position:fixed;
-  bottom:100px;
-  left:50%;
-  transform:translateX(-50%);
-  background:#1E1E23;
-  color:white;
-  padding:10px 18px;
-  border-radius:20px;
-  font-size:14px;
-  display:none;
-}
-
-.sticky{
-  position:fixed;
-  bottom:0;
-  left:0;
-  width:100%;
-  background:white;
-  padding:12px 20px;
-  box-shadow:0 -4px 20px rgba(0,0,0,0.06);
-}
-
-.sticky a{
-  margin:0;
-}
-
-.accordion{
-  cursor:pointer;
-  font-weight:600;
-  margin-bottom:10px;
-}
-
-.panel{
-  display:none;
-  font-size:14px;
-  opacity:0.7;
-  margin-bottom:10px;
-}
-
-.popup{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.6);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-}
-
-.popup-content{
-  background:white;
-  padding:24px;
-  border-radius:var(--radius);
-  text-align:center;
-  max-width:400px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Офіційна сторінка замовлень</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        body {
+            color: #e0e0e0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            padding-top: 20px;
+            padding-bottom: 120px;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #FE2C55, #25F4EE);
+            background-size: 400% 400%;
+            animation: gradientBG 20s ease infinite;
+            min-height: 100vh;
+        }
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .container {
+            max-width: 500px;
+            background-color: rgba(18, 18, 18, 0.85);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .store-name {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 6px;
+        }
+        .subtitle {
+            font-size: 0.95rem;
+            color: #bbb;
+            margin-bottom: 20px;
+        }
+        .section-title {
+            color: #fff;
+            text-align: center;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: #25F4EE;
+            margin: 8px auto 0;
+            border-radius: 3px;
+        }
+        .btn-link-style {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 14px;
+            border: none;
+            cursor: pointer;
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+        }
+        .btn-link-style:hover {
+            color: inherit;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        .btn-primary-style {
+            background: linear-gradient(135deg, #FE2C55, #ff5783);
+            color: white !important;
+            font-size: 17px;
+            box-shadow: 0 8px 24px rgba(254, 44, 85, 0.35);
+        }
+        .btn-primary-style:hover {
+            color: white !important;
+            box-shadow: 0 0 20px rgba(254, 44, 85, 0.6);
+        }
+        .btn-secondary-style {
+            background-color: rgba(50, 50, 50, 0.9);
+            color: #e0e0e0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .btn-secondary-style:hover {
+            background-color: rgba(65, 65, 65, 0.95);
+            color: #fff;
+        }
+        .block {
+            background-color: rgba(40, 40, 40, 0.9);
+            border: 1px solid #505050;
+            border-radius: 15px;
+            padding: 18px;
+            margin-bottom: 18px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        }
+        .block strong {
+            color: #fff;
+        }
+        .copy-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #ccc;
+        }
+        .copy-row span {
+            cursor: pointer;
+            color: #25F4EE;
+            transition: color 0.2s;
+        }
+        .copy-row span:hover {
+            color: #fff;
+        }
+        .accordion-item {
+            cursor: pointer;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+            padding: 8px 0;
+        }
+        .accordion-item:hover {
+            color: #25F4EE;
+        }
+        .panel {
+            display: none;
+            font-size: 14px;
+            color: #b0b0b0;
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+        .small-text {
+            font-size: 14px;
+            color: #999;
+            margin-top: -8px;
+            margin-bottom: 18px;
+        }
+        .sticky {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(18, 18, 18, 0.95);
+            padding: 12px 20px;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+        }
+        .sticky .btn-link-style {
+            margin-bottom: 0;
+        }
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1E1E23;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 20px;
+            font-size: 14px;
+            display: none;
+            z-index: 9999;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+        .popup {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 10000;
+        }
+        .popup-content {
+            background: rgba(30, 30, 35, 0.98);
+            padding: 24px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #e0e0e0;
+        }
+        .popup-content h3 {
+            color: #fff;
+            margin-bottom: 12px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.8rem;
+            color: #aaa;
+        }
+        .footer a {
+            color: #25F4EE;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
-
 <body>
 
 <div class="popup" id="tiktokPopup">
-  <div class="popup-content">
-    <h3>Ви перейшли з TikTok</h3>
-    <p>Для коректної роботи бота відкрийте сторінку у браузері.</p>
-    <button class="primary" onclick="closePopup()">Зрозуміло</button>
-  </div>
+    <div class="popup-content">
+        <h3>Ви перейшли з TikTok</h3>
+        <p>Для коректної роботи бота відкрийте сторінку у браузері.</p>
+        <button class="btn-link-style btn-primary-style" onclick="closePopup()">Зрозуміло</button>
+    </div>
 </div>
 
 <div class="container">
 
-<h1 id="storeName">Назва магазину</h1>
-<div class="subtitle">Офіційна сторінка замовлень</div>
+    <div class="profile-header">
+        <h1 class="store-name" id="storeName">Назва магазину</h1>
+        <p class="subtitle">Офіційна сторінка замовлень</p>
+    </div>
 
-<a id="phoneBtn" class="secondary">📞 Подзвонити</a>
-<a id="viberBtn" class="secondary">💬 Написати у Viber</a>
+    <a id="phoneBtn" class="btn-link-style btn-secondary-style">
+        <i class="bi bi-telephone-fill me-2"></i> Подзвонити
+    </a>
+    <a id="viberBtn" class="btn-link-style btn-secondary-style">
+        <i class="bi bi-chat-right-dots-fill me-2"></i> Написати у Viber
+    </a>
 
-<a id="telegramMain" class="btn primary">
-  🟣 Оформити замовлення через Telegram
-</a>
-<div class="small">Швидке оформлення та автоматична доставка</div>
+    <a id="telegramMain" class="btn-link-style btn-primary-style">
+        <i class="bi bi-telegram me-2"></i> Оформити замовлення через Telegram
+    </a>
+    <p class="small-text">Швидке оформлення та автоматична доставка</p>
 
-<a id="catalogBtn" class="secondary">📦 Відкрити каталог</a>
-<a id="accountBtn" class="secondary">👤 Кабінет покупця</a>
-<a id="updateBtn" class="secondary">🔄 Змінити дані доставки</a>
-<a id="subscribeBtn" class="secondary">📩 Підписатися на оновлення</a>
+    <a id="catalogBtn" class="btn-link-style btn-secondary-style">
+        <i class="bi bi-box-seam me-2"></i> Відкрити каталог
+    </a>
+    <a id="accountBtn" class="btn-link-style btn-secondary-style">
+        <i class="bi bi-person-fill me-2"></i> Кабінет покупця
+    </a>
+    <a id="updateBtn" class="btn-link-style btn-secondary-style">
+        <i class="bi bi-pencil-square me-2"></i> Змінити дані доставки
+    </a>
+    <a id="subscribeBtn" class="btn-link-style btn-secondary-style">
+        <i class="bi bi-envelope-fill me-2"></i> Підписатися на оновлення
+    </a>
 
-<div class="block">
-  <strong>💳 Оплата</strong><br><br>
-  <div class="copy">IBAN <span onclick="copyText(config.iban)">Скопіювати</span></div>
-  <div class="copy">Картка <span onclick="copyText(config.card)">Скопіювати</span></div>
-  <div class="copy">ЄДРПОУ <span onclick="copyText(config.edrpou)">Скопіювати</span></div>
-  <div class="copy">Призначення <span onclick="copyText(config.paymentNote)">Скопіювати</span></div>
-</div>
+    <div class="block">
+        <strong><i class="bi bi-credit-card-2-front me-2"></i> Оплата</strong><br><br>
+        <div class="copy-row">IBAN <span onclick="copyText(config.iban)">Скопіювати</span></div>
+        <div class="copy-row">Картка <span onclick="copyText(config.card)">Скопіювати</span></div>
+        <div class="copy-row">ЄДРПОУ <span onclick="copyText(config.edrpou)">Скопіювати</span></div>
+        <div class="copy-row">Призначення <span onclick="copyText(config.paymentNote)">Скопіювати</span></div>
+    </div>
 
-<div class="block">
-  <div class="accordion" onclick="toggle(this)">▸ Варіанти оплати</div>
-  <div class="panel">Оплата на IBAN або картку.</div>
+    <div class="block">
+        <div class="accordion-item" onclick="toggle(this)">
+            <i class="bi bi-chevron-right me-2"></i> Варіанти оплати
+        </div>
+        <div class="panel">Оплата на IBAN або картку.</div>
 
-  <div class="accordion" onclick="toggle(this)">▸ Доставка</div>
-  <div class="panel">Нова Пошта по Україні.</div>
+        <div class="accordion-item" onclick="toggle(this)">
+            <i class="bi bi-chevron-right me-2"></i> Доставка
+        </div>
+        <div class="panel">Нова Пошта по Україні.</div>
 
-  <div class="accordion" onclick="toggle(this)">▸ Повернення</div>
-  <div class="panel">14 днів згідно законодавства.</div>
+        <div class="accordion-item" onclick="toggle(this)">
+            <i class="bi bi-chevron-right me-2"></i> Повернення
+        </div>
+        <div class="panel">14 днів згідно законодавства.</div>
 
-  <div class="accordion" onclick="toggle(this)">▸ Як оформити</div>
-  <div class="panel">Натисніть кнопку Telegram та дотримуйтесь інструкцій бота.</div>
-</div>
+        <div class="accordion-item" onclick="toggle(this)">
+            <i class="bi bi-chevron-right me-2"></i> Як оформити
+        </div>
+        <div class="panel">Натисніть кнопку Telegram та дотримуйтесь інструкцій бота.</div>
+    </div>
+
+    <div class="footer">
+        <p>© 2026 <span id="footerStoreName">STORE NAME</span>. Всі права захищено.</p>
+        <p>Розроблено з <i class="bi bi-heart-fill" style="color: #FE2C55;"></i></p>
+    </div>
 
 </div>
 
 <div class="sticky">
-  <a id="telegramSticky" class="btn primary">🟣 Оформити через Telegram</a>
+    <a id="telegramSticky" class="btn-link-style btn-primary-style">
+        <i class="bi bi-telegram me-2"></i> Оформити через Telegram
+    </a>
 </div>
 
 <div class="toast" id="toast">Скопійовано</div>
 
 <script>
 const config = {
-  storeName: "STORE NAME",
-  botUsername: "username_bot",
-  storeID: "store123",
-  phone: "+380000000000",
-  viber: "380000000000",
-  iban: "UA123456789012345678901234567",
-  card: "0000 0000 0000 0000",
-  edrpou: "12345678",
-  paymentNote: "Оплата за товар"
+    storeName: "STORE NAME",
+    botUsername: "username_bot",
+    storeID: "store123",
+    phone: "+380000000000",
+    viber: "380000000000",
+    iban: "UA123456789012345678901234567",
+    card: "0000 0000 0000 0000",
+    edrpou: "12345678",
+    paymentNote: "Оплата за товар"
 };
 
 document.getElementById("storeName").innerText = config.storeName;
+document.getElementById("footerStoreName").innerText = config.storeName;
 
 document.getElementById("phoneBtn").href = "tel:" + config.phone;
 document.getElementById("viberBtn").href = "viber://chat?number=%2B" + config.viber;
@@ -226,26 +333,40 @@ document.getElementById("accountBtn").href = tgLink + "_account";
 document.getElementById("updateBtn").href = tgLink + "_update";
 document.getElementById("subscribeBtn").href = tgLink + "_subscribe";
 
-function copyText(text){
-  navigator.clipboard.writeText(text);
-  const toast=document.getElementById("toast");
-  toast.style.display="block";
-  setTimeout(()=>toast.style.display="none",2000);
+function copyText(text) {
+    navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById("toast");
+        toast.style.display = "block";
+        setTimeout(() => toast.style.display = "none", 2000);
+    }).catch(() => {
+        const toast = document.getElementById("toast");
+        toast.textContent = "Помилка копіювання";
+        toast.style.display = "block";
+        setTimeout(() => {
+            toast.textContent = "Скопійовано";
+            toast.style.display = "none";
+        }, 2000);
+    });
 }
 
-function toggle(el){
-  const panel=el.nextElementSibling;
-  panel.style.display=panel.style.display==="block"?"none":"block";
+function toggle(el) {
+    const icon = el.querySelector("i");
+    const panel = el.nextElementSibling;
+    const isOpen = panel.style.display === "block";
+    panel.style.display = isOpen ? "none" : "block";
+    if (icon) {
+        icon.className = isOpen ? "bi bi-chevron-right me-2" : "bi bi-chevron-down me-2";
+    }
 }
 
-function closePopup(){
-  document.getElementById("tiktokPopup").style.display="none";
+function closePopup() {
+    document.getElementById("tiktokPopup").style.display = "none";
 }
 
-if(navigator.userAgent.includes("TikTok")){
-  document.getElementById("tiktokPopup").style.display="flex";
+if (navigator.userAgent.includes("TikTok")) {
+    document.getElementById("tiktokPopup").style.display = "flex";
 }
 </script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
