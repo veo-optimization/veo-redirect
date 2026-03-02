@@ -113,15 +113,24 @@
             box-shadow: 0 0 20px rgba(182, 236, 223, 0.4);
         }
         .btn-telegram-cta {
-            background: #c07a8a !important;
+            background: #0088cc !important;
             color: #fff !important;
             font-size: 17px;
-            box-shadow: 0 6px 20px rgba(192, 122, 138, 0.35);
+            box-shadow: 0 6px 20px rgba(0, 136, 204, 0.4);
         }
         .btn-telegram-cta:hover {
             color: #fff !important;
-            background: #c98a98 !important;
-            box-shadow: 0 0 20px rgba(192, 122, 138, 0.45);
+            background: #0099e6 !important;
+            box-shadow: 0 0 22px rgba(0, 136, 204, 0.5);
+        }
+        .btn-telegram-cta .btn-line1 {
+            display: block;
+            margin-bottom: 4px;
+        }
+        .btn-telegram-cta .btn-line2 {
+            display: block;
+            font-size: 0.95em;
+            opacity: 0.95;
         }
         .telegram-cta-desc {
             font-size: 14px;
@@ -420,10 +429,11 @@
     <!-- БЛОК 3 — PRIMARY CTA -->
     <section id="block-primary-cta">
         <a id="btn-telegram-subscribe" class="btn-link-style btn-telegram-cta" href="https://t.me/tarasshop_bot" target="_blank" rel="noopener noreferrer">
-            <i class="bi bi-telegram me-2"></i> Підписатися на бота «<span id="telegramBtnStoreName">Taras Shop Ukraine</span>»
+            <span class="btn-line1"><i class="bi bi-telegram me-2"></i> Підписатися на бота в Telegram</span>
+            <span class="btn-line2">«<span id="telegramBtnStoreName">Taras Shop Ukraine</span>»</span>
         </a>
         <p class="telegram-cta-desc">
-            <strong>Швидке оформлення замовлень.</strong> Після підписки передайте нам дані Нової Пошти — і ми все зробимо за вас.
+            Завдяки боту та наданим продавцеві даних доставки ви зможете слідкувати за оновленням статусу вашого замовлення, отримувати ТТН, гортати каталог, отримувати сповіщення про розпродажі, вихід продавця в ефір на різних платформах та багато іншого цікавого від вашого улюбленого продавця.
         </p>
     </section>
 
@@ -526,7 +536,8 @@
 
 <div class="sticky">
     <a id="telegramSticky" class="btn-link-style btn-telegram-cta" href="https://t.me/tarasshop_bot" target="_blank" rel="noopener noreferrer">
-        <i class="bi bi-telegram me-2"></i> Підписатися на бота «<span id="telegramStickyStoreName">Taras Shop Ukraine</span>»
+        <span class="btn-line1"><i class="bi bi-telegram me-2"></i> Підписатися на бота в Telegram</span>
+        <span class="btn-line2">«<span id="telegramStickyStoreName">Taras Shop Ukraine</span>»</span>
     </a>
 </div>
 
