@@ -61,6 +61,11 @@
             color: #bbb;
             margin-bottom: 20px;
             word-break: break-word;
+            line-height: 1.6;
+        }
+        .scam-warning {
+            color: #FE2C55 !important;
+            font-weight: 600;
         }
         .section-title {
             color: #fff;
@@ -79,6 +84,18 @@
             background: rgb(182, 236, 223);
             margin: 8px auto 0;
             border-radius: 3px;
+        }
+        .contact-subblock {
+            margin-bottom: 20px;
+        }
+        .contact-subblock-title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 10px;
+            padding-left: 4px;
         }
         .btn-link-style {
             display: block;
@@ -340,6 +357,34 @@
         .footer-credits a {
             color: rgb(182, 236, 223);
         }
+        .footer-block {
+            background: rgba(55, 55, 60, 0.5);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .footer-block-title {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+        .footer-block-content {
+            font-size: 0.95rem;
+            color: #ccc;
+            line-height: 1.5;
+        }
+        .footer-block-content a {
+            color: rgb(182, 236, 223);
+            font-weight: 500;
+        }
+        .footer-block-content .highlight {
+            color: #fff;
+            font-weight: 600;
+        }
         .btn-veoforce {
             display: block;
             width: 100%;
@@ -380,7 +425,7 @@
     <!-- БЛОК 1 — HEADER / ІНФОРМАЦІЯ ПРО МАГАЗИН -->
     <section id="block-store-info" class="profile-header">
         <h1 id="storeName" class="store-name">Taras Shop Ukraine</h1>
-        <p id="storeDescription" class="subtitle">Офіційна сторінка прийому замовлень та оплати.</p>
+        <p id="storeDescription" class="subtitle">Офіційна сторінка магазину для комунікації з клієнтами. <span class="scam-warning">Остерігайтесь шахраїв — магазин не несе відповідальності за дії, що призводять до втрати коштів.</span> Вся комунікація та оплата проводяться лише через канали зв'язку, зазначені на цій сторінці.</p>
         <p id="storeCategories" class="small-text">Одяг, аксесуари, шарфи, хустки, сезонні колекції</p>
     </section>
 
@@ -440,33 +485,63 @@
     <!-- БЛОК 4 — КОНТАКТИ ТА СОЦМЕРЕЖІ -->
     <section id="block-contacts">
         <h2 class="section-title">Контакти та соцмережі</h2>
-        <a id="contact-telegram" class="btn-link-style btn-secondary-style" href="https://t.me/taras_support" target="_blank" rel="noopener noreferrer">
-            <i class="bi bi-telegram me-2"></i> Telegram — особисті повідомлення
-        </a>
-        <a id="contact-telegram-channel" class="btn-link-style btn-secondary-style" href="https://t.me/tarasshop_channel" target="_blank" rel="noopener noreferrer">
-            <i class="bi bi-telegram me-2"></i> Telegram канал
-        </a>
-        <a id="contact-telegram-group" class="btn-link-style btn-secondary-style" href="https://t.me/tarasshop_group" target="_blank" rel="noopener noreferrer">
-            <i class="bi bi-telegram me-2"></i> Telegram група
-        </a>
-        <a id="contact-viber" class="btn-link-style btn-secondary-style" href="viber://chat?number=%2B380671234567">
-            <i class="bi bi-chat-right-dots-fill me-2"></i> Viber — відкрити чат
-        </a>
-        <a id="contact-viber-group" class="btn-link-style btn-secondary-style" href="https://invite.viber.com/?g2=examplelink" target="_blank" rel="noopener noreferrer">
-            <i class="bi bi-chat-dots-fill me-2"></i> Viber група
-        </a>
-        <a id="contact-tiktok" class="btn-link-style btn-secondary-style" href="https://www.tiktok.com/@tarasshop" target="_blank" rel="noopener noreferrer">
-            <i class="bi bi-tiktok me-2"></i> TikTok
-        </a>
-        <a id="contact-instagram" class="btn-link-style btn-secondary-style" href="https://www.instagram.com/tarasshop" target="_blank" rel="noopener noreferrer">
-            <i class="bi bi-instagram me-2"></i> Instagram
-        </a>
-        <a id="contact-facebook" class="btn-link-style btn-secondary-style" href="https://www.facebook.com/tarasshop" target="_blank" rel="noopener noreferrer">
-            <i class="bi bi-facebook me-2"></i> Facebook
-        </a>
-        <a id="contact-bigo" class="btn-link-style btn-secondary-style" href="https://www.bigo.tv/tarasshop" target="_blank" rel="noopener noreferrer">
-            <i class="bi bi-broadcast me-2"></i> Bigo Live
-        </a>
+        <div class="contact-subblock">
+            <div class="contact-subblock-title">Telegram</div>
+            <a id="contact-telegram" class="btn-link-style btn-secondary-style" href="https://t.me/taras_support" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-telegram me-2"></i> Особисті повідомлення
+            </a>
+            <a id="contact-telegram-channel" class="btn-link-style btn-secondary-style" href="https://t.me/tarasshop_channel" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-telegram me-2"></i> Канал
+            </a>
+            <a id="contact-telegram-group" class="btn-link-style btn-secondary-style" href="https://t.me/tarasshop_group" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-telegram me-2"></i> Група
+            </a>
+        </div>
+        <div class="contact-subblock">
+            <div class="contact-subblock-title">Viber</div>
+            <a id="contact-viber" class="btn-link-style btn-secondary-style" href="viber://chat?number=%2B380671234567">
+                <i class="bi bi-chat-right-dots-fill me-2"></i> Відкрити чат
+            </a>
+            <a id="contact-viber-group" class="btn-link-style btn-secondary-style" href="https://invite.viber.com/?g2=examplelink" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-chat-dots-fill me-2"></i> Група
+            </a>
+        </div>
+        <div class="contact-subblock">
+            <div class="contact-subblock-title">TikTok</div>
+            <a id="contact-tiktok" class="btn-link-style btn-secondary-style" href="https://www.tiktok.com/@tarasshop" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-tiktok me-2"></i> TikTok
+            </a>
+        </div>
+        <div class="contact-subblock">
+            <div class="contact-subblock-title">Meta</div>
+            <a id="contact-instagram" class="btn-link-style btn-secondary-style" href="https://www.instagram.com/tarasshop" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-instagram me-2"></i> Instagram
+            </a>
+            <a id="contact-facebook" class="btn-link-style btn-secondary-style" href="https://www.facebook.com/tarasshop" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-facebook me-2"></i> Facebook
+            </a>
+        </div>
+        <div class="contact-subblock">
+            <div class="contact-subblock-title">Google</div>
+            <a id="contact-youtube" class="btn-link-style btn-secondary-style" href="https://www.youtube.com/@tarasshop" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-youtube me-2"></i> YouTube
+            </a>
+            <a id="contact-email" class="btn-link-style btn-secondary-style" href="mailto:shop@tarasshop.ua">
+                <i class="bi bi-envelope me-2"></i> Пошта
+            </a>
+            <a id="contact-googlemaps" class="btn-link-style btn-secondary-style" href="https://maps.google.com/?q=tarasshop" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-geo-alt me-2"></i> Адреса на карті
+            </a>
+        </div>
+        <div class="contact-subblock">
+            <div class="contact-subblock-title">Інше</div>
+            <a id="contact-bigo" class="btn-link-style btn-secondary-style" href="https://www.bigo.tv/tarasshop" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-broadcast me-2"></i> Bigo Live
+            </a>
+            <a id="contact-twitch" class="btn-link-style btn-secondary-style" href="https://www.twitch.tv/tarasshop" target="_blank" rel="noopener noreferrer">
+                <i class="bi bi-twitch me-2"></i> Twitch
+            </a>
+        </div>
     </section>
 
     <!-- БЛОК 5 — УМОВИ ОПЛАТИ ТА ДОСТАВКИ -->
@@ -517,19 +592,32 @@
                 <li>Витрати на доставку повернення — за рахунок покупця</li>
             </ul>
         </div>
+
+        <div class="accordion-item" onclick="toggle(this)">
+            <i class="bi bi-chevron-right me-2"></i> Відповідальність магазину
+        </div>
+        <div class="panel">
+            <p style="margin:0;color:#b0b0b0;">Магазин не несе відповідальності, якщо клієнт провів оплату за контактами, які не відображені на даній сторінці. Оплату здійснюйте лише через реквізити та канали зв'язку, зазначені вище.</p>
+        </div>
     </section>
 
     <div class="footer">
         <a href="https://app.veoforce.com/register" target="_blank" rel="noopener noreferrer" class="btn-veoforce">
             <i class="bi bi-plus-circle me-2"></i> Створити таку сторінку
         </a>
-        <p class="footer-credits">
-            Розроблено <strong>VEO FORCE</strong> — <a href="https://t.me/veoforce_support" target="_blank" rel="noopener noreferrer">написати в підтримку в Telegram @veoforce_support</a>
-        </p>
-        <p class="footer-credits">
-            Ідея та логіка екосистеми — <strong>Vasil VEO</strong> (<a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener noreferrer">TikTok</a>, <a href="https://t.me/vasil_veo" target="_blank" rel="noopener noreferrer">Telegram @vasil_veo</a>)
-        </p>
-        <p>© 2026 <span id="footerStoreName">Taras Shop Ukraine</span>. Всі права захищено.</p>
+        <div class="footer-block">
+            <div class="footer-block-title">Платформа та підтримка</div>
+            <div class="footer-block-content">
+                Сторінку створено на <span class="highlight">VEO FORCE</span> — CRM для продавців. Питання? <a href="https://t.me/veoforce_support" target="_blank" rel="noopener noreferrer">Напишіть нам у Telegram @veoforce_support</a>
+            </div>
+        </div>
+        <div class="footer-block">
+            <div class="footer-block-title">Автор екосистеми</div>
+            <div class="footer-block-content">
+                Ідея та логіка — <span class="highlight">Vasil VEO</span>. Підписуйтесь: <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener noreferrer">TikTok</a>, <a href="https://t.me/vasil_veo" target="_blank" rel="noopener noreferrer">Telegram @vasil_veo</a>
+            </div>
+        </div>
+        <p style="font-size:0.8rem;color:#888;margin-top:16px;">© 2026 <span id="footerStoreName">Taras Shop Ukraine</span></p>
     </div>
 
 </div>
@@ -547,7 +635,7 @@
 // Конфіг для легкої заміни даних під різних продавців
 const config = {
     storeName: "Taras Shop Ukraine",
-    storeDescription: "Офіційна сторінка прийому замовлень та оплати.",
+    storeDescription: "Офіційна сторінка магазину для комунікації з клієнтами.",
     storeCategories: "Одяг, аксесуари, шарфи, хустки, сезонні колекції",
     fop: "Шевченко Тарас Григорович",
     iban: "UA903052990000026001234567890",
@@ -563,7 +651,11 @@ const config = {
     tiktok: "https://www.tiktok.com/@tarasshop",
     instagram: "https://www.instagram.com/tarasshop",
     facebook: "https://www.facebook.com/tarasshop",
-    bigo: "https://www.bigo.tv/tarasshop"
+    youtube: "https://www.youtube.com/@tarasshop",
+    email: "mailto:shop@tarasshop.ua",
+    googleMaps: "https://maps.google.com/?q=tarasshop",
+    bigo: "https://www.bigo.tv/tarasshop",
+    twitch: "https://www.twitch.tv/tarasshop"
 };
 
 // Мапа: id кнопки копіювання -> id елемента з текстом
@@ -684,7 +776,6 @@ function closePopup() {
 
 // Ініціалізація з config (для масштабування)
 document.getElementById("storeName").innerText = config.storeName;
-document.getElementById("storeDescription").innerText = config.storeDescription;
 document.getElementById("storeCategories").innerText = config.storeCategories;
 document.getElementById("footerStoreName").innerText = config.storeName;
 document.getElementById("telegramBtnStoreName").innerText = config.storeName;
@@ -704,7 +795,11 @@ document.getElementById("contact-viber-group").href = config.viberGroup;
 document.getElementById("contact-tiktok").href = config.tiktok;
 document.getElementById("contact-instagram").href = config.instagram;
 document.getElementById("contact-facebook").href = config.facebook;
+document.getElementById("contact-youtube").href = config.youtube;
+document.getElementById("contact-email").href = config.email;
+document.getElementById("contact-googlemaps").href = config.googleMaps;
 document.getElementById("contact-bigo").href = config.bigo;
+document.getElementById("contact-twitch").href = config.twitch;
 
 if (navigator.userAgent.includes("TikTok")) {
     document.getElementById("tiktokPopup").style.display = "flex";
