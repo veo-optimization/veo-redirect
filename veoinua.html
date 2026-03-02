@@ -333,6 +333,16 @@
             color: #fff;
             margin-bottom: 12px;
         }
+        .popup-tiktok-hint {
+            font-size: 0.9rem;
+            color: rgb(182, 236, 223);
+            margin-top: 12px;
+            margin-bottom: 0;
+            line-height: 1.5;
+        }
+        .popup-tiktok-hint strong {
+            color: #fff;
+        }
         .footer {
             text-align: center;
             margin-top: 30px;
@@ -412,10 +422,11 @@
 </head>
 <body>
 
-<div class="popup" id="tiktokPopup">
+<div class="popup" id="browserPopup">
     <div class="popup-content">
-        <h3>Ви перейшли з TikTok</h3>
-        <p>Для коректної роботи бота відкрийте сторінку у браузері.</p>
+        <h3>Для коректної роботи відкрийте в браузері</h3>
+        <p>Кнопки Telegram-бота та контактів працюють коректно лише у звичайному браузері.</p>
+        <p class="popup-tiktok-hint"><strong>Якщо ви з TikTok:</strong> натисніть три крапки <i class="bi bi-three-dots-vertical"></i> вгорі праворуч, потім оберіть «Відкрити в браузері».</p>
         <button class="btn-link-style btn-primary-style" onclick="closePopup()">Зрозуміло</button>
     </div>
 </div>
@@ -771,7 +782,7 @@ function toggle(el) {
 }
 
 function closePopup() {
-    document.getElementById("tiktokPopup").style.display = "none";
+    document.getElementById("browserPopup").style.display = "none";
 }
 
 // Ініціалізація з config (для масштабування)
@@ -801,9 +812,8 @@ document.getElementById("contact-googlemaps").href = config.googleMaps;
 document.getElementById("contact-bigo").href = config.bigo;
 document.getElementById("contact-twitch").href = config.twitch;
 
-if (navigator.userAgent.includes("TikTok")) {
-    document.getElementById("tiktokPopup").style.display = "flex";
-}
+// Зараз показуємо завжди при завантаженні. Потім змінити на: тільки якщо navigator.userAgent.includes("TikTok")
+document.getElementById("browserPopup").style.display = "flex";
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
