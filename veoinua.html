@@ -176,11 +176,34 @@
         }
         .requisite-value {
             font-size: 14px;
-            color: #e0e0e0;
+            color: rgb(182, 236, 223);
             word-break: break-all;
             overflow-wrap: break-word;
             margin: 0;
             line-height: 1.4;
+        }
+        .fop-name {
+            text-align: center;
+            font-size: 1rem;
+            color: rgb(182, 236, 223);
+            margin-top: -8px;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        .requisites-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+        .requisites-actions .btn-link-style {
+            flex: 1;
+            min-width: 140px;
+            margin-bottom: 0;
+        }
+        .requisites-actions .btn-link-style.copied {
+            background: #fff !important;
+            color: #1a1a1e !important;
         }
         .accordion-item {
             cursor: pointer;
@@ -275,6 +298,38 @@
         .footer a:hover {
             text-decoration: underline;
         }
+        .footer-credits {
+            font-size: 0.95rem;
+            color: #bbb;
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        .footer-credits a {
+            color: rgb(182, 236, 223);
+        }
+        .btn-veoforce {
+            display: block;
+            width: 100%;
+            padding: 16px 20px;
+            margin-top: 20px;
+            margin-bottom: 16px;
+            border-radius: 14px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 16px;
+            border: 2px solid #FE2C55;
+            background: linear-gradient(135deg, rgba(254, 44, 85, 0.25), rgba(254, 44, 85, 0.1));
+            color: #fff;
+            box-shadow: 0 0 20px rgba(254, 44, 85, 0.3);
+            transition: all 0.2s ease;
+        }
+        .btn-veoforce:hover {
+            background: linear-gradient(135deg, rgba(254, 44, 85, 0.4), rgba(254, 44, 85, 0.2));
+            color: #fff;
+            box-shadow: 0 0 25px rgba(254, 44, 85, 0.5);
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
@@ -299,13 +354,7 @@
     <!-- БЛОК 2 — РЕКВІЗИТИ ФОП -->
     <section id="block-requisites" class="block">
         <h2 class="section-title">Реквізити ФОП</h2>
-        <div class="requisite-item">
-            <div class="copy-row">
-                <span class="req-label">ФОП:</span>
-                <button type="button" class="btn-copy" id="copy-fop" onclick="copyById('copy-fop', this)">Скопіювати</button>
-            </div>
-            <p id="requisite-fop" class="requisite-value">Шевченко Тарас Григорович</p>
-        </div>
+        <p id="requisite-fop" class="fop-name">Шевченко Тарас Григорович</p>
         <div class="requisite-item">
             <div class="copy-row">
                 <span class="req-label">IBAN:</span>
@@ -333,6 +382,14 @@
                 <button type="button" class="btn-copy" id="copy-phone" onclick="copyById('copy-phone', this)">Скопіювати</button>
             </div>
             <p id="requisite-phone" class="requisite-value">+380 67 123 45 67</p>
+        </div>
+        <div class="requisites-actions">
+            <button type="button" class="btn-link-style btn-secondary-style" id="btn-copy-all" onclick="copyAllRequisites(this)">
+                <i class="bi bi-clipboard me-2"></i> Копіювати всі реквізити
+            </button>
+            <button type="button" class="btn-link-style btn-secondary-style" id="btn-share-requisites" onclick="shareRequisites(this)">
+                <i class="bi bi-share me-2"></i> Поділитися реквізитами
+            </button>
         </div>
     </section>
 
@@ -427,8 +484,16 @@
     </section>
 
     <div class="footer">
+        <a href="https://app.veoforce.com/" target="_blank" rel="noopener noreferrer" class="btn-veoforce">
+            <i class="bi bi-plus-circle me-2"></i> Створити таку сторінку
+        </a>
+        <p class="footer-credits">
+            Розроблено <strong>VEO FORCE</strong> — <a href="https://t.me/veoforce_support" target="_blank" rel="noopener noreferrer">написати в підтримку в Telegram @veoforce_support</a>
+        </p>
+        <p class="footer-credits">
+            Ідея та логіка екосистеми — <strong>Vasil VEO</strong> (<a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener noreferrer">TikTok</a>, <a href="https://t.me/vasil_veo" target="_blank" rel="noopener noreferrer">Telegram @vasil_veo</a>)
+        </p>
         <p>© 2026 <span id="footerStoreName">Taras Shop Ukraine</span>. Всі права захищено.</p>
-        <p>Розроблено з <i class="bi bi-heart-fill" style="color: #FE2C55;"></i></p>
     </div>
 
 </div>
@@ -466,12 +531,73 @@ const config = {
 
 // Мапа: id кнопки копіювання -> id елемента з текстом
 const copyMap = {
-    "copy-fop": "requisite-fop",
     "copy-iban": "requisite-iban",
     "copy-edrpou": "requisite-edrpou",
     "copy-payment-note": "requisite-payment-note",
     "copy-phone": "requisite-phone"
 };
+
+function getAllRequisitesText() {
+    const fop = document.getElementById("requisite-fop").textContent.trim();
+    const iban = document.getElementById("requisite-iban").textContent.trim();
+    const edrpou = document.getElementById("requisite-edrpou").textContent.trim();
+    const paymentNote = document.getElementById("requisite-payment-note").textContent.trim();
+    const phone = document.getElementById("requisite-phone").textContent.trim();
+    return `ФОП: ${fop}\nIBAN: ${iban}\nЄДРПОУ: ${edrpou}\nПризначення платежу: ${paymentNote}\nКонтактний телефон: ${phone}`;
+}
+
+function copyAllRequisites(btnEl) {
+    const text = getAllRequisitesText();
+    navigator.clipboard.writeText(text).then(() => {
+        showToast("Реквізити скопійовано");
+        if (btnEl) {
+            const orig = btnEl.innerHTML;
+            btnEl.innerHTML = '<i class="bi bi-check-lg me-2"></i> Скопійовано';
+            btnEl.classList.add("copied");
+            btnEl.disabled = true;
+            setTimeout(() => {
+                btnEl.innerHTML = orig;
+                btnEl.classList.remove("copied");
+                btnEl.disabled = false;
+            }, 2000);
+        }
+    }).catch(() => showToast("Помилка копіювання"));
+}
+
+function shareRequisites(btnEl) {
+    const text = getAllRequisitesText();
+    const title = config.storeName + " — Реквізити";
+    if (navigator.share) {
+        navigator.share({
+            title: title,
+            text: text,
+            url: window.location.href
+        }).then(() => {
+            showToast("Реквізити надіслано");
+        }).catch((err) => {
+            if (err.name !== "AbortError") copyFallback(text, btnEl);
+        });
+    } else {
+        copyFallback(text, btnEl);
+    }
+}
+
+function copyFallback(text, btnEl) {
+    navigator.clipboard.writeText(text).then(() => {
+        showToast("Реквізити скопійовано");
+        if (btnEl) {
+            const orig = btnEl.innerHTML;
+            btnEl.innerHTML = '<i class="bi bi-check-lg me-2"></i> Скопійовано';
+            btnEl.classList.add("copied");
+            btnEl.disabled = true;
+            setTimeout(() => {
+                btnEl.innerHTML = orig;
+                btnEl.classList.remove("copied");
+                btnEl.disabled = false;
+            }, 2000);
+        }
+    }).catch(() => showToast("Помилка копіювання"));
+}
 
 function copyById(btnId, btnEl) {
     const targetId = copyMap[btnId];
