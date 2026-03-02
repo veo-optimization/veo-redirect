@@ -112,6 +112,17 @@
             background: rgb(195, 240, 230);
             box-shadow: 0 0 20px rgba(182, 236, 223, 0.4);
         }
+        .btn-telegram-cta {
+            background: #FE2C55 !important;
+            color: #fff !important;
+            font-size: 17px;
+            box-shadow: 0 8px 24px rgba(254, 44, 85, 0.4);
+        }
+        .btn-telegram-cta:hover {
+            color: #fff !important;
+            background: #ff4d6d !important;
+            box-shadow: 0 0 25px rgba(254, 44, 85, 0.6);
+        }
         .btn-secondary-style {
             background: rgb(182, 236, 223);
             color: #1a1a1e;
@@ -395,8 +406,8 @@
 
     <!-- БЛОК 3 — PRIMARY CTA -->
     <section id="block-primary-cta">
-        <a id="btn-telegram-subscribe" class="btn-link-style btn-primary-style" href="https://t.me/tarasshop_bot" target="_blank" rel="noopener noreferrer">
-            <i class="bi bi-telegram me-2"></i> Підписатися на Telegram-бота магазину
+        <a id="btn-telegram-subscribe" class="btn-link-style btn-telegram-cta" href="https://t.me/tarasshop_bot" target="_blank" rel="noopener noreferrer">
+            <i class="bi bi-telegram me-2"></i> ПІДПИСАТИСЬ на телеграм-бот магазину «<span id="telegramBtnStoreName">Taras Shop Ukraine</span>»
         </a>
         <p class="small-text">Підписуючись, ви надаєте продавцеві свої дані доставки Нової Пошти для швидкого оформлення замовлень.</p>
     </section>
@@ -484,7 +495,7 @@
     </section>
 
     <div class="footer">
-        <a href="https://app.veoforce.com/" target="_blank" rel="noopener noreferrer" class="btn-veoforce">
+        <a href="https://app.veoforce.com/register" target="_blank" rel="noopener noreferrer" class="btn-veoforce">
             <i class="bi bi-plus-circle me-2"></i> Створити таку сторінку
         </a>
         <p class="footer-credits">
@@ -499,8 +510,8 @@
 </div>
 
 <div class="sticky">
-    <a id="telegramSticky" class="btn-link-style btn-primary-style" href="https://t.me/tarasshop_bot" target="_blank" rel="noopener noreferrer">
-        <i class="bi bi-telegram me-2"></i> Підписатися на Telegram
+    <a id="telegramSticky" class="btn-link-style btn-telegram-cta" href="https://t.me/tarasshop_bot" target="_blank" rel="noopener noreferrer">
+        <i class="bi bi-telegram me-2"></i> ПІДПИСАТИСЬ на телеграм-бот магазину «<span id="telegramStickyStoreName">Taras Shop Ukraine</span>»
     </a>
 </div>
 
@@ -650,6 +661,8 @@ document.getElementById("storeName").innerText = config.storeName;
 document.getElementById("storeDescription").innerText = config.storeDescription;
 document.getElementById("storeCategories").innerText = config.storeCategories;
 document.getElementById("footerStoreName").innerText = config.storeName;
+document.getElementById("telegramBtnStoreName").innerText = config.storeName;
+document.getElementById("telegramStickyStoreName").innerText = config.storeName;
 document.getElementById("requisite-fop").innerText = config.fop;
 document.getElementById("requisite-iban").innerText = config.iban;
 document.getElementById("requisite-edrpou").innerText = config.edrpou;
