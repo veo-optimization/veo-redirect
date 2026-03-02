@@ -665,8 +665,13 @@
     <section id="block-store-info" class="profile-header">
         <h1 id="storeName" class="store-name">Taras Shop Ukraine</h1>
         <p id="storeCategories" class="store-categories">Одяг, аксесуари, шарфи, хустки, сезонні колекції</p>
-        <p id="storeDescription" class="subtitle">Офіційна сторінка магазину для комунікації з клієнтами. Вся комунікація та оплата проводяться лише через канали зв'язку, зазначені на цій сторінці.</p>
-        <p class="store-info-warning">Остерігайтесь шахраїв — магазин не несе відповідальності за дії, що призводять до втрати коштів.</p>
+        <ul class="store-info-theses">
+            <li><span class="check">✓</span> Офіційна сторінка магазину для спілкування з клієнтами</li>
+            <li><span class="check">✓</span> Оплата здійснюється лише через офіційний захищений платіжний шлюз (Visa, MasterCard)</li>
+            <li><span class="check">✓</span> Після оплати на пошту автоматично надходить квитанція про успішну оплату та фіскальний чек</li>
+            <li><span class="check">✓</span> Вся комунікація та оплата здійснюються лише через канали, зазначені на цій сторінці</li>
+        </ul>
+        <p class="store-info-warning">Остерігайтесь шахраїв — ми не пишемо перші та не надсилаємо дані банківських карток.</p>
     </section>
 
     <!-- БЛОК 2 — РЕКВІЗИТИ ФОП -->
@@ -1203,7 +1208,6 @@ function closePopup() {
 // Ініціалізація з config
 document.getElementById("storeName").innerText = config.storeName;
 document.getElementById("storeCategories").innerText = config.storeCategories;
-document.getElementById("storeDescription").innerText = config.storeDescription;
 document.getElementById("footerStoreName").innerText = config.storeName;
 document.getElementById("requisite-fop").innerText = config.fop;
 document.getElementById("requisite-iban").innerText = config.iban;
