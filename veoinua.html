@@ -113,15 +113,28 @@
             box-shadow: 0 0 20px rgba(182, 236, 223, 0.4);
         }
         .btn-telegram-cta {
-            background: #FE2C55 !important;
+            background: #c07a8a !important;
             color: #fff !important;
             font-size: 17px;
-            box-shadow: 0 8px 24px rgba(254, 44, 85, 0.4);
+            box-shadow: 0 6px 20px rgba(192, 122, 138, 0.35);
         }
         .btn-telegram-cta:hover {
             color: #fff !important;
-            background: #ff4d6d !important;
-            box-shadow: 0 0 25px rgba(254, 44, 85, 0.6);
+            background: #c98a98 !important;
+            box-shadow: 0 0 20px rgba(192, 122, 138, 0.45);
+        }
+        .telegram-cta-desc {
+            font-size: 14px;
+            color: #b8b8b8;
+            line-height: 1.5;
+            margin-top: 12px;
+            margin-bottom: 0;
+            padding: 0 4px;
+            max-width: 100%;
+        }
+        .telegram-cta-desc strong {
+            color: rgb(182, 236, 223);
+            font-weight: 600;
         }
         .btn-secondary-style {
             background: rgb(182, 236, 223);
@@ -407,9 +420,11 @@
     <!-- БЛОК 3 — PRIMARY CTA -->
     <section id="block-primary-cta">
         <a id="btn-telegram-subscribe" class="btn-link-style btn-telegram-cta" href="https://t.me/tarasshop_bot" target="_blank" rel="noopener noreferrer">
-            <i class="bi bi-telegram me-2"></i> ПІДПИСАТИСЬ на телеграм-бот магазину «<span id="telegramBtnStoreName">Taras Shop Ukraine</span>»
+            <i class="bi bi-telegram me-2"></i> Підписатися на бота «<span id="telegramBtnStoreName">Taras Shop Ukraine</span>»
         </a>
-        <p class="small-text">Підписуючись, ви надаєте продавцеві свої дані доставки Нової Пошти для швидкого оформлення замовлень.</p>
+        <p class="telegram-cta-desc">
+            <strong>Швидке оформлення замовлень.</strong> Після підписки передайте нам дані Нової Пошти — і ми все зробимо за вас.
+        </p>
     </section>
 
     <!-- БЛОК 4 — КОНТАКТИ ТА СОЦМЕРЕЖІ -->
@@ -511,7 +526,7 @@
 
 <div class="sticky">
     <a id="telegramSticky" class="btn-link-style btn-telegram-cta" href="https://t.me/tarasshop_bot" target="_blank" rel="noopener noreferrer">
-        <i class="bi bi-telegram me-2"></i> ПІДПИСАТИСЬ на телеграм-бот магазину «<span id="telegramStickyStoreName">Taras Shop Ukraine</span>»
+        <i class="bi bi-telegram me-2"></i> Підписатися на бота «<span id="telegramStickyStoreName">Taras Shop Ukraine</span>»
     </a>
 </div>
 
