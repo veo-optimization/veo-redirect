@@ -666,20 +666,49 @@
             font-weight: 600;
         }
         .product-card-body { padding: 12px; }
+        .product-card-code {
+            font-size: 0.8rem;
+            color: #999;
+            margin-bottom: 4px;
+        }
         .product-card-name {
             font-weight: 600;
             color: #fff;
             font-size: 0.95rem;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
+        .product-card-size {
+            font-size: 0.85rem;
+            color: #bbb;
+            margin-bottom: 4px;
+        }
         .product-card-price {
             font-size: 1rem;
             font-weight: 700;
             color: rgb(182, 236, 223);
+        }
+        .top-products-show-more {
+            grid-column: 1 / -1;
+            margin-top: 8px;
+        }
+        .top-products-catalog-link {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 16px;
+            font-size: 1rem;
+            color: rgb(182, 236, 223);
+        }
+        .top-products-catalog-link a {
+            color: rgb(182, 236, 223);
+            font-weight: 600;
+            text-decoration: none;
+        }
+        .top-products-catalog-link a:hover {
+            text-decoration: underline;
         }
         .products-grid {
             display: grid;
@@ -780,6 +809,12 @@
     <section id="block-top-products" class="block" data-block="block-top-products">
         <h2 class="section-title">Топові товари</h2>
         <div id="topProductsGrid" class="products-grid"></div>
+        <div id="topProductsShowMore" class="top-products-show-more" style="display:none;">
+            <button type="button" class="btn-link-style btn-secondary-style" id="btnTopProductsShowMore">Показати ще</button>
+        </div>
+        <div id="topProductsCatalogLink" class="top-products-catalog-link" style="display:none;">
+            <a href="#catalog/all">Перейдіть до каталогу</a>
+        </div>
     </section>
 
     <!-- BLOCK: block-catalog — Каталог -->
@@ -1089,14 +1124,24 @@ const config = {
         { id: "scarves", name: "Шарфи та хустки", subcategories: ["Шарфи", "Хустки", "Платки"] }
     ],
     products: [
-        { id: 1, name: "Шарф вовняний", price: 450, categoryId: "scarves", subcategory: "Шарфи", dateAdded: "2026-02-15", isTop: true },
-        { id: 2, name: "Сумка шкіряна", price: 1200, categoryId: "accessories", subcategory: "Сумки", dateAdded: "2026-02-20", isTop: true },
-        { id: 3, name: "Светр жіночий", price: 890, categoryId: "cloth", subcategory: "Жіночий", dateAdded: "2026-02-18", isTop: true },
-        { id: 4, name: "Хустка шовкова", price: 320, categoryId: "scarves", subcategory: "Хустки", dateAdded: "2026-02-22", isTop: false },
-        { id: 5, name: "Куртка чоловіча", price: 2100, categoryId: "cloth", subcategory: "Чоловічий", dateAdded: "2026-02-10", isTop: true },
-        { id: 6, name: "Годинник класичний", price: 850, categoryId: "accessories", subcategory: "Годинники", dateAdded: "2026-02-25", isTop: false },
-        { id: 7, name: "Платок весняний", price: 180, categoryId: "scarves", subcategory: "Платки", dateAdded: "2026-03-01", isTop: false },
-        { id: 8, name: "Сукня літня", price: 650, categoryId: "cloth", subcategory: "Жіночий", dateAdded: "2026-02-28", isTop: false }
+        { id: 1, code: 8034, name: "Футболка чорна", size: "L", price: 350, categoryId: "cloth", subcategory: "Жіночий", dateAdded: "2026-02-15", isTop: true },
+        { id: 2, code: 8035, name: "Футболка біла", size: "M", price: 320, categoryId: "cloth", subcategory: "Жіночий", dateAdded: "2026-02-16", isTop: true },
+        { id: 3, code: 8036, name: "Светр сірий", size: "L", price: 890, categoryId: "cloth", subcategory: "Жіночий", dateAdded: "2026-02-17", isTop: true },
+        { id: 4, code: 8037, name: "Світшот синій", size: "XL", price: 650, categoryId: "cloth", subcategory: "Чоловічий", dateAdded: "2026-02-18", isTop: true },
+        { id: 5, code: 8038, name: "Сукня літня", size: "S", price: 720, categoryId: "cloth", subcategory: "Жіночий", dateAdded: "2026-02-19", isTop: true },
+        { id: 6, code: 8039, name: "Шарф вовняний", size: "—", price: 450, categoryId: "scarves", subcategory: "Шарфи", dateAdded: "2026-02-20", isTop: true },
+        { id: 7, code: 8040, name: "Шарф трикотажний", size: "—", price: 280, categoryId: "scarves", subcategory: "Шарфи", dateAdded: "2026-02-21", isTop: true },
+        { id: 8, code: 8041, name: "Хустка шовкова", size: "—", price: 320, categoryId: "scarves", subcategory: "Хустки", dateAdded: "2026-02-22", isTop: true },
+        { id: 9, code: 8042, name: "Сумка шкіряна", size: "—", price: 1200, categoryId: "accessories", subcategory: "Сумки", dateAdded: "2026-02-23", isTop: true },
+        { id: 10, code: 8043, name: "Сумка шопер", size: "—", price: 380, categoryId: "accessories", subcategory: "Сумки", dateAdded: "2026-02-24", isTop: true },
+        { id: 11, code: 8044, name: "Годинник класичний", size: "—", price: 850, categoryId: "accessories", subcategory: "Годинники", dateAdded: "2026-02-25", isTop: true },
+        { id: 12, code: 8045, name: "Ремінь шкіряний", size: "L", price: 420, categoryId: "accessories", subcategory: "Ремені", dateAdded: "2026-02-26", isTop: true },
+        { id: 13, code: 8046, name: "Куртка чоловіча", size: "M", price: 2100, categoryId: "cloth", subcategory: "Чоловічий", dateAdded: "2026-02-27", isTop: true },
+        { id: 14, code: 8047, name: "Платок весняний", size: "—", price: 180, categoryId: "scarves", subcategory: "Платки", dateAdded: "2026-02-28", isTop: true },
+        { id: 15, code: 8048, name: "Блузка біла", size: "M", price: 540, categoryId: "cloth", subcategory: "Жіночий", dateAdded: "2026-03-01", isTop: true },
+        { id: 16, code: 8049, name: "Джинси сині", size: "32", price: 890, categoryId: "cloth", subcategory: "Чоловічий", dateAdded: "2026-03-02", isTop: true },
+        { id: 17, name: "Платок осінній", price: 220, categoryId: "scarves", subcategory: "Платки", dateAdded: "2026-03-03", isTop: false },
+        { id: 18, name: "Шарф дитячий", price: 190, categoryId: "scarves", subcategory: "Шарфи", dateAdded: "2026-03-04", isTop: false }
     ]
 };
 
@@ -1293,20 +1338,51 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0, rootMargin: "-50px 0px 0px 0px" });
 if (mainBtn && stickyEl) observer.observe(mainBtn);
 
-// Топові товари
+// Топові товари (16 шт., спочатку 4, кнопка "Показати ще" по 4, потім "Перейдіть до каталогу")
+const TOP_PRODUCTS_TOTAL = 16;
+const TOP_PRODUCTS_STEP = 4;
+let topProductsVisible = TOP_PRODUCTS_STEP;
+
 function renderTopProducts() {
-    const products = (config.products || []).filter(p => p.isTop);
+    const products = (config.products || []).filter(p => p.isTop).slice(0, TOP_PRODUCTS_TOTAL);
     const grid = document.getElementById("topProductsGrid");
+    const showMoreWrap = document.getElementById("topProductsShowMore");
+    const catalogLinkWrap = document.getElementById("topProductsCatalogLink");
     if (!grid) return;
-    grid.innerHTML = products.map(p => `
+
+    const visible = products.slice(0, topProductsVisible);
+    grid.innerHTML = visible.map(p => {
+        const code = p.code != null ? p.code : p.id;
+        const size = p.size || "—";
+        return `
         <div class="product-card">
             <div class="product-card-img">фото товару</div>
             <div class="product-card-body">
+                <div class="product-card-code">Код: ${code}</div>
                 <div class="product-card-name">${p.name}</div>
-                <div class="product-card-price">${p.price} грн</div>
+                <div class="product-card-size">Розмір: ${size}</div>
+                <div class="product-card-price">Ціна: ${p.price} грн</div>
             </div>
         </div>
-    `).join("");
+    `}).join("");
+
+    if (showMoreWrap && catalogLinkWrap) {
+        if (topProductsVisible >= products.length && products.length > TOP_PRODUCTS_STEP) {
+            showMoreWrap.style.display = "none";
+            catalogLinkWrap.style.display = "block";
+        } else if (products.length > TOP_PRODUCTS_STEP) {
+            showMoreWrap.style.display = "block";
+            catalogLinkWrap.style.display = "none";
+            const btn = document.getElementById("btnTopProductsShowMore");
+            if (btn) btn.onclick = function() {
+                topProductsVisible = Math.min(topProductsVisible + TOP_PRODUCTS_STEP, products.length);
+                renderTopProducts();
+            };
+        } else {
+            showMoreWrap.style.display = "none";
+            catalogLinkWrap.style.display = products.length > 0 ? "block" : "none";
+        }
+    }
 }
 
 // Каталог
