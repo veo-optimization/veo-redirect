@@ -167,12 +167,6 @@
             padding-top: 20px;
             border-top: 1px solid #eee;
         }
-        @media (min-width: 380px) {
-            .form-actions {
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-        }
         .btn {
             min-height: 48px;
             padding: 14px 20px;
@@ -202,10 +196,6 @@
             order: 1;
         }
         .btn-primary:hover { background: #6d28d9; }
-        @media (min-width: 380px) {
-            .btn { flex: 1; min-width: 0; }
-            .btn-primary { flex: 2; }
-        }
         .btn-secondary {
             background: #e5e5e5;
             color: #555;
@@ -322,11 +312,21 @@
         }
         .toggle-btn:hover { border-color: #7c3aed; background: rgba(124,58,237,0.06); }
         .toggle-btn.active { border-color: #7c3aed; background: #7c3aed; color: #fff; }
-        .toggle-btn-desc { font-size: 0.75rem; color: #888; margin-top: 4px; font-weight: 400; line-height: 1.3; }
+        .toggle-btn-main { display: block; font-size: 1.1rem; font-weight: 700; }
+        .toggle-btn-desc { font-size: 0.7rem; color: #888; margin-top: 4px; font-weight: 400; line-height: 1.3; }
         .toggle-btn.active .toggle-btn-desc { color: rgba(255,255,255,0.9); }
+        .toggle-btn-short .toggle-btn { min-height: 56px; }
+        .form-actions { flex-direction: column; }
+        .form-actions .btn { order: unset; }
+        .form-actions .btn-primary { order: 1; min-height: 144px; font-size: 18px; }
+        .form-actions .btn-save { order: 2; }
+        .form-actions .btn-cancel { order: 3; }
         .btn-primary { min-height: 144px; font-size: 18px; }
         .btn-cancel { background: transparent; color: #888; border: 1px solid #ddd; }
         .btn-cancel:hover { background: #f5f5f5; color: #555; }
+        .measure-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
+        .measure-row label { font-size: 0.85rem; color: #666; min-width: 90px; }
+        .measure-row input { flex: 1; min-width: 0; }
     </style>
 </head>
 <body>
@@ -354,11 +354,11 @@
         <div class="form-row">
             <div class="form-group">
                 <label for="price">Ціна (грн)</label>
-                <input type="number" id="price" name="price" class="form-input" placeholder="Введіть ціну" min="0" step="0.01">
+                <input type="number" id="price" name="price" class="form-input" placeholder="Введіть ціну" min="0" step="0.01" inputmode="decimal">
             </div>
             <div class="form-group">
                 <label for="quantity">Кількість</label>
-                <input type="number" id="quantity" name="quantity" class="form-input" placeholder="Введіть кількість" min="0" step="1">
+                <input type="number" id="quantity" name="quantity" class="form-input" placeholder="Введіть кількість" min="0" step="1" inputmode="numeric">
             </div>
         </div>
 
@@ -383,12 +383,14 @@
             </div>
         </div>
 
-        <!-- 5c. Розмір та параметри (підблоки) -->
+        <!-- 5c. Еластичність -->
+        <div class="form-group" id="elasticityGroup">
+            <div class="quick-buttons-label">Еластичність</div>
+            <div class="quick-buttons" id="elasticityBtns"></div>
+        </div>
+
+        <!-- 5d. Розмір та параметри (підблоки) -->
         <div class="form-group" id="attributesGroup">
-            <div class="attr-subblock">
-                <div class="quick-buttons-label">Повномірне чи маломірне</div>
-                <div class="quick-buttons" id="fitBtns"></div>
-            </div>
             <div class="attr-subblock" id="sizeLetterBlock">
                 <div class="quick-buttons-label">Розмір (буквами)</div>
                 <div id="sizeLetterBtns" class="quick-buttons"></div>
@@ -405,17 +407,13 @@
                 <div class="quick-buttons-label">Тип: короткий / середній / довгий</div>
                 <div id="lengthTypeBtns" class="quick-buttons"></div>
             </div>
-            <div class="attr-subblock attr-measures">
+            <div class="attr-subblock attr-measures" id="measuresBlock">
                 <div class="quick-buttons-label">Напівобхват, см</div>
-                <div class="form-row">
-                    <div class="form-group"><input type="number" id="measureChest" class="form-input" placeholder="Груди" min="0"></div>
-                    <div class="form-group"><input type="number" id="measureWaist" class="form-input" placeholder="Талія/пояс" min="0"></div>
-                    <div class="form-group"><input type="number" id="measureHips" class="form-input" placeholder="Стегна" min="0"></div>
-                </div>
+                <div id="measuresContent"></div>
             </div>
             <div class="attr-subblock">
                 <div class="quick-buttons-label">Довжина, см</div>
-                <input type="number" id="lengthCm" class="form-input" placeholder="Довжина" min="0">
+                <input type="number" id="lengthCm" class="form-input" placeholder="Довжина" min="0" inputmode="numeric">
             </div>
             <div class="attr-subblock">
                 <div class="quick-buttons-label">Країна виробник</div>
@@ -434,14 +432,14 @@
         <div class="form-section-title">Медіа та опис</div>
         <!-- 6. Toggle buttons -->
         <div class="form-group">
-            <div class="toggle-btn-wrap">
+            <div class="toggle-btn-wrap toggle-btn-short">
                 <button type="button" class="toggle-btn" id="toggleSendToBot" data-field="sendToBot">
-                    Відправити в бот
-                    <div class="toggle-btn-desc">Підписникам прийде сповіщення про новий товар у боті</div>
+                    <span class="toggle-btn-main">БОТ</span>
+                    <div class="toggle-btn-desc">Сповіщення підписникам у боті</div>
                 </button>
                 <button type="button" class="toggle-btn" id="toggleIsTop" data-field="isTop">
-                    Топовий товар
-                    <div class="toggle-btn-desc">Товар буде на головній сторінці міні-сайту</div>
+                    <span class="toggle-btn-main">ТОП</span>
+                    <div class="toggle-btn-desc">На головній міні-сайту</div>
                 </button>
             </div>
             <input type="hidden" name="sendToBot" id="sendToBot" value="0">
@@ -483,11 +481,11 @@ const SUBCATEGORIES = {
     "Дитячий одяг": ["Верх", "Низ", "Футболки", "Сукні", "Штани", "Куртки", "Комбінезони", "Светри", "Шорти", "Спідниці", "Шапки", "Шкарпетки", "Боді", "Піжами", "Костюми"]
 };
 
-// Матеріали
-const MATERIALS = ["Бавовна", "Поліестер", "Шерсть", "Шовк", "Джинса", "Трикотаж", "Віскоза", "Еластан", "Льон", "Кашемір", "Модал", "Нейлон", "Акрил", "Поліамід", "Штучний шовк", "Мікрофібра"];
+// Матеріали (алфавіт) + шкіра, екошкіра
+const MATERIALS = ["Акрил", "Бавовна", "Віскоза", "Джинса", "Екошкіра", "Еластан", "Кашемір", "Льон", "Мікрофібра", "Модал", "Нейлон", "Поліамід", "Поліестер", "Трикотаж", "Шерсть", "Шкіра", "Шовк", "Штучний шовк"];
 
-// Країни виробники
-const COUNTRIES = ["Україна", "Китай", "Туреччина", "Бангладеш", "В'єтнам", "Індія", "Польща"];
+// Країни виробники (алфавіт)
+const COUNTRIES = ["Англія", "Бангладеш", "В'єтнам", "Індія", "Іспанія", "Італія", "Китай", "Німеччина", "Польща", "Португалія", "США", "Туреччина", "Україна", "Франція"];
 
 // Розміри буквами (XXS–5XL)
 const SIZES_LETTER = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL", "4XL", "5XL"];
@@ -504,9 +502,11 @@ const LENGTH_TYPES = ["Короткий", "Середній", "Довгий"];
 
 let selectedCategory = "Жіночий одяг";
 let selectedSubcategory = null;
+let selectedTopBottom = [];
 let selectedAttributes = {};
 let selectedMaterials = [];
 let selectedMaterialPercentages = {};
+let elasticity = null;
 
 function getCategoryType(cat) {
     if (cat === "Жіночий одяг") return "women";
@@ -519,6 +519,7 @@ function renderSubcategoryButtons() {
     const cat = document.getElementById("category").value;
     selectedCategory = cat;
     selectedSubcategory = null;
+    selectedTopBottom = [];
     selectedMaterials = [];
     selectedMaterialPercentages = {};
     const subs = SUBCATEGORIES[cat] || [];
@@ -535,19 +536,33 @@ function renderSubcategoryButtons() {
     html += `<button type="button" class="quick-btn" data-sub="">Без підкатегорії</button>`;
     container.innerHTML = html;
 
+    selectedTopBottom.forEach(tb => container.querySelector(`.quick-btn[data-sub="${tb}"]`)?.classList.add("active"));
+
     container.querySelectorAll(".quick-btn").forEach(btn => {
         btn.onclick = function() {
-            container.querySelectorAll(".quick-btn").forEach(b => b.classList.remove("active"));
-            this.classList.add("active");
             const val = this.dataset.sub;
-            if (val === "other") {
+            if (val === "Верх" || val === "Низ") {
+                this.classList.toggle("active");
+                if (this.classList.contains("active")) selectedTopBottom.push(val);
+                else selectedTopBottom = selectedTopBottom.filter(x => x !== val);
+            } else if (val === "other") {
+                container.querySelectorAll(".quick-btn:not([data-sub='Верх']):not([data-sub='Низ'])").forEach(b => b.classList.remove("active"));
+                this.classList.add("active");
                 customWrap.classList.add("visible");
                 customInput.focus();
                 selectedSubcategory = null;
-            } else {
+            } else if (val === "") {
+                container.querySelectorAll(".quick-btn:not([data-sub='Верх']):not([data-sub='Низ'])").forEach(b => b.classList.remove("active"));
+                this.classList.add("active");
                 customWrap.classList.remove("visible");
                 customInput.value = "";
-                selectedSubcategory = val || null;
+                selectedSubcategory = null;
+            } else {
+                container.querySelectorAll(".quick-btn:not([data-sub='Верх']):not([data-sub='Низ'])").forEach(b => b.classList.remove("active"));
+                this.classList.add("active");
+                customWrap.classList.remove("visible");
+                customInput.value = "";
+                selectedSubcategory = val;
             }
             renderAttributeButtons();
         };
@@ -566,7 +581,9 @@ function renderAttributeButtons() {
     const sub = (selectedSubcategory || document.getElementById("customSubcategory").value || "").trim();
     const isShoe = (sub === "Взуття" || sub === "взуття") && type === "accessories";
 
-    document.getElementById("fitBtns").innerHTML = '<button type="button" class="quick-btn attr-btn" data-attr="fit" data-val="full">Повномірне</button><button type="button" class="quick-btn attr-btn" data-attr="fit" data-val="small">Маломірне</button>';
+    if (type === "accessories" || type === "children") { document.getElementById("elasticityGroup").style.display = "none"; elasticity = null; }
+    else document.getElementById("elasticityGroup").style.display = "block";
+    document.getElementById("elasticityBtns").innerHTML = '<button type="button" class="quick-btn attr-btn" data-attr="elasticity" data-val="stretch">Стретч</button><button type="button" class="quick-btn attr-btn" data-attr="elasticity" data-val="noStretch">Не тягнеться</button>';
 
     let sizeLetterArr = SIZES_LETTER, sizeEuArr = type === "men" ? SIZES_EU_M : SIZES_EU_W;
     if (type === "accessories" && isShoe) {
@@ -599,7 +616,7 @@ function renderAttributeButtons() {
     document.getElementById("countryBtns").innerHTML = COUNTRIES.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="country" data-val="${v}">${v}</button>`).join("");
     document.getElementById("materialBtns").innerHTML = MATERIALS.map(m => `<button type="button" class="quick-btn attr-btn material-btn" data-attr="material" data-val="${m}">${m}</button>`).join("");
 
-    document.querySelectorAll("#attributesGroup .attr-btn").forEach(btn => {
+    document.querySelectorAll("#attributesGroup .attr-btn, #elasticityGroup .attr-btn").forEach(btn => {
         btn.onclick = function() {
             const attr = this.dataset.attr;
             const val = this.dataset.val;
@@ -608,21 +625,58 @@ function renderAttributeButtons() {
                 if (this.classList.contains("active")) selectedMaterials.push(val);
                 else { selectedMaterials = selectedMaterials.filter(x => x !== val); delete selectedMaterialPercentages[val]; }
                 renderMaterialPercentages();
+            } else if (attr === "elasticity") {
+                const wasActive = this.classList.contains("active");
+                document.querySelectorAll(`[data-attr="elasticity"]`).forEach(b => b.classList.remove("active"));
+                if (!wasActive) { this.classList.add("active"); elasticity = val; }
+                else elasticity = null;
+                renderMeasures();
             } else {
-                const grp = this.closest(".attr-subblock");
+                const wasActive = this.classList.contains("active");
+                const grp = this.closest(".attr-subblock") || this.closest("#elasticityGroup");
                 grp.querySelectorAll(".attr-btn").forEach(b => b.classList.remove("active"));
-                this.classList.add("active");
-                selectedAttributes[attr] = val;
+                if (!wasActive) { this.classList.add("active"); selectedAttributes[attr] = val; }
+                else delete selectedAttributes[attr];
             }
         };
     });
 
-    ["fit","sizeLetter","sizeEu","sizeUa","lengthType","country"].forEach(attr => {
+    if (elasticity) document.querySelector(`[data-attr="elasticity"][data-val="${elasticity}"]`)?.classList.add("active");
+    ["sizeLetter","sizeEu","sizeUa","lengthType","country"].forEach(attr => {
         const v = selectedAttributes[attr];
         if (v) document.querySelector(`#attributesGroup .attr-btn[data-attr="${attr}"][data-val="${v}"]`)?.classList.add("active");
     });
     selectedMaterials.forEach(m => document.querySelector(`.material-btn[data-val="${m}"]`)?.classList.add("active"));
     renderMaterialPercentages();
+    renderMeasures();
+}
+
+function renderMeasures() {
+    const type = getCategoryType(selectedCategory);
+    const block = document.querySelector(".attr-measures");
+    const content = document.getElementById("measuresContent");
+    if (!block || !content) return;
+    if (type === "accessories" || type === "children") { block.style.display = "none"; return; }
+    block.style.display = "block";
+    const isStretch = elasticity === "stretch";
+    const labels = ["Груди","Талія/пояс","Стегна"];
+    const ids = ["chest","waist","hips"];
+    if (isStretch) {
+        content.innerHTML = labels.map((lbl,i) => `
+            <div class="measure-row">
+                <label>${lbl}</label>
+                <input type="number" class="form-input" placeholder="від" min="0" inputmode="numeric" data-m="from" data-id="${ids[i]}">
+                <input type="number" class="form-input" placeholder="до" min="0" inputmode="numeric" data-m="to" data-id="${ids[i]}">
+            </div>
+        `).join("");
+    } else {
+        content.innerHTML = labels.map((lbl,i) => `
+            <div class="measure-row">
+                <label>${lbl}</label>
+                <input type="number" class="form-input" placeholder="см" min="0" inputmode="numeric" data-id="${ids[i]}">
+            </div>
+        `).join("");
+    }
 }
 
 function renderMaterialPercentages() {
@@ -642,7 +696,7 @@ function renderMaterialPercentages() {
         return `
             <div class="material-percent-row" data-material="${m}">
                 <span>${m}</span>
-                <input type="number" min="0" max="100" placeholder="%" value="${pct}" data-material="${m}">
+                <input type="number" min="0" max="100" placeholder="%" value="${pct}" data-material="${m}" inputmode="numeric">
             </div>
         `;
     }).join("");
@@ -669,12 +723,17 @@ document.getElementById("productForm").addEventListener("submit", function(e) {
     formData.set("attributes", JSON.stringify(selectedAttributes));
     formData.set("materials", JSON.stringify(selectedMaterials));
     formData.set("materialPercentages", JSON.stringify(selectedMaterialPercentages));
-    formData.set("measures", JSON.stringify({
-        chest: document.getElementById("measureChest")?.value || "",
-        waist: document.getElementById("measureWaist")?.value || "",
-        hips: document.getElementById("measureHips")?.value || "",
-        lengthCm: document.getElementById("lengthCm")?.value || ""
-    }));
+    const measuresData = { elasticity };
+    document.querySelectorAll("#measuresContent input").forEach(inp => {
+        const id = inp.dataset.id;
+        if (!id) return;
+        if (inp.dataset.m === "from") measuresData[id + "From"] = inp.value || "";
+        else if (inp.dataset.m === "to") measuresData[id + "To"] = inp.value || "";
+        else measuresData[id] = inp.value || "";
+    });
+    measuresData.lengthCm = document.getElementById("lengthCm")?.value || "";
+    formData.set("measures", JSON.stringify(measuresData));
+    formData.set("topBottom", JSON.stringify(selectedTopBottom));
 
     // Зчитуємо актуальні відсотки з полів
     document.querySelectorAll("#materialPercentagesList input").forEach(inp => {
