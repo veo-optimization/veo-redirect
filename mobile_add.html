@@ -327,6 +327,19 @@
         .measure-row { display: flex; gap: 10px; align-items: center; margin-bottom: 10px; }
         .measure-row label { font-size: 0.85rem; color: #666; min-width: 90px; }
         .measure-row input { flex: 1; min-width: 0; }
+        .mode-selector-wrap {
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #f9f9f9;
+            border-radius: 12px;
+            border: 1px solid #eee;
+        }
+        .mode-selector-wrap .toggle-btn-wrap { margin-bottom: 10px; }
+        .mode-desc {
+            font-size: 0.8rem;
+            color: #666;
+            line-height: 1.4;
+        }
     </style>
 </head>
 <body>
@@ -337,6 +350,20 @@
     </header>
 
     <form id="productForm" action="#" method="post">
+        <input type="hidden" name="createMode" id="createMode" value="clean">
+        <div class="mode-selector-wrap">
+            <div class="toggle-btn-wrap toggle-btn-short">
+                <button type="button" class="toggle-btn" id="modeClean" data-mode="clean">
+                    <span class="toggle-btn-main">Начисто</span>
+                    <div class="toggle-btn-desc">Створити новий товар з нуля</div>
+                </button>
+                <button type="button" class="toggle-btn" id="modeTemplate" data-mode="template">
+                    <span class="toggle-btn-main">Шаблон</span>
+                    <div class="toggle-btn-desc">Скопіювати з попереднього товару</div>
+                </button>
+            </div>
+            <div class="mode-desc" id="modeDesc"></div>
+        </div>
         <div class="form-section-title">Основні дані</div>
         <!-- 1. SKU -->
         <div class="form-group">
@@ -418,10 +445,17 @@
             <div class="attr-subblock">
                 <div class="quick-buttons-label">Країна виробник</div>
                 <div id="countryBtns" class="quick-buttons"></div>
+                <div id="customCountryWrap" class="custom-input-wrap">
+                    <input type="text" id="customCountry" class="form-input" placeholder="Введіть іншу країну">
+                </div>
             </div>
             <div class="attr-subblock">
-                <div class="quick-buttons-label">Матеріал</div>
+                <div class="quick-buttons-label">Склад</div>
                 <div id="materialBtns" class="quick-buttons"></div>
+                <div id="customMaterialWrap" class="custom-input-wrap">
+                    <input type="text" id="customMaterialInput" class="form-input" placeholder="Введіть свій матеріал">
+                    <button type="button" class="quick-btn" id="addCustomMaterialBtn" style="margin-top:8px">+ Додати</button>
+                </div>
             </div>
             <div id="materialPercentagesWrap" class="material-percent-wrap custom-input-wrap">
                 <div class="quick-buttons-label">Склад (% матеріалу)</div>
@@ -473,6 +507,10 @@
 </div>
 
 <script>
+// Підкатегорії типу "верх" / "низ" (для авто-перемикання)
+const SUBCAT_TOP = ["Футболки","Блузки","Светри","Куртки","Сорочки","Піджаки","Светшоти","Поло","Топи","Кофти","Плащі","Жилети","Світшоти","Боді","Піжами","Костюми"];
+const SUBCAT_BOTTOM = ["Лосини","Спідниці","Шорти","Джинси","Штани","Брюки","Спідня білизна"];
+
 // Дані підкатегорій (Верх/Низ на початку для одягу, +50% елементів)
 const SUBCATEGORIES = {
     "Жіночий одяг": ["Верх", "Низ", "Футболки", "Лосини", "Сукні", "Блузки", "Светри", "Куртки", "Спідниці", "Шорти", "Джинси", "Спідня білизна", "Плащі", "Топи", "Світшоти", "Брюки", "Кофти"],
@@ -487,26 +525,30 @@ const MATERIALS = ["Акрил", "Бавовна", "Віскоза", "Джинс
 // Країни виробники (алфавіт)
 const COUNTRIES = ["Англія", "Бангладеш", "В'єтнам", "Індія", "Іспанія", "Італія", "Китай", "Німеччина", "Польща", "Португалія", "США", "Туреччина", "Україна", "Франція"];
 
-// Розміри буквами (XXS–5XL)
-const SIZES_LETTER = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL", "4XL", "5XL"];
+// Розміри буквами (XXS–8XL)
+const SIZES_LETTER = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL", "4XL", "5XL", "6XL", "7XL", "8XL"];
 
-// Розміри EU (жін/чол)
-const SIZES_EU_W = ["38", "40", "42", "44", "46", "48", "50", "52"];
-const SIZES_EU_M = ["44", "46", "48", "50", "52", "54", "56"];
+// Розміри EU (жін 32–66 / чол 40–64)
+const SIZES_EU_W = ["32","34","36","38","40","42","44","46","48","50","52","54","56","58","60","62","64","66"];
+const SIZES_EU_M = ["40","42","44","46","48","50","52","54","56","58","60","62","64"];
 
-// Розміри UA
-const SIZES_UA = ["42", "44", "46", "48", "50", "52", "54"];
+// Розміри UA (40–64)
+const SIZES_UA = ["40","42","44","46","48","50","52","54","56","58","60","62","64"];
 
 // Тип довжини
 const LENGTH_TYPES = ["Короткий", "Середній", "Довгий"];
 
+const TEMPLATE_STORAGE_KEY = "mobile_add_product_template";
+
 let selectedCategory = "Жіночий одяг";
 let selectedSubcategory = null;
-let selectedTopBottom = [];
+let selectedTopBottom = []; // максимум один: "Верх" або "Низ"
 let selectedAttributes = {};
 let selectedMaterials = [];
 let selectedMaterialPercentages = {};
+let selectedCustomCountry = "";
 let elasticity = null;
+let createMode = "clean"; // "clean" | "template"
 
 function getCategoryType(cat) {
     if (cat === "Жіночий одяг") return "women";
@@ -515,19 +557,131 @@ function getCategoryType(cat) {
     return "accessories";
 }
 
-function renderSubcategoryButtons() {
+function getNextSku(sku) {
+    const m = String(sku || "").match(/^(\d+)$/);
+    return m ? String(parseInt(m[1], 10) + 1) : sku;
+}
+
+function saveTemplate() {
+    const sub = selectedSubcategory || document.getElementById("customSubcategory").value || "";
+    const attrs = {...selectedAttributes};
+    if (attrs.country === "other") attrs.country = document.getElementById("customCountry").value.trim() || "Інше";
+    const measuresData = { elasticity };
+    document.querySelectorAll("#measuresContent input").forEach(inp => {
+        const id = inp.dataset.id;
+        if (!id) return;
+        if (inp.dataset.m === "from") measuresData[id + "From"] = inp.value || "";
+        else if (inp.dataset.m === "to") measuresData[id + "To"] = inp.value || "";
+        else measuresData[id] = inp.value || "";
+    });
+    const t = {
+        sku: document.getElementById("sku").value,
+        productName: document.getElementById("productName").value,
+        price: document.getElementById("price").value,
+        quantity: document.getElementById("quantity").value,
+        category: document.getElementById("category").value,
+        subcategory: sub,
+        customSubcategory: document.getElementById("customSubcategory").value,
+        attributes: attrs,
+        materials: [...selectedMaterials],
+        materialPercentages: {...selectedMaterialPercentages},
+        measures: measuresData,
+        lengthCm: document.getElementById("lengthCm").value,
+        topBottom: [...selectedTopBottom],
+        description: document.getElementById("description").value,
+        sendToBot: document.getElementById("sendToBot").value,
+        isTop: document.getElementById("isTop").value
+    };
+    try { localStorage.setItem(TEMPLATE_STORAGE_KEY, JSON.stringify(t)); } catch (e) {}
+}
+
+function applyTemplate() {
+    let t;
+    try { t = JSON.parse(localStorage.getItem(TEMPLATE_STORAGE_KEY) || "null"); } catch (e) { return; }
+    if (!t) return;
+    document.getElementById("sku").value = getNextSku(t.sku);
+    document.getElementById("productName").value = t.productName || "";
+    document.getElementById("price").value = t.price || "";
+    document.getElementById("quantity").value = t.quantity || "";
+    document.getElementById("category").value = t.category || "Жіночий одяг";
+    document.getElementById("customSubcategory").value = t.customSubcategory || "";
+    document.getElementById("lengthCm").value = t.lengthCm || "";
+    document.getElementById("description").value = t.description || "";
+    document.getElementById("sendToBot").value = t.sendToBot || "0";
+    document.getElementById("isTop").value = t.isTop || "0";
+    selectedCategory = t.category || "Жіночий одяг";
+    const savedSub = t.subcategory || "";
+    const subs = SUBCATEGORIES[selectedCategory] || [];
+    if (subs.includes(savedSub)) {
+        selectedSubcategory = savedSub;
+    } else {
+        selectedSubcategory = null;
+        document.getElementById("customSubcategory").value = savedSub;
+    }
+    selectedTopBottom = t.topBottom || [];
+    selectedAttributes = t.attributes || {};
+    selectedMaterials = t.materials || [];
+    selectedMaterialPercentages = t.materialPercentages || {};
+    elasticity = t.measures?.elasticity || null;
+    const savedCountry = t.attributes?.country || "";
+    if (COUNTRIES.includes(savedCountry)) {
+        selectedAttributes.country = savedCountry;
+        selectedCustomCountry = "";
+    } else if (savedCountry) {
+        selectedAttributes.country = "other";
+        selectedCustomCountry = savedCountry;
+        document.getElementById("customCountry").value = savedCountry;
+    }
+    document.getElementById("mediaInput").value = "";
+    renderSubcategoryButtons(true);
+    if (!subs.includes(savedSub) && savedSub) {
+        document.getElementById("customSubcategoryWrap").classList.add("visible");
+        document.getElementById("subcategoryButtons").querySelector('.quick-btn[data-sub="other"]')?.classList.add("active");
+    }
+    renderAttributeButtons();
+    document.querySelectorAll("#measuresContent input").forEach(inp => {
+        const id = inp.dataset.id;
+        if (!id) return;
+        const m = t.measures || {};
+        if (inp.dataset.m === "from") inp.value = m[id + "From"] || "";
+        else if (inp.dataset.m === "to") inp.value = m[id + "To"] || "";
+        else inp.value = m[id] || "";
+    });
+    document.getElementById("toggleSendToBot").classList.toggle("active", t.sendToBot === "1");
+    document.getElementById("toggleIsTop").classList.toggle("active", t.isTop === "1");
+}
+
+function setCreateMode(mode) {
+    createMode = mode;
+    document.getElementById("createMode").value = mode;
+    document.getElementById("modeClean").classList.toggle("active", mode === "clean");
+    document.getElementById("modeTemplate").classList.toggle("active", mode === "template");
+    try { localStorage.setItem("mobile_add_createMode", mode); } catch (e) {}
+    const desc = document.getElementById("modeDesc");
+    if (mode === "clean") {
+        desc.textContent = "Створення товару з порожньої форми.";
+    } else {
+        desc.textContent = "Новий товар створюється з попередніми налаштуваннями: ціна, назва, розміри, категорія, склад тощо. Змінюється лише порядковий номер і зникає фото-відео.";
+    }
+}
+
+function renderSubcategoryButtons(keepSelection) {
     const cat = document.getElementById("category").value;
     selectedCategory = cat;
-    selectedSubcategory = null;
-    selectedTopBottom = [];
-    selectedMaterials = [];
-    selectedMaterialPercentages = {};
+    if (!keepSelection) {
+        selectedSubcategory = null;
+        selectedTopBottom = [];
+        selectedMaterials = [];
+        selectedMaterialPercentages = {};
+    }
     const subs = SUBCATEGORIES[cat] || [];
     const container = document.getElementById("subcategoryButtons");
     const customWrap = document.getElementById("customSubcategoryWrap");
     const customInput = document.getElementById("customSubcategory");
-    customWrap.classList.remove("visible");
-    customInput.value = "";
+    if (!keepSelection) {
+        customWrap.classList.remove("visible");
+        customInput.value = "";
+    }
 
     let html = subs.map(s => `
         <button type="button" class="quick-btn" data-sub="${s}">${s}</button>
@@ -542,9 +696,16 @@ function renderSubcategoryButtons() {
         btn.onclick = function() {
             const val = this.dataset.sub;
             if (val === "Верх" || val === "Низ") {
-                this.classList.toggle("active");
-                if (this.classList.contains("active")) selectedTopBottom.push(val);
-                else selectedTopBottom = selectedTopBottom.filter(x => x !== val);
+                const other = val === "Верх" ? "Низ" : "Верх";
+                const otherBtn = container.querySelector(`.quick-btn[data-sub="${other}"]`);
+                if (this.classList.contains("active")) {
+                    this.classList.remove("active");
+                    selectedTopBottom = [];
+                } else {
+                    otherBtn?.classList.remove("active");
+                    selectedTopBottom = [val];
+                    this.classList.add("active");
+                }
             } else if (val === "other") {
                 container.querySelectorAll(".quick-btn:not([data-sub='Верх']):not([data-sub='Низ'])").forEach(b => b.classList.remove("active"));
                 this.classList.add("active");
@@ -563,6 +724,17 @@ function renderSubcategoryButtons() {
                 customWrap.classList.remove("visible");
                 customInput.value = "";
                 selectedSubcategory = val;
+                const topBtn = container.querySelector(`.quick-btn[data-sub="Верх"]`);
+                const bottomBtn = container.querySelector(`.quick-btn[data-sub="Низ"]`);
+                if (SUBCAT_TOP.includes(val)) {
+                    selectedTopBottom = ["Верх"];
+                    topBtn?.classList.add("active");
+                    bottomBtn?.classList.remove("active");
+                } else if (SUBCAT_BOTTOM.includes(val)) {
+                    selectedTopBottom = ["Низ"];
+                    bottomBtn?.classList.add("active");
+                    topBtn?.classList.remove("active");
+                }
             }
             renderAttributeButtons();
         };
@@ -613,8 +785,8 @@ function renderAttributeButtons() {
     document.getElementById("sizeEuBtns").innerHTML = sizeEuArr.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="sizeEu" data-val="${v}">${v}</button>`).join("");
     document.getElementById("sizeUaBtns").innerHTML = SIZES_UA.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="sizeUa" data-val="${v}">${v}</button>`).join("");
     document.getElementById("lengthTypeBtns").innerHTML = LENGTH_TYPES.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="lengthType" data-val="${v}">${v}</button>`).join("");
-    document.getElementById("countryBtns").innerHTML = COUNTRIES.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="country" data-val="${v}">${v}</button>`).join("");
-    document.getElementById("materialBtns").innerHTML = MATERIALS.map(m => `<button type="button" class="quick-btn attr-btn material-btn" data-attr="material" data-val="${m}">${m}</button>`).join("");
+    document.getElementById("countryBtns").innerHTML = COUNTRIES.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="country" data-val="${v}">${v}</button>`).join("") + `<button type="button" class="quick-btn other-btn attr-btn" data-attr="country" data-val="other">Інше</button>`;
+    document.getElementById("materialBtns").innerHTML = MATERIALS.map(m => `<button type="button" class="quick-btn attr-btn material-btn" data-attr="material" data-val="${m}">${m}</button>`).join("") + `<button type="button" class="quick-btn other-btn attr-btn material-other-btn" data-attr="materialOther">Інше</button>`;
 
     document.querySelectorAll("#attributesGroup .attr-btn, #elasticityGroup .attr-btn").forEach(btn => {
         btn.onclick = function() {
@@ -625,6 +797,24 @@ function renderAttributeButtons() {
                 if (this.classList.contains("active")) selectedMaterials.push(val);
                 else { selectedMaterials = selectedMaterials.filter(x => x !== val); delete selectedMaterialPercentages[val]; }
                 renderMaterialPercentages();
+            } else if (attr === "materialOther") {
+                document.getElementById("customMaterialWrap").classList.add("visible");
+                document.getElementById("customMaterialInput").focus();
+            } else if (attr === "country") {
+                const grp = this.closest(".attr-subblock");
+                grp.querySelectorAll(".attr-btn[data-attr='country']").forEach(b => b.classList.remove("active"));
+                if (val === "other") {
+                    this.classList.add("active");
+                    document.getElementById("customCountryWrap").classList.add("visible");
+                    document.getElementById("customCountry").focus();
+                    selectedAttributes.country = "other";
+                } else {
+                    document.getElementById("customCountryWrap").classList.remove("visible");
+                    document.getElementById("customCountry").value = "";
+                    selectedCustomCountry = "";
+                    this.classList.add("active");
+                    selectedAttributes.country = val;
+                }
             } else if (attr === "elasticity") {
                 const wasActive = this.classList.contains("active");
                 document.querySelectorAll(`[data-attr="elasticity"]`).forEach(b => b.classList.remove("active"));
@@ -642,11 +832,24 @@ function renderAttributeButtons() {
     });
 
     if (elasticity) document.querySelector(`[data-attr="elasticity"][data-val="${elasticity}"]`)?.classList.add("active");
-    ["sizeLetter","sizeEu","sizeUa","lengthType","country"].forEach(attr => {
+    ["sizeLetter","sizeEu","sizeUa","lengthType"].forEach(attr => {
         const v = selectedAttributes[attr];
         if (v) document.querySelector(`#attributesGroup .attr-btn[data-attr="${attr}"][data-val="${v}"]`)?.classList.add("active");
     });
+    if (selectedAttributes.country) {
+        const countryBtn = document.querySelector(`#attributesGroup .attr-btn[data-attr="country"][data-val="${selectedAttributes.country}"]`);
+        if (countryBtn) {
+            countryBtn.classList.add("active");
+            if (selectedAttributes.country === "other") {
+                document.getElementById("customCountryWrap").classList.add("visible");
+                document.getElementById("customCountry").value = selectedCustomCountry;
+            } else {
+                document.getElementById("customCountryWrap").classList.remove("visible");
+            }
+        }
+    }
     selectedMaterials.forEach(m => document.querySelector(`.material-btn[data-val="${m}"]`)?.classList.add("active"));
+    document.getElementById("customMaterialWrap").classList.add("visible");
     renderMaterialPercentages();
     renderMeasures();
 }
@@ -714,13 +917,28 @@ document.getElementById("customSubcategory").addEventListener("input", function(
     selectedSubcategory = this.value.trim() || null;
     renderAttributeButtons();
 });
+document.getElementById("customCountry").addEventListener("input", function() {
+    selectedCustomCountry = this.value.trim();
+});
+document.getElementById("addCustomMaterialBtn").addEventListener("click", function() {
+    const inp = document.getElementById("customMaterialInput");
+    const val = inp.value.trim();
+    if (!val) return;
+    if (!selectedMaterials.includes(val)) {
+        selectedMaterials.push(val);
+        renderMaterialPercentages();
+        inp.value = "";
+    }
+});
 
 document.getElementById("productForm").addEventListener("submit", function(e) {
     e.preventDefault();
     const sub = selectedSubcategory || document.getElementById("customSubcategory").value || "";
     const formData = new FormData(this);
     formData.set("subcategory", sub);
-    formData.set("attributes", JSON.stringify(selectedAttributes));
+    const attrs = {...selectedAttributes};
+    if (attrs.country === "other") attrs.country = document.getElementById("customCountry").value.trim() || "Інше";
+    formData.set("attributes", JSON.stringify(attrs));
     formData.set("materials", JSON.stringify(selectedMaterials));
     formData.set("materialPercentages", JSON.stringify(selectedMaterialPercentages));
     const measuresData = { elasticity };
@@ -759,6 +977,8 @@ document.getElementById("productForm").addEventListener("submit", function(e) {
         descEl.value = newDesc;
     }
 
+    saveTemplate();
+
     const data = Object.fromEntries(formData);
     console.log("Form data (prototype):", data);
 });
@@ -776,7 +996,20 @@ document.getElementById("toggleIsTop").addEventListener("click", function() {
     document.getElementById("isTop").value = this.classList.contains("active") ? "1" : "0";
 });
 
-renderSubcategoryButtons();
+document.getElementById("modeClean").addEventListener("click", function() { setCreateMode("clean"); });
+document.getElementById("modeTemplate").addEventListener("click", function() {
+    setCreateMode("template");
+    applyTemplate();
+});
+
+let savedMode = "clean";
+try { savedMode = localStorage.getItem("mobile_add_createMode") || "clean"; } catch (e) {}
+setCreateMode(savedMode);
+if (savedMode === "template") {
+    applyTemplate();
+} else {
+    renderSubcategoryButtons();
+}
 </script>
 </body>
 </html>
