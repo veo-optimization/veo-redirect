@@ -8,24 +8,31 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         * { box-sizing: border-box; }
-        html { overflow-x: hidden; }
+        html {
+            overflow-x: hidden;
+            -webkit-text-size-adjust: 100%;
+        }
         body {
             margin: 0;
-            padding: 16px;
+            padding: 12px 16px 24px;
+            padding-bottom: calc(24px + env(safe-area-inset-bottom));
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background: #f5f5f5;
             color: #333;
             min-height: 100vh;
         }
+        @media (min-width: 360px) {
+            body { padding: 16px; padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+        }
         .page-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 24px;
-            padding: 0 4px;
+            margin-bottom: 20px;
+            padding: 0 2px;
         }
         .page-title {
-            font-size: 1.5rem;
+            font-size: clamp(1.25rem, 4.5vw, 1.5rem);
             font-weight: 700;
             margin: 0;
         }
@@ -34,8 +41,11 @@
             margin: 0 auto;
             background: #fff;
             border-radius: 16px;
-            padding: 24px;
+            padding: 20px 16px;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        @media (min-width: 360px) {
+            .form-container { padding: 24px 20px; }
         }
         .form-group {
             margin-bottom: 20px;
@@ -52,17 +62,18 @@
             grid-template-columns: 1fr 1fr;
             gap: 16px;
         }
-        @media (max-width: 400px) {
+        @media (max-width: 380px) {
             .form-row { grid-template-columns: 1fr; }
         }
         .form-input,
         .form-select,
         .form-textarea {
             width: 100%;
+            min-height: 48px;
             padding: 12px 14px;
             border: 1px solid #ddd;
             border-radius: 10px;
-            font-size: 1rem;
+            font-size: 16px;
             font-family: inherit;
             background: #fff;
             transition: border-color 0.2s, box-shadow 0.2s;
@@ -82,16 +93,27 @@
             min-height: 100px;
             resize: vertical;
         }
+        .form-select {
+            -webkit-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
         .form-checkbox {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 12px;
             cursor: pointer;
+            min-height: 44px;
+            padding: 4px 0;
         }
         .form-checkbox input {
-            width: 18px;
-            height: 18px;
+            width: 22px;
+            height: 22px;
+            min-width: 22px;
             accent-color: #7c3aed;
             cursor: pointer;
         }
@@ -102,15 +124,20 @@
         .media-upload {
             border: 2px dashed #ccc;
             border-radius: 12px;
-            padding: 24px;
+            padding: 28px 20px;
+            min-height: 100px;
             text-align: center;
             background: #fafafa;
             cursor: pointer;
             transition: border-color 0.2s, background 0.2s;
+            -webkit-tap-highlight-color: transparent;
         }
         .media-upload:hover {
             border-color: #7c3aed;
             background: rgba(124, 58, 237, 0.04);
+        }
+        .media-upload:active {
+            background: rgba(124, 58, 237, 0.08);
         }
         .media-upload input[type="file"] {
             position: absolute;
@@ -134,18 +161,23 @@
         }
         .form-actions {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             gap: 10px;
-            margin-top: 28px;
+            margin-top: 24px;
             padding-top: 20px;
             border-top: 1px solid #eee;
         }
+        @media (min-width: 380px) {
+            .form-actions {
+                flex-direction: row;
+                flex-wrap: wrap;
+            }
+        }
         .btn {
-            flex: 1;
-            min-width: 100px;
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 0.95rem;
+            min-height: 48px;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
             border: none;
@@ -155,20 +187,25 @@
         .btn-cancel {
             background: #e5e5e5;
             color: #555;
+            order: 3;
         }
         .btn-cancel:hover { background: #d5d5d5; }
         .btn-save {
-            background: #7c3aed;
+            background: rgba(124, 58, 237, 0.85);
             color: #fff;
+            order: 2;
         }
         .btn-save:hover { background: #6d28d9; }
         .btn-primary {
             background: #7c3aed;
             color: #fff;
-            flex: 2;
-            min-width: 180px;
+            order: 1;
         }
         .btn-primary:hover { background: #6d28d9; }
+        @media (min-width: 380px) {
+            .btn { flex: 1; min-width: 0; }
+            .btn-primary { flex: 2; }
+        }
         .btn-secondary {
             background: #e5e5e5;
             color: #555;
@@ -190,14 +227,16 @@
             gap: 8px;
         }
         .quick-btn {
+            min-height: 44px;
             padding: 10px 14px;
             border-radius: 10px;
             border: 2px solid #ddd;
             background: #fff;
-            font-size: 0.9rem;
+            font-size: 15px;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
         }
         .quick-btn:hover {
             border-color: #7c3aed;
@@ -239,17 +278,55 @@
             color: #444;
         }
         .material-percent-row input {
+            min-width: 64px;
             width: 70px;
-            padding: 8px 10px;
+            min-height: 44px;
+            padding: 10px 12px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            font-size: 0.95rem;
+            font-size: 16px;
             text-align: center;
         }
+        .form-section-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #7c3aed;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 24px 0 12px;
+            padding-bottom: 6px;
+        }
+        .form-section-title:first-of-type { margin-top: 0; }
         .material-percent-row input:focus {
             outline: none;
             border-color: #7c3aed;
         }
+        .attr-subblock { margin-bottom: 16px; }
+        .attr-subblock .quick-buttons-label { margin-bottom: 6px; }
+        .toggle-btn-wrap {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .toggle-btn {
+            min-height: 52px;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 2px solid #ddd;
+            background: #fff;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .toggle-btn:hover { border-color: #7c3aed; background: rgba(124,58,237,0.06); }
+        .toggle-btn.active { border-color: #7c3aed; background: #7c3aed; color: #fff; }
+        .toggle-btn-desc { font-size: 0.75rem; color: #888; margin-top: 4px; font-weight: 400; line-height: 1.3; }
+        .toggle-btn.active .toggle-btn-desc { color: rgba(255,255,255,0.9); }
+        .btn-primary { min-height: 144px; font-size: 18px; }
+        .btn-cancel { background: transparent; color: #888; border: 1px solid #ddd; }
+        .btn-cancel:hover { background: #f5f5f5; color: #555; }
     </style>
 </head>
 <body>
@@ -260,6 +337,7 @@
     </header>
 
     <form id="productForm" action="#" method="post">
+        <div class="form-section-title">Основні дані</div>
         <!-- 1. SKU -->
         <div class="form-group">
             <label for="sku">Код (SKU)</label>
@@ -284,6 +362,7 @@
             </div>
         </div>
 
+        <div class="form-section-title">Категорія та параметри</div>
         <!-- 5. Category -->
         <div class="form-group">
             <label for="category">Категорія</label>
@@ -304,26 +383,69 @@
             </div>
         </div>
 
-        <!-- 5c. Size / attributes quick buttons -->
+        <!-- 5c. Розмір та параметри (підблоки) -->
         <div class="form-group" id="attributesGroup">
-            <label class="quick-buttons-label" id="attributesLabel">Розмір / параметри</label>
-            <div id="attributeButtons" class="quick-buttons"></div>
+            <div class="attr-subblock">
+                <div class="quick-buttons-label">Повномірне чи маломірне</div>
+                <div class="quick-buttons" id="fitBtns"></div>
+            </div>
+            <div class="attr-subblock" id="sizeLetterBlock">
+                <div class="quick-buttons-label">Розмір (буквами)</div>
+                <div id="sizeLetterBtns" class="quick-buttons"></div>
+            </div>
+            <div class="attr-subblock" id="sizeEuBlock">
+                <div class="quick-buttons-label">Розмір EU</div>
+                <div id="sizeEuBtns" class="quick-buttons"></div>
+            </div>
+            <div class="attr-subblock" id="sizeUaBlock">
+                <div class="quick-buttons-label">Розмір UA</div>
+                <div id="sizeUaBtns" class="quick-buttons"></div>
+            </div>
+            <div class="attr-subblock">
+                <div class="quick-buttons-label">Тип: короткий / середній / довгий</div>
+                <div id="lengthTypeBtns" class="quick-buttons"></div>
+            </div>
+            <div class="attr-subblock attr-measures">
+                <div class="quick-buttons-label">Напівобхват, см</div>
+                <div class="form-row">
+                    <div class="form-group"><input type="number" id="measureChest" class="form-input" placeholder="Груди" min="0"></div>
+                    <div class="form-group"><input type="number" id="measureWaist" class="form-input" placeholder="Талія/пояс" min="0"></div>
+                    <div class="form-group"><input type="number" id="measureHips" class="form-input" placeholder="Стегна" min="0"></div>
+                </div>
+            </div>
+            <div class="attr-subblock">
+                <div class="quick-buttons-label">Довжина, см</div>
+                <input type="number" id="lengthCm" class="form-input" placeholder="Довжина" min="0">
+            </div>
+            <div class="attr-subblock">
+                <div class="quick-buttons-label">Країна виробник</div>
+                <div id="countryBtns" class="quick-buttons"></div>
+            </div>
+            <div class="attr-subblock">
+                <div class="quick-buttons-label">Матеріал</div>
+                <div id="materialBtns" class="quick-buttons"></div>
+            </div>
             <div id="materialPercentagesWrap" class="material-percent-wrap custom-input-wrap">
                 <div class="quick-buttons-label">Склад (% матеріалу)</div>
                 <div id="materialPercentagesList"></div>
             </div>
         </div>
 
-        <!-- 6. Checkboxes -->
+        <div class="form-section-title">Медіа та опис</div>
+        <!-- 6. Toggle buttons -->
         <div class="form-group">
-            <label class="form-checkbox">
-                <input type="checkbox" name="sendToBot" id="sendToBot">
-                <span>Відправити в бот</span>
-            </label>
-            <label class="form-checkbox">
-                <input type="checkbox" name="isTop" id="isTop">
-                <span>Топовий товар</span>
-            </label>
+            <div class="toggle-btn-wrap">
+                <button type="button" class="toggle-btn" id="toggleSendToBot" data-field="sendToBot">
+                    Відправити в бот
+                    <div class="toggle-btn-desc">Підписникам прийде сповіщення про новий товар у боті</div>
+                </button>
+                <button type="button" class="toggle-btn" id="toggleIsTop" data-field="isTop">
+                    Топовий товар
+                    <div class="toggle-btn-desc">Товар буде на головній сторінці міні-сайту</div>
+                </button>
+            </div>
+            <input type="hidden" name="sendToBot" id="sendToBot" value="0">
+            <input type="hidden" name="isTop" id="isTop" value="0">
         </div>
 
         <!-- 7. Media Upload -->
@@ -345,51 +467,40 @@
 
         <!-- 9. Action Buttons -->
         <div class="form-actions">
-            <button type="button" class="btn btn-cancel">Скасувати</button>
-            <button type="submit" class="btn btn-save"><i class="bi bi-save"></i> Зберегти</button>
             <button type="submit" name="saveAndAdd" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Зберегти і додати ще</button>
+            <button type="submit" class="btn btn-save"><i class="bi bi-save"></i> Зберегти і вийти</button>
+            <button type="button" class="btn btn-cancel">Скасувати</button>
         </div>
     </form>
 </div>
 
 <script>
-// Дані підкатегорій для кожної категорії
+// Дані підкатегорій (Верх/Низ на початку для одягу, +50% елементів)
 const SUBCATEGORIES = {
-    "Жіночий одяг": ["Футболки", "Лосини", "Сукні", "Блузки", "Светри", "Куртки", "Спідниці", "Шорти", "Джинси", "Спідня білизна"],
-    "Чоловічий одяг": ["Футболки", "Сорочки", "Джинси", "Шорти", "Куртки", "Светри", "Штани", "Піджаки", "Светшоти", "Поло"],
-    "Взуття та аксесуари": ["Взуття", "Сумки", "Годинники", "Ремені", "Прикраси", "Капелюхи", "Шарфи", "Шали", "Гаманці", "Окуляри"],
-    "Дитячий одяг": ["Футболки", "Сукні", "Штани", "Куртки", "Комбінезони", "Светри", "Шорти", "Спідниці", "Шапки", "Шкарпетки"]
+    "Жіночий одяг": ["Верх", "Низ", "Футболки", "Лосини", "Сукні", "Блузки", "Светри", "Куртки", "Спідниці", "Шорти", "Джинси", "Спідня білизна", "Плащі", "Топи", "Світшоти", "Брюки", "Кофти"],
+    "Чоловічий одяг": ["Верх", "Низ", "Футболки", "Сорочки", "Джинси", "Шорти", "Куртки", "Светри", "Штани", "Піджаки", "Светшоти", "Поло", "Плащі", "Світшоти", "Брюки", "Жилети"],
+    "Взуття та аксесуари": ["Взуття", "Сумки", "Годинники", "Ремені", "Прикраси", "Капелюхи", "Шарфи", "Шали", "Гаманці", "Окуляри", "Краватки", "Підтяжки", "Шарфи-пашміни", "Рюкзаки", "Косметички"],
+    "Дитячий одяг": ["Верх", "Низ", "Футболки", "Сукні", "Штани", "Куртки", "Комбінезони", "Светри", "Шорти", "Спідниці", "Шапки", "Шкарпетки", "Боді", "Піжами", "Костюми"]
 };
 
-// Матеріали (спільний список для одягу)
+// Матеріали
 const MATERIALS = ["Бавовна", "Поліестер", "Шерсть", "Шовк", "Джинса", "Трикотаж", "Віскоза", "Еластан", "Льон", "Кашемір", "Модал", "Нейлон", "Акрил", "Поліамід", "Штучний шовк", "Мікрофібра"];
 
-// Розміри та параметри за типом категорії
-const ATTRIBUTES = {
-    "women": {
-        sizes: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL", "4XL"],
-        eu: ["42", "44", "46", "48", "50", "52"],
-        lengths: ["Короткий", "Середній", "Довгий"],
-        material: MATERIALS
-    },
-    "men": {
-        sizes: ["XS", "S", "M", "L", "XL", "XXL", "3XL", "4XL"],
-        eu: ["44", "46", "48", "50", "52", "54"],
-        lengths: ["Короткий", "Середній", "Довгий"],
-        material: MATERIALS
-    },
-    "children": {
-        sizes: ["86", "92", "98", "104", "110", "116", "122", "128", "134", "140", "146", "152", "158"],
-        age: ["0-1 р", "1-2 р", "2-3 р", "3-4 р", "4-5 р", "5-6 р", "6-7 р", "8-9 р", "10-11 р", "12+ р"],
-        material: MATERIALS
-    },
-    "accessories": {
-        sizes: ["Один розмір", "S", "M", "L", "XL"],
-        shoe: ["35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
-        dimensions: ["Маленький", "Середній", "Великий"],
-        material: MATERIALS
-    }
-};
+// Країни виробники
+const COUNTRIES = ["Україна", "Китай", "Туреччина", "Бангладеш", "В'єтнам", "Індія", "Польща"];
+
+// Розміри буквами (XXS–5XL)
+const SIZES_LETTER = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL", "4XL", "5XL"];
+
+// Розміри EU (жін/чол)
+const SIZES_EU_W = ["38", "40", "42", "44", "46", "48", "50", "52"];
+const SIZES_EU_M = ["44", "46", "48", "50", "52", "54", "56"];
+
+// Розміри UA
+const SIZES_UA = ["42", "44", "46", "48", "50", "52", "54"];
+
+// Тип довжини
+const LENGTH_TYPES = ["Короткий", "Середній", "Довгий"];
 
 let selectedCategory = "Жіночий одяг";
 let selectedSubcategory = null;
@@ -445,87 +556,72 @@ function renderSubcategoryButtons() {
     renderAttributeButtons();
 }
 
+const SIZES_SHOE = ["35","36","37","38","39","40","41","42","43","44","45"];
+const SIZES_CHILD = ["86","92","98","104","110","116","122","128","134","140","146","152","158"];
+const AGE_CHILD = ["0-1 р","1-2 р","2-3 р","3-4 р","4-5 р","5-6 р","6-7 р","8-9 р","10-11 р","12+ р"];
+const SIZES_ACC = ["Один розмір","S","M","L","XL"];
+
 function renderAttributeButtons() {
     const type = getCategoryType(selectedCategory);
-    const attrs = ATTRIBUTES[type];
-    const container = document.getElementById("attributeButtons");
-    const labelEl = document.getElementById("attributesLabel");
-
-    if (!attrs) {
-        container.innerHTML = "";
-        return;
-    }
-
-    const sub = selectedSubcategory || document.getElementById("customSubcategory").value;
+    const sub = (selectedSubcategory || document.getElementById("customSubcategory").value || "").trim();
     const isShoe = (sub === "Взуття" || sub === "взуття") && type === "accessories";
 
-    let buttons = [];
+    document.getElementById("fitBtns").innerHTML = '<button type="button" class="quick-btn attr-btn" data-attr="fit" data-val="full">Повномірне</button><button type="button" class="quick-btn attr-btn" data-attr="fit" data-val="small">Маломірне</button>';
+
+    let sizeLetterArr = SIZES_LETTER, sizeEuArr = type === "men" ? SIZES_EU_M : SIZES_EU_W;
     if (type === "accessories" && isShoe) {
-        buttons = attrs.shoe || attrs.sizes;
-        labelEl.textContent = "Розмір взуття";
+        sizeLetterArr = SIZES_SHOE;
+        document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір взуття";
+        document.getElementById("sizeEuBlock").style.display = "none";
+        document.getElementById("sizeUaBlock").style.display = "none";
+    } else if (type === "accessories") {
+        sizeLetterArr = SIZES_ACC;
+        document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір";
+        document.getElementById("sizeEuBlock").style.display = "none";
+        document.getElementById("sizeUaBlock").style.display = "none";
     } else if (type === "children") {
-        buttons = [...attrs.sizes];
-        if (attrs.age) buttons = buttons.concat(attrs.age);
-        labelEl.textContent = "Розмір / вік";
+        sizeLetterArr = SIZES_CHILD.concat(AGE_CHILD);
+        document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір / вік";
+        document.getElementById("sizeEuBlock").style.display = "none";
+        document.getElementById("sizeUaBlock").style.display = "none";
     } else {
-        buttons = [...attrs.sizes];
-        if (type !== "children") buttons = buttons.concat(attrs.eu || []);
-        labelEl.textContent = "Розмір";
+        document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір (буквами)";
+        document.getElementById("sizeEuBlock").style.display = "block";
+        document.getElementById("sizeUaBlock").style.display = "block";
     }
 
-    let html = buttons.map(b => `
-        <button type="button" class="quick-btn attr-btn" data-attr="size" data-val="${b}">${b}</button>
-    `).join("");
+    document.querySelector(".attr-measures").style.display = (type === "accessories" || type === "children") ? "none" : "block";
 
-    if (attrs.lengths && type !== "children") {
-        html += attrs.lengths.map(l => `
-            <button type="button" class="quick-btn attr-btn" data-attr="length" data-val="${l}">${l}</button>
-        `).join("");
-    }
-    if (attrs.material) {
-        html += attrs.material.map(m => `
-            <button type="button" class="quick-btn attr-btn material-btn" data-attr="material" data-val="${m}">${m}</button>
-        `).join("");
-    }
-    if (attrs.dimensions && type === "accessories") {
-        html += attrs.dimensions.map(d => `
-            <button type="button" class="quick-btn attr-btn" data-attr="dim" data-val="${d}">${d}</button>
-        `).join("");
-    }
+    document.getElementById("sizeLetterBtns").innerHTML = sizeLetterArr.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="sizeLetter" data-val="${v}">${v}</button>`).join("");
+    document.getElementById("sizeEuBtns").innerHTML = sizeEuArr.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="sizeEu" data-val="${v}">${v}</button>`).join("");
+    document.getElementById("sizeUaBtns").innerHTML = SIZES_UA.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="sizeUa" data-val="${v}">${v}</button>`).join("");
+    document.getElementById("lengthTypeBtns").innerHTML = LENGTH_TYPES.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="lengthType" data-val="${v}">${v}</button>`).join("");
+    document.getElementById("countryBtns").innerHTML = COUNTRIES.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="country" data-val="${v}">${v}</button>`).join("");
+    document.getElementById("materialBtns").innerHTML = MATERIALS.map(m => `<button type="button" class="quick-btn attr-btn material-btn" data-attr="material" data-val="${m}">${m}</button>`).join("");
 
-    container.innerHTML = html;
-
-    selectedMaterials.forEach(m => {
-        const btn = container.querySelector(`.material-btn[data-val="${m}"]`);
-        if (btn) btn.classList.add("active");
-    });
-
-    container.querySelectorAll(".attr-btn").forEach(btn => {
+    document.querySelectorAll("#attributesGroup .attr-btn").forEach(btn => {
         btn.onclick = function() {
             const attr = this.dataset.attr;
             const val = this.dataset.val;
             if (attr === "material") {
                 this.classList.toggle("active");
-                if (this.classList.contains("active")) {
-                    selectedMaterials.push(val);
-                } else {
-                    selectedMaterials = selectedMaterials.filter(m => m !== val);
-                    delete selectedMaterialPercentages[val];
-                }
+                if (this.classList.contains("active")) selectedMaterials.push(val);
+                else { selectedMaterials = selectedMaterials.filter(x => x !== val); delete selectedMaterialPercentages[val]; }
                 renderMaterialPercentages();
             } else {
-                const existing = container.querySelector(`.attr-btn[data-attr="${attr}"].active`);
-                if (existing) existing.classList.remove("active");
-                this.classList.toggle("active");
-                if (this.classList.contains("active")) {
-                    selectedAttributes[attr] = val;
-                } else {
-                    delete selectedAttributes[attr];
-                }
+                const grp = this.closest(".attr-subblock");
+                grp.querySelectorAll(".attr-btn").forEach(b => b.classList.remove("active"));
+                this.classList.add("active");
+                selectedAttributes[attr] = val;
             }
         };
     });
 
+    ["fit","sizeLetter","sizeEu","sizeUa","lengthType","country"].forEach(attr => {
+        const v = selectedAttributes[attr];
+        if (v) document.querySelector(`#attributesGroup .attr-btn[data-attr="${attr}"][data-val="${v}"]`)?.classList.add("active");
+    });
+    selectedMaterials.forEach(m => document.querySelector(`.material-btn[data-val="${m}"]`)?.classList.add("active"));
     renderMaterialPercentages();
 }
 
@@ -573,6 +669,12 @@ document.getElementById("productForm").addEventListener("submit", function(e) {
     formData.set("attributes", JSON.stringify(selectedAttributes));
     formData.set("materials", JSON.stringify(selectedMaterials));
     formData.set("materialPercentages", JSON.stringify(selectedMaterialPercentages));
+    formData.set("measures", JSON.stringify({
+        chest: document.getElementById("measureChest")?.value || "",
+        waist: document.getElementById("measureWaist")?.value || "",
+        hips: document.getElementById("measureHips")?.value || "",
+        lengthCm: document.getElementById("lengthCm")?.value || ""
+    }));
 
     // Зчитуємо актуальні відсотки з полів
     document.querySelectorAll("#materialPercentagesList input").forEach(inp => {
@@ -604,6 +706,15 @@ document.getElementById("productForm").addEventListener("submit", function(e) {
 
 document.querySelector(".btn-cancel").addEventListener("click", function() {
     if (confirm("Скасувати?")) window.history.back();
+});
+
+document.getElementById("toggleSendToBot").addEventListener("click", function() {
+    this.classList.toggle("active");
+    document.getElementById("sendToBot").value = this.classList.contains("active") ? "1" : "0";
+});
+document.getElementById("toggleIsTop").addEventListener("click", function() {
+    this.classList.toggle("active");
+    document.getElementById("isTop").value = this.classList.contains("active") ? "1" : "0";
 });
 
 renderSubcategoryButtons();
