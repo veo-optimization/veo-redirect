@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="google" content="notranslate">
-    <title>Create New Product</title>
+    <title>Створити новий товар</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         * { box-sizing: border-box; }
@@ -142,7 +142,7 @@
         }
         .btn {
             flex: 1;
-            min-width: 120px;
+            min-width: 100px;
             padding: 12px 16px;
             border-radius: 10px;
             font-size: 0.95rem;
@@ -162,55 +162,156 @@
             color: #fff;
         }
         .btn-save:hover { background: #6d28d9; }
+        .btn-primary {
+            background: #7c3aed;
+            color: #fff;
+            flex: 2;
+            min-width: 180px;
+        }
+        .btn-primary:hover { background: #6d28d9; }
         .btn-secondary {
             background: #e5e5e5;
             color: #555;
         }
         .btn-secondary:hover { background: #d5d5d5; }
         .btn i { margin-right: 6px; }
+        /* Quick buttons */
+        .quick-buttons-wrap {
+            margin-top: 8px;
+        }
+        .quick-buttons-label {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        .quick-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .quick-btn {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            background: #fff;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quick-btn:hover {
+            border-color: #7c3aed;
+            background: rgba(124, 58, 237, 0.08);
+            color: #7c3aed;
+        }
+        .quick-btn.active {
+            border-color: #7c3aed;
+            background: #7c3aed;
+            color: #fff;
+        }
+        .quick-btn.other-btn {
+            border-style: dashed;
+        }
+        .custom-input-wrap {
+            margin-top: 10px;
+            display: none;
+        }
+        .custom-input-wrap.visible {
+            display: block;
+        }
+        .material-percent-wrap {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            border: 1px solid #eee;
+        }
+        .material-percent-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .material-percent-row:last-child { margin-bottom: 0; }
+        .material-percent-row span {
+            flex: 1;
+            font-size: 0.9rem;
+            color: #444;
+        }
+        .material-percent-row input {
+            width: 70px;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            text-align: center;
+        }
+        .material-percent-row input:focus {
+            outline: none;
+            border-color: #7c3aed;
+        }
     </style>
 </head>
 <body>
 
 <div class="form-container">
     <header class="page-header">
-        <h1 class="page-title">Create New Product</h1>
+        <h1 class="page-title">Створити новий товар</h1>
     </header>
 
     <form id="productForm" action="#" method="post">
         <!-- 1. SKU -->
         <div class="form-group">
-            <label for="sku">SKU</label>
+            <label for="sku">Код (SKU)</label>
             <input type="text" id="sku" name="sku" class="form-input" value="8034" required>
         </div>
 
         <!-- 2. Product Name -->
         <div class="form-group">
-            <label for="productName">Product Name</label>
+            <label for="productName">Назва товару</label>
             <input type="text" id="productName" name="productName" class="form-input" value="Футболка біла" required>
         </div>
 
         <!-- 3. Price & 4. Quantity -->
         <div class="form-row">
             <div class="form-group">
-                <label for="price">Price</label>
-                <input type="number" id="price" name="price" class="form-input" placeholder="Enter price" min="0" step="0.01">
+                <label for="price">Ціна (грн)</label>
+                <input type="number" id="price" name="price" class="form-input" placeholder="Введіть ціну" min="0" step="0.01">
             </div>
             <div class="form-group">
-                <label for="quantity">Quantity</label>
-                <input type="number" id="quantity" name="quantity" class="form-input" placeholder="Enter quantity" min="0" step="1">
+                <label for="quantity">Кількість</label>
+                <input type="number" id="quantity" name="quantity" class="form-input" placeholder="Введіть кількість" min="0" step="1">
             </div>
         </div>
 
         <!-- 5. Category -->
         <div class="form-group">
-            <label for="category">Category</label>
+            <label for="category">Категорія</label>
             <select id="category" name="category" class="form-select">
                 <option value="Жіночий одяг">Жіночий одяг</option>
                 <option value="Чоловічий одяг">Чоловічий одяг</option>
                 <option value="Взуття та аксесуари">Взуття та аксесуари</option>
                 <option value="Дитячий одяг">Дитячий одяг</option>
             </select>
+        </div>
+
+        <!-- 5b. Subcategory quick buttons -->
+        <div class="form-group" id="subcategoryGroup">
+            <label class="quick-buttons-label">Підкатегорія</label>
+            <div id="subcategoryButtons" class="quick-buttons"></div>
+            <div id="customSubcategoryWrap" class="custom-input-wrap">
+                <input type="text" id="customSubcategory" class="form-input" placeholder="Введіть свою підкатегорію">
+            </div>
+        </div>
+
+        <!-- 5c. Size / attributes quick buttons -->
+        <div class="form-group" id="attributesGroup">
+            <label class="quick-buttons-label" id="attributesLabel">Розмір / параметри</label>
+            <div id="attributeButtons" class="quick-buttons"></div>
+            <div id="materialPercentagesWrap" class="material-percent-wrap custom-input-wrap">
+                <div class="quick-buttons-label">Склад (% матеріалу)</div>
+                <div id="materialPercentagesList"></div>
+            </div>
         </div>
 
         <!-- 6. Checkboxes -->
@@ -246,21 +347,266 @@
         <div class="form-actions">
             <button type="button" class="btn btn-cancel">Скасувати</button>
             <button type="submit" class="btn btn-save"><i class="bi bi-save"></i> Зберегти</button>
-            <button type="button" class="btn btn-secondary"><i class="bi bi-plus"></i> Додати ще</button>
-            <button type="submit" name="saveAndAdd" class="btn btn-save">Зберегти і додати ще</button>
+            <button type="submit" name="saveAndAdd" class="btn btn-primary"><i class="bi bi-plus-lg"></i> Зберегти і додати ще</button>
         </div>
     </form>
 </div>
 
 <script>
-// UI prototype — backend logic will be implemented later
-document.getElementById('productForm').addEventListener('submit', function(e) {
+// Дані підкатегорій для кожної категорії
+const SUBCATEGORIES = {
+    "Жіночий одяг": ["Футболки", "Лосини", "Сукні", "Блузки", "Светри", "Куртки", "Спідниці", "Шорти", "Джинси", "Спідня білизна"],
+    "Чоловічий одяг": ["Футболки", "Сорочки", "Джинси", "Шорти", "Куртки", "Светри", "Штани", "Піджаки", "Светшоти", "Поло"],
+    "Взуття та аксесуари": ["Взуття", "Сумки", "Годинники", "Ремені", "Прикраси", "Капелюхи", "Шарфи", "Шали", "Гаманці", "Окуляри"],
+    "Дитячий одяг": ["Футболки", "Сукні", "Штани", "Куртки", "Комбінезони", "Светри", "Шорти", "Спідниці", "Шапки", "Шкарпетки"]
+};
+
+// Матеріали (спільний список для одягу)
+const MATERIALS = ["Бавовна", "Поліестер", "Шерсть", "Шовк", "Джинса", "Трикотаж", "Віскоза", "Еластан", "Льон", "Кашемір", "Модал", "Нейлон", "Акрил", "Поліамід", "Штучний шовк", "Мікрофібра"];
+
+// Розміри та параметри за типом категорії
+const ATTRIBUTES = {
+    "women": {
+        sizes: ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL", "4XL"],
+        eu: ["42", "44", "46", "48", "50", "52"],
+        lengths: ["Короткий", "Середній", "Довгий"],
+        material: MATERIALS
+    },
+    "men": {
+        sizes: ["XS", "S", "M", "L", "XL", "XXL", "3XL", "4XL"],
+        eu: ["44", "46", "48", "50", "52", "54"],
+        lengths: ["Короткий", "Середній", "Довгий"],
+        material: MATERIALS
+    },
+    "children": {
+        sizes: ["86", "92", "98", "104", "110", "116", "122", "128", "134", "140", "146", "152", "158"],
+        age: ["0-1 р", "1-2 р", "2-3 р", "3-4 р", "4-5 р", "5-6 р", "6-7 р", "8-9 р", "10-11 р", "12+ р"],
+        material: MATERIALS
+    },
+    "accessories": {
+        sizes: ["Один розмір", "S", "M", "L", "XL"],
+        shoe: ["35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45"],
+        dimensions: ["Маленький", "Середній", "Великий"],
+        material: MATERIALS
+    }
+};
+
+let selectedCategory = "Жіночий одяг";
+let selectedSubcategory = null;
+let selectedAttributes = {};
+let selectedMaterials = [];
+let selectedMaterialPercentages = {};
+
+function getCategoryType(cat) {
+    if (cat === "Жіночий одяг") return "women";
+    if (cat === "Чоловічий одяг") return "men";
+    if (cat === "Дитячий одяг") return "children";
+    return "accessories";
+}
+
+function renderSubcategoryButtons() {
+    const cat = document.getElementById("category").value;
+    selectedCategory = cat;
+    selectedSubcategory = null;
+    selectedMaterials = [];
+    selectedMaterialPercentages = {};
+    const subs = SUBCATEGORIES[cat] || [];
+    const container = document.getElementById("subcategoryButtons");
+    const customWrap = document.getElementById("customSubcategoryWrap");
+    const customInput = document.getElementById("customSubcategory");
+    customWrap.classList.remove("visible");
+    customInput.value = "";
+
+    let html = subs.map(s => `
+        <button type="button" class="quick-btn" data-sub="${s}">${s}</button>
+    `).join("");
+    html += `<button type="button" class="quick-btn other-btn" data-sub="other">Інша</button>`;
+    html += `<button type="button" class="quick-btn" data-sub="">Без підкатегорії</button>`;
+    container.innerHTML = html;
+
+    container.querySelectorAll(".quick-btn").forEach(btn => {
+        btn.onclick = function() {
+            container.querySelectorAll(".quick-btn").forEach(b => b.classList.remove("active"));
+            this.classList.add("active");
+            const val = this.dataset.sub;
+            if (val === "other") {
+                customWrap.classList.add("visible");
+                customInput.focus();
+                selectedSubcategory = null;
+            } else {
+                customWrap.classList.remove("visible");
+                customInput.value = "";
+                selectedSubcategory = val || null;
+            }
+            renderAttributeButtons();
+        };
+    });
+
+    renderAttributeButtons();
+}
+
+function renderAttributeButtons() {
+    const type = getCategoryType(selectedCategory);
+    const attrs = ATTRIBUTES[type];
+    const container = document.getElementById("attributeButtons");
+    const labelEl = document.getElementById("attributesLabel");
+
+    if (!attrs) {
+        container.innerHTML = "";
+        return;
+    }
+
+    const sub = selectedSubcategory || document.getElementById("customSubcategory").value;
+    const isShoe = (sub === "Взуття" || sub === "взуття") && type === "accessories";
+
+    let buttons = [];
+    if (type === "accessories" && isShoe) {
+        buttons = attrs.shoe || attrs.sizes;
+        labelEl.textContent = "Розмір взуття";
+    } else if (type === "children") {
+        buttons = [...attrs.sizes];
+        if (attrs.age) buttons = buttons.concat(attrs.age);
+        labelEl.textContent = "Розмір / вік";
+    } else {
+        buttons = [...attrs.sizes];
+        if (type !== "children") buttons = buttons.concat(attrs.eu || []);
+        labelEl.textContent = "Розмір";
+    }
+
+    let html = buttons.map(b => `
+        <button type="button" class="quick-btn attr-btn" data-attr="size" data-val="${b}">${b}</button>
+    `).join("");
+
+    if (attrs.lengths && type !== "children") {
+        html += attrs.lengths.map(l => `
+            <button type="button" class="quick-btn attr-btn" data-attr="length" data-val="${l}">${l}</button>
+        `).join("");
+    }
+    if (attrs.material) {
+        html += attrs.material.map(m => `
+            <button type="button" class="quick-btn attr-btn material-btn" data-attr="material" data-val="${m}">${m}</button>
+        `).join("");
+    }
+    if (attrs.dimensions && type === "accessories") {
+        html += attrs.dimensions.map(d => `
+            <button type="button" class="quick-btn attr-btn" data-attr="dim" data-val="${d}">${d}</button>
+        `).join("");
+    }
+
+    container.innerHTML = html;
+
+    selectedMaterials.forEach(m => {
+        const btn = container.querySelector(`.material-btn[data-val="${m}"]`);
+        if (btn) btn.classList.add("active");
+    });
+
+    container.querySelectorAll(".attr-btn").forEach(btn => {
+        btn.onclick = function() {
+            const attr = this.dataset.attr;
+            const val = this.dataset.val;
+            if (attr === "material") {
+                this.classList.toggle("active");
+                if (this.classList.contains("active")) {
+                    selectedMaterials.push(val);
+                } else {
+                    selectedMaterials = selectedMaterials.filter(m => m !== val);
+                    delete selectedMaterialPercentages[val];
+                }
+                renderMaterialPercentages();
+            } else {
+                const existing = container.querySelector(`.attr-btn[data-attr="${attr}"].active`);
+                if (existing) existing.classList.remove("active");
+                this.classList.toggle("active");
+                if (this.classList.contains("active")) {
+                    selectedAttributes[attr] = val;
+                } else {
+                    delete selectedAttributes[attr];
+                }
+            }
+        };
+    });
+
+    renderMaterialPercentages();
+}
+
+function renderMaterialPercentages() {
+    const wrap = document.getElementById("materialPercentagesWrap");
+    const list = document.getElementById("materialPercentagesList");
+    if (!wrap || !list) return;
+
+    if (selectedMaterials.length === 0) {
+        wrap.classList.remove("visible");
+        list.innerHTML = "";
+        return;
+    }
+
+    wrap.classList.add("visible");
+    list.innerHTML = selectedMaterials.map(m => {
+        const pct = selectedMaterialPercentages[m] ?? (selectedMaterials.length === 1 ? 100 : "");
+        return `
+            <div class="material-percent-row" data-material="${m}">
+                <span>${m}</span>
+                <input type="number" min="0" max="100" placeholder="%" value="${pct}" data-material="${m}">
+            </div>
+        `;
+    }).join("");
+
+    list.querySelectorAll("input").forEach(inp => {
+        inp.addEventListener("input", function() {
+            const val = parseInt(this.value, 10);
+            selectedMaterialPercentages[this.dataset.material] = isNaN(val) ? null : val;
+        });
+    });
+}
+
+document.getElementById("category").addEventListener("change", renderSubcategoryButtons);
+document.getElementById("customSubcategory").addEventListener("input", function() {
+    selectedSubcategory = this.value.trim() || null;
+    renderAttributeButtons();
+});
+
+document.getElementById("productForm").addEventListener("submit", function(e) {
     e.preventDefault();
-    console.log('Form submit (prototype)');
+    const sub = selectedSubcategory || document.getElementById("customSubcategory").value || "";
+    const formData = new FormData(this);
+    formData.set("subcategory", sub);
+    formData.set("attributes", JSON.stringify(selectedAttributes));
+    formData.set("materials", JSON.stringify(selectedMaterials));
+    formData.set("materialPercentages", JSON.stringify(selectedMaterialPercentages));
+
+    // Зчитуємо актуальні відсотки з полів
+    document.querySelectorAll("#materialPercentagesList input").forEach(inp => {
+        const val = parseInt(inp.value, 10);
+        if (!isNaN(val)) selectedMaterialPercentages[inp.dataset.material] = val;
+    });
+
+    // Формуємо рядок складу для опису
+    const compositionParts = [];
+    selectedMaterials.forEach(m => {
+        const pct = selectedMaterialPercentages[m];
+        if (pct != null && pct > 0) {
+            compositionParts.push(`${pct}% ${m.toLowerCase()}`);
+        } else if (selectedMaterials.length === 1) {
+            compositionParts.push(`100% ${m.toLowerCase()}`);
+        }
+    });
+    if (compositionParts.length > 0) {
+        const compositionStr = "Склад: " + compositionParts.join(", ");
+        const descEl = document.getElementById("description");
+        const currentDesc = descEl.value.trim();
+        const newDesc = currentDesc ? currentDesc + "\n\n" + compositionStr : compositionStr;
+        descEl.value = newDesc;
+    }
+
+    const data = Object.fromEntries(formData);
+    console.log("Form data (prototype):", data);
 });
-document.querySelector('.btn-cancel').addEventListener('click', function() {
-    if (confirm('Скасувати?')) window.history.back();
+
+document.querySelector(".btn-cancel").addEventListener("click", function() {
+    if (confirm("Скасувати?")) window.history.back();
 });
+
+renderSubcategoryButtons();
 </script>
 </body>
 </html>
