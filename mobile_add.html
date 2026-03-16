@@ -1042,7 +1042,7 @@ function renderMeasures() {
     const block = document.querySelector(".attr-measures");
     const content = document.getElementById("measuresContent");
     if (!block || !content) return;
-    if (type === "accessories" || type === "children") { block.style.display = "none"; return; }
+    if (type === "accessories" || type === "children" || type === "footwear") { block.style.display = "none"; return; }
     block.style.display = "block";
     const isStretch = elasticity === "stretch";
     const labels = ["Груди","Талія/пояс","Стегна"];
