@@ -298,6 +298,11 @@
             grid-template-columns: 1fr 1fr;
             gap: 10px;
         }
+        .toggle-btn-wrap.toggle-btn-triple {
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        .toggle-btn-wrap.toggle-btn-triple .toggle-btn { min-height: 48px; }
+        .toggle-btn-wrap.toggle-btn-triple .toggle-btn-desc { font-size: 0.65rem; }
         .toggle-btn {
             min-height: 52px;
             padding: 12px 14px;
@@ -350,16 +355,20 @@
     </header>
 
     <form id="productForm" action="#" method="post">
-        <input type="hidden" name="createMode" id="createMode" value="clean">
+        <input type="hidden" name="createMode" id="createMode" value="mini">
         <div class="mode-selector-wrap">
-            <div class="toggle-btn-wrap toggle-btn-short">
+            <div class="toggle-btn-wrap toggle-btn-triple">
+                <button type="button" class="toggle-btn" id="modeMini" data-mode="mini">
+                    <span class="toggle-btn-main">Міні</span>
+                    <div class="toggle-btn-desc">SKU, назва, ціна, фото-відео, опис</div>
+                </button>
                 <button type="button" class="toggle-btn" id="modeClean" data-mode="clean">
-                    <span class="toggle-btn-main">Начисто</span>
-                    <div class="toggle-btn-desc">Створити новий товар з нуля</div>
+                    <span class="toggle-btn-main">Наново</span>
+                    <div class="toggle-btn-desc">Всі поля скидаються, все доступно</div>
                 </button>
                 <button type="button" class="toggle-btn" id="modeTemplate" data-mode="template">
-                    <span class="toggle-btn-main">Шаблон</span>
-                    <div class="toggle-btn-desc">Скопіювати з попереднього товару</div>
+                    <span class="toggle-btn-main">ДУБЛЬ</span>
+                    <div class="toggle-btn-desc">Копія попереднього товару</div>
                 </button>
             </div>
             <div class="mode-desc" id="modeDesc"></div>
@@ -378,17 +387,18 @@
         </div>
 
         <!-- 3. Price & 4. Quantity -->
-        <div class="form-row">
+        <div class="form-row" id="priceQuantityRow">
             <div class="form-group">
                 <label for="price">Ціна (грн)</label>
                 <input type="number" id="price" name="price" class="form-input" placeholder="Введіть ціну" min="0" step="0.01" inputmode="decimal">
             </div>
-            <div class="form-group">
+            <div class="form-group" id="quantityGroup">
                 <label for="quantity">Кількість</label>
                 <input type="number" id="quantity" name="quantity" class="form-input" placeholder="Введіть кількість" min="0" step="1" inputmode="numeric">
             </div>
         </div>
 
+        <div id="categoryParamsSection">
         <div class="form-section-title">Категорія та параметри</div>
         <!-- 5. Category -->
         <div class="form-group">
@@ -415,6 +425,10 @@
             <div class="attr-subblock" id="sizeLetterBlock">
                 <div class="quick-buttons-label">Розмір (буквами)</div>
                 <div id="sizeLetterBtns" class="quick-buttons"></div>
+            </div>
+            <div class="attr-subblock" id="ageChildBlock" style="display:none">
+                <div class="quick-buttons-label">Вік</div>
+                <div id="ageChildBtns" class="quick-buttons"></div>
             </div>
             <div class="attr-subblock" id="sizeEuBlock">
                 <div class="quick-buttons-label">Розмір EU</div>
@@ -460,10 +474,11 @@
                 <div id="materialPercentagesList"></div>
             </div>
         </div>
+        </div>
 
         <div class="form-section-title">Медіа та опис</div>
         <!-- 6. Toggle buttons -->
-        <div class="form-group">
+        <div class="form-group" id="toggleBtnsGroup">
             <div class="toggle-btn-wrap toggle-btn-short">
                 <button type="button" class="toggle-btn" id="toggleSendToBot" data-field="sendToBot">
                     <span class="toggle-btn-main">БОТ</span>
@@ -490,7 +505,7 @@
         </div>
 
         <!-- 8. Description -->
-        <div class="form-group">
+        <div class="form-group" id="descriptionGroup">
             <label for="description">Опис товару</label>
             <textarea id="description" name="description" class="form-textarea" placeholder="Опис товару..."></textarea>
         </div>
@@ -546,7 +561,7 @@ let selectedMaterials = [];
 let selectedMaterialPercentages = {};
 let selectedCustomCountry = "";
 let elasticity = null;
-let createMode = "clean"; // "clean" | "template"
+let createMode = "mini"; // "mini" | "clean" | "template"
 
 function getCategoryType(cat) {
     if (cat === "Жіночий одяг") return "women";
@@ -652,15 +667,69 @@ function applyTemplate() {
 function setCreateMode(mode) {
     createMode = mode;
     document.getElementById("createMode").value = mode;
+    document.getElementById("modeMini").classList.toggle("active", mode === "mini");
     document.getElementById("modeClean").classList.toggle("active", mode === "clean");
     document.getElementById("modeTemplate").classList.toggle("active", mode === "template");
     try { localStorage.setItem("mobile_add_createMode", mode); } catch (e) {}
     const desc = document.getElementById("modeDesc");
-    if (mode === "clean") {
-        desc.textContent = "Створення товару з порожньої форми.";
+    const catSection = document.getElementById("categoryParamsSection");
+    const descGroup = document.getElementById("descriptionGroup");
+    const quantityGroup = document.getElementById("quantityGroup");
+    const toggleBtnsGroup = document.getElementById("toggleBtnsGroup");
+    const priceQuantityRow = document.getElementById("priceQuantityRow");
+    if (mode === "mini") {
+        desc.textContent = "Лише SKU, назва, ціна товару, фото-відео та поле опису.";
+        if (catSection) catSection.style.display = "none";
+        if (descGroup) descGroup.style.display = "";
+        if (quantityGroup) quantityGroup.style.display = "none";
+        if (toggleBtnsGroup) toggleBtnsGroup.style.display = "none";
+        if (priceQuantityRow) priceQuantityRow.style.gridTemplateColumns = "1fr";
+    } else if (mode === "clean") {
+        desc.textContent = "Всі поля скидаються (окрім SKU). Усі параметри доступні для введення.";
+        if (catSection) catSection.style.display = "";
+        if (descGroup) descGroup.style.display = "";
+        if (quantityGroup) quantityGroup.style.display = "";
+        if (toggleBtnsGroup) toggleBtnsGroup.style.display = "";
+        if (priceQuantityRow) priceQuantityRow.style.gridTemplateColumns = "";
+        resetFormExceptSku();
     } else {
-        desc.textContent = "Новий товар створюється з попередніми налаштуваннями: ціна, назва, розміри, категорія, склад тощо. Змінюється лише порядковий номер і зникає фото-відео.";
+        desc.textContent = "Повна палітра характеристик, повторює попередні дані. SKU +1, фото-відео скидається.";
+        if (catSection) catSection.style.display = "";
+        if (descGroup) descGroup.style.display = "";
+        if (quantityGroup) quantityGroup.style.display = "";
+        if (toggleBtnsGroup) toggleBtnsGroup.style.display = "";
+        if (priceQuantityRow) priceQuantityRow.style.gridTemplateColumns = "";
+        applyTemplate();
     }
+}
+
+function resetFormExceptSku() {
+    document.getElementById("productName").value = "";
+    document.getElementById("price").value = "";
+    document.getElementById("quantity").value = "";
+    document.getElementById("category").value = "Жіночий одяг";
+    document.getElementById("customSubcategory").value = "";
+    document.getElementById("lengthCm").value = "";
+    document.getElementById("description").value = "";
+    document.getElementById("sendToBot").value = "0";
+    document.getElementById("isTop").value = "0";
+    document.getElementById("mediaInput").value = "";
+    document.getElementById("toggleSendToBot").classList.remove("active");
+    document.getElementById("toggleIsTop").classList.remove("active");
+    document.getElementById("customCountryWrap").classList.remove("visible");
+    document.getElementById("customCountry").value = "";
+    document.getElementById("customMaterialWrap").classList.remove("visible");
+    document.getElementById("customMaterialInput").value = "";
+    selectedCategory = "Жіночий одяг";
+    selectedSubcategory = null;
+    selectedTopBottom = [];
+    selectedAttributes = {};
+    selectedMaterials = [];
+    selectedMaterialPercentages = {};
+    selectedCustomCountry = "";
+    elasticity = null;
+    renderSubcategoryButtons();
+    renderAttributeButtons();
 }
 
 function renderSubcategoryButtons(keepSelection) {
@@ -679,6 +748,7 @@ function renderSubcategoryButtons(keepSelection) {
     if (!keepSelection) {
         customWrap.classList.remove("visible");
         customInput.value = "";
+        document.getElementById("customMaterialWrap")?.classList.remove("visible");
     }
 
     let html = subs.map(s => `
@@ -759,27 +829,37 @@ function renderAttributeButtons() {
     if (type === "accessories" && isShoe) {
         sizeLetterArr = SIZES_SHOE;
         document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір взуття";
+        document.getElementById("sizeLetterBlock").style.display = "block";
+        document.getElementById("ageChildBlock").style.display = "none";
         document.getElementById("sizeEuBlock").style.display = "none";
         document.getElementById("sizeUaBlock").style.display = "none";
     } else if (type === "accessories") {
         sizeLetterArr = SIZES_ACC;
         document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір";
+        document.getElementById("sizeLetterBlock").style.display = "block";
+        document.getElementById("ageChildBlock").style.display = "none";
         document.getElementById("sizeEuBlock").style.display = "none";
         document.getElementById("sizeUaBlock").style.display = "none";
     } else if (type === "children") {
-        sizeLetterArr = SIZES_CHILD.concat(AGE_CHILD);
-        document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір / вік";
+        sizeLetterArr = SIZES_CHILD;
+        document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір";
+        document.getElementById("sizeLetterBlock").style.display = "block";
+        document.getElementById("ageChildBlock").style.display = "block";
+        document.getElementById("ageChildBtns").innerHTML = AGE_CHILD.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="ageChild" data-val="${v}">${v}</button>`).join("");
         document.getElementById("sizeEuBlock").style.display = "none";
         document.getElementById("sizeUaBlock").style.display = "none";
     } else {
         document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір (буквами)";
+        document.getElementById("sizeLetterBlock").style.display = "block";
+        document.getElementById("ageChildBlock").style.display = "none";
         document.getElementById("sizeEuBlock").style.display = "block";
         document.getElementById("sizeUaBlock").style.display = "block";
     }
 
     document.querySelector(".attr-measures").style.display = (type === "accessories" || type === "children") ? "none" : "block";
 
-    document.getElementById("sizeLetterBtns").innerHTML = sizeLetterArr.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="sizeLetter" data-val="${v}">${v}</button>`).join("");
+    const sizeAttr = type === "children" ? "sizeChild" : "sizeLetter";
+    document.getElementById("sizeLetterBtns").innerHTML = sizeLetterArr.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="${sizeAttr}" data-val="${v}">${v}</button>`).join("");
     document.getElementById("sizeEuBtns").innerHTML = sizeEuArr.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="sizeEu" data-val="${v}">${v}</button>`).join("");
     document.getElementById("sizeUaBtns").innerHTML = SIZES_UA.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="sizeUa" data-val="${v}">${v}</button>`).join("");
     document.getElementById("lengthTypeBtns").innerHTML = LENGTH_TYPES.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="lengthType" data-val="${v}">${v}</button>`).join("");
@@ -796,8 +876,9 @@ function renderAttributeButtons() {
                 else { selectedMaterials = selectedMaterials.filter(x => x !== val); delete selectedMaterialPercentages[val]; }
                 renderMaterialPercentages();
             } else if (attr === "materialOther") {
-                document.getElementById("customMaterialWrap").classList.add("visible");
-                document.getElementById("customMaterialInput").focus();
+                const wrap = document.getElementById("customMaterialWrap");
+                wrap.classList.toggle("visible");
+                if (wrap.classList.contains("visible")) document.getElementById("customMaterialInput").focus();
             } else if (attr === "country") {
                 const grp = this.closest(".attr-subblock");
                 grp.querySelectorAll(".attr-btn[data-attr='country']").forEach(b => b.classList.remove("active"));
@@ -830,7 +911,7 @@ function renderAttributeButtons() {
     });
 
     if (elasticity) document.querySelector(`[data-attr="elasticity"][data-val="${elasticity}"]`)?.classList.add("active");
-    ["sizeLetter","sizeEu","sizeUa","lengthType"].forEach(attr => {
+    ["sizeLetter","sizeChild","ageChild","sizeEu","sizeUa","lengthType"].forEach(attr => {
         const v = selectedAttributes[attr];
         if (v) document.querySelector(`#attributesGroup .attr-btn[data-attr="${attr}"][data-val="${v}"]`)?.classList.add("active");
     });
@@ -847,7 +928,6 @@ function renderAttributeButtons() {
         }
     }
     selectedMaterials.forEach(m => document.querySelector(`.material-btn[data-val="${m}"]`)?.classList.add("active"));
-    document.getElementById("customMaterialWrap").classList.add("visible");
     renderMaterialPercentages();
     renderMeasures();
 }
@@ -904,8 +984,21 @@ function renderMaterialPercentages() {
 
     list.querySelectorAll("input").forEach(inp => {
         inp.addEventListener("input", function() {
-            const val = parseInt(this.value, 10);
-            selectedMaterialPercentages[this.dataset.material] = isNaN(val) ? null : val;
+            let val = parseInt(this.value, 10);
+            const mat = this.dataset.material;
+            let othersSum = 0;
+            list.querySelectorAll("input").forEach(other => {
+                if (other !== this) {
+                    const v = parseInt(other.value, 10);
+                    if (!isNaN(v)) othersSum += v;
+                }
+            });
+            const maxVal = Math.max(0, 100 - othersSum);
+            if (!isNaN(val) && val > maxVal) {
+                val = maxVal;
+                this.value = val === 0 ? "" : String(val);
+            }
+            selectedMaterialPercentages[mat] = isNaN(val) ? null : val;
         });
     });
 }
@@ -994,18 +1087,14 @@ document.getElementById("toggleIsTop").addEventListener("click", function() {
     document.getElementById("isTop").value = this.classList.contains("active") ? "1" : "0";
 });
 
+document.getElementById("modeMini").addEventListener("click", function() { setCreateMode("mini"); });
 document.getElementById("modeClean").addEventListener("click", function() { setCreateMode("clean"); });
-document.getElementById("modeTemplate").addEventListener("click", function() {
-    setCreateMode("template");
-    applyTemplate();
-});
+document.getElementById("modeTemplate").addEventListener("click", function() { setCreateMode("template"); });
 
-let savedMode = "clean";
-try { savedMode = localStorage.getItem("mobile_add_createMode") || "clean"; } catch (e) {}
+let savedMode = "mini";
+try { savedMode = localStorage.getItem("mobile_add_createMode") || "mini"; } catch (e) {}
 setCreateMode(savedMode);
-if (savedMode === "template") {
-    applyTemplate();
-} else {
+if (savedMode !== "template" && savedMode !== "clean") {
     renderSubcategoryButtons();
 }
 </script>
