@@ -406,7 +406,8 @@
             <select id="category" name="category" class="form-select">
                 <option value="Жіночий одяг">Жіночий одяг</option>
                 <option value="Чоловічий одяг">Чоловічий одяг</option>
-                <option value="Взуття та аксесуари">Взуття та аксесуари</option>
+                <option value="Взуття">Взуття</option>
+                <option value="Аксесуари">Аксесуари</option>
                 <option value="Дитячий одяг">Дитячий одяг</option>
             </select>
         </div>
@@ -438,7 +439,7 @@
                 <div class="quick-buttons-label">Розмір UA</div>
                 <div id="sizeUaBtns" class="quick-buttons"></div>
             </div>
-            <div class="attr-subblock">
+            <div class="attr-subblock" id="lengthTypeBlock">
                 <div class="quick-buttons-label">Тип: короткий / середній / довгий</div>
                 <div id="lengthTypeBtns" class="quick-buttons"></div>
             </div>
@@ -450,9 +451,13 @@
                 <div class="quick-buttons-label">Напівобхват, см</div>
                 <div id="measuresContent"></div>
             </div>
-            <div class="attr-subblock">
-                <div class="quick-buttons-label">Довжина, см</div>
+            <div class="attr-subblock" id="lengthBlock">
+                <div class="quick-buttons-label" id="length-label">Довжина, см</div>
                 <input type="number" id="lengthCm" class="form-input" placeholder="Довжина" min="0" inputmode="numeric">
+            </div>
+            <div class="attr-subblock" id="shoeTypeBlock" style="display:none">
+                <div class="quick-buttons-label">Тип взуття</div>
+                <div id="shoeTypeBtns" class="quick-buttons"></div>
             </div>
             <div class="attr-subblock">
                 <div class="quick-buttons-label">Країна виробник</div>
@@ -472,6 +477,18 @@
             <div id="materialPercentagesWrap" class="material-percent-wrap custom-input-wrap">
                 <div class="quick-buttons-label">Склад (% матеріалу)</div>
                 <div id="materialPercentagesList"></div>
+            </div>
+            <div class="attr-subblock" id="shoeSizeBlock" style="display:none">
+                <div class="quick-buttons-label">Розмір (міжнародний EU)</div>
+                <div id="shoeSizeEuBtns" class="quick-buttons"></div>
+            </div>
+            <div class="attr-subblock" id="shoeSizeUaBlock" style="display:none">
+                <div class="quick-buttons-label">Розмір (UA)</div>
+                <div id="shoeSizeUaBtns" class="quick-buttons"></div>
+            </div>
+            <div class="attr-subblock" id="insoleLengthBlock" style="display:none">
+                <div class="quick-buttons-label">Довжина устілки, см</div>
+                <input type="number" id="insoleLengthCm" class="form-input" placeholder="см" min="0" inputmode="numeric">
             </div>
         </div>
         </div>
@@ -528,9 +545,12 @@ const SUBCAT_BOTTOM = ["Лосини","Спідниці","Шорти","Джин�
 const SUBCATEGORIES = {
     "Жіночий одяг": ["Верх", "Низ", "Футболки", "Лосини", "Сукні", "Блузки", "Светри", "Куртки", "Спідниці", "Шорти", "Джинси", "Спідня білизна", "Плащі", "Топи", "Світшоти", "Брюки", "Кофти"],
     "Чоловічий одяг": ["Верх", "Низ", "Футболки", "Сорочки", "Джинси", "Шорти", "Куртки", "Светри", "Штани", "Піджаки", "Светшоти", "Поло", "Плащі", "Світшоти", "Брюки", "Жилети"],
-    "Взуття та аксесуари": ["Взуття", "Сумки", "Годинники", "Ремені", "Прикраси", "Капелюхи", "Шарфи", "Шали", "Гаманці", "Окуляри", "Краватки", "Підтяжки", "Шарфи-пашміни", "Рюкзаки", "Косметички"],
+    "Взуття": ["Жіноче", "Чоловіче", "Дитяче"],
+    "Аксесуари": ["Сумки", "Годинники", "Ремені", "Прикраси", "Капелюхи", "Шарфи", "Шали", "Гаманці", "Окуляри", "Краватки", "Підтяжки", "Шарфи-пашміни", "Рюкзаки", "Косметички"],
     "Дитячий одяг": ["Верх", "Низ", "Футболки", "Сукні", "Штани", "Куртки", "Комбінезони", "Светри", "Шорти", "Спідниці", "Шапки", "Шкарпетки", "Боді", "Піжами", "Костюми"]
 };
+
+const SHOE_TYPES = ["Туфлі", "Кросівки", "Черевики", "Сандалі", "Балетки", "Босоніжки", "Мокасини", "Лофери", "Угги", "Берці", "Боти", "Еспадрильї", "Капці", "Шльопанці"];
 
 // Матеріали (алфавіт) + шкіра, екошкіра
 const MATERIALS = ["Акрил", "Бавовна", "Віскоза", "Джинса", "Екошкіра", "Еластан", "Кашемір", "Льон", "Мікрофібра", "Модал", "Нейлон", "Поліамід", "Поліестер", "Трикотаж", "Шерсть", "Шкіра", "Шовк", "Штучний шовк"];
@@ -567,6 +587,7 @@ function getCategoryType(cat) {
     if (cat === "Жіночий одяг") return "women";
     if (cat === "Чоловічий одяг") return "men";
     if (cat === "Дитячий одяг") return "children";
+    if (cat === "Взуття") return "footwear";
     return "accessories";
 }
 
@@ -580,6 +601,8 @@ function saveTemplate() {
     const attrs = {...selectedAttributes};
     if (attrs.country === "other") attrs.country = document.getElementById("customCountry").value.trim() || "Інше";
     const measuresData = { elasticity };
+    const insoleEl = document.getElementById("insoleLengthCm");
+    if (insoleEl) measuresData.insoleLengthCm = insoleEl.value || "";
     document.querySelectorAll("#measuresContent input").forEach(inp => {
         const id = inp.dataset.id;
         if (!id) return;
@@ -600,6 +623,7 @@ function saveTemplate() {
         materialPercentages: {...selectedMaterialPercentages},
         measures: measuresData,
         lengthCm: document.getElementById("lengthCm").value,
+        insoleLengthCm: document.getElementById("insoleLengthCm")?.value || "",
         topBottom: [...selectedTopBottom],
         description: document.getElementById("description").value,
         sendToBot: document.getElementById("sendToBot").value,
@@ -616,13 +640,14 @@ function applyTemplate() {
     document.getElementById("productName").value = t.productName || "";
     document.getElementById("price").value = t.price || "";
     document.getElementById("quantity").value = t.quantity || "";
-    document.getElementById("category").value = t.category || "Жіночий одяг";
+    const savedCat = (t.category === "Взуття та аксесуари") ? "Аксесуари" : (t.category || "Жіночий одяг");
+    document.getElementById("category").value = savedCat;
     document.getElementById("customSubcategory").value = t.customSubcategory || "";
     document.getElementById("lengthCm").value = t.lengthCm || "";
     document.getElementById("description").value = t.description || "";
     document.getElementById("sendToBot").value = t.sendToBot || "0";
     document.getElementById("isTop").value = t.isTop || "0";
-    selectedCategory = t.category || "Жіночий одяг";
+    selectedCategory = savedCat;
     const savedSub = t.subcategory || "";
     const subs = SUBCATEGORIES[selectedCategory] || [];
     if (subs.includes(savedSub)) {
@@ -660,6 +685,8 @@ function applyTemplate() {
         else if (inp.dataset.m === "to") inp.value = m[id + "To"] || "";
         else inp.value = m[id] || "";
     });
+    const insoleEl = document.getElementById("insoleLengthCm");
+    if (insoleEl) insoleEl.value = t.insoleLengthCm || t.measures?.insoleLengthCm || "";
     document.getElementById("toggleSendToBot").classList.toggle("active", t.sendToBot === "1");
     document.getElementById("toggleIsTop").classList.toggle("active", t.isTop === "1");
 }
@@ -710,6 +737,8 @@ function resetFormExceptSku() {
     document.getElementById("category").value = "Жіночий одяг";
     document.getElementById("customSubcategory").value = "";
     document.getElementById("lengthCm").value = "";
+    const insoleEl = document.getElementById("insoleLengthCm");
+    if (insoleEl) insoleEl.value = "";
     document.getElementById("description").value = "";
     document.getElementById("sendToBot").value = "0";
     document.getElementById("isTop").value = "0";
@@ -812,6 +841,8 @@ function renderSubcategoryButtons(keepSelection) {
 }
 
 const SIZES_SHOE = ["35","36","37","38","39","40","41","42","43","44","45"];
+const SIZES_SHOE_EU = ["32","33","34","35","36","37","38","39","40","41","42","43","44","45","46"];
+const SIZES_SHOE_UA = ["32","33","34","35","36","37","38","39","40","41","42","43","44","45","46"];
 const SIZES_CHILD = ["86","92","98","104","110","116","122","128","134","140","146","152","158"];
 const AGE_CHILD = ["0-1 р","1-2 р","2-3 р","3-4 р","4-5 р","5-6 р","6-7 р","8-9 р","10-11 р","12+ р"];
 const SIZES_ACC = ["Один розмір","S","M","L","XL"];
@@ -820,8 +851,9 @@ function renderAttributeButtons() {
     const type = getCategoryType(selectedCategory);
     const sub = (selectedSubcategory || document.getElementById("customSubcategory").value || "").trim();
     const isShoe = (sub === "Взуття" || sub === "взуття") && type === "accessories";
+    const isFootwear = type === "footwear";
 
-    if (type === "accessories" || type === "children") { document.getElementById("elasticityGroup").style.display = "none"; elasticity = null; }
+    if (type === "accessories" || type === "children" || isFootwear) { document.getElementById("elasticityGroup").style.display = "none"; elasticity = null; }
     else document.getElementById("elasticityGroup").style.display = "block";
     document.getElementById("elasticityBtns").innerHTML = '<button type="button" class="quick-btn attr-btn" data-attr="elasticity" data-val="stretch">Стретч</button><button type="button" class="quick-btn attr-btn" data-attr="elasticity" data-val="noStretch">Не тягнеться</button>';
 
@@ -833,6 +865,12 @@ function renderAttributeButtons() {
         document.getElementById("ageChildBlock").style.display = "none";
         document.getElementById("sizeEuBlock").style.display = "none";
         document.getElementById("sizeUaBlock").style.display = "none";
+        document.getElementById("lengthTypeBlock").style.display = "none";
+        document.getElementById("shoeTypeBlock").style.display = "none";
+        document.getElementById("shoeSizeBlock").style.display = "none";
+        document.getElementById("shoeSizeUaBlock").style.display = "none";
+        document.getElementById("lengthBlock").style.display = "block";
+        document.getElementById("insoleLengthBlock").style.display = "none";
     } else if (type === "accessories") {
         sizeLetterArr = SIZES_ACC;
         document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір";
@@ -840,6 +878,12 @@ function renderAttributeButtons() {
         document.getElementById("ageChildBlock").style.display = "none";
         document.getElementById("sizeEuBlock").style.display = "none";
         document.getElementById("sizeUaBlock").style.display = "none";
+        document.getElementById("lengthTypeBlock").style.display = "none";
+        document.getElementById("shoeTypeBlock").style.display = "none";
+        document.getElementById("shoeSizeBlock").style.display = "none";
+        document.getElementById("shoeSizeUaBlock").style.display = "none";
+        document.getElementById("lengthBlock").style.display = "block";
+        document.getElementById("insoleLengthBlock").style.display = "none";
     } else if (type === "children") {
         sizeLetterArr = SIZES_CHILD;
         document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір";
@@ -848,15 +892,41 @@ function renderAttributeButtons() {
         document.getElementById("ageChildBtns").innerHTML = AGE_CHILD.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="ageChild" data-val="${v}">${v}</button>`).join("");
         document.getElementById("sizeEuBlock").style.display = "none";
         document.getElementById("sizeUaBlock").style.display = "none";
+        document.getElementById("lengthTypeBlock").style.display = "none";
+        document.getElementById("shoeTypeBlock").style.display = "none";
+        document.getElementById("shoeSizeBlock").style.display = "none";
+        document.getElementById("shoeSizeUaBlock").style.display = "none";
+        document.getElementById("lengthBlock").style.display = "block";
+        document.getElementById("insoleLengthBlock").style.display = "none";
+    } else if (isFootwear) {
+        document.getElementById("sizeLetterBlock").style.display = "none";
+        document.getElementById("ageChildBlock").style.display = "none";
+        document.getElementById("sizeEuBlock").style.display = "none";
+        document.getElementById("sizeUaBlock").style.display = "none";
+        document.getElementById("lengthTypeBlock").style.display = "none";
+        document.getElementById("shoeTypeBlock").style.display = "block";
+        document.getElementById("shoeTypeBtns").innerHTML = SHOE_TYPES.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="shoeType" data-val="${v}">${v}</button>`).join("");
+        document.getElementById("shoeSizeBlock").style.display = "block";
+        document.getElementById("shoeSizeEuBtns").innerHTML = SIZES_SHOE_EU.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="shoeSizeEu" data-val="${v}">${v}</button>`).join("");
+        document.getElementById("shoeSizeUaBlock").style.display = "block";
+        document.getElementById("shoeSizeUaBtns").innerHTML = SIZES_SHOE_UA.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="shoeSizeUa" data-val="${v}">${v}</button>`).join("");
+        document.getElementById("lengthBlock").style.display = "none";
+        document.getElementById("insoleLengthBlock").style.display = "block";
     } else {
         document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір (буквами)";
         document.getElementById("sizeLetterBlock").style.display = "block";
         document.getElementById("ageChildBlock").style.display = "none";
         document.getElementById("sizeEuBlock").style.display = "block";
         document.getElementById("sizeUaBlock").style.display = "block";
+        document.getElementById("lengthTypeBlock").style.display = "block";
+        document.getElementById("shoeTypeBlock").style.display = "none";
+        document.getElementById("shoeSizeBlock").style.display = "none";
+        document.getElementById("shoeSizeUaBlock").style.display = "none";
+        document.getElementById("lengthBlock").style.display = "block";
+        document.getElementById("insoleLengthBlock").style.display = "none";
     }
 
-    document.querySelector(".attr-measures").style.display = (type === "accessories" || type === "children") ? "none" : "block";
+    document.querySelector(".attr-measures").style.display = (type === "accessories" || type === "children" || isFootwear) ? "none" : "block";
 
     const sizeAttr = type === "children" ? "sizeChild" : "sizeLetter";
     document.getElementById("sizeLetterBtns").innerHTML = sizeLetterArr.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="${sizeAttr}" data-val="${v}">${v}</button>`).join("");
@@ -911,7 +981,7 @@ function renderAttributeButtons() {
     });
 
     if (elasticity) document.querySelector(`[data-attr="elasticity"][data-val="${elasticity}"]`)?.classList.add("active");
-    ["sizeLetter","sizeChild","ageChild","sizeEu","sizeUa","lengthType"].forEach(attr => {
+    ["sizeLetter","sizeChild","ageChild","sizeEu","sizeUa","lengthType","shoeType","shoeSizeEu","shoeSizeUa"].forEach(attr => {
         const v = selectedAttributes[attr];
         if (v) document.querySelector(`#attributesGroup .attr-btn[data-attr="${attr}"][data-val="${v}"]`)?.classList.add("active");
     });
@@ -1041,6 +1111,7 @@ document.getElementById("productForm").addEventListener("submit", function(e) {
         else measuresData[id] = inp.value || "";
     });
     measuresData.lengthCm = document.getElementById("lengthCm")?.value || "";
+    measuresData.insoleLengthCm = document.getElementById("insoleLengthCm")?.value || "";
     formData.set("measures", JSON.stringify(measuresData));
     formData.set("topBottom", JSON.stringify(selectedTopBottom));
 
