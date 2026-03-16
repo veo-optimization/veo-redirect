@@ -545,7 +545,10 @@ const SUBCATEGORIES = {
     "Дитячий одяг": ["Верх", "Низ", "Футболки", "Сукні", "Штани", "Куртки", "Комбінезони", "Светри", "Шорти", "Спідниці", "Шапки", "Шкарпетки", "Боді", "Піжами", "Костюми"]
 };
 
-const SHOE_TYPES = ["Туфлі", "Кросівки", "Черевики", "Сандалі", "Балетки", "Босоніжки", "Мокасини", "Лофери", "Угги", "Берці", "Боти", "Еспадрильї", "Капці", "Шльопанці"];
+// Типи взуття за підкатегорією
+const SHOE_TYPES_WOMEN = ["Туфлі", "Балетки", "Босоніжки", "Сандалі", "Лофери", "Черевики", "Кросівки", "Мокасини", "Угги", "Боти", "Еспадрильї", "Капці", "Шльопанці", "Пінетки"];
+const SHOE_TYPES_MEN = ["Туфлі", "Кросівки", "Черевики", "Мокасини", "Лофери", "Берці", "Боти", "Сандалі", "Топсайдери", "Угги", "Капці", "Шльопанці", "Череді"];
+const SHOE_TYPES_CHILD = ["Кросівки", "Сандалі", "Балетки", "Черевики", "Тапочки", "Шльопанці", "Боти", "Мокасини", "Пінетки"];
 
 // Матеріали (алфавіт) + шкіра, екошкіра
 const MATERIALS = ["Акрил", "Бавовна", "Віскоза", "Джинса", "Екошкіра", "Еластан", "Кашемір", "Льон", "Мікрофібра", "Модал", "Нейлон", "Поліамід", "Поліестер", "Трикотаж", "Шерсть", "Шкіра", "Шовк", "Штучний шовк"];
@@ -672,7 +675,8 @@ function applyTemplate() {
         document.getElementById("customCountry").value = savedCountry;
     }
     const savedShoeType = t.attributes?.shoeType || t.customShoeType || "";
-    if (SHOE_TYPES.includes(savedShoeType)) {
+    const allShoeTypes = [...SHOE_TYPES_WOMEN, ...SHOE_TYPES_MEN, ...SHOE_TYPES_CHILD];
+    if (allShoeTypes.includes(savedShoeType)) {
         selectedAttributes.shoeType = savedShoeType;
         selectedCustomShoeType = "";
     } else if (savedShoeType) {
@@ -918,7 +922,8 @@ function renderAttributeButtons() {
         document.getElementById("sizeUaBlock").style.display = "none";
         document.getElementById("lengthTypeBlock").style.display = "none";
         document.getElementById("shoeTypeBlock").style.display = "block";
-        document.getElementById("shoeTypeBtns").innerHTML = SHOE_TYPES.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="shoeType" data-val="${v}">${v}</button>`).join("") + `<button type="button" class="quick-btn other-btn attr-btn" data-attr="shoeType" data-val="other">Інше</button>`;
+        const shoeTypesArr = sub === "Жіноче" ? SHOE_TYPES_WOMEN : sub === "Чоловіче" ? SHOE_TYPES_MEN : sub === "Дитяче" ? SHOE_TYPES_CHILD : SHOE_TYPES_WOMEN;
+        document.getElementById("shoeTypeBtns").innerHTML = shoeTypesArr.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="shoeType" data-val="${v}">${v}</button>`).join("") + `<button type="button" class="quick-btn other-btn attr-btn" data-attr="shoeType" data-val="other">Інше</button>`;
         document.getElementById("shoeSizeBlock").style.display = "block";
         document.getElementById("shoeSizeEuBtns").innerHTML = SIZES_SHOE_EU.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="shoeSizeEu" data-val="${v}">${v}</button>`).join("");
         document.getElementById("shoeSizeUaBlock").style.display = "block";
