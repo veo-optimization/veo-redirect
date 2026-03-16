@@ -357,19 +357,11 @@
     <form id="productForm" action="#" method="post">
         <input type="hidden" name="createMode" id="createMode" value="mini">
         <div class="mode-selector-wrap">
+            <div class="quick-buttons-label" style="margin-bottom:10px">Оберіть режим публікації товару</div>
             <div class="toggle-btn-wrap toggle-btn-triple">
-                <button type="button" class="toggle-btn" id="modeMini" data-mode="mini">
-                    <span class="toggle-btn-main">Міні</span>
-                    <div class="toggle-btn-desc">SKU, назва, ціна, фото-відео, опис</div>
-                </button>
-                <button type="button" class="toggle-btn" id="modeClean" data-mode="clean">
-                    <span class="toggle-btn-main">Наново</span>
-                    <div class="toggle-btn-desc">Всі поля скидаються, все доступно</div>
-                </button>
-                <button type="button" class="toggle-btn" id="modeTemplate" data-mode="template">
-                    <span class="toggle-btn-main">ДУБЛЬ</span>
-                    <div class="toggle-btn-desc">Копія попереднього товару</div>
-                </button>
+                <button type="button" class="toggle-btn" id="modeMini" data-mode="mini"><span class="toggle-btn-main">МІНІ</span></button>
+                <button type="button" class="toggle-btn" id="modeClean" data-mode="clean"><span class="toggle-btn-main">НОВЕ</span></button>
+                <button type="button" class="toggle-btn" id="modeTemplate" data-mode="template"><span class="toggle-btn-main">ДУБЛЬ</span></button>
             </div>
             <div class="mode-desc" id="modeDesc"></div>
         </div>
@@ -458,6 +450,9 @@
             <div class="attr-subblock" id="shoeTypeBlock" style="display:none">
                 <div class="quick-buttons-label">Тип взуття</div>
                 <div id="shoeTypeBtns" class="quick-buttons"></div>
+                <div id="customShoeTypeWrap" class="custom-input-wrap">
+                    <input type="text" id="customShoeType" class="form-input" placeholder="Введіть свій тип взуття">
+                </div>
             </div>
             <div class="attr-subblock">
                 <div class="quick-buttons-label">Країна виробник</div>
@@ -555,6 +550,9 @@ const SHOE_TYPES = ["Туфлі", "Кросівки", "Черевики", "Са�
 // Матеріали (алфавіт) + шкіра, екошкіра
 const MATERIALS = ["Акрил", "Бавовна", "Віскоза", "Джинса", "Екошкіра", "Еластан", "Кашемір", "Льон", "Мікрофібра", "Модал", "Нейлон", "Поліамід", "Поліестер", "Трикотаж", "Шерсть", "Шкіра", "Шовк", "Штучний шовк"];
 
+// Склад для взуття (поліуретан, шкіра, екошкіра, готекс та ін.)
+const MATERIALS_FOOTWEAR = ["Поліуретан", "Шкіра", "Екошкіра", "Готекс", "Нубук", "Замша", "Мікрофібра", "Нейлон", "Текстиль", "Поліестер", "Штучна шкіра", "Резина", "ЕВА", "Термопластична резина"];
+
 // Країни виробники (алфавіт)
 const COUNTRIES = ["Англія", "Бангладеш", "В'єтнам", "Індія", "Іспанія", "Італія", "Китай", "Німеччина", "Польща", "Португалія", "США", "Туреччина", "Україна", "Франція"];
 
@@ -580,6 +578,7 @@ let selectedAttributes = {};
 let selectedMaterials = [];
 let selectedMaterialPercentages = {};
 let selectedCustomCountry = "";
+let selectedCustomShoeType = "";
 let elasticity = null;
 let createMode = "mini"; // "mini" | "clean" | "template"
 
@@ -600,6 +599,7 @@ function saveTemplate() {
     const sub = selectedSubcategory || document.getElementById("customSubcategory").value || "";
     const attrs = {...selectedAttributes};
     if (attrs.country === "other") attrs.country = document.getElementById("customCountry").value.trim() || "Інше";
+    if (attrs.shoeType === "other") attrs.shoeType = document.getElementById("customShoeType")?.value.trim() || "Інше";
     const measuresData = { elasticity };
     const insoleEl = document.getElementById("insoleLengthCm");
     if (insoleEl) measuresData.insoleLengthCm = insoleEl.value || "";
@@ -618,6 +618,7 @@ function saveTemplate() {
         category: document.getElementById("category").value,
         subcategory: sub,
         customSubcategory: document.getElementById("customSubcategory").value,
+        customShoeType: document.getElementById("customShoeType")?.value || "",
         attributes: attrs,
         materials: [...selectedMaterials],
         materialPercentages: {...selectedMaterialPercentages},
@@ -669,6 +670,15 @@ function applyTemplate() {
         selectedAttributes.country = "other";
         selectedCustomCountry = savedCountry;
         document.getElementById("customCountry").value = savedCountry;
+    }
+    const savedShoeType = t.attributes?.shoeType || t.customShoeType || "";
+    if (SHOE_TYPES.includes(savedShoeType)) {
+        selectedAttributes.shoeType = savedShoeType;
+        selectedCustomShoeType = "";
+    } else if (savedShoeType) {
+        selectedAttributes.shoeType = "other";
+        selectedCustomShoeType = savedShoeType;
+        document.getElementById("customShoeType").value = savedShoeType;
     }
     document.getElementById("mediaInput").value = "";
     renderSubcategoryButtons(true);
@@ -749,6 +759,9 @@ function resetFormExceptSku() {
     document.getElementById("customCountry").value = "";
     document.getElementById("customMaterialWrap").classList.remove("visible");
     document.getElementById("customMaterialInput").value = "";
+    document.getElementById("customShoeTypeWrap")?.classList.remove("visible");
+    document.getElementById("customShoeType").value = "";
+    selectedCustomShoeType = "";
     selectedCategory = "Жіночий одяг";
     selectedSubcategory = null;
     selectedTopBottom = [];
@@ -905,7 +918,7 @@ function renderAttributeButtons() {
         document.getElementById("sizeUaBlock").style.display = "none";
         document.getElementById("lengthTypeBlock").style.display = "none";
         document.getElementById("shoeTypeBlock").style.display = "block";
-        document.getElementById("shoeTypeBtns").innerHTML = SHOE_TYPES.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="shoeType" data-val="${v}">${v}</button>`).join("");
+        document.getElementById("shoeTypeBtns").innerHTML = SHOE_TYPES.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="shoeType" data-val="${v}">${v}</button>`).join("") + `<button type="button" class="quick-btn other-btn attr-btn" data-attr="shoeType" data-val="other">Інше</button>`;
         document.getElementById("shoeSizeBlock").style.display = "block";
         document.getElementById("shoeSizeEuBtns").innerHTML = SIZES_SHOE_EU.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="shoeSizeEu" data-val="${v}">${v}</button>`).join("");
         document.getElementById("shoeSizeUaBlock").style.display = "block";
@@ -934,7 +947,8 @@ function renderAttributeButtons() {
     document.getElementById("sizeUaBtns").innerHTML = SIZES_UA.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="sizeUa" data-val="${v}">${v}</button>`).join("");
     document.getElementById("lengthTypeBtns").innerHTML = LENGTH_TYPES.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="lengthType" data-val="${v}">${v}</button>`).join("");
     document.getElementById("countryBtns").innerHTML = COUNTRIES.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="country" data-val="${v}">${v}</button>`).join("") + `<button type="button" class="quick-btn other-btn attr-btn" data-attr="country" data-val="other">Інше</button>`;
-    document.getElementById("materialBtns").innerHTML = MATERIALS.map(m => `<button type="button" class="quick-btn attr-btn material-btn" data-attr="material" data-val="${m}">${m}</button>`).join("") + `<button type="button" class="quick-btn other-btn attr-btn material-other-btn" data-attr="materialOther">Інше</button>`;
+    const materialsArr = isFootwear ? MATERIALS_FOOTWEAR : MATERIALS;
+    document.getElementById("materialBtns").innerHTML = materialsArr.map(m => `<button type="button" class="quick-btn attr-btn material-btn" data-attr="material" data-val="${m}">${m}</button>`).join("") + `<button type="button" class="quick-btn other-btn attr-btn material-other-btn" data-attr="materialOther">Інше</button>`;
 
     document.querySelectorAll("#attributesGroup .attr-btn, #elasticityGroup .attr-btn").forEach(btn => {
         btn.onclick = function() {
@@ -963,6 +977,21 @@ function renderAttributeButtons() {
                     selectedCustomCountry = "";
                     this.classList.add("active");
                     selectedAttributes.country = val;
+                }
+            } else if (attr === "shoeType") {
+                const grp = this.closest(".attr-subblock");
+                grp.querySelectorAll(".attr-btn[data-attr='shoeType']").forEach(b => b.classList.remove("active"));
+                if (val === "other") {
+                    this.classList.add("active");
+                    document.getElementById("customShoeTypeWrap").classList.add("visible");
+                    document.getElementById("customShoeType").focus();
+                    selectedAttributes.shoeType = "other";
+                } else {
+                    document.getElementById("customShoeTypeWrap").classList.remove("visible");
+                    document.getElementById("customShoeType").value = "";
+                    selectedCustomShoeType = "";
+                    this.classList.add("active");
+                    selectedAttributes.shoeType = val;
                 }
             } else if (attr === "elasticity") {
                 const wasActive = this.classList.contains("active");
@@ -996,6 +1025,12 @@ function renderAttributeButtons() {
                 document.getElementById("customCountryWrap").classList.remove("visible");
             }
         }
+    }
+    if (selectedAttributes.shoeType === "other") {
+        document.getElementById("customShoeTypeWrap")?.classList.add("visible");
+        document.getElementById("customShoeType").value = selectedCustomShoeType;
+    } else {
+        document.getElementById("customShoeTypeWrap")?.classList.remove("visible");
     }
     selectedMaterials.forEach(m => document.querySelector(`.material-btn[data-val="${m}"]`)?.classList.add("active"));
     renderMaterialPercentages();
@@ -1081,6 +1116,9 @@ document.getElementById("customSubcategory").addEventListener("input", function(
 document.getElementById("customCountry").addEventListener("input", function() {
     selectedCustomCountry = this.value.trim();
 });
+document.getElementById("customShoeType").addEventListener("input", function() {
+    selectedCustomShoeType = this.value.trim();
+});
 document.getElementById("addCustomMaterialBtn").addEventListener("click", function() {
     const inp = document.getElementById("customMaterialInput");
     const val = inp.value.trim();
@@ -1099,6 +1137,7 @@ document.getElementById("productForm").addEventListener("submit", function(e) {
     formData.set("subcategory", sub);
     const attrs = {...selectedAttributes};
     if (attrs.country === "other") attrs.country = document.getElementById("customCountry").value.trim() || "Інше";
+    if (attrs.shoeType === "other") attrs.shoeType = document.getElementById("customShoeType")?.value.trim() || "Інше";
     formData.set("attributes", JSON.stringify(attrs));
     formData.set("materials", JSON.stringify(selectedMaterials));
     formData.set("materialPercentages", JSON.stringify(selectedMaterialPercentages));
