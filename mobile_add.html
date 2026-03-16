@@ -715,11 +715,11 @@ function setCreateMode(mode) {
     const toggleBtnsGroup = document.getElementById("toggleBtnsGroup");
     const priceQuantityRow = document.getElementById("priceQuantityRow");
     if (mode === "mini") {
-        desc.textContent = "Лише SKU, назва, ціна товару, фото-відео та поле опису.";
+        desc.textContent = "Лише SKU, назва, ціна товару, фото-відео, опис. Можливість публікувати в бот і в топові товари.";
         if (catSection) catSection.style.display = "none";
         if (descGroup) descGroup.style.display = "";
         if (quantityGroup) quantityGroup.style.display = "none";
-        if (toggleBtnsGroup) toggleBtnsGroup.style.display = "none";
+        if (toggleBtnsGroup) toggleBtnsGroup.style.display = "";
         if (priceQuantityRow) priceQuantityRow.style.gridTemplateColumns = "1fr";
     } else if (mode === "clean") {
         desc.textContent = "Всі поля скидаються (окрім SKU). Усі параметри доступні для введення.";
