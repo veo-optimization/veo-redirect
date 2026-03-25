@@ -444,6 +444,47 @@
             margin-bottom: 10px;
         }
         .form-accordion-nested:last-child { margin-bottom: 0; }
+        .variant-hint {
+            font-size: 0.8rem;
+            color: #666;
+            margin: 8px 0 0;
+            line-height: 1.4;
+        }
+        .variant-list { margin-top: 12px; }
+        .variant-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 72px 44px;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        @media (max-width: 400px) {
+            .variant-row {
+                grid-template-columns: 1fr 1fr;
+                grid-template-rows: auto auto;
+            }
+            .variant-row .variant-qty { grid-column: 1; }
+            .variant-row .variant-remove { grid-column: 2; justify-self: end; }
+        }
+        .variant-row .form-input { min-height: 44px; font-size: 15px; }
+        .variant-row .variant-remove {
+            min-height: 44px;
+            padding: 0 10px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            background: #fff;
+            font-size: 1.25rem;
+            line-height: 1;
+            color: #888;
+            cursor: pointer;
+        }
+        .variant-row .variant-remove:active { background: #fee2e2; border-color: #f87171; color: #b91c1c; }
+        .variant-chip.matrix-chip.active {
+            border-color: #7c3aed;
+            background: #7c3aed;
+            color: #fff;
+        }
+        .form-checkbox-wrap { margin-bottom: 8px; }
     </style>
 </head>
 <body>
@@ -501,6 +542,43 @@
                         <input type="number" id="quantity" name="quantity" class="form-input" placeholder="Кількість" min="0" step="1" inputmode="numeric">
                     </div>
                 </div>
+
+                <div class="form-accordion form-accordion-nested" data-acc-id="productVariants">
+                    <button type="button" class="form-accordion-header" aria-expanded="true" id="accHeader-productVariants">
+                        <span class="form-accordion-title-row">
+                            <span>Варіанти за одним кодом (SKU)</span>
+                            <span class="form-accordion-count" data-acc-variant-badge="1" data-count="0"></span>
+                        </span>
+                        <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                    </button>
+                    <div class="form-accordion-panel" style="border-top:1px solid #eee;padding-top:12px">
+                        <div class="form-checkbox-wrap">
+                            <label class="form-checkbox" style="margin-bottom:0">
+                                <input type="checkbox" id="variantMultiMode" name="variantMultiMode" value="1">
+                                <span>Кілька варіантів (різні розміри та/або кольори) за одним SKU</span>
+                            </label>
+                            <p class="variant-hint" id="variantModeHint">Увімкніть, щоб задати кілька рядків (розмір / колір / кількість) для однієї картки товару.</p>
+                        </div>
+                        <div id="variantsEditor" style="display:none;margin-top:12px">
+                            <div class="quick-buttons-label" style="margin-top:4px">Кольори для комбінацій (оберіть кілька)</div>
+                            <div id="variantMatrixColors" class="quick-buttons" style="margin-bottom:10px"></div>
+                            <div class="quick-buttons-label">Розміри для комбінацій (оберіть кілька)</div>
+                            <div id="variantMatrixSizes" class="quick-buttons" style="margin-bottom:10px"></div>
+                            <button type="button" class="btn btn-secondary" id="variantGenerateMatrixBtn" style="width:100%;margin-bottom:14px">Згенерувати рядки з обраних кольорів і розмірів</button>
+                            <div class="quick-buttons-label">Швидко додати рядок</div>
+                            <div id="variantQuickColors" class="quick-buttons" style="margin-bottom:8px"></div>
+                            <div id="variantQuickSizes" class="quick-buttons" style="margin-bottom:12px"></div>
+                            <div class="quick-buttons-label">Рядки варіантів</div>
+                            <div id="variantList" class="variant-list"></div>
+                            <button type="button" class="btn btn-secondary" id="variantAddRowBtn" style="width:100%">＋ Додати рядок вручну</button>
+                            <div class="form-group" style="margin-top:12px;margin-bottom:0">
+                                <label for="variantTotalQty">Усього одиниць (сума за варіантами)</label>
+                                <input type="text" class="form-input" id="variantTotalQty" readonly inputmode="numeric">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="variantsJson" id="variantsJson" value="[]">
             </div>
         </div>
 
@@ -839,6 +917,10 @@ const SIZES_UA = ["40","42","44","46","48","50","52","54","56","58","60","62","6
 // Тип довжини
 const LENGTH_TYPES = ["Короткий", "Середній", "Довгий"];
 
+// Варіанти товару (один SKU): кольори та розміри для комбінацій / швидкого додавання
+const VARIANT_COLORS = ["Чорний", "Білий", "Сірий", "Червоний", "Синій", "Зелений", "Бежевий", "Коричневий", "Рожевий", "Жовтий", "Фіолетовий", "Помаранчевий"];
+const VARIANT_SIZES_MATRIX = ["XXS", "XS", "S", "M", "L", "XL", "XXL", "3XL", "4XL"];
+
 const TEMPLATE_STORAGE_KEY = "mobile_add_product_template";
 
 let selectedCategory = "Жіночий одяг";
@@ -851,6 +933,217 @@ let selectedCustomCountry = "";
 let selectedCustomShoeType = "";
 let elasticity = null;
 let createMode = "mini"; // "mini" | "clean" | "template"
+let variantRows = []; // { id, size, color, qty }
+
+function newVariantRowId() {
+    return "v" + Date.now() + "-" + Math.random().toString(36).slice(2, 9);
+}
+
+function escapeHtmlVariant(s) {
+    if (s == null || s === "") return "";
+    const d = document.createElement("div");
+    d.textContent = String(s);
+    return d.innerHTML;
+}
+
+function collectVariantRowsFromInputs() {
+    if (!document.getElementById("variantMultiMode")?.checked) return;
+    document.querySelectorAll("#variantList .variant-row").forEach(el => {
+        const id = el.dataset.id;
+        const row = variantRows.find(r => r.id === id);
+        if (!row) return;
+        row.size = el.querySelector(".variant-size")?.value?.trim() ?? "";
+        row.color = el.querySelector(".variant-color")?.value?.trim() ?? "";
+        const q = parseInt(el.querySelector(".variant-qty")?.value, 10);
+        row.qty = isNaN(q) ? 0 : Math.max(0, q);
+    });
+}
+
+function syncVariantsJson() {
+    const el = document.getElementById("variantsJson");
+    if (!el) return;
+    collectVariantRowsFromInputs();
+    const payload = document.getElementById("variantMultiMode")?.checked
+        ? variantRows.map(r => ({ size: r.size, color: r.color, qty: r.qty }))
+        : [];
+    el.value = JSON.stringify(payload);
+}
+
+function updateVariantTotal() {
+    const el = document.getElementById("variantTotalQty");
+    if (!el) return;
+    if (!document.getElementById("variantMultiMode")?.checked) {
+        el.value = "";
+        return;
+    }
+    collectVariantRowsFromInputs();
+    const sum = variantRows.reduce((a, r) => a + (parseInt(r.qty, 10) || 0), 0);
+    el.value = String(sum);
+}
+
+function renderVariantRows() {
+    const list = document.getElementById("variantList");
+    if (!list) return;
+    if (!document.getElementById("variantMultiMode")?.checked) {
+        list.innerHTML = "";
+        syncVariantsJson();
+        return;
+    }
+    list.innerHTML = variantRows.map(row => {
+        const qv = row.qty === "" || row.qty == null ? "" : row.qty;
+        return `
+    <div class="variant-row" data-id="${row.id}">
+      <input type="text" class="form-input variant-size" placeholder="Розмір" value="${escapeHtmlVariant(row.size)}" aria-label="Розмір">
+      <input type="text" class="form-input variant-color" placeholder="Колір" value="${escapeHtmlVariant(row.color)}" aria-label="Колір">
+      <input type="number" min="0" class="form-input variant-qty" placeholder="0" value="${qv}" inputmode="numeric" aria-label="Кількість">
+      <button type="button" class="variant-remove" aria-label="Видалити рядок">×</button>
+    </div>`;
+    }).join("");
+    syncVariantsJson();
+    updateVariantTotal();
+}
+
+function addVariantRow(partial) {
+    variantRows.push({
+        id: newVariantRowId(),
+        size: partial && partial.size != null ? String(partial.size) : "",
+        color: partial && partial.color != null ? String(partial.color) : "",
+        qty: partial && partial.qty != null ? Math.max(0, parseInt(partial.qty, 10) || 0) : 1
+    });
+    renderVariantRows();
+    if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
+}
+
+function generateVariantMatrix() {
+    const colors = [...document.querySelectorAll("#variantMatrixColors .matrix-chip.active")].map(b => b.dataset.color).filter(Boolean);
+    const sizes = [...document.querySelectorAll("#variantMatrixSizes .matrix-chip.active")].map(b => b.dataset.size).filter(Boolean);
+    if (colors.length === 0 && sizes.length === 0) {
+        alert("Оберіть хоча б один колір або один розмір.");
+        return;
+    }
+    collectVariantRowsFromInputs();
+    const existing = new Set(variantRows.map(r => `${(r.size || "").trim()}\t${(r.color || "").trim()}`));
+    const toAdd = [];
+    if (colors.length && sizes.length) {
+        colors.forEach(c => sizes.forEach(s => {
+            const key = `${s}\t${c}`;
+            if (!existing.has(key)) { toAdd.push({ size: s, color: c, qty: 1 }); existing.add(key); }
+        }));
+    } else if (colors.length) {
+        colors.forEach(c => {
+            const key = `\t${c}`;
+            if (!existing.has(key)) { toAdd.push({ size: "", color: c, qty: 1 }); existing.add(key); }
+        });
+    } else {
+        sizes.forEach(s => {
+            const key = `${s}\t`;
+            if (!existing.has(key)) { toAdd.push({ size: s, color: "", qty: 1 }); existing.add(key); }
+        });
+    }
+    toAdd.forEach(p => {
+        variantRows.push({ id: newVariantRowId(), size: p.size, color: p.color, qty: p.qty });
+    });
+    renderVariantRows();
+    if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
+}
+
+function toggleVariantMultiUi() {
+    const cb = document.getElementById("variantMultiMode");
+    const on = cb && cb.checked;
+    const qg = document.getElementById("quantityGroup");
+    const ed = document.getElementById("variantsEditor");
+    const hint = document.getElementById("variantModeHint");
+    if (!qg || !ed) return;
+    if (on) {
+        qg.style.display = "none";
+        ed.style.display = "";
+        if (hint) hint.textContent = "Один код товару — кілька рядків: розмір, колір, кількість. Загальна кількість — сума по рядках.";
+        if (variantRows.length === 0) {
+            variantRows.push({ id: newVariantRowId(), size: "", color: "", qty: 1 });
+        }
+    } else {
+        collectVariantRowsFromInputs();
+        const sum = variantRows.reduce((a, r) => a + (parseInt(r.qty, 10) || 0), 0);
+        if (sum > 0) {
+            const qInp = document.getElementById("quantity");
+            if (qInp) qInp.value = String(sum);
+        }
+        qg.style.display = "";
+        ed.style.display = "none";
+        if (hint) hint.textContent = "Увімкніть, щоб задати кілька рядків (розмір / колір / кількість) для однієї картки товару.";
+    }
+    renderVariantRows();
+    updateVariantTotal();
+    syncVariantsJson();
+    if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
+}
+
+function initVariantUi() {
+    const mc = document.getElementById("variantMatrixColors");
+    const ms = document.getElementById("variantMatrixSizes");
+    const qc = document.getElementById("variantQuickColors");
+    const qs = document.getElementById("variantQuickSizes");
+    if (!mc || !ms || mc.dataset.inited === "1") return;
+    mc.dataset.inited = "1";
+    VARIANT_COLORS.forEach(c => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "quick-btn variant-chip matrix-chip";
+        b.dataset.color = c;
+        b.textContent = c;
+        b.addEventListener("click", function() { this.classList.toggle("active"); });
+        mc.appendChild(b);
+    });
+    VARIANT_SIZES_MATRIX.forEach(s => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "quick-btn variant-chip matrix-chip";
+        b.dataset.size = s;
+        b.textContent = s;
+        b.addEventListener("click", function() { this.classList.toggle("active"); });
+        ms.appendChild(b);
+    });
+    VARIANT_COLORS.forEach(c => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "quick-btn";
+        b.textContent = "+ " + c;
+        b.addEventListener("click", function() { addVariantRow({ color: c, size: "", qty: 1 }); });
+        qc.appendChild(b);
+    });
+    VARIANT_SIZES_MATRIX.forEach(s => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "quick-btn";
+        b.textContent = "+ " + s;
+        b.addEventListener("click", function() { addVariantRow({ size: s, color: "", qty: 1 }); });
+        qs.appendChild(b);
+    });
+    document.getElementById("variantMultiMode").addEventListener("change", toggleVariantMultiUi);
+    document.getElementById("variantGenerateMatrixBtn").addEventListener("click", generateVariantMatrix);
+    document.getElementById("variantAddRowBtn").addEventListener("click", function() {
+        addVariantRow({ size: "", color: "", qty: 1 });
+    });
+    document.getElementById("variantList").addEventListener("input", function(e) {
+        if (!e.target.matches(".variant-size, .variant-color, .variant-qty")) return;
+        collectVariantRowsFromInputs();
+        syncVariantsJson();
+        updateVariantTotal();
+        if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
+    });
+    document.getElementById("variantList").addEventListener("click", function(e) {
+        const rm = e.target.closest(".variant-remove");
+        if (!rm) return;
+        const rowEl = rm.closest(".variant-row");
+        if (!rowEl || !rowEl.dataset.id) return;
+        variantRows = variantRows.filter(r => r.id !== rowEl.dataset.id);
+        renderVariantRows();
+        if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
+    });
+    document.getElementById("quantity").addEventListener("input", function() {
+        if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
+    });
+}
 
 function getCategoryType(cat) {
     if (cat === "Жіночий одяг") return "women";
@@ -880,11 +1173,18 @@ function saveTemplate() {
         else if (inp.dataset.m === "to") measuresData[id + "To"] = inp.value || "";
         else measuresData[id] = inp.value || "";
     });
+    collectVariantRowsFromInputs();
+    const variantMulti = document.getElementById("variantMultiMode")?.checked;
+    const variantsForSave = variantMulti
+        ? variantRows.map(r => ({ size: r.size, color: r.color, qty: r.qty }))
+        : [];
     const t = {
         sku: document.getElementById("sku").value,
         productName: document.getElementById("productName").value,
         price: document.getElementById("price").value,
         quantity: document.getElementById("quantity").value,
+        variantMultiMode: !!variantMulti,
+        variants: variantsForSave,
         category: document.getElementById("category").value,
         subcategory: sub,
         customSubcategory: document.getElementById("customSubcategory").value,
@@ -970,6 +1270,15 @@ function applyTemplate() {
     if (insoleEl) insoleEl.value = t.insoleLengthCm || t.measures?.insoleLengthCm || "";
     document.getElementById("toggleSendToBot").classList.toggle("active", t.sendToBot === "1");
     document.getElementById("toggleIsTop").classList.toggle("active", t.isTop === "1");
+    variantRows = (Array.isArray(t.variants) ? t.variants : []).map(v => ({
+        id: newVariantRowId(),
+        size: v.size || "",
+        color: v.color || "",
+        qty: Math.max(0, parseInt(v.qty, 10) || 0)
+    }));
+    const vm = document.getElementById("variantMultiMode");
+    if (vm) vm.checked = !!t.variantMultiMode || variantRows.length > 0;
+    toggleVariantMultiUi();
 }
 
 function setCreateMode(mode) {
@@ -986,7 +1295,7 @@ function setCreateMode(mode) {
     const toggleBtnsGroup = document.getElementById("toggleBtnsGroup");
     const priceQuantityRow = document.getElementById("priceQuantityRow");
     if (mode === "mini") {
-        desc.textContent = "SKU, назва, ціна, кількість одиниць, фото, опис. Публікація в бот і ТОП.";
+        desc.textContent = "SKU, назва, ціна, одна кількість або кілька варіантів (розмір/колір), фото, опис. Публікація в бот і ТОП.";
         if (catSection) catSection.style.display = "none";
         if (descGroup) descGroup.style.display = "";
         if (quantityGroup) quantityGroup.style.display = "";
@@ -1041,6 +1350,10 @@ function resetFormExceptSku() {
     selectedMaterialPercentages = {};
     selectedCustomCountry = "";
     elasticity = null;
+    variantRows = [];
+    const vm = document.getElementById("variantMultiMode");
+    if (vm) vm.checked = false;
+    toggleVariantMultiUi();
     renderSubcategoryButtons();
     renderAttributeButtons();
 }
@@ -1446,6 +1759,24 @@ function updateAllAccordionCounts() {
         setCountBadge(badge, n);
     }
 
+    const pv = document.querySelector('[data-acc-id="productVariants"]');
+    if (pv) {
+        const badge = pv.querySelector("[data-acc-variant-badge]");
+        if (badge) {
+            collectVariantRowsFromInputs();
+            let n = 0;
+            if (document.getElementById("variantMultiMode")?.checked) {
+                n = variantRows.filter(r =>
+                    (r.size || "").trim() || (r.color || "").trim() || (parseInt(r.qty, 10) || 0) > 0
+                ).length;
+            } else {
+                const q = parseInt(document.getElementById("quantity")?.value, 10);
+                n = !isNaN(q) && q > 0 ? 1 : 0;
+            }
+            setCountBadge(badge, n);
+        }
+    }
+
     const catBadge = document.querySelector('[data-acc-total="category"]');
     if (catBadge) {
         let sum = 0;
@@ -1525,7 +1856,7 @@ function initAccordionSystem() {
     });
 
     document.getElementById("productForm")?.addEventListener("input", function(e) {
-        if (e.target.matches("#lengthCm, #insoleLengthCm") || e.target.closest("#measuresContent") || e.target.closest("#materialPercentagesList")) {
+        if (e.target.matches("#lengthCm, #insoleLengthCm") || e.target.closest("#measuresContent") || e.target.closest("#materialPercentagesList") || e.target.closest("#variantList")) {
             updateAllAccordionCounts();
         }
     });
@@ -1584,6 +1915,18 @@ document.getElementById("productForm").addEventListener("submit", function(e) {
     formData.set("measures", JSON.stringify(measuresData));
     formData.set("topBottom", JSON.stringify(selectedTopBottom));
 
+    collectVariantRowsFromInputs();
+    const variantMulti = document.getElementById("variantMultiMode")?.checked;
+    const variantsPayload = variantMulti
+        ? variantRows.map(r => ({ size: r.size || "", color: r.color || "", qty: parseInt(r.qty, 10) || 0 }))
+        : [];
+    formData.set("variantMultiMode", variantMulti ? "1" : "0");
+    formData.set("variants", JSON.stringify(variantsPayload));
+    if (variantMulti) {
+        const sum = variantRows.reduce((a, r) => a + (parseInt(r.qty, 10) || 0), 0);
+        formData.set("quantity", String(sum));
+    }
+
     // Зчитуємо актуальні відсотки з полів
     document.querySelectorAll("#materialPercentagesList input").forEach(inp => {
         const val = parseInt(inp.value, 10);
@@ -1619,6 +1962,10 @@ document.getElementById("productForm").addEventListener("submit", function(e) {
         document.getElementById("quantity").value = "";
         document.getElementById("description").value = "";
         document.getElementById("mediaInput").value = "";
+        variantRows = [];
+        const vm = document.getElementById("variantMultiMode");
+        if (vm) vm.checked = false;
+        if (typeof toggleVariantMultiUi === "function") toggleVariantMultiUi();
         if (typeof loadAccordionState === "function") loadAccordionState();
         if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
     }
@@ -1652,6 +1999,7 @@ document.getElementById("modeTemplate").addEventListener("click", function() { s
 
 let savedMode = "mini";
 try { savedMode = localStorage.getItem("mobile_add_createMode") || "mini"; } catch (e) {}
+initVariantUi();
 setCreateMode(savedMode);
 if (savedMode !== "template" && savedMode !== "clean") {
     renderSubcategoryButtons();
