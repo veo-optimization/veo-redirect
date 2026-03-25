@@ -345,6 +345,105 @@
             color: #666;
             line-height: 1.4;
         }
+        /* Акордеони */
+        .form-accordion {
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            background: #fff;
+            overflow: hidden;
+        }
+        .form-accordion.form-accordion--pulse {
+            animation: accPulse 1.2s ease;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.35);
+        }
+        @keyframes accPulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0); }
+            35% { box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.45); }
+        }
+        .form-accordion-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 14px 16px;
+            min-height: 48px;
+            border: none;
+            background: #fafafa;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #333;
+            text-align: left;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .form-accordion-header:hover { background: #f3f0ff; }
+        .form-accordion-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+        }
+        .form-accordion-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 22px;
+            height: 22px;
+            padding: 0 6px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            background: #7c3aed;
+            color: #fff;
+        }
+        .form-accordion-count:empty,
+        .form-accordion-count[data-count="0"] {
+            display: none;
+        }
+        .form-accordion-chevron {
+            flex-shrink: 0;
+            transition: transform 0.25s ease;
+            color: #666;
+        }
+        .form-accordion.collapsed .form-accordion-chevron {
+            transform: rotate(-90deg);
+        }
+        .form-accordion-panel {
+            padding: 0 16px 16px;
+            border-top: 1px solid #eee;
+        }
+        .form-accordion.collapsed .form-accordion-panel {
+            display: none;
+        }
+        .form-accordion-main .form-accordion-panel {
+            padding-top: 12px;
+        }
+        .attr-accordion .form-accordion-header {
+            background: #fcfcfc;
+            padding: 10px 12px;
+            font-size: 0.9rem;
+        }
+        .attr-acc-title-wrap {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            flex: 1;
+            min-width: 0;
+        }
+        .attr-acc-title-text {
+            margin: 0;
+            font-size: inherit;
+            font-weight: 600;
+            color: #444;
+        }
+        .form-accordion-nested {
+            margin-bottom: 10px;
+        }
+        .form-accordion-nested:last-child { margin-bottom: 0; }
     </style>
 </head>
 <body>
@@ -356,43 +455,65 @@
 
     <form id="productForm" action="#" method="post">
         <input type="hidden" name="createMode" id="createMode" value="mini">
-        <div class="mode-selector-wrap">
-            <div class="quick-buttons-label" style="margin-bottom:10px">Оберіть режим публікації товару</div>
-            <div class="toggle-btn-wrap toggle-btn-triple">
-                <button type="button" class="toggle-btn" id="modeMini" data-mode="mini"><span class="toggle-btn-main">МІНІ</span></button>
-                <button type="button" class="toggle-btn" id="modeClean" data-mode="clean"><span class="toggle-btn-main">НОВЕ</span></button>
-                <button type="button" class="toggle-btn" id="modeTemplate" data-mode="template"><span class="toggle-btn-main">ДУБЛЬ</span></button>
+        <div class="form-accordion" data-acc-id="mode">
+            <button type="button" class="form-accordion-header" aria-expanded="true" id="accHeader-mode">
+                <span class="form-accordion-title-row">
+                    <span>Режим публікації</span>
+                </span>
+                <i class="bi bi-chevron-down form-accordion-chevron"></i>
+            </button>
+            <div class="form-accordion-panel">
+                <div class="mode-selector-wrap" style="margin-bottom:0;border:none;padding:0;background:transparent">
+                    <div class="quick-buttons-label" style="margin-bottom:10px">Оберіть режим публікації товару</div>
+                    <div class="toggle-btn-wrap toggle-btn-triple">
+                        <button type="button" class="toggle-btn" id="modeMini" data-mode="mini"><span class="toggle-btn-main">МІНІ</span></button>
+                        <button type="button" class="toggle-btn" id="modeClean" data-mode="clean"><span class="toggle-btn-main">НОВЕ</span></button>
+                        <button type="button" class="toggle-btn" id="modeTemplate" data-mode="template"><span class="toggle-btn-main">ДУБЛЬ</span></button>
+                    </div>
+                    <div class="mode-desc" id="modeDesc"></div>
+                </div>
             </div>
-            <div class="mode-desc" id="modeDesc"></div>
-        </div>
-        <div class="form-section-title">Основні дані</div>
-        <!-- 1. SKU -->
-        <div class="form-group">
-            <label for="sku">Код (SKU)</label>
-            <input type="text" id="sku" name="sku" class="form-input" value="8034" required>
         </div>
 
-        <!-- 2. Product Name -->
-        <div class="form-group">
-            <label for="productName">Назва товару</label>
-            <input type="text" id="productName" name="productName" class="form-input" value="Футболка біла" required>
-        </div>
-
-        <!-- 3. Price & 4. Quantity -->
-        <div class="form-row" id="priceQuantityRow">
-            <div class="form-group">
-                <label for="price">Ціна (грн)</label>
-                <input type="number" id="price" name="price" class="form-input" placeholder="Введіть ціну" min="0" step="0.01" inputmode="decimal">
-            </div>
-            <div class="form-group" id="quantityGroup">
-                <label for="quantity">Кількість</label>
-                <input type="number" id="quantity" name="quantity" class="form-input" placeholder="Введіть кількість" min="0" step="1" inputmode="numeric">
+        <div class="form-accordion form-accordion-main" data-acc-id="main">
+            <button type="button" class="form-accordion-header" aria-expanded="true" id="accHeader-main">
+                <span class="form-accordion-title-row">
+                    <span>Основні дані</span>
+                </span>
+                <i class="bi bi-chevron-down form-accordion-chevron"></i>
+            </button>
+            <div class="form-accordion-panel">
+                <div class="form-group">
+                    <label for="sku">Код (SKU)</label>
+                    <input type="text" id="sku" name="sku" class="form-input" value="8034" required>
+                </div>
+                <div class="form-group">
+                    <label for="productName">Назва товару</label>
+                    <input type="text" id="productName" name="productName" class="form-input" value="Футболка біла" required>
+                </div>
+                <div class="form-row" id="priceQuantityRow">
+                    <div class="form-group">
+                        <label for="price">Ціна (грн)</label>
+                        <input type="number" id="price" name="price" class="form-input" placeholder="Введіть ціну" min="0" step="0.01" inputmode="decimal">
+                    </div>
+                    <div class="form-group" id="quantityGroup">
+                        <label for="quantity">Кількість одиниць</label>
+                        <input type="number" id="quantity" name="quantity" class="form-input" placeholder="Кількість" min="0" step="1" inputmode="numeric">
+                    </div>
+                </div>
             </div>
         </div>
 
         <div id="categoryParamsSection">
-        <div class="form-section-title">Категорія та параметри</div>
-        <!-- 5. Category -->
+        <div class="form-accordion" data-acc-id="category">
+            <button type="button" class="form-accordion-header" aria-expanded="true" id="accHeader-category">
+                <span class="form-accordion-title-row">
+                    <span>Категорія та параметри</span>
+                    <span class="form-accordion-count" data-acc-total="category" data-count="0"></span>
+                </span>
+                <i class="bi bi-chevron-down form-accordion-chevron"></i>
+            </button>
+            <div class="form-accordion-panel">
         <div class="form-group">
             <label for="category">Категорія</label>
             <select id="category" name="category" class="form-select">
@@ -404,93 +525,221 @@
             </select>
         </div>
 
-        <!-- 5b. Subcategory quick buttons -->
-        <div class="form-group" id="subcategoryGroup">
-            <label class="quick-buttons-label">Підкатегорія</label>
+        <div class="form-accordion form-accordion-nested" data-acc-id="subcat">
+            <button type="button" class="form-accordion-header" aria-expanded="true" id="accHeader-subcat">
+                <span class="form-accordion-title-row">
+                    <span>Підкатегорія</span>
+                    <span class="form-accordion-count" data-count="0"></span>
+                </span>
+                <i class="bi bi-chevron-down form-accordion-chevron"></i>
+            </button>
+            <div class="form-accordion-panel">
+        <div class="form-group" id="subcategoryGroup" style="margin-bottom:0">
             <div id="subcategoryButtons" class="quick-buttons"></div>
             <div id="customSubcategoryWrap" class="custom-input-wrap">
                 <input type="text" id="customSubcategory" class="form-input" placeholder="Введіть свою підкатегорію">
             </div>
         </div>
+            </div>
+        </div>
 
-        <!-- 5d. Розмір та параметри (підблоки) -->
+        <!-- 5d. Розмір та параметри (підблоки — акордеони) -->
         <div class="form-group" id="attributesGroup">
-            <div class="attr-subblock" id="sizeLetterBlock">
-                <div class="quick-buttons-label">Розмір (буквами)</div>
-                <div id="sizeLetterBtns" class="quick-buttons"></div>
+            <div class="attr-accordion attr-subblock form-accordion" id="sizeLetterBlock" data-acc-id="attr-sizeLetter">
+                <button type="button" class="form-accordion-header" aria-expanded="true">
+                    <span class="attr-acc-title-wrap">
+                        <span class="quick-buttons-label attr-acc-title-text">Розмір (буквами)</span>
+                        <span class="form-accordion-count" data-count="0"></span>
+                    </span>
+                    <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                </button>
+                <div class="form-accordion-panel"><div id="sizeLetterBtns" class="quick-buttons"></div></div>
             </div>
-            <div class="attr-subblock" id="ageChildBlock" style="display:none">
-                <div class="quick-buttons-label">Вік</div>
-                <div id="ageChildBtns" class="quick-buttons"></div>
+            <div class="attr-accordion attr-subblock form-accordion" id="ageChildBlock" style="display:none" data-acc-id="attr-ageChild">
+                <button type="button" class="form-accordion-header" aria-expanded="true">
+                    <span class="attr-acc-title-wrap">
+                        <span class="quick-buttons-label attr-acc-title-text">Вік</span>
+                        <span class="form-accordion-count" data-count="0"></span>
+                    </span>
+                    <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                </button>
+                <div class="form-accordion-panel"><div id="ageChildBtns" class="quick-buttons"></div></div>
             </div>
-            <div class="attr-subblock" id="sizeEuBlock">
-                <div class="quick-buttons-label">Розмір EU</div>
-                <div id="sizeEuBtns" class="quick-buttons"></div>
+            <div class="attr-accordion attr-subblock form-accordion" id="sizeEuBlock" data-acc-id="attr-sizeEu">
+                <button type="button" class="form-accordion-header" aria-expanded="true">
+                    <span class="attr-acc-title-wrap">
+                        <span class="quick-buttons-label attr-acc-title-text">Розмір EU</span>
+                        <span class="form-accordion-count" data-count="0"></span>
+                    </span>
+                    <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                </button>
+                <div class="form-accordion-panel"><div id="sizeEuBtns" class="quick-buttons"></div></div>
             </div>
-            <div class="attr-subblock" id="sizeUaBlock">
-                <div class="quick-buttons-label">Розмір UA</div>
-                <div id="sizeUaBtns" class="quick-buttons"></div>
+            <div class="attr-accordion attr-subblock form-accordion" id="sizeUaBlock" data-acc-id="attr-sizeUa">
+                <button type="button" class="form-accordion-header" aria-expanded="true">
+                    <span class="attr-acc-title-wrap">
+                        <span class="quick-buttons-label attr-acc-title-text">Розмір UA</span>
+                        <span class="form-accordion-count" data-count="0"></span>
+                    </span>
+                    <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                </button>
+                <div class="form-accordion-panel"><div id="sizeUaBtns" class="quick-buttons"></div></div>
             </div>
-            <div class="attr-subblock" id="lengthTypeBlock">
-                <div class="quick-buttons-label">Тип: короткий / середній / довгий</div>
-                <div id="lengthTypeBtns" class="quick-buttons"></div>
+            <div class="attr-accordion attr-subblock form-accordion" id="lengthTypeBlock" data-acc-id="attr-lengthType">
+                <button type="button" class="form-accordion-header" aria-expanded="true">
+                    <span class="attr-acc-title-wrap">
+                        <span class="quick-buttons-label attr-acc-title-text">Тип: короткий / середній / довгий</span>
+                        <span class="form-accordion-count" data-count="0"></span>
+                    </span>
+                    <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                </button>
+                <div class="form-accordion-panel"><div id="lengthTypeBtns" class="quick-buttons"></div></div>
             </div>
-            <div class="attr-subblock" id="elasticityGroup">
-                <div class="quick-buttons-label">Еластичність</div>
-                <div class="quick-buttons" id="elasticityBtns"></div>
+            <div class="attr-accordion attr-subblock form-accordion" id="elasticityGroup" data-acc-id="attr-elasticity">
+                <button type="button" class="form-accordion-header" aria-expanded="true">
+                    <span class="attr-acc-title-wrap">
+                        <span class="quick-buttons-label attr-acc-title-text">Еластичність</span>
+                        <span class="form-accordion-count" data-count="0"></span>
+                    </span>
+                    <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                </button>
+                <div class="form-accordion-panel"><div class="quick-buttons" id="elasticityBtns"></div></div>
             </div>
-            <div class="attr-subblock attr-measures" id="measuresBlock">
-                <div class="quick-buttons-label">Напівобхват, см</div>
-                <div id="measuresContent"></div>
+            <div class="attr-accordion attr-subblock attr-measures form-accordion" id="measuresBlock" data-acc-id="attr-measures">
+                <button type="button" class="form-accordion-header" aria-expanded="true">
+                    <span class="attr-acc-title-wrap">
+                        <span class="quick-buttons-label attr-acc-title-text">Напівобхват, см</span>
+                        <span class="form-accordion-count" data-count="0"></span>
+                    </span>
+                    <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                </button>
+                <div class="form-accordion-panel"><div id="measuresContent"></div></div>
             </div>
-            <div class="attr-subblock" id="lengthBlock">
-                <div class="quick-buttons-label" id="length-label">Довжина, см</div>
-                <input type="number" id="lengthCm" class="form-input" placeholder="Довжина" min="0" inputmode="numeric">
-            </div>
-            <div class="attr-subblock" id="shoeTypeBlock" style="display:none">
-                <div class="quick-buttons-label">Тип взуття</div>
-                <div id="shoeTypeBtns" class="quick-buttons"></div>
-                <div id="customShoeTypeWrap" class="custom-input-wrap">
-                    <input type="text" id="customShoeType" class="form-input" placeholder="Введіть свій тип взуття">
+            <div class="attr-accordion attr-subblock form-accordion" id="lengthBlock" data-acc-id="attr-length">
+                <button type="button" class="form-accordion-header" aria-expanded="true">
+                    <span class="attr-acc-title-wrap">
+                        <span class="quick-buttons-label attr-acc-title-text" id="length-label">Довжина, см</span>
+                        <span class="form-accordion-count" data-count="0"></span>
+                    </span>
+                    <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                </button>
+                <div class="form-accordion-panel">
+                    <input type="number" id="lengthCm" class="form-input" placeholder="Довжина" min="0" inputmode="numeric">
                 </div>
             </div>
-            <div class="attr-subblock">
-                <div class="quick-buttons-label">Країна виробник</div>
-                <div id="countryBtns" class="quick-buttons"></div>
-                <div id="customCountryWrap" class="custom-input-wrap">
-                    <input type="text" id="customCountry" class="form-input" placeholder="Введіть іншу країну">
+            <div class="attr-accordion attr-subblock form-accordion" id="shoeTypeBlock" style="display:none" data-acc-id="attr-shoeType">
+                <button type="button" class="form-accordion-header" aria-expanded="true">
+                    <span class="attr-acc-title-wrap">
+                        <span class="quick-buttons-label attr-acc-title-text">Тип взуття</span>
+                        <span class="form-accordion-count" data-count="0"></span>
+                    </span>
+                    <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                </button>
+                <div class="form-accordion-panel">
+                    <div id="shoeTypeBtns" class="quick-buttons"></div>
+                    <div id="customShoeTypeWrap" class="custom-input-wrap">
+                        <input type="text" id="customShoeType" class="form-input" placeholder="Введіть свій тип взуття">
+                    </div>
                 </div>
             </div>
-            <div class="attr-subblock">
-                <div class="quick-buttons-label">Склад</div>
-                <div id="materialBtns" class="quick-buttons"></div>
-                <div id="customMaterialWrap" class="custom-input-wrap">
-                    <input type="text" id="customMaterialInput" class="form-input" placeholder="Введіть свій матеріал">
-                    <button type="button" class="quick-btn" id="addCustomMaterialBtn" style="margin-top:8px">+ Додати</button>
+            <div class="attr-accordion attr-subblock form-accordion" data-acc-id="attr-country">
+                <button type="button" class="form-accordion-header" aria-expanded="true">
+                    <span class="attr-acc-title-wrap">
+                        <span class="quick-buttons-label attr-acc-title-text">Країна виробник</span>
+                        <span class="form-accordion-count" data-count="0"></span>
+                    </span>
+                    <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                </button>
+                <div class="form-accordion-panel">
+                    <div id="countryBtns" class="quick-buttons"></div>
+                    <div id="customCountryWrap" class="custom-input-wrap">
+                        <input type="text" id="customCountry" class="form-input" placeholder="Введіть іншу країну">
+                    </div>
                 </div>
             </div>
-            <div id="materialPercentagesWrap" class="material-percent-wrap custom-input-wrap">
-                <div class="quick-buttons-label">Склад (% матеріалу)</div>
-                <div id="materialPercentagesList"></div>
+            <div class="attr-accordion attr-subblock form-accordion" data-acc-id="attr-material">
+                <button type="button" class="form-accordion-header" aria-expanded="true">
+                    <span class="attr-acc-title-wrap">
+                        <span class="quick-buttons-label attr-acc-title-text">Склад</span>
+                        <span class="form-accordion-count" data-count="0"></span>
+                    </span>
+                    <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                </button>
+                <div class="form-accordion-panel">
+                    <div id="materialBtns" class="quick-buttons"></div>
+                    <div id="customMaterialWrap" class="custom-input-wrap">
+                        <input type="text" id="customMaterialInput" class="form-input" placeholder="Введіть свій матеріал">
+                        <button type="button" class="quick-btn" id="addCustomMaterialBtn" style="margin-top:8px">+ Додати</button>
+                    </div>
+                </div>
             </div>
-            <div class="attr-subblock" id="shoeSizeBlock" style="display:none">
-                <div class="quick-buttons-label">Розмір (міжнародний EU)</div>
-                <div id="shoeSizeEuBtns" class="quick-buttons"></div>
+            <div class="attr-accordion form-accordion" id="materialPercentagesWrapOuter" data-acc-id="attr-materialPct">
+                <button type="button" class="form-accordion-header" aria-expanded="true">
+                    <span class="attr-acc-title-wrap">
+                        <span class="quick-buttons-label">Склад (% матеріалу)</span>
+                        <span class="form-accordion-count" data-count="0"></span>
+                    </span>
+                    <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                </button>
+                <div class="form-accordion-panel">
+                    <div id="materialPercentagesWrap" class="material-percent-wrap custom-input-wrap" style="border:none;padding:0;background:transparent">
+                        <div id="materialPercentagesList"></div>
+                    </div>
+                </div>
             </div>
-            <div class="attr-subblock" id="shoeSizeUaBlock" style="display:none">
-                <div class="quick-buttons-label">Розмір (UA)</div>
-                <div id="shoeSizeUaBtns" class="quick-buttons"></div>
+            <div class="attr-accordion attr-subblock form-accordion" id="shoeSizeBlock" style="display:none" data-acc-id="attr-shoeEu">
+                <button type="button" class="form-accordion-header" aria-expanded="true">
+                    <span class="attr-acc-title-wrap">
+                        <span class="quick-buttons-label attr-acc-title-text">Розмір (міжнародний EU)</span>
+                        <span class="form-accordion-count" data-count="0"></span>
+                    </span>
+                    <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                </button>
+                <div class="form-accordion-panel"><div id="shoeSizeEuBtns" class="quick-buttons"></div></div>
             </div>
-            <div class="attr-subblock" id="insoleLengthBlock" style="display:none">
-                <div class="quick-buttons-label">Довжина устілки, см</div>
-                <input type="number" id="insoleLengthCm" class="form-input" placeholder="см" min="0" inputmode="numeric">
+            <div class="attr-accordion attr-subblock form-accordion" id="shoeSizeUaBlock" style="display:none" data-acc-id="attr-shoeUa">
+                <button type="button" class="form-accordion-header" aria-expanded="true">
+                    <span class="attr-acc-title-wrap">
+                        <span class="quick-buttons-label attr-acc-title-text">Розмір (UA)</span>
+                        <span class="form-accordion-count" data-count="0"></span>
+                    </span>
+                    <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                </button>
+                <div class="form-accordion-panel"><div id="shoeSizeUaBtns" class="quick-buttons"></div></div>
+            </div>
+            <div class="attr-accordion attr-subblock form-accordion" id="insoleLengthBlock" style="display:none" data-acc-id="attr-insole">
+                <button type="button" class="form-accordion-header" aria-expanded="true">
+                    <span class="attr-acc-title-wrap">
+                        <span class="quick-buttons-label attr-acc-title-text">Довжина устілки, см</span>
+                        <span class="form-accordion-count" data-count="0"></span>
+                    </span>
+                    <i class="bi bi-chevron-down form-accordion-chevron"></i>
+                </button>
+                <div class="form-accordion-panel">
+                    <input type="number" id="insoleLengthCm" class="form-input" placeholder="см" min="0" inputmode="numeric">
+                </div>
+            </div>
+        </div>
             </div>
         </div>
         </div>
 
-        <div class="form-section-title">Медіа та опис</div>
-        <!-- 6. Toggle buttons -->
-        <div class="form-group" id="toggleBtnsGroup">
+        <div class="form-accordion" data-acc-id="mediaRoot">
+            <button type="button" class="form-accordion-header" aria-expanded="true" id="accHeader-mediaRoot">
+                <span class="form-accordion-title-row"><span>Медіа та опис</span></span>
+                <i class="bi bi-chevron-down form-accordion-chevron"></i>
+            </button>
+            <div class="form-accordion-panel" style="border-top:none;padding-top:0">
+        <div class="form-accordion form-accordion-nested" data-acc-id="toggles">
+            <button type="button" class="form-accordion-header" aria-expanded="true">
+                <span class="form-accordion-title-row">
+                    <span>БОТ / ТОП</span>
+                    <span class="form-accordion-count" data-acc-toggles="1" data-count="0"></span>
+                </span>
+                <i class="bi bi-chevron-down form-accordion-chevron"></i>
+            </button>
+            <div class="form-accordion-panel">
+        <div class="form-group" id="toggleBtnsGroup" style="margin-bottom:0">
             <div class="toggle-btn-wrap toggle-btn-short">
                 <button type="button" class="toggle-btn" id="toggleSendToBot" data-field="sendToBot">
                     <span class="toggle-btn-main">БОТ</span>
@@ -504,9 +753,16 @@
             <input type="hidden" name="sendToBot" id="sendToBot" value="0">
             <input type="hidden" name="isTop" id="isTop" value="0">
         </div>
+            </div>
+        </div>
 
-        <!-- 7. Media Upload -->
-        <div class="form-group">
+        <div class="form-accordion form-accordion-nested" data-acc-id="media">
+            <button type="button" class="form-accordion-header" aria-expanded="true">
+                <span class="form-accordion-title-row"><span>Медіа</span></span>
+                <i class="bi bi-chevron-down form-accordion-chevron"></i>
+            </button>
+            <div class="form-accordion-panel">
+        <div class="form-group" style="margin-bottom:0">
             <label>Медіа</label>
             <label class="media-upload" for="mediaInput">
                 <input type="file" id="mediaInput" name="media" accept="image/*,video/*" multiple>
@@ -515,11 +771,22 @@
                 <div class="media-hint">Зображення та відео</div>
             </label>
         </div>
+            </div>
+        </div>
 
-        <!-- 8. Description -->
-        <div class="form-group" id="descriptionGroup">
+        <div class="form-accordion form-accordion-nested" data-acc-id="description">
+            <button type="button" class="form-accordion-header" aria-expanded="true">
+                <span class="form-accordion-title-row"><span>Опис товару</span></span>
+                <i class="bi bi-chevron-down form-accordion-chevron"></i>
+            </button>
+            <div class="form-accordion-panel">
+        <div class="form-group" id="descriptionGroup" style="margin-bottom:0">
             <label for="description">Опис товару</label>
             <textarea id="description" name="description" class="form-textarea" placeholder="Опис товару..."></textarea>
+        </div>
+            </div>
+        </div>
+            </div>
         </div>
 
         <!-- 9. Action Buttons -->
@@ -719,12 +986,12 @@ function setCreateMode(mode) {
     const toggleBtnsGroup = document.getElementById("toggleBtnsGroup");
     const priceQuantityRow = document.getElementById("priceQuantityRow");
     if (mode === "mini") {
-        desc.textContent = "Лише SKU, назва, ціна товару, фото-відео, опис. Можливість публікувати в бот і в топові товари.";
+        desc.textContent = "SKU, назва, ціна, кількість одиниць, фото, опис. Публікація в бот і ТОП.";
         if (catSection) catSection.style.display = "none";
         if (descGroup) descGroup.style.display = "";
-        if (quantityGroup) quantityGroup.style.display = "none";
+        if (quantityGroup) quantityGroup.style.display = "";
         if (toggleBtnsGroup) toggleBtnsGroup.style.display = "";
-        if (priceQuantityRow) priceQuantityRow.style.gridTemplateColumns = "1fr";
+        if (priceQuantityRow) priceQuantityRow.style.gridTemplateColumns = "1fr 1fr";
     } else if (mode === "clean") {
         desc.textContent = "Всі поля скидаються (окрім SKU). Усі параметри доступні для введення.";
         if (catSection) catSection.style.display = "";
@@ -877,7 +1144,7 @@ function renderAttributeButtons() {
     let sizeLetterArr = SIZES_LETTER, sizeEuArr = type === "men" ? SIZES_EU_M : SIZES_EU_W;
     if (type === "accessories" && isShoe) {
         sizeLetterArr = SIZES_SHOE;
-        document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір взуття";
+        document.getElementById("sizeLetterBlock").querySelector(".attr-acc-title-text").textContent = "Розмір взуття";
         document.getElementById("sizeLetterBlock").style.display = "block";
         document.getElementById("ageChildBlock").style.display = "none";
         document.getElementById("sizeEuBlock").style.display = "none";
@@ -890,7 +1157,7 @@ function renderAttributeButtons() {
         document.getElementById("insoleLengthBlock").style.display = "none";
     } else if (type === "accessories") {
         sizeLetterArr = SIZES_ACC;
-        document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір";
+        document.getElementById("sizeLetterBlock").querySelector(".attr-acc-title-text").textContent = "Розмір";
         document.getElementById("sizeLetterBlock").style.display = "block";
         document.getElementById("ageChildBlock").style.display = "none";
         document.getElementById("sizeEuBlock").style.display = "none";
@@ -903,7 +1170,7 @@ function renderAttributeButtons() {
         document.getElementById("insoleLengthBlock").style.display = "none";
     } else if (type === "children") {
         sizeLetterArr = SIZES_CHILD;
-        document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір";
+        document.getElementById("sizeLetterBlock").querySelector(".attr-acc-title-text").textContent = "Розмір";
         document.getElementById("sizeLetterBlock").style.display = "block";
         document.getElementById("ageChildBlock").style.display = "block";
         document.getElementById("ageChildBtns").innerHTML = AGE_CHILD.map(v => `<button type="button" class="quick-btn attr-btn" data-attr="ageChild" data-val="${v}">${v}</button>`).join("");
@@ -931,7 +1198,7 @@ function renderAttributeButtons() {
         document.getElementById("lengthBlock").style.display = "none";
         document.getElementById("insoleLengthBlock").style.display = "block";
     } else {
-        document.getElementById("sizeLetterBlock").querySelector(".quick-buttons-label").textContent = "Розмір (буквами)";
+        document.getElementById("sizeLetterBlock").querySelector(".attr-acc-title-text").textContent = "Розмір (буквами)";
         document.getElementById("sizeLetterBlock").style.display = "block";
         document.getElementById("ageChildBlock").style.display = "none";
         document.getElementById("sizeEuBlock").style.display = "block";
@@ -1011,6 +1278,7 @@ function renderAttributeButtons() {
                 if (!wasActive) { this.classList.add("active"); selectedAttributes[attr] = val; }
                 else delete selectedAttributes[attr];
             }
+            if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
         };
     });
 
@@ -1040,6 +1308,7 @@ function renderAttributeButtons() {
     selectedMaterials.forEach(m => document.querySelector(`.material-btn[data-val="${m}"]`)?.classList.add("active"));
     renderMaterialPercentages();
     renderMeasures();
+    if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
 }
 
 function renderMeasures() {
@@ -1068,19 +1337,29 @@ function renderMeasures() {
             </div>
         `).join("");
     }
+    content.querySelectorAll("input").forEach(inp => {
+        inp.addEventListener("input", function() {
+            if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
+        });
+    });
+    if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
 }
 
 function renderMaterialPercentages() {
     const wrap = document.getElementById("materialPercentagesWrap");
     const list = document.getElementById("materialPercentagesList");
+    const outer = document.getElementById("materialPercentagesWrapOuter");
     if (!wrap || !list) return;
 
     if (selectedMaterials.length === 0) {
         wrap.classList.remove("visible");
         list.innerHTML = "";
+        if (outer) outer.style.display = "none";
+        if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
         return;
     }
 
+    if (outer) outer.style.display = "";
     wrap.classList.add("visible");
     list.innerHTML = selectedMaterials.map(m => {
         const pct = selectedMaterialPercentages[m] ?? (selectedMaterials.length === 1 ? 100 : "");
@@ -1109,8 +1388,150 @@ function renderMaterialPercentages() {
                 this.value = val === 0 ? "" : String(val);
             }
             selectedMaterialPercentages[mat] = isNaN(val) ? null : val;
+            if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
         });
     });
+    if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
+}
+
+const ACCORDION_STATE_KEY = "mobile_add_accordion_state_v1";
+
+function setCountBadge(el, n) {
+    if (!el) return;
+    const v = Math.max(0, Math.floor(Number(n) || 0));
+    el.textContent = v > 0 ? String(v) : "";
+    el.dataset.count = String(v);
+}
+
+function updateAllAccordionCounts() {
+    document.querySelectorAll("#attributesGroup .form-accordion[data-acc-id]").forEach(acc => {
+        const id = acc.dataset.accId;
+        const panel = acc.querySelector(".form-accordion-panel");
+        const badge = acc.querySelector(".form-accordion-count");
+        if (!panel || !badge) return;
+        let n = 0;
+        if (id === "attr-material") {
+            n = panel.querySelectorAll(".material-btn.active").length;
+        } else if (id === "attr-materialPct") {
+            document.querySelectorAll("#materialPercentagesList input").forEach(inp => {
+                const v = parseInt(inp.value, 10);
+                if (!isNaN(v) && v > 0) n++;
+            });
+        } else if (id === "attr-measures") {
+            panel.querySelectorAll("#measuresContent input").forEach(inp => {
+                if (inp.value && String(inp.value).trim() !== "") n++;
+            });
+        } else if (id === "attr-length" || id === "attr-insole") {
+            const inp = panel.querySelector("input[type=\"number\"]");
+            n = inp && inp.value && String(inp.value).trim() !== "" ? 1 : 0;
+        } else {
+            n = panel.querySelectorAll(".quick-btn.active").length;
+        }
+        setCountBadge(badge, n);
+    });
+
+    const subAcc = document.querySelector('[data-acc-id="subcat"]');
+    if (subAcc) {
+        const badge = subAcc.querySelector(".form-accordion-count");
+        const n = document.querySelectorAll("#subcategoryButtons .quick-btn.active").length;
+        setCountBadge(badge, n);
+    }
+
+    const togglesAcc = document.querySelector('[data-acc-id="toggles"]');
+    if (togglesAcc) {
+        const badge = togglesAcc.querySelector(".form-accordion-count");
+        let n = 0;
+        if (document.getElementById("toggleSendToBot")?.classList.contains("active")) n++;
+        if (document.getElementById("toggleIsTop")?.classList.contains("active")) n++;
+        setCountBadge(badge, n);
+    }
+
+    const catBadge = document.querySelector('[data-acc-total="category"]');
+    if (catBadge) {
+        let sum = 0;
+        document.querySelectorAll("#attributesGroup .form-accordion-count").forEach(b => {
+            sum += parseInt(b.dataset.count || b.textContent, 10) || 0;
+        });
+        const subB = document.querySelector('[data-acc-id="subcat"] .form-accordion-count');
+        if (subB) sum += parseInt(subB.dataset.count || subB.textContent, 10) || 0;
+        setCountBadge(catBadge, sum);
+    }
+}
+
+function persistAccordionState() {
+    const state = {};
+    document.querySelectorAll(".form-accordion[data-acc-id]").forEach(acc => {
+        const id = acc.dataset.accId;
+        if (!id) return;
+        state[id] = !acc.classList.contains("collapsed");
+    });
+    try { localStorage.setItem(ACCORDION_STATE_KEY, JSON.stringify(state)); } catch (e) {}
+}
+
+function loadAccordionState() {
+    let state = {};
+    try { state = JSON.parse(localStorage.getItem(ACCORDION_STATE_KEY) || "{}"); } catch (e) {}
+    document.querySelectorAll(".form-accordion[data-acc-id]").forEach(acc => {
+        const id = acc.dataset.accId;
+        if (state[id] === undefined) return;
+        const expanded = state[id] === true;
+        acc.classList.toggle("collapsed", !expanded);
+        const h = acc.querySelector(".form-accordion-header");
+        if (h) h.setAttribute("aria-expanded", expanded ? "true" : "false");
+    });
+}
+
+function expandAccordionIfCollapsed(acc) {
+    if (!acc || !acc.classList.contains("collapsed")) return;
+    acc.classList.remove("collapsed");
+    const h = acc.querySelector(".form-accordion-header");
+    if (h) h.setAttribute("aria-expanded", "true");
+    acc.classList.add("form-accordion--pulse");
+    setTimeout(() => acc.classList.remove("form-accordion--pulse"), 1200);
+    persistAccordionState();
+}
+
+function initAccordionSystem() {
+    if (window.__mobileAddAccordionInited) return;
+    window.__mobileAddAccordionInited = true;
+
+    document.querySelectorAll(".form-accordion[data-acc-id] .form-accordion-header").forEach(header => {
+        header.addEventListener("click", function(e) {
+            if (e.target.closest("a, button.toggle-btn, .quick-btn, .attr-btn")) return;
+            const acc = header.closest(".form-accordion[data-acc-id]");
+            if (!acc) return;
+            acc.classList.toggle("collapsed");
+            const expanded = !acc.classList.contains("collapsed");
+            header.setAttribute("aria-expanded", expanded ? "true" : "false");
+            persistAccordionState();
+        });
+    });
+
+    function onCharClick(e) {
+        const btn = e.target.closest(".quick-btn, .attr-btn, .toggle-btn");
+        if (!btn) return;
+        const acc = btn.closest(".form-accordion[data-acc-id]");
+        if (acc && acc.classList.contains("collapsed")) expandAccordionIfCollapsed(acc);
+        setTimeout(updateAllAccordionCounts, 0);
+    }
+
+    document.getElementById("attributesGroup")?.addEventListener("click", onCharClick);
+    document.getElementById("subcategoryButtons")?.addEventListener("click", function(e) {
+        const btn = e.target.closest(".quick-btn");
+        if (!btn) return;
+        const acc = document.querySelector('[data-acc-id="subcat"]');
+        if (acc && acc.classList.contains("collapsed")) expandAccordionIfCollapsed(acc);
+        setTimeout(updateAllAccordionCounts, 0);
+    });
+
+    document.getElementById("productForm")?.addEventListener("input", function(e) {
+        if (e.target.matches("#lengthCm, #insoleLengthCm") || e.target.closest("#measuresContent") || e.target.closest("#materialPercentagesList")) {
+            updateAllAccordionCounts();
+        }
+    });
+
+    loadAccordionState();
+    updateAllAccordionCounts();
 }
 
 document.getElementById("category").addEventListener("change", renderSubcategoryButtons);
@@ -1132,6 +1553,10 @@ document.getElementById("addCustomMaterialBtn").addEventListener("click", functi
         selectedMaterials.push(val);
         renderMaterialPercentages();
         inp.value = "";
+        const accMat = document.querySelector('[data-acc-id="attr-material"]');
+        if (accMat && accMat.classList.contains("collapsed")) expandAccordionIfCollapsed(accMat);
+        const accPct = document.querySelector('[data-acc-id="attr-materialPct"]');
+        if (accPct && accPct.classList.contains("collapsed")) expandAccordionIfCollapsed(accPct);
     }
 });
 
@@ -1185,6 +1610,19 @@ document.getElementById("productForm").addEventListener("submit", function(e) {
 
     saveTemplate();
 
+    const saveAndAdd = e.submitter && e.submitter.name === "saveAndAdd";
+    if (saveAndAdd) {
+        const skuEl = document.getElementById("sku");
+        skuEl.value = getNextSku(skuEl.value);
+        document.getElementById("productName").value = "";
+        document.getElementById("price").value = "";
+        document.getElementById("quantity").value = "";
+        document.getElementById("description").value = "";
+        document.getElementById("mediaInput").value = "";
+        if (typeof loadAccordionState === "function") loadAccordionState();
+        if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
+    }
+
     const data = Object.fromEntries(formData);
     console.log("Form data (prototype):", data);
 });
@@ -1196,10 +1634,16 @@ document.querySelector(".btn-cancel").addEventListener("click", function() {
 document.getElementById("toggleSendToBot").addEventListener("click", function() {
     this.classList.toggle("active");
     document.getElementById("sendToBot").value = this.classList.contains("active") ? "1" : "0";
+    const acc = document.querySelector('[data-acc-id="toggles"]');
+    if (acc && acc.classList.contains("collapsed")) expandAccordionIfCollapsed(acc);
+    if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
 });
 document.getElementById("toggleIsTop").addEventListener("click", function() {
     this.classList.toggle("active");
     document.getElementById("isTop").value = this.classList.contains("active") ? "1" : "0";
+    const acc = document.querySelector('[data-acc-id="toggles"]');
+    if (acc && acc.classList.contains("collapsed")) expandAccordionIfCollapsed(acc);
+    if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
 });
 
 document.getElementById("modeMini").addEventListener("click", function() { setCreateMode("mini"); });
@@ -1212,6 +1656,7 @@ setCreateMode(savedMode);
 if (savedMode !== "template" && savedMode !== "clean") {
     renderSubcategoryButtons();
 }
+initAccordionSystem();
 </script>
 </body>
 </html>
