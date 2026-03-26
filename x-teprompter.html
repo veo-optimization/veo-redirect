@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Teleprompter</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Montserrat', sans-serif;
+    background: #111;
+    color: white;
+}
+
+/* Налаштування */
+.settings {
+    padding: 20px;
+}
+
+textarea {
+    width: 100%;
+    height: 150px;
+    margin-top: 10px;
+}
+
+input {
+    margin: 5px;
+}
+
+button {
+    padding: 10px 15px;
+    margin: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Суфлер */
+.teleprompter {
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background: black;
+    overflow: hidden;
+}
+
+.text {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    top: 100%;
+}
+
+/* Кнопки керування */
+.controls {
+    position: fixed;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+.controls button {
+    font-size: 18px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="settings">
+    <h2>Налаштування суфлера</h2>
+
+    <label>Текст:</label>
+    <textarea id="inputText">Каталог ROSSO TT</textarea>
+
+    <br>
+
+    <label>Швидкість:</label>
+    <input type="number" id="speed" value="1" step="0.1">
+
+    <br>
+
+    <label>Розмір тексту:</label>
+    <input type="number" id="fontSize" value="40">
+
+    <br>
+
+    <label>Крок назад (сек):</label>
+    <input type="number" id="backStep" value="5">
+
+    <label>Крок вперед (сек):</label>
+    <input type="number" id="forwardStep" value="5">
+
+    <br><br>
+
+    <button onclick="start()">Запустити</button>
+</div>
+
+<div class="teleprompter" id="teleprompter">
+    <div class="text" id="text"></div>
+
+    <div class="controls">
+        <button onclick="changeSpeed(0.5)">Повільніше</button>
+        <button onclick="changeSpeed(2)">Швидше</button>
+
+        <button onclick="skip(-1)">⬅ Назад</button>
+        <button onclick="skip(1)">Вперед ➡</button>
+    </div>
+</div>
+
+<script>
+let position = window.innerHeight;
+let speed = 1;
+let interval;
+
+function start() {
+    const text = document.getElementById('inputText').value;
+    speed = parseFloat(document.getElementById('speed').value);
+    const fontSize = document.getElementById('fontSize').value;
+
+    document.querySelector('.settings').style.display = 'none';
+    document.getElementById('teleprompter').style.display = 'block';
+
+    const textDiv = document.getElementById('text');
+    textDiv.innerText = text;
+    textDiv.style.fontSize = fontSize + 'px';
+
+    position = window.innerHeight;
+
+    interval = setInterval(scrollText, 30);
+}
+
+function scrollText() {
+    position -= speed;
+    document.getElementById('text').style.top = position + 'px';
+}
+
+function changeSpeed(multiplier) {
+    speed *= multiplier;
+}
+
+function skip(direction) {
+    const back = parseInt(document.getElementById('backStep').value);
+    const forward = parseInt(document.getElementById('forwardStep').value);
+
+    let seconds = direction === -1 ? back : forward;
+
+    position += direction * seconds * 50;
+}
+</script>
+
+</body>
+</html>
