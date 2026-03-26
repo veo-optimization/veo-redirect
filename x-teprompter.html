@@ -9,19 +9,15 @@
 * { box-sizing:border-box; margin:0; padding:0; }
 body { font-family:'Montserrat',sans-serif; background:#0f0f0f; color:white; overflow:hidden; }
 .settings { position:fixed; width:100%; height:100%; overflow-y:auto; padding:16px; }
-
 textarea,input { width:100%; border-radius:12px; border:none; padding:12px; margin-top:6px; font-size:16px; }
-textarea { height:180px; resize:none; }
+textarea { height:180px; resize:none; } /* півтора рази більше */
 .label { margin-top:12px; display:block; font-size:14px; opacity:0.8; }
+.button-main { width:100%; padding:16px; margin-top:16px; border-radius:12px; border:none; font-size:20px; font-weight:700; color:white; background:linear-gradient(135deg,#4CAF50,#2ecc71); cursor:pointer; }
+.button-secondary { width:100%; padding:12px; margin-top:10px; border-radius:12px; border:none; background:rgba(255,255,255,0.1); color:white; cursor:pointer; }
 
-.button-main { width:100%; padding:16px; margin-top:16px; border-radius:16px; border:none; font-size:20px; font-weight:700; color:white; background: linear-gradient(45deg,#FF0040,#F6C90E,#00F0FF); cursor:pointer; transition:0.2s; box-shadow:0 5px 15px rgba(0,0,0,0.3); }
-.button-main:hover { transform:scale(1.05); }
-
-.button-secondary { width:100%; padding:12px; margin-top:10px; border-radius:12px; border:none; background:rgba(255,255,255,0.1); color:white; cursor:pointer; transition:0.2s; }
-.button-secondary:hover { background:rgba(255,255,255,0.2); }
-
+/* TELEPROMPTER */
 .teleprompter { display:none; position:fixed; width:100%; height:100%; background:black; overflow:hidden; }
-.close-btn { position:absolute; top:15px; right:15px; font-size:32px; cursor:pointer; z-index:999; color:#FF0040; text-shadow:0 0 8px rgba(255,0,64,0.8); }
+.close-btn { position:absolute; top:15px; right:15px; font-size:28px; cursor:pointer; z-index:999; }
 .text { position:absolute; width:100%; text-align:center; top:100%; padding:0 10px; line-height:1.5; }
 
 /* LINES PREVIEW */
@@ -30,37 +26,27 @@ textarea { height:180px; resize:none; }
 @keyframes moveLine { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
 /* CONTROLS */
-.controls { position: fixed; bottom: 20px; width:100%; display: flex; justify-content: space-between; padding: 0 20px; }
+.controls { position: fixed; bottom: 20px; width: 100%; display: flex; justify-content: space-between; padding: 0 20px; }
 .control-block { text-align:center; }
+.circle-btn { width: 70px; height: 70px; border-radius:50%; border:none; font-size:22px; background: rgba(255,255,255,0.1); color:white; cursor:pointer; }
+.label-small { font-size:12px; margin-top:5px; opacity:0.7; }
 
-.circle-btn { width:70px; height:70px; border-radius:50%; border:none; font-size:24px; background: linear-gradient(135deg,#FF0040,#F6C90E,#00F0FF); color:white; cursor:pointer; box-shadow:0 5px 15px rgba(0,0,0,0.5); transition:0.2s; }
-.circle-btn:hover { transform:scale(1.1); }
-
-.label-small { font-size:12px; margin-top:5px; opacity:0.8; }
-
-/* Speed & Font */
 .speed-controls, .font-controls { position:fixed; width:100%; text-align:center; }
 .speed-controls { bottom:110px; }
 .font-controls { bottom:180px; }
-.speed-controls button, .font-controls button { margin:5px; padding:10px 15px; border-radius:16px; border:none; background:linear-gradient(135deg,#FF0040,#F6C90E,#00F0FF); color:white; font-weight:600; font-size:16px; cursor:pointer; transition:0.2s; box-shadow:0 5px 15px rgba(0,0,0,0.5);}
-.speed-controls button:hover, .font-controls button:hover{ transform:scale(1.1); }
+.speed-controls button, .font-controls button { margin:5px; padding:10px 15px; border-radius:10px; border:none; background:rgba(255,255,255,0.1); color:white; cursor:pointer; }
 
-.pause-btn { position:fixed; bottom:60px; left:50%; transform:translateX(-50%); padding:12px 28px; font-size:18px; border:none; border-radius:20px; background:linear-gradient(135deg,#FF0040,#F6C90E,#00F0FF); color:white; cursor:pointer; box-shadow:0 5px 15px rgba(0,0,0,0.5); transition:0.2s;}
-.pause-btn:hover{ transform:scale(1.05); }
+.pause-btn { position:fixed; bottom:60px; left:50%; transform:translateX(-50%); padding:12px 24px; font-size:18px; border:none; border-radius:12px; background:rgba(255,255,255,0.2); color:white; cursor:pointer; }
 
 /* АКОРДЕОН */
 .accordion { width:100%; margin-top:16px; }
 .accordion-item { border-top:1px solid rgba(255,255,255,0.2); }
-.accordion-header { padding:12px; cursor:pointer; font-weight:600; background:rgba(255,255,255,0.05); transition:0.2s;}
-.accordion-header:hover { background:rgba(255,255,255,0.15);}
-.accordion-content { display:none; padding:10px 15px; background:rgba(255,255,255,0.05); border-radius:10px; }
-.copy-btn, .use-btn { padding:6px 10px; margin:3px; border:none; border-radius:10px; background:linear-gradient(135deg,#FF0040,#F6C90E,#00F0FF); color:white; cursor:pointer; font-size:12px; transition:0.2s; }
-.copy-btn:hover, .use-btn:hover { transform:scale(1.05); }
+.accordion-header { padding:12px; cursor:pointer; font-weight:600; background:rgba(255,255,255,0.05); }
+.accordion-content { display:none; padding:10px 15px; background:rgba(255,255,255,0.05); }
+.copy-btn, .use-btn { padding:6px 10px; margin:3px; border:none; border-radius:8px; background:rgba(255,255,255,0.1); color:white; cursor:pointer; font-size:12px; }
 
-/* AI Links */
 .ai-links { margin-top:20px; text-align:center; font-size:14px; }
-.ai-links a { margin:5px; color:#FF0040; font-weight:600; text-decoration:none; transition:0.2s;}
-.ai-links a:hover { color:#00F0FF; }
+.ai-links a { margin:5px; color:#4CAF50; text-decoration:none; font-weight:600; }
 </style>
 </head>
 <body>
@@ -93,11 +79,31 @@ textarea { height:180px; resize:none; }
 
 <div class="accordion">
 <div class="accordion-item">
-<div class="accordion-header" onclick="toggleAccordion(this)">Ідеї для текстів</div>
-<div class="accordion-content" id="ideasContent"></div>
+<div class="accordion-header" onclick="toggleAccordion(this)">Продаж одягу та взуття</div>
+<div class="accordion-content" id="clothes">
 </div>
 </div>
-
+<div class="accordion-item">
+<div class="accordion-header" onclick="toggleAccordion(this)">Продаж аксесуарів</div>
+<div class="accordion-content" id="accessories">
+</div>
+</div>
+<div class="accordion-item">
+<div class="accordion-header" onclick="toggleAccordion(this)">Продаж автомобілів</div>
+<div class="accordion-content" id="cars">
+</div>
+</div>
+<div class="accordion-item">
+<div class="accordion-header" onclick="toggleAccordion(this)">Послуги психологів</div>
+<div class="accordion-content" id="psychology">
+</div>
+</div>
+<div class="accordion-item">
+<div class="accordion-header" onclick="toggleAccordion(this)">Послуги юристів</div>
+<div class="accordion-content" id="law">
+</div>
+</div>
+</div>
 </div>
 
 <div class="teleprompter" id="teleprompter">
@@ -119,13 +125,22 @@ textarea { height:180px; resize:none; }
 
 <div class="controls">
     <div class="control-block">
-        <button class="circle-btn" onclick="smoothSkip(-1)">⟲</button>
+        <button class="circle-btn" onclick="smoothSkip(-1)">⬅</button>
         <div class="label-small" id="backLabel"></div>
     </div>
     <div class="control-block">
-        <button class="circle-btn" onclick="smoothSkip(1)">⟳</button>
+        <button class="circle-btn" onclick="smoothSkip(1)">➡</button>
         <div class="label-small" id="forwardLabel"></div>
     </div>
+</div>
+
+<div class="accordion" style="position:absolute; bottom:10px; width:95%; left:2.5%; text-align:left; max-height:40%; overflow-y:auto;">
+<div class="accordion-item">
+<div class="accordion-header" onclick="toggleAccordion(this)">Ідеї для текстів</div>
+<div class="accordion-content" id="ideasContent">
+<!-- Будуть вставлені тексти через JS -->
+</div>
+</div>
 </div>
 
 <div class="ai-links">
@@ -138,8 +153,161 @@ textarea { height:180px; resize:none; }
 </div>
 
 <script>
-// -- JS: все як в попередньому коді, зберегли всі функції, ідеї текстів, прокрутку, паузу, шрифт, швидкість
-// --- тут можна вставити JS з попереднього коду, бо стилі змінилися
+// Тексти для ідей
+const ideas = {
+"clothes":["5 лайфхаків як зберегти білі футболки яскравими",
+"Топ-3 помилки при прасуванні джинсів",
+"Як підібрати взуття під образ швидко і стильно",
+"Як доглядати за шкіряною сумкою, щоб служила 5+ років",
+"Трендові кольори цього сезону та як їх правильно поєднувати"],
+"accessories":["5 способів носити шарфи стильно",
+"Як обирати ремені під офісний образ",
+"Догляд за сонцезахисними окулярами",
+"Як правильно чистити годинник",
+"Ідеї подарунків для друзів на свята"],
+"cars":["Чим відрізняється бензин 95 від 92",
+"Що таке октанове число і як воно впливає на авто",
+"Цетанове число та дизельне паливо",
+"Як доглядати за лакофарбовим покриттям",
+"5 порад з економії палива щодня"],
+"psychology":["Як зберегти психічне здоров’я під час стресу",
+"Техніки швидкої релаксації на роботі",
+"Як підтримувати позитивні відносини з колегами",
+"5 способів підвищити концентрацію",
+"Як не вигоріти емоційно на щоденній роботі"],
+"law":["Що робити при складанні договору",
+"Як уникнути штрафів при роботі з клієнтами",
+"5 типових помилок ФОП при веденні бізнесу",
+"Як захистити авторські права на продукт",
+"Поради щодо оформлення нерухомості"]
+};
+
+// Заповнення ідей
+function populateIdeas(){
+for(let cat in ideas){
+    const container = document.getElementById(cat);
+    ideas[cat].forEach(t=>{
+        const div = document.createElement('div');
+        div.style.marginBottom='5px';
+        div.innerHTML = `${t} <button class="copy-btn" onclick="copyText('${t}')">Скопіювати</button> <button class="use-btn" onclick="useText('${t}')">Використати</button>`;
+        container.appendChild(div);
+    });
+}
+}
+populateIdeas();
+
+function copyText(t){ navigator.clipboard.writeText(t); alert("Текст скопійовано"); }
+function useText(t){ document.getElementById('inputText').value=t; calculateTime(); }
+
+function toggleAccordion(header){
+const content=header.nextElementSibling;
+if(content.style.display==='block'){ content.style.display='none'; }
+else{ content.style.display='block'; }
+}
+
+function toggleSettings(){
+const panel=document.getElementById('settingsPanel');
+panel.style.display=panel.style.display==='block'?'none':'block';
+calculateTime();
+}
+
+function clearText(){ document.getElementById('inputText').value=''; calculateTime(); }
+
+// Підрахунок часу читання
+function calculateTime(){
+let txt=document.getElementById('inputText').value.trim();
+let words=txt? txt.split(/\s+/).length:0;
+let wpm=180; // середня швидкість 180 слів/хв
+let minutes=Math.floor(words/wpm);
+let seconds=Math.ceil((words%wpm)/(wpm/60));
+document.getElementById('readingTime').innerText=`Час читання: ${minutes} хв ${seconds} сек`;
+}
+document.getElementById('inputText').addEventListener('input',calculateTime);
+
+let position,speed,interval,paused=false,isTouching=false,lastY=0;
+const defaultText="Це VEO Prompter — інструмент для комфортного читання тексту під час запису відео або ефірів.";
+
+const inputText=document.getElementById('inputText');
+const speedInput=document.getElementById('speed');
+const fontSizeInput=document.getElementById('fontSize');
+const backStepInput=document.getElementById('backStep');
+const forwardStepInput=document.getElementById('forwardStep');
+const teleprompter=document.getElementById('teleprompter');
+const textEl=document.getElementById('text');
+const backLabel=document.getElementById('backLabel');
+const forwardLabel=document.getElementById('forwardLabel');
+const lineContainer=document.getElementById('lineContainer');
+const pauseBtn=document.getElementById('pauseBtn');
+
+function getText(){ return inputText.value.trim()||defaultText; }
+
+function updateLabels(){
+    backLabel.innerText="Назад - "+backStepInput.value+" сек";
+    forwardLabel.innerText="Вперед + "+forwardStepInput.value+" сек";
+}
+
+function start(){
+    document.querySelector('.settings').style.display='none';
+    teleprompter.style.display='block';
+    textEl.style.fontSize=fontSizeInput.value+'px';
+    speed=parseFloat(speedInput.value);
+    position=window.innerHeight;
+    updateLabels();
+    // створюємо лінії
+    lineContainer.innerHTML='';
+    for(let i=0;i<15;i++){
+        let l=document.createElement('div');
+        l.className='line';
+        l.style.animationDelay=(i*0.1)+'s';
+        lineContainer.appendChild(l);
+    }
+    // через 2с показуємо текст
+    setTimeout(()=>{
+        lineContainer.style.display='none';
+        textEl.innerText=getText();
+        interval=requestAnimationFrame(scrollText);
+    },2000);
+}
+
+function scrollText(){
+    if(!paused && !isTouching){
+        position-=speed;
+        textEl.style.top=position+'px';
+    }
+    interval=requestAnimationFrame(scrollText);
+}
+
+function changeSpeed(mult){ speed*=mult; }
+function togglePause(){ paused=!paused; pauseBtn.innerText=paused?'Відновити':'Пауза'; }
+function changeFontSize(delta){ textEl.style.fontSize=(parseInt(textEl.style.fontSize)+delta)+'px'; }
+
+function exitTeleprompter(){ cancelAnimationFrame(interval); teleprompter.style.display='none'; document.querySelector('.settings').style.display='block'; }
+
+function smoothSkip(dir){
+    let sec = dir===-1? backStepInput.value: forwardStepInput.value;
+    let target = position + dir*sec*50;
+    let step = dir*(sec*50)/30;
+    let count=0;
+    function animateSkip(){
+        if(count<30){
+            position+=step;
+            textEl.style.top=position+'px';
+            count++;
+            requestAnimationFrame(animateSkip);
+        }
+    }
+    animateSkip();
+}
+
+teleprompter.addEventListener('touchstart',e=>{isTouching=true; lastY=e.touches[0].clientY;});
+teleprompter.addEventListener('touchmove',e=>{
+    let currentY=e.touches[0].clientY;
+    let diff=lastY-currentY;
+    position-=diff;
+    textEl.style.top=position+'px';
+    lastY=currentY;
+});
+teleprompter.addEventListener('touchend',()=>{isTouching=false;});
 </script>
 
 </body>
