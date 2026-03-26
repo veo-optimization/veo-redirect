@@ -3,81 +3,119 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Бриф для міні-сайту</title>
+<title>Бриф міні-сайту</title>
 
 <style>
+:root {
+    --main:#000;
+    --bg:#f5f5f5;
+    --card:#fff;
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-    background: #f7f7f7;
-    margin: 0;
+    margin:0;
+    font-family:-apple-system, BlinkMacSystemFont;
+    background:var(--bg);
 }
+
 .container {
-    max-width: 500px;
-    margin: auto;
-    padding: 15px;
-}
-.card {
-    background: white;
-    padding: 15px;
-    border-radius: 16px;
-    margin-bottom: 12px;
-}
-h2 { text-align:center; }
-label { font-size:14px; font-weight:600; }
-.hint { font-size:12px; color:#777; margin-bottom:5px;}
-input, textarea, select {
-    width:100%;
+    max-width:480px;
+    margin:auto;
     padding:12px;
-    border-radius:10px;
-    border:1px solid #ddd;
+}
+
+.card {
+    background:var(--card);
+    padding:14px;
+    border-radius:18px;
     margin-bottom:10px;
 }
-.checkbox {
-    display:flex;
-    gap:10px;
-    margin:5px 0;
+
+h2 {text-align:center;}
+
+label {
+    font-size:14px;
+    font-weight:600;
 }
-button {
+
+.hint {
+    font-size:12px;
+    color:#777;
+    margin-bottom:6px;
+}
+
+input, textarea, select {
     width:100%;
-    padding:15px;
-    border:none;
+    padding:14px;
     border-radius:12px;
+    border:1px solid #ddd;
+    font-size:16px;
+    margin-bottom:10px;
+}
+
+.toggle {
+    display:flex;
+    gap:8px;
+}
+
+.toggle button {
+    flex:1;
+    padding:12px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    background:#fff;
+}
+
+.toggle button.active {
     background:black;
     color:white;
-    font-size:16px;
 }
+
 .sticky {
     position:fixed;
     bottom:0;
     width:100%;
-    max-width:500px;
+    max-width:480px;
     left:50%;
     transform:translateX(-50%);
     background:white;
     padding:10px;
-    border-top:1px solid #ddd;
+    border-top:1px solid #eee;
 }
-.hidden { display:none; }
+
+.main-btn {
+    width:100%;
+    padding:16px;
+    border-radius:14px;
+    border:none;
+    background:black;
+    color:white;
+    font-size:16px;
+}
+
+.hidden {display:none;}
+
 .modal {
     display:none;
     position:fixed;
     width:100%;
     height:100%;
     background:rgba(0,0,0,0.6);
-    top:0;
 }
+
 .modal-content {
     background:white;
     margin:10% auto;
     padding:15px;
     width:90%;
-    border-radius:12px;
+    border-radius:14px;
 }
+
 pre {
     background:#111;
     color:#0f0;
     padding:10px;
-    white-space:pre-wrap;
+    font-size:12px;
 }
 </style>
 </head>
@@ -86,25 +124,24 @@ pre {
 
 <div class="container">
 
-<h2>Створення міні-сайту</h2>
+<h2>Міні-сайт</h2>
 
 <div class="card">
 <label>Назва магазину</label>
-<div class="hint">Можна кирилицею або латиницею</div>
+<div class="hint">Наприклад: VEO STORE</div>
 <input id="shop">
 
-<label>Назва посилання</label>
-<div class="hint">Тільки латиниця. Наприклад: veo_store</div>
+<label>Посилання</label>
+<div class="hint">латиниця: veo_store</div>
 <input id="slug">
 </div>
 
 <div class="card">
 <label>ПІБ ФОП</label>
-<div class="hint">Наприклад: Шевченко Тарас Григорович</div>
 <input id="fop">
 
 <label>ЄДРПОУ</label>
-<input id="edrpou">
+<input id="edrpou" inputmode="numeric">
 
 <label>IBAN</label>
 <input id="iban">
@@ -113,117 +150,83 @@ pre {
 <select id="bank">
 <option>ПриватБанк</option>
 <option>Монобанк</option>
-<option>Ощадбанк</option>
-<option>Укрсиббанк</option>
-<option>Райффайзен</option>
 <option>Інший</option>
 </select>
 <input id="bank_other" class="hidden" placeholder="Ваш банк">
 </div>
 
 <div class="card">
-<label>TikTok (основний)</label>
-<input id="tt_main">
-
-<label>TikTok резерви</label>
+<label>TikTok</label>
+<input id="tt_main" placeholder="Основний">
 <input id="tt1" placeholder="Резерв 1">
 <input id="tt2" placeholder="Резерв 2">
-<input id="tt3" placeholder="Резерв 3">
+</div>
 
-<label>Інші соцмережі</label>
+<div class="card">
+<label>Соцмережі</label>
 <input id="instagram" placeholder="Instagram">
-<input id="facebook" placeholder="Facebook">
 <input id="youtube" placeholder="YouTube">
-<input id="other_social" placeholder="Інші (через кому)">
+<input id="other_social" placeholder="Інші">
 </div>
 
 <div class="card">
-<label>Контакти</label>
+<label>Телефон</label>
+<input id="phone" inputmode="numeric" placeholder="0661234567">
 
-<div class="hint">Телефон у форматі: 0661234567</div>
-<input id="phone">
-
-<input id="tg" placeholder="Telegram username (@name)">
-<input id="tg_group" placeholder="Telegram канал / група">
-
-<button onclick="openTG()">Як створити username</button>
+<label>Telegram</label>
+<input id="tg" placeholder="@username">
 </div>
 
 <div class="card">
-<label>Локації (до 3)</label>
-<div class="hint">Місто, адреса або Google Maps</div>
-<input id="map1" placeholder="Точка 1">
-<input id="map2" placeholder="Точка 2">
-<input id="map3" placeholder="Точка 3">
+<label>Локації</label>
+<input id="map1" placeholder="Адреса 1">
+<input id="map2" placeholder="Адреса 2">
 </div>
 
 <div class="card">
-<label>Доставка</label>
-<div class="checkbox"><input type="checkbox" value="Нова пошта"> Нова пошта</div>
-<div class="checkbox"><input type="checkbox" value="Укрпошта"> Укрпошта</div>
-<div class="checkbox"><input type="checkbox" value="Meest"> Meest</div>
-<div class="checkbox"><input type="checkbox" value="Delivery"> Delivery</div>
-</div>
-
-<div class="card">
-<label>Оплата</label>
-
-<div class="checkbox">
-<input type="checkbox" id="card_pay"> Оплата на картку
+<label>Оплата на картку</label>
+<div class="toggle">
+<button onclick="setCard(true,this)">Є</button>
+<button onclick="setCard(false,this)">Немає</button>
 </div>
 
 <div id="card_block" class="hidden">
 <input id="card_number" placeholder="Номер картки">
 <input id="card_owner" placeholder="ПІБ власника">
-<select id="card_bank">
-<option>ПриватБанк</option>
-<option>Монобанк</option>
-<option>Ощадбанк</option>
-<option>Укрсиббанк</option>
-<option>Райффайзен</option>
-<option>Інший</option>
-</select>
-<input id="card_bank_other" class="hidden" placeholder="Інший банк">
 </div>
 </div>
 
 <div class="card">
 <label>Повернення</label>
-<div class="checkbox">
-<input type="checkbox" id="return_yes"> Є
-<input type="checkbox" id="return_no"> Немає
+<div class="toggle">
+<button onclick="setReturn(true,this)">Є</button>
+<button onclick="setReturn(false,this)">Немає</button>
 </div>
 
-<div id="return_options" class="hidden">
-<div class="checkbox"><input type="checkbox" value="товарний вигляд"> Товарний вигляд</div>
-<div class="checkbox"><input type="checkbox" value="без слідів носіння"> Без слідів носіння</div>
-<div class="checkbox"><input type="checkbox" value="в упаковці"> В упаковці</div>
+<div id="return_block" class="hidden">
+<input id="return_cond" placeholder="Умови повернення">
 </div>
 
 <label>Обмін</label>
-<div class="checkbox">
-<input type="checkbox" id="exchange_yes"> Є
-<input type="checkbox" id="exchange_no"> Немає
+<div class="toggle">
+<button onclick="setExchange(true,this)">Є</button>
+<button onclick="setExchange(false,this)">Немає</button>
 </div>
 
-<div id="exchange_options" class="hidden">
-<div class="checkbox"><input type="checkbox" value="тільки брак"> Тільки брак</div>
-<div class="checkbox"><input type="checkbox" value="до 7 днів"> До 7 днів</div>
+<div id="exchange_block" class="hidden">
+<input id="exchange_cond" placeholder="Умови обміну">
 </div>
-
-<textarea id="extra_conditions" placeholder="Додаткові умови"></textarea>
 </div>
 
 <div class="card">
 <label>Пароль</label>
-<div class="hint">Новий пароль для доступу до міні-сайту</div>
 <input id="pass">
 </div>
 
 </div>
 
 <div class="sticky">
-<button onclick="generate()">Згенерувати</button>
+<button class="main-btn" onclick="generate()">Згенерувати</button>
 </div>
 
 <div class="modal" id="modal">
@@ -233,100 +236,71 @@ pre {
 </div>
 </div>
 
-<div class="modal" id="tgmodal">
-<div class="modal-content">
-<p><b>Android:</b> Telegram → Налаштування → Username</p>
-<p><b>iPhone:</b> Settings → Username</p>
-<p><b>Канал:</b> Тип → Публічний → створити посилання</p>
-<button onclick="closeTG()">Закрити</button>
-</div>
-</div>
-
 <script>
 
-bank.onchange = () => {
-    bank_other.classList.toggle("hidden", bank.value !== "Інший");
-};
+bank.onchange=()=>bank_other.classList.toggle("hidden", bank.value!=="Інший");
 
-card_pay.onchange = () => {
-    card_block.classList.toggle("hidden", !card_pay.checked);
-};
+let card=false, ret=false, ex=false;
 
-card_bank.onchange = () => {
-    card_bank_other.classList.toggle("hidden", card_bank.value !== "Інший");
-};
+function setCard(val,el){
+    card=val;
+    card_block.classList.toggle("hidden", !val);
+    highlight(el);
+}
+function setReturn(val,el){
+    ret=val;
+    return_block.classList.toggle("hidden", !val);
+    highlight(el);
+}
+function setExchange(val,el){
+    ex=val;
+    exchange_block.classList.toggle("hidden", !val);
+    highlight(el);
+}
 
-return_yes.onchange = () => {
-    return_options.classList.toggle("hidden", !return_yes.checked);
-};
-
-exchange_yes.onchange = () => {
-    exchange_options.classList.toggle("hidden", !exchange_yes.checked);
-};
+function highlight(el){
+    [...el.parentNode.children].forEach(b=>b.classList.remove("active"));
+    el.classList.add("active");
+}
 
 function generate(){
 
-    let deliveries = [...document.querySelectorAll('input[type=checkbox]:checked')]
-    .map(el=>el.value).filter(Boolean);
-
-    let locations = [map1.value, map2.value, map3.value].filter(Boolean);
-
-    let cardInfo = card_pay.checked ? `
-Оплата на картку:
-Номер: ${card_number.value}
-Власник: ${card_owner.value}
-Банк: ${card_bank.value === 'Інший' ? card_bank_other.value : card_bank.value}
-` : `Оплата на картку: Немає`;
-
-    result.textContent = `
-Назва магазину: ${shop.value}
+result.textContent = `
+Назва: ${shop.value}
 Посилання: ${slug.value}
 
-ПІБ ФОП: ${fop.value}
+ФОП: ${fop.value}
 ЄДРПОУ: ${edrpou.value}
 IBAN: ${iban.value}
 Банк: ${bank.value === 'Інший' ? bank_other.value : bank.value}
 
 TikTok: ${tt_main.value}
-Резерви: ${tt1.value}, ${tt2.value}, ${tt3.value}
+Резерви: ${tt1.value}, ${tt2.value}
 
 Instagram: ${instagram.value}
-Facebook: ${facebook.value}
 YouTube: ${youtube.value}
-Інші соцмережі: ${other_social.value}
+Інше: ${other_social.value}
 
 Телефон: ${phone.value}
 Telegram: ${tg.value}
-Telegram канал: ${tg_group.value}
 
-Локації: ${locations.join(' | ')}
+Локації: ${map1.value}, ${map2.value}
 
-Доставка: ${deliveries.join(', ')}
+Оплата: ${card ? `Картка ${card_number.value}` : 'Немає'}
 
-${cardInfo}
-
-Повернення: ${return_yes.checked ? 'Є' : 'Немає'}
-Обмін: ${exchange_yes.checked ? 'Є' : 'Немає'}
-
-Умови повернення/обміну:
-${[...document.querySelectorAll('#return_options input:checked, #exchange_options input:checked')]
-.map(el=>el.value).join(', ')}
-
-Додатково: ${extra_conditions.value}
+Повернення: ${ret ? return_cond.value : 'Немає'}
+Обмін: ${ex ? exchange_cond.value : 'Немає'}
 
 Пароль: ${pass.value}
 `;
 
-    modal.style.display = "block";
+modal.style.display="block";
 }
 
 function copy(){
-    navigator.clipboard.writeText(result.textContent);
-    alert("Скопійовано");
+navigator.clipboard.writeText(result.textContent);
+alert("Скопійовано");
 }
-
-function openTG(){ tgmodal.style.display="block"; }
-function closeTG(){ tgmodal.style.display="none"; }
 
 </script>
 
