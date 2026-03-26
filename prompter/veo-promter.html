@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>VEO суфлер</title>
+    <style>
+        * { box-sizing: border-box; }
+        html, body {
+            margin: 0;
+            height: 100%;
+            background: #0f0f12;
+            color: #f4f4f5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            padding: 10px 12px;
+            background: #18181c;
+            border-bottom: 1px solid #2a2a32;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .toolbar label { font-size: 0.75rem; color: #a1a1aa; }
+        .toolbar button, .toolbar input[type="file"] {
+            font: inherit;
+            cursor: pointer;
+        }
+        .btn {
+            padding: 8px 14px;
+            border-radius: 10px;
+            border: 1px solid #3f3f46;
+            background: #27272a;
+            color: #fafafa;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        .btn:hover { background: #3f3f46; }
+        .btn-primary {
+            background: #7c3aed;
+            border-color: #6d28d9;
+        }
+        .btn-primary:hover { background: #6d28d9; }
+        .btn[aria-pressed="true"] { outline: 2px solid #a78bfa; }
+        input[type="range"] { width: 120px; vertical-align: middle; }
+        .stage-wrap {
+            height: calc(100vh - 56px);
+            overflow: hidden;
+            position: relative;
+        }
+        .stage-wrap.mirror { transform: scaleX(-1); }
+        #scrollBox {
+            height: 100%;
+            overflow: hidden;
+            padding: 8vh 6vw 20vh;
+            cursor: default;
+        }
+        #scrollContent {
+            font-size: var(--tp-size, clamp(1.5rem, 5vw, 3rem));
+            line-height: 1.55;
+            max-width: 52ch;
+            margin: 0 auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            transition: transform 0.05s linear;
+            will-change: transform;
+            text-align: center;
+            text-shadow: 0 2px 24px rgba(0,0,0,0.45);
+        }
+        .hint {
+            font-size: 0.7rem;
+            color: #71717a;
+            margin-left: auto;
+            max-width: 200px;
+            text-align: right;
+        }
+        @media (max-width: 480px) {
+            .hint { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <button type="button" class="btn btn-primary" id="btnPlay" aria-pressed="false">Старт</button>
+        <button type="button" class="btn" id="btnReset">На початок</button>
+        <label>Швидкість <input type="range" id="speed" min="0" max="100" value="35"></label>
+        <label>Шрифт <input type="range" id="fontSize" min="80" max="220" value="120"></label>
+        <button type="button" class="btn" id="btnMirror" aria-pressed="false" title="Дзеркало для скляного суфлера">Дзеркало</button>
+        <label class="btn" style="display:inline-flex;align-items:center;gap:6px;">
+            Текст
+            <input type="file" id="fileText" accept=".txt,text/plain" />
+        </label>
+        <span class="hint">Текст за замовчуванням з тексти/usi-teksty.txt (через «Відкрити» або вставте нижче)</span>
+    </div>
+    <div class="stage-wrap" id="stageWrap">
+        <div id="scrollBox">
+            <div id="scrollContent"></div>
+        </div>
+    </div>
+    <script>
+(function () {
+    const scrollContent = document.getElementById("scrollContent");
+    const scrollBox = document.getElementById("scrollBox");
+    const stageWrap = document.getElementById("stageWrap");
+    const btnPlay = document.getElementById("btnPlay");
+    const btnReset = document.getElementById("btnReset");
+    const btnMirror = document.getElementById("btnMirror");
+    const speedEl = document.getElementById("speed");
+    const fontSizeEl = document.getElementById("fontSize");
+    const fileText = document.getElementById("fileText");
+
+    const DEFAULT_TEXT = "Завантажте файл .txt (наприклад, тексти/usi-teksty.txt) або оберіть його кнопкою «Текст».\n\nКерування: Старт / Пауза, швидкість, розмір шрифту, На початок, Дзеркало для скляного суфлера.";
+
+    let y = 0;
+    let playing = false;
+    let raf = 0;
+
+    function setText(t) {
+        scrollContent.textContent = t || DEFAULT_TEXT;
+        y = 0;
+        applyTransform();
+    }
+
+    function applyTransform() {
+        const boxH = scrollBox.clientHeight;
+        const maxScroll = Math.max(0, scrollContent.offsetHeight - boxH + 80);
+        y = Math.max(0, Math.min(y, maxScroll));
+        scrollContent.style.transform = "translateY(-" + y + "px)";
+    }
+
+    function tick() {
+        if (!playing) return;
+        const sp = parseInt(speedEl.value, 10) / 100;
+        y += 0.35 + sp * 2.8;
+        applyTransform();
+        const boxH = scrollBox.clientHeight;
+        const maxScroll = Math.max(0, scrollContent.offsetHeight - boxH + 40);
+        if (y >= maxScroll) {
+            playing = false;
+            btnPlay.setAttribute("aria-pressed", "false");
+            btnPlay.textContent = "Старт";
+            return;
+        }
+        raf = requestAnimationFrame(tick);
+    }
+
+    function togglePlay() {
+        playing = !playing;
+        btnPlay.setAttribute("aria-pressed", playing ? "true" : "false");
+        btnPlay.textContent = playing ? "Пауза" : "Старт";
+        cancelAnimationFrame(raf);
+        if (playing) raf = requestAnimationFrame(tick);
+    }
+
+    btnPlay.addEventListener("click", togglePlay);
+    btnReset.addEventListener("click", function () {
+        y = 0;
+        applyTransform();
+    });
+
+    btnMirror.addEventListener("click", function () {
+        const on = !stageWrap.classList.contains("mirror");
+        stageWrap.classList.toggle("mirror", on);
+        btnMirror.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+
+    fontSizeEl.addEventListener("input", function () {
+        document.documentElement.style.setProperty("--tp-size", (this.value / 100) + "rem");
+    });
+    document.documentElement.style.setProperty("--tp-size", (fontSizeEl.value / 100) + "rem");
+
+    fileText.addEventListener("change", function () {
+        const f = this.files && this.files[0];
+        if (!f) return;
+        const reader = new FileReader();
+        reader.onload = function () {
+            setText(String(reader.result || ""));
+        };
+        reader.readAsText(f, "UTF-8");
+    });
+
+    window.addEventListener("resize", applyTransform);
+
+    fetch("тексти/usi-teksty.txt")
+        .then(function (r) {
+            if (!r.ok) throw new Error("no fetch");
+            return r.text();
+        })
+        .then(setText)
+        .catch(function () {
+            setText(DEFAULT_TEXT);
+        });
+})();
+    </script>
+</body>
+</html>
