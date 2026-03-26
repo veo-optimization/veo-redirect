@@ -3,23 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
 <title>VEO Prompter</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-
 <style>
-* { box-sizing: border-box; }
-
+* { box-sizing: border-box; margin:0; padding:0; }
 body {
-    margin: 0;
     font-family: 'Montserrat', sans-serif;
     background: #0f0f0f;
     color: white;
     overflow: hidden;
 }
-
-/* SETTINGS */
 .settings {
     position: fixed;
     width: 100%;
@@ -27,7 +20,6 @@ body {
     overflow-y: auto;
     padding: 16px;
 }
-
 textarea, input {
     width: 100%;
     border-radius: 12px;
@@ -36,66 +28,53 @@ textarea, input {
     margin-top: 6px;
     font-size: 16px;
 }
-
-textarea {
-    height: 120px;
-    resize: none;
-}
-
-.label {
-    margin-top: 12px;
-    display: block;
-    font-size: 14px;
-    opacity: 0.8;
-}
-
+textarea { height: 120px; resize: none; }
+.label { margin-top:12px; display:block; font-size:14px; opacity:0.8; }
 .button-main {
-    width: 100%;
-    padding: 16px;
-    margin-top: 16px;
-    border-radius: 12px;
-    border: none;
-    font-size: 20px;
-    font-weight: 700;
-    color: white;
+    width: 100%; padding:16px; margin-top:16px; border-radius:12px;
+    border:none; font-size:20px; font-weight:700; color:white;
     background: linear-gradient(135deg, #4CAF50, #2ecc71);
 }
-
 .button-secondary {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    border-radius: 12px;
-    border: none;
-    background: rgba(255,255,255,0.1);
-    color: white;
+    width:100%; padding:12px; margin-top:10px; border-radius:12px;
+    border:none; background: rgba(255,255,255,0.1); color:white;
 }
 
 /* TELEPROMPTER */
 .teleprompter {
     display: none;
     position: fixed;
-    width: 100%;
-    height: 100%;
-    background: black;
-    overflow: hidden;
+    width:100%;
+    height:100%;
+    background:black;
+    overflow:hidden;
 }
-
 .close-btn {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    font-size: 28px;
-    cursor: pointer;
+    position:absolute; top:15px; right:15px; font-size:28px; cursor:pointer;
+}
+.text {
+    position:absolute;
+    width:100%;
+    text-align:center;
+    top:100%;
+    padding:0 10px;
+    line-height:1.5;
 }
 
-.text {
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    top: 100%;
-    padding: 0 10px;
-    line-height: 1.5;
+/* LINES PREVIEW */
+.line-container {
+    position:absolute; width:100%; height:100%;
+}
+.line {
+    width:90%;
+    height:2px;
+    margin:8px auto;
+    background:rgba(255,255,255,0.2);
+    animation: moveLine 2s linear infinite;
+}
+@keyframes moveLine {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
 }
 
 /* CONTROLS */
@@ -107,53 +86,34 @@ textarea {
     justify-content: space-between;
     padding: 0 20px;
 }
-
-.control-block {
-    text-align: center;
-}
-
+.control-block { text-align:center; }
 .circle-btn {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-    border: none;
-    font-size: 22px;
+    width: 70px; height: 70px;
+    border-radius:50%;
+    border:none;
+    font-size:22px;
     background: rgba(255,255,255,0.1);
-    color: white;
+    color:white;
 }
-
-.label-small {
-    font-size: 12px;
-    margin-top: 5px;
-    opacity: 0.7;
-}
-
+.label-small { font-size:12px; margin-top:5px; opacity:0.7; }
 .speed-controls {
     position: fixed;
     bottom: 110px;
     width: 100%;
     text-align: center;
 }
-
 .speed-controls button {
-    margin: 5px;
-    padding: 10px 15px;
-    border-radius: 10px;
-    border: none;
-    background: rgba(255,255,255,0.1);
-    color: white;
+    margin:5px; padding:10px 15px; border-radius:10px;
+    border:none; background: rgba(255,255,255,0.1); color:white;
 }
 </style>
 </head>
-
 <body>
 
 <div class="settings">
     <h2>VEO Prompter</h2>
-
     <span class="label">Текст</span>
     <textarea id="inputText"></textarea>
-
     <button class="button-secondary" onclick="clearText()">Очистити текст</button>
 
     <span class="label">Швидкість</span>
@@ -172,9 +132,9 @@ textarea {
 </div>
 
 <div class="teleprompter" id="teleprompter">
-
     <div class="close-btn" onclick="exitTeleprompter()">✕</div>
 
+    <div class="line-container" id="lineContainer"></div>
     <div class="text" id="text"></div>
 
     <div class="speed-controls">
@@ -187,108 +147,98 @@ textarea {
             <button class="circle-btn" onclick="skip(-1)">⬅</button>
             <div class="label-small" id="backLabel"></div>
         </div>
-
         <div class="control-block">
             <button class="circle-btn" onclick="skip(1)">➡</button>
             <div class="label-small" id="forwardLabel"></div>
         </div>
     </div>
-
 </div>
 
 <script>
-let position;
-let speed;
-let interval;
-
-let isTouching = false;
-let lastY = 0;
+let position, speed, interval;
+let isTouching=false, lastY=0;
 
 const defaultText = "Це VEO Prompter — інструмент для комфортного читання тексту під час запису відео або ефірів.";
 
-function getText() {
-    return inputText.value.trim() || defaultText;
-}
-
-function start() {
-    document.querySelector('.settings').style.display = 'none';
-    teleprompter.style.display = 'block';
-
-    text.innerText = getText();
-    text.style.fontSize = fontSize.value + 'px';
-
-    speed = parseFloat(speedInput.value);
-    position = window.innerHeight;
-
-    updateLabels();
-
-    interval = setInterval(scrollText, 30);
-}
-
-function scrollText() {
-    if (!isTouching) {
-        position -= speed;
-        text.style.top = position + 'px';
-    }
-}
-
-function changeSpeed(multiplier) {
-    speed *= multiplier;
-}
-
-function skip(dir) {
-    let sec = dir === -1 ? backStep.value : forwardStep.value;
-    position += dir * sec * 50;
-}
-
-function updateLabels() {
-    backLabel.innerText = "Назад - " + backStep.value + " сек";
-    forwardLabel.innerText = "Вперед + " + forwardStep.value + " сек";
-}
-
-function exitTeleprompter() {
-    clearInterval(interval);
-    teleprompter.style.display = 'none';
-    document.querySelector('.settings').style.display = 'block';
-}
-
-function clearText() {
-    inputText.value = '';
-}
-
-/* SWIPE SCROLL */
-teleprompter.addEventListener('touchstart', e => {
-    isTouching = true;
-    lastY = e.touches[0].clientY;
-});
-
-teleprompter.addEventListener('touchmove', e => {
-    let currentY = e.touches[0].clientY;
-    let diff = lastY - currentY;
-
-    position -= diff;
-    text.style.top = position + 'px';
-
-    lastY = currentY;
-});
-
-teleprompter.addEventListener('touchend', () => {
-    isTouching = false;
-});
-
-/* INIT */
 const inputText = document.getElementById('inputText');
 const speedInput = document.getElementById('speed');
 const fontSize = document.getElementById('fontSize');
 const backStep = document.getElementById('backStep');
 const forwardStep = document.getElementById('forwardStep');
-
 const teleprompter = document.getElementById('teleprompter');
 const text = document.getElementById('text');
-
 const backLabel = document.getElementById('backLabel');
 const forwardLabel = document.getElementById('forwardLabel');
-</script>
+const lineContainer = document.getElementById('lineContainer');
 
+function getText(){ return inputText.value.trim() || defaultText; }
+function clearText(){ inputText.value=''; }
+
+function updateLabels(){
+    backLabel.innerText = "Назад - " + backStep.value + " сек";
+    forwardLabel.innerText = "Вперед + " + forwardStep.value + " сек";
+}
+
+function start(){
+    document.querySelector('.settings').style.display='none';
+    teleprompter.style.display='block';
+    text.style.fontSize = fontSize.value + 'px';
+    speed = parseFloat(speedInput.value);
+    position = window.innerHeight;
+    updateLabels();
+
+    // створюємо лінії для прев'ю руху
+    lineContainer.innerHTML='';
+    for(let i=0;i<15;i++){
+        let l=document.createElement('div');
+        l.className='line';
+        lContainerDelay(i,l);
+        lineContainer.appendChild(l);
+    }
+
+    // через 2 секунди показуємо текст
+    setTimeout(()=>{
+        lineContainer.style.display='none';
+        text.innerText = getText();
+        interval=setInterval(scrollText,30);
+    },2000);
+}
+
+function lContainerDelay(i,l){
+    l.style.animationDelay = (i*0.1) + 's';
+}
+
+function scrollText(){
+    if(!isTouching){
+        position-=speed;
+        text.style.top = position + 'px';
+    }
+}
+
+function changeSpeed(mult){ speed*=mult; }
+function skip(dir){
+    let sec=dir===-1? backStep.value : forwardStep.value;
+    position+=dir*sec*50;
+}
+
+function exitTeleprompter(){
+    clearInterval(interval);
+    teleprompter.style.display='none';
+    document.querySelector('.settings').style.display='block';
+}
+
+/* SWIPE SCROLL */
+teleprompter.addEventListener('touchstart', e=>{
+    isTouching=true; lastY=e.touches[0].clientY;
+});
+teleprompter.addEventListener('touchmove', e=>{
+    let currentY=e.touches[0].clientY;
+    let diff=lastY-currentY;
+    position-=diff;
+    text.style.top=position+'px';
+    lastY=currentY;
+});
+teleprompter.addEventListener('touchend',()=>{isTouching=false;});
+</script>
 </body>
 </html>
