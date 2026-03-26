@@ -4,14 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-<title>Teleprompter</title>
+<title>Teleprompter PRO</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
-* {
-    box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -20,36 +18,23 @@ body {
     color: white;
 }
 
-/* ===== НАЛАШТУВАННЯ ===== */
-
+/* SETTINGS */
 .settings {
     padding: 16px;
     max-width: 600px;
     margin: auto;
 }
 
-h2 {
-    text-align: center;
-}
-
-textarea {
+textarea, input {
     width: 100%;
-    height: 140px;
     border-radius: 12px;
     border: none;
     padding: 12px;
+    margin-top: 6px;
     font-size: 16px;
-    resize: none;
 }
 
-input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    margin-top: 5px;
-    font-size: 16px;
-}
+textarea { height: 120px; resize: none; }
 
 .label {
     margin-top: 12px;
@@ -58,20 +43,25 @@ input {
     opacity: 0.8;
 }
 
-.button-main {
+.button-main, .button-secondary {
     width: 100%;
     padding: 14px;
-    margin-top: 20px;
-    font-size: 18px;
-    border: none;
+    margin-top: 10px;
     border-radius: 12px;
-    background: linear-gradient(135deg, #4CAF50, #2ecc71);
-    color: white;
-    font-weight: 600;
+    border: none;
+    font-size: 16px;
 }
 
-/* ===== СУФЛЕР ===== */
+.button-main {
+    background: linear-gradient(135deg, #4CAF50, #2ecc71);
+}
 
+.button-secondary {
+    background: rgba(255,255,255,0.1);
+    color: white;
+}
+
+/* TELEPROMPTER */
 .teleprompter {
     display: none;
     position: fixed;
@@ -81,68 +71,72 @@ input {
     overflow: hidden;
 }
 
-/* кнопка виходу */
 .close-btn {
     position: absolute;
     top: 15px;
     right: 15px;
     font-size: 28px;
-    color: white;
-    z-index: 10;
     cursor: pointer;
 }
 
-/* текст */
 .text {
     position: absolute;
     width: 100%;
     text-align: center;
     top: 100%;
     padding: 0 10px;
-    line-height: 1.4;
+    line-height: 1.5;
+    transition: transform 0.2s;
 }
 
-/* керування */
+/* CONTROLS */
 .controls {
     position: fixed;
-    bottom: 15px;
+    bottom: 20px;
     width: 100%;
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    flex-wrap: wrap;
+    text-align: center;
 }
 
-.controls button {
-    padding: 10px 14px;
-    border-radius: 10px;
+.circle-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
     border: none;
-    font-size: 14px;
+    font-size: 22px;
+    margin: 5px;
     background: rgba(255,255,255,0.1);
     color: white;
-    backdrop-filter: blur(5px);
 }
 
-/* мобільна адаптація */
-@media (max-width: 480px) {
-    .controls button {
-        font-size: 13px;
-        padding: 8px 10px;
-    }
+.control-label {
+    font-size: 12px;
+    opacity: 0.7;
 }
+
+/* TOGGLE */
+.toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
 </style>
 </head>
 
 <body>
 
 <div class="settings">
-    <h2>Суфлер</h2>
+
+    <h2>Teleprompter PRO</h2>
 
     <span class="label">Текст</span>
-    <textarea id="inputText">Каталог ROSSO TT</textarea>
+    <textarea id="inputText"></textarea>
+
+    <button class="button-secondary" onclick="clearText()">Очистити текст</button>
 
     <span class="label">Швидкість</span>
-    <input type="number" id="speed" value="1" step="0.1">
+    <input type="range" id="speed" min="0.2" max="5" step="0.1">
 
     <span class="label">Розмір тексту</span>
     <input type="number" id="fontSize" value="40">
@@ -153,7 +147,18 @@ input {
     <span class="label">Вперед (сек)</span>
     <input type="number" id="forwardStep" value="5">
 
+    <div class="toggle">
+        <span>Дзеркало</span>
+        <input type="checkbox" id="mirror">
+    </div>
+
+    <div class="toggle">
+        <span>Реверс</span>
+        <input type="checkbox" id="reverse">
+    </div>
+
     <button class="button-main" onclick="start()">Запустити</button>
+
 </div>
 
 <div class="teleprompter" id="teleprompter">
@@ -163,59 +168,126 @@ input {
     <div class="text" id="text"></div>
 
     <div class="controls">
-        <button onclick="changeSpeed(0.7)">Повільніше</button>
-        <button onclick="changeSpeed(1.3)">Швидше</button>
-
-        <button onclick="skip(-1)">⬅ Назад</button>
-        <button onclick="skip(1)">Вперед ➡</button>
+        <button class="circle-btn" onclick="skip(-1)">↺</button>
+        <button class="circle-btn" onclick="skip(1)">↻</button>
     </div>
 </div>
 
 <script>
-let position = window.innerHeight;
-let speed = 1;
+let position;
+let speed;
 let interval;
 
+const defaultText = "Це професійний телесуфлер. Він допомагає комфортно читати текст під час запису відео або проведення ефірів.";
+
+function saveSettings() {
+    localStorage.setItem("tp_settings", JSON.stringify({
+        text: inputText.value,
+        speed: speedInput.value,
+        fontSize: fontSize.value,
+        back: backStep.value,
+        forward: forwardStep.value,
+        mirror: mirror.checked,
+        reverse: reverse.checked
+    }));
+}
+
+function loadSettings() {
+    let s = JSON.parse(localStorage.getItem("tp_settings") || "{}");
+
+    inputText.value = s.text || "";
+    speedInput.value = s.speed || 1;
+    fontSize.value = s.fontSize || 40;
+    backStep.value = s.back || 5;
+    forwardStep.value = s.forward || 5;
+    mirror.checked = s.mirror || false;
+    reverse.checked = s.reverse || false;
+}
+
+function getText() {
+    return inputText.value.trim() || defaultText;
+}
+
 function start() {
-    const text = document.getElementById('inputText').value;
-    speed = parseFloat(document.getElementById('speed').value);
-    const fontSize = document.getElementById('fontSize').value;
+    saveSettings();
 
     document.querySelector('.settings').style.display = 'none';
-    document.getElementById('teleprompter').style.display = 'block';
+    teleprompter.style.display = 'block';
 
-    const textDiv = document.getElementById('text');
-    textDiv.innerText = text;
-    textDiv.style.fontSize = fontSize + 'px';
+    text.innerText = getText();
+    text.style.fontSize = fontSize.value + 'px';
 
+    speed = parseFloat(speedInput.value);
     position = window.innerHeight;
+
+    applyModes();
 
     interval = setInterval(scrollText, 30);
 }
 
+function applyModes() {
+    text.style.transform = `
+        ${mirror.checked ? 'scaleX(-1)' : ''}
+        ${reverse.checked ? 'scaleY(-1)' : ''}
+    `;
+}
+
 function scrollText() {
-    position -= speed;
-    document.getElementById('text').style.top = position + 'px';
+    position -= (reverse.checked ? -speed : speed);
+    text.style.top = position + 'px';
 }
 
-function changeSpeed(multiplier) {
-    speed *= multiplier;
-}
-
-function skip(direction) {
-    const back = parseInt(document.getElementById('backStep').value);
-    const forward = parseInt(document.getElementById('forwardStep').value);
-
-    let seconds = direction === -1 ? back : forward;
-
-    position += direction * seconds * 50;
+function skip(dir) {
+    let sec = dir === -1 ? backStep.value : forwardStep.value;
+    position += dir * sec * 50;
 }
 
 function exitTeleprompter() {
     clearInterval(interval);
-    document.getElementById('teleprompter').style.display = 'none';
+    teleprompter.style.display = 'none';
     document.querySelector('.settings').style.display = 'block';
 }
+
+function clearText() {
+    inputText.value = '';
+}
+
+/* SWIPES */
+let startY = 0;
+
+document.addEventListener('touchstart', e => startY = e.touches[0].clientY);
+
+document.addEventListener('touchend', e => {
+    let diff = startY - e.changedTouches[0].clientY;
+
+    if (diff > 50) speed *= 1.2;
+    if (diff < -50) speed *= 0.8;
+});
+
+/* TAP ZONES */
+document.addEventListener('click', e => {
+    if (teleprompter.style.display !== 'block') return;
+
+    let x = e.clientX;
+    let w = window.innerWidth;
+
+    if (x < w * 0.3) skip(-1);
+    if (x > w * 0.7) skip(1);
+});
+
+/* INIT */
+const inputText = document.getElementById('inputText');
+const speedInput = document.getElementById('speed');
+const fontSize = document.getElementById('fontSize');
+const backStep = document.getElementById('backStep');
+const forwardStep = document.getElementById('forwardStep');
+const mirror = document.getElementById('mirror');
+const reverse = document.getElementById('reverse');
+
+const teleprompter = document.getElementById('teleprompter');
+const text = document.getElementById('text');
+
+loadSettings();
 </script>
 
 </body>
