@@ -266,6 +266,33 @@
             margin: 2px 4px 2px 0;
             background: #fff;
         }
+        .tiktok-embed-wrap {
+            margin: 12px 0;
+            border: 1px solid #ccc;
+            background: #fafafa;
+            overflow: hidden;
+            max-width: 360px;
+        }
+        .tiktok-embed-wrap iframe {
+            display: block;
+            width: 100%;
+            min-height: 680px;
+            border: 0;
+        }
+        .earn-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.82rem;
+            margin: 10px 0;
+        }
+        .earn-table th, .earn-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        .earn-table th { background: #f5f5f5; font-weight: 600; }
+        .earn-table td:last-child { font-variant-numeric: tabular-nums; font-weight: 600; color: #5b21b6; }
+
         .disclaimer {
             font-size: 0.75rem;
             color: #777;
@@ -291,16 +318,17 @@
     </header>
 
     <section class="calc-card" aria-labelledby="calc-title">
-        <div class="calc-card-head" id="calc-title">Калькулятор дохода</div>
+        <div class="calc-card-head" id="calc-title">Калькулятор: TikTok Shop (комиссия с продаж)</div>
         <div class="calc-card-body">
-            <p class="muted">Добавьте один или несколько аккаунтов: режим ниш, категории, целевые просмотры. Внизу — сумма по «семье».</p>
+            <p class="muted">Считаем не «деньги за 1000 просмотров», а <strong>ориентировочные заказы и комиссию</strong> с товаров: тематика влияет на средний чек и типичный % комиссии, стиль ролика — на то, какая доля просмотров превращается в покупку (воронка TOFU / MOFU / BOFU). Добавьте один или несколько аккаунтов — внизу итог по «семье».</p>
             <div id="accountsRoot"></div>
             <button type="button" class="btn-add" id="btnAddAccount"><i class="bi bi-plus-lg"></i> Добавить аккаунт</button>
             <div class="family-total" id="familyTotal" hidden>
                 <h3>Итого по всем аккаунтам</h3>
-                <div class="family-row"><span>Ориентировочный доход</span><span class="family-big" id="famEur">0 €</span></div>
-                <div class="family-row"><span>Видео всего (оценка)</span><span id="famVideos">0</span></div>
-                <div class="family-row"><span>Время на съёмку (оценка)</span><span id="famHours">0</span></div>
+                <div class="family-row"><span>Ориентировочная комиссия</span><span class="family-big" id="famEur">0 €</span></div>
+                <div class="family-row"><span>Заказов (оценка)</span><span id="famOrders">0</span></div>
+                <div class="family-row"><span>Роликов (оценка)</span><span id="famVideos">0</span></div>
+                <div class="family-row"><span>Время на ролики (оценка)</span><span id="famHours">0</span></div>
             </div>
         </div>
     </section>
@@ -418,6 +446,39 @@
         </div>
     </div>
 
+    <div class="acc">
+        <button type="button" class="acc-header" aria-expanded="true">
+            <span>6а. Пример: ланч-бокс с подогревом на аккумуляторе (~11 млн просмотров)</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <p><strong>Товар:</strong> контейнер для еды (ланч-бокс) с подогревом на аккумуляторе — удобный формат для TikTok Shop (демонстрация «до/после», тепло, компакт).</p>
+            <p><strong>Референс:</strong> ролик с ~<strong>11 млн</strong> просмотров — можно изучать подачу и озвучивать по-испански под локальный рынок. <a href="https://vt.tiktok.com/ZSHeEg4wv/" target="_blank" rel="noopener noreferrer">Открыть в TikTok</a></p>
+            <p><strong>Ориентир цены в магазине:</strong> примерно <strong>70–80 €</strong> (зависит от продавца и акций).</p>
+            <div class="tiktok-embed-wrap">
+                <iframe
+                    title="TikTok: ланч-бокс с подогревом"
+                    src="https://www.tiktok.com/embed/v2/7505430221508660510"
+                    allow="encrypted-media; fullscreen"
+                    loading="lazy"
+                    referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            </div>
+            <p><strong>Ориентир по той же модели, что и калькулятор выше</strong> (комиссия с продаж, не «€ за просмотры»). Просмотры: <strong>11 000 000</strong>, средний чек <strong>75 €</strong>, комиссия <strong>10%</strong> (~7,5 € с заказа), тематика «дом / кухня» — для сравнения стилей воронки:</p>
+            <table class="earn-table">
+                <thead>
+                    <tr><th>Стиль ролика (воронка)</th><th>Заказов (оценка)</th><th>Комиссия (оценка)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Верх воронки (TOFU) — охват, мало прямых продаж</td><td>~44</td><td>~330 €</td></tr>
+                    <tr><td>Середина (MOFU) — обзор, доверие</td><td>~110</td><td>~825 €</td></tr>
+                    <tr><td>Низ (BOFU) — демо, CTA, ссылка на товар</td><td>~275</td><td>~2 060 €</td></tr>
+                </tbody>
+            </table>
+            <p class="muted" style="margin-bottom:8px;">Цифры из тех же констант, что в скрипте страницы (<code>BASE_ORDER_RATE_PER_VIEW</code>, множители воронки и ниши). Реальность сильно зависит от аккаунта и оффера.</p>
+            <p><strong>Напоминание:</strong> при цене товара 70–80 € и комиссии 10% с одного заказа получается примерно <strong>7–8 €</strong>; итоговая сумма = число заказов × эта величина.</p>
+        </div>
+    </div>
+
     <div class="acc collapsed">
         <button type="button" class="acc-header" aria-expanded="false">
             <span>7. Направления контента по членам семьи</span>
@@ -462,13 +523,20 @@
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
         <div class="acc-panel">
-            <p><strong>Почему суммы ориентировочные?</strong> Реальный RPM зависит от ниши, сезона и качества роликов.</p>
-            <p><strong>Откуда средняя длительность видео?</strong> В коде заданы константы <code>AVG_SEC_PER_VIDEO</code> и <code>AVG_VIEWS_PER_VIDEO</code> — подставьте свои средние из статистики.</p>
+            <p><strong>Почему суммы ориентировочные?</strong> Модель считает примерное число заказов из просмотров и комиссию продавца с товара. На результат влияют ниша, сезон, цена товара, реальная ставка комиссии в карточке товара, качество ролика и соответствие аудитории — это не прогноз, а планировочный ориентир.</p>
+            <p><strong>Что такое стили воронки в калькуляторе?</strong> В маркетинге их называют <strong>TOFU / MOFU / BOFU</strong> (иногда по-русски: верх / середина / низ воронки):</p>
+            <ul>
+                <li><strong>TOFU</strong> (top of funnel, <em>awareness</em>) — «верх»: вирус, юмор, охват; мало прямых продаж с одного просмотра.</li>
+                <li><strong>MOFU</strong> (middle of funnel, <em>consideration</em>) — «середина»: обзор, сравнение, лайфстайл, доверие к товару.</li>
+                <li><strong>BOFU</strong> (bottom of funnel, <em>conversion</em>) — «низ»: демонстрация товара, цена, акция, явный призыв и ссылка на покупку; выше доля просмотров, превращающихся в заказы.</li>
+            </ul>
+            <p><strong>Откуда время на ролики?</strong> Для каждого стиля воронки в коде задан ориентир минут на один ролик (поле <code>minPerVideo</code> в объекте <code>FUNNEL</code>), а число роликов — из целевых просмотров и ползунка «средних просмотров на 1 ролик» (константа по умолчанию <code>AVG_VIEWS_PER_VIDEO</code>). Подставьте свои средние из статистики TikTok.</p>
+            <p><strong>Где править коэффициенты?</strong> Внизу страницы в скрипте: базовая конверсия «просмотр → заказ» (<code>BASE_ORDER_RATE_PER_VIEW</code>), множители воронки и ниши, средние чеки и типичные % комиссии по категориям.</p>
         </div>
     </div>
 
     <p class="disclaimer">
-        Модель дохода в калькуляторе упрощена: используются условные € за 1000 просмотров по категориям. Подстройте коэффициенты в скрипте под свои данные из TikTok Shop.
+        Калькулятор упрощён: оцениваются <strong>продажи через TikTok Shop</strong> и <strong>ваша комиссия</strong> с заказа (ставка задаётся продавцом, обычно ориентир 5–20%). Это не учёт налогов, возвратов и удержаний платформы. Подстройте константы в скрипте под свои фактические данные из TikTok Shop и тесты креативов.
     </p>
 
     <footer>
@@ -478,29 +546,49 @@
 
 <script>
 (function () {
-    var EUR_PER_1K_VIEWS_BY_CAT = {
-        fashion: 0.75,
-        beauty: 0.85,
-        electronics: 0.65,
-        home: 0.55,
-        food: 0.7,
-        sports: 0.6,
-        kids: 0.7,
-        other: 0.5
-    };
-    var EUR_PER_1K_MIXED = 0.48;
+    /** Базовая доля просмотров, переходящая в заказ (для MOFU и множителя 1 по нише). Подстройте по своей статистике. */
+    var BASE_ORDER_RATE_PER_VIEW = 0.00001;
+    /** Средние просмотры на один ролик — для оценки числа роликов и времени. */
     var AVG_VIEWS_PER_VIDEO = 4500;
-    var AVG_SEC_PER_VIDEO = 40;
+
+    /**
+     * Тематика: ориентир среднего чека (€), типичная комиссия креатора (%), множитель конверсии относительно «средней» ниши.
+     */
+    var CAT = {
+        fashion: { label: "Одежда / обувь", avgPrice: 38, defaultCommissionPct: 12, convMult: 1.05 },
+        beauty: { label: "Красота", avgPrice: 32, defaultCommissionPct: 14, convMult: 1.15 },
+        electronics: { label: "Электроника / гаджеты", avgPrice: 55, defaultCommissionPct: 8, convMult: 0.88 },
+        home: { label: "Дом / кухня", avgPrice: 42, defaultCommissionPct: 10, convMult: 1.0 },
+        food: { label: "Еда / напитки", avgPrice: 28, defaultCommissionPct: 11, convMult: 1.08 },
+        sports: { label: "Спорт", avgPrice: 45, defaultCommissionPct: 14, convMult: 1.02 },
+        kids: { label: "Дети", avgPrice: 35, defaultCommissionPct: 12, convMult: 1.0 },
+        auto: { label: "Авто / гараж", avgPrice: 48, defaultCommissionPct: 11, convMult: 0.92 },
+        other: { label: "Другое", avgPrice: 40, defaultCommissionPct: 10, convMult: 1.0 }
+    };
+
+    var MIXED_DEFAULT = { avgPrice: 40, defaultCommissionPct: 10, convMult: 1.0 };
+
+    /**
+     * Воронка: TOFU / MOFU / BOFU — как в маркетинге (awareness / consideration / conversion).
+     * convMult — насколько чаще просмотр превращается в заказ относительно MOFU.
+     * minPerVideo — минут на один ролик (оценка трудозатрат).
+     */
+    var FUNNEL = {
+        tofu: { key: "tofu", short: "Верх (TOFU)", hint: "Охват, вирус, мало прямых продаж", convMult: 0.4, minPerVideo: 22 },
+        mofu: { key: "mofu", short: "Середина (MOFU)", hint: "Обзор, доверие, лайфстайл", convMult: 1, minPerVideo: 38 },
+        bofu: { key: "bofu", short: "Низ (BOFU)", hint: "Демо товара, CTA, ссылка", convMult: 2.5, minPerVideo: 52 }
+    };
 
     var CATEGORIES = [
-        { id: "fashion", label: "Одежда / обувь" },
-        { id: "beauty", label: "Красота" },
-        { id: "electronics", label: "Электроника" },
-        { id: "home", label: "Дом" },
-        { id: "food", label: "Еда / напитки" },
-        { id: "sports", label: "Спорт" },
-        { id: "kids", label: "Дети" },
-        { id: "other", label: "Другое" }
+        { id: "fashion", label: CAT.fashion.label },
+        { id: "beauty", label: CAT.beauty.label },
+        { id: "electronics", label: CAT.electronics.label },
+        { id: "home", label: CAT.home.label },
+        { id: "food", label: CAT.food.label },
+        { id: "sports", label: CAT.sports.label },
+        { id: "kids", label: CAT.kids.label },
+        { id: "auto", label: CAT.auto.label },
+        { id: "other", label: CAT.other.label }
     ];
 
     var VIEW_PRESETS = [
@@ -520,25 +608,65 @@
         return e;
     }
 
-    function avgRateForCategories(ids) {
-        if (!ids.length) return EUR_PER_1K_MIXED;
-        var sum = 0;
-        ids.forEach(function (id) {
-            sum += EUR_PER_1K_VIEWS_BY_CAT[id] || EUR_PER_1K_VIEWS_BY_CAT.other;
-        });
-        return sum / ids.length;
+    function metricsForAccount(a) {
+        if (a.mode === "mixed") {
+            if (!a.categoryIds.length) return MIXED_DEFAULT;
+            var sumP = 0, sumC = 0, sumM = 0, n = a.categoryIds.length;
+            a.categoryIds.forEach(function (id) {
+                var c = CAT[id] || CAT.other;
+                sumP += c.avgPrice;
+                sumC += c.defaultCommissionPct;
+                sumM += c.convMult;
+            });
+            return { avgPrice: sumP / n, defaultCommissionPct: sumC / n, convMult: sumM / n };
+        }
+        var id = a.categoryIds[0] || "other";
+        var c = CAT[id] || CAT.other;
+        return { avgPrice: c.avgPrice, defaultCommissionPct: c.defaultCommissionPct, convMult: c.convMult };
+    }
+
+    function syncDefaultsFromCategory(a) {
+        var m = metricsForAccount(a);
+        if (a.priceEur == null || a._lastCatSig !== categorySig(a)) {
+            a.priceEur = Math.round(m.avgPrice);
+            a.commissionPct = Math.round(m.defaultCommissionPct * 10) / 10;
+        }
+        a._lastCatSig = categorySig(a);
+    }
+
+    function categorySig(a) {
+        return a.mode + ":" + (a.categoryIds || []).slice().sort().join(",");
     }
 
     function computeAccount(a) {
+        syncDefaultsFromCategory(a);
         var views = a.viewsTarget;
-        var rate = a.mode === "mixed" ? EUR_PER_1K_MIXED : avgRateForCategories(a.categoryIds);
-        var eur = (views / 1000) * rate;
-        var videos = Math.ceil(views / AVG_VIEWS_PER_VIDEO);
-        var hours = (videos * AVG_SEC_PER_VIDEO) / 3600;
-        return { eur: eur, videos: videos, hours: hours, rate: rate };
+        var m = metricsForAccount(a);
+        var price = typeof a.priceEur === "number" ? a.priceEur : m.avgPrice;
+        var pct = typeof a.commissionPct === "number" ? a.commissionPct : m.defaultCommissionPct;
+        var funnel = FUNNEL[a.funnel] || FUNNEL.mofu;
+        var orders = views * BASE_ORDER_RATE_PER_VIEW * funnel.convMult * m.convMult;
+        var commissionEUR = orders * price * (pct / 100);
+        var vPerVid = a.avgViewsPerVideo || AVG_VIEWS_PER_VIDEO;
+        var videos = Math.max(1, Math.ceil(views / vPerVid));
+        var hours = (videos * funnel.minPerVideo) / 60;
+        return {
+            commissionEUR: commissionEUR,
+            orders: orders,
+            videos: videos,
+            hours: hours,
+            price: price,
+            pct: pct,
+            funnelShort: funnel.short
+        };
     }
 
     function renderAccount(a) {
+        if (a.funnel == null) a.funnel = "mofu";
+        if (a.categoryIds == null) a.categoryIds = ["home"];
+        if (a.avgViewsPerVideo == null) a.avgViewsPerVideo = AVG_VIEWS_PER_VIDEO;
+        syncDefaultsFromCategory(a);
+
         var wrap = el("div", "account-block");
         wrap.dataset.id = String(a.id);
 
@@ -556,14 +684,24 @@
         var body = el("div", "calc-card-body");
 
         var modeLabel = el("div", "toggle-row");
-        modeLabel.innerHTML = "<label>Режим ниши</label>";
+        modeLabel.innerHTML = "<label>Тематика аккаунта</label>";
         var modeRow = el("div", "toggle-row");
-        var btnMono = el("button", "seg-btn" + (a.mode === "mono" ? " active" : ""), "Моно-ниши (выбрать категории)");
-        var btnMix = el("button", "seg-btn" + (a.mode === "mixed" ? " active" : ""), "Всё подряд / микс");
+        var btnMono = el("button", "seg-btn" + (a.mode === "mono" ? " active" : ""), "Одна ниша");
+        var btnMix = el("button", "seg-btn" + (a.mode === "mixed" ? " active" : ""), "Несколько ниш / микс");
         btnMono.type = "button";
         btnMix.type = "button";
-        btnMono.addEventListener("click", function () { a.mode = "mono"; renderAll(); });
-        btnMix.addEventListener("click", function () { a.mode = "mixed"; a.categoryIds = []; renderAll(); });
+        btnMono.addEventListener("click", function () {
+            a.mode = "mono";
+            if (!a.categoryIds.length) a.categoryIds = ["home"];
+            else if (a.categoryIds.length > 1) a.categoryIds = [a.categoryIds[0]];
+            a._lastCatSig = null;
+            renderAll();
+        });
+        btnMix.addEventListener("click", function () {
+            a.mode = "mixed";
+            if (!a.categoryIds.length) a.categoryIds = ["home", "beauty"];
+            renderAll();
+        });
         modeRow.appendChild(btnMono);
         modeRow.appendChild(btnMix);
         modeLabel.appendChild(modeRow);
@@ -571,7 +709,7 @@
 
         var catLabel = el("label", null);
         catLabel.style.cssText = "display:block;font-size:0.8rem;font-weight:600;color:#444;margin-bottom:8px;";
-        catLabel.textContent = "Категории (одна или несколько; в режиме микс отключено)";
+        catLabel.textContent = "Категории товаров (влияют на средний чек и конверсию)";
         body.appendChild(catLabel);
 
         var catGrid = el("div", "cat-grid");
@@ -583,18 +721,113 @@
             if (a.categoryIds.indexOf(c.id) >= 0) b.classList.add("active");
             b.addEventListener("click", function () {
                 if (!mono) return;
-                var i = a.categoryIds.indexOf(c.id);
-                if (i >= 0) a.categoryIds.splice(i, 1);
-                else a.categoryIds.push(c.id);
+                a.categoryIds = [c.id];
+                a._lastCatSig = null;
                 renderAll();
             });
             catGrid.appendChild(b);
         });
         body.appendChild(catGrid);
 
+        if (!mono) {
+            var mixLabel = el("label", null);
+            mixLabel.style.cssText = "display:block;font-size:0.8rem;font-weight:600;color:#444;margin-bottom:8px;margin-top:8px;";
+            mixLabel.textContent = "Микс: отметьте несколько ниш (усредняем чек и коэффициенты)";
+            body.appendChild(mixLabel);
+            var catGrid2 = el("div", "cat-grid");
+            CATEGORIES.forEach(function (c) {
+                var b = el("button", "cat-btn", c.label);
+                b.type = "button";
+                if (a.categoryIds.indexOf(c.id) >= 0) b.classList.add("active");
+                b.addEventListener("click", function () {
+                    var i = a.categoryIds.indexOf(c.id);
+                    if (i >= 0) {
+                        if (a.categoryIds.length > 1) a.categoryIds.splice(i, 1);
+                    } else a.categoryIds.push(c.id);
+                    a._lastCatSig = null;
+                    renderAll();
+                });
+                catGrid2.appendChild(b);
+            });
+            body.appendChild(catGrid2);
+        }
+
+        var funnelLabel = el("div", "toggle-row");
+        funnelLabel.innerHTML = "<label>Стиль роликов (воронка продаж)</label>";
+        body.appendChild(funnelLabel);
+        var funnelRow = el("div", "toggle-row");
+        ["tofu", "mofu", "bofu"].forEach(function (fk) {
+            var f = FUNNEL[fk];
+            var btn = el("button", "seg-btn" + (a.funnel === fk ? " active" : ""), f.short);
+            btn.type = "button";
+            btn.title = f.hint;
+            btn.addEventListener("click", function () { a.funnel = fk; renderAll(); });
+            funnelRow.appendChild(btn);
+        });
+        body.appendChild(funnelRow);
+        var funnelHint = el("p", "muted");
+        funnelHint.style.marginTop = "0";
+        funnelHint.textContent = (FUNNEL[a.funnel] || FUNNEL.mofu).hint + " — см. раздел «9. Вопросы по калькулятору».";
+        body.appendChild(funnelHint);
+
+        var rowPrice = el("div", "slider-block");
+        rowPrice.innerHTML = "<label>Средний чек товара (€): <span class=\"slider-val\"></span></label>";
+        var rngPrice = el("input");
+        rngPrice.type = "range";
+        rngPrice.min = "8";
+        rngPrice.max = "200";
+        rngPrice.step = "1";
+        rngPrice.value = String(Math.round(a.priceEur));
+        var prSpan = rowPrice.querySelector(".slider-val");
+        rngPrice.addEventListener("input", function () {
+            a.priceEur = parseInt(rngPrice.value, 10);
+            a._lastCatSig = categorySig(a);
+            if (prSpan) prSpan.textContent = formatNum(a.priceEur);
+            updateResultsOnly();
+        });
+        rowPrice.appendChild(rngPrice);
+        body.appendChild(rowPrice);
+        if (prSpan) prSpan.textContent = formatNum(Math.round(a.priceEur));
+
+        var rowComm = el("div", "slider-block");
+        rowComm.innerHTML = "<label>Комиссия с заказа (%): <span class=\"slider-val\"></span></label>";
+        var rngComm = el("input");
+        rngComm.type = "range";
+        rngComm.min = "5";
+        rngComm.max = "22";
+        rngComm.step = "0.5";
+        rngComm.value = String(a.commissionPct);
+        var cmSpan = rowComm.querySelector(".slider-val");
+        rngComm.addEventListener("input", function () {
+            a.commissionPct = parseFloat(rngComm.value);
+            if (cmSpan) cmSpan.textContent = String(a.commissionPct).replace(".", ",");
+            updateResultsOnly();
+        });
+        rowComm.appendChild(rngComm);
+        body.appendChild(rowComm);
+        if (cmSpan) cmSpan.textContent = String(a.commissionPct).replace(".", ",");
+
+        var rowVp = el("div", "slider-block");
+        rowVp.innerHTML = "<label>Средних просмотров на 1 ролик: <span class=\"slider-val\"></span></label>";
+        var rngVp = el("input");
+        rngVp.type = "range";
+        rngVp.min = "500";
+        rngVp.max = "50000";
+        rngVp.step = "100";
+        rngVp.value = String(a.avgViewsPerVideo);
+        var vpSpan = rowVp.querySelector(".slider-val");
+        rngVp.addEventListener("input", function () {
+            a.avgViewsPerVideo = parseInt(rngVp.value, 10);
+            if (vpSpan) vpSpan.textContent = formatNum(a.avgViewsPerVideo);
+            updateResultsOnly();
+        });
+        rowVp.appendChild(rngVp);
+        body.appendChild(rowVp);
+        if (vpSpan) vpSpan.textContent = formatNum(a.avgViewsPerVideo);
+
         var vpLabel = el("label", null);
-        vpLabel.style.cssText = "display:block;font-size:0.8rem;font-weight:600;color:#444;margin-bottom:8px;";
-        vpLabel.textContent = "Целевые просмотры";
+        vpLabel.style.cssText = "display:block;font-size:0.8rem;font-weight:600;color:#444;margin-bottom:8px;margin-top:8px;";
+        vpLabel.textContent = "Целевые просмотры (период или кампания)";
         body.appendChild(vpLabel);
 
         var presets = el("div", "views-presets");
@@ -603,7 +836,6 @@
             b.type = "button";
             b.addEventListener("click", function () {
                 a.viewsTarget = p.v;
-                a.customSlider = false;
                 renderAll();
             });
             presets.appendChild(b);
@@ -611,9 +843,10 @@
         body.appendChild(presets);
 
         var sliderBlock = el("div", "slider-block");
-        var maxV = 10000000;
+        var maxV = 20000000;
         var lbl = el("label", null);
-        lbl.innerHTML = "Своё значение просмотров: <span class=\"slider-val\" id=\"sv-" + a.id + "\"></span>";
+        lbl.innerHTML = "Своё значение просмотров: <span class=\"slider-val\"></span>";
+        var svSpan = lbl.querySelector(".slider-val");
         var range = el("input");
         range.type = "range";
         range.min = "1000";
@@ -622,29 +855,32 @@
         range.value = String(Math.min(a.viewsTarget, maxV));
         range.addEventListener("input", function () {
             a.viewsTarget = parseInt(range.value, 10) || 1000;
-            a.customSlider = true;
-            var svEl = document.getElementById("sv-" + a.id);
-            if (svEl) svEl.textContent = formatNum(a.viewsTarget);
+            if (svSpan) svSpan.textContent = formatNum(a.viewsTarget);
             updateResultsOnly();
         });
         sliderBlock.appendChild(lbl);
         sliderBlock.appendChild(range);
         body.appendChild(sliderBlock);
 
-        var sv = document.getElementById("sv-" + a.id);
-        if (sv) sv.textContent = formatNum(a.viewsTarget);
+        if (svSpan) svSpan.textContent = formatNum(a.viewsTarget);
 
         var res = computeAccount(a);
         var rg = el("div", "result-grid");
         rg.innerHTML =
-            "<div class=\"result-item\"><strong>Ориентировочный доход</strong><span>" + res.eur.toFixed(2) + " €</span></div>" +
-            "<div class=\"result-item\"><strong>Видео (оценка)</strong><span>" + res.videos + " шт.</span></div>" +
-            "<div class=\"result-item\"><strong>Время съёмки (оценка)</strong><span>" + formatHours(res.hours) + "</span></div>" +
-            "<div class=\"result-item\"><strong>Ставка (условно / 1k просмотров)</strong><span>" + res.rate.toFixed(2) + " €</span></div>";
+            "<div class=\"result-item\"><strong>Ориентировочная комиссия</strong><span data-r=\"commission\">" + res.commissionEUR.toFixed(2) + " €</span></div>" +
+            "<div class=\"result-item\"><strong>Заказов (оценка)</strong><span data-r=\"orders\">" + formatOrders(res.orders) + "</span></div>" +
+            "<div class=\"result-item\"><strong>Роликов (оценка)</strong><span data-r=\"videos\">" + res.videos + " шт.</span></div>" +
+            "<div class=\"result-item\"><strong>Время на ролики (оценка)</strong><span data-r=\"hours\">" + formatHours(res.hours) + "</span></div>" +
+            "<div class=\"result-item\"><strong>Стиль / средний чек</strong><span data-r=\"meta\">" + res.funnelShort + " · " + res.price.toFixed(0) + " € · " + res.pct + "%</span></div>";
         body.appendChild(rg);
 
         wrap.appendChild(body);
         return wrap;
+    }
+
+    function formatOrders(o) {
+        if (o < 10) return o.toFixed(1).replace(".", ",");
+        return Math.round(o).toLocaleString("ru-RU");
     }
 
     function formatNum(n) {
@@ -665,13 +901,17 @@
             var block = root.querySelector(".account-block[data-id=\"" + a.id + "\"]");
             if (!block) return;
             var res = computeAccount(a);
-            var items = block.querySelectorAll(".result-item span");
-            if (items.length >= 4) {
-                items[0].textContent = res.eur.toFixed(2) + " €";
-                items[1].textContent = res.videos + " шт.";
-                items[2].textContent = formatHours(res.hours);
-                items[3].textContent = res.rate.toFixed(2) + " €";
-            }
+            var map = {
+                commission: res.commissionEUR.toFixed(2) + " €",
+                orders: formatOrders(res.orders),
+                videos: res.videos + " шт.",
+                hours: formatHours(res.hours),
+                meta: res.funnelShort + " · " + res.price.toFixed(0) + " € · " + res.pct + "%"
+            };
+            Object.keys(map).forEach(function (k) {
+                var n = block.querySelector("[data-r=\"" + k + "\"]");
+                if (n) n.textContent = map[k];
+            });
         });
         updateFamily();
     }
@@ -679,6 +919,7 @@
     function updateFamily() {
         var ft = document.getElementById("familyTotal");
         var fe = document.getElementById("famEur");
+        var fo = document.getElementById("famOrders");
         var fv = document.getElementById("famVideos");
         var fh = document.getElementById("famHours");
         if (accounts.length === 0) {
@@ -686,14 +927,16 @@
             return;
         }
         ft.hidden = false;
-        var te = 0, tv = 0, th = 0;
+        var te = 0, to = 0, tv = 0, th = 0;
         accounts.forEach(function (a) {
             var r = computeAccount(a);
-            te += r.eur;
+            te += r.commissionEUR;
+            to += r.orders;
             tv += r.videos;
             th += r.hours;
         });
         fe.textContent = te.toFixed(2) + " €";
+        fo.textContent = formatOrders(to);
         fv.textContent = String(tv);
         fh.textContent = formatHours(th);
     }
@@ -711,9 +954,13 @@
         accounts.push({
             id: nextId++,
             mode: "mono",
-            categoryIds: ["fashion"],
+            categoryIds: ["home"],
+            funnel: "mofu",
             viewsTarget: 10000,
-            customSlider: false
+            avgViewsPerVideo: AVG_VIEWS_PER_VIDEO,
+            priceEur: null,
+            commissionPct: null,
+            _lastCatSig: null
         });
         renderAll();
     });
@@ -727,7 +974,17 @@
         });
     });
 
-    accounts.push({ id: nextId++, mode: "mono", categoryIds: ["fashion"], viewsTarget: 10000, customSlider: false });
+    accounts.push({
+        id: nextId++,
+        mode: "mono",
+        categoryIds: ["home"],
+        funnel: "mofu",
+        viewsTarget: 10000,
+        avgViewsPerVideo: AVG_VIEWS_PER_VIDEO,
+        priceEur: null,
+        commissionPct: null,
+        _lastCatSig: null
+    });
     renderAll();
 })();
 </script>
