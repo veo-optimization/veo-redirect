@@ -411,10 +411,15 @@
             line-height: 1.25;
         }
         .calc-tab:hover { background: #ece8ff; color: #1a1a1a; }
+        .calc-tab[aria-selected="false"] {
+            color: #6b6b70;
+            font-weight: 600;
+        }
         .calc-tab[aria-selected="true"] {
             background: #fff;
             border-bottom-color: #7c3aed;
             color: #5b21b6;
+            font-weight: 800;
         }
         .calc-panel-wrap[hidden] { display: none !important; }
 
@@ -529,8 +534,8 @@
 
     <div class="calc-hub" id="calcHub">
         <div class="calc-mode-tabs" role="tablist" aria-label="Режим калькулятора">
-            <button type="button" class="calc-tab" role="tab" id="tabCalcMon" aria-selected="true" aria-controls="calcPanelMon" tabindex="0" data-i18n="calc_tab_mon">Монетизація (перегляди)</button>
-            <button type="button" class="calc-tab" role="tab" id="tabCalcShop" aria-selected="false" aria-controls="calcPanelShop" tabindex="-1" data-i18n="calc_tab_shop">TikTok Shop</button>
+            <button type="button" class="calc-tab" role="tab" id="tabCalcMon" aria-selected="true" aria-controls="calcPanelMon" tabindex="0"><span data-i18n="calc_tab_mon">Монетизація (перегляди)</span></button>
+            <button type="button" class="calc-tab" role="tab" id="tabCalcShop" aria-selected="false" aria-controls="calcPanelShop" tabindex="-1"><span data-i18n="calc_tab_shop">TikTok Shop</span></button>
         </div>
         <div id="calcPanelMon" class="calc-panel-wrap" role="tabpanel" aria-labelledby="tabCalcMon">
     <section class="calc-card" id="calc-time-money" aria-labelledby="calc-tm-title">
@@ -1890,6 +1895,7 @@
             panelMon.hidden = !!shop;
             panelShop.hidden = !shop;
         }
+        switchTab(false);
         tabMon.addEventListener("click", function () { switchTab(false); });
         tabShop.addEventListener("click", function () { switchTab(true); });
     }
