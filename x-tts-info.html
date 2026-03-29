@@ -480,6 +480,8 @@
         .help-dlg-body li { margin-bottom: 6px; }
         .help-dlg-body strong { color: #1a1a1a; }
         .help-dlg-body .gloss { font-size: 0.88rem; background: #f5f3ff; padding: 10px 12px; border-radius: 8px; border: 1px solid #e9e5ff; margin: 10px 0; }
+        .acc-prose .earn-table--compact th,
+        .acc-prose .earn-table--compact td { font-size: 0.76rem; padding: 6px 8px; }
     </style>
 </head>
 <body>
@@ -670,6 +672,16 @@
         </button>
         <div class="acc-panel">
             <div id="accInjectEchoGap" class="acc-prose"></div>
+        </div>
+    </div>
+
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
+            <span id="accMarketTitle">Зріз ринку США: товари, магазини, креатори (березень 2026)</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <div id="accInjectMarketSnapshot" class="acc-prose"></div>
         </div>
     </div>
 
@@ -1167,6 +1179,8 @@
     }
 
     function renderStepLabels() {
+        var amt = document.getElementById("accMarketTitle");
+        if (amt) amt.textContent = lang === "ru" ? "Срез рынка США: товары, магазины, креаторы (март 2026)" : "Зріз ринку США: товари, магазини, креатори (березень 2026)";
         var stq = document.getElementById("stepTypeQuality");
         var sv = document.getElementById("stepViews");
         var lq = document.getElementById("lblQualitySub");
@@ -1497,10 +1511,93 @@
         }
     };
 
+    var MARKET_SNAPSHOT_UK = '<p class="doc-h2">Три зрізи одного ринку (США)</p>' +
+        '<p>Нижче — <strong>пов’язані зрізи</strong> з різних панелей: <strong>FastMoss</strong> — щоденний топ товарів; <strong>EchoTik</strong> — топ магазинів за <strong>той самий день</strong>; <strong>EchoTik</strong> — топ креаторів за <strong>останні 28 днів</strong>. Регіон: США. Дата для товарів і магазинів: <strong>28.03.2026</strong> (daily). Це не внутрішня звітність TikTok, а зовнішні аналітичні сервіси — зручно бачити масштаб і перетини.</p>' +
+        '<h3>1. Топ товарів (FastMoss, США, 28.03.2026)</h3>' +
+        '<p>Рейтинг за проданими одиницями за день. Комісія афіліата в топі — <strong>13–30%</strong>.</p>' +
+        '<div class="data-table-wrap"><table class="earn-table earn-table--compact">' +
+        '<thead><tr><th>#</th><th>Товар (категорія)</th><th>Магазин</th><th>Коміс.</th><th>Од./день</th><th>GMV (день)</th></tr></thead><tbody>' +
+        '<tr><td>1</td><td>Loaded Tea (напої порошкові)</td><td>Caffeine, Candles &amp; Chaos</td><td>14%</td><td>7.9k</td><td class="cell-money">$29.7k</td></tr>' +
+        '<tr><td>2</td><td>medicube PDRN Pink (набори догляду)</td><td>medicube US Store</td><td>15%</td><td>7.4k</td><td class="cell-money">$155.8k</td></tr>' +
+        '<tr><td>3</td><td>Toplux Magnesium (суплементи)</td><td>Toplux Nutrition</td><td>30%</td><td>5.8k</td><td class="cell-money">$143.6k</td></tr>' +
+        '<tr><td>4</td><td>Hismile iD Whitening (ополіскувач)</td><td>Hismile US</td><td>20%</td><td>5.5k</td><td class="cell-money">$111.5k</td></tr>' +
+        '<tr><td>5</td><td>OIAK Jelly Bras (бюстгальтери)</td><td>OIAK Apparel</td><td>13%</td><td>4.0k</td><td class="cell-money">$80.3k</td></tr>' +
+        '</tbody></table></div>' +
+        '<h3>2. Топ магазинів (EchoTik, США, 28.03.2026)</h3>' +
+        '<p>За одиницями за день. Колонки: GMV за день, скільки активних SKU мали продажі, скільки креаторів принесли продажі.</p>' +
+        '<div class="data-table-wrap"><table class="earn-table earn-table--compact">' +
+        '<thead><tr><th>#</th><th>Магазин</th><th>Ніша</th><th>Од.</th><th>GMV</th><th>SKU</th><th>Креаторів</th></tr></thead><tbody>' +
+        '<tr><td>1</td><td>medicube US Store</td><td>Beauty</td><td>17.6k</td><td class="cell-money">$933.0k</td><td>124</td><td>96.5k</td></tr>' +
+        '<tr><td>2</td><td>Tarte Cosmetics</td><td>Beauty</td><td>17.5k</td><td class="cell-money">$601.3k</td><td>104</td><td>84.0k</td></tr>' +
+        '<tr><td>3</td><td>Dr. Melaxin / BRAND501</td><td>Beauty</td><td>17.4k</td><td class="cell-money">$633.7k</td><td>108</td><td>42.3k</td></tr>' +
+        '<tr><td>4</td><td>Caffeine, Candles &amp; Chaos</td><td>Food &amp; beverages</td><td>13.9k</td><td class="cell-money">$74.7k</td><td>14</td><td>5.8k</td></tr>' +
+        '<tr><td>5</td><td>Halara US</td><td>Sports &amp; outdoor</td><td>11.0k</td><td class="cell-money">$418.1k</td><td>193</td><td>51.8k</td></tr>' +
+        '</tbody></table></div>' +
+        '<h3>3. Топ креаторів за 28 днів (EchoTik, США)</h3>' +
+        '<p>Продані одиниці та середні перегляди на відео — різні стратегії охоплення.</p>' +
+        '<div class="data-table-wrap"><table class="earn-table earn-table--compact">' +
+        '<thead><tr><th>#</th><th>Акаунт</th><th>Фокус ніші</th><th>Од. 28д</th><th>Сер. перегл.</th><th>Підписники</th><th>ER</th></tr></thead><tbody>' +
+        '<tr><td>1</td><td>BASED</td><td>Волосся, догляд</td><td>118.8k</td><td>179.9k</td><td>2.8M</td><td>1.97%</td></tr>' +
+        '<tr><td>2</td><td>highlanddaily1</td><td>Sets, піжами</td><td>92.0k</td><td>5.6k</td><td>44.3k</td><td>0.4%</td></tr>' +
+        '<tr><td>3</td><td>highland.fashion30</td><td>Костюми, сукні</td><td>78.8k</td><td>5.0k</td><td>89.0k</td><td>0.72%</td></tr>' +
+        '<tr><td>4</td><td>highland.fashion7</td><td>Sets, куртки</td><td>70.6k</td><td>5.6k</td><td>254.8k</td><td>0.65%</td></tr>' +
+        '<tr><td>5</td><td>yazzy.fashion7</td><td>Шарфи, комплекти</td><td>49.2k</td><td>1.0k</td><td>51.3k</td><td>0.41%</td></tr>' +
+        '</tbody></table></div>' +
+        '<p class="doc-h2">Як це зв’язати</p>' +
+        '<ul>' +
+        '<li><strong>medicube</strong> — і в топі товарів (2-й рядок FastMoss), і 1-й серед магазинів у EchoTik: один день, два джерела збігаються.</li>' +
+        '<li><strong>Caffeine, Candles &amp; Chaos</strong>: Loaded Tea — №1 за одиницями у FastMoss; той самий магазин — 4-й у EchoTik при лише <strong>14 активних SKU</strong> проти 100+ у beauty-лідерів — вузький асортимент може давати великий денний обсяг.</li>' +
+        '<li>Комісії у топі товарів <strong>13–30%</strong> — залежать від оферу продавця.</li>' +
+        '<li><strong>Денна динаміка</strong> (наприклад, зростання замовлень Hismile +140% за день) показує чутливість зрізу «один день» до хвиль і трендів.</li>' +
+        '<li>Креатори: <strong>BASED</strong> поєднує великі продажі з високими середніми переглядами (~180k); <strong>Highland / yazzy</strong> — великі обсяги при <strong>~1–6k</strong> середніх переглядів на відео — орієнтир конвеєра без вірусного охоплення на кожен ролик (порівняйте з блоком про системну роботу вище).</li>' +
+        '</ul>';
+
+    var MARKET_SNAPSHOT_RU = '<p class="doc-h2">Три среза одного рынка (США)</p>' +
+        '<p>Ниже — <strong>связанные срезы</strong> с разных панелей: <strong>FastMoss</strong> — дневной топ товаров; <strong>EchoTik</strong> — топ магазинов за <strong>тот же день</strong>; <strong>EchoTik</strong> — топ креаторов за <strong>последние 28 дней</strong>. Регион: США. Дата для товаров и магазинов: <strong>28.03.2026</strong> (daily). Это не внутренняя отчётность TikTok, а внешние сервисы — удобно видеть масштаб и пересечения.</p>' +
+        '<h3>1. Топ товаров (FastMoss, США, 28.03.2026)</h3>' +
+        '<p>Рейтинг по проданным единицам за день. Комиссия аффилиата в топе — <strong>13–30%</strong>.</p>' +
+        '<div class="data-table-wrap"><table class="earn-table earn-table--compact">' +
+        '<thead><tr><th>#</th><th>Товар (категория)</th><th>Магазин</th><th>Комис.</th><th>Ед./день</th><th>GMV (день)</th></tr></thead><tbody>' +
+        '<tr><td>1</td><td>Loaded Tea (напитки порошковые)</td><td>Caffeine, Candles &amp; Chaos</td><td>14%</td><td>7.9k</td><td class="cell-money">$29.7k</td></tr>' +
+        '<tr><td>2</td><td>medicube PDRN Pink (наборы ухода)</td><td>medicube US Store</td><td>15%</td><td>7.4k</td><td class="cell-money">$155.8k</td></tr>' +
+        '<tr><td>3</td><td>Toplux Magnesium (суплементы)</td><td>Toplux Nutrition</td><td>30%</td><td>5.8k</td><td class="cell-money">$143.6k</td></tr>' +
+        '<tr><td>4</td><td>Hismile iD Whitening (ополаскиватель)</td><td>Hismile US</td><td>20%</td><td>5.5k</td><td class="cell-money">$111.5k</td></tr>' +
+        '<tr><td>5</td><td>OIAK Jelly Bras (бюстгальтеры)</td><td>OIAK Apparel</td><td>13%</td><td>4.0k</td><td class="cell-money">$80.3k</td></tr>' +
+        '</tbody></table></div>' +
+        '<h3>2. Топ магазинов (EchoTik, США, 28.03.2026)</h3>' +
+        '<p>По единицам за день. Колонки: GMV за день, активных SKU с продажами, креаторов с продажами.</p>' +
+        '<div class="data-table-wrap"><table class="earn-table earn-table--compact">' +
+        '<thead><tr><th>#</th><th>Магазин</th><th>Ниша</th><th>Ед.</th><th>GMV</th><th>SKU</th><th>Креаторов</th></tr></thead><tbody>' +
+        '<tr><td>1</td><td>medicube US Store</td><td>Beauty</td><td>17.6k</td><td class="cell-money">$933.0k</td><td>124</td><td>96.5k</td></tr>' +
+        '<tr><td>2</td><td>Tarte Cosmetics</td><td>Beauty</td><td>17.5k</td><td class="cell-money">$601.3k</td><td>104</td><td>84.0k</td></tr>' +
+        '<tr><td>3</td><td>Dr. Melaxin / BRAND501</td><td>Beauty</td><td>17.4k</td><td class="cell-money">$633.7k</td><td>108</td><td>42.3k</td></tr>' +
+        '<tr><td>4</td><td>Caffeine, Candles &amp; Chaos</td><td>Food &amp; beverages</td><td>13.9k</td><td class="cell-money">$74.7k</td><td>14</td><td>5.8k</td></tr>' +
+        '<tr><td>5</td><td>Halara US</td><td>Sports &amp; outdoor</td><td>11.0k</td><td class="cell-money">$418.1k</td><td>193</td><td>51.8k</td></tr>' +
+        '</tbody></table></div>' +
+        '<h3>3. Топ креаторов за 28 дней (EchoTik, США)</h3>' +
+        '<p>Проданные единицы и средние просмотры на видео — разные стратегии охвата.</p>' +
+        '<div class="data-table-wrap"><table class="earn-table earn-table--compact">' +
+        '<thead><tr><th>#</th><th>Аккаунт</th><th>Фокус ниши</th><th>Ед. 28д</th><th>Ср. просм.</th><th>Подписчики</th><th>ER</th></tr></thead><tbody>' +
+        '<tr><td>1</td><td>BASED</td><td>Волосы, уход</td><td>118.8k</td><td>179.9k</td><td>2.8M</td><td>1.97%</td></tr>' +
+        '<tr><td>2</td><td>highlanddaily1</td><td>Sets, пижамы</td><td>92.0k</td><td>5.6k</td><td>44.3k</td><td>0.4%</td></tr>' +
+        '<tr><td>3</td><td>highland.fashion30</td><td>Костюмы, платья</td><td>78.8k</td><td>5.0k</td><td>89.0k</td><td>0.72%</td></tr>' +
+        '<tr><td>4</td><td>highland.fashion7</td><td>Sets, куртки</td><td>70.6k</td><td>5.6k</td><td>254.8k</td><td>0.65%</td></tr>' +
+        '<tr><td>5</td><td>yazzy.fashion7</td><td>Шарфы, комплекты</td><td>49.2k</td><td>1.0k</td><td>51.3k</td><td>0.41%</td></tr>' +
+        '</tbody></table></div>' +
+        '<p class="doc-h2">Как это связать</p>' +
+        '<ul>' +
+        '<li><strong>medicube</strong> — и в топе товаров (2-я строка FastMoss), и 1-й среди магазинов в EchoTik: один день, два источника сходятся.</li>' +
+        '<li><strong>Caffeine, Candles &amp; Chaos</strong>: Loaded Tea — №1 по единицам в FastMoss; тот же магазин — 4-й в EchoTik при только <strong>14 активных SKU</strong> против 100+ у beauty-лидеров — узкий ассортимент может давать большой дневной объём.</li>' +
+        '<li>Комиссии в топе товаров <strong>13–30%</strong> — задаёт продавец.</li>' +
+        '<li><strong>Дневная динамика</strong> (например, рост заказов Hismile +140% за день) показывает чувствительность среза «один день» к волнам и трендам.</li>' +
+        '<li>Креаторы: <strong>BASED</strong> сочетает большие продажи с высокими средними просмотрами (~180k); <strong>Highland / yazzy</strong> — большие объёмы при <strong>~1–6k</strong> средних просмотров на видео — ориентир конвейера без вирусного охвата на каждый ролик (см. блок о системной работе выше).</li>' +
+        '</ul>';
+
     var ACC_UK = {
         gmv: "<p><strong>GMV (Gross Merchandise Value)</strong> — загальна сума замовлень товарів за вашим посиланням у TikTok Shop за період. Це <strong>не</strong> готівка креатора: з неї ще віднімають комісії платформи, повернення тощо (у продавця своя економіка).</p><p>У <strong>звітах, рейтингах і публічних цифрах</strong> часто показують саме GMV — не плутайте з особистим заробітком.</p><h3>Хто такий креатор і афіліат?</h3><p><strong>Креатор</strong> — автор відео. <strong>Афіліат</strong> у Shop — партнер продавця: ви ведете трафік на товар і отримуєте <strong>відсоток від оплаченого замовлення</strong> (типово орієнтир 5–20%, ставить продавець).</p><h3>Що зазвичай не дорівнює «чистим грошам» з GMV</h3><div class=\"data-table-wrap\"><table class=\"earn-table\"><thead><tr><th>Стаття</th><th>Коротко</th></tr></thead><tbody><tr><td>Комісія платформи</td><td>Знімається з обороту продавця</td></tr><tr><td>Ваша комісія (афіліат)</td><td>Відсоток від чека — окремий рядок доходу креатора</td></tr><tr><td>Повернення товару</td><td>Зменшують реальний результат</td></tr><tr><td>Податки, продакшн</td><td>Не входять у цифри калькулятора</td></tr></tbody></table></div>",
         shop: "<p>У TikTok Shop <strong>конверсія</strong> — це наскільки добре перегляди перетворюються на замовлення. Вона залежить від ніші, ціни товару, довіри та <strong>типу ролика</strong> (воронка TOFU → BOFU).</p><p><strong>Комісія креатора</strong> задається у картці товару продавцем; у різних категоріях діапазони різні (мода й краса часто вищі, електроніка — нижчі).</p><p>Дешеві товари (&lt;20 $) часто дають вищу частку конверсій «з перегляду»; рідна мова й UGC зазвичай підсилюють результат. Верх воронки (TOFU) дає охоплення; низ (BOFU) — пряміші продажі з одного перегляду.</p>",
         echoGap: "<p class=\"doc-h2\">Чому так буває</p><p>Якщо на сторінці акаунта видно більше роликів, ніж у EchoTik, а контент <strong>майже весь комерційний</strong>, розбіжність часто пояснюють так:</p><ul><li><strong>Вибірка даних:</strong> сторонні аналітичні сервіси не завжди індексують кожне відео; у базу потрапляють ролики з достатнім охопленням, товарами з топів, популярними хештегами тощо.</li><li><strong>Період і тариф:</strong> у безкоштовному доступі можуть показувати лише топ-ролики за період; повна історія — у платних планах.</li><li><strong>Регіон і доступність:</strong> частина відео може по-різному відображатися залежно від гео та налаштувань.</li></ul><p>Тому для моделі ми спираємося на рядок <strong>«відео з товарами»</strong> у звіті EchoTik за обрані 7 / 15 / 30 днів, а не на сирій підрахунок усіх публікацій на сторінці.</p>",
+        marketSnapshot: MARKET_SNAPSHOT_UK,
         kalodata: "<p>Таблиця нижче — <strong>GMV</strong> (валовий обіг за посиланням креатора) за грудень 2025 за даними Kalodata. Це <strong>не</strong> чистий дохід креатора: з GMV рахується комісія %, податки та інші витрати окремо.</p><p>Кількість підписників <strong>не завжди</strong> корелює з GMV — важливі ніша, товар і якість контенту.</p><p>Приклад ролика з демонстрацією товару: <a class=\"tt-link\" href=\"https://vt.tiktok.com/ZSHdS4gWW/\" target=\"_blank\" rel=\"noopener noreferrer\">коротке відео @be.lush</a>.</p>",
         tofu: "<p><strong>TOFU (верх воронки)</strong> — відео для охоплення: тренди, челенджі, мало прямих продажів з одного перегляду.</p><p><strong>MOFU (середина)</strong> — огляди, «топ-5», довіра; люди вже цікавляться темою.</p><p><strong>BOFU (низ)</strong> — демо товару, ціна, чіткий заклик «купити за посиланням»; тут найвищий відсоток переглядів, що перетворюються на замовлення.</p><p>У калькуляторі вибір воронки змінює орієнтир конверсії разом із нішею.</p>"
     };
@@ -1509,6 +1606,7 @@
         gmv: "<p><strong>GMV</strong> — валовый оборот заказов по вашей ссылке в TikTok Shop за период. Это <strong>не</strong> наличные креатора: с оборота платят комиссии платформы, возвраты и т.д.</p><p>В <strong>отчётах, рейтингах и публичных цифрах</strong> часто показывают именно GMV.</p><h3>Креатор и аффилиат</h3><p><strong>Креатор</strong> — автор видео. <strong>Аффилиат</strong> в Shop — партнёр продавца: вы приводите покупателя по ссылке и получаете <strong>процент от оплаченного заказа</strong> (часто ориентир 5–20%).</p><h3>Что не равно «чистым деньгам» из GMV</h3><div class=\"data-table-wrap\"><table class=\"earn-table\"><thead><tr><th>Статья</th><th>Кратко</th></tr></thead><tbody><tr><td>Комиссия платформы</td><td>Удерживается с оборота продавца</td></tr><tr><td>Ваша комиссия</td><td>Процент от чека — отдельная строка дохода креатора</td></tr><tr><td>Возвраты</td><td>Снижают итог</td></tr><tr><td>Налоги, съёмка</td><td>Не включены в калькулятор</td></tr></tbody></table></div>",
         shop: "<p>В TikTok Shop <strong>конверсия</strong> — насколько просмотры превращаются в заказы. Зависит от ниши, цены, доверия и <strong>типа ролика</strong> (воронка TOFU → BOFU).</p><p><strong>Комиссия креатора</strong> задаётся продавцом в карточке товара; в категориях диапазоны разные.</p><p>Дешёвые товары часто конвертируют лучше; родной язык и UGC усиливают результат. Верх воронки даёт охват; низ — прямые продажи с просмотра.</p>",
         echoGap: "<p class=\"doc-h2\">Почему цифры расходятся</p><p>Если в профиле видно больше роликов, чем в EchoTik, а контент <strong>в основном коммерческий</strong>, часто действуют факторы:</p><ul><li><strong>Выборка:</strong> сервисы не всегда индексируют каждое видео; в базу попадают ролики с достаточным охватом, топ-товарами, популярными хештегами.</li><li><strong>Период и тариф:</strong> в бесплатном доступе часто топ-N за период; полная история — в платных планах.</li><li><strong>Регион:</strong> часть роликов может по-разному быть доступна для API.</li></ul><p>В модели опираемся на <strong>«видео с товарами»</strong> в EchoTik за 7 / 15 / 30 дней, а не на ручной подсчёт всех публикаций в профиле.</p>",
+        marketSnapshot: MARKET_SNAPSHOT_RU,
         kalodata: "<p>В таблице ниже — <strong>GMV</strong> за декабрь 2025 по данным Kalodata. Это <strong>не</strong> чистый доход креатора.</p><p>Подписчики <strong>не всегда</strong> коррелируют с GMV.</p><p>Пример демонстрации товара: <a class=\"tt-link\" href=\"https://vt.tiktok.com/ZSHdS4gWW/\" target=\"_blank\" rel=\"noopener noreferrer\">видео @be.lush</a>.</p>",
         tofu: "<p><strong>TOFU</strong> — охват и тренды, мало прямых продаж с одного просмотра.</p><p><strong>MOFU</strong> — обзоры и доверие.</p><p><strong>BOFU</strong> — демо, цена, призыв к покупке по ссылке; выше доля просмотров, ставших заказами.</p>"
     };
@@ -1519,6 +1617,7 @@
         el = document.getElementById("accInjectGmv"); if (el) el.innerHTML = a.gmv;
         el = document.getElementById("accInjectShop"); if (el) el.innerHTML = a.shop;
         el = document.getElementById("accInjectEchoGap"); if (el) el.innerHTML = a.echoGap;
+        el = document.getElementById("accInjectMarketSnapshot"); if (el) el.innerHTML = a.marketSnapshot;
         el = document.getElementById("accInjectKalodata"); if (el) el.innerHTML = a.kalodata;
         el = document.getElementById("accInjectTofu"); if (el) el.innerHTML = a.tofu;
     }
