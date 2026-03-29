@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="uk" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="google" content="notranslate">
+    <title>TikTok: заробіток | Гайд для української аудиторії</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        html { -webkit-text-size-adjust: 100%; }
+        body {
+            margin: 0;
+            padding: 12px 16px 40px;
+            padding-bottom: calc(40px + env(safe-area-inset-bottom));
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f0f0f2;
+            color: #1a1a1a;
+            line-height: 1.5;
+        }
+        .wrap { max-width: 720px; margin: 0 auto; }
+        .cross-link {
+            font-size: 0.88rem;
+            margin: 0 0 14px;
+        }
+        .cross-link a { color: #5b21b6; font-weight: 600; }
+        .lang-bar {
+            text-align: center;
+            margin-bottom: 16px;
+            padding: 12px 14px;
+            background: #fff;
+            border: 1px solid #ccc;
+        }
+        .lang-bar-inner { display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px 14px; }
+        .lang-btn {
+            min-width: 52px; min-height: 44px; padding: 8px 18px;
+            border: 2px solid #ccc; background: #fff; font-weight: 700; font-size: 0.88rem;
+            cursor: pointer; color: #333;
+        }
+        .lang-btn.lang-btn--active { border-color: #7c3aed; background: #7c3aed; color: #fff; }
+        .lang-status { margin: 0; flex-basis: 100%; font-size: 0.88rem; color: #444; font-weight: 600; }
+        .page-header { margin-bottom: 14px; padding-bottom: 12px; border-bottom: 2px solid #1a1a1a; }
+        .page-title { font-size: clamp(1.15rem, 4vw, 1.45rem); font-weight: 700; margin: 0 0 8px; }
+        .page-sub { font-size: 0.86rem; color: #555; margin: 0; }
+
+        .quick-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        @media (min-width: 520px) { .quick-stats { grid-template-columns: repeat(4, 1fr); } }
+        .stat-card {
+            background: #fff;
+            border: 1px solid #ccc;
+            padding: 12px 10px;
+            text-align: center;
+        }
+        .stat-card strong {
+            display: block;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: #5b21b6;
+            font-variant-numeric: tabular-nums;
+        }
+        .stat-card span { font-size: 0.72rem; color: #555; text-transform: uppercase; letter-spacing: 0.04em; }
+
+        .calc-card {
+            background: #fff;
+            border: 1px solid #ccc;
+            margin-bottom: 16px;
+        }
+        .calc-card-head {
+            padding: 12px 14px;
+            background: #fafafa;
+            border-bottom: 1px solid #ddd;
+            font-weight: 700;
+            font-size: 0.88rem;
+            color: #333;
+        }
+        .calc-card-body { padding: 14px; }
+        .muted { font-size: 0.8rem; color: #666; margin: 0 0 12px; }
+
+        .calc-mode-tabs { display: flex; border: 1px solid #ddd; margin-bottom: 14px; }
+        .calc-tab {
+            flex: 1;
+            min-height: 46px;
+            border: none;
+            background: #f3f3f5;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            color: #555;
+        }
+        .calc-tab[aria-selected="true"] {
+            background: #fff;
+            color: #5b21b6;
+            border-bottom: 3px solid #7c3aed;
+        }
+        .calc-tab[aria-selected="false"] { border-bottom: 3px solid transparent; }
+
+        .step-label { font-size: 0.78rem; font-weight: 700; color: #444; margin: 0 0 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .cat-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+        .cat-btn {
+            padding: 8px 10px;
+            border: 1px solid #bbb;
+            background: #fff;
+            font-size: 0.76rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: #333;
+        }
+        .cat-btn:hover { border-color: #7c3aed; }
+        .cat-btn.active { border-color: #7c3aed; background: rgba(124, 58, 237, 0.12); color: #5b21b6; font-weight: 700; }
+
+        .funnel-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+        .funnel-row .seg-btn { flex: 1; min-width: 90px; min-height: 42px; border: 2px solid #ccc; background: #fff; font-size: 0.78rem; font-weight: 600; cursor: pointer; }
+        .funnel-row .seg-btn.active { border-color: #7c3aed; background: #7c3aed; color: #fff; }
+
+        .views-presets { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 8px; }
+        @media (min-width: 400px) { .views-presets { grid-template-columns: repeat(4, 1fr); } }
+        .view-preset {
+            min-height: 40px;
+            border: 1px solid #bbb;
+            background: #fff;
+            font-size: 0.76rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .view-preset.active { border-color: #7c3aed; background: #f3f0ff; }
+
+        .slider-block label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
+        }
+        .slider-val { font-variant-numeric: tabular-nums; color: #7c3aed; font-weight: 700; }
+        input[type="range"] { width: 100%; accent-color: #7c3aed; }
+
+        .big-result {
+            margin-top: 16px;
+            padding: 16px;
+            background: #1a1a1a;
+            color: #fff;
+            border-radius: 0;
+        }
+        .big-result-grid {
+            display: grid;
+            gap: 14px;
+        }
+        @media (min-width: 480px) { .big-result-grid { grid-template-columns: 1fr 1fr; } }
+        .big-result .lbl {
+            display: block;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.07em;
+            color: #aaa;
+            margin-bottom: 4px;
+        }
+        .big-result .val {
+            font-size: 1.5rem;
+            font-weight: 800;
+            font-variant-numeric: tabular-nums;
+            color: #c4b5fd;
+            line-height: 1.2;
+        }
+        .big-result .val-sm { font-size: 1.15rem; color: #e5e5e5; }
+
+        .philosophy {
+            padding: 12px 14px;
+            background: #f5f3ff;
+            border-left: 4px solid #7c3aed;
+            font-size: 0.88rem;
+            margin: 16px 0 0;
+            color: #333;
+        }
+
+        .acc {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            background: #fff;
+        }
+        .acc-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 14px 16px;
+            min-height: 48px;
+            border: none;
+            background: #fafafa;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+        }
+        .acc.collapsed .acc-chevron { transform: rotate(-90deg); }
+        .acc-chevron { transition: transform 0.2s; color: #555; flex-shrink: 0; }
+        .acc-panel { padding: 0 16px 16px; border-top: 1px solid #e8e8e8; font-size: 0.88rem; }
+        .acc.collapsed .acc-panel { display: none; }
+        .acc-panel p { margin: 0 0 10px; }
+        .acc-panel ul { margin: 8px 0 0; padding-left: 1.2em; }
+        .doc-h2 { font-size: 1rem; margin: 12px 0 8px; font-weight: 700; }
+        .data-table-wrap { overflow-x: auto; margin: 10px 0; border: 1px solid #ddd; max-width: 100%; }
+        .earn-table { width: 100%; border-collapse: collapse; font-size: 0.76rem; table-layout: fixed; }
+        .earn-table th, .earn-table td { border: 1px solid #ccc; padding: 6px; word-wrap: break-word; overflow-wrap: anywhere; }
+        .earn-table th { background: #f5f5f5; font-weight: 600; }
+        a.tt-link { color: #5b21b6; font-weight: 600; }
+        .highlight-inline {
+            background: #f5f3ff;
+            border: 1px solid #ddd;
+            padding: 10px 12px;
+            margin: 10px 0;
+            font-size: 0.86rem;
+        }
+        footer { margin-top: 20px; padding-top: 14px; border-top: 1px solid #ccc; font-size: 0.8rem; color: #555; }
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="lang-bar" role="navigation" aria-label="Мова">
+        <div class="lang-bar-inner">
+            <button type="button" class="lang-btn lang-btn--active" id="langBtnUa" data-set-lang="uk" aria-pressed="true">UA</button>
+            <button type="button" class="lang-btn" id="langBtnRu" data-set-lang="ru" aria-pressed="false">RU</button>
+            <p class="lang-status" id="langStatus">Ви обрали 🇺🇦</p>
+        </div>
+    </div>
+
+    <header class="page-header">
+        <h1 class="page-title" id="infoTitle">TikTok: як рахувати заробіток</h1>
+        <p class="page-sub" id="infoSub">Орієнтири для української аудиторії: Shop, перегляди, комісії. Не є податковою чи інвестиційною порадою.</p>
+    </header>
+
+    <p class="cross-link" id="crossSpain"><a href="x-tts-spain.html">Проєкт у Іспанії: реєстрація, сім’я, локальні інструкції →</a></p>
+
+    <section class="quick-stats" aria-label="Ключові орієнтири">
+        <div class="stat-card"><span>Комісія Shop (креатор)</span><strong>5–20%</strong></div>
+        <div class="stat-card"><span>CPM (Rewards, орієнтир ЄС)</span><strong>~0,5–2 €</strong></div>
+        <div class="stat-card"><span>Середня комісія афіліата (світ)</span><strong>~13%</strong></div>
+        <div class="stat-card"><span>Курс для оцінки</span><strong>1 € ≈ 45 ₴</strong></div>
+    </section>
+
+    <section class="calc-card" aria-labelledby="calc-head">
+        <div class="calc-card-head" id="calc-head">Швидкий розрахунок</div>
+        <div class="calc-card-body">
+            <p class="muted" id="calcIntro">Оберіть <strong>нішу</strong>, <strong>перегляди</strong> за період і режим. Побачите <strong>орієнтовний дохід</strong> і <strong>час на ролики</strong> (оцінка). Для Shop додано стиль воронки — він змінює конверсію.</p>
+
+            <div class="calc-mode-tabs" role="tablist">
+                <button type="button" class="calc-tab" role="tab" id="tabMon" aria-selected="true" aria-controls="panelMon"><span id="lblTabMon">Перегляди (CPM)</span></button>
+                <button type="button" class="calc-tab" role="tab" id="tabShop" aria-selected="false" aria-controls="panelShop" tabindex="-1"><span id="lblTabShop">TikTok Shop</span></button>
+            </div>
+
+            <p class="step-label" id="stepCat">1. Категорія / ніша</p>
+            <div class="cat-grid" id="catGrid"></div>
+
+            <div id="shopFunnelWrap">
+                <p class="step-label" id="stepFunnel">2. Стиль роликів (воронка)</p>
+                <div class="funnel-row" id="funnelRow"></div>
+            </div>
+
+            <p class="step-label" id="stepViews">3. Перегляди за період</p>
+            <div class="views-presets" id="viewPresets"></div>
+            <div class="slider-block">
+                <label><span id="lblSlider">Перегляди</span>: <span class="slider-val" id="viewsOut">0</span></label>
+                <input type="range" id="viewsRange" min="0" max="1000" value="500" aria-labelledby="calc-head">
+            </div>
+
+            <div class="big-result" id="bigResult">
+                <div class="big-result-grid">
+                    <div>
+                        <span class="lbl" id="lblEarn">Орієнтовний «чистий» дохід</span>
+                        <div class="val" id="outEarn">0 €</div>
+                        <div class="val-sm" id="outUah">0 ₴</div>
+                    </div>
+                    <div>
+                        <span class="lbl" id="lblTime">Час на ролики (оцінка)</span>
+                        <div class="val val-sm" id="outTime">0</div>
+                        <span class="lbl" style="margin-top:8px;" id="lblExtra"></span>
+                        <div class="val-sm" id="outExtra" style="margin-top:4px;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <p class="philosophy" id="philosophy">
+                Високі суми в таблицях і в цьому калькуляторі ближчі до авторів, які розуміють <strong>алгоритм</strong>, <strong>психологію глядача</strong>, <strong>тип контенту</strong> і <strong>виробництво</strong>, і працюють <strong>системно</strong>. Багато годин на слабкий контент дають гірший «заробіток на годину», ніж менше часу на сильні ролики — тому порівнюйте не лише гроші, а ще й час.
+            </p>
+            <p class="muted" id="calcFootnote">«Чистий» у значенні дохід від монетизації/комісії до податків і витрат — податки та повернення не віднімали.</p>
+        </div>
+    </section>
+
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
+            <span>GMV і «гроші в кишені»</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <div class="highlight-inline">
+                <strong>GMV ≠ ваш заробіток.</strong> У скріншотах часто показують валовий обсяг продажів, а не дохід креатора. Віднімайте: комісія платформи, податки, команда, повернення.
+            </div>
+            <p>Комісія креатора з замовлення зазвичай <strong>5–20%</strong> від чека (ставить продавець). Регіон і ніша сильно змінюють реальні суми.</p>
+        </div>
+    </div>
+
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
+            <span>TikTok Shop: комісія та конверсія</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <p>У застосунку Shop типова конверсія часто вища, ніж у «класичній» вітрині — але залежить від товару, ціни й довіри.</p>
+            <ul>
+                <li>Дешеві товари (&lt;20 €) часто конвертують краще за дорогі.</li>
+                <li>UGC і рідна мова озвучки зазвичай підсилюють результат.</li>
+                <li>Верх воронки (розваги) дає охоплення; низ воронки — пряміші продажі з перегляду.</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
+            <span>Монетизація за переглядами (Rewards / Fund)</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <p>Окремо від Shop: виплати за перегляди; <strong>CPM</strong> залежить від країни, якості трафіку та правил програми. У ЄС часто нижчі орієнти, ніж у США — перевіряйте в акаунті.</p>
+        </div>
+    </div>
+
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
+            <span>Топ-10 за GMV (Kalodata, грудень 2025)</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <p class="muted">У таблиці — GMV, не чистий дохід креатора.</p>
+            <div class="data-table-wrap"><table class="earn-table">
+                <thead><tr><th>#</th><th>Акаунт</th><th>Підписники</th><th>GMV</th></tr></thead>
+                <tbody>
+                    <tr><td>1</td><td><a class="tt-link" href="https://www.tiktok.com/@dealswithty" target="_blank" rel="noopener noreferrer">@dealswithty</a></td><td>136,5k</td><td><strong>$2 720 000</strong></td></tr>
+                    <tr><td>2</td><td><a class="tt-link" href="https://www.tiktok.com/@hannahbentley" target="_blank" rel="noopener noreferrer">@hannahbentley</a></td><td>35,9k</td><td><strong>$2 370 000</strong></td></tr>
+                    <tr><td>3</td><td><a class="tt-link" href="https://www.tiktok.com/@myfamilypov" target="_blank" rel="noopener noreferrer">@myfamilypov</a></td><td>206,6k</td><td><strong>$2 000 000</strong></td></tr>
+                    <tr><td>4</td><td><a class="tt-link" href="https://www.tiktok.com/@trending_ttok" target="_blank" rel="noopener noreferrer">@trending_ttok</a></td><td>164,1k</td><td><strong>$1 920 000</strong></td></tr>
+                    <tr><td>5</td><td><a class="tt-link" href="https://www.tiktok.com/@highland.fashion7" target="_blank" rel="noopener noreferrer">@highland.fashion7</a></td><td>240,7k</td><td><strong>$1 830 000</strong></td></tr>
+                    <tr><td>6</td><td><a class="tt-link" href="https://www.tiktok.com/@be.lush" target="_blank" rel="noopener noreferrer">@be.lush</a></td><td>231,6k</td><td><strong>$1 750 000</strong></td></tr>
+                    <tr><td>7</td><td><a class="tt-link" href="https://www.tiktok.com/@mikaylanogueira" target="_blank" rel="noopener noreferrer">@mikaylanogueira</a></td><td>17,4M</td><td><strong>$1 730 000</strong></td></tr>
+                    <tr><td>8</td><td><a class="tt-link" href="https://www.tiktok.com/@anniedanner" target="_blank" rel="noopener noreferrer">@anniedanner</a></td><td>32,8k</td><td><strong>$1 370 000</strong></td></tr>
+                    <tr><td>9</td><td><a class="tt-link" href="https://www.tiktok.com/@sarahgibbons_" target="_blank" rel="noopener noreferrer">@sarahgibbons_</a></td><td>249,4k</td><td><strong>$1 290 000</strong></td></tr>
+                    <tr><td>10</td><td><a class="tt-link" href="https://www.tiktok.com/@sadiejonesuploading" target="_blank" rel="noopener noreferrer">@sadiejonesuploading</a></td><td>37,1k</td><td><strong>$1 160 000</strong></td></tr>
+                </tbody>
+            </table></div>
+        </div>
+    </div>
+
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
+            <span>TOFU, MOFU, BOFU — коротко</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <p><strong>TOFU</strong> — охоплення, вірус; мало прямих продажів з одного перегляду.</p>
+            <p><strong>MOFU</strong> — огляд, довіра, лайфстайл.</p>
+            <p><strong>BOFU</strong> — демо товару, ціна, чіткий заклик і посилання — вища частка переглядів, що стають замовленнями.</p>
+        </div>
+    </div>
+
+    <footer>
+        Детальні таблиці по Іспанії та сімейному кейсу — на сторінці <a href="x-tts-spain.html">x-tts-spain.html</a>. Калькулятор — орієнтир; підлаштуйте коефіцієнти під свою статистику.
+    </footer>
+</div>
+
+<script>
+(function () {
+    var EUR_UAH = 45;
+    var BASE_ORDER_RATE_PER_VIEW = 0.00001;
+    var AVG_VIEWS_PER_VIDEO = 4500;
+
+    var CPM_EUR = {
+        fashion: 1.1, beauty: 1.3, electronics: 0.9, home: 1.0,
+        food: 1.15, sports: 1.05, kids: 1.0, auto: 1.0, other: 1.0
+    };
+
+    var CAT_NUM = {
+        fashion: { avgPrice: 38, defaultCommissionPct: 12, convMult: 1.05 },
+        beauty: { avgPrice: 32, defaultCommissionPct: 14, convMult: 1.15 },
+        electronics: { avgPrice: 55, defaultCommissionPct: 8, convMult: 0.88 },
+        home: { avgPrice: 42, defaultCommissionPct: 10, convMult: 1.0 },
+        food: { avgPrice: 28, defaultCommissionPct: 11, convMult: 1.08 },
+        sports: { avgPrice: 45, defaultCommissionPct: 14, convMult: 1.02 },
+        kids: { avgPrice: 35, defaultCommissionPct: 12, convMult: 1.0 },
+        auto: { avgPrice: 48, defaultCommissionPct: 11, convMult: 0.92 },
+        other: { avgPrice: 40, defaultCommissionPct: 10, convMult: 1.0 }
+    };
+
+    var FUNNEL_NUM = {
+        tofu: { convMult: 0.4, minPerVideo: 22 },
+        mofu: { convMult: 1, minPerVideo: 38 },
+        bofu: { convMult: 2.5, minPerVideo: 52 }
+    };
+
+    var CAT_LABELS_UK = {
+        fashion: "Одяг", beauty: "Краса", electronics: "Гаджети", home: "Дім / кухня",
+        food: "Їжа", sports: "Спорт", kids: "Діти", auto: "Авто", other: "Інше"
+    };
+
+    var FUNNEL_LABELS_UK = { tofu: "Верх (TOFU)", mofu: "Середина (MOFU)", bofu: "Низ (BOFU)" };
+
+    var CAT_LABELS_RU = {
+        fashion: "Одежда", beauty: "Красота", electronics: "Гаджеты", home: "Дом / кухня",
+        food: "Еда", sports: "Спорт", kids: "Дети", auto: "Авто", other: "Другое"
+    };
+    var FUNNEL_LABELS_RU = { tofu: "Верх (TOFU)", mofu: "Середина (MOFU)", bofu: "Низ (BOFU)" };
+
+    var state = { mode: "mon", cat: "home", funnel: "mofu", views: 100000 };
+    var lang = localStorage.getItem("langInfo") === "ru" ? "ru" : "uk";
+
+    function catLabel(id) {
+        return lang === "ru" ? (CAT_LABELS_RU[id] || CAT_LABELS_UK[id]) : CAT_LABELS_UK[id];
+    }
+    function funnelLabel(fk) {
+        return lang === "ru" ? (FUNNEL_LABELS_RU[fk] || FUNNEL_LABELS_UK[fk]) : FUNNEL_LABELS_UK[fk];
+    }
+
+    function viewsFromSlider(pos) {
+        if (pos <= 0) return 0;
+        var minV = 100;
+        var maxV = 100000000;
+        var t = pos / 1000;
+        return Math.round(minV * Math.pow(maxV / minV, t));
+    }
+
+    function loc() {
+        return lang === "ru" ? "ru-RU" : "uk-UA";
+    }
+
+    function formatNum(n) {
+        return n.toLocaleString(loc());
+    }
+
+    function formatHours(h) {
+        if (h < 1) return Math.round(h * 60) + (lang === "ru" ? " мин" : " хв");
+        var hh = Math.floor(h);
+        var mm = Math.round((h - hh) * 60);
+        if (lang === "ru") return hh + " ч " + (mm ? mm + " мин" : "").trim();
+        return hh + " год " + (mm ? mm + " хв" : "").trim();
+    }
+
+    function computeShop() {
+        var c = CAT_NUM[state.cat] || CAT_NUM.other;
+        var f = FUNNEL_NUM[state.funnel] || FUNNEL_NUM.mofu;
+        var views = state.views;
+        var orders = views * BASE_ORDER_RATE_PER_VIEW * f.convMult * c.convMult;
+        var commissionEUR = orders * c.avgPrice * (c.defaultCommissionPct / 100);
+        var videos = Math.max(1, Math.ceil(views / AVG_VIEWS_PER_VIDEO));
+        var hours = (videos * f.minPerVideo) / 60;
+        var gmv = orders * c.avgPrice;
+        return { commissionEUR: commissionEUR, orders: orders, videos: videos, hours: hours, gmv: gmv, pct: c.defaultCommissionPct };
+    }
+
+    function renderCatGrid() {
+        var g = document.getElementById("catGrid");
+        g.innerHTML = "";
+        Object.keys(CAT_LABELS_UK).forEach(function (id) {
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = "cat-btn" + (state.cat === id ? " active" : "");
+            b.textContent = catLabel(id);
+            b.addEventListener("click", function () { state.cat = id; renderCatGrid(); render(); });
+            g.appendChild(b);
+        });
+    }
+
+    function renderFunnel() {
+        var row = document.getElementById("funnelRow");
+        row.innerHTML = "";
+        ["tofu", "mofu", "bofu"].forEach(function (fk) {
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = "seg-btn" + (state.funnel === fk ? " active" : "");
+            b.textContent = funnelLabel(fk);
+            b.addEventListener("click", function () { state.funnel = fk; renderFunnel(); render(); });
+            row.appendChild(b);
+        });
+    }
+
+    function renderPresets() {
+        var wrap = document.getElementById("viewPresets");
+        var presets = lang === "ru" ? [
+            { l: "10 тыс", v: 10000 },
+            { l: "100 тыс", v: 100000 },
+            { l: "1 млн", v: 1000000 },
+            { l: "10 млн", v: 10000000 }
+        ] : [
+            { l: "10 тис", v: 10000 },
+            { l: "100 тис", v: 100000 },
+            { l: "1 млн", v: 1000000 },
+            { l: "10 млн", v: 10000000 }
+        ];
+        wrap.innerHTML = "";
+        presets.forEach(function (p) {
+            var b = document.createElement("button");
+            b.type = "button";
+            b.className = "view-preset" + (state.views === p.v ? " active" : "");
+            b.textContent = p.l;
+            b.addEventListener("click", function () {
+                state.views = p.v;
+                var rng = document.getElementById("viewsRange");
+                if (rng) {
+                    var pos = 1000 * Math.log(state.views / 100) / Math.log(100000000 / 100);
+                    rng.value = String(Math.max(0, Math.min(1000, Math.round(pos))));
+                }
+                renderPresets();
+                render();
+            });
+            wrap.appendChild(b);
+        });
+    }
+
+    function render() {
+        var rng = document.getElementById("viewsRange");
+        if (rng) {
+            state.views = viewsFromSlider(parseInt(rng.value, 10) || 0);
+        }
+        document.getElementById("viewsOut").textContent = formatNum(state.views);
+
+        var shopF = document.getElementById("shopFunnelWrap");
+        shopF.style.display = state.mode === "shop" ? "block" : "none";
+
+        var lblEarn = document.getElementById("lblEarn");
+        var outEarn = document.getElementById("outEarn");
+        var outUah = document.getElementById("outUah");
+        var outTime = document.getElementById("outTime");
+        var outExtra = document.getElementById("outExtra");
+        var lblExtra = document.getElementById("lblExtra");
+
+        if (state.mode === "mon") {
+            lblEarn.textContent = lang === "ru"
+                ? "Ориентировочный доход (CPM, до налогов)"
+                : "Орієнтовний дохід (CPM, до податків)";
+            var cpm = CPM_EUR[state.cat] != null ? CPM_EUR[state.cat] : 1;
+            var rev = (state.views / 1000) * cpm;
+            var videos = Math.max(1, Math.ceil(state.views / AVG_VIEWS_PER_VIDEO));
+            var mpv = FUNNEL_NUM.mofu.minPerVideo;
+            var hours = (videos * mpv) / 60;
+            outEarn.textContent = rev.toFixed(2) + " €";
+            outUah.textContent = Math.round(rev * EUR_UAH).toLocaleString(loc()) + " ₴";
+            outTime.textContent = formatHours(hours);
+            lblExtra.textContent = lang === "ru" ? "Ориентир CPM для ниши" : "Орієнтир CPM для ніші";
+            outExtra.textContent = lang === "ru"
+                ? "~" + cpm.toFixed(2) + " € / 1000 просмотров"
+                : "~" + cpm.toFixed(2) + " € / 1000 переглядів";
+        } else {
+            lblEarn.textContent = lang === "ru"
+                ? "Ориентировочная комиссия (до налогов)"
+                : "Орієнтовна комісія (до податків)";
+            var r = computeShop();
+            outEarn.textContent = r.commissionEUR.toFixed(2) + " €";
+            outUah.textContent = Math.round(r.commissionEUR * EUR_UAH).toLocaleString(loc()) + " ₴";
+            outTime.textContent = formatHours(r.hours);
+            lblExtra.textContent = lang === "ru" ? "GMV (оценка) · заказов" : "GMV (оцінка) · замовлень";
+            outExtra.textContent = r.gmv.toFixed(0) + " € · " + (r.orders < 10 ? r.orders.toFixed(1) : Math.round(r.orders));
+        }
+    }
+
+    function bindTabs() {
+        var tabMon = document.getElementById("tabMon");
+        var tabShop = document.getElementById("tabShop");
+        function sw(shop) {
+            state.mode = shop ? "shop" : "mon";
+            tabMon.setAttribute("aria-selected", shop ? "false" : "true");
+            tabShop.setAttribute("aria-selected", shop ? "true" : "false");
+            tabMon.tabIndex = shop ? -1 : 0;
+            tabShop.tabIndex = shop ? 0 : -1;
+            render();
+        }
+        tabMon.addEventListener("click", function () { sw(false); });
+        tabShop.addEventListener("click", function () { sw(true); });
+    }
+
+    function bindRange() {
+        var rng = document.getElementById("viewsRange");
+        rng.addEventListener("input", render);
+        rng.addEventListener("change", render);
+    }
+
+    document.querySelectorAll(".acc-header").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            var acc = btn.closest(".acc");
+            var collapsed = !acc.classList.contains("collapsed");
+            acc.classList.toggle("collapsed", collapsed);
+            btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+        });
+    });
+
+    var RU = {
+        infoTitle: "TikTok: как считать заработок",
+        infoSub: "Ориентиры для украинской аудитории: Shop, просмотры, комиссии. Не является налоговой консультацией.",
+        crossSpain: "<a href=\"x-tts-spain.html\">Проект в Испании: регистрация, семья, локальные инструкции →</a>",
+        calcIntro: "Выберите <strong>нишу</strong>, <strong>просмотры</strong> за период и режим. Увидите <strong>ориентировочный доход</strong> и <strong>время на ролики</strong>. Для Shop — стиль воронки влияет на конверсию.",
+        lblTabMon: "Просмотры (CPM)",
+        lblTabShop: "TikTok Shop",
+        stepCat: "1. Категория / ниша",
+        stepFunnel: "2. Стиль роликов (воронка)",
+        stepViews: "3. Просмотры за период",
+        lblSlider: "Просмотры",
+        lblEarnMon: "Ориентировочный доход (CPM, до налогов)",
+        lblEarnShop: "Ориентировочная комиссия (до налогов)",
+        lblTime: "Время на ролики (оценка)",
+        lblGmv: "GMV (оценка) · заказов",
+        philosophy: "Высокие суммы ближе к авторам, которые понимают <strong>алгоритм</strong>, <strong>психологию зрителя</strong>, <strong>тип контента</strong> и <strong>производство</strong>, и работают <strong>системно</strong>. Много часов на слабый контент дают худший «заработок в час», чем меньше времени на сильные ролики.",
+        calcFootnote: "«Чистый» — доход от монетизации/комиссии до налогов и расходов; налоги и возвраты не вычитались.",
+        calcHead: "Быстрый расчёт",
+        stat1: "Комиссия Shop (креатор)",
+        stat2: "CPM (Rewards, ориентир ЕС)",
+        stat3: "Средняя комиссия (мир)",
+        stat4: "Курс для оценки",
+        langStatus: "Вы выбрали 🇷🇺"
+    };
+
+    function setLangButtons() {
+        var ua = document.getElementById("langBtnUa");
+        var ru = document.getElementById("langBtnRu");
+        ua.classList.toggle("lang-btn--active", lang === "uk");
+        ru.classList.toggle("lang-btn--active", lang === "ru");
+        ua.setAttribute("aria-pressed", lang === "uk" ? "true" : "false");
+        ru.setAttribute("aria-pressed", lang === "ru" ? "true" : "false");
+        document.getElementById("langStatus").textContent = lang === "uk" ? "Ви обрали 🇺🇦" : "Вы выбрали 🇷🇺";
+    }
+
+    document.getElementById("langBtnUa").addEventListener("click", function () {
+        lang = "uk";
+        localStorage.setItem("langInfo", "uk");
+        setLangButtons();
+        applyUkStatic();
+        renderCatGrid();
+        renderFunnel();
+        renderPresets();
+        render();
+    });
+    document.getElementById("langBtnRu").addEventListener("click", function () {
+        lang = "ru";
+        localStorage.setItem("langInfo", "ru");
+        setLangButtons();
+        applyRuStatic();
+        renderCatGrid();
+        renderFunnel();
+        renderPresets();
+        render();
+    });
+
+    function applyUkStatic() {
+        document.getElementById("infoTitle").textContent = "TikTok: як рахувати заробіток";
+        document.getElementById("infoSub").textContent = "Орієнтири для української аудиторії: Shop, перегляди, комісії. Не є податковою чи інвестиційною порадою.";
+        document.getElementById("crossSpain").innerHTML = "<a href=\"x-tts-spain.html\">Проєкт у Іспанії: реєстрація, сім’я, локальні інструкції →</a>";
+        document.getElementById("calcIntro").innerHTML = "Оберіть <strong>нішу</strong>, <strong>перегляди</strong> за період і режим. Побачите <strong>орієнтовний дохід</strong> і <strong>час на ролики</strong> (оцінка). Для Shop додано стиль воронки — він змінює конверсію.";
+        document.getElementById("lblTabMon").textContent = "Перегляди (CPM)";
+        document.getElementById("lblTabShop").textContent = "TikTok Shop";
+        document.getElementById("stepCat").textContent = "1. Категорія / ніша";
+        document.getElementById("stepFunnel").textContent = "2. Стиль роликів (воронка)";
+        document.getElementById("stepViews").textContent = "3. Перегляди за період";
+        document.getElementById("lblSlider").textContent = "Перегляди";
+        document.getElementById("philosophy").innerHTML = "Високі суми в таблицях і в цьому калькуляторі ближчі до авторів, які розуміють <strong>алгоритм</strong>, <strong>психологію глядача</strong>, <strong>тип контенту</strong> і <strong>виробництво</strong>, і працюють <strong>системно</strong>. Багато годин на слабкий контент дають гірший «заробіток на годину», ніж менше часу на сильні ролики — тому порівнюйте не лише гроші, а ще й час.";
+        document.getElementById("calcFootnote").textContent = "«Чистий» у значенні дохід від монетизації/комісії до податків і витрат — податки та повернення не віднімали.";
+        document.getElementById("calc-head").textContent = "Швидкий розрахунок";
+        var labs = ["Комісія Shop (креатор)", "CPM (Rewards, орієнтир ЄС)", "Середня комісія афіліата (світ)", "Курс для оцінки"];
+        document.querySelectorAll(".stat-card span").forEach(function (el, i) {
+            if (labs[i]) el.textContent = labs[i];
+        });
+    }
+
+    function applyRuStatic() {
+        document.getElementById("infoTitle").textContent = RU.infoTitle;
+        document.getElementById("infoSub").textContent = RU.infoSub;
+        document.getElementById("crossSpain").innerHTML = RU.crossSpain;
+        document.getElementById("calcIntro").innerHTML = RU.calcIntro;
+        document.getElementById("lblTabMon").textContent = RU.lblTabMon;
+        document.getElementById("lblTabShop").textContent = RU.lblTabShop;
+        document.getElementById("stepCat").textContent = RU.stepCat;
+        document.getElementById("stepFunnel").textContent = RU.stepFunnel;
+        document.getElementById("stepViews").textContent = RU.stepViews;
+        document.getElementById("lblSlider").textContent = RU.lblSlider;
+        document.getElementById("philosophy").innerHTML = RU.philosophy;
+        document.getElementById("calcFootnote").textContent = RU.calcFootnote;
+        document.getElementById("calc-head").textContent = RU.calcHead;
+        var t = [RU.stat1, RU.stat2, RU.stat3, RU.stat4];
+        document.querySelectorAll(".stat-card span").forEach(function (el, i) {
+            if (t[i]) el.textContent = t[i];
+        });
+    }
+
+    renderCatGrid();
+    renderFunnel();
+    renderPresets();
+    bindTabs();
+    bindRange();
+    if (lang === "ru") {
+        setLangButtons();
+        applyRuStatic();
+    }
+    render();
+})();
+</script>
+</body>
+</html>
