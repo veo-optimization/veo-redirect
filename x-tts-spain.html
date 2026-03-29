@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="ru" translate="no">
+<html lang="uk" translate="no">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="google" content="notranslate">
-    <title>TikTok Shop в Испании | Семейный проект</title>
+    <title>TikTok Shop в Іспанії | Сімейний проєкт</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         * { box-sizing: border-box; }
@@ -20,6 +20,45 @@
             line-height: 1.5;
         }
         .wrap { max-width: 720px; margin: 0 auto; }
+        .lang-bar {
+            text-align: center;
+            margin-bottom: 16px;
+            padding: 12px 14px;
+            background: #fff;
+            border: 1px solid #ccc;
+        }
+        .lang-bar-inner {
+            display: inline-flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            gap: 10px 14px;
+        }
+        .lang-btn {
+            min-width: 52px;
+            min-height: 44px;
+            padding: 8px 18px;
+            border: 2px solid #ccc;
+            background: #fff;
+            font-weight: 700;
+            font-size: 0.88rem;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+            color: #333;
+        }
+        .lang-btn:hover { border-color: #7c3aed; color: #7c3aed; }
+        .lang-btn.lang-btn--active {
+            border-color: #7c3aed;
+            background: #7c3aed;
+            color: #fff;
+        }
+        .lang-status {
+            margin: 0;
+            flex-basis: 100%;
+            font-size: 0.88rem;
+            color: #444;
+            font-weight: 600;
+        }
         .page-header {
             margin-bottom: 16px;
             padding-bottom: 12px;
@@ -312,238 +351,348 @@
 </head>
 <body>
 <div class="wrap">
+    <div class="lang-bar" role="navigation" aria-label="Мова сторінки">
+        <div class="lang-bar-inner">
+            <button type="button" class="lang-btn lang-btn--active" id="langBtnUa" data-set-lang="uk" aria-pressed="true">UA</button>
+            <button type="button" class="lang-btn" id="langBtnRu" data-set-lang="ru" aria-pressed="false">RU</button>
+            <p class="lang-status" id="langStatus">Ви обрали 🇺🇦</p>
+        </div>
+    </div>
     <header class="page-header">
-        <h1 class="page-title">TikTok Shop в Испании: семейный проект</h1>
-        <p class="page-sub">Ориентировочные расчёты дохода и гайд по запуску. Не является финансовой или налоговой консультацией.</p>
+        <h1 class="page-title" data-i18n="h_title">TikTok Shop в Іспанії: сімейний проєкт</h1>
+        <p class="page-sub" data-i18n="h_sub">Орієнтовні розрахунки доходу та гайд із запуску. Не є фінансовою чи податковою консультацією.</p>
     </header>
 
     <section class="calc-card" aria-labelledby="calc-title">
-        <div class="calc-card-head" id="calc-title">Калькулятор: TikTok Shop (комиссия с продаж)</div>
+        <div class="calc-card-head" id="calc-title" data-i18n="calc_title">Калькулятор: TikTok Shop (комісія з продажів)</div>
         <div class="calc-card-body">
-            <p class="muted">Считаем не «деньги за 1000 просмотров», а <strong>ориентировочные заказы и комиссию</strong> с товаров: тематика влияет на средний чек и типичный % комиссии, стиль ролика — на то, какая доля просмотров превращается в покупку (воронка TOFU / MOFU / BOFU). Добавьте один или несколько аккаунтов — внизу итог по «семье».</p>
+            <p class="muted" data-i18n="calc_intro">Рахуємо не «гроші за 1000 переглядів», а <strong>орієнтовні замовлення та комісію</strong> з товарів: тематика впливає на середній чек і типовий % комісії, стиль ролика — на те, яка частка переглядів перетворюється на покупку (воронка TOFU / MOFU / BOFU). Додайте один або кілька акаунтів — внизу підсумок по «родині».</p>
             <div id="accountsRoot"></div>
-            <button type="button" class="btn-add" id="btnAddAccount"><i class="bi bi-plus-lg"></i> Добавить аккаунт</button>
+            <button type="button" class="btn-add" id="btnAddAccount"><i class="bi bi-plus-lg"></i> <span data-i18n="btn_add">Додати акаунт</span></button>
             <div class="family-total" id="familyTotal" hidden>
-                <h3>Итого по всем аккаунтам</h3>
-                <div class="family-row"><span>Ориентировочная комиссия</span><span class="family-big" id="famEur">0 €</span></div>
-                <div class="family-row"><span>Заказов (оценка)</span><span id="famOrders">0</span></div>
-                <div class="family-row"><span>Роликов (оценка)</span><span id="famVideos">0</span></div>
-                <div class="family-row"><span>Время на ролики (оценка)</span><span id="famHours">0</span></div>
+                <h3 data-i18n="fam_h3">Підсумок по всіх акаунтах</h3>
+                <div class="family-row"><span data-i18n="fam_lbl_comm">Орієнтовна комісія</span><span class="family-big" id="famEur">0 €</span></div>
+                <div class="family-row"><span data-i18n="fam_lbl_ord">Замовлень (оцінка)</span><span id="famOrders">0</span></div>
+                <div class="family-row"><span data-i18n="fam_lbl_vid">Роликів (оцінка)</span><span id="famVideos">0</span></div>
+                <div class="family-row"><span data-i18n="fam_lbl_time">Час на ролики (оцінка)</span><span id="famHours">0</span></div>
             </div>
         </div>
     </section>
 
     <div class="acc">
         <button type="button" class="acc-header" aria-expanded="true">
-            <span>Предложение и идея проекта</span>
+            <span data-i18n="acc_hdr_proposal">Пропозиція та ідея проєкту</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
-        <div class="acc-panel">
-            <p><strong>Предложение:</strong> объединиться для работы с TikTok Shop в Испании. Цель — дополнительный доход для пенсионеров и обучение подростков заработку в медиа. Необходимые ресурсы можно собрать поэтапно.</p>
+        <div class="acc-panel" data-i18n="acc_panel_proposal">
+            <p><strong>Пропозиція:</strong> об’єднатися для роботи з TikTok Shop в Іспанії. Мета — додатковий дохід для пенсіонерів і навчання підлітків заробітку в медіа. Потрібні ресурси можна зібрати поетапно.</p>
         </div>
     </div>
 
     <div class="acc">
         <button type="button" class="acc-header" aria-expanded="true">
-            <span>1. Запуск: телефон, SIM, IP, верификация</span>
+            <span data-i18n="acc_hdr_1">1. Запуск: телефон, SIM, IP, верифікація</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
-        <div class="acc-panel">
+        <div class="acc-panel" data-i18n="acc_panel_1">
             <ul>
-                <li><strong>Телефон:</strong> отдельный аппарат (например, сброшенный до заводских настроек), который физически находится в Испании.</li>
-                <li><strong>SIM:</strong> prepaid испанского оператора (Movistar, Vodafone, Orange) — ориентир 10–20 €.</li>
-                <li><strong>Регистрация TikTok:</strong> совершеннолетний; номер испанской SIM; не входить через Google/Apple ID, привязанные к Украине.</li>
-                <li><strong>Локация:</strong> публикации только из Испании; VPN для обхода геолокации не рекомендуется.</li>
-                <li><strong>Affiliate:</strong> после 1000–2000 подписчиков — заявка в TikTok Studio → Monetization → TikTok Shop for Creator; паспорт совершеннолетнего для проверки личности.</li>
-                <li><strong>Бизнес-документы</strong> для старта как affiliate creator не обязательны.</li>
+                <li><strong>Телефон:</strong> окремий апарат (наприклад, скинутий до заводських налаштувань), який фізично перебуває в Іспанії.</li>
+                <li><strong>SIM:</strong> prepaid іспанського оператора (Movistar, Vodafone, Orange) — орієнтир 10–20 €.</li>
+                <li><strong>Реєстрація TikTok:</strong> повнолітній; номер іспанської SIM; не входити через Google/Apple ID, прив’язані до України.</li>
+                <li><strong>Локація:</strong> публікації лише з Іспанії; VPN для обходу геолокації не рекомендується.</li>
+                <li><strong>Affiliate:</strong> після 1000–2000 підписників — заявка в TikTok Studio → Monetization → TikTok Shop for Creator; паспорт повнолітнього для перевірки особи.</li>
+                <li><strong>Бізнес-документи</strong> для старту як affiliate creator не обов’язкові.</li>
             </ul>
         </div>
     </div>
 
     <div class="acc">
         <button type="button" class="acc-header" aria-expanded="true">
-            <span>2. Комиссии TikTok Shop (креатор)</span>
+            <span data-i18n="acc_hdr_2">2. Комісії TikTok Shop (креатор)</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
-        <div class="acc-panel">
-            <p>Для affiliate creator комиссия часто <strong>5–20%</strong> с заказа (ставку задаёт продавец). Процент TikTok с продавца (например, ~3,85%) креатора напрямую не касается.</p>
+        <div class="acc-panel" data-i18n="acc_panel_2">
+            <p>Для affiliate creator комісія часто <strong>5–20%</strong> із замовлення (ставку задає продавець). Відсоток TikTok із продавця (наприклад, ~3,85%) креатора напряму не стосується.</p>
             <div class="card-grid-mini">
-                <div class="mini-card"><h4>Электроника, гаджеты</h4>~5–10 %</div>
-                <div class="mini-card"><h4>Мода, красота</h4>~10–15 %</div>
-                <div class="mini-card"><h4>Дом, кухня</h4>~8–12 %</div>
+                <div class="mini-card"><h4>Електроніка, гаджети</h4>~5–10 %</div>
+                <div class="mini-card"><h4>Мода, краса</h4>~10–15 %</div>
+                <div class="mini-card"><h4>Дім, кухня</h4>~8–12 %</div>
                 <div class="mini-card"><h4>Спорт</h4>~12–20 %</div>
-                <div class="mini-card"><h4>Автотовары</h4>~8–15 %</div>
+                <div class="mini-card"><h4>Автотовари</h4>~8–15 %</div>
                 <div class="mini-card"><h4>Wellness</h4>~15–20 %</div>
             </div>
-            <p><strong>Пример:</strong> товар для дома, комиссия 12 %, цена 100 €, 50 продаж в месяц → 12 € с продажи × 50 = 600 €/мес. с одной позиции (иллюстрация, не гарантия).</p>
+            <p><strong>Приклад:</strong> товар для дому, комісія 12 %, ціна 100 €, 50 продажів на місяць → 12 € із продажу × 50 = 600 €/міс. з однієї позиції (ілюстрація, не гарантія).</p>
         </div>
     </div>
 
     <div class="acc">
         <button type="button" class="acc-header" aria-expanded="true">
-            <span>3. Контент: форматы, Испания и «американский» референс</span>
+            <span data-i18n="acc_hdr_3">3. Контент: формати, Іспанія та «американський» референс</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
-        <div class="acc-panel">
-            <p><strong>Типы подачи:</strong> испанский закадровый голос; украинский или русский в кадре/за кадром; без слов (демонстрация + музыка + текст на экране).</p>
-            <p><strong>Производство:</strong> съёмка и монтаж в одной стране → готовые ролики семье в Испании для публикации с испанского телефона и аффилиатной ссылкой.</p>
+        <div class="acc-panel" data-i18n="acc_panel_3">
+            <p><strong>Типи подачі:</strong> іспанський закадровий голос; українська чи російська в кадрі/за кадром; без слів (демонстрація + музика + текст на екрані).</p>
+            <p><strong>Виробництво:</strong> зйомка й монтаж в одній країні → готові ролики родині в Іспанії для публікації з іспанського телефона та афіліатного посилання.</p>
             <div class="highlight-inline">
-                <strong>Важно про рынок Испании:</strong> TikTok Shop здесь — относительно <em>новый</em> формат продаж. Поэтому если взять уже успешные <strong>американские</strong> видео (с большим числом просмотров, комментариев и сильной статистикой) и <strong>озвучить их по-испански</strong> (или адаптировать под локальный тон), результат можно получить <strong>быстрее и проще</strong>, чем строить всё с нуля без проверенных референсов.
+                <strong>Важливо про ринок Іспанії:</strong> TikTok Shop тут — відносно <em>новий</em> формат продажів. Тому якщо взяти вже успішні <strong>американські</strong> відео (з великою кількістю переглядів, коментарів і сильною статистикою) і <strong>озвучити їх іспанською</strong> (або адаптувати під локальний тон), результат можна отримати <strong>швидше й простіше</strong>, ніж будувати все з нуля без перевірених референсів.
             </div>
             <ul>
-                <li>Короткий вертикальный формат, понятный показ товара, текст на экране, призыв к действию.</li>
-                <li>Длительность шоп-роликов часто 15–60 с; сильный хук в первые 1–3 с.</li>
+                <li>Короткий вертикальний формат, зрозуміле показування товару, текст на екрані, заклик до дії.</li>
+                <li>Тривалість шоп-роликів часто 15–60 с; сильний хук у перші 1–3 с.</li>
             </ul>
         </div>
     </div>
 
     <div class="acc">
         <button type="button" class="acc-header" aria-expanded="true">
-            <span>4. Первые 1000–2000 подписчиков: только Испания</span>
+            <span data-i18n="acc_hdr_4">4. Перші 1000–2000 підписників: лише Іспанія</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
-        <div class="acc-panel">
-            <p><strong>Как правильно набирать первых подписчиков.</strong> Первые 1000–2000 подписчиков должны быть <strong>исключительно из Испании</strong>.</p>
-            <p><strong>Как это сделать:</strong></p>
+        <div class="acc-panel" data-i18n="acc_panel_4">
+            <p><strong>Як правильно набирати перших підписників.</strong> Перші 1000–2000 підписників мають бути <strong>виключно з Іспанії</strong>.</p>
+            <p><strong>Як це зробити:</strong></p>
             <ul>
-                <li>Подписывайтесь на испанских блогеров, комментируйте их ролики <strong>по-испански</strong> — так чаще приходит внимание испанской аудитории.</li>
-                <li>Публикуйте первые видео <strong>на испанском</strong> или с <strong>испанскими субтитрами</strong>.</li>
-                <li>Используйте локальные хештеги: <span class="tag">#tiktokespaña</span> <span class="tag">#parati</span> <span class="tag">#españa</span> <span class="tag">#tiktokshopspain</span></li>
-                <li>Не распространяйте ссылку на аккаунт в украинских чатах и не просите украинских друзей подписываться на старте.</li>
+                <li>Підписуйтеся на іспанських блогерів, коментуйте їхні ролики <strong>іспанською</strong> — так частіше приходить увага іспанської аудиторії.</li>
+                <li>Публікуйте перші відео <strong>іспанською</strong> або з <strong>іспанськими субтитрами</strong>.</li>
+                <li>Використовуйте локальні хештеги: <span class="tag">#tiktokespaña</span> <span class="tag">#parati</span> <span class="tag">#españa</span> <span class="tag">#tiktokshopspain</span></li>
+                <li>Не поширюйте посилання на акаунт в українських чатах і не просіть українських друзів підписуватися на старті.</li>
             </ul>
-            <p><strong>Вывод:</strong> украинские подписчики из Украины на первом этапе <strong>вредны</strong> для гео и рекомендаций. Их можно подключать позже, когда уже есть стабильная испанская база.</p>
+            <p><strong>Висновок:</strong> українські підписники з України на першому етапі <strong>шкідливі</strong> для гео та рекомендацій. Їх можна підключати пізніше, коли вже є стабільна іспанська база.</p>
         </div>
     </div>
 
     <div class="acc">
         <button type="button" class="acc-header" aria-expanded="true">
-            <span>5. Оптимальная стратегия по фазам</span>
+            <span data-i18n="acc_hdr_5">5. Оптимальна стратегія за фазами</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
-        <div class="acc-panel">
-            <p><strong>Фаза 1 (первые 2–3 недели):</strong> набор испанской аудитории. Контент на испанском (voiceover может делать член семьи с сильным испанским). Темы: например автотовары или обзоры популярных гаджетов. Цель — быстро набрать <strong>2000+</strong> испанских подписчиков.</p>
-            <p><strong>Фаза 2 (после доступа к Affiliate Center):</strong> добавить украинский контент для украинцев в Испании; задействовать разных членов семьи — кулинария, авто, спорт. Параллельно продолжать испанский контент для масштабирования.</p>
-            <p><strong>Фаза 3 (масштабирование):</strong> несколько аккаунтов под разные ниши (отдельно авто, отдельно кухня и т.д.); использовать TikTok Shop Affiliate Center для товаров с высокой комиссией.</p>
+        <div class="acc-panel" data-i18n="acc_panel_5">
+            <p><strong>Фаза 1 (перші 2–3 тижні):</strong> набір іспанської аудиторії. Контент іспанською (voiceover може робити член родини з сильним іспанським). Теми: наприклад автотовари або огляди популярних гаджетів. Мета — швидко набрати <strong>2000+</strong> іспанських підписників.</p>
+            <p><strong>Фаза 2 (після доступу до Affiliate Center):</strong> додати український контент для українців в Іспанії; залучити різних членів родини — кулінарія, авто, спорт. Паралельно продовжувати іспанський контент для масштабування.</p>
+            <p><strong>Фаза 3 (масштабування):</strong> кілька акаунтів під різні ніші (окремо авто, окремо кухня тощо); використовувати TikTok Shop Affiliate Center для товарів із високою комісією.</p>
         </div>
     </div>
 
     <div class="acc">
         <button type="button" class="acc-header" aria-expanded="true">
-            <span>6. Простые форматы для набора подписчиков (идеи по хештегам)</span>
+            <span data-i18n="acc_hdr_6">6. Прості формати для набору підписників (ідеї за хештегами)</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
-        <div class="acc-panel">
-            <p>Часто подписчики приходят с <strong>простых</strong> роликов: юмор, тёплые бытовые сцены, рыбалка, кухня, дед и внук — ищите идеи по хештегам вроде «юмор», «семья», «кухня», «рыбалка», «бабушка и внук».</p>
+        <div class="acc-panel" data-i18n="acc_panel_6">
+            <p>Часто підписники приходять з <strong>простих</strong> роликів: гумор, теплі побутові сцени, рибалка, кухня, дід і онук — шукайте ідеї за хештегами на кшталт «гумор», «родина», «кухня», «рибалка», «бабуся та онук».</p>
             <ol>
-                <li><strong>Короткий юмор или абсурд</strong> — иногда только текст на экране, без озвучки.</li>
-                <li><strong>Дедушка + внук</strong> — тёплая сцена, помощь, быт (хорошо заходит локальной аудитории).</li>
-                <li><strong>Рыбалка / гараж / мастерская</strong> — процесс крупным планом, минимум слов.</li>
-                <li><strong>Кухня / рецепт</strong> — ASMR, звук, результат блюда.</li>
-                <li><strong>Распаковка гаджета</strong> с испанской озвучкой по мотивам трендовых US-роликов.</li>
-                <li><strong>Челлендж 15–30 с</strong> с <span class="tag">#parati</span> и локальными тегами.</li>
-                <li><strong>Лайфхак «до/после»</strong> — один предмет, понятный эффект, испанский текст на экране.</li>
+                <li><strong>Короткий гумор або абсурд</strong> — іноді лише текст на екрані, без озвучки.</li>
+                <li><strong>Дідусь + онук</strong> — тепла сцена, допомога, побут (добре заходить локальній аудиторії).</li>
+                <li><strong>Рибалка / гараж / майстерня</strong> — процес крупним планом, мінімум слів.</li>
+                <li><strong>Кухня / рецепт</strong> — ASMR, звук, результат страви.</li>
+                <li><strong>Розпакування гаджета</strong> з іспанською озвучкою за мотивами трендових US-роликів.</li>
+                <li><strong>Челендж 15–30 с</strong> з <span class="tag">#parati</span> і локальними тегами.</li>
+                <li><strong>Лайфхак «до/після»</strong> — один предмет, зрозумілий ефект, іспанський текст на екрані.</li>
             </ol>
         </div>
     </div>
 
     <div class="acc">
         <button type="button" class="acc-header" aria-expanded="true">
-            <span>6а. Пример: ланч-бокс с подогревом на аккумуляторе (~11 млн просмотров)</span>
+            <span data-i18n="acc_hdr_6a">6а. Приклад: ланч-бокс з підігрівом на акумуляторі (~11 млн переглядів)</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
         <div class="acc-panel">
-            <p><strong>Товар:</strong> контейнер для еды (ланч-бокс) с подогревом на аккумуляторе — удобный формат для TikTok Shop (демонстрация «до/после», тепло, компакт).</p>
-            <p><strong>Референс:</strong> ролик с ~<strong>11 млн</strong> просмотров — можно изучать подачу и озвучивать по-испански под локальный рынок. <a href="https://vt.tiktok.com/ZSHeEg4wv/" target="_blank" rel="noopener noreferrer">Открыть в TikTok</a></p>
-            <p><strong>Ориентир цены в магазине:</strong> примерно <strong>70–80 €</strong> (зависит от продавца и акций).</p>
+            <p data-i18n="acc_6a_p1"><strong>Товар:</strong> контейнер для їжі (ланч-бокс) з підігрівом на акумуляторі — зручний формат для TikTok Shop (демонстрація «до/після», тепло, компакт).</p>
+            <p data-i18n="acc_6a_p2"><strong>Референс:</strong> ролик із ~<strong>11 млн</strong> переглядів — можна вивчати подачу й озвучувати іспанською під локальний ринок. <a href="https://vt.tiktok.com/ZSHeEg4wv/" target="_blank" rel="noopener noreferrer">Відкрити в TikTok</a></p>
+            <p data-i18n="acc_6a_p3"><strong>Орієнтир ціни в магазині:</strong> приблизно <strong>70–80 €</strong> (залежить від продавця та акцій).</p>
             <div class="tiktok-embed-wrap">
                 <iframe
-                    title="TikTok: ланч-бокс с подогревом"
+                    data-i18n-title="iframe_lunch"
+                    title="TikTok: ланч-бокс з підігрівом"
                     src="https://www.tiktok.com/embed/v2/7505430221508660510"
                     allow="encrypted-media; fullscreen"
                     loading="lazy"
                     referrerpolicy="strict-origin-when-cross-origin"></iframe>
             </div>
-            <p><strong>Ориентир по той же модели, что и калькулятор выше</strong> (комиссия с продаж, не «€ за просмотры»). Просмотры: <strong>11 000 000</strong>, средний чек <strong>75 €</strong>, комиссия <strong>10%</strong> (~7,5 € с заказа), тематика «дом / кухня» — для сравнения стилей воронки:</p>
+            <p data-i18n="acc_6a_p4"><strong>Орієнтир за тією ж моделлю, що й калькулятор вище</strong> (комісія з продажів, не «€ за перегляди»). Перегляди: <strong>11 000 000</strong>, середній чек <strong>75 €</strong>, комісія <strong>10%</strong> (~7,5 € із замовлення), тематика «дім / кухня» — для порівняння стилів воронки:</p>
             <table class="earn-table">
                 <thead>
-                    <tr><th>Стиль ролика (воронка)</th><th>Заказов (оценка)</th><th>Комиссия (оценка)</th></tr>
+                    <tr><th data-i18n="tbl_funnel">Стиль ролика (воронка)</th><th data-i18n="tbl_orders">Замовлень (оцінка)</th><th data-i18n="tbl_comm">Комісія (оцінка)</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Верх воронки (TOFU) — охват, мало прямых продаж</td><td>~44</td><td>~330 €</td></tr>
-                    <tr><td>Середина (MOFU) — обзор, доверие</td><td>~110</td><td>~825 €</td></tr>
-                    <tr><td>Низ (BOFU) — демо, CTA, ссылка на товар</td><td>~275</td><td>~2 060 €</td></tr>
+                    <tr><td data-i18n="tbl_row_tofu">Верх воронки (TOFU) — охоплення, мало прямих продажів</td><td>~44</td><td>~330 €</td></tr>
+                    <tr><td data-i18n="tbl_row_mofu">Середина (MOFU) — огляд, довіра</td><td>~110</td><td>~825 €</td></tr>
+                    <tr><td data-i18n="tbl_row_bofu">Низ (BOFU) — демо, CTA, посилання на товар</td><td>~275</td><td>~2 060 €</td></tr>
                 </tbody>
             </table>
-            <p class="muted" style="margin-bottom:8px;">Цифры из тех же констант, что в скрипте страницы (<code>BASE_ORDER_RATE_PER_VIEW</code>, множители воронки и ниши). Реальность сильно зависит от аккаунта и оффера.</p>
-            <p><strong>Напоминание:</strong> при цене товара 70–80 € и комиссии 10% с одного заказа получается примерно <strong>7–8 €</strong>; итоговая сумма = число заказов × эта величина.</p>
+            <p class="muted" style="margin-bottom:8px;" data-i18n="acc_6a_muted">Цифри з тих самих констант, що в скрипті сторінки (<code>BASE_ORDER_RATE_PER_VIEW</code>, множники воронки та ніші). Реальність сильно залежить від акаунта та офера.</p>
+            <p data-i18n="acc_6a_rem"><strong>Нагадування:</strong> при ціні товару 70–80 € і комісії 10% з одного замовлення виходить приблизно <strong>7–8 €</strong>; підсумкова сума = кількість замовлень × ця величина.</p>
         </div>
     </div>
 
     <div class="acc collapsed">
         <button type="button" class="acc-header" aria-expanded="false">
-            <span>7. Направления контента по членам семьи</span>
+            <span data-i18n="acc_hdr_7">7. Напрями контенту за членами родини</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
-        <div class="acc-panel">
-            <h3 class="acc-inner-title">Бабушка — кухня, уют</h3>
-            <p>Силиконовые формы, вакууматоры, терки, наборы для выпечки, органайзеры для кухни, чудо-губки.</p>
-            <h3 class="acc-inner-title">Дедушка — авто, рыбалка, гараж</h3>
-            <p>Удочки, эхолоты, LED для авто, компрессоры, держатели, мультитулы, свет в гараже.</p>
-            <h3 class="acc-inner-title">Ребёнок (пример) — спорт, скейт</h3>
-            <p>Защита, подсветка, рюкзаки, мячи, фитнес-резинки, бутылки.</p>
-            <h3 class="acc-inner-title">Подросток — voiceover и гаджеты</h3>
-            <p>Испанский закадр, обзоры TWS, умные часы, зарядки, спортинвентарь.</p>
+        <div class="acc-panel" data-i18n="acc_panel_7">
+            <h3 class="acc-inner-title">Бабуся — кухня, затишок</h3>
+            <p>Силіконові форми, вакууматори, терки, набори для випічки, органайзери для кухні, «чудо»-губки.</p>
+            <h3 class="acc-inner-title">Дідусь — авто, рибалка, гараж</h3>
+            <p>Вудки, ехолоти, LED для авто, компресори, тримачі, мультитули, світло в гаражі.</p>
+            <h3 class="acc-inner-title">Дитина (приклад) — спорт, скейт</h3>
+            <p>Захист, підсвітка, рюкзаки, м’ячі, фітнес-резинки, пляшки.</p>
+            <h3 class="acc-inner-title">Підліток — voiceover і гаджети</h3>
+            <p>Іспанський закадр, огляди TWS, розумні годинники, зарядки, спортінвентар.</p>
         </div>
     </div>
 
     <div class="acc collapsed">
         <button type="button" class="acc-header" aria-expanded="false">
-            <span>8. Совместные форматы и роли</span>
+            <span data-i18n="acc_hdr_8">8. Спільні формати та ролі</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
-        <div class="acc-panel">
-            <p>Кулинарные баттлы с внуками, дедушка + внуки (авто / рыбалка), семейный челлендж с органайзерами.</p>
+        <div class="acc-panel" data-i18n="acc_panel_8">
+            <p>Кулінарні батли з онуками, дідусь + онуки (авто / рибалка), сімейний челендж з органайзерами.</p>
             <table class="table-compact">
-                <thead><tr><th>Участник</th><th>Задачи</th></tr></thead>
+                <thead><tr><th>Учасник</th><th>Завдання</th></tr></thead>
                 <tbody>
-                    <tr><td>Стратег / монтаж</td><td>Идеи, монтаж, передача роликов семье, помощь с аккаунтом.</td></tr>
-                    <tr><td>Бабушка</td><td>Кулинария, уют, кадр или демонстрация.</td></tr>
-                    <tr><td>Дедушка</td><td>Авто, рыбалка, инструмент.</td></tr>
-                    <tr><td>Подросток с испанским</td><td>Voiceover, публикация, гаджеты, спорт.</td></tr>
-                    <tr><td>Младший ребёнок</td><td>Динамика, спорт, скейтпарк.</td></tr>
+                    <tr><td>Стратег / монтаж</td><td>Ідеї, монтаж, передача роликів родині, допомога з акаунтом.</td></tr>
+                    <tr><td>Бабуся</td><td>Кулінарія, затишок, кадр або демонстрація.</td></tr>
+                    <tr><td>Дідусь</td><td>Авто, рибалка, інструмент.</td></tr>
+                    <tr><td>Підліток з іспанською</td><td>Voiceover, публікація, гаджети, спорт.</td></tr>
+                    <tr><td>Молодший</td><td>Динаміка, спорт, скейтпарк.</td></tr>
                 </tbody>
             </table>
-            <p><strong>Схема:</strong> монтаж → отправка файла семье → публикация с испанского телефона + аффилиатная ссылка на товар из TikTok Shop España.</p>
+            <p><strong>Схема:</strong> монтаж → надсилання файлу родині → публікація з іспанського телефона + афіліатне посилання на товар із TikTok Shop España.</p>
         </div>
     </div>
 
     <div class="acc collapsed">
         <button type="button" class="acc-header" aria-expanded="false">
-            <span>9. Вопросы по калькулятору</span>
+            <span data-i18n="acc_hdr_9">9. Питання щодо калькулятора</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
-        <div class="acc-panel">
-            <p><strong>Почему суммы ориентировочные?</strong> Модель считает примерное число заказов из просмотров и комиссию продавца с товара. На результат влияют ниша, сезон, цена товара, реальная ставка комиссии в карточке товара, качество ролика и соответствие аудитории — это не прогноз, а планировочный ориентир.</p>
-            <p><strong>Что такое стили воронки в калькуляторе?</strong> В маркетинге их называют <strong>TOFU / MOFU / BOFU</strong> (иногда по-русски: верх / середина / низ воронки):</p>
+        <div class="acc-panel" data-i18n="acc_panel_9">
+            <p><strong>Чому суми орієнтовні?</strong> Модель рахує приблизну кількість замовлень із переглядів і комісію продавця з товару. На результат впливають ніша, сезон, ціна товару, реальна ставка комісії в картці товару, якість ролика й відповідність аудиторії — це не прогноз, а планувальний орієнтир.</p>
+            <p><strong>Що таке стилі воронки в калькуляторі?</strong> У маркетингу їх називають <strong>TOFU / MOFU / BOFU</strong> (іноді українською: верх / середина / низ воронки):</p>
             <ul>
-                <li><strong>TOFU</strong> (top of funnel, <em>awareness</em>) — «верх»: вирус, юмор, охват; мало прямых продаж с одного просмотра.</li>
-                <li><strong>MOFU</strong> (middle of funnel, <em>consideration</em>) — «середина»: обзор, сравнение, лайфстайл, доверие к товару.</li>
-                <li><strong>BOFU</strong> (bottom of funnel, <em>conversion</em>) — «низ»: демонстрация товара, цена, акция, явный призыв и ссылка на покупку; выше доля просмотров, превращающихся в заказы.</li>
+                <li><strong>TOFU</strong> (top of funnel, <em>awareness</em>) — «верх»: вірус, гумор, охоплення; мало прямих продажів з одного перегляду.</li>
+                <li><strong>MOFU</strong> (middle of funnel, <em>consideration</em>) — «середина»: огляд, порівняння, лайфстайл, довіра до товару.</li>
+                <li><strong>BOFU</strong> (bottom of funnel, <em>conversion</em>) — «низ»: демонстрація товару, ціна, акція, явний заклик і посилання на покупку; вища частка переглядів, що перетворюються на замовлення.</li>
             </ul>
-            <p><strong>Откуда время на ролики?</strong> Для каждого стиля воронки в коде задан ориентир минут на один ролик (поле <code>minPerVideo</code> в объекте <code>FUNNEL</code>), а число роликов — из целевых просмотров и ползунка «средних просмотров на 1 ролик» (константа по умолчанию <code>AVG_VIEWS_PER_VIDEO</code>). Подставьте свои средние из статистики TikTok.</p>
-            <p><strong>Где править коэффициенты?</strong> Внизу страницы в скрипте: базовая конверсия «просмотр → заказ» (<code>BASE_ORDER_RATE_PER_VIEW</code>), множители воронки и ниши, средние чеки и типичные % комиссии по категориям.</p>
+            <p><strong>Звідки час на ролики?</strong> Для кожного стилю воронки в коді задано орієнтир хвилин на один ролик (поле <code>minPerVideo</code> в об’єкті <code>FUNNEL</code>), а кількість роликів — із цільових переглядів і повзунка «середніх переглядів на 1 ролик» (константа за замовчуванням <code>AVG_VIEWS_PER_VIDEO</code>). Підставте свої середні зі статистики TikTok.</p>
+            <p><strong>Де правити коефіцієнти?</strong> Внизу сторінки в скрипті: базова конверсія «перегляд → замовлення» (<code>BASE_ORDER_RATE_PER_VIEW</code>), множники воронки та ніші, середні чеки й типові % комісії за категоріями.</p>
         </div>
     </div>
 
-    <p class="disclaimer">
-        Калькулятор упрощён: оцениваются <strong>продажи через TikTok Shop</strong> и <strong>ваша комиссия</strong> с заказа (ставка задаётся продавцом, обычно ориентир 5–20%). Это не учёт налогов, возвратов и удержаний платформы. Подстройте константы в скрипте под свои фактические данные из TikTok Shop и тесты креативов.
+    <p class="disclaimer" data-i18n="disclaimer">
+        Калькулятор спрощено: оцінюються <strong>продажі через TikTok Shop</strong> і <strong>ваша комісія</strong> із замовлення (ставку задає продавець, зазвичай орієнтир 5–20%). Це не облік податків, повернень і утримань платформи. Підлаштуйте константи в скрипті під свої фактичні дані з TikShop і тести креативів.
     </p>
 
-    <footer>
-        <strong>Следующие шаги:</strong> SIM и телефон в Испании → регистрация аккаунта → рост испанской аудитории → заявка в Shop for Creator → товары и публикации с ссылками.
+    <footer data-i18n="footer">
+        <strong>Наступні кроки:</strong> SIM і телефон в Іспанії → реєстрація акаунта → зростання іспанської аудиторії → заявка в Shop for Creator → товари й публікації з посиланнями.
     </footer>
 </div>
 
+<script>
+(function () {
+    var I18N_RU = {
+        doc_title: "TikTok Shop в Испании | Семейный проект",
+        h_title: "TikTok Shop в Испании: семейный проект",
+        h_sub: "Ориентировочные расчёты дохода и гайд по запуску. Не является финансовой или налоговой консультацией.",
+        calc_title: "Калькулятор: TikTok Shop (комиссия с продаж)",
+        calc_intro: "Считаем не «деньги за 1000 просмотров», а <strong>ориентировочные заказы и комиссию</strong> с товаров: тематика влияет на средний чек и типичный % комиссии, стиль ролика — на то, какая доля просмотров превращается в покупку (воронка TOFU / MOFU / BOFU). Добавьте один или несколько аккаунтов — внизу итог по «семье».",
+        btn_add: "Добавить аккаунт",
+        fam_h3: "Итого по всем аккаунтам",
+        fam_lbl_comm: "Ориентировочная комиссия",
+        fam_lbl_ord: "Заказов (оценка)",
+        fam_lbl_vid: "Роликов (оценка)",
+        fam_lbl_time: "Время на ролики (оценка)",
+        acc_hdr_proposal: "Предложение и идея проекта",
+        acc_panel_proposal: "<p><strong>Предложение:</strong> объединиться для работы с TikTok Shop в Испании. Цель — дополнительный доход для пенсионеров и обучение подростков заработку в медиа. Необходимые ресурсы можно собрать поэтапно.</p>",
+        acc_hdr_1: "1. Запуск: телефон, SIM, IP, верификация",
+        acc_panel_1: "<ul><li><strong>Телефон:</strong> отдельный аппарат (например, сброшенный до заводских настроек), который физически находится в Испании.</li><li><strong>SIM:</strong> prepaid испанского оператора (Movistar, Vodafone, Orange) — ориентир 10–20 €.</li><li><strong>Регистрация TikTok:</strong> совершеннолетний; номер испанской SIM; не входить через Google/Apple ID, привязанные к Украине.</li><li><strong>Локация:</strong> публикации только из Испании; VPN для обхода геолокации не рекомендуется.</li><li><strong>Affiliate:</strong> после 1000–2000 подписчиков — заявка в TikTok Studio → Monetization → TikTok Shop for Creator; паспорт совершеннолетнего для проверки личности.</li><li><strong>Бизнес-документы</strong> для старта как affiliate creator не обязательны.</li></ul>",
+        acc_hdr_2: "2. Комиссии TikTok Shop (креатор)",
+        acc_panel_2: "<p>Для affiliate creator комиссия часто <strong>5–20%</strong> с заказа (ставку задаёт продавец). Процент TikTok с продавца (например, ~3,85%) креатора напрямую не касается.</p><div class=\"card-grid-mini\"><div class=\"mini-card\"><h4>Электроника, гаджеты</h4>~5–10 %</div><div class=\"mini-card\"><h4>Мода, красота</h4>~10–15 %</div><div class=\"mini-card\"><h4>Дом, кухня</h4>~8–12 %</div><div class=\"mini-card\"><h4>Спорт</h4>~12–20 %</div><div class=\"mini-card\"><h4>Автотовары</h4>~8–15 %</div><div class=\"mini-card\"><h4>Wellness</h4>~15–20 %</div></div><p><strong>Пример:</strong> товар для дома, комиссия 12 %, цена 100 €, 50 продаж в месяц → 12 € с продажи × 50 = 600 €/мес. с одной позиции (иллюстрация, не гарантия).</p>",
+        acc_hdr_3: "3. Контент: форматы, Испания и «американский» референс",
+        acc_panel_3: "<p><strong>Типы подачи:</strong> испанский закадровый голос; украинский или русский в кадре/за кадром; без слов (демонстрация + музыка + текст на экране).</p><p><strong>Производство:</strong> съёмка и монтаж в одной стране → готовые ролики семье в Испании для публикации с испанского телефона и аффилиатной ссылкой.</p><div class=\"highlight-inline\"><strong>Важно про рынок Испании:</strong> TikTok Shop здесь — относительно <em>новый</em> формат продаж. Поэтому если взять уже успешные <strong>американские</strong> видео (с большим числом просмотров, комментариев и сильной статистикой) и <strong>озвучить их по-испански</strong> (или адаптировать под локальный тон), результат можно получить <strong>быстрее и проще</strong>, чем строить всё с нуля без проверенных референсов.</div><ul><li>Короткий вертикальный формат, понятный показ товара, текст на экране, призыв к действию.</li><li>Длительность шоп-роликов часто 15–60 с; сильный хук в первые 1–3 с.</li></ul>",
+        acc_hdr_4: "4. Первые 1000–2000 подписчиков: только Испания",
+        acc_panel_4: "<p><strong>Как правильно набирать первых подписчиков.</strong> Первые 1000–2000 подписчиков должны быть <strong>исключительно из Испании</strong>.</p><p><strong>Как это сделать:</strong></p><ul><li>Подписывайтесь на испанских блогеров, комментируйте их ролики <strong>по-испански</strong> — так чаще приходит внимание испанской аудитории.</li><li>Публикуйте первые видео <strong>на испанском</strong> или с <strong>испанскими субтитрами</strong>.</li><li>Используйте локальные хештеги: <span class=\"tag\">#tiktokespaña</span> <span class=\"tag\">#parati</span> <span class=\"tag\">#españa</span> <span class=\"tag\">#tiktokshopspain</span></li><li>Не распространяйте ссылку на аккаунт в украинских чатах и не просите украинских друзей подписываться на старте.</li></ul><p><strong>Вывод:</strong> украинские подписчики из Украины на первом этапе <strong>вредны</strong> для гео и рекомендаций. Их можно подключать позже, когда уже есть стабильная испанская база.</p>",
+        acc_hdr_5: "5. Оптимальная стратегия по фазам",
+        acc_panel_5: "<p><strong>Фаза 1 (первые 2–3 недели):</strong> набор испанской аудитории. Контент на испанском (voiceover может делать член семьи с сильным испанским). Темы: например автотовары или обзоры популярных гаджетов. Цель — быстро набрать <strong>2000+</strong> испанских подписчиков.</p><p><strong>Фаза 2 (после доступа к Affiliate Center):</strong> добавить украинский контент для украинцев в Испании; задействовать разных членов семьи — кулинария, авто, спорт. Параллельно продолжать испанский контент для масштабирования.</p><p><strong>Фаза 3 (масштабирование):</strong> несколько аккаунтов под разные ниши (отдельно авто, отдельно кухня и т.д.); использовать TikTok Shop Affiliate Center для товаров с высокой комиссией.</p>",
+        acc_hdr_6: "6. Простые форматы для набора подписчиков (идеи по хештегам)",
+        acc_panel_6: "<p>Часто подписчики приходят с <strong>простых</strong> роликов: юмор, тёплые бытовые сцены, рыбалка, кухня, дед и внук — ищите идеи по хештегам вроде «юмор», «семья», «кухня», «рыбалка», «бабушка и внук».</p><ol><li><strong>Короткий юмор или абсурд</strong> — иногда только текст на экране, без озвучки.</li><li><strong>Дедушка + внук</strong> — тёплая сцена, помощь, быт (хорошо заходит локальной аудитории).</li><li><strong>Рыбалка / гараж / мастерская</strong> — процесс крупным планом, минимум слов.</li><li><strong>Кухня / рецепт</strong> — ASMR, звук, результат блюда.</li><li><strong>Распаковка гаджета</strong> с испанской озвучкой по мотивам трендовых US-роликов.</li><li><strong>Челлендж 15–30 с</strong> с <span class=\"tag\">#parati</span> и локальными тегами.</li><li><strong>Лайфхак «до/после»</strong> — один предмет, понятный эффект, испанский текст на экране.</li></ol>",
+        acc_hdr_6a: "6а. Пример: ланч-бокс с подогревом на аккумуляторе (~11 млн просмотров)",
+        acc_6a_p1: "<strong>Товар:</strong> контейнер для еды (ланч-бокс) с подогревом на аккумуляторе — удобный формат для TikTok Shop (демонстрация «до/после», тепло, компакт).",
+        acc_6a_p2: "<strong>Референс:</strong> ролик с ~<strong>11 млн</strong> просмотров — можно изучать подачу и озвучивать по-испански под локальный рынок. <a href=\"https://vt.tiktok.com/ZSHeEg4wv/\" target=\"_blank\" rel=\"noopener noreferrer\">Открыть в TikTok</a>",
+        acc_6a_p3: "<strong>Ориентир цены в магазине:</strong> примерно <strong>70–80 €</strong> (зависит от продавца и акций).",
+        iframe_lunch: "TikTok: ланч-бокс с подогревом",
+        acc_6a_p4: "<strong>Ориентир по той же модели, что и калькулятор выше</strong> (комиссия с продаж, не «€ за просмотры»). Просмотры: <strong>11 000 000</strong>, средний чек <strong>75 €</strong>, комиссия <strong>10%</strong> (~7,5 € с заказа), тематика «дом / кухня» — для сравнения стилей воронки:",
+        tbl_funnel: "Стиль ролика (воронка)",
+        tbl_orders: "Заказов (оценка)",
+        tbl_comm: "Комиссия (оценка)",
+        tbl_row_tofu: "Верх воронки (TOFU) — охват, мало прямых продаж",
+        tbl_row_mofu: "Середина (MOFU) — обзор, доверие",
+        tbl_row_bofu: "Низ (BOFU) — демо, CTA, ссылка на товар",
+        acc_6a_muted: "Цифры из тех же констант, что в скрипте страницы (<code>BASE_ORDER_RATE_PER_VIEW</code>, множители воронки и ниши). Реальность сильно зависит от аккаунта и оффера.",
+        acc_6a_rem: "<strong>Напоминание:</strong> при цене товара 70–80 € и комиссии 10% с одного заказа получается примерно <strong>7–8 €</strong>; итоговая сумма = число заказов × эта величина.",
+        acc_hdr_7: "7. Направления контента по членам семьи",
+        acc_panel_7: "<h3 class=\"acc-inner-title\">Бабушка — кухня, уют</h3><p>Силиконовые формы, вакууматоры, терки, наборы для выпечки, органайзеры для кухни, чудо-губки.</p><h3 class=\"acc-inner-title\">Дедушка — авто, рыбалка, гараж</h3><p>Удочки, эхолоты, LED для авто, компрессоры, держатели, мультитулы, свет в гараже.</p><h3 class=\"acc-inner-title\">Ребёнок (пример) — спорт, скейт</h3><p>Защита, подсветка, рюкзаки, мячи, фитнес-резинки, бутылки.</p><h3 class=\"acc-inner-title\">Подросток — voiceover и гаджеты</h3><p>Испанский закадр, обзоры TWS, умные часы, зарядки, спортинвентарь.</p>",
+        acc_hdr_8: "8. Совместные форматы и роли",
+        acc_panel_8: "<p>Кулинарные баттлы с внуками, дедушка + внуки (авто / рыбалка), семейный челлендж с органайзерами.</p><table class=\"table-compact\"><thead><tr><th>Участник</th><th>Задачи</th></tr></thead><tbody><tr><td>Стратег / монтаж</td><td>Идеи, монтаж, передача роликов семье, помощь с аккаунтом.</td></tr><tr><td>Бабушка</td><td>Кулинария, уют, кадр или демонстрация.</td></tr><tr><td>Дедушка</td><td>Авто, рыбалка, инструмент.</td></tr><tr><td>Подросток с испанским</td><td>Voiceover, публикация, гаджеты, спорт.</td></tr><tr><td>Младший ребёнок</td><td>Динамика, спорт, скейтпарк.</td></tr></tbody></table><p><strong>Схема:</strong> монтаж → отправка файла семье → публикация с испанского телефона + аффилиатная ссылка на товар из TikTok Shop España.</p>",
+        acc_hdr_9: "9. Вопросы по калькулятору",
+        acc_panel_9: "<p><strong>Почему суммы ориентировочные?</strong> Модель считает примерное число заказов из просмотров и комиссию продавца с товара. На результат влияют ниша, сезон, цена товара, реальная ставка комиссии в карточке товара, качество ролика и соответствие аудитории — это не прогноз, а планировочный ориентир.</p><p><strong>Что такое стили воронки в калькуляторе?</strong> В маркетинге их называют <strong>TOFU / MOFU / BOFU</strong> (иногда по-русски: верх / середина / низ воронки):</p><ul><li><strong>TOFU</strong> (top of funnel, <em>awareness</em>) — «верх»: вирус, юмор, охват; мало прямых продаж с одного просмотра.</li><li><strong>MOFU</strong> (middle of funnel, <em>consideration</em>) — «середина»: обзор, сравнение, лайфстайл, доверие к товару.</li><li><strong>BOFU</strong> (bottom of funnel, <em>conversion</em>) — «низ»: демонстрация товара, цена, акция, явный призыв и ссылка на покупку; выше доля просмотров, превращающихся в заказы.</li></ul><p><strong>Откуда время на ролики?</strong> Для каждого стиля воронки в коде задан ориентир минут на один ролик (поле <code>minPerVideo</code> в объекте <code>FUNNEL</code>), а число роликов — из целевых просмотров и ползунка «средних просмотров на 1 ролик» (константа по умолчанию <code>AVG_VIEWS_PER_VIDEO</code>). Подставьте свои средние из статистики TikTok.</p><p><strong>Где править коэффициенты?</strong> Внизу страницы в скрипте: базовая конверсия «просмотр → заказ» (<code>BASE_ORDER_RATE_PER_VIEW</code>), множители воронки и ниши, средние чеки и типичные % комиссии по категориям.</p>",
+        disclaimer: "Калькулятор упрощён: оцениваются <strong>продажи через TikTok Shop</strong> и <strong>ваша комиссия</strong> с заказа (ставка задаётся продавцом, обычно ориентир 5–20%). Это не учёт налогов, возвратов и удержаний платформы. Подстройте константы в скрипте под свои фактические данные из TikTok Shop и тесты креативов.",
+        footer: "<strong>Следующие шаги:</strong> SIM и телефон в Испании → регистрация аккаунта → рост испанской аудитории → заявка в Shop for Creator → товары и публикации с ссылками."
+    };
+
+    var I18N_UK = {};
+
+    function cacheUKFromDOM() {
+        I18N_UK.doc_title = document.title;
+        document.querySelectorAll("[data-i18n]").forEach(function (el) {
+            var k = el.getAttribute("data-i18n");
+            if (k) I18N_UK[k] = el.innerHTML;
+        });
+        document.querySelectorAll("[data-i18n-title]").forEach(function (el) {
+            var k = el.getAttribute("data-i18n-title");
+            if (k) I18N_UK[k] = el.getAttribute("title") || "";
+        });
+    }
+
+    function getPageLang() {
+        return localStorage.getItem("lang") || "uk";
+    }
+
+    function applyPageLang(lang) {
+        localStorage.setItem("lang", lang);
+        document.documentElement.lang = lang;
+        var src = lang === "ru" ? I18N_RU : I18N_UK;
+        document.querySelectorAll("[data-i18n]").forEach(function (el) {
+            var k = el.getAttribute("data-i18n");
+            if (k && src[k] !== undefined) el.innerHTML = src[k];
+        });
+        document.querySelectorAll("[data-i18n-title]").forEach(function (el) {
+            var k = el.getAttribute("data-i18n-title");
+            if (k && src[k] !== undefined) el.setAttribute("title", src[k]);
+        });
+        if (src.doc_title) document.title = src.doc_title;
+        var ua = document.getElementById("langBtnUa");
+        var ru = document.getElementById("langBtnRu");
+        if (ua && ru) {
+            ua.classList.toggle("lang-btn--active", lang === "uk");
+            ru.classList.toggle("lang-btn--active", lang === "ru");
+            ua.setAttribute("aria-pressed", lang === "uk" ? "true" : "false");
+            ru.setAttribute("aria-pressed", lang === "ru" ? "true" : "false");
+        }
+        var st = document.getElementById("langStatus");
+        if (st) st.textContent = lang === "uk" ? "Ви обрали 🇺🇦" : "Ви обрали 🇷🇺";
+    }
+
+    window.getPageLang = getPageLang;
+    window.applyPageLang = applyPageLang;
+    window.cacheUKFromDOM = cacheUKFromDOM;
+    window.I18N_RU = I18N_RU;
+    window.I18N_UK = I18N_UK;
+})();
+</script>
 <script>
 (function () {
     /** Базовая доля просмотров, переходящая в заказ (для MOFU и множителя 1 по нише). Подстройте по своей статистике. */
@@ -551,52 +700,156 @@
     /** Средние просмотры на один ролик — для оценки числа роликов и времени. */
     var AVG_VIEWS_PER_VIDEO = 4500;
 
+    function L() {
+        return typeof window.getPageLang === "function" ? window.getPageLang() : "uk";
+    }
+    function localeNum() {
+        return L() === "ru" ? "ru-RU" : "uk-UA";
+    }
+
     /**
-     * Тематика: ориентир среднего чека (€), типичная комиссия креатора (%), множитель конверсии относительно «средней» ниши.
+     * Тематика: ориентир среднего чека (€), типичная комиссия креатора (%), множитель конверсии.
      */
-    var CAT = {
-        fashion: { label: "Одежда / обувь", avgPrice: 38, defaultCommissionPct: 12, convMult: 1.05 },
-        beauty: { label: "Красота", avgPrice: 32, defaultCommissionPct: 14, convMult: 1.15 },
-        electronics: { label: "Электроника / гаджеты", avgPrice: 55, defaultCommissionPct: 8, convMult: 0.88 },
-        home: { label: "Дом / кухня", avgPrice: 42, defaultCommissionPct: 10, convMult: 1.0 },
-        food: { label: "Еда / напитки", avgPrice: 28, defaultCommissionPct: 11, convMult: 1.08 },
-        sports: { label: "Спорт", avgPrice: 45, defaultCommissionPct: 14, convMult: 1.02 },
-        kids: { label: "Дети", avgPrice: 35, defaultCommissionPct: 12, convMult: 1.0 },
-        auto: { label: "Авто / гараж", avgPrice: 48, defaultCommissionPct: 11, convMult: 0.92 },
-        other: { label: "Другое", avgPrice: 40, defaultCommissionPct: 10, convMult: 1.0 }
+    var CAT_NUM = {
+        fashion: { avgPrice: 38, defaultCommissionPct: 12, convMult: 1.05 },
+        beauty: { avgPrice: 32, defaultCommissionPct: 14, convMult: 1.15 },
+        electronics: { avgPrice: 55, defaultCommissionPct: 8, convMult: 0.88 },
+        home: { avgPrice: 42, defaultCommissionPct: 10, convMult: 1.0 },
+        food: { avgPrice: 28, defaultCommissionPct: 11, convMult: 1.08 },
+        sports: { avgPrice: 45, defaultCommissionPct: 14, convMult: 1.02 },
+        kids: { avgPrice: 35, defaultCommissionPct: 12, convMult: 1.0 },
+        auto: { avgPrice: 48, defaultCommissionPct: 11, convMult: 0.92 },
+        other: { avgPrice: 40, defaultCommissionPct: 10, convMult: 1.0 }
     };
+
+    var CAT_LABELS = {
+        uk: {
+            fashion: "Одяг / взуття",
+            beauty: "Краса",
+            electronics: "Електроніка / гаджети",
+            home: "Дім / кухня",
+            food: "Їжа / напої",
+            sports: "Спорт",
+            kids: "Діти",
+            auto: "Авто / гараж",
+            other: "Інше"
+        },
+        ru: {
+            fashion: "Одежда / обувь",
+            beauty: "Красота",
+            electronics: "Электроника / гаджеты",
+            home: "Дом / кухня",
+            food: "Еда / напитки",
+            sports: "Спорт",
+            kids: "Дети",
+            auto: "Авто / гараж",
+            other: "Другое"
+        }
+    };
+
+    var CATEGORY_IDS = ["fashion", "beauty", "electronics", "home", "food", "sports", "kids", "auto", "other"];
 
     var MIXED_DEFAULT = { avgPrice: 40, defaultCommissionPct: 10, convMult: 1.0 };
 
-    /**
-     * Воронка: TOFU / MOFU / BOFU — как в маркетинге (awareness / consideration / conversion).
-     * convMult — насколько чаще просмотр превращается в заказ относительно MOFU.
-     * minPerVideo — минут на один ролик (оценка трудозатрат).
-     */
-    var FUNNEL = {
-        tofu: { key: "tofu", short: "Верх (TOFU)", hint: "Охват, вирус, мало прямых продаж", convMult: 0.4, minPerVideo: 22 },
-        mofu: { key: "mofu", short: "Середина (MOFU)", hint: "Обзор, доверие, лайфстайл", convMult: 1, minPerVideo: 38 },
-        bofu: { key: "bofu", short: "Низ (BOFU)", hint: "Демо товара, CTA, ссылка", convMult: 2.5, minPerVideo: 52 }
+    var FUNNEL_NUM = {
+        tofu: { convMult: 0.4, minPerVideo: 22 },
+        mofu: { convMult: 1, minPerVideo: 38 },
+        bofu: { convMult: 2.5, minPerVideo: 52 }
     };
 
-    var CATEGORIES = [
-        { id: "fashion", label: CAT.fashion.label },
-        { id: "beauty", label: CAT.beauty.label },
-        { id: "electronics", label: CAT.electronics.label },
-        { id: "home", label: CAT.home.label },
-        { id: "food", label: CAT.food.label },
-        { id: "sports", label: CAT.sports.label },
-        { id: "kids", label: CAT.kids.label },
-        { id: "auto", label: CAT.auto.label },
-        { id: "other", label: CAT.other.label }
+    var FUNNEL_TEXT = {
+        uk: {
+            tofu: { short: "Верх (TOFU)", hint: "Охоплення, вірус, мало прямих продажів" },
+            mofu: { short: "Середина (MOFU)", hint: "Огляд, довіра, лайфстайл" },
+            bofu: { short: "Низ (BOFU)", hint: "Демо товару, CTA, посилання" }
+        },
+        ru: {
+            tofu: { short: "Верх (TOFU)", hint: "Охват, вирус, мало прямых продаж" },
+            mofu: { short: "Середина (MOFU)", hint: "Обзор, доверие, лайфстайл" },
+            bofu: { short: "Низ (BOFU)", hint: "Демо товара, CTA, ссылка" }
+        }
+    };
+
+    function getFunnel(fk) {
+        fk = fk || "mofu";
+        var n = FUNNEL_NUM[fk] || FUNNEL_NUM.mofu;
+        var lg = L();
+        var t = (FUNNEL_TEXT[lg] || FUNNEL_TEXT.uk)[fk] || FUNNEL_TEXT.uk.mofu;
+        return Object.assign({ key: fk }, n, t);
+    }
+
+    var VIEW_PRESETS_DATA = [
+        { labelUk: "1 тис", labelRu: "1 тыс", v: 1000 },
+        { labelUk: "10 тис", labelRu: "10 тыс", v: 10000 },
+        { labelUk: "100 тис", labelRu: "100 тыс", v: 100000 },
+        { labelUk: "1 млн", labelRu: "1 млн", v: 1000000 }
     ];
 
-    var VIEW_PRESETS = [
-        { label: "1 тыс", v: 1000 },
-        { label: "10 тыс", v: 10000 },
-        { label: "100 тыс", v: 100000 },
-        { label: "1 млн", v: 1000000 }
-    ];
+    function getViewPresets() {
+        var ru = L() === "ru";
+        return VIEW_PRESETS_DATA.map(function (p) {
+            return { label: ru ? p.labelRu : p.labelUk, v: p.v };
+        });
+    }
+
+    var CALC_UI = {
+        uk: {
+            account: "Акаунт №",
+            delete: "Видалити",
+            themeLabel: "Тематика акаунта",
+            oneNiche: "Одна ніша",
+            mix: "Кілька ніш / мікс",
+            catHint: "Категорії товарів (впливають на середній чек і конверсію)",
+            mixHint: "Мікс: позначте кілька ніш (усереднюємо чек і коефіцієнти)",
+            funnelLabel: "Стиль роликів (воронка продажів)",
+            funnelRef: " — див. розділ «9. Питання щодо калькулятора».",
+            price: "Середній чек товару (€):",
+            commission: "Комісія з замовлення (%):",
+            viewsPerVid: "Середніх переглядів на 1 ролик:",
+            targetViews: "Цільові перегляди (період або кампанія)",
+            customViews: "Своє значення переглядів:",
+            resComm: "Орієнтовна комісія",
+            resOrders: "Замовлень (оцінка)",
+            resVideos: "Роликів (оцінка)",
+            resTime: "Час на ролики (оцінка)",
+            resMeta: "Стиль / середній чек",
+            pieces: " шт."
+        },
+        ru: {
+            account: "Аккаунт №",
+            delete: "Удалить",
+            themeLabel: "Тематика аккаунта",
+            oneNiche: "Одна ниша",
+            mix: "Несколько ниш / микс",
+            catHint: "Категории товаров (влияют на средний чек и конверсию)",
+            mixHint: "Микс: отметьте несколько ниш (усредняем чек и коэффициенты)",
+            funnelLabel: "Стиль роликов (воронка продаж)",
+            funnelRef: " — см. раздел «9. Вопросы по калькулятору».",
+            price: "Средний чек товара (€):",
+            commission: "Комиссия с заказа (%):",
+            viewsPerVid: "Средних просмотров на 1 ролик:",
+            targetViews: "Целевые просмотры (период или кампания)",
+            customViews: "Своё значение просмотров:",
+            resComm: "Ориентировочная комиссия",
+            resOrders: "Заказов (оценка)",
+            resVideos: "Роликов (оценка)",
+            resTime: "Время на ролики (оценка)",
+            resMeta: "Стиль / средний чек",
+            pieces: " шт."
+        }
+    };
+
+    function ui(key) {
+        var pack = CALC_UI[L()] || CALC_UI.uk;
+        return pack[key] != null ? pack[key] : CALC_UI.uk[key];
+    }
+
+    function getCategoryRows() {
+        var labels = CAT_LABELS[L()] || CAT_LABELS.uk;
+        return CATEGORY_IDS.map(function (id) {
+            return { id: id, label: labels[id] || CAT_LABELS.uk[id] };
+        });
+    }
 
     var accounts = [];
     var nextId = 1;
@@ -613,7 +866,7 @@
             if (!a.categoryIds.length) return MIXED_DEFAULT;
             var sumP = 0, sumC = 0, sumM = 0, n = a.categoryIds.length;
             a.categoryIds.forEach(function (id) {
-                var c = CAT[id] || CAT.other;
+                var c = CAT_NUM[id] || CAT_NUM.other;
                 sumP += c.avgPrice;
                 sumC += c.defaultCommissionPct;
                 sumM += c.convMult;
@@ -621,7 +874,7 @@
             return { avgPrice: sumP / n, defaultCommissionPct: sumC / n, convMult: sumM / n };
         }
         var id = a.categoryIds[0] || "other";
-        var c = CAT[id] || CAT.other;
+        var c = CAT_NUM[id] || CAT_NUM.other;
         return { avgPrice: c.avgPrice, defaultCommissionPct: c.defaultCommissionPct, convMult: c.convMult };
     }
 
@@ -644,7 +897,7 @@
         var m = metricsForAccount(a);
         var price = typeof a.priceEur === "number" ? a.priceEur : m.avgPrice;
         var pct = typeof a.commissionPct === "number" ? a.commissionPct : m.defaultCommissionPct;
-        var funnel = FUNNEL[a.funnel] || FUNNEL.mofu;
+        var funnel = getFunnel(a.funnel);
         var orders = views * BASE_ORDER_RATE_PER_VIEW * funnel.convMult * m.convMult;
         var commissionEUR = orders * price * (pct / 100);
         var vPerVid = a.avgViewsPerVideo || AVG_VIEWS_PER_VIDEO;
@@ -671,8 +924,8 @@
         wrap.dataset.id = String(a.id);
 
         var head = el("div", "account-head");
-        head.innerHTML = "<span>Аккаунт №" + a.id + "</span>";
-        var del = el("button", null, "Удалить");
+        head.innerHTML = "<span>" + ui("account") + a.id + "</span>";
+        var del = el("button", null, ui("delete"));
         del.type = "button";
         del.addEventListener("click", function () {
             accounts = accounts.filter(function (x) { return x.id !== a.id; });
@@ -684,10 +937,10 @@
         var body = el("div", "calc-card-body");
 
         var modeLabel = el("div", "toggle-row");
-        modeLabel.innerHTML = "<label>Тематика аккаунта</label>";
+        modeLabel.innerHTML = "<label>" + ui("themeLabel") + "</label>";
         var modeRow = el("div", "toggle-row");
-        var btnMono = el("button", "seg-btn" + (a.mode === "mono" ? " active" : ""), "Одна ниша");
-        var btnMix = el("button", "seg-btn" + (a.mode === "mixed" ? " active" : ""), "Несколько ниш / микс");
+        var btnMono = el("button", "seg-btn" + (a.mode === "mono" ? " active" : ""), ui("oneNiche"));
+        var btnMix = el("button", "seg-btn" + (a.mode === "mixed" ? " active" : ""), ui("mix"));
         btnMono.type = "button";
         btnMix.type = "button";
         btnMono.addEventListener("click", function () {
@@ -709,12 +962,12 @@
 
         var catLabel = el("label", null);
         catLabel.style.cssText = "display:block;font-size:0.8rem;font-weight:600;color:#444;margin-bottom:8px;";
-        catLabel.textContent = "Категории товаров (влияют на средний чек и конверсию)";
+        catLabel.textContent = ui("catHint");
         body.appendChild(catLabel);
 
         var catGrid = el("div", "cat-grid");
         var mono = a.mode === "mono";
-        CATEGORIES.forEach(function (c) {
+        getCategoryRows().forEach(function (c) {
             var b = el("button", "cat-btn", c.label);
             b.type = "button";
             b.disabled = !mono;
@@ -732,10 +985,10 @@
         if (!mono) {
             var mixLabel = el("label", null);
             mixLabel.style.cssText = "display:block;font-size:0.8rem;font-weight:600;color:#444;margin-bottom:8px;margin-top:8px;";
-            mixLabel.textContent = "Микс: отметьте несколько ниш (усредняем чек и коэффициенты)";
+            mixLabel.textContent = ui("mixHint");
             body.appendChild(mixLabel);
             var catGrid2 = el("div", "cat-grid");
-            CATEGORIES.forEach(function (c) {
+            getCategoryRows().forEach(function (c) {
                 var b = el("button", "cat-btn", c.label);
                 b.type = "button";
                 if (a.categoryIds.indexOf(c.id) >= 0) b.classList.add("active");
@@ -753,11 +1006,11 @@
         }
 
         var funnelLabel = el("div", "toggle-row");
-        funnelLabel.innerHTML = "<label>Стиль роликов (воронка продаж)</label>";
+        funnelLabel.innerHTML = "<label>" + ui("funnelLabel") + "</label>";
         body.appendChild(funnelLabel);
         var funnelRow = el("div", "toggle-row");
         ["tofu", "mofu", "bofu"].forEach(function (fk) {
-            var f = FUNNEL[fk];
+            var f = getFunnel(fk);
             var btn = el("button", "seg-btn" + (a.funnel === fk ? " active" : ""), f.short);
             btn.type = "button";
             btn.title = f.hint;
@@ -767,11 +1020,11 @@
         body.appendChild(funnelRow);
         var funnelHint = el("p", "muted");
         funnelHint.style.marginTop = "0";
-        funnelHint.textContent = (FUNNEL[a.funnel] || FUNNEL.mofu).hint + " — см. раздел «9. Вопросы по калькулятору».";
+        funnelHint.textContent = getFunnel(a.funnel).hint + ui("funnelRef");
         body.appendChild(funnelHint);
 
         var rowPrice = el("div", "slider-block");
-        rowPrice.innerHTML = "<label>Средний чек товара (€): <span class=\"slider-val\"></span></label>";
+        rowPrice.innerHTML = "<label>" + ui("price") + " <span class=\"slider-val\"></span></label>";
         var rngPrice = el("input");
         rngPrice.type = "range";
         rngPrice.min = "8";
@@ -790,7 +1043,7 @@
         if (prSpan) prSpan.textContent = formatNum(Math.round(a.priceEur));
 
         var rowComm = el("div", "slider-block");
-        rowComm.innerHTML = "<label>Комиссия с заказа (%): <span class=\"slider-val\"></span></label>";
+        rowComm.innerHTML = "<label>" + ui("commission") + " <span class=\"slider-val\"></span></label>";
         var rngComm = el("input");
         rngComm.type = "range";
         rngComm.min = "5";
@@ -808,7 +1061,7 @@
         if (cmSpan) cmSpan.textContent = String(a.commissionPct).replace(".", ",");
 
         var rowVp = el("div", "slider-block");
-        rowVp.innerHTML = "<label>Средних просмотров на 1 ролик: <span class=\"slider-val\"></span></label>";
+        rowVp.innerHTML = "<label>" + ui("viewsPerVid") + " <span class=\"slider-val\"></span></label>";
         var rngVp = el("input");
         rngVp.type = "range";
         rngVp.min = "500";
@@ -827,11 +1080,11 @@
 
         var vpLabel = el("label", null);
         vpLabel.style.cssText = "display:block;font-size:0.8rem;font-weight:600;color:#444;margin-bottom:8px;margin-top:8px;";
-        vpLabel.textContent = "Целевые просмотры (период или кампания)";
+        vpLabel.textContent = ui("targetViews");
         body.appendChild(vpLabel);
 
         var presets = el("div", "views-presets");
-        VIEW_PRESETS.forEach(function (p) {
+        getViewPresets().forEach(function (p) {
             var b = el("button", "view-preset" + (a.viewsTarget === p.v ? " active" : ""), p.label);
             b.type = "button";
             b.addEventListener("click", function () {
@@ -845,7 +1098,7 @@
         var sliderBlock = el("div", "slider-block");
         var maxV = 20000000;
         var lbl = el("label", null);
-        lbl.innerHTML = "Своё значение просмотров: <span class=\"slider-val\"></span>";
+        lbl.innerHTML = ui("customViews") + " <span class=\"slider-val\"></span>";
         var svSpan = lbl.querySelector(".slider-val");
         var range = el("input");
         range.type = "range";
@@ -867,11 +1120,11 @@
         var res = computeAccount(a);
         var rg = el("div", "result-grid");
         rg.innerHTML =
-            "<div class=\"result-item\"><strong>Ориентировочная комиссия</strong><span data-r=\"commission\">" + res.commissionEUR.toFixed(2) + " €</span></div>" +
-            "<div class=\"result-item\"><strong>Заказов (оценка)</strong><span data-r=\"orders\">" + formatOrders(res.orders) + "</span></div>" +
-            "<div class=\"result-item\"><strong>Роликов (оценка)</strong><span data-r=\"videos\">" + res.videos + " шт.</span></div>" +
-            "<div class=\"result-item\"><strong>Время на ролики (оценка)</strong><span data-r=\"hours\">" + formatHours(res.hours) + "</span></div>" +
-            "<div class=\"result-item\"><strong>Стиль / средний чек</strong><span data-r=\"meta\">" + res.funnelShort + " · " + res.price.toFixed(0) + " € · " + res.pct + "%</span></div>";
+            "<div class=\"result-item\"><strong>" + ui("resComm") + "</strong><span data-r=\"commission\">" + res.commissionEUR.toFixed(2) + " €</span></div>" +
+            "<div class=\"result-item\"><strong>" + ui("resOrders") + "</strong><span data-r=\"orders\">" + formatOrders(res.orders) + "</span></div>" +
+            "<div class=\"result-item\"><strong>" + ui("resVideos") + "</strong><span data-r=\"videos\">" + res.videos + ui("pieces") + "</span></div>" +
+            "<div class=\"result-item\"><strong>" + ui("resTime") + "</strong><span data-r=\"hours\">" + formatHours(res.hours) + "</span></div>" +
+            "<div class=\"result-item\"><strong>" + ui("resMeta") + "</strong><span data-r=\"meta\">" + res.funnelShort + " · " + res.price.toFixed(0) + " € · " + res.pct + "%</span></div>";
         body.appendChild(rg);
 
         wrap.appendChild(body);
@@ -880,18 +1133,20 @@
 
     function formatOrders(o) {
         if (o < 10) return o.toFixed(1).replace(".", ",");
-        return Math.round(o).toLocaleString("ru-RU");
+        return Math.round(o).toLocaleString(localeNum());
     }
 
     function formatNum(n) {
-        return n.toLocaleString("ru-RU");
+        return n.toLocaleString(localeNum());
     }
 
     function formatHours(h) {
-        if (h < 1) return Math.round(h * 60) + " мин";
+        var ru = L() === "ru";
+        if (h < 1) return Math.round(h * 60) + (ru ? " мин" : " хв");
         var hh = Math.floor(h);
         var mm = Math.round((h - hh) * 60);
-        return hh + " ч " + (mm ? mm + " мин" : "").trim();
+        if (ru) return hh + " ч " + (mm ? mm + " мин" : "").trim();
+        return hh + " год " + (mm ? mm + " хв" : "").trim();
     }
 
     function updateResultsOnly() {
@@ -904,7 +1159,7 @@
             var map = {
                 commission: res.commissionEUR.toFixed(2) + " €",
                 orders: formatOrders(res.orders),
-                videos: res.videos + " шт.",
+                videos: res.videos + ui("pieces"),
                 hours: formatHours(res.hours),
                 meta: res.funnelShort + " · " + res.price.toFixed(0) + " € · " + res.pct + "%"
             };
@@ -974,18 +1229,42 @@
         });
     });
 
-    accounts.push({
-        id: nextId++,
-        mode: "mono",
-        categoryIds: ["home"],
-        funnel: "mofu",
-        viewsTarget: 10000,
-        avgViewsPerVideo: AVG_VIEWS_PER_VIDEO,
-        priceEur: null,
-        commissionPct: null,
-        _lastCatSig: null
-    });
-    renderAll();
+    function bootCalc() {
+        accounts.push({
+            id: nextId++,
+            mode: "mono",
+            categoryIds: ["home"],
+            funnel: "mofu",
+            viewsTarget: 10000,
+            avgViewsPerVideo: AVG_VIEWS_PER_VIDEO,
+            priceEur: null,
+            commissionPct: null,
+            _lastCatSig: null
+        });
+        renderAll();
+    }
+
+    function initLangUi() {
+        window.cacheUKFromDOM();
+        window.applyPageLang(window.getPageLang());
+        var ua = document.getElementById("langBtnUa");
+        var ru = document.getElementById("langBtnRu");
+        if (ua) ua.addEventListener("click", function () {
+            window.applyPageLang("uk");
+            renderAll();
+        });
+        if (ru) ru.addEventListener("click", function () {
+            window.applyPageLang("ru");
+            renderAll();
+        });
+        bootCalc();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initLangUi);
+    } else {
+        initLangUi();
+    }
 })();
 </script>
 </body>
