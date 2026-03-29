@@ -342,7 +342,7 @@
         .help-lead { font-size: 0.8rem; color: #444; margin: 0 0 6px; line-height: 1.35; }
         .stat-help-wrap { text-align: center; margin-top: 8px; }
         dialog.help-dlg {
-            max-width: min(92vw, 440px);
+            max-width: min(94vw, 520px);
             width: 100%;
             padding: 0;
             border: 1px solid #bbb;
@@ -350,12 +350,7 @@
             box-shadow: 0 12px 40px rgba(0,0,0,.2);
         }
         dialog.help-dlg::backdrop { background: rgba(0,0,0,.45); }
-        .help-dlg-inner { padding: 16px 18px 14px; }
-        .help-dlg-title { margin: 0 0 10px; font-size: 1rem; font-weight: 700; color: #1a1a1a; }
-        .help-dlg-body { font-size: 0.86rem; line-height: 1.45; color: #333; margin-bottom: 14px; }
-        .help-dlg-body p { margin: 0 0 10px; }
-        .help-dlg-body ul { margin: 6px 0 0; padding-left: 1.2em; }
-        .help-dlg-body code { font-size: 0.8rem; background: #f3f3f5; padding: 2px 6px; border-radius: 4px; }
+        .help-dlg-body code { font-size: 0.85rem; background: #f3f3f5; padding: 2px 6px; border-radius: 4px; }
         .help-dlg-close {
             width: 100%;
             min-height: 44px;
@@ -371,9 +366,6 @@
         .acc-prose p { margin: 0 0 12px; }
         .acc-prose h3 { font-size: 0.95rem; margin: 14px 0 8px; font-weight: 700; color: #1a1a1a; }
         .acc-prose .earn-table { font-size: 0.78rem; }
-        dialog.help-dlg {
-            max-width: min(94vw, 520px);
-        }
         .help-dlg-inner { padding: 18px 20px 16px; }
         .help-dlg-title { font-size: 1.1rem; line-height: 1.35; margin-bottom: 12px; }
         .help-dlg-body {
@@ -404,15 +396,15 @@
     </header>
 
     <section class="highlight-inline juicy-summary" aria-label="Короткий зміст">
-        <p class="help-lead" id="juicyLead"><strong>Коротко:</strong> GMV, комісії креатора, CPM і воронка — орієнти у шапці; деталі та застереження — у підказці.</p>
+        <p class="help-lead" id="juicyLead"><strong>Коротко:</strong> <strong>Креатор</strong> — людина, яка знімає відео та заробляє на контенті. <strong>Афіліат</strong> у TikTok Shop — партнер продавця: рекламує товар у ролику й отримує відсоток від замовлення (не всю суму продажу). <strong>GMV</strong> — загальний обіг продажів за посиланням; це не «гроші в кишені». <strong>Rewards / Fund</strong> — виплати за перегляди окремо від Shop. <strong>CPM</strong> — скільки доларів орієнтовно за 1000 переглядів. Деталі — у підказці.</p>
         <button type="button" class="help-pill" id="pillJuicy" data-help="juicy">Чому це важливо?</button>
     </section>
 
     <section class="quick-stats" aria-label="Ключові орієнтири">
         <div class="stat-card"><span>Комісія Shop (креатор)</span><strong>5–20%</strong></div>
-        <div class="stat-card"><span>CPM (Rewards, орієнтир ЄС)</span><strong>~0,5–2 €</strong></div>
+        <div class="stat-card"><span>CPM (Rewards, орієнтир)</span><strong>~$0,5–2</strong></div>
         <div class="stat-card"><span>Середня комісія афіліата (світ)</span><strong>~13%</strong></div>
-        <div class="stat-card"><span>Курс для оцінки</span><strong>1 € ≈ 45 ₴</strong></div>
+        <div class="stat-card"><span>Курс для оцінки</span><strong>1 $ ≈ 43 ₴</strong></div>
         <div class="stat-help-wrap" style="grid-column: 1 / -1;">
             <button type="button" class="help-pill" id="statLegendBtn" data-help="statsLegend">Що означають цифри в картках?</button>
         </div>
@@ -458,44 +450,67 @@
 
             <div class="big-result" id="bigResult">
                 <div class="big-result-grid">
-                    <div>
-                        <span class="lbl" id="lblEarn">Орієнтовний дохід креатора (до податків)</span>
-                        <span class="lbl-sub" id="lblEarnSub">Комісія з продажу або виплата за перегляди — залежить від режиму; податки й повернення не віднімали.</span>
-                        <div class="val" id="outEarn">0 €</div>
-                        <span class="lbl" id="lblUsdLine" style="margin-top:8px;">Орієнтир у доларах США</span>
-                        <span class="lbl-sub" id="lblUsdSub">≈ 1 € = 1,05 $ — для порівняння з $-номіналами в гайдах; курс умовний.</span>
-                        <div class="val-sm" id="outEarnUSD">~ $0</div>
-                        <span class="lbl" id="lblUahLine" style="margin-top:8px;">У гривнях (орієнтир)</span>
-                        <span class="lbl-sub" id="lblUahSub">За курсом 1 € ≈ 45 ₴ — лише для наочності.</span>
+                    <div class="big-result-block">
+                        <div class="lbl-with-hint">
+                            <span class="lbl" id="lblEarn">Орієнтовний дохід креатора (до податків)</span>
+                            <button type="button" class="hint-btn" data-help="metricEarn" aria-label="Пояснення: дохід креатора" title="Пояснення"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="val" id="outEarn">$0</div>
+                    </div>
+                    <hr class="big-result-sep">
+                    <div class="big-result-block">
+                        <div class="lbl-with-hint">
+                            <span class="lbl" id="lblUahLine">У гривнях (орієнтир)</span>
+                            <button type="button" class="hint-btn" data-help="metricUah" aria-label="Пояснення: гривні" title="Пояснення"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
+                        </div>
                         <div class="val-sm" id="outUah">0 ₴</div>
                     </div>
-                    <div id="cellGmv">
-                        <span class="lbl" id="lblGmv">GMV — оборот за посиланням (лише TikTok Shop)</span>
-                        <span class="lbl-sub" id="lblGmvSub">Сума замовлень по кліку, не «гроші в кишені»; комісія креатора — відсоток від цього обороту.</span>
+                    <hr class="big-result-sep">
+                    <div class="big-result-block" id="cellGmv">
+                        <div class="lbl-with-hint">
+                            <span class="lbl" id="lblGmv">GMV — оборот за посиланням (лише TikTok Shop)</span>
+                            <button type="button" class="hint-btn" data-help="metricGmv" aria-label="Пояснення: GMV" title="Пояснення"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
+                        </div>
                         <div class="val val-sm" id="outGmv">—</div>
                     </div>
-                    <div id="cellConv" style="grid-column: 1 / -1;">
-                        <span class="lbl" id="lblConv">Конверсія перегляд → замовлення (орієнтир)</span>
-                        <span class="lbl-sub" id="lblConvSub">Спрощена модель за нішею та воронкою; у звітах TikTok часто інші визначення (сесія, клік).</span>
+                    <hr class="big-result-sep">
+                    <div class="big-result-block" id="cellConv" style="grid-column: 1 / -1;">
+                        <div class="lbl-with-hint">
+                            <span class="lbl" id="lblConv">Конверсія перегляд → замовлення (орієнтир)</span>
+                            <button type="button" class="hint-btn" data-help="metricConv" aria-label="Пояснення: конверсія" title="Пояснення"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
+                        </div>
                         <div class="val-xs" id="outConv">—</div>
                     </div>
-                    <div>
-                        <span class="lbl" id="lblVideos">Кількість відео в сценарії</span>
-                        <span class="lbl-sub" id="lblVideosSub">Усього переглядів ÷ середні перегляди на 1 відео (округлення вгору).</span>
+                    <hr class="big-result-sep">
+                    <div class="big-result-block">
+                        <div class="lbl-with-hint">
+                            <span class="lbl" id="lblVideos">Кількість відео в сценарії</span>
+                            <button type="button" class="hint-btn" data-help="metricVideos" aria-label="Пояснення: відео" title="Пояснення"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
+                        </div>
                         <div class="val val-sm" id="outVideos">0</div>
                     </div>
-                    <div>
-                        <span class="lbl" id="lblHours">Сумарний час на виробництво</span>
-                        <span class="lbl-sub" id="lblHoursSub">Кількість відео × хвилин на ролик — оцінка зйомки, монтажу й публікації.</span>
+                    <hr class="big-result-sep">
+                    <div class="big-result-block">
+                        <div class="lbl-with-hint">
+                            <span class="lbl" id="lblHours">Сумарний час на виробництво</span>
+                            <button type="button" class="hint-btn" data-help="metricHours" aria-label="Пояснення: час" title="Пояснення"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
+                        </div>
                         <div class="val val-sm" id="outHours">0</div>
                     </div>
-                    <div id="cellTeacher" style="grid-column: 1 / -1;">
-                        <span class="lbl" id="lblTeacher"></span>
-                        <span class="lbl-sub" id="lblTeacherSub"></span>
+                    <hr class="big-result-sep">
+                    <div class="big-result-block" id="cellTeacher" style="grid-column: 1 / -1;">
+                        <div class="lbl-with-hint">
+                            <span class="lbl" id="lblTeacher"></span>
+                            <button type="button" class="hint-btn" data-help="metricTeacher" aria-label="Пояснення: порівняння" title="Пояснення"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
+                        </div>
                         <div class="val-xs" id="outTeacher"></div>
                     </div>
-                    <div style="grid-column: 1 / -1;">
-                        <span class="lbl" id="lblExtra"></span>
+                    <hr class="big-result-sep">
+                    <div class="big-result-block" style="grid-column: 1 / -1;">
+                        <div class="lbl-with-hint">
+                            <span class="lbl" id="lblExtra"></span>
+                            <button type="button" class="hint-btn" data-help="metricExtra" aria-label="Пояснення: додатково" title="Пояснення"><i class="bi bi-question-circle" aria-hidden="true"></i></button>
+                        </div>
                         <div class="val-xs" id="outExtra"></div>
                     </div>
                 </div>
@@ -515,8 +530,7 @@
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
         <div class="acc-panel">
-            <p class="acc-panel-short" id="accLeadGmv">GMV у скрінах — це оборот, не зарплата креатора.</p>
-            <button type="button" class="help-pill" id="accBtnGmv" data-help="accGmv">Що це таке?</button>
+            <div id="accInjectGmv" class="acc-prose"></div>
         </div>
     </div>
 
@@ -526,8 +540,7 @@
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
         <div class="acc-panel">
-            <p class="acc-panel-short" id="accLeadShop">Конверсія та комісія залежать від ніші, ціни й типу ролика.</p>
-            <button type="button" class="help-pill" id="accBtnShop" data-help="accShopConv">Чому це важливо?</button>
+            <div id="accInjectShop" class="acc-prose"></div>
         </div>
     </div>
 
@@ -537,8 +550,7 @@
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
         <div class="acc-panel">
-            <p class="acc-panel-short" id="accLeadRewards">Окремо від Shop: виплати за перегляди; CPM залежить від регіону.</p>
-            <button type="button" class="help-pill" id="accBtnRewards" data-help="accRewards">Як це вираховується?</button>
+            <div id="accInjectRewards" class="acc-prose"></div>
         </div>
     </div>
 
@@ -548,8 +560,7 @@
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
         <div class="acc-panel">
-            <p class="acc-panel-short" id="accLeadKalodata">Рейтинг за оборотом (GMV), не за чистим доходом креатора.</p>
-            <button type="button" class="help-pill" id="accBtnKalodata" data-help="accKalodata">Що показує таблиця?</button>
+            <div id="accInjectKalodata" class="acc-prose"></div>
             <div class="data-table-wrap"><table class="earn-table">
                 <colgroup>
                     <col class="col-tight">
@@ -580,8 +591,7 @@
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
         <div class="acc-panel">
-            <p class="acc-panel-short" id="accLeadTofu">Три рівні воронки: від охоплення до прямого продажу в ролику.</p>
-            <button type="button" class="help-pill" id="accBtnTofu" data-help="accTofu">Розгорнути пояснення</button>
+            <div id="accInjectTofu" class="acc-prose"></div>
         </div>
     </div>
 
@@ -600,10 +610,10 @@
 
 <script>
 (function () {
-    var EUR_UAH = 45;
+    /** Орієнтир перерахунку $ → ₴ у калькуляторі (умовно, для наочності). */
+    var USD_UAH = 43;
     /**
-     * Модель конверсії узгоджена з tiktok-shop-data-library.txt (розм. F): у TikTok Shop часто
-     * порівнюють з «класичною» комерцією (орієнтири 8–12% vs 2–4% у різних визначеннях).
+     * Модель конверсії: у TikTok Shop часто порівнюють з «класичною» комерцією (орієнтири 8–12% vs 2–4% у різних визначеннях).
      * У калькуляторі — спрощена частка переглядів → замовлення: типово ~0,5–1,5% (MOFU),
      * для «продажного» контенту (BOFU) — до ~5–10%+. Верх воронки (TOFU) суттєво нижчий.
      * Множники ніші змінюють ставку в межах реалістичного діапазону; верх обмежено MAX_CR.
@@ -611,21 +621,22 @@
     var BASE_ORDER_RATE_PER_VIEW = 0.0085;
     var MAX_CR_PER_VIEW = 0.11;
 
-    var CPM_EUR = {
-        fashion: 1.1, beauty: 1.3, electronics: 0.9, home: 1.0,
-        food: 1.15, sports: 1.05, kids: 1.0, auto: 1.0, other: 1.0
+    var CPM_USD = {
+        fashion: 1.15, beauty: 1.37, electronics: 0.95, home: 1.05,
+        food: 1.2, sports: 1.1, kids: 1.05, auto: 1.05, other: 1.05
     };
 
+    /** avgPrice — орієнтир середнього чека в USD (для моделі GMV). */
     var CAT_NUM = {
-        fashion: { avgPrice: 38, defaultCommissionPct: 12, convMult: 1.05 },
-        beauty: { avgPrice: 32, defaultCommissionPct: 14, convMult: 1.15 },
-        electronics: { avgPrice: 55, defaultCommissionPct: 8, convMult: 0.88 },
-        home: { avgPrice: 42, defaultCommissionPct: 10, convMult: 1.0 },
-        food: { avgPrice: 28, defaultCommissionPct: 11, convMult: 1.08 },
-        sports: { avgPrice: 45, defaultCommissionPct: 14, convMult: 1.02 },
-        kids: { avgPrice: 35, defaultCommissionPct: 12, convMult: 1.0 },
-        auto: { avgPrice: 48, defaultCommissionPct: 11, convMult: 0.92 },
-        other: { avgPrice: 40, defaultCommissionPct: 10, convMult: 1.0 }
+        fashion: { avgPrice: 40, defaultCommissionPct: 12, convMult: 1.05 },
+        beauty: { avgPrice: 34, defaultCommissionPct: 14, convMult: 1.15 },
+        electronics: { avgPrice: 58, defaultCommissionPct: 8, convMult: 0.88 },
+        home: { avgPrice: 44, defaultCommissionPct: 10, convMult: 1.0 },
+        food: { avgPrice: 29, defaultCommissionPct: 11, convMult: 1.08 },
+        sports: { avgPrice: 47, defaultCommissionPct: 14, convMult: 1.02 },
+        kids: { avgPrice: 37, defaultCommissionPct: 12, convMult: 1.0 },
+        auto: { avgPrice: 50, defaultCommissionPct: 11, convMult: 0.92 },
+        other: { avgPrice: 42, defaultCommissionPct: 10, convMult: 1.0 }
     };
 
     var FUNNEL_NUM = {
@@ -648,7 +659,6 @@
     var FUNNEL_LABELS_RU = { tofu: "Верх (TOFU)", mofu: "Середина (MOFU)", bofu: "Низ (BOFU)" };
 
     var TEACHER_UAH_FLOOR = 15000;
-    var EUR_USD = 1.05;
 
     /** Якість контенту: орієнтир переглядів/відео + хв на публікацію (спам / середній / топ). */
     var QUALITY = {
@@ -713,12 +723,12 @@
         var convPerView = Math.min(MAX_CR_PER_VIEW, rawConv);
         var orders = views * convPerView;
         var gmv = orders * c.avgPrice;
-        var commissionEUR = gmv * (c.defaultCommissionPct / 100);
+        var commissionUSD = gmv * (c.defaultCommissionPct / 100);
         var videos = Math.max(1, Math.ceil(views / Math.max(1, state.avgViewsPerVideo)));
         var m = getMinPerVideo();
         var hours = (videos * m) / 60;
         return {
-            commissionEUR: commissionEUR,
+            commissionUSD: commissionUSD,
             orders: orders,
             videos: videos,
             hours: hours,
@@ -730,12 +740,12 @@
     }
 
     function computeMon() {
-        var cpm = CPM_EUR[state.cat] != null ? CPM_EUR[state.cat] : 1;
+        var cpm = CPM_USD[state.cat] != null ? CPM_USD[state.cat] : 1;
         var rev = (state.views / 1000) * cpm;
         var videos = Math.max(1, Math.ceil(state.views / Math.max(1, state.avgViewsPerVideo)));
         var m = getMinPerVideo();
         var hours = (videos * m) / 60;
-        return { revEUR: rev, cpm: cpm, videos: videos, hours: hours };
+        return { revUSD: rev, cpm: cpm, videos: videos, hours: hours };
     }
 
     function renderCatGrid() {
@@ -755,15 +765,15 @@
         var el = document.getElementById("catHint");
         if (!el) return;
         var c = CAT_NUM[state.cat] || CAT_NUM.other;
-        var cpm = CPM_EUR[state.cat] != null ? CPM_EUR[state.cat] : 1;
+        var cpm = CPM_USD[state.cat] != null ? CPM_USD[state.cat] : 1;
         if (state.mode === "shop") {
             el.textContent = lang === "ru"
                 ? "ориентир: средняя комиссия автора с продажи ~" + c.defaultCommissionPct + "% от чека (ставка в карточке товара)."
                 : "орієнтир: середня комісія автора з продажу ~" + c.defaultCommissionPct + "% від чека (ставка в картці товару).";
         } else {
             el.textContent = lang === "ru"
-                ? "ориентир: оплата за 1000 просмотров ~" + cpm.toFixed(2).replace(".", ",") + " € (Rewards / Fund; зависит от страны и правил)."
-                : "орієнтир: оплата за 1000 переглядів ~" + cpm.toFixed(2).replace(".", ",") + " € (Rewards / Fund; залежить від країни й правил).";
+                ? "ориентир: оплата за 1000 просмотров ~$" + cpm.toFixed(2) + " (Rewards / Fund; зависит от страны и правил)."
+                : "орієнтир: оплата за 1000 переглядів ~$" + cpm.toFixed(2) + " (Rewards / Fund; залежить від країни й правил).";
         }
     }
 
@@ -863,79 +873,46 @@
         var lblVideos = document.getElementById("lblVideos");
         var lblHours = document.getElementById("lblHours");
         var cellGmv = document.getElementById("cellGmv");
-        var lblTeacherSub = document.getElementById("lblTeacherSub");
-        var lblEarnSub = document.getElementById("lblEarnSub");
         var lblUahLine = document.getElementById("lblUahLine");
-        var lblUahSub = document.getElementById("lblUahSub");
-        var lblGmvSub = document.getElementById("lblGmvSub");
-        var lblVideosSub = document.getElementById("lblVideosSub");
-        var lblHoursSub = document.getElementById("lblHoursSub");
         var lblConv = document.getElementById("lblConv");
-        var lblConvSub = document.getElementById("lblConvSub");
         var outConv = document.getElementById("outConv");
         var cellConv = document.getElementById("cellConv");
         var lblTeacher = document.getElementById("lblTeacher");
         var outTeacher = document.getElementById("outTeacher");
         var cellTeacher = document.getElementById("cellTeacher");
-        var outEarnUSD = document.getElementById("outEarnUSD");
-        var lblUsdLine = document.getElementById("lblUsdLine");
-        var lblUsdSub = document.getElementById("lblUsdSub");
 
-        function setUsdFromEur(eur) {
-            if (outEarnUSD) outEarnUSD.textContent = (lang === "ru" ? "~ " : "~ ") + "$" + (eur * EUR_USD).toFixed(2);
-            if (lblUsdLine) lblUsdLine.textContent = lang === "ru" ? "Ориентир в долларах США" : "Орієнтир у доларах США";
-            if (lblUsdSub) lblUsdSub.textContent = lang === "ru"
-                ? "≈ 1 € = " + String(EUR_USD).replace(".", ",") + " $ — для сравнения с $-номиналами в гайдах; курс условный."
-                : "≈ 1 € = " + String(EUR_USD).replace(".", ",") + " $ — для порівняння з $-номіналами в гайдах; курс умовний.";
+        function fmtUsd(n) {
+            return "$" + (Math.round(n * 100) / 100).toLocaleString(loc(), { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
         updateCatHint();
 
         if (state.mode === "mon") {
             if (cellConv) cellConv.style.display = "none";
-            if (lblEarnSub) lblEarnSub.textContent = lang === "ru"
-                ? "Выплаты за просмотры (Rewards / Fund), до налогов; ставка CPM по нише."
-                : "Виплати за перегляди (Rewards / Fund), до податків; ставка CPM по ніші.";
             if (lblUahLine) lblUahLine.textContent = lang === "ru" ? "В гривнах (ориентир)" : "У гривнях (орієнтир)";
-            if (lblUahSub) lblUahSub.textContent = lang === "ru"
-                ? "Курс 1 € ≈ 45 ₴ — только для наглядности."
-                : "За курсом 1 € ≈ 45 ₴ — лише для наочності.";
             if (lblGmv) lblGmv.textContent = lang === "ru" ? "GMV (TikTok Shop)" : "GMV (TikTok Shop)";
-            if (lblGmvSub) lblGmvSub.textContent = lang === "ru"
-                ? "В режиме «монетизация» не считается — выбраны выплаты за просмотры."
-                : "У режимі «монетизація» не рахується — обрано виплати за перегляди.";
             if (outGmv) outGmv.textContent = "—";
             lblEarn.textContent = lang === "ru"
-                ? "Ориентировочный доход креатора (до налогов)"
-                : "Орієнтовний дохід креатора (до податків)";
+                ? "Ориентировочный доход креатора (до налогов), USD"
+                : "Орієнтовний дохід креатора (до податків), USD";
             var m = computeMon();
-            outEarn.textContent = m.revEUR.toFixed(2) + " €";
-            setUsdFromEur(m.revEUR);
-            var uah = Math.round(m.revEUR * EUR_UAH);
+            outEarn.textContent = fmtUsd(m.revUSD);
+            var uah = Math.round(m.revUSD * USD_UAH);
             outUah.textContent = uah.toLocaleString(loc()) + " ₴";
             outVideos.textContent = formatNum(m.videos);
             outHours.textContent = formatHours(m.hours);
             lblExtra.textContent = lang === "ru" ? "Ориентир по нише (CPM)" : "Орієнтир по ніші (CPM)";
             outExtra.textContent = lang === "ru"
-                ? "~" + m.cpm.toFixed(2) + " € за 1000 просмотров (Rewards / Fund)"
-                : "~" + m.cpm.toFixed(2) + " € за 1000 переглядів (Rewards / Fund)";
+                ? "~$" + m.cpm.toFixed(2) + " за 1000 просмотров (Rewards / Fund)"
+                : "~$" + m.cpm.toFixed(2) + " за 1000 переглядів (Rewards / Fund)";
             if (lblVideos) lblVideos.textContent = lang === "ru" ? "Количество видео в сценарии" : "Кількість відео в сценарії";
-            if (lblVideosSub) lblVideosSub.textContent = lang === "ru"
-                ? "Суммарные просмотры за месяц ÷ ориентир просмотров на 1 видео (из уровня качества; округление вверх)."
-                : "Сумарні перегляди за місяць ÷ орієнтир переглядів на 1 відео (з рівня якості; округлення вгору).";
             if (lblHours) lblHours.textContent = lang === "ru" ? "Суммарное время на производство" : "Сумарний час на виробництво";
-            if (lblHoursSub) lblHoursSub.textContent = lang === "ru"
-                ? "Число видео × минут на ролик по уровню качества (спам 5 / средний 15 / топ 30)."
-                : "Кількість відео × хв на ролик за рівнем якості (спам 5 / середній 15 / топ 30).";
             if (cellGmv) cellGmv.style.opacity = "0.85";
             if (uah >= TEACHER_UAH_FLOOR && cellTeacher && lblTeacher && outTeacher) {
                 var n = Math.floor(uah / TEACHER_UAH_FLOOR);
                 lblTeacher.textContent = lang === "ru"
                     ? "Условно «зарплат учителя» (порог 15 000 ₴)"
                     : "Умовно «зарплат вчителя» (поріг 15 000 ₴)";
-                if (lblTeacherSub) lblTeacherSub.textContent = lang === "ru"
-                    ? "Грубое сравнение с базой ~15 000 ₴/мес., не налоговая справка."
-                    : "Грубе порівняння з базою ~15 000 ₴/міс., не податкова довідка.";
                 outTeacher.textContent = lang === "ru"
                     ? "≈ " + formatNum(n) + " мес."
                     : "≈ " + formatNum(n) + " міс.";
@@ -945,25 +922,13 @@
             }
         } else {
             if (cellConv) cellConv.style.display = "block";
-            if (lblEarnSub) lblEarnSub.textContent = lang === "ru"
-                ? "Комиссия афилиата с заказа по карточке товара; налоги и возвраты не вычитались."
-                : "Комісія афіліата з замовлення за карткою товару; податки й повернення не віднімали.";
             if (lblUahLine) lblUahLine.textContent = lang === "ru" ? "В гривнах (ориентир)" : "У гривнях (орієнтир)";
-            if (lblUahSub) lblUahSub.textContent = lang === "ru"
-                ? "Курс 1 € ≈ 45 ₴ — только для наглядности."
-                : "За курсом 1 € ≈ 45 ₴ — лише для наочності.";
             if (lblGmv) lblGmv.textContent = lang === "ru"
                 ? "GMV — оборот по ссылке (TikTok Shop)"
                 : "GMV — оборот за посиланням (TikTok Shop)";
-            if (lblGmvSub) lblGmvSub.textContent = lang === "ru"
-                ? "Сумма заказов по клику; комиссия креатора — процент от этого оборота."
-                : "Сума замовлень по кліку; комісія креатора — відсоток від цього обороту.";
             if (lblConv) lblConv.textContent = lang === "ru"
                 ? "Конверсия «просмотр → заказ» (ориентир)"
                 : "Конверсія «перегляд → замовлення» (орієнтир)";
-            if (lblConvSub) lblConvSub.textContent = lang === "ru"
-                ? "Упрощённая модель по нише и воронке; в отчётах TikTok метрики могут считаться иначе."
-                : "Спрощена модель за нішею та воронкою; у звітах TikTok метрики можуть рахуватися інакше.";
             var r = computeShop();
             if (outConv) {
                 var capNote = r.convCapped ? (lang === "ru" ? " (срез сверху ~11%)" : " (зріз зверху ~11%)") : "";
@@ -971,35 +936,25 @@
                     ? "~" + formatConvPercent(r.convPerView) + "% · заказов: " + (r.orders < 10 ? r.orders.toFixed(1) : Math.round(r.orders)) + capNote
                     : "~" + formatConvPercent(r.convPerView) + "% · замовлень: " + (r.orders < 10 ? r.orders.toFixed(1) : Math.round(r.orders)) + capNote;
             }
-            if (outGmv) outGmv.textContent = r.gmv.toFixed(0) + " €";
+            if (outGmv) outGmv.textContent = "$" + formatNum(Math.round(r.gmv));
             lblEarn.textContent = lang === "ru"
-                ? "Ориентировочный доход креатора (до налогов)"
-                : "Орієнтовний дохід креатора (до податків)";
-            outEarn.textContent = r.commissionEUR.toFixed(2) + " €";
-            setUsdFromEur(r.commissionEUR);
-            var uahS = Math.round(r.commissionEUR * EUR_UAH);
+                ? "Ориентировочный доход креатора (до налогов), USD"
+                : "Орієнтовний дохід креатора (до податків), USD";
+            outEarn.textContent = fmtUsd(r.commissionUSD);
+            var uahS = Math.round(r.commissionUSD * USD_UAH);
             outUah.textContent = uahS.toLocaleString(loc()) + " ₴";
             outVideos.textContent = formatNum(r.videos);
             outHours.textContent = formatHours(r.hours);
             lblExtra.textContent = lang === "ru" ? "Доля креатора и средний чек" : "Частка креатора й середній чек";
-            outExtra.textContent = (lang === "ru" ? "~" + r.pct + "% от GMV · AOV ~" : "~" + r.pct + "% від GMV · AOV ~") + (CAT_NUM[state.cat] || CAT_NUM.other).avgPrice + " €";
+            outExtra.textContent = (lang === "ru" ? "~" + r.pct + "% от GMV · AOV ~$" : "~" + r.pct + "% від GMV · AOV ~$") + (CAT_NUM[state.cat] || CAT_NUM.other).avgPrice;
             if (lblVideos) lblVideos.textContent = lang === "ru" ? "Количество видео в сценарии" : "Кількість відео в сценарії";
-            if (lblVideosSub) lblVideosSub.textContent = lang === "ru"
-                ? "Суммарные просмотры за месяц ÷ ориентир просмотров на 1 видео (из уровня качества; округление вверх)."
-                : "Сумарні перегляди за місяць ÷ орієнтир переглядів на 1 відео (з рівня якості; округлення вгору).";
             if (lblHours) lblHours.textContent = lang === "ru" ? "Суммарное время на производство" : "Сумарний час на виробництво";
-            if (lblHoursSub) lblHoursSub.textContent = lang === "ru"
-                ? "Число видео × минут на ролик по уровню качества (спам 5 / средний 15 / топ 30)."
-                : "Кількість відео × хв на ролик за рівнем якості (спам 5 / середній 15 / топ 30).";
             if (cellGmv) cellGmv.style.opacity = "1";
             if (uahS >= TEACHER_UAH_FLOOR && cellTeacher && lblTeacher && outTeacher) {
                 var nt = Math.floor(uahS / TEACHER_UAH_FLOOR);
                 lblTeacher.textContent = lang === "ru"
                     ? "Условно «зарплат учителя» (порог 15 000 ₴)"
                     : "Умовно «зарплат вчителя» (поріг 15 000 ₴)";
-                if (lblTeacherSub) lblTeacherSub.textContent = lang === "ru"
-                    ? "Грубое сравнение с базой ~15 000 ₴/мес., не налоговая справка."
-                    : "Грубе порівняння з базою ~15 000 ₴/міс., не податкова довідка.";
                 outTeacher.textContent = lang === "ru"
                     ? "≈ " + formatNum(nt) + " мес."
                     : "≈ " + formatNum(nt) + " міс.";
@@ -1044,7 +999,7 @@
         infoTitle: "TikTok: как считать заработок",
         infoSub: "Ориентиры для украинской аудитории: Shop, просмотры, комиссии. Не является налоговой консультацией.",
         juicyBlock: "<strong>Кратко:</strong> <strong>GMV</strong> на скриншотах — не «деньги в кармане»; комиссия креатора с чека часто <strong>5–20%</strong>. <strong>Rewards / Fund</strong> — отдельная оплата за просмотры (в ЕС <strong>CPM</strong> обычно ниже, чем в США). В TikTok Shop на результат влияют <strong>ниша</strong>, <strong>цена</strong> и <strong>тип контента</strong> (верх / середина / низ воронки). В топ-таблицах — <strong>GMV</strong>, не чистый доход креатора. Подробнее — в блоках ниже после калькулятора.",
-        calcIntro: "Выберите режим: <strong>TikTok Shop</strong> (комиссия с продаж) или <strong>монетизацию</strong> (оплата за просмотры). Укажите <strong>качество контента</strong>, при необходимости — <strong>тип контента</strong> в воронке (для Shop), двигайте ползунок <strong>суммарных просмотров за месяц</strong>. Ниже — ориентировочный доход до налогов (€ и $), GMV (Shop), число видео и время по уровню качества.",
+        calcIntro: "Выберите режим: <strong>TikTok Shop</strong> (комиссия с продаж) или <strong>монетизацию</strong> (оплата за просмотры). Укажите <strong>качество контента</strong>, при необходимости — <strong>тип контента</strong> в воронке (для Shop), двигайте ползунок <strong>суммарных просмотров за месяц</strong>. Итог в чёрном блоке — в <strong>долларах США</strong> (ориентир), плюс гривны и прочие строки.",
         lblTabMon: "Монетизация (CPM)",
         lblTabShop: "TikTok Shop",
         stepCat: "1. Категория / ниша",
@@ -1058,7 +1013,7 @@
         calcFootnote: "«Чистый» — доход от монетизации/комиссии до налогов и расходов; налоги и возвраты не вычитались.",
         calcHead: "Быстрый расчёт",
         stat1: "Комиссия Shop (креатор)",
-        stat2: "CPM (Rewards, ориентир ЕС)",
+        stat2: "CPM (Rewards, ориентир)",
         stat3: "Средняя комиссия (мир)",
         stat4: "Курс для оценки",
         langStatus: "Вы выбрали 🇷🇺",
@@ -1068,16 +1023,6 @@
         philosophyLead: "Сравнивайте не только сумму, но и время на ролик — качество меняет «заработок в час».",
         dialogClose: "Закрыть",
         statLegendBtn: "Что значат цифры в карточках?",
-        accLeadGmv: "GMV на скриншотах — это оборот, не зарплата креатора.",
-        accBtnGmv: "Что это?",
-        accLeadShop: "Конверсия и комиссия зависят от ниши, цены и типа ролика.",
-        accBtnShop: "Почему это важно?",
-        accLeadRewards: "Отдельно от Shop: выплаты за просмотры; CPM зависит от региона.",
-        accBtnRewards: "Как считается?",
-        accLeadKalodata: "Рейтинг по обороту (GMV), не по чистому доходу креатора.",
-        accBtnKalodata: "Что показывает таблица?",
-        accLeadTofu: "Три уровня воронки: от охвата до прямой продажи в ролике.",
-        accBtnTofu: "Подробнее",
         pillJuicy: "Почему это важно?",
         pillCalcHow: "Как работает калькулятор?",
         pillAvgVpV: "Что означают уровни?",
@@ -1089,19 +1034,19 @@
     var HELP_UK = {
         juicy: {
             title: "Чому це важливо?",
-            html: "<p><strong>GMV</strong> у скрінах — це не «гроші в кишені»: з обороту знімають комісії платформи, податки, повернення. Комісія креатора з чека часто <strong>5–20%</strong> (ставить продавець). <strong>Rewards / Fund</strong> — окрема лінія доходу за перегляди; у ЄС <strong>CPM</strong> зазвичай нижчий, ніж у США. У TikTok Shop на результат впливають ніша, ціна й тип контенту (воронка). У топ-таблицях — <strong>GMV</strong>, не чистий дохід креатора.</p>"
+            html: "<div class=\"gloss\"><p><strong>Креатор</strong> — людина, яка знімає відео й заробляє на контенті (Shop, Rewards тощо).</p><p><strong>Афіліат</strong> у TikTok Shop — партнер продавця: показує товар у ролику й отримує домовлений <strong>% від суми замовлення</strong>, а не весь обіг.</p><p><strong>GMV</strong> — загальний обіг продажів за вашим посиланням; це не «гроші в кишені».</p><p><strong>Rewards / Creator Fund</strong> — виплати за перегляди, окремо від Shop.</p><p><strong>CPM</strong> — орієнтир, скільки <strong>доларів</strong> за 1000 переглядів.</p></div><p>У статистиці, рейтингах і дашбордах часто показують саме GMV — не плутайте з особистим доходом. Комісія з чека креатору часто <strong>5–20%</strong> (ставить продавець).</p>"
         },
         statsLegend: {
             title: "Що означають цифри в картках?",
-            html: "<ul><li><strong>Комісія Shop</strong> — типовий діапазон відсотка з чека для афіліата.</li><li><strong>CPM (ЄС)</strong> — орієнтир виплат за 1000 переглядів у програмах на кшталт Rewards; реальність залежить від країни.</li><li><strong>~13%</strong> — усереднена комісія афіліата по платформі в оглядах (не гарантія по кожному товару).</li><li><strong>Курс</strong> — лише для перерахунку € → ₴ у калькуляторі.</li></ul>"
+            html: "<ul><li><strong>Комісія Shop</strong> — типовий діапазон відсотка з чека для афіліата.</li><li><strong>CPM</strong> — орієнтир виплат за 1000 переглядів (програми на кшталт Rewards); залежить від країни.</li><li><strong>~13%</strong> — усереднена комісія афіліата в оглядах (не гарантія для кожного товару).</li><li><strong>Курс</strong> — умовний перерахунок $ → ₴ у калькуляторі.</li></ul>"
         },
         calcHow: {
             title: "Як працює калькулятор?",
-            html: "<p><strong>TikTok Shop:</strong> оцінюємо замовлення через <strong>орієнтир конверсії перегляд → покупка</strong> (ніша + воронка), множимо на середній чек і на <strong>% комісії креатора</strong> — отримуєте орієнтовну комісію та GMV.</p><p><strong>Монетизація:</strong> перегляди × CPM по ніші — орієнт виплат за перегляди.</p><p>Кількість відео = <strong>сумарні перегляди за місяць</strong> ÷ орієнтир переглядів на відео з обраного <strong>рівня якості</strong>. Час = відео × хвилин на ролик (5 / 15 / 30 за рівнем). Податки й повернення не віднімали.</p>"
+            html: "<p>Усі суми в блоці результатів — у <strong>доларах США</strong> (орієнтир).</p><p><strong>TikTok Shop:</strong> оцінюємо замовлення через спрощену <strong>конверсію перегляд → покупка</strong> (ніша + воронка), множимо на середній чек (USD) і на <strong>% комісії креатора</strong> — отримуєте орієнтовну комісію та GMV.</p><p><strong>Монетизація:</strong> перегляди × CPM (USD) по ніші.</p><p>Кількість відео = сумарні перегляди за місяць ÷ орієнтир переглядів на відео (рівень якості). Час = відео × хв на ролик (5 / 15 / 30). Податки й повернення не віднімали.</p>"
         },
         avgVpV: {
             title: "Що означають рівні якості?",
-            html: "<p><strong>Низька (спам):</strong> орієнтир ~<strong>200</strong> переглядів на відео, <strong>5 хв</strong> на публікацію.</p><p><strong>Середня:</strong> ~<strong>5 тис</strong> переглядів, <strong>15 хв</strong>.</p><p><strong>Висока:</strong> <strong>50 тис.+</strong> — орієнтир з <strong>валового розподілу переглядів по всіх відео акаунта за місяць</strong> (не одне відео), <strong>30 хв</strong> на ролик.</p><p>Ці значення ділять <strong>сумарні перегляди за місяць</strong> на кількість роликів і множаться на хвилини, щоб показати час виробництва.</p>"
+            html: "<p><strong>Низька (спам):</strong> орієнтир ~<strong>200</strong> переглядів на відео, <strong>5 хв</strong> на публікацію.</p><p><strong>Середня:</strong> ~<strong>5 тис</strong> переглядів, <strong>15 хв</strong>.</p><p><strong>Висока:</strong> <strong>50 тис.+</strong> — орієнтир з валового розподілу переглядів по всіх відео акаунта за місяць (не одне відео), <strong>30 хв</strong> на ролик.</p><p>Ці значення ділять сумарні перегляди за місяць на кількість роликів і множаться на хвилини для оцінки часу.</p>"
         },
         funnel: {
             title: "Чому воронка важлива?",
@@ -1109,50 +1054,62 @@
         },
         convModel: {
             title: "Як рахується конверсія?",
-            html: "<p>У <code>tiktok-shop-data-library.txt</code> наведено, що в TikTok Shop часто порівнюють з «класичною» е-комерцією (орієнтири <strong>8–12%</strong> vs <strong>2–4%</strong> у різних визначеннях метрики). У калькуляторі використано <strong>спрощену частку переглядів → замовлення</strong>: для MOFU орієнтир близько <strong>0,5–1,5%</strong>, для «продажного» BOFU — до <strong>~5–10%+</strong>; верх обмежено ~11%, щоб не виходити за реалістичні межі.</p><p>У звітах TikTok конверсія може рахуватися від сесії, кліку чи іншої бази — тому цифри не повинні збігатися з дашбордом один до одного.</p>"
+            html: "<p>У TikTok Shop у порівняннях із «класичною» е-комерцією часто наводять орієнтири <strong>8–12%</strong> vs <strong>2–4%</strong> (у різних визначеннях метрики). У калькуляторі — <strong>спрощена частка переглядів → замовлення</strong>: для MOFU орієнтир близько <strong>0,5–1,5%</strong>, для «продажного» BOFU — до <strong>~5–10%+</strong>; верх обмежено ~11%.</p><p>У звітах TikTok конверсія може рахуватися від сесії, кліку чи іншої бази — цифри не зобов’язані збігатися з дашбордом один до одного.</p>"
         },
         philosophy: {
             title: "Чому не лише сума важлива?",
             html: "<p>Високі суми в таблицях ближчі до авторів, які розуміють алгоритм, психологію глядача, тип контенту й виробництво й працюють системно. Багато годин на слабкий контент дають гірший «заробіток на годину», ніж менше часу на сильні ролики.</p>"
         },
-        accGmv: {
-            title: "Що таке GMV?",
-            html: "<p><strong>GMV</strong> — валовий обсяг продажів за посиланням; це не зарплата креатора. У скрінах часто показують саме GMV. Ваш дохід — <strong>комісія %</strong> від замовлення (і мінус податки, продакшн тощо). Комісія креатора з замовлення зазвичай <strong>5–20%</strong> від чека.</p>"
+        metricEarn: {
+            title: "Орієнтовний дохід креатора",
+            html: "<p>Сума в <strong>доларах США</strong> до податків: або <strong>комісія афіліата</strong> з продажу в TikTok Shop, або <strong>виплати за перегляди</strong> (режим монетизації). Податки, повернення товару й витрати на зйомку в суму не входили.</p>"
         },
-        accShopConv: {
-            title: "Чому це важливо?",
-            html: "<p>У застосунку Shop конверсія часто вища, ніж у класичній вітрині, але залежить від товару, ціни й довіри. Дешеві товари (&lt;20 €) часто конвертують краще; UGC і рідна мова озвучки зазвичай підсилюють результат. Верх воронки дає охоплення; низ — пряміші продажі з перегляду.</p>"
+        metricUah: {
+            title: "Гривні",
+            html: "<p>Умовний перерахунок доларів у гривні за курсом <strong>1 $ ≈ 43 ₴</strong> — лише для наочності, не курс НБУ й не податкова консультація.</p>"
         },
-        accRewards: {
-            title: "Як це вираховується?",
-            html: "<p>Окремо від Shop: виплати за перегляди (Rewards / Fund). <strong>CPM</strong> залежить від країни, якості трафіку та правил програми. У ЄС часто нижчі орієнти, ніж у США — перевіряйте в акаунті.</p>"
+        metricGmv: {
+            title: "GMV",
+            html: "<p><strong>GMV</strong> — валовий обіг замовлень за вашим посиланням (сума чеків покупців). Це <strong>не</strong> ваша зарплата: ваш дохід — зазвичай відсоток від цього обігу (комісія афіліата).</p><p>У режимі «монетизація за переглядами» GMV у блоці не рахується.</p>"
         },
-        accKalodata: {
-            title: "Що показує таблиця?",
-            html: "<p>У таблиці — <strong>GMV</strong> за даними Kalodata (грудень 2025), не чистий дохід креатора. Підписники не завжди корелюють з GMV.</p><p>Приклад демонстрації товару в ролику: <a href=\"https://vt.tiktok.com/ZSHdS4gWW/\" target=\"_blank\" rel=\"noopener noreferrer\">відео @be.lush</a>.</p>"
+        metricConv: {
+            title: "Конверсія",
+            html: "<p>Спрощена оцінка: яка частка переглядів перетворюється на замовлення з урахуванням ніші та воронки (TOFU / MOFU / BOFU). У реальних звітах TikTok метрика може визначатися інакше.</p>"
         },
-        accTofu: {
-            title: "TOFU, MOFU, BOFU",
-            html: "<p><strong>TOFU</strong> — охоплення, вірус; мало прямих продажів з одного перегляду.</p><p><strong>MOFU</strong> — огляд, довіра, лайфстайл.</p><p><strong>BOFU</strong> — демо товару, ціна, чіткий заклик і посилання — вища частка переглядів, що стають замовленнями.</p>"
+        metricVideos: {
+            title: "Кількість відео",
+            html: "<p><strong>Сумарні перегляди за місяць</strong> діляться на орієнтир переглядів на одне відео (залежить від обраного рівня якості). Результат округлюється вгору — це скільки роликів «потрібно», щоб набрати такий обсяг переглядів.</p>"
+        },
+        metricHours: {
+            title: "Час на виробництво",
+            html: "<p>Кількість відео множиться на хвилини на один ролик за рівнем якості: спам <strong>5 хв</strong>, середній <strong>15 хв</strong>, топ <strong>30 хв</strong>. Це груба оцінка зйомки, монтажу й публікації.</p>"
+        },
+        metricExtra: {
+            title: "Додатковий рядок",
+            html: "<p><strong>Shop:</strong> частка креатора від GMV і орієнтир середнього чека (AOV) у доларах.</p><p><strong>Монетизація:</strong> орієнтир CPM — скільки доларів за 1000 переглядів у програмах на кшталт Rewards / Fund.</p>"
+        },
+        metricTeacher: {
+            title: "Порівняння з «зарплатою вчителя»",
+            html: "<p>Грубе порівняння: скільки умовних «місячних зарплат учителя» (орієнтир <strong>15 000 ₴</strong>) відповідає показаній сумі в гривнях. Не має юридичного чи податкового сенсу.</p>"
         }
     };
 
     var HELP_RU = {
         juicy: {
             title: "Почему это важно?",
-            html: "<p><strong>GMV</strong> на скриншотах — не «деньги в кармане»: с оборота снимают комиссии платформы, налоги, возвраты. Комиссия креатора с чека часто <strong>5–20%</strong> (ставит продавец). <strong>Rewards / Fund</strong> — отдельная линия дохода за просмотры; в ЕС <strong>CPM</strong> обычно ниже, чем в США. В TikTok Shop на результат влияют ниша, цена и тип контента (воронка). В топ-таблицах — <strong>GMV</strong>, не чистый доход креатора.</p>"
+            html: "<div class=\"gloss\"><p><strong>Креатор</strong> — автор видео, который зарабатывает на контенте.</p><p><strong>Аффилиат</strong> в TikTok Shop — партнёр продавца: показывает товар в ролике и получает <strong>% от суммы заказа</strong>, а не весь оборот.</p><p><strong>GMV</strong> — валовый оборот продаж по вашей ссылке; это не «деньги в кармане».</p><p><strong>Rewards / Creator Fund</strong> — выплаты за просмотры, отдельно от Shop.</p><p><strong>CPM</strong> — ориентир, сколько <strong>долларов</strong> за 1000 просмотров.</p></div><p>В отчётах, рейтингах и цифрах в соцсетях часто показывают именно GMV. Комиссия креатора с чека часто <strong>5–20%</strong> (ставит продавец).</p>"
         },
         statsLegend: {
             title: "Что значат цифры в карточках?",
-            html: "<ul><li><strong>Комиссия Shop</strong> — типичный диапазон процента с чека для аффилиата.</li><li><strong>CPM (ЕС)</strong> — ориентир выплат за 1000 просмотров; реальность зависит от страны.</li><li><strong>~13%</strong> — средняя комиссия аффилиата по платформе в обзорах.</li><li><strong>Курс</strong> — только для пересчёта € → ₴ в калькуляторе.</li></ul>"
+            html: "<ul><li><strong>Комиссия Shop</strong> — типичный диапазон процента с чека для аффилиата.</li><li><strong>CPM</strong> — ориентир выплат за 1000 просмотров (программы вроде Rewards); зависит от страны.</li><li><strong>~13%</strong> — средняя комиссия аффилиата в обзорах.</li><li><strong>Курс</strong> — условный пересчёт $ → ₴ в калькуляторе.</li></ul>"
         },
         calcHow: {
             title: "Как работает калькулятор?",
-            html: "<p><strong>TikTok Shop:</strong> оцениваем заказы через <strong>ориентир конверсии просмотр → покупка</strong> (ниша + воронка), умножаем на средний чек и на <strong>% комиссии креатора</strong>.</p><p><strong>Монетизация:</strong> просмотры × CPM по нише.</p><p>Число роликов = <strong>суммарные просмотры за месяц</strong> ÷ ориентир просмотров на видео из <strong>уровня качества</strong>. Время = видео × минут на ролик (5 / 15 / 30). Налоги и возвраты не вычитались.</p>"
+            html: "<p>Все суммы в блоке результатов — в <strong>долларах США</strong> (ориентир).</p><p><strong>TikTok Shop:</strong> оцениваем заказы через упрощённую <strong>конверсию просмотр → покупка</strong> (ниша + воронка), умножаем на средний чек (USD) и на <strong>% комиссии креатора</strong>.</p><p><strong>Монетизация:</strong> просмотры × CPM (USD) по нише.</p><p>Число роликов = суммарные просмотры за месяц ÷ ориентир просмотров на видео (уровень качества). Время = видео × минуты на ролик (5 / 15 / 30). Налоги и возвраты не вычитались.</p>"
         },
         avgVpV: {
             title: "Что означают уровни качества?",
-            html: "<p><strong>Низкая (спам):</strong> ориентир ~<strong>200</strong> просмотров на видео, <strong>5 мин</strong> на публикацию.</p><p><strong>Средняя:</strong> ~<strong>5 тыс</strong>, <strong>15 мин</strong>.</p><p><strong>Высокая:</strong> <strong>50 тыс.+</strong> — ориентир из <strong>валового распределения просмотров по всем видео аккаунта за месяц</strong> (не одно видео), <strong>30 мин</strong> на ролик.</p>"
+            html: "<p><strong>Низкая (спам):</strong> ориентир ~<strong>200</strong> просмотров на видео, <strong>5 мин</strong> на публикацию.</p><p><strong>Средняя:</strong> ~<strong>5 тыс</strong>, <strong>15 мин</strong>.</p><p><strong>Высокая:</strong> <strong>50 тыс.+</strong> — ориентир из валового распределения просмотров по всем видео аккаунта за месяц (не одно видео), <strong>30 мин</strong> на ролик.</p>"
         },
         funnel: {
             title: "Почему важна воронка?",
@@ -1160,33 +1117,71 @@
         },
         convModel: {
             title: "Как считается конверсия?",
-            html: "<p>В библиотеке данных для TikTok Shop приводят сравнение с «классической» e-commerce (ориентиры <strong>8–12%</strong> vs <strong>2–4%</strong> в разных определениях). В калькуляторе — <strong>упрощённая доля просмотров → заказ</strong>: для MOFU порядка <strong>0,5–1,5%</strong>, для BOFU — до <strong>~5–10%+</strong>; верх ограничен ~11%.</p><p>В отчётах TikTok конверсия может считаться от сессии или клика — цифры не обязаны совпадать с дашбордом.</p>"
+            html: "<p>В сравнениях TikTok Shop с «классической» e-commerce часто приводят ориентиры <strong>8–12%</strong> vs <strong>2–4%</strong> (в разных определениях метрики). В калькуляторе — <strong>упрощённая доля просмотров → заказ</strong>: для MOFU порядка <strong>0,5–1,5%</strong>, для BOFU — до <strong>~5–10%+</strong>; верх ограничен ~11%.</p><p>В отчётах TikTok конверсия может считаться от сессии или клика — цифры не обязаны совпадать с дашбордом.</p>"
         },
         philosophy: {
             title: "Почему важна не только сумма?",
             html: "<p>Высокие суммы ближе к авторам, которые понимают алгоритм, психологию зрителя и производство. Много часов на слабый контент дают худший «заработок в час».</p>"
         },
-        accGmv: {
-            title: "Что такое GMV?",
-            html: "<p><strong>GMV</strong> — валовый объём продаж по ссылке; это не зарплата креатора. Ваш доход — <strong>комиссия %</strong> с заказа. Обычно <strong>5–20%</strong> с чека.</p>"
+        metricEarn: {
+            title: "Ориентировочный доход креатора",
+            html: "<p>Сумма в <strong>долларах США</strong> до налогов: либо <strong>комиссия аффилиата</strong> с продажи в TikTok Shop, либо <strong>выплаты за просмотры</strong> (режим монетизации). Налоги, возвраты и затраты на съёмку не вычитались.</p>"
         },
-        accShopConv: {
-            title: "Почему это важно?",
-            html: "<p>В приложении Shop конверсия часто выше, чем у классической витрины. Дешёвые товары часто конвертуют лучше; UGC и родной язык усиливают результат.</p>"
+        metricUah: {
+            title: "Гривны",
+            html: "<p>Условный пересчёт долларов в гривны по курсу <strong>1 $ ≈ 43 ₴</strong> — только для наглядности.</p>"
         },
-        accRewards: {
-            title: "Как это считается?",
-            html: "<p>Отдельно от Shop: выплаты за просмотры. <strong>CPM</strong> зависит от страны и правил программы.</p>"
+        metricGmv: {
+            title: "GMV",
+            html: "<p><strong>GMV</strong> — валовый оборот заказов по вашей ссылке (сумма чеков). Это <strong>не</strong> ваша зарплата: доход креатора — обычно процент от этого оборота.</p><p>В режиме «монетизация за просмотры» GMV в блоке не считается.</p>"
         },
-        accKalodata: {
-            title: "Что показывает таблица?",
-            html: "<p><strong>GMV</strong> по данным Kalodata, не чистый доход креатора.</p><p>Пример демонстрации товара: <a href=\"https://vt.tiktok.com/ZSHdS4gWW/\" target=\"_blank\" rel=\"noopener noreferrer\">видео @be.lush</a>.</p>"
+        metricConv: {
+            title: "Конверсия",
+            html: "<p>Упрощённая оценка: какая доля просмотров превращается в заказы с учётом ниши и воронки (TOFU / MOFU / BOFU). В реальных отчётах TikTok метрика может определяться иначе.</p>"
         },
-        accTofu: {
-            title: "TOFU, MOFU, BOFU",
-            html: "<p><strong>TOFU</strong> — охват, вирус.</p><p><strong>MOFU</strong> — обзор, доверие.</p><p><strong>BOFU</strong> — демо, цена, призыв и ссылка.</p>"
+        metricVideos: {
+            title: "Количество видео",
+            html: "<p><strong>Суммарные просмотры за месяц</strong> делятся на ориентир просмотров на одно видео (уровень качества). Округление вверх — сколько роликов нужно, чтобы набрать такой объём просмотров.</p>"
+        },
+        metricHours: {
+            title: "Время на производство",
+            html: "<p>Число видео умножается на минуты на ролик по уровню качества: спам <strong>5</strong>, средний <strong>15</strong>, топ <strong>30</strong>. Грубая оценка съёмки, монтажа и публикации.</p>"
+        },
+        metricExtra: {
+            title: "Дополнительная строка",
+            html: "<p><strong>Shop:</strong> доля креатора от GMV и ориентир среднего чека (AOV) в долларах.</p><p><strong>Монетизация:</strong> ориентир CPM — долларов за 1000 просмотров (Rewards / Fund).</p>"
+        },
+        metricTeacher: {
+            title: "Сравнение с «зарплатой учителя»",
+            html: "<p>Грубое сравнение с базой <strong>15 000 ₴</strong> в месяц. Не налоговая или юридическая оценка.</p>"
         }
     };
+
+    var ACC_UK = {
+        gmv: "<p><strong>GMV (Gross Merchandise Value)</strong> — загальна сума замовлень товарів за вашим посиланням у TikTok Shop за період. Це <strong>не</strong> готівка креатора: з неї ще віднімають комісії платформи, повернення тощо (у продавця своя економіка).</p><p>У <strong>звітах, рейтингах і публічних цифрах</strong> часто показують саме GMV — не плутайте з особистим заробітком.</p><h3>Хто такий креатор і афіліат?</h3><p><strong>Креатор</strong> — автор відео. <strong>Афіліат</strong> у Shop — партнер продавця: ви ведете трафік на товар і отримуєте <strong>відсоток від оплаченого замовлення</strong> (типово орієнтир 5–20%, ставить продавець).</p><h3>Що зазвичай не дорівнює «чистим грошам» з GMV</h3><div class=\"data-table-wrap\"><table class=\"earn-table\"><thead><tr><th>Стаття</th><th>Коротко</th></tr></thead><tbody><tr><td>Комісія платформи</td><td>Знімається з обороту продавця</td></tr><tr><td>Ваша комісія (афіліат)</td><td>Відсоток від чека — окремий рядок доходу креатора</td></tr><tr><td>Повернення товару</td><td>Зменшують реальний результат</td></tr><tr><td>Податки, продакшн</td><td>Не входять у цифри калькулятора</td></tr></tbody></table></div>",
+        shop: "<p>У TikTok Shop <strong>конверсія</strong> — це наскільки добре перегляди перетворюються на замовлення. Вона залежить від ніші, ціни товару, довіри та <strong>типу ролика</strong> (воронка TOFU → BOFU).</p><p><strong>Комісія креатора</strong> задається у картці товару продавцем; у різних категоріях діапазони різні (мода й краса часто вищі, електроніка — нижчі).</p><p>Дешеві товари (&lt;20 $) часто дають вищу частку конверсій «з перегляду»; рідна мова й UGC зазвичай підсилюють результат. Верх воронки (TOFU) дає охоплення; низ (BOFU) — пряміші продажі з одного перегляду.</p>",
+        rewards: "<p><strong>Rewards</strong> і подібні програми — це <strong>окремо</strong> від TikTok Shop: виплати за перегляди або участь у фондах монетизації (назви залежать від регіону й року).</p><p><strong>CPM (cost per mille)</strong> — скільки <strong>доларів</strong> ви орієнтовно отримуєте за <strong>1000 переглядів</strong> зарахованих відео. Реальна ставка залежить від країни, тематики й правил програми — перевіряйте в акаунті TikTok.</p>",
+        kalodata: "<p>Таблиця нижче — <strong>GMV</strong> (валовий обіг за посиланням креатора) за грудень 2025 за даними Kalodata. Це <strong>не</strong> чистий дохід креатора: з GMV рахується комісія %, податки та інші витрати окремо.</p><p>Кількість підписників <strong>не завжди</strong> корелює з GMV — важливі ніша, товар і якість контенту.</p><p>Приклад ролика з демонстрацією товару: <a class=\"tt-link\" href=\"https://vt.tiktok.com/ZSHdS4gWW/\" target=\"_blank\" rel=\"noopener noreferrer\">коротке відео @be.lush</a>.</p>",
+        tofu: "<p><strong>TOFU (верх воронки)</strong> — відео для охоплення: тренди, челенджі, мало прямих продажів з одного перегляду.</p><p><strong>MOFU (середина)</strong> — огляди, «топ-5», довіра; люди вже цікавляться темою.</p><p><strong>BOFU (низ)</strong> — демо товару, ціна, чіткий заклик «купити за посиланням»; тут найвищий відсоток переглядів, що перетворюються на замовлення.</p><p>У калькуляторі вибір воронки змінює орієнтир конверсії разом із нішею.</p>"
+    };
+
+    var ACC_RU = {
+        gmv: "<p><strong>GMV</strong> — валовый оборот заказов по вашей ссылке в TikTok Shop за период. Это <strong>не</strong> наличные креатора: с оборота платят комиссии платформы, возвраты и т.д.</p><p>В <strong>отчётах, рейтингах и публичных цифрах</strong> часто показывают именно GMV.</p><h3>Креатор и аффилиат</h3><p><strong>Креатор</strong> — автор видео. <strong>Аффилиат</strong> в Shop — партнёр продавца: вы приводите покупателя по ссылке и получаете <strong>процент от оплаченного заказа</strong> (часто ориентир 5–20%).</p><h3>Что не равно «чистым деньгам» из GMV</h3><div class=\"data-table-wrap\"><table class=\"earn-table\"><thead><tr><th>Статья</th><th>Кратко</th></tr></thead><tbody><tr><td>Комиссия платформы</td><td>Удерживается с оборота продавца</td></tr><tr><td>Ваша комиссия</td><td>Процент от чека — отдельная строка дохода креатора</td></tr><tr><td>Возвраты</td><td>Снижают итог</td></tr><tr><td>Налоги, съёмка</td><td>Не включены в калькулятор</td></tr></tbody></table></div>",
+        shop: "<p>В TikTok Shop <strong>конверсия</strong> — насколько просмотры превращаются в заказы. Зависит от ниши, цены, доверия и <strong>типа ролика</strong> (воронка TOFU → BOFU).</p><p><strong>Комиссия креатора</strong> задаётся продавцом в карточке товара; в категориях диапазоны разные.</p><p>Дешёвые товары часто конвертируют лучше; родной язык и UGC усиливают результат. Верх воронки даёт охват; низ — прямые продажи с просмотра.</p>",
+        rewards: "<p><strong>Rewards</strong> и похожие программы — <strong>отдельно</strong> от Shop: выплаты за просмотры (названия зависят от региона).</p><p><strong>CPM</strong> — сколько <strong>долларов</strong> ориентировочно за <strong>1000 просмотров</strong>. Реальная ставка зависит от страны и правил — смотрите в аккаунте TikTok.</p>",
+        kalodata: "<p>В таблице ниже — <strong>GMV</strong> за декабрь 2025 по данным Kalodata. Это <strong>не</strong> чистый доход креатора.</p><p>Подписчики <strong>не всегда</strong> коррелируют с GMV.</p><p>Пример демонстрации товара: <a class=\"tt-link\" href=\"https://vt.tiktok.com/ZSHdS4gWW/\" target=\"_blank\" rel=\"noopener noreferrer\">видео @be.lush</a>.</p>",
+        tofu: "<p><strong>TOFU</strong> — охват и тренды, мало прямых продаж с одного просмотра.</p><p><strong>MOFU</strong> — обзоры и доверие.</p><p><strong>BOFU</strong> — демо, цена, призыв к покупке по ссылке; выше доля просмотров, ставших заказами.</p>"
+    };
+
+    function injectAccordionPanels() {
+        var a = lang === "ru" ? ACC_RU : ACC_UK;
+        var el;
+        el = document.getElementById("accInjectGmv"); if (el) el.innerHTML = a.gmv;
+        el = document.getElementById("accInjectShop"); if (el) el.innerHTML = a.shop;
+        el = document.getElementById("accInjectRewards"); if (el) el.innerHTML = a.rewards;
+        el = document.getElementById("accInjectKalodata"); if (el) el.innerHTML = a.kalodata;
+        el = document.getElementById("accInjectTofu"); if (el) el.innerHTML = a.tofu;
+    }
 
     function getHelp(key) {
         var map = lang === "ru" ? HELP_RU : HELP_UK;
@@ -1260,7 +1255,7 @@
         document.getElementById("infoTitle").textContent = "TikTok: як рахувати заробіток";
         document.getElementById("infoSub").textContent = "Орієнтири для української аудиторії: Shop, перегляди, комісії. Не є податковою чи інвестиційною порадою.";
         var jl = document.getElementById("juicyLead");
-        if (jl) jl.innerHTML = "<strong>Коротко:</strong> GMV, комісії креатора, CPM і воронка — орієнти у шапці; деталі та застереження — у підказці.";
+        if (jl) jl.innerHTML = "<strong>Коротко:</strong> <strong>Креатор</strong> — людина, яка знімає відео та заробляє на контенті. <strong>Афіліат</strong> у TikTok Shop — партнер продавця: рекламує товар у ролику й отримує відсоток від замовлення (не всю суму продажу). <strong>GMV</strong> — загальний обіг продажів за посиланням; це не «гроші в кишені». <strong>Rewards / Fund</strong> — виплати за перегляди окремо від Shop. <strong>CPM</strong> — скільки доларів орієнтовно за 1000 переглядів. Деталі — у підказці.";
         var cil = document.getElementById("calcIntroLead");
         if (cil) cil.textContent = "Оберіть режим і параметри нижче; підсумок — у чорному блоці.";
         var ph = document.getElementById("philosophyLead");
@@ -1283,30 +1278,10 @@
         document.getElementById("calc-head").textContent = "Швидкий розрахунок";
         var pf = document.getElementById("pageFooter");
         if (pf) pf.textContent = "Калькулятор і таблиці — орієнтири; підлаштуйте коефіцієнти під свою статистику. Податки й повернення не віднімали.";
-        var labs = ["Комісія Shop (креатор)", "CPM (Rewards, орієнтир ЄС)", "Середня комісія афіліата (світ)", "Курс для оцінки"];
+        var labs = ["Комісія Shop (креатор)", "CPM (Rewards, орієнтир)", "Середня комісія афіліата (світ)", "Курс для оцінки"];
         document.querySelectorAll(".stat-card span").forEach(function (el, i) {
             if (labs[i]) el.textContent = labs[i];
         });
-        var ag = document.getElementById("accLeadGmv");
-        if (ag) ag.textContent = "GMV у скрінах — це оборот, не зарплата креатора.";
-        var as = document.getElementById("accLeadShop");
-        if (as) as.textContent = "Конверсія та комісія залежать від ніші, ціни й типу ролика.";
-        var ar = document.getElementById("accLeadRewards");
-        if (ar) ar.textContent = "Окремо від Shop: виплати за перегляди; CPM залежить від регіону.";
-        var ak = document.getElementById("accLeadKalodata");
-        if (ak) ak.textContent = "Рейтинг за оборотом (GMV), не за чистим доходом креатора.";
-        var at = document.getElementById("accLeadTofu");
-        if (at) at.textContent = "Три рівні воронки: від охоплення до прямого продажу в ролику.";
-        var b1 = document.getElementById("accBtnGmv");
-        if (b1) b1.textContent = "Що це таке?";
-        var b2 = document.getElementById("accBtnShop");
-        if (b2) b2.textContent = "Чому це важливо?";
-        var b3 = document.getElementById("accBtnRewards");
-        if (b3) b3.textContent = "Як це вираховується?";
-        var b4 = document.getElementById("accBtnKalodata");
-        if (b4) b4.textContent = "Що показує таблиця?";
-        var b5 = document.getElementById("accBtnTofu");
-        if (b5) b5.textContent = "Розгорнути пояснення";
         var pj = document.getElementById("pillJuicy");
         if (pj) pj.textContent = "Чому це важливо?";
         var pch = document.getElementById("pillCalcHow");
@@ -1319,13 +1294,14 @@
         if (pc) pc.textContent = "Як рахується конверсія?";
         var pp = document.getElementById("pillPhilosophy");
         if (pp) pp.textContent = "Чому це важливо?";
+        injectAccordionPanels();
     }
 
     function applyRuStatic() {
         document.getElementById("infoTitle").textContent = RU.infoTitle;
         document.getElementById("infoSub").textContent = RU.infoSub;
         var jl = document.getElementById("juicyLead");
-        if (jl) jl.innerHTML = "<strong>Кратко:</strong> GMV, комиссии, CPM и воронка — ориентиры в шапке; детали в подсказках.";
+        if (jl) jl.innerHTML = "<strong>Кратко:</strong> <strong>Креатор</strong> — автор видео, который зарабатывает на контенте. <strong>Аффилиат</strong> в TikTok Shop — партнёр продавца: показывает товар в ролике и получает процент от заказа (не весь оборот). <strong>GMV</strong> — валовый оборот по ссылке; это не «деньги в кармане». <strong>Rewards / Fund</strong> — выплаты за просмотры отдельно от Shop. <strong>CPM</strong> — сколько долларов ориентировочно за 1000 просмотров. Подробнее — в подсказках.";
         var cil = document.getElementById("calcIntroLead");
         if (cil) cil.textContent = RU.calcIntroLead;
         var ph = document.getElementById("philosophyLead");
@@ -1352,26 +1328,6 @@
         document.querySelectorAll(".stat-card span").forEach(function (el, i) {
             if (t[i]) el.textContent = t[i];
         });
-        var ag = document.getElementById("accLeadGmv");
-        if (ag) ag.textContent = RU.accLeadGmv;
-        var as = document.getElementById("accLeadShop");
-        if (as) as.textContent = RU.accLeadShop;
-        var ar = document.getElementById("accLeadRewards");
-        if (ar) ar.textContent = RU.accLeadRewards;
-        var ak = document.getElementById("accLeadKalodata");
-        if (ak) ak.textContent = RU.accLeadKalodata;
-        var at = document.getElementById("accLeadTofu");
-        if (at) at.textContent = RU.accLeadTofu;
-        var b1 = document.getElementById("accBtnGmv");
-        if (b1) b1.textContent = RU.accBtnGmv;
-        var b2 = document.getElementById("accBtnShop");
-        if (b2) b2.textContent = RU.accBtnShop;
-        var b3 = document.getElementById("accBtnRewards");
-        if (b3) b3.textContent = RU.accBtnRewards;
-        var b4 = document.getElementById("accBtnKalodata");
-        if (b4) b4.textContent = RU.accBtnKalodata;
-        var b5 = document.getElementById("accBtnTofu");
-        if (b5) b5.textContent = RU.accBtnTofu;
         var pj = document.getElementById("pillJuicy");
         if (pj) pj.textContent = RU.pillJuicy;
         var pch = document.getElementById("pillCalcHow");
@@ -1384,6 +1340,7 @@
         if (pc) pc.textContent = RU.pillConv;
         var pp = document.getElementById("pillPhilosophy");
         if (pp) pp.textContent = RU.pillPhilosophy;
+        injectAccordionPanels();
     }
 
     renderCatGrid();
@@ -1395,6 +1352,8 @@
     if (lang === "ru") {
         setLangButtons();
         applyRuStatic();
+    } else {
+        injectAccordionPanels();
     }
     render();
 })();
