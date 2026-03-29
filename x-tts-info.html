@@ -507,7 +507,7 @@
     <section class="benchmark-section" id="benchmarkSection" aria-labelledby="benchSectionTitle">
         <h2 class="benchmark-head" id="benchSectionTitle">Орієнтир @be.lush (EchoTik Overview)</h2>
         <p class="labor-callout" id="laborCallout"><strong>Системний TikTok Shop</strong> — це труд: орієнтир <strong>8 год робочого дня</strong> (з перервами), у який входять аналітика топ-товарів, пошук оферів, сценарій і формат подачі, аналіз середовища навколо товару, відгуки й коментарі — не лише зйомка й монтаж. Це інша ефективність, ніж «квартирний» швидкий огляд.</p>
-        <p class="benchmark-meta" id="benchMeta">Дані з аналітичного сервісу EchoTik (скріншоти), станом на <strong>29 березня 2026</strong>. Показник <strong>«Нові відео»</strong> у калькуляторі <strong>не використовується</strong> — база для моделі: <strong>відео з товарами</strong> і середні перегляди на відео.</p>
+        <p class="benchmark-meta" id="benchMeta">Дані з аналітичного сервісу EchoTik (не внутрішня панель TikTok). Оновлено <strong>29.03.2026</strong>. На вкладках 7 / 15 / 30 днів цифри різні; наприклад, <strong>158</strong> відео з товарами — це зріз за <strong>30 днів</strong>. У калькуляторі база — «відео з товарами» і середні перегляди на відео.</p>
         <div class="bench-period-tabs" role="tablist" aria-label="Період EchoTik">
             <button type="button" role="tab" class="bench-tab" id="benchTab7d" data-bench-period="7d" aria-selected="false">7 днів</button>
             <button type="button" role="tab" class="bench-tab" id="benchTab15d" data-bench-period="15d" aria-selected="false">15 днів</button>
@@ -1089,27 +1089,17 @@
                 benchCard("Видео с товарами (база модели)", formatNum(b.videoProducts), " bench-card--primary"),
                 benchCard("Просмотры", formatEchoCompact(b.views), ""),
                 benchCard("Среднее на видео", formatEchoCompact(b.avgView), ""),
-                benchCard("GPM ($ / 1000 просм.)", "$" + b.gpm.toFixed(2).replace(".", ","), ""),
-                benchCard("IPM", String(b.ipm).replace(".", ","), ""),
-                benchCard("ER Rate", b.er.toFixed(2).replace(".", ",") + "%", ""),
-                benchCard("Длительность ролика (ср.)", "≈" + b.avgDurSec + " с", ""),
-                benchCard("Лайки / коммент. / репосты", formatNum(b.avgLike) + " / " + String(b.avgComments).replace(".", ",") + " / " + String(b.avgShare).replace(".", ","), ""),
-                benchCard("Новые видео (не для модели)", formatNum(b.videosNew), " bench-card--muted")
+                benchCard("GPM ($ / 1000 просм.)", "$" + b.gpm.toFixed(2).replace(".", ","), "")
             ];
-            if (foot) foot.textContent = "Роликов с товарами в день (ориентир): " + vpd.replace(".", ",") + "; при «качественном» режиме в калькуляторе: ~" + cq.min + " мин на полный цикл одного видео (модель рабочего дня " + Math.round(WORK_CONTENT_MIN_PER_DAY / 60) + " ч). EchoTik, не внутренняя аналитика TikTok.";
+            if (foot) foot.textContent = "Видео с товарами в день (ориентир): " + vpd.replace(".", ",") + "; в режиме «качественный»: ~" + cq.min + " мин на полный цикл одного видео.";
         } else {
             parts = [
                 benchCard("Відео з товарами (база моделі)", formatNum(b.videoProducts), " bench-card--primary"),
                 benchCard("Перегляди", formatEchoCompact(b.views), ""),
                 benchCard("Середнє на відео", formatEchoCompact(b.avgView), ""),
-                benchCard("GPM ($ / 1000 перегл.)", "$" + b.gpm.toFixed(2).replace(".", ","), ""),
-                benchCard("IPM", String(b.ipm).replace(".", ","), ""),
-                benchCard("ER Rate", b.er.toFixed(2).replace(".", ",") + "%", ""),
-                benchCard("Тривалість ролика (ср.)", "≈" + b.avgDurSec + " с", ""),
-                benchCard("Лайки / комент. / репости", formatNum(b.avgLike) + " / " + String(b.avgComments).replace(".", ",") + " / " + String(b.avgShare).replace(".", ","), ""),
-                benchCard("Нові відео (не для моделі)", formatNum(b.videosNew), " bench-card--muted")
+                benchCard("GPM ($ / 1000 перегл.)", "$" + b.gpm.toFixed(2).replace(".", ","), "")
             ];
-            if (foot) foot.textContent = "Відео з товарів на день (орієнтир): " + vpd.replace(".", ",") + "; у режимі «якісний» у калькуляторі: ~" + cq.min + " хв на повний цикл одного відео (модель робочого дня " + Math.round(WORK_CONTENT_MIN_PER_DAY / 60) + " год). EchoTik, не внутрішня аналітика TikTok.";
+            if (foot) foot.textContent = "Відео з товарів на день (орієнтир): " + vpd.replace(".", ",") + "; у режимі «якісний»: ~" + cq.min + " хв на повний цикл одного відео.";
         }
         grid.innerHTML = parts.join("");
         renderBenchmarkTabsUI();
@@ -1226,7 +1216,7 @@
         } else {
             if (h2) h2.textContent = "Орієнтир @be.lush (EchoTik Overview)";
             if (lc) lc.innerHTML = "<strong>Системний TikTok Shop</strong> — це труд: орієнтир <strong>8 год робочого дня</strong> (з перервами), у який входять аналітика топ-товарів, пошук оферів, сценарій і формат подачі, аналіз середовища навколо товару, відгуки й коментарі — не лише зйомка й монтаж. Це інша ефективність, ніж «квартирний» швидкий огляд.";
-            if (bm) bm.innerHTML = "Дані з аналітичного сервісу EchoTik (скріншоти), станом на <strong>29 березня 2026</strong>. Показник <strong>«Нові відео»</strong> у калькуляторі <strong>не використовується</strong> — база для моделі: <strong>відео з товарами</strong> і середні перегляди на відео.";
+            if (bm) bm.innerHTML = "Дані з аналітичного сервісу EchoTik (не внутрішня панель TikTok). Оновлено <strong>29.03.2026</strong>. На вкладках 7 / 15 / 30 днів цифри різні; наприклад, <strong>158</strong> відео з товарами — це зріз за <strong>30 днів</strong>. У калькуляторі база — «відео з товарами» і середні перегляди на відео.";
             if (bl) bl.textContent = "Що означають показники в картках?";
             if (ae) ae.textContent = "Чому цифри на сторінці акаунта та в EchoTik можуть розходитись";
             if (t7) t7.textContent = "7 днів";
@@ -1360,7 +1350,7 @@
         benchLegendBtn: "Что означают показатели в карточках?",
         benchSectionTitle: "Ориентир @be.lush (EchoTik Overview)",
         laborCallout: "<strong>Системный TikTok Shop</strong> — это труд: ориентир <strong>8 часов рабочего дня</strong> (с перерывами), в него входят аналитика топ-товаров, поиск офферов, сценарий и формат подачи, анализ среды вокруг товара, отзывы и комментарии — не только съёмка и монтаж. Это другая эффективность, чем «квартирный» быстрый обзор.",
-        benchMeta: "Данные аналитического сервиса EchoTik (скриншоты), на <strong>29 марта 2026</strong>. Показатель <strong>«Новые видео»</strong> в калькуляторе <strong>не используется</strong> — база модели: <strong>видео с товарами</strong> и средние просмотры на видео.",
+        benchMeta: "Данные аналитического сервиса EchoTik (не внутренняя панель TikTok). Обновлено <strong>29.03.2026</strong>. На вкладках 7 / 15 / 30 дней цифры разные; например, <strong>158</strong> видео с товарами — это срез за <strong>30 дней</strong>. В калькуляторе база — «видео с товарами» и средние просмотры на видео.",
         accEchoGapTitle: "Почему цифры в профиле и в EchoTik могут различаться",
         pillJuicy: "Почему это важно?",
         pillCalcHow: "Как работает калькулятор?",
@@ -1376,7 +1366,7 @@
         },
         benchLegend: {
             title: "Показники EchoTik (Overview)",
-            html: "<p>Дані з аналітичного сервісу <strong>EchoTik</strong> (не внутрішня панель TikTok). Скріншоти — <strong>29.03.2026</strong>.</p><ul><li><strong>Відео з товарами</strong> — скільки роликів із прикріпленими товарами потрапило у звіт; <strong>цей рядок — база для калькулятора</strong> (не «Нові відео»).</li><li><strong>Перегляди</strong> — сума переглядів за період.</li><li><strong>Середнє на відео</strong> — середні перегляди на одне відео в вибірці.</li><li><strong>GPM</strong> (gross per mille) — орієнтир валового прибутку з продажів на 1000 переглядів, у доларах.</li><li><strong>IPM</strong> — items / impact per mille (у залежності від версії EchoTik) — показник «на 1000 переглядів».</li><li><strong>ER Rate</strong> — engagement rate, залученість (лайки, коментарі тощо).</li><li><strong>Тривалість / лайки / коментарі / репости</strong> — середні по відео в звіті.</li><li><strong>Нові відео</strong> у картці з позначкою «не для моделі» — показано для порівняння, у формулах не використовується.</li></ul>"
+            html: "<p>Дані з аналітичного сервісу <strong>EchoTik</strong> (не внутрішня панель TikTok). Оновлено <strong>29.03.2026</strong>.</p><ul><li><strong>Відео з товарами</strong> — тут саме той показник, де наприклад <strong>158</strong> відео з продуктами; на <strong>7, 15 та 30 днях</strong> різні цифри, <strong>158</strong> — це на <strong>30 днях</strong>. База для калькулятора.</li><li><strong>Перегляди</strong> — сума переглядів за період.</li><li><strong>Середнє на відео</strong> — середні перегляди на одне відео у вибірці.</li><li><strong>GPM</strong> (<em>gross per mille</em>) — орієнтир валового прибутку з продажів на 1000 переглядів, у доларах США. <strong>GMV</strong> (<em>Gross Merchandise Value</em>, валовий обіг товарів) — сума чеків замовлень за посиланням; у цьому блоці карток EchoTik GMV окремо не виводиться, у калькуляторі нижче GMV показується окремим рядком.</li></ul>"
         },
         calcHow: {
             title: "Як працює калькулятор?",
@@ -1408,7 +1398,7 @@
         },
         metricGmv: {
             title: "GMV",
-            html: "<p><strong>GMV</strong> — валовий обіг замовлень за вашим посиланням (сума чеків покупців). Це <strong>не</strong> ваша зарплата: ваш дохід — зазвичай відсоток від цього обігу (комісія афіліата).</p>"
+            html: "<p><strong>GMV</strong> (<em>Gross Merchandise Value</em>) — валовий обіг замовлень за вашим посиланням (сума чеків покупців). Це <strong>не</strong> ваша зарплата: ваш дохід — зазвичай відсоток від цього обігу (комісія афіліата).</p>"
         },
         metricConv: {
             title: "Конверсія",
@@ -1447,7 +1437,7 @@
         },
         benchLegend: {
             title: "Показатели EchoTik (Overview)",
-            html: "<p>Данные сервиса <strong>EchoTik</strong>, скриншоты <strong>29.03.2026</strong>.</p><ul><li><strong>Видео с товарами</strong> — база для калькулятора (не «Новые видео»).</li><li><strong>Просмотры</strong> — сумма за период.</li><li><strong>Среднее на видео</strong> — средние просмотры на ролик в выборке.</li><li><strong>GPM</strong> — валовый профит на 1000 просмотров, $.</li><li><strong>IPM</strong> — показатель на 1000 просмотров (версия метрики зависит от EchoTik).</li><li><strong>ER Rate</strong> — вовлечённость.</li><li><strong>Длительность / лайки / комменты / репосты</strong> — средние по видео.</li><li><strong>Новые видео</strong> — для сравнения, в модели не используется.</li></ul>"
+            html: "<p>Данные аналитического сервиса <strong>EchoTik</strong> (не внутренняя панель TikTok). Обновлено <strong>29.03.2026</strong>.</p><ul><li><strong>Видео с товарами</strong> — здесь тот показатель, где, например, <strong>158</strong> видео с продуктами; на <strong>7, 15 и 30 днях</strong> разные цифры, <strong>158</strong> — это на <strong>30 днях</strong>. База для калькулятора.</li><li><strong>Просмотры</strong> — сумма просмотров за период.</li><li><strong>Среднее на видео</strong> — средние просмотры на одно видео в выборке.</li><li><strong>GPM</strong> (<em>gross per mille</em>) — ориентир валовой прибыли с продаж на 1000 просмотров, в долларах США. <strong>GMV</strong> (<em>Gross Merchandise Value</em>, валовой оборот товаров) — сумма чеков заказов по ссылке; в этом блоке карточек EchoTik GMV отдельно не показан, в калькуляторе ниже GMV выводится отдельной строкой.</li></ul>"
         },
         calcHow: {
             title: "Как работает калькулятор?",
@@ -1479,7 +1469,7 @@
         },
         metricGmv: {
             title: "GMV",
-            html: "<p><strong>GMV</strong> — валовый оборот заказов по вашей ссылке (сумма чеков). Это <strong>не</strong> ваша зарплата: доход креатора — обычно процент от этого оборота.</p>"
+            html: "<p><strong>GMV</strong> (<em>Gross Merchandise Value</em>) — валовый оборот заказов по вашей ссылке (сумма чеков). Это <strong>не</strong> ваша зарплата: доход креатора — обычно процент от этого оборота.</p>"
         },
         metricConv: {
             title: "Конверсия",
