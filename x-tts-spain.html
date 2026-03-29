@@ -1,381 +1,735 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" translate="no">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="google" content="notranslate">
     <title>TikTok Shop в Испании | Семейный проект</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { box-sizing: border-box; }
+        html { -webkit-text-size-adjust: 100%; }
         body {
-            font-family: 'Montserrat', sans-serif;
-            background: #ffffff;
-            color: #1a2c3e;
+            margin: 0;
+            padding: 12px 16px 32px;
+            padding-bottom: calc(32px + env(safe-area-inset-bottom));
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f0f0f2;
+            color: #1a1a1a;
+            min-height: 100vh;
             line-height: 1.5;
-            padding: 2rem 1rem;
         }
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 28px;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.05);
-            padding: 1.8rem 1.2rem;
+        .wrap { max-width: 720px; margin: 0 auto; }
+        .page-header {
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #1a1a1a;
         }
-        @media (min-width: 768px) {
-            body { padding: 2rem; }
-            .container { padding: 2rem 2.5rem; }
-        }
-        h1, h2, h3 {
+        .page-title {
+            font-size: clamp(1.2rem, 4vw, 1.5rem);
             font-weight: 700;
-            line-height: 1.3;
-            margin-top: 1.5em;
-            margin-bottom: 0.6em;
+            margin: 0 0 8px;
+            letter-spacing: -0.02em;
         }
-        h1 {
-            font-size: 1.9rem;
-            margin-top: 0;
-            color: #1e2f3e;
+        .page-sub { font-size: 0.85rem; color: #555; margin: 0; }
+
+        .calc-card {
+            background: #fff;
+            border: 1px solid #ccc;
+            margin-bottom: 16px;
         }
-        @media (min-width: 640px) { h1 { font-size: 2.2rem; } }
-        h2 {
-            font-size: 1.5rem;
-            border-left: 5px solid #fe2c55;
-            padding-left: 1rem;
-            margin-top: 2rem;
+        .calc-card-head {
+            padding: 12px 14px;
+            background: #fafafa;
+            border-bottom: 1px solid #ddd;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #333;
         }
-        h3 {
-            font-size: 1.2rem;
-            margin: 1rem 0 0.8rem;
-            color: #0f3b5c;
-        }
-        .card-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.2rem;
-            margin: 1.5rem 0;
-        }
-        @media (min-width: 640px) { .card-grid { grid-template-columns: repeat(2,1fr); } }
-        @media (min-width: 1024px) { .card-grid { grid-template-columns: repeat(3,1fr); } }
-        .person-card {
-            background: #f8fafd;
-            border-radius: 24px;
-            padding: 1.2rem;
-            border: 1px solid #eef2f8;
-        }
-        .person-card h4 {
-            font-size: 1.3rem;
-            color: #fe2c55;
-            margin-bottom: 0.75rem;
-        }
-        .badge {
-            background: #fe2c55;
-            color: white;
-            border-radius: 30px;
-            padding: 2px 12px;
-            font-size: 0.7rem;
+        .calc-card-body { padding: 14px; }
+        .muted { font-size: 0.8rem; color: #666; margin: 0 0 12px; }
+
+        .toggle-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+        .toggle-row label { font-size: 0.8rem; font-weight: 600; color: #444; width: 100%; margin-bottom: 4px; }
+
+        .seg-btn {
+            flex: 1;
+            min-width: 120px;
+            min-height: 44px;
+            padding: 10px 12px;
+            border: 2px solid #ccc;
+            background: #fff;
+            font-size: 0.85rem;
             font-weight: 600;
-            display: inline-block;
-            margin-right: 6px;
+            cursor: pointer;
+            color: #333;
+            transition: border-color 0.15s, background 0.15s, color 0.15s;
         }
-        .highlight-box {
-            background: #f0f4fa;
-            border-left: 4px solid #1e6fdf;
-            padding: 0.8rem 1.2rem;
-            border-radius: 18px;
-            margin: 1.2rem 0;
+        .seg-btn:hover { border-color: #7c3aed; color: #7c3aed; }
+        .seg-btn.active { border-color: #7c3aed; background: #7c3aed; color: #fff; }
+
+        .cat-grid { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+        .cat-btn {
+            padding: 8px 10px;
+            border: 1px solid #bbb;
+            background: #fff;
+            font-size: 0.78rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: #333;
         }
-        table {
+        .cat-btn:hover { border-color: #7c3aed; }
+        .cat-btn.active {
+            border-color: #7c3aed;
+            background: rgba(124, 58, 237, 0.12);
+            color: #5b21b6;
+            font-weight: 700;
+        }
+        .cat-btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
+
+        .views-presets { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 10px; }
+        @media (min-width: 400px) { .views-presets { grid-template-columns: repeat(4, 1fr); } }
+        .view-preset {
+            min-height: 42px;
+            border: 1px solid #bbb;
+            background: #fff;
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .view-preset:hover { border-color: #7c3aed; }
+        .view-preset.active { border-color: #7c3aed; background: #f3f0ff; }
+
+        .slider-block { margin-top: 8px; }
+        .slider-block label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
+        }
+        .slider-block input[type="range"] { width: 100%; accent-color: #7c3aed; }
+        .slider-val { font-variant-numeric: tabular-nums; color: #7c3aed; }
+
+        .result-grid { display: grid; gap: 10px; margin-top: 14px; padding-top: 14px; border-top: 1px solid #e5e5e5; }
+        .result-item {
+            padding: 10px 12px;
+            background: #f7f7f8;
+            border-left: 3px solid #7c3aed;
+        }
+        .result-item strong {
+            display: block;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: #666;
+            margin-bottom: 4px;
+        }
+        .result-item span { font-size: 1.1rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+        .account-block { border: 1px solid #ccc; margin-bottom: 12px; background: #fff; }
+        .account-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: #f5f5f5;
+            border-bottom: 1px solid #ddd;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .account-head button {
+            border: 1px solid #c00;
+            background: #fff;
+            color: #c00;
+            padding: 4px 10px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .account-head button:hover { background: #fee; }
+
+        .btn-add {
+            width: 100%;
+            min-height: 48px;
+            border: 2px dashed #7c3aed;
+            background: rgba(124, 58, 237, 0.06);
+            color: #5b21b6;
+            font-size: 0.95rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 16px;
+        }
+        .btn-add:hover { background: rgba(124, 58, 237, 0.12); }
+
+        .family-total {
+            padding: 16px;
+            background: #1a1a1a;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+        .family-total h3 {
+            margin: 0 0 10px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #aaa;
+            font-weight: 600;
+        }
+        .family-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; font-size: 0.9rem; }
+        .family-row:last-child { margin-bottom: 0; }
+        .family-big { font-size: 1.45rem; font-weight: 800; font-variant-numeric: tabular-nums; color: #c4b5fd; }
+
+        .acc {
+            border: 1px solid #ccc;
+            margin-bottom: 10px;
+            background: #fff;
+        }
+        .acc-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 14px 16px;
+            min-height: 48px;
+            border: none;
+            background: #fafafa;
+            font-size: 0.92rem;
+            font-weight: 600;
+            color: #222;
+            text-align: left;
+            cursor: pointer;
+        }
+        .acc-header:hover { background: #f3f0ff; }
+        .acc.collapsed .acc-chevron { transform: rotate(-90deg); }
+        .acc-chevron { transition: transform 0.2s ease; color: #555; flex-shrink: 0; }
+        .acc-panel {
+            padding: 0 16px 16px;
+            border-top: 1px solid #e8e8e8;
+            font-size: 0.9rem;
+            color: #333;
+        }
+        .acc.collapsed .acc-panel { display: none; }
+        .acc-panel p { margin: 0 0 10px; }
+        .acc-panel ul { margin: 8px 0 0; padding-left: 1.2em; }
+        .acc-panel li { margin-bottom: 6px; }
+        .acc-panel h3.acc-inner-title {
+            font-size: 1rem;
+            margin: 14px 0 8px;
+            color: #1a1a1a;
+            border-left: 3px solid #7c3aed;
+            padding-left: 10px;
+        }
+        .highlight-inline {
+            background: #f5f3ff;
+            border: 1px solid #ddd;
+            padding: 10px 12px;
+            margin: 10px 0;
+            font-size: 0.88rem;
+        }
+        .table-compact {
             width: 100%;
             border-collapse: collapse;
-            margin: 1.2rem 0;
-            font-size: 0.85rem;
-            border-radius: 16px;
-            overflow: hidden;
+            font-size: 0.82rem;
+            margin: 10px 0;
         }
-        th, td {
-            border: 1px solid #e2e8f0;
-            padding: 8px 8px;
+        .table-compact th, .table-compact td {
+            border: 1px solid #ccc;
+            padding: 8px;
             vertical-align: top;
         }
-        th {
-            background: #f1f5f9;
-            font-weight: 600;
+        .table-compact th { background: #f5f5f5; font-weight: 600; }
+        .card-grid-mini {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin: 10px 0;
         }
-        .earn-example {
-            background: #eafaf1;
-            border-radius: 20px;
-            padding: 0.9rem 1.2rem;
-            margin: 1.2rem 0;
+        @media (min-width: 560px) { .card-grid-mini { grid-template-columns: repeat(2, 1fr); } }
+        .mini-card {
+            border: 1px solid #ddd;
+            padding: 10px;
+            background: #fafafa;
+            font-size: 0.85rem;
         }
-        .content-item {
-            background: #ffffff;
-            border-radius: 18px;
-            padding: 0.7rem 0.9rem;
-            margin: 0.7rem 0;
-            border: 1px solid #e9edf2;
+        .mini-card h4 { margin: 0 0 8px; font-size: 0.9rem; color: #5b21b6; }
+        .tag {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border: 1px solid #ccc;
+            margin: 2px 4px 2px 0;
+            background: #fff;
         }
-        hr {
-            margin: 2rem 0;
-            border: none;
-            height: 1px;
-            background: #e9edf2;
+        .disclaimer {
+            font-size: 0.75rem;
+            color: #777;
+            margin-top: 16px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background: #fafafa;
         }
         footer {
-            margin-top: 2.5rem;
-            text-align: center;
-            font-size: 0.75rem;
-            color: #5a6e85;
-            border-top: 1px solid #eef2f8;
-            padding-top: 1.8rem;
-        }
-        .lang-tag {
-            background: #e4e9f0;
-            border-radius: 20px;
-            padding: 2px 8px;
-            font-size: 0.7rem;
-            font-weight: 500;
-            display: inline-block;
-            margin-right: 5px;
-        }
-        .commission-highlight {
-            background: #fff3e0;
-            border-left: 4px solid #ff9800;
-            padding: 1rem;
-            border-radius: 16px;
-            margin: 1rem 0;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #ccc;
+            font-size: 0.8rem;
+            color: #555;
         }
     </style>
 </head>
 <body>
-<div class="container">
-    <h1>TikTok Shop в Испании: семейный проект</h1>
-    <div class="highlight-box">
-        <strong>📌 Предложение:</strong> Предлагаю объединиться для работы с TikTok Shop в Испании.<br>
-        Цель: дополнительный доход для пенсионеров + обучение подростков заработку в медиа. Все необходимые ресурсы есть.
-    </div>
+<div class="wrap">
+    <header class="page-header">
+        <h1 class="page-title">TikTok Shop в Испании: семейный проект</h1>
+        <p class="page-sub">Ориентировочные расчёты дохода и гайд по запуску. Не является финансовой или налоговой консультацией.</p>
+    </header>
 
-    <!-- ========= 1. ЗАПУСК: ТЕХНИЧЕСКАЯ ЧАСТЬ ========= -->
-    <h2>1. Как запустить: телефоны, SIM, IP, верификация</h2>
-    <ul>
-        <li><strong>Телефон:</strong> Нужно взять отдельный телефон (отправлю в Испанию чистый Xiaomi (сброс до заводских настроек).</li>
-        <li><strong>SIM-карта:</strong> купить prepago любого испанского оператора (Movistar, Vodafone, Orange) — около 10–20€.</li>
-        <li><strong>Регистрация TikTok:</strong> выполняет совершеннолетний (бабушка или дедушка). Использовать номер испанской SIM, не входить через Google/Apple ID, связанные с Украиной.</li>
-        <li><strong>Локация и IP:</strong> телефон всегда находится в Испании, публикации только оттуда. VPN для обхода геолокации не используются — это небезопасно.</li>
-        <li><strong>Верификация для Affiliate:</strong> после набора 1000–2000 подписчиков подается заявка в TikTok Studio → Monetization → TikTok Shop for Creator. Потребуется паспорт совершеннолетнего (украинский подходит, проверяют личность).</li>
-        <li><strong>Документы бизнеса не требуются</strong> — работаем как Affiliate Creator.</li>
-    </ul>
+    <section class="calc-card" aria-labelledby="calc-title">
+        <div class="calc-card-head" id="calc-title">Калькулятор дохода</div>
+        <div class="calc-card-body">
+            <p class="muted">Добавьте один или несколько аккаунтов: режим ниш, категории, целевые просмотры. Внизу — сумма по «семье».</p>
+            <div id="accountsRoot"></div>
+            <button type="button" class="btn-add" id="btnAddAccount"><i class="bi bi-plus-lg"></i> Добавить аккаунт</button>
+            <div class="family-total" id="familyTotal" hidden>
+                <h3>Итого по всем аккаунтам</h3>
+                <div class="family-row"><span>Ориентировочный доход</span><span class="family-big" id="famEur">0 €</span></div>
+                <div class="family-row"><span>Видео всего (оценка)</span><span id="famVideos">0</span></div>
+                <div class="family-row"><span>Время на съёмку (оценка)</span><span id="famHours">0</span></div>
+            </div>
+        </div>
+    </section>
 
-    <!-- ========= 2. TIKTOK SHOP: КОМИССИИ И ДОХОД ========= -->
-    <h2>2. TikTok Shop в Испании: комиссии для креатора</h2>
-    <div class="commission-highlight">
-        <strong>💰 Важно: комиссия для Affiliate Creator (креатора) составляет 5–20%</strong> от стоимости заказа.<br>
-        3.85% — это комиссия TikTok с продавца, нас это не касается. Мы работаем как аффилиаты.<br>
-        Продавец сам устанавливает процент за продвижение. Средние ставки по категориям:
-    </div>
-    <div class="card-grid">
-        <div class="person-card">
-            <h4>📱 Электроника, гаджеты</h4>
-            <div class="content-item">Комиссия: <strong>5–10%</strong></div>
-            <div class="content-item">Пример: наушники 50€ → комиссия 2.50–5.00€</div>
-        </div>
-        <div class="person-card">
-            <h4>👗 Мода, красота, косметика</h4>
-            <div class="content-item">Комиссия: <strong>10–15%</strong></div>
-            <div class="content-item">Пример: косметика 40€ → комиссия 4.00–6.00€</div>
-        </div>
-        <div class="person-card">
-            <h4>🏠 Товары для дома, кухня</h4>
-            <div class="content-item">Комиссия: <strong>8–12%</strong></div>
-            <div class="content-item">Пример: органайзер 25€ → комиссия 2.00–3.00€</div>
-        </div>
-        <div class="person-card">
-            <h4>⚽ Спорт, фитнес, активный отдых</h4>
-            <div class="content-item">Комиссия: <strong>12–20%</strong></div>
-            <div class="content-item">Пример: фитнес-резинки 30€ → комиссия 3.60–6.00€</div>
-        </div>
-        <div class="person-card">
-            <h4>🚗 Автотовары, инструмент</h4>
-            <div class="content-item">Комиссия: <strong>8–15%</strong></div>
-            <div class="content-item">Пример: автоаксессуар 45€ → комиссия 3.60–6.75€</div>
-        </div>
-        <div class="person-card">
-            <h4>🍎 Здоровье, Wellness</h4>
-            <div class="content-item">Комиссия: <strong>15–20%</strong></div>
-            <div class="content-item">Самые высокие ставки, премиум-сегмент</div>
+    <div class="acc">
+        <button type="button" class="acc-header" aria-expanded="true">
+            <span>Предложение и идея проекта</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <p><strong>Предложение:</strong> объединиться для работы с TikTok Shop в Испании. Цель — дополнительный доход для пенсионеров и обучение подростков заработку в медиа. Необходимые ресурсы можно собрать поэтапно.</p>
         </div>
     </div>
 
-    <div class="earn-example">
-        <strong>📊 Реальный пример заработка:</strong><br>
-        • Вы прорекламировали товар для дома (комиссия 12%). Цена 100€.<br>
-        • 50 продаж в месяц → 100€ × 12% = 12€ с одной продажи.<br>
-        • <strong>Итого: 600€/мес.</strong> только с одного товара.<br>
-        • При 5 активных товарах (разные ниши) → <strong>2000–3000€/мес.</strong><br><br>
-        🔥 <strong>Рекорды в Испании (2026):</strong><br>
-        • Креаторы с 20–50 тыс. подписчиков зарабатывают 1500–4000€/мес.<br>
-        • Топ-аффилиаты с виральными видео (1+ млн просмотров) выходят на 8000–15000€/мес.<br>
-        • Украинская диаспора в Испании (200 000+) — наша уникальная аудитория с высоким доверием.
-    </div>
-
-    <!-- ========= 3. ТИПЫ КОНТЕНТА ========= -->
-    <h2>3. Форматы видео: где и как создавать</h2>
-    <div class="highlight-box">
-        <strong>🎬 Типы контента (озвучка и подача):</strong><br>
-        • <span class="lang-tag">🇪🇸 Испанский закадровый голос</span> (делает Артем, 17 лет, владеет идеально)<br>
-        • <span class="lang-tag">🇺🇦 Украинский в кадре / за кадром</span><br>
-        • <span class="lang-tag">🇷🇺 Русский в кадре / за кадром</span><br>
-        • <span class="lang-tag">🤫 Без слов</span> (только демонстрация товара + музыка + текст на экране испанском/русском)<br><br>
-        <strong>Производство контента:</strong><br>
-        ✔ Вариант 1: съемка и монтаж в Украине, готовые видео отправляются родственникам в Испанию для публикации.<br>
-        ✔ Вариант 2: съемка в Испании (кто-то из членов семьи), помощь с идеями и редактированием удаленно.<br>
-        Публикация всегда происходит с телефона, который находится в Испании, с обязательным добавлением ссылки на товар (аффилиат).
-    </div>
-
-    <!-- ========= 4. ИДЕИ ДЛЯ КАЖДОГО ЧЛЕНА СЕМЬИ ========= -->
-    <h2>4. Направления контента: для бабушки, дедушки, внуков</h2>
-
-    <!-- Бабушка (кулинария, выпечка, домашний уют) -->
-    <h3>🍰 Бабушка — кулинария, выпечка, домашний уют</h3>
-    <div class="card-grid">
-        <div class="person-card">
-            <h4>🥘 Кухонные гаджеты и органайзеры</h4>
-            <div class="content-item">🔹 <strong>Силиконовые формы для выпечки</strong> — показать, как легко достается пирог, без прилипания. Формат: без слов + текст на экране исп./рус.</div>
-            <div class="content-item">🔹 <strong>Вакууматоры и контейнеры</strong> — как продукты дольше хранятся, демонстрация свежести.</div>
-            <div class="content-item">🔹 <strong>Терки-мультирезки / спиралайзеры</strong> — нарезка овощей за секунды, эффект "вау".</div>
-        </div>
-        <div class="person-card">
-            <h4>🥧 Готовые наборы для выпечки (десерты)</h4>
-            <div class="content-item">🔹 <strong>Пряники / капкейки с декором</strong> — процесс украшения, результат. Озвучка: испанский (делает Артем).</div>
-            <div class="content-item">🔹 <strong>Смеси для хлеба / кексов</strong> — замес, выпечка, аромат крупным планом.</div>
-            <div class="content-item">🔹 <strong>Шоколадные наборы для фондю</strong> — красивая подача, семейная атмосфера.</div>
-        </div>
-        <div class="person-card">
-            <h4>🧼 Уборка и порядок на кухне</h4>
-            <div class="content-item">🔹 <strong>Чудо-губки / салфетки из микрофибры</strong> — удаление сложных загрязнений до/после.</div>
-            <div class="content-item">🔹 <strong>Органайзеры для специй и ящиков</strong> — наведение порядка, эстетика.</div>
-            <div class="content-item">🔹 <strong>Очистители воздуха / ионизаторы для кухни</strong> — компактность, работа.</div>
+    <div class="acc">
+        <button type="button" class="acc-header" aria-expanded="true">
+            <span>1. Запуск: телефон, SIM, IP, верификация</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <ul>
+                <li><strong>Телефон:</strong> отдельный аппарат (например, сброшенный до заводских настроек), который физически находится в Испании.</li>
+                <li><strong>SIM:</strong> prepaid испанского оператора (Movistar, Vodafone, Orange) — ориентир 10–20 €.</li>
+                <li><strong>Регистрация TikTok:</strong> совершеннолетний; номер испанской SIM; не входить через Google/Apple ID, привязанные к Украине.</li>
+                <li><strong>Локация:</strong> публикации только из Испании; VPN для обхода геолокации не рекомендуется.</li>
+                <li><strong>Affiliate:</strong> после 1000–2000 подписчиков — заявка в TikTok Studio → Monetization → TikTok Shop for Creator; паспорт совершеннолетнего для проверки личности.</li>
+                <li><strong>Бизнес-документы</strong> для старта как affiliate creator не обязательны.</li>
+            </ul>
         </div>
     </div>
 
-    <!-- Дедушка (рыбалка, авто, гараж, электроника) -->
-    <h3>🔧 Дедушка — рыбалка, автотовары, гараж, электрика</h3>
-    <div class="card-grid">
-        <div class="person-card">
-            <h4>🎣 Рыболовные товары</h4>
-            <div class="content-item">🔹 <strong>Компактные удочки / катушки</strong> — распаковка, тест на прочность.</div>
-            <div class="content-item">🔹 <strong>Эхолоты / поплавки с подсветкой</strong> — демонстрация работы, результат на воде.</div>
-            <div class="content-item">🔹 <strong>Ящики и органайзеры для снастей</strong> — порядок, удобство.</div>
-        </div>
-        <div class="person-card">
-            <h4>🚗 Автотовары (для гаража и авто)</h4>
-            <div class="content-item">🔹 <strong>Светодиодные лампы / подсветка для авто</strong> — установка, разница "до/после".</div>
-            <div class="content-item">🔹 <strong>Автомобильные компрессоры / пылесосы</strong> — накачка шин, уборка салона.</div>
-            <div class="content-item">🔹 <strong>Магнитные держатели для телефона / органайзеры в салон</strong> — простая установка, надежность.</div>
-        </div>
-        <div class="person-card">
-            <h4>⚡ Электроинструмент и гаражные приспособления</h4>
-            <div class="content-item">🔹 <strong>Мультитулы / компактные дрели</strong> — небольшие работы по дому, наглядная демонстрация.</div>
-            <div class="content-item">🔹 <strong>Светильники на батарейках / магнитные ленты</strong> — свет в гараже, в шкафу.</div>
-            <div class="content-item">🔹 <strong>Наборы бит / органайзеры для инструментов</strong> — удобство хранения, быстрый доступ.</div>
+    <div class="acc">
+        <button type="button" class="acc-header" aria-expanded="true">
+            <span>2. Комиссии TikTok Shop (креатор)</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <p>Для affiliate creator комиссия часто <strong>5–20%</strong> с заказа (ставку задаёт продавец). Процент TikTok с продавца (например, ~3,85%) креатора напрямую не касается.</p>
+            <div class="card-grid-mini">
+                <div class="mini-card"><h4>Электроника, гаджеты</h4>~5–10 %</div>
+                <div class="mini-card"><h4>Мода, красота</h4>~10–15 %</div>
+                <div class="mini-card"><h4>Дом, кухня</h4>~8–12 %</div>
+                <div class="mini-card"><h4>Спорт</h4>~12–20 %</div>
+                <div class="mini-card"><h4>Автотовары</h4>~8–15 %</div>
+                <div class="mini-card"><h4>Wellness</h4>~15–20 %</div>
+            </div>
+            <p><strong>Пример:</strong> товар для дома, комиссия 12 %, цена 100 €, 50 продаж в месяц → 12 € с продажи × 50 = 600 €/мес. с одной позиции (иллюстрация, не гарантия).</p>
         </div>
     </div>
 
-    <!-- КИРИЛЛ (12 лет) – скейтпарк, активный отдых, спорт -->
-    <h3>🛹 Кирилл (12 лет) — скейтпарк, спорт, активный образ жизни</h3>
-    <div class="card-grid">
-        <div class="person-card">
-            <h4>🛴 Аксессуары для скейтборда / самоката</h4>
-            <div class="content-item">🔹 <strong>Светодиодные колеса / подсветка для скейта</strong> — эффектное видео в движении, музыка, без слов.</div>
-            <div class="content-item">🔹 <strong>Наколенники / защита яркого дизайна</strong> — примерка, прыжки, безопасно и стильно.</div>
-            <div class="content-item">🔹 <strong>Рюкзаки / поясные сумки для скейтеров</strong> — практичность, обзор.</div>
-        </div>
-        <div class="person-card">
-            <h4>🏀 Спортивные товары (мячи, экипировка)</h4>
-            <div class="content-item">🔹 <strong>Мини-баскетбольное кольцо на дверь</strong> — игра, эмоции, крупно.</div>
-            <div class="content-item">🔹 <strong>Фитнес-резинки, скакалки</strong> — комплекс упражнений, короткое видео.</div>
-            <div class="content-item">🔹 <strong>Спортивные бутылки / шейкеры</strong> — удобство, яркий дизайн.</div>
-        </div>
-        <div class="person-card">
-            <h4>🎧 Гаджеты для активного отдыха</h4>
-            <div class="content-item">🔹 <strong>Портативные колонки</strong> — громкая музыка на скейтпарке, водонепроницаемость.</div>
-            <div class="content-item">🔹 <strong>Энергетические батончики / изотоники (если разрешены)</strong> — распаковка, вкус.</div>
+    <div class="acc">
+        <button type="button" class="acc-header" aria-expanded="true">
+            <span>3. Контент: форматы, Испания и «американский» референс</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <p><strong>Типы подачи:</strong> испанский закадровый голос; украинский или русский в кадре/за кадром; без слов (демонстрация + музыка + текст на экране).</p>
+            <p><strong>Производство:</strong> съёмка и монтаж в одной стране → готовые ролики семье в Испании для публикации с испанского телефона и аффилиатной ссылкой.</p>
+            <div class="highlight-inline">
+                <strong>Важно про рынок Испании:</strong> TikTok Shop здесь — относительно <em>новый</em> формат продаж. Поэтому если взять уже успешные <strong>американские</strong> видео (с большим числом просмотров, комментариев и сильной статистикой) и <strong>озвучить их по-испански</strong> (или адаптировать под локальный тон), результат можно получить <strong>быстрее и проще</strong>, чем строить всё с нуля без проверенных референсов.
+            </div>
+            <ul>
+                <li>Короткий вертикальный формат, понятный показ товара, текст на экране, призыв к действию.</li>
+                <li>Длительность шоп-роликов часто 15–60 с; сильный хук в первые 1–3 с.</li>
+            </ul>
         </div>
     </div>
 
-    <!-- АРТЕМ (17 лет) – спорт, взрослые гаджеты, идеальный испанский голос -->
-    <h3>🎙️ Артем (17 лет) — voiceover испанский, спорт, технологии, обзоры</h3>
-    <div class="card-grid">
-        <div class="person-card">
-            <h4>🎧 Аудио / наушники / гаджеты</h4>
-            <div class="content-item">🔹 <strong>Обзоры TWS наушников</strong> — распаковка, подключение, качество звука. Голос испанский (сильная сторона).</div>
-            <div class="content-item">🔹 <strong>Умные часы / фитнес-браслеты</strong> — тест во время тренировки, замер пульса.</div>
-            <div class="content-item">🔹 <strong>Портативные зарядные станции</strong> — для телефона, ноутбука, демонстрация мощности.</div>
-        </div>
-        <div class="person-card">
-            <h4>🏋️ Спорт и тренировки (фитнес, воркаут)</h4>
-            <div class="content-item">🔹 <strong>Эспандеры, гантели-трансформеры</strong> — упражнения, компактность.</div>
-            <div class="content-item">🔹 <strong>Спортивная форма / термобелье</strong> — комфорт, обзор материала.</div>
-            <div class="content-item">🔹 <strong>Роллеры / массажные валики</strong> — восстановление после тренировки.</div>
-        </div>
-        <div class="person-card">
-            <h4>🎮 Аксессуары для гейминга</h4>
-            <div class="content-item">🔹 <strong>Игровые наушники с подсветкой</strong> — подключение, тест микрофона.</div>
-            <div class="content-item">🔹 <strong>Подставки для телефона / охлаждение</strong> — удобство во время игр.</div>
+    <div class="acc">
+        <button type="button" class="acc-header" aria-expanded="true">
+            <span>4. Первые 1000–2000 подписчиков: только Испания</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <p><strong>Как правильно набирать первых подписчиков.</strong> Первые 1000–2000 подписчиков должны быть <strong>исключительно из Испании</strong>.</p>
+            <p><strong>Как это сделать:</strong></p>
+            <ul>
+                <li>Подписывайтесь на испанских блогеров, комментируйте их ролики <strong>по-испански</strong> — так чаще приходит внимание испанской аудитории.</li>
+                <li>Публикуйте первые видео <strong>на испанском</strong> или с <strong>испанскими субтитрами</strong>.</li>
+                <li>Используйте локальные хештеги: <span class="tag">#tiktokespaña</span> <span class="tag">#parati</span> <span class="tag">#españa</span> <span class="tag">#tiktokshopspain</span></li>
+                <li>Не распространяйте ссылку на аккаунт в украинских чатах и не просите украинских друзей подписываться на старте.</li>
+            </ul>
+            <p><strong>Вывод:</strong> украинские подписчики из Украины на первом этапе <strong>вредны</strong> для гео и рекомендаций. Их можно подключать позже, когда уже есть стабильная испанская база.</p>
         </div>
     </div>
 
-    <!-- ========= 5. СОВМЕСТНЫЙ КОНТЕНТ (СЕМЕЙНЫЙ) ========= -->
-    <h2>5. Совместные форматы: вся семья в кадре</h2>
-    <div class="card-grid">
-        <div class="person-card">
-            <h4>🍕 Кулинарные баттлы с внуками</h4>
-            <div class="content-item">Бабушка и Кирилл/Артем готовят вместе с использованием кухонных гаджетов.</div>
-        </div>
-        <div class="person-card">
-            <h4>🚗 Дедушка + внуки: автоуход или рыбалка</h4>
-            <div class="content-item">Дедушка показывает, как установить светодиодную ленту в машину, а внуки помогают. Или совместная рыбалка с новым эхолотом.</div>
-        </div>
-        <div class="person-card">
-            <h4>🏆 Семейный челлендж "Уборка с органайзерами"</h4>
-            <div class="content-item">Быстрая уборка в гараже или на кухне с использованием органайзеров, которые идут в TikTok Shop.</div>
+    <div class="acc">
+        <button type="button" class="acc-header" aria-expanded="true">
+            <span>5. Оптимальная стратегия по фазам</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <p><strong>Фаза 1 (первые 2–3 недели):</strong> набор испанской аудитории. Контент на испанском (voiceover может делать член семьи с сильным испанским). Темы: например автотовары или обзоры популярных гаджетов. Цель — быстро набрать <strong>2000+</strong> испанских подписчиков.</p>
+            <p><strong>Фаза 2 (после доступа к Affiliate Center):</strong> добавить украинский контент для украинцев в Испании; задействовать разных членов семьи — кулинария, авто, спорт. Параллельно продолжать испанский контент для масштабирования.</p>
+            <p><strong>Фаза 3 (масштабирование):</strong> несколько аккаунтов под разные ниши (отдельно авто, отдельно кухня и т.д.); использовать TikTok Shop Affiliate Center для товаров с высокой комиссией.</p>
         </div>
     </div>
 
-    <!-- ========= 6. РАСПРЕДЕЛЕНИЕ РОЛЕЙ ========= -->
-    <h2>6. Роли в команде и техническая схема</h2>
-    <table>
-        <thead>
-            <tr><th>Участник</th><th>Основные задачи</th></tr>
-        </thead>
-        <tbody>
-            <tr><td>Наталья</td><td>Стратегия, монтаж видео, идеи, отправка телефона/техники, помощь с аккаунтом.</td></tr>
-            <tr><td>Бабушка</td><td>Съемка/демонстрация кулинарных товаров, уютных органайзеров, может появляться в кадре.</td></tr>
-            <tr><td>Дедушка</td><td>Контент по автотоварам, рыбалке, электроинструменту, гаражным лайфхакам.</td></tr>
-            <tr><td>Артем (17 лет)</td><td>Испанский voiceover (идеальный язык), техническая помощь при публикации, обзоры гаджетов, спорт.</td></tr>
-            <tr><td>Кирилл (12 лет)</td><td>Скейтпарк, спорт, участие в динамичных видео, помощь с простыми съемками.</td></tr>
-        </tbody>
-    </table>
-    <div class="highlight-box">
-        <strong>🔄 Схема публикации:</strong><br>
-        • Наталья монтирует видео (Украина) → отправляет через Telegram/Google Drive родственникам → бабушка или дедушка с помощью Артема публикуют с испанского телефона + добавляют ссылку товара.<br>
-        • Все видео обязательно содержат аффилиатную ссылку на товар из TikTok Shop España.
+    <div class="acc">
+        <button type="button" class="acc-header" aria-expanded="true">
+            <span>6. Простые форматы для набора подписчиков (идеи по хештегам)</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <p>Часто подписчики приходят с <strong>простых</strong> роликов: юмор, тёплые бытовые сцены, рыбалка, кухня, дед и внук — ищите идеи по хештегам вроде «юмор», «семья», «кухня», «рыбалка», «бабушка и внук».</p>
+            <ol>
+                <li><strong>Короткий юмор или абсурд</strong> — иногда только текст на экране, без озвучки.</li>
+                <li><strong>Дедушка + внук</strong> — тёплая сцена, помощь, быт (хорошо заходит локальной аудитории).</li>
+                <li><strong>Рыбалка / гараж / мастерская</strong> — процесс крупным планом, минимум слов.</li>
+                <li><strong>Кухня / рецепт</strong> — ASMR, звук, результат блюда.</li>
+                <li><strong>Распаковка гаджета</strong> с испанской озвучкой по мотивам трендовых US-роликов.</li>
+                <li><strong>Челлендж 15–30 с</strong> с <span class="tag">#parati</span> и локальными тегами.</li>
+                <li><strong>Лайфхак «до/после»</strong> — один предмет, понятный эффект, испанский текст на экране.</li>
+            </ol>
+        </div>
     </div>
 
-    <hr>
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
+            <span>7. Направления контента по членам семьи</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <h3 class="acc-inner-title">Бабушка — кухня, уют</h3>
+            <p>Силиконовые формы, вакууматоры, терки, наборы для выпечки, органайзеры для кухни, чудо-губки.</p>
+            <h3 class="acc-inner-title">Дедушка — авто, рыбалка, гараж</h3>
+            <p>Удочки, эхолоты, LED для авто, компрессоры, держатели, мультитулы, свет в гараже.</p>
+            <h3 class="acc-inner-title">Ребёнок (пример) — спорт, скейт</h3>
+            <p>Защита, подсветка, рюкзаки, мячи, фитнес-резинки, бутылки.</p>
+            <h3 class="acc-inner-title">Подросток — voiceover и гаджеты</h3>
+            <p>Испанский закадр, обзоры TWS, умные часы, зарядки, спортинвентарь.</p>
+        </div>
+    </div>
+
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
+            <span>8. Совместные форматы и роли</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <p>Кулинарные баттлы с внуками, дедушка + внуки (авто / рыбалка), семейный челлендж с органайзерами.</p>
+            <table class="table-compact">
+                <thead><tr><th>Участник</th><th>Задачи</th></tr></thead>
+                <tbody>
+                    <tr><td>Стратег / монтаж</td><td>Идеи, монтаж, передача роликов семье, помощь с аккаунтом.</td></tr>
+                    <tr><td>Бабушка</td><td>Кулинария, уют, кадр или демонстрация.</td></tr>
+                    <tr><td>Дедушка</td><td>Авто, рыбалка, инструмент.</td></tr>
+                    <tr><td>Подросток с испанским</td><td>Voiceover, публикация, гаджеты, спорт.</td></tr>
+                    <tr><td>Младший ребёнок</td><td>Динамика, спорт, скейтпарк.</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Схема:</strong> монтаж → отправка файла семье → публикация с испанского телефона + аффилиатная ссылка на товар из TikTok Shop España.</p>
+        </div>
+    </div>
+
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
+            <span>9. Вопросы по калькулятору</span>
+            <i class="bi bi-chevron-down acc-chevron"></i>
+        </button>
+        <div class="acc-panel">
+            <p><strong>Почему суммы ориентировочные?</strong> Реальный RPM зависит от ниши, сезона и качества роликов.</p>
+            <p><strong>Откуда средняя длительность видео?</strong> В коде заданы константы <code>AVG_SEC_PER_VIDEO</code> и <code>AVG_VIEWS_PER_VIDEO</code> — подставьте свои средние из статистики.</p>
+        </div>
+    </div>
+
+    <p class="disclaimer">
+        Модель дохода в калькуляторе упрощена: используются условные € за 1000 просмотров по категориям. Подстройте коэффициенты в скрипте под свои данные из TikTok Shop.
+    </p>
+
     <footer>
-        📌 <strong>Следующие шаги:</strong><br>
-        1. Приобрести испанскую SIM, получить чистый телефон.<br>
-        2. Зарегистрировать TikTok аккаунт (на взрослого).<br>
-        3. Набрать 1000–2000 подписчиков, подать заявку на TikTok Shop for Creator.<br>
-        4. Начать заказывать товары на адрес в Испании → пересылать в Украину → снимать/монтировать → публиковать.<br>
-        <br>
-        🚀 Вся семья получает не только доход, но и современный медианавык. Вопросы можно задавать в общем чате.
+        <strong>Следующие шаги:</strong> SIM и телефон в Испании → регистрация аккаунта → рост испанской аудитории → заявка в Shop for Creator → товары и публикации с ссылками.
     </footer>
 </div>
+
+<script>
+(function () {
+    var EUR_PER_1K_VIEWS_BY_CAT = {
+        fashion: 0.75,
+        beauty: 0.85,
+        electronics: 0.65,
+        home: 0.55,
+        food: 0.7,
+        sports: 0.6,
+        kids: 0.7,
+        other: 0.5
+    };
+    var EUR_PER_1K_MIXED = 0.48;
+    var AVG_VIEWS_PER_VIDEO = 4500;
+    var AVG_SEC_PER_VIDEO = 40;
+
+    var CATEGORIES = [
+        { id: "fashion", label: "Одежда / обувь" },
+        { id: "beauty", label: "Красота" },
+        { id: "electronics", label: "Электроника" },
+        { id: "home", label: "Дом" },
+        { id: "food", label: "Еда / напитки" },
+        { id: "sports", label: "Спорт" },
+        { id: "kids", label: "Дети" },
+        { id: "other", label: "Другое" }
+    ];
+
+    var VIEW_PRESETS = [
+        { label: "1 тыс", v: 1000 },
+        { label: "10 тыс", v: 10000 },
+        { label: "100 тыс", v: 100000 },
+        { label: "1 млн", v: 1000000 }
+    ];
+
+    var accounts = [];
+    var nextId = 1;
+
+    function el(tag, cls, html) {
+        var e = document.createElement(tag);
+        if (cls) e.className = cls;
+        if (html != null) e.innerHTML = html;
+        return e;
+    }
+
+    function avgRateForCategories(ids) {
+        if (!ids.length) return EUR_PER_1K_MIXED;
+        var sum = 0;
+        ids.forEach(function (id) {
+            sum += EUR_PER_1K_VIEWS_BY_CAT[id] || EUR_PER_1K_VIEWS_BY_CAT.other;
+        });
+        return sum / ids.length;
+    }
+
+    function computeAccount(a) {
+        var views = a.viewsTarget;
+        var rate = a.mode === "mixed" ? EUR_PER_1K_MIXED : avgRateForCategories(a.categoryIds);
+        var eur = (views / 1000) * rate;
+        var videos = Math.ceil(views / AVG_VIEWS_PER_VIDEO);
+        var hours = (videos * AVG_SEC_PER_VIDEO) / 3600;
+        return { eur: eur, videos: videos, hours: hours, rate: rate };
+    }
+
+    function renderAccount(a) {
+        var wrap = el("div", "account-block");
+        wrap.dataset.id = String(a.id);
+
+        var head = el("div", "account-head");
+        head.innerHTML = "<span>Аккаунт №" + a.id + "</span>";
+        var del = el("button", null, "Удалить");
+        del.type = "button";
+        del.addEventListener("click", function () {
+            accounts = accounts.filter(function (x) { return x.id !== a.id; });
+            renderAll();
+        });
+        head.appendChild(del);
+        wrap.appendChild(head);
+
+        var body = el("div", "calc-card-body");
+
+        var modeLabel = el("div", "toggle-row");
+        modeLabel.innerHTML = "<label>Режим ниши</label>";
+        var modeRow = el("div", "toggle-row");
+        var btnMono = el("button", "seg-btn" + (a.mode === "mono" ? " active" : ""), "Моно-ниши (выбрать категории)");
+        var btnMix = el("button", "seg-btn" + (a.mode === "mixed" ? " active" : ""), "Всё подряд / микс");
+        btnMono.type = "button";
+        btnMix.type = "button";
+        btnMono.addEventListener("click", function () { a.mode = "mono"; renderAll(); });
+        btnMix.addEventListener("click", function () { a.mode = "mixed"; a.categoryIds = []; renderAll(); });
+        modeRow.appendChild(btnMono);
+        modeRow.appendChild(btnMix);
+        modeLabel.appendChild(modeRow);
+        body.appendChild(modeLabel);
+
+        var catLabel = el("label", null);
+        catLabel.style.cssText = "display:block;font-size:0.8rem;font-weight:600;color:#444;margin-bottom:8px;";
+        catLabel.textContent = "Категории (одна или несколько; в режиме микс отключено)";
+        body.appendChild(catLabel);
+
+        var catGrid = el("div", "cat-grid");
+        var mono = a.mode === "mono";
+        CATEGORIES.forEach(function (c) {
+            var b = el("button", "cat-btn", c.label);
+            b.type = "button";
+            b.disabled = !mono;
+            if (a.categoryIds.indexOf(c.id) >= 0) b.classList.add("active");
+            b.addEventListener("click", function () {
+                if (!mono) return;
+                var i = a.categoryIds.indexOf(c.id);
+                if (i >= 0) a.categoryIds.splice(i, 1);
+                else a.categoryIds.push(c.id);
+                renderAll();
+            });
+            catGrid.appendChild(b);
+        });
+        body.appendChild(catGrid);
+
+        var vpLabel = el("label", null);
+        vpLabel.style.cssText = "display:block;font-size:0.8rem;font-weight:600;color:#444;margin-bottom:8px;";
+        vpLabel.textContent = "Целевые просмотры";
+        body.appendChild(vpLabel);
+
+        var presets = el("div", "views-presets");
+        VIEW_PRESETS.forEach(function (p) {
+            var b = el("button", "view-preset" + (a.viewsTarget === p.v ? " active" : ""), p.label);
+            b.type = "button";
+            b.addEventListener("click", function () {
+                a.viewsTarget = p.v;
+                a.customSlider = false;
+                renderAll();
+            });
+            presets.appendChild(b);
+        });
+        body.appendChild(presets);
+
+        var sliderBlock = el("div", "slider-block");
+        var maxV = 10000000;
+        var lbl = el("label", null);
+        lbl.innerHTML = "Своё значение просмотров: <span class=\"slider-val\" id=\"sv-" + a.id + "\"></span>";
+        var range = el("input");
+        range.type = "range";
+        range.min = "1000";
+        range.max = String(maxV);
+        range.step = "5000";
+        range.value = String(Math.min(a.viewsTarget, maxV));
+        range.addEventListener("input", function () {
+            a.viewsTarget = parseInt(range.value, 10) || 1000;
+            a.customSlider = true;
+            var svEl = document.getElementById("sv-" + a.id);
+            if (svEl) svEl.textContent = formatNum(a.viewsTarget);
+            updateResultsOnly();
+        });
+        sliderBlock.appendChild(lbl);
+        sliderBlock.appendChild(range);
+        body.appendChild(sliderBlock);
+
+        var sv = document.getElementById("sv-" + a.id);
+        if (sv) sv.textContent = formatNum(a.viewsTarget);
+
+        var res = computeAccount(a);
+        var rg = el("div", "result-grid");
+        rg.innerHTML =
+            "<div class=\"result-item\"><strong>Ориентировочный доход</strong><span>" + res.eur.toFixed(2) + " €</span></div>" +
+            "<div class=\"result-item\"><strong>Видео (оценка)</strong><span>" + res.videos + " шт.</span></div>" +
+            "<div class=\"result-item\"><strong>Время съёмки (оценка)</strong><span>" + formatHours(res.hours) + "</span></div>" +
+            "<div class=\"result-item\"><strong>Ставка (условно / 1k просмотров)</strong><span>" + res.rate.toFixed(2) + " €</span></div>";
+        body.appendChild(rg);
+
+        wrap.appendChild(body);
+        return wrap;
+    }
+
+    function formatNum(n) {
+        return n.toLocaleString("ru-RU");
+    }
+
+    function formatHours(h) {
+        if (h < 1) return Math.round(h * 60) + " мин";
+        var hh = Math.floor(h);
+        var mm = Math.round((h - hh) * 60);
+        return hh + " ч " + (mm ? mm + " мин" : "").trim();
+    }
+
+    function updateResultsOnly() {
+        var root = document.getElementById("accountsRoot");
+        if (!root) return;
+        accounts.forEach(function (a) {
+            var block = root.querySelector(".account-block[data-id=\"" + a.id + "\"]");
+            if (!block) return;
+            var res = computeAccount(a);
+            var items = block.querySelectorAll(".result-item span");
+            if (items.length >= 4) {
+                items[0].textContent = res.eur.toFixed(2) + " €";
+                items[1].textContent = res.videos + " шт.";
+                items[2].textContent = formatHours(res.hours);
+                items[3].textContent = res.rate.toFixed(2) + " €";
+            }
+        });
+        updateFamily();
+    }
+
+    function updateFamily() {
+        var ft = document.getElementById("familyTotal");
+        var fe = document.getElementById("famEur");
+        var fv = document.getElementById("famVideos");
+        var fh = document.getElementById("famHours");
+        if (accounts.length === 0) {
+            ft.hidden = true;
+            return;
+        }
+        ft.hidden = false;
+        var te = 0, tv = 0, th = 0;
+        accounts.forEach(function (a) {
+            var r = computeAccount(a);
+            te += r.eur;
+            tv += r.videos;
+            th += r.hours;
+        });
+        fe.textContent = te.toFixed(2) + " €";
+        fv.textContent = String(tv);
+        fh.textContent = formatHours(th);
+    }
+
+    function renderAll() {
+        var root = document.getElementById("accountsRoot");
+        root.innerHTML = "";
+        accounts.forEach(function (a) {
+            root.appendChild(renderAccount(a));
+        });
+        updateFamily();
+    }
+
+    document.getElementById("btnAddAccount").addEventListener("click", function () {
+        accounts.push({
+            id: nextId++,
+            mode: "mono",
+            categoryIds: ["fashion"],
+            viewsTarget: 10000,
+            customSlider: false
+        });
+        renderAll();
+    });
+
+    document.querySelectorAll(".acc-header").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+            var acc = btn.closest(".acc");
+            var collapsed = !acc.classList.contains("collapsed");
+            acc.classList.toggle("collapsed", collapsed);
+            btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+        });
+    });
+
+    accounts.push({ id: nextId++, mode: "mono", categoryIds: ["fashion"], viewsTarget: 10000, customSlider: false });
+    renderAll();
+})();
+</script>
 </body>
 </html>
