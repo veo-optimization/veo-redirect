@@ -205,11 +205,47 @@
         .acc-panel p { margin: 0 0 10px; }
         .acc-panel ul { margin: 8px 0 0; padding-left: 1.2em; }
         .doc-h2 { font-size: 1rem; margin: 12px 0 8px; font-weight: 700; }
-        .data-table-wrap { overflow-x: auto; margin: 10px 0; border: 1px solid #ddd; max-width: 100%; }
-        .earn-table { width: 100%; border-collapse: collapse; font-size: 0.76rem; table-layout: fixed; }
-        .earn-table th, .earn-table td { border: 1px solid #ccc; padding: 6px; word-wrap: break-word; overflow-wrap: anywhere; }
+        .data-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            max-width: 100%;
+        }
+        .data-table-wrap .earn-table {
+            border-collapse: collapse;
+            font-size: 0.76rem;
+            table-layout: auto;
+            width: max-content;
+            max-width: 100%;
+        }
+        .earn-table th, .earn-table td {
+            border: 1px solid #ccc;
+            padding: 6px 8px;
+            vertical-align: top;
+            hyphens: none;
+            word-break: normal;
+            overflow-wrap: normal;
+        }
         .earn-table th { background: #f5f5f5; font-weight: 600; }
-        a.tt-link { color: #5b21b6; font-weight: 600; }
+        /* Вузькі колонки (порядковий №, короткі %) — не забирають ширину в текстових */
+        .earn-table col.col-tight { width: 0.01%; }
+        .earn-table td.col-tight, .earn-table th.col-tight {
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        /* Діапазони та суми — один рядок; «тис. €» можна винести під число */
+        .earn-table td.cell-nowrap, .earn-table th.cell-nowrap {
+            white-space: nowrap;
+            font-variant-numeric: tabular-nums;
+        }
+        .cell-money {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+        .cell-money__val { display: block; white-space: nowrap; line-height: 1.25; }
+        .cell-money__unit { display: block; font-size: 0.9em; line-height: 1.2; opacity: 0.88; white-space: nowrap; }
+        a.tt-link { color: #5b21b6; font-weight: 600; overflow-wrap: anywhere; word-break: normal; }
         .highlight-inline {
             background: #f5f3ff;
             border: 1px solid #ddd;
@@ -338,18 +374,24 @@
         <div class="acc-panel">
             <p class="muted">У таблиці — GMV, не чистий дохід креатора.</p>
             <div class="data-table-wrap"><table class="earn-table">
-                <thead><tr><th>#</th><th>Акаунт</th><th>Підписники</th><th>GMV</th></tr></thead>
+                <colgroup>
+                    <col class="col-tight">
+                    <col>
+                    <col class="col-tight">
+                    <col class="col-tight">
+                </colgroup>
+                <thead><tr><th class="col-tight">#</th><th>Акаунт</th><th class="col-tight">Підписники</th><th class="col-tight">GMV</th></tr></thead>
                 <tbody>
-                    <tr><td>1</td><td><a class="tt-link" href="https://www.tiktok.com/@dealswithty" target="_blank" rel="noopener noreferrer">@dealswithty</a></td><td>136,5k</td><td><strong>$2 720 000</strong></td></tr>
-                    <tr><td>2</td><td><a class="tt-link" href="https://www.tiktok.com/@hannahbentley" target="_blank" rel="noopener noreferrer">@hannahbentley</a></td><td>35,9k</td><td><strong>$2 370 000</strong></td></tr>
-                    <tr><td>3</td><td><a class="tt-link" href="https://www.tiktok.com/@myfamilypov" target="_blank" rel="noopener noreferrer">@myfamilypov</a></td><td>206,6k</td><td><strong>$2 000 000</strong></td></tr>
-                    <tr><td>4</td><td><a class="tt-link" href="https://www.tiktok.com/@trending_ttok" target="_blank" rel="noopener noreferrer">@trending_ttok</a></td><td>164,1k</td><td><strong>$1 920 000</strong></td></tr>
-                    <tr><td>5</td><td><a class="tt-link" href="https://www.tiktok.com/@highland.fashion7" target="_blank" rel="noopener noreferrer">@highland.fashion7</a></td><td>240,7k</td><td><strong>$1 830 000</strong></td></tr>
-                    <tr><td>6</td><td><a class="tt-link" href="https://www.tiktok.com/@be.lush" target="_blank" rel="noopener noreferrer">@be.lush</a></td><td>231,6k</td><td><strong>$1 750 000</strong></td></tr>
-                    <tr><td>7</td><td><a class="tt-link" href="https://www.tiktok.com/@mikaylanogueira" target="_blank" rel="noopener noreferrer">@mikaylanogueira</a></td><td>17,4M</td><td><strong>$1 730 000</strong></td></tr>
-                    <tr><td>8</td><td><a class="tt-link" href="https://www.tiktok.com/@anniedanner" target="_blank" rel="noopener noreferrer">@anniedanner</a></td><td>32,8k</td><td><strong>$1 370 000</strong></td></tr>
-                    <tr><td>9</td><td><a class="tt-link" href="https://www.tiktok.com/@sarahgibbons_" target="_blank" rel="noopener noreferrer">@sarahgibbons_</a></td><td>249,4k</td><td><strong>$1 290 000</strong></td></tr>
-                    <tr><td>10</td><td><a class="tt-link" href="https://www.tiktok.com/@sadiejonesuploading" target="_blank" rel="noopener noreferrer">@sadiejonesuploading</a></td><td>37,1k</td><td><strong>$1 160 000</strong></td></tr>
+                    <tr><td class="col-tight">1</td><td><a class="tt-link" href="https://www.tiktok.com/@dealswithty" target="_blank" rel="noopener noreferrer">@dealswithty</a></td><td class="col-tight cell-nowrap">136,5k</td><td class="cell-money cell-nowrap"><strong>$2 720 000</strong></td></tr>
+                    <tr><td class="col-tight">2</td><td><a class="tt-link" href="https://www.tiktok.com/@hannahbentley" target="_blank" rel="noopener noreferrer">@hannahbentley</a></td><td class="col-tight cell-nowrap">35,9k</td><td class="cell-money cell-nowrap"><strong>$2 370 000</strong></td></tr>
+                    <tr><td class="col-tight">3</td><td><a class="tt-link" href="https://www.tiktok.com/@myfamilypov" target="_blank" rel="noopener noreferrer">@myfamilypov</a></td><td class="col-tight cell-nowrap">206,6k</td><td class="cell-money cell-nowrap"><strong>$2 000 000</strong></td></tr>
+                    <tr><td class="col-tight">4</td><td><a class="tt-link" href="https://www.tiktok.com/@trending_ttok" target="_blank" rel="noopener noreferrer">@trending_ttok</a></td><td class="col-tight cell-nowrap">164,1k</td><td class="cell-money cell-nowrap"><strong>$1 920 000</strong></td></tr>
+                    <tr><td class="col-tight">5</td><td><a class="tt-link" href="https://www.tiktok.com/@highland.fashion7" target="_blank" rel="noopener noreferrer">@highland.fashion7</a></td><td class="col-tight cell-nowrap">240,7k</td><td class="cell-money cell-nowrap"><strong>$1 830 000</strong></td></tr>
+                    <tr><td class="col-tight">6</td><td><a class="tt-link" href="https://www.tiktok.com/@be.lush" target="_blank" rel="noopener noreferrer">@be.lush</a></td><td class="col-tight cell-nowrap">231,6k</td><td class="cell-money cell-nowrap"><strong>$1 750 000</strong></td></tr>
+                    <tr><td class="col-tight">7</td><td><a class="tt-link" href="https://www.tiktok.com/@mikaylanogueira" target="_blank" rel="noopener noreferrer">@mikaylanogueira</a></td><td class="col-tight cell-nowrap">17,4M</td><td class="cell-money cell-nowrap"><strong>$1 730 000</strong></td></tr>
+                    <tr><td class="col-tight">8</td><td><a class="tt-link" href="https://www.tiktok.com/@anniedanner" target="_blank" rel="noopener noreferrer">@anniedanner</a></td><td class="col-tight cell-nowrap">32,8k</td><td class="cell-money cell-nowrap"><strong>$1 370 000</strong></td></tr>
+                    <tr><td class="col-tight">9</td><td><a class="tt-link" href="https://www.tiktok.com/@sarahgibbons_" target="_blank" rel="noopener noreferrer">@sarahgibbons_</a></td><td class="col-tight cell-nowrap">249,4k</td><td class="cell-money cell-nowrap"><strong>$1 290 000</strong></td></tr>
+                    <tr><td class="col-tight">10</td><td><a class="tt-link" href="https://www.tiktok.com/@sadiejonesuploading" target="_blank" rel="noopener noreferrer">@sadiejonesuploading</a></td><td class="col-tight cell-nowrap">37,1k</td><td class="cell-money cell-nowrap"><strong>$1 160 000</strong></td></tr>
                 </tbody>
             </table></div>
         </div>
