@@ -128,6 +128,14 @@
             cursor: pointer;
         }
         .view-preset.active { border-color: #7c3aed; background: #f3f0ff; }
+        .view-preset--quality {
+            min-height: 64px;
+            text-align: left;
+            padding: 8px 10px;
+            line-height: 1.25;
+        }
+        .view-preset--quality .vp-q { display: block; font-weight: 700; font-size: 0.78rem; }
+        .view-preset--quality .vp-qmeta { display: block; font-size: 0.68rem; font-weight: 500; color: #444; margin-top: 4px; }
 
         .slider-block label {
             display: flex;
@@ -168,6 +176,47 @@
             line-height: 1.2;
         }
         .big-result .val-sm { font-size: 1.15rem; color: #e5e5e5; }
+        .big-result-sep {
+            height: 0;
+            margin: 0;
+            border: none;
+            border-top: 1px solid #444;
+            grid-column: 1 / -1;
+        }
+        .big-result-block {
+            min-width: 0;
+        }
+        .lbl-with-hint {
+            display: flex;
+            align-items: flex-start;
+            justify-content: flex-start;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+        .lbl-with-hint .lbl { margin-bottom: 0; flex: 1; min-width: 0; }
+        .hint-btn {
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            margin: 0;
+            padding: 0;
+            border: none;
+            background: transparent;
+            color: #a78bfa;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 1.05rem;
+            line-height: 1;
+        }
+        .hint-btn:hover, .hint-btn:focus-visible {
+            color: #ddd;
+            outline: 2px solid #7c3aed;
+            outline-offset: 2px;
+        }
 
         .philosophy {
             padding: 12px 14px;
@@ -318,6 +367,25 @@
             font-family: inherit;
         }
         .acc-panel-short { margin: 0 0 10px; font-size: 0.86rem; color: #444; }
+        .acc-prose { font-size: 0.9rem; line-height: 1.55; color: #333; }
+        .acc-prose p { margin: 0 0 12px; }
+        .acc-prose h3 { font-size: 0.95rem; margin: 14px 0 8px; font-weight: 700; color: #1a1a1a; }
+        .acc-prose .earn-table { font-size: 0.78rem; }
+        dialog.help-dlg {
+            max-width: min(94vw, 520px);
+        }
+        .help-dlg-inner { padding: 18px 20px 16px; }
+        .help-dlg-title { font-size: 1.1rem; line-height: 1.35; margin-bottom: 12px; }
+        .help-dlg-body {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #222;
+        }
+        .help-dlg-body p { margin: 0 0 12px; }
+        .help-dlg-body ul, .help-dlg-body ol { margin: 8px 0 12px; padding-left: 1.25em; }
+        .help-dlg-body li { margin-bottom: 6px; }
+        .help-dlg-body strong { color: #1a1a1a; }
+        .help-dlg-body .gloss { font-size: 0.88rem; background: #f5f3ff; padding: 10px 12px; border-radius: 8px; border: 1px solid #e9e5ff; margin: 10px 0; }
     </style>
 </head>
 <body>
@@ -365,11 +433,13 @@
             <div class="cat-grid" id="catGrid"></div>
             <p class="cat-hint" id="catHint"></p>
 
-            <p class="step-label" id="stepAvgVpV">2. Середні перегляди на 1 відео</p>
+            <p class="step-label" id="stepAvgVpV">2. Якість контенту</p>
+            <p class="muted" id="qualityNote" style="margin-top:0;">Орієнтир середніх переглядів на одне відео. Для рівня «висока» — типові <strong>50 тис.+</strong> з валового розподілу переглядів по всіх відео акаунта за місяць (не одне відео).</p>
             <div class="help-row">
-                <button type="button" class="help-pill" id="pillAvgVpV" data-help="avgVpV">Що це таке?</button>
+                <button type="button" class="help-pill" id="pillAvgVpV" data-help="avgVpV">Що означають рівні?</button>
             </div>
-            <div class="views-presets" id="avgViewsPresets"></div>
+            <div class="views-presets" id="avgViewsPresets" style="grid-template-columns: 1fr;"></div>
+            <p class="cat-hint" id="qualityTimeLine"></p>
 
             <div id="shopFunnelWrap">
                 <p class="step-label" id="stepFunnel">3. Тип контенту (воронка)</p>
@@ -380,19 +450,10 @@
                 <div class="funnel-row" id="funnelRow"></div>
             </div>
 
-            <p class="step-label" id="stepViews">4. Усього переглядів (сценарій)</p>
+            <p class="step-label" id="stepViews">4. Сумарні перегляди за місяць</p>
             <div class="slider-block">
-                <label><span id="lblSlider">Переглядів у сценарії</span>: <span class="slider-val" id="viewsOut">0</span></label>
+                <label><span id="lblSlider">Переглядів за місяць (сценарій)</span>: <span class="slider-val" id="viewsOut">0</span></label>
                 <input type="range" id="viewsRange" min="0" max="1000" value="500" aria-labelledby="calc-head">
-            </div>
-
-            <p class="step-label" id="stepMinVid">5. Хвилин на 1 відео (зйомка, монтаж, публікація)</p>
-            <div class="help-row">
-                <button type="button" class="help-pill" id="pillMinVid" data-help="minVid">Як це впливає на час?</button>
-            </div>
-            <div class="num-row">
-                <input type="number" class="num-input" id="minPerVideoInput" min="1" max="600" value="5" step="1" inputmode="numeric" aria-label="Хвилин на одне відео">
-                <span class="muted" id="minPerVideoSuffix">хв</span>
             </div>
 
             <div class="big-result" id="bigResult">
@@ -401,6 +462,9 @@
                         <span class="lbl" id="lblEarn">Орієнтовний дохід креатора (до податків)</span>
                         <span class="lbl-sub" id="lblEarnSub">Комісія з продажу або виплата за перегляди — залежить від режиму; податки й повернення не віднімали.</span>
                         <div class="val" id="outEarn">0 €</div>
+                        <span class="lbl" id="lblUsdLine" style="margin-top:8px;">Орієнтир у доларах США</span>
+                        <span class="lbl-sub" id="lblUsdSub">≈ 1 € = 1,05 $ — для порівняння з $-номіналами в гайдах; курс умовний.</span>
+                        <div class="val-sm" id="outEarnUSD">~ $0</div>
                         <span class="lbl" id="lblUahLine" style="margin-top:8px;">У гривнях (орієнтир)</span>
                         <span class="lbl-sub" id="lblUahSub">За курсом 1 € ≈ 45 ₴ — лише для наочності.</span>
                         <div class="val-sm" id="outUah">0 ₴</div>
@@ -584,8 +648,16 @@
     var FUNNEL_LABELS_RU = { tofu: "Верх (TOFU)", mofu: "Середина (MOFU)", bofu: "Низ (BOFU)" };
 
     var TEACHER_UAH_FLOOR = 15000;
+    var EUR_USD = 1.05;
 
-    var state = { mode: "shop", cat: "home", funnel: "mofu", views: 100000, avgViewsPerVideo: 5000, minPerVideo: 5 };
+    /** Якість контенту: орієнтир переглядів/відео + хв на публікацію (спам / середній / топ). */
+    var QUALITY = {
+        low: { v: 200, min: 5 },
+        mid: { v: 5000, min: 15 },
+        high: { v: 50000, min: 30 }
+    };
+
+    var state = { mode: "shop", cat: "home", funnel: "mofu", views: 100000, qualityTier: "mid" };
     var lang = localStorage.getItem("langInfo") === "ru" ? "ru" : "uk";
 
     function catLabel(id) {
@@ -619,12 +691,18 @@
         return hh + " год " + (mm ? mm + " хв" : "").trim();
     }
 
+    function getQualityParams() {
+        return QUALITY[state.qualityTier] || QUALITY.mid;
+    }
+
     function getMinPerVideo() {
-        var el = document.getElementById("minPerVideoInput");
-        var v = el ? parseInt(el.value, 10) : 5;
-        if (!isFinite(v) || v < 1) v = 5;
-        if (v > 600) v = 600;
-        return v;
+        return getQualityParams().min;
+    }
+
+    function syncQualityToState() {
+        var q = getQualityParams();
+        state.avgViewsPerVideo = q.v;
+        state.minPerVideo = q.min;
     }
 
     function computeShop() {
@@ -705,24 +783,39 @@
     function renderAvgViewsPresets() {
         var wrap = document.getElementById("avgViewsPresets");
         if (!wrap) return;
-        var presets = [
-            { l: "200", v: 200 },
-            { l: lang === "ru" ? "5 тыс" : "5 тис", v: 5000 },
-            { l: lang === "ru" ? "50 тыс" : "50 тис", v: 50000 }
+        var tiers = lang === "ru" ? [
+            { id: "low", q: "Низкая", m: "спам, ~200 просм./видео · 5 мин" },
+            { id: "mid", q: "Средняя", m: "~5 тыс · 15 мин" },
+            { id: "high", q: "Высокая", m: "50 тыс.+ · 30 мин · из месячного валового по аккаунту" }
+        ] : [
+            { id: "low", q: "Низька", m: "спам-контент, ~200 перегл./відео · 5 хв на публікацію" },
+            { id: "mid", q: "Середня", m: "~5 тис перегл. · 15 хв" },
+            { id: "high", q: "Висока", m: "50 тис.+ · 30 хв · з валового місячного розкладу на акаунті" }
         ];
         wrap.innerHTML = "";
-        presets.forEach(function (p) {
+        tiers.forEach(function (t) {
             var b = document.createElement("button");
             b.type = "button";
-            b.className = "view-preset" + (state.avgViewsPerVideo === p.v ? " active" : "");
-            b.textContent = p.l;
+            b.className = "view-preset view-preset--quality" + (state.qualityTier === t.id ? " active" : "");
+            b.innerHTML = "<span class=\"vp-q\">" + t.q + "</span><span class=\"vp-qmeta\">" + t.m + "</span>";
             b.addEventListener("click", function () {
-                state.avgViewsPerVideo = p.v;
+                state.qualityTier = t.id;
+                syncQualityToState();
                 renderAvgViewsPresets();
+                updateQualityTimeLine();
                 render();
             });
             wrap.appendChild(b);
         });
+    }
+
+    function updateQualityTimeLine() {
+        var el = document.getElementById("qualityTimeLine");
+        if (!el) return;
+        var m = getMinPerVideo();
+        el.textContent = lang === "ru"
+            ? "Время на публикацию одного видео по уровню качества: " + m + " мин (оценка)."
+            : "Час на публікацію одного відео за рівнем якості: " + m + " хв (орієнтир).";
     }
 
     function formatConvPercent(x) {
@@ -735,19 +828,17 @@
         var shop = state.mode === "shop";
         var sf = document.getElementById("stepFunnel");
         var sv = document.getElementById("stepViews");
-        var sm = document.getElementById("stepMinVid");
         if (shop) {
             if (sf) sf.textContent = lang === "ru" ? "3. Тип контента (воронка)" : "3. Тип контенту (воронка)";
-            if (sv) sv.textContent = lang === "ru" ? "4. Всего просмотров (сценарий)" : "4. Усього переглядів (сценарій)";
-            if (sm) sm.textContent = lang === "ru" ? "5. Минут на 1 видео (съёмка, монтаж, публикация)" : "5. Хвилин на 1 відео (зйомка, монтаж, публікація)";
+            if (sv) sv.textContent = lang === "ru" ? "4. Суммарные просмотры за месяц" : "4. Сумарні перегляди за місяць";
         } else {
             if (sf) sf.textContent = "";
-            if (sv) sv.textContent = lang === "ru" ? "3. Всего просмотров (сценарий)" : "3. Усього переглядів (сценарій)";
-            if (sm) sm.textContent = lang === "ru" ? "4. Минут на 1 видео (съёмка, монтаж, публикация)" : "4. Хвилин на 1 відео (зйомка, монтаж, публікація)";
+            if (sv) sv.textContent = lang === "ru" ? "3. Суммарные просмотры за месяц" : "3. Сумарні перегляди за місяць";
         }
     }
 
     function render() {
+        syncQualityToState();
         state.minPerVideo = getMinPerVideo();
         var rng = document.getElementById("viewsRange");
         if (rng) {
@@ -758,6 +849,7 @@
         var shopF = document.getElementById("shopFunnelWrap");
         if (shopF) shopF.style.display = state.mode === "shop" ? "block" : "none";
         renderStepLabels();
+        updateQualityTimeLine();
 
         var lblEarn = document.getElementById("lblEarn");
         var outEarn = document.getElementById("outEarn");
@@ -785,6 +877,17 @@
         var lblTeacher = document.getElementById("lblTeacher");
         var outTeacher = document.getElementById("outTeacher");
         var cellTeacher = document.getElementById("cellTeacher");
+        var outEarnUSD = document.getElementById("outEarnUSD");
+        var lblUsdLine = document.getElementById("lblUsdLine");
+        var lblUsdSub = document.getElementById("lblUsdSub");
+
+        function setUsdFromEur(eur) {
+            if (outEarnUSD) outEarnUSD.textContent = (lang === "ru" ? "~ " : "~ ") + "$" + (eur * EUR_USD).toFixed(2);
+            if (lblUsdLine) lblUsdLine.textContent = lang === "ru" ? "Ориентир в долларах США" : "Орієнтир у доларах США";
+            if (lblUsdSub) lblUsdSub.textContent = lang === "ru"
+                ? "≈ 1 € = " + String(EUR_USD).replace(".", ",") + " $ — для сравнения с $-номиналами в гайдах; курс условный."
+                : "≈ 1 € = " + String(EUR_USD).replace(".", ",") + " $ — для порівняння з $-номіналами в гайдах; курс умовний.";
+        }
 
         updateCatHint();
 
@@ -807,6 +910,7 @@
                 : "Орієнтовний дохід креатора (до податків)";
             var m = computeMon();
             outEarn.textContent = m.revEUR.toFixed(2) + " €";
+            setUsdFromEur(m.revEUR);
             var uah = Math.round(m.revEUR * EUR_UAH);
             outUah.textContent = uah.toLocaleString(loc()) + " ₴";
             outVideos.textContent = formatNum(m.videos);
@@ -817,12 +921,12 @@
                 : "~" + m.cpm.toFixed(2) + " € за 1000 переглядів (Rewards / Fund)";
             if (lblVideos) lblVideos.textContent = lang === "ru" ? "Количество видео в сценарии" : "Кількість відео в сценарії";
             if (lblVideosSub) lblVideosSub.textContent = lang === "ru"
-                ? "Всего просмотров ÷ средние просмотры на 1 видео (округление вверх)."
-                : "Усього переглядів ÷ середні перегляди на 1 відео (округлення вгору).";
+                ? "Суммарные просмотры за месяц ÷ ориентир просмотров на 1 видео (из уровня качества; округление вверх)."
+                : "Сумарні перегляди за місяць ÷ орієнтир переглядів на 1 відео (з рівня якості; округлення вгору).";
             if (lblHours) lblHours.textContent = lang === "ru" ? "Суммарное время на производство" : "Сумарний час на виробництво";
             if (lblHoursSub) lblHoursSub.textContent = lang === "ru"
-                ? "Число видео × минут на ролик — оценка съёмки, монтажа и публикации."
-                : "Кількість відео × хвилин на ролик — оцінка зйомки, монтажу й публікації.";
+                ? "Число видео × минут на ролик по уровню качества (спам 5 / средний 15 / топ 30)."
+                : "Кількість відео × хв на ролик за рівнем якості (спам 5 / середній 15 / топ 30).";
             if (cellGmv) cellGmv.style.opacity = "0.85";
             if (uah >= TEACHER_UAH_FLOOR && cellTeacher && lblTeacher && outTeacher) {
                 var n = Math.floor(uah / TEACHER_UAH_FLOOR);
@@ -872,6 +976,7 @@
                 ? "Ориентировочный доход креатора (до налогов)"
                 : "Орієнтовний дохід креатора (до податків)";
             outEarn.textContent = r.commissionEUR.toFixed(2) + " €";
+            setUsdFromEur(r.commissionEUR);
             var uahS = Math.round(r.commissionEUR * EUR_UAH);
             outUah.textContent = uahS.toLocaleString(loc()) + " ₴";
             outVideos.textContent = formatNum(r.videos);
@@ -880,12 +985,12 @@
             outExtra.textContent = (lang === "ru" ? "~" + r.pct + "% от GMV · AOV ~" : "~" + r.pct + "% від GMV · AOV ~") + (CAT_NUM[state.cat] || CAT_NUM.other).avgPrice + " €";
             if (lblVideos) lblVideos.textContent = lang === "ru" ? "Количество видео в сценарии" : "Кількість відео в сценарії";
             if (lblVideosSub) lblVideosSub.textContent = lang === "ru"
-                ? "Всего просмотров ÷ средние просмотры на 1 видео (округление вверх)."
-                : "Усього переглядів ÷ середні перегляди на 1 відео (округлення вгору).";
+                ? "Суммарные просмотры за месяц ÷ ориентир просмотров на 1 видео (из уровня качества; округление вверх)."
+                : "Сумарні перегляди за місяць ÷ орієнтир переглядів на 1 відео (з рівня якості; округлення вгору).";
             if (lblHours) lblHours.textContent = lang === "ru" ? "Суммарное время на производство" : "Сумарний час на виробництво";
             if (lblHoursSub) lblHoursSub.textContent = lang === "ru"
-                ? "Число видео × минут на ролик — оценка съёмки, монтажа и публикации."
-                : "Кількість відео × хвилин на ролик — оцінка зйомки, монтажу й публікації.";
+                ? "Число видео × минут на ролик по уровню качества (спам 5 / средний 15 / топ 30)."
+                : "Кількість відео × хв на ролик за рівнем якості (спам 5 / середній 15 / топ 30).";
             if (cellGmv) cellGmv.style.opacity = "1";
             if (uahS >= TEACHER_UAH_FLOOR && cellTeacher && lblTeacher && outTeacher) {
                 var nt = Math.floor(uahS / TEACHER_UAH_FLOOR);
@@ -920,13 +1025,6 @@
         tabMon.addEventListener("click", function () { sw(false); });
     }
 
-    function bindMinVideo() {
-        var inp = document.getElementById("minPerVideoInput");
-        if (!inp) return;
-        inp.addEventListener("input", render);
-        inp.addEventListener("change", render);
-    }
-
     function bindRange() {
         var rng = document.getElementById("viewsRange");
         rng.addEventListener("input", render);
@@ -946,17 +1044,16 @@
         infoTitle: "TikTok: как считать заработок",
         infoSub: "Ориентиры для украинской аудитории: Shop, просмотры, комиссии. Не является налоговой консультацией.",
         juicyBlock: "<strong>Кратко:</strong> <strong>GMV</strong> на скриншотах — не «деньги в кармане»; комиссия креатора с чека часто <strong>5–20%</strong>. <strong>Rewards / Fund</strong> — отдельная оплата за просмотры (в ЕС <strong>CPM</strong> обычно ниже, чем в США). В TikTok Shop на результат влияют <strong>ниша</strong>, <strong>цена</strong> и <strong>тип контента</strong> (верх / середина / низ воронки). В топ-таблицах — <strong>GMV</strong>, не чистый доход креатора. Подробнее — в блоках ниже после калькулятора.",
-        calcIntro: "Выберите режим: <strong>TikTok Shop</strong> (комиссия с продаж) или <strong>монетизацию</strong> (оплата за просмотры). Задайте <strong>средние просмотры на одно видео</strong>, при необходимости — <strong>тип контента</strong> в воронке (для Shop), <strong>всего просмотров</strong> ползунком и <strong>минуты на видео</strong>. Ниже — ориентировочный «чистый» доход до налогов, GMV (Shop), число видео и часы.",
+        calcIntro: "Выберите режим: <strong>TikTok Shop</strong> (комиссия с продаж) или <strong>монетизацию</strong> (оплата за просмотры). Укажите <strong>качество контента</strong>, при необходимости — <strong>тип контента</strong> в воронке (для Shop), двигайте ползунок <strong>суммарных просмотров за месяц</strong>. Ниже — ориентировочный доход до налогов (€ и $), GMV (Shop), число видео и время по уровню качества.",
         lblTabMon: "Монетизация (CPM)",
         lblTabShop: "TikTok Shop",
         stepCat: "1. Категория / ниша",
+        stepAvgVpV: "2. Качество контента",
+        qualityNote: "Ориентир просмотров на одно видео зависит от уровня. Для «высокой» — типичные <strong>50 тыс.+</strong> из <strong>валового распределения просмотров по всем видео аккаунта за месяц</strong> (не одно видео).",
         avgVpVExplain: "В TikTok по-разному: много роликов «молчат», а один взлетает; или все стабильно набирают просмотры — это разные типы ведения. Ориентир «на видео» помогает оценить, сколько роликов соответствует выбранному сценарию просмотров.",
         funnelExplain: "<strong>TOFU</strong> — охват, тренды (пример: челлендж без прямых продаж). <strong>MOFU</strong> — обзор, доверие (пример: «5 способов…»). <strong>BOFU</strong> — демо, цена, ссылка (пример: распаковка + «ссылка в корзине»). Для Shop модель меняет ориентировочную конверсию просмотр → заказ.",
-        stepViews: "4. Всего просмотров (сценарий)",
-        lblSlider: "Просмотров в сценарии",
-        stepMinVid: "5. Минут на 1 видео (съёмка, монтаж, публикация)",
-        minPerVideoHelp: "Введите, сколько минут планируете на одно видео. По умолчанию <strong>5 мин</strong> — для простого обзора без монтажа; сложный монтаж или съёмка занимают больше.",
-        minPerVideoSuffix: "мин",
+        stepViews: "4. Суммарные просмотры за месяц",
+        lblSlider: "Суммарных просмотров за месяц",
         philosophy: "Высокие суммы ближе к авторам, которые понимают <strong>алгоритм</strong>, <strong>психологию зрителя</strong>, <strong>тип контента</strong> и <strong>производство</strong>, и работают <strong>системно</strong>. Много часов на слабый контент дают худший «заработок в час», чем меньше времени на сильные ролики.",
         calcFootnote: "«Чистый» — доход от монетизации/комиссии до налогов и расходов; налоги и возвраты не вычитались.",
         calcHead: "Быстрый расчёт",
@@ -983,10 +1080,9 @@
         accBtnTofu: "Подробнее",
         pillJuicy: "Почему это важно?",
         pillCalcHow: "Как работает калькулятор?",
-        pillAvgVpV: "Что это?",
+        pillAvgVpV: "Что означают уровни?",
         pillFunnel: "Почему важна воронка?",
         pillConv: "Как считается конверсия?",
-        pillMinVid: "Как это влияет на время?",
         pillPhilosophy: "Почему это важно?"
     };
 
@@ -1001,11 +1097,11 @@
         },
         calcHow: {
             title: "Як працює калькулятор?",
-            html: "<p><strong>TikTok Shop:</strong> оцінюємо замовлення через <strong>орієнтир конверсії перегляд → покупка</strong> (ніша + воронка), множимо на середній чек і на <strong>% комісії креатора</strong> — отримуєте орієнтовну комісію та GMV.</p><p><strong>Монетизація:</strong> перегляди × CPM по ніші — орієнт виплат за перегляди.</p><p>Час і кількість відео — від співвідношення «усього переглядів / середні на відео» і хвилин на ролик. Податки й повернення не віднімали.</p>"
+            html: "<p><strong>TikTok Shop:</strong> оцінюємо замовлення через <strong>орієнтир конверсії перегляд → покупка</strong> (ніша + воронка), множимо на середній чек і на <strong>% комісії креатора</strong> — отримуєте орієнтовну комісію та GMV.</p><p><strong>Монетизація:</strong> перегляди × CPM по ніші — орієнт виплат за перегляди.</p><p>Кількість відео = <strong>сумарні перегляди за місяць</strong> ÷ орієнтир переглядів на відео з обраного <strong>рівня якості</strong>. Час = відео × хвилин на ролик (5 / 15 / 30 за рівнем). Податки й повернення не віднімали.</p>"
         },
         avgVpV: {
-            title: "Що таке «середні перегляди на 1 відео»?",
-            html: "<p>У TikTok буває по-різному: багато роликів майже не набирають переглядів, а один «залітає», або ж усі стабільно тримають помітний рівень. Цей параметр ділить <strong>усього переглядів</strong> у сценарії на кількість роликів (округлення вгору), щоб оцінити навантаження на виробництво.</p>"
+            title: "Що означають рівні якості?",
+            html: "<p><strong>Низька (спам):</strong> орієнтир ~<strong>200</strong> переглядів на відео, <strong>5 хв</strong> на публікацію.</p><p><strong>Середня:</strong> ~<strong>5 тис</strong> переглядів, <strong>15 хв</strong>.</p><p><strong>Висока:</strong> <strong>50 тис.+</strong> — орієнтир з <strong>валового розподілу переглядів по всіх відео акаунта за місяць</strong> (не одне відео), <strong>30 хв</strong> на ролик.</p><p>Ці значення ділять <strong>сумарні перегляди за місяць</strong> на кількість роликів і множаться на хвилини, щоб показати час виробництва.</p>"
         },
         funnel: {
             title: "Чому воронка важлива?",
@@ -1014,10 +1110,6 @@
         convModel: {
             title: "Як рахується конверсія?",
             html: "<p>У <code>tiktok-shop-data-library.txt</code> наведено, що в TikTok Shop часто порівнюють з «класичною» е-комерцією (орієнтири <strong>8–12%</strong> vs <strong>2–4%</strong> у різних визначеннях метрики). У калькуляторі використано <strong>спрощену частку переглядів → замовлення</strong>: для MOFU орієнтир близько <strong>0,5–1,5%</strong>, для «продажного» BOFU — до <strong>~5–10%+</strong>; верх обмежено ~11%, щоб не виходити за реалістичні межі.</p><p>У звітах TikTok конверсія може рахуватися від сесії, кліку чи іншої бази — тому цифри не повинні збігатися з дашбордом один до одного.</p>"
-        },
-        minVid: {
-            title: "Як час на відео впливає на розрахунок?",
-            html: "<p>Хвилини на одне відео множаться на <strong>кількість відео</strong> у сценарії — отримуєте орієнтовний сумарний час зйомки, монтажу й публікації. Це не впливає на € у Shop/монетизації, але допомагає порівняти заробіток з часом.</p>"
         },
         philosophy: {
             title: "Чому не лише сума важлива?",
@@ -1037,7 +1129,7 @@
         },
         accKalodata: {
             title: "Що показує таблиця?",
-            html: "<p>У таблиці — <strong>GMV</strong> за даними Kalodata (грудень 2025), не чистий дохід креатора. Підписники не завжди корелюють з GMV.</p>"
+            html: "<p>У таблиці — <strong>GMV</strong> за даними Kalodata (грудень 2025), не чистий дохід креатора. Підписники не завжди корелюють з GMV.</p><p>Приклад демонстрації товару в ролику: <a href=\"https://vt.tiktok.com/ZSHdS4gWW/\" target=\"_blank\" rel=\"noopener noreferrer\">відео @be.lush</a>.</p>"
         },
         accTofu: {
             title: "TOFU, MOFU, BOFU",
@@ -1056,11 +1148,11 @@
         },
         calcHow: {
             title: "Как работает калькулятор?",
-            html: "<p><strong>TikTok Shop:</strong> оцениваем заказы через <strong>ориентир конверсии просмотр → покупка</strong> (ниша + воронка), умножаем на средний чек и на <strong>% комиссии креатора</strong>.</p><p><strong>Монетизация:</strong> просмотры × CPM по нише.</p><p>Время и число роликов — из отношения «всего просмотров / средние на видео» и минут на ролик. Налоги и возвраты не вычитались.</p>"
+            html: "<p><strong>TikTok Shop:</strong> оцениваем заказы через <strong>ориентир конверсии просмотр → покупка</strong> (ниша + воронка), умножаем на средний чек и на <strong>% комиссии креатора</strong>.</p><p><strong>Монетизация:</strong> просмотры × CPM по нише.</p><p>Число роликов = <strong>суммарные просмотры за месяц</strong> ÷ ориентир просмотров на видео из <strong>уровня качества</strong>. Время = видео × минут на ролик (5 / 15 / 30). Налоги и возвраты не вычитались.</p>"
         },
         avgVpV: {
-            title: "Что такое «средние просмотры на 1 видео»?",
-            html: "<p>В TikTok по-разному: много роликов почти не набирают просмотров, а один «взлетает», или все стабильно держат уровень. Параметр делит <strong>всего просмотров</strong> в сценарии на число роликов (округление вверх), чтобы оценить нагрузку.</p>"
+            title: "Что означают уровни качества?",
+            html: "<p><strong>Низкая (спам):</strong> ориентир ~<strong>200</strong> просмотров на видео, <strong>5 мин</strong> на публикацию.</p><p><strong>Средняя:</strong> ~<strong>5 тыс</strong>, <strong>15 мин</strong>.</p><p><strong>Высокая:</strong> <strong>50 тыс.+</strong> — ориентир из <strong>валового распределения просмотров по всем видео аккаунта за месяц</strong> (не одно видео), <strong>30 мин</strong> на ролик.</p>"
         },
         funnel: {
             title: "Почему важна воронка?",
@@ -1069,10 +1161,6 @@
         convModel: {
             title: "Как считается конверсия?",
             html: "<p>В библиотеке данных для TikTok Shop приводят сравнение с «классической» e-commerce (ориентиры <strong>8–12%</strong> vs <strong>2–4%</strong> в разных определениях). В калькуляторе — <strong>упрощённая доля просмотров → заказ</strong>: для MOFU порядка <strong>0,5–1,5%</strong>, для BOFU — до <strong>~5–10%+</strong>; верх ограничен ~11%.</p><p>В отчётах TikTok конверсия может считаться от сессии или клика — цифры не обязаны совпадать с дашбордом.</p>"
-        },
-        minVid: {
-            title: "Как время на видео влияет на расчёт?",
-            html: "<p>Минуты на одно видео умножаются на <strong>число видео</strong> в сценарии — ориентир суммарного времени. На € в Shop/монетизации это не влияет, но помогает сравнить доход со временем.</p>"
         },
         philosophy: {
             title: "Почему важна не только сумма?",
@@ -1092,7 +1180,7 @@
         },
         accKalodata: {
             title: "Что показывает таблица?",
-            html: "<p><strong>GMV</strong> по данным Kalodata, не чистый доход креатора.</p>"
+            html: "<p><strong>GMV</strong> по данным Kalodata, не чистый доход креатора.</p><p>Пример демонстрации товара: <a href=\"https://vt.tiktok.com/ZSHdS4gWW/\" target=\"_blank\" rel=\"noopener noreferrer\">видео @be.lush</a>.</p>"
         },
         accTofu: {
             title: "TOFU, MOFU, BOFU",
@@ -1185,13 +1273,12 @@
         document.getElementById("lblTabMon").textContent = "Монетизація (CPM)";
         document.getElementById("stepCat").textContent = "1. Категорія / ніша";
         var sav = document.getElementById("stepAvgVpV");
-        if (sav) sav.textContent = "2. Середні перегляди на 1 відео";
+        if (sav) sav.textContent = "2. Якість контенту";
+        var qn = document.getElementById("qualityNote");
+        if (qn) qn.innerHTML = "Орієнтир переглядів на одне відео залежить від рівня. Для «високої» — типові <strong>50 тис.+</strong> з <strong>валового розподілу переглядів по всіх відео акаунта за місяць</strong> (не одне відео).";
         document.getElementById("stepFunnel").textContent = "3. Тип контенту (воронка)";
-        document.getElementById("stepViews").textContent = "4. Усього переглядів (сценарій)";
-        document.getElementById("stepMinVid").textContent = "5. Хвилин на 1 відео (зйомка, монтаж, публікація)";
-        document.getElementById("lblSlider").textContent = "Переглядів у сценарії";
-        var ms = document.getElementById("minPerVideoSuffix");
-        if (ms) ms.textContent = "хв";
+        document.getElementById("stepViews").textContent = "4. Сумарні перегляди за місяць";
+        document.getElementById("lblSlider").textContent = "Переглядів за місяць (сценарій)";
         document.getElementById("calcFootnote").textContent = "«Чистий» у значенні дохід від монетизації/комісії до податків і витрат — податки та повернення не віднімали.";
         document.getElementById("calc-head").textContent = "Швидкий розрахунок";
         var pf = document.getElementById("pageFooter");
@@ -1225,13 +1312,11 @@
         var pch = document.getElementById("pillCalcHow");
         if (pch) pch.textContent = "Як працює калькулятор?";
         var pa = document.getElementById("pillAvgVpV");
-        if (pa) pa.textContent = "Що це таке?";
+        if (pa) pa.textContent = "Що означають рівні?";
         var pf = document.getElementById("pillFunnel");
         if (pf) pf.textContent = "Чому воронка важлива?";
         var pc = document.getElementById("pillConv");
         if (pc) pc.textContent = "Як рахується конверсія?";
-        var pm = document.getElementById("pillMinVid");
-        if (pm) pm.textContent = "Як це впливає на час?";
         var pp = document.getElementById("pillPhilosophy");
         if (pp) pp.textContent = "Чому це важливо?";
     }
@@ -1253,13 +1338,12 @@
         document.getElementById("lblTabMon").textContent = RU.lblTabMon;
         document.getElementById("stepCat").textContent = RU.stepCat;
         var sav = document.getElementById("stepAvgVpV");
-        if (sav) sav.textContent = "2. Средние просмотры на 1 видео";
+        if (sav) sav.textContent = RU.stepAvgVpV;
+        var qn = document.getElementById("qualityNote");
+        if (qn) qn.innerHTML = RU.qualityNote;
         document.getElementById("stepFunnel").textContent = "3. Тип контента (воронка)";
         document.getElementById("stepViews").textContent = RU.stepViews;
-        document.getElementById("stepMinVid").textContent = RU.stepMinVid;
         document.getElementById("lblSlider").textContent = RU.lblSlider;
-        var ms = document.getElementById("minPerVideoSuffix");
-        if (ms) ms.textContent = RU.minPerVideoSuffix;
         document.getElementById("calcFootnote").textContent = RU.calcFootnote;
         document.getElementById("calc-head").textContent = RU.calcHead;
         var pf = document.getElementById("pageFooter");
@@ -1298,8 +1382,6 @@
         if (pf) pf.textContent = RU.pillFunnel;
         var pc = document.getElementById("pillConv");
         if (pc) pc.textContent = RU.pillConv;
-        var pm = document.getElementById("pillMinVid");
-        if (pm) pm.textContent = RU.pillMinVid;
         var pp = document.getElementById("pillPhilosophy");
         if (pp) pp.textContent = RU.pillPhilosophy;
     }
@@ -1309,7 +1391,6 @@
     renderAvgViewsPresets();
     bindTabs();
     bindRange();
-    bindMinVideo();
     bindHelp();
     if (lang === "ru") {
         setLangButtons();
