@@ -143,6 +143,18 @@
         .cat-hint-list { margin: 0; padding-left: 1.1em; font-size: 0.74rem; line-height: 1.45; color: #444; }
         .cat-hint-list li { margin-bottom: 4px; }
 
+        .calc-example {
+            font-size: 0.76rem;
+            line-height: 1.5;
+            color: #3a3848;
+            background: #f5f3ff;
+            border: 1px solid #e4dcfa;
+            padding: 10px 12px;
+            margin: 0 0 14px;
+        }
+        .calc-example p { margin: 0; }
+        .calc-example strong { color: #1a1a1a; }
+
         .slider-block label {
             display: flex;
             justify-content: space-between;
@@ -448,6 +460,8 @@
                 <div class="funnel-row" id="funnelRow"></div>
             </div>
 
+            <div class="calc-example" id="calcExampleBeLush" role="note" aria-label="Приклад реального акаунта"></div>
+
             <p class="step-label" id="stepViews">3. Сумарні перегляди за місяць</p>
             <div class="slider-block">
                 <label><span id="lblSlider">Переглядів за місяць (сценарій)</span>: <span class="slider-val" id="viewsOut">0</span></label>
@@ -641,6 +655,10 @@
     };
 
     var CAT_ORDER = ["fashion", "beauty", "electronics", "home", "auto"];
+
+    var CALC_EXAMPLE_UK = "<p><strong>Приклад.</strong> <a class=\"tt-link\" href=\"https://www.tiktok.com/@be.lush\" target=\"_blank\" rel=\"noopener noreferrer\">@be.lush</a> — блогер у <strong>топ-10</strong> TikTok Shop; у виробництві тримає орієнтир <strong>8–10 роликів на день</strong>. За <strong>30 днів</strong> у TikTok Shop Analytics (Overview) орієнтири як на скріншоті: <strong>22,63 млн</strong> переглядів, <strong>середнє на відео ~646,7 тис.</strong>, <strong>35</strong> нових відео за період, <strong>158</strong> відео з товарами; <strong>GPM ~$96,29</strong>, <strong>ER ~1,56%</strong>, середня тривалість <strong>~40 с</strong>. Це не «норма для початківця», а зріз <strong>системного</strong> масштабу.</p>";
+
+    var CALC_EXAMPLE_RU = "<p><strong>Пример.</strong> <a class=\"tt-link\" href=\"https://www.tiktok.com/@be.lush\" target=\"_blank\" rel=\"noopener noreferrer\">@be.lush</a> — блогер в <strong>топ-10</strong> TikTok Shop; в производстве ориентир <strong>8–10 роликов в день</strong>. За <strong>30 дней</strong> в TikTok Shop Analytics (Overview) данные как на скриншоте: <strong>22,63 млн</strong> просмотров, <strong>среднее на видео ~646,7 тыс.</strong>, <strong>35</strong> новых видео за период, <strong>158</strong> видео с товарами; <strong>GPM ~$96,29</strong>, <strong>ER ~1,56%</strong>, средняя длительность <strong>~40 с</strong>. Это не «норма для новичка», а срез <strong>системного</strong> масштаба.</p>";
 
     /** Приклади товарів і орієнтир комісії афіліата (від суми замовлення) — ілюстративно. */
     var PRODUCT_EXAMPLES_UK = {
@@ -916,7 +934,15 @@
         else if (lf) lf.style.display = "block";
     }
 
+    function injectCalcExample() {
+        var el = document.getElementById("calcExampleBeLush");
+        if (!el) return;
+        el.innerHTML = lang === "ru" ? CALC_EXAMPLE_RU : CALC_EXAMPLE_UK;
+        el.setAttribute("aria-label", lang === "ru" ? "Пример реального аккаунта" : "Приклад реального акаунта");
+    }
+
     function render() {
+        injectCalcExample();
         syncQualityToState();
         state.minPerVideo = getMinPerVideo();
         var rng = document.getElementById("viewsRange");
