@@ -276,11 +276,14 @@
             border-collapse: collapse;
             font-size: 0.82rem;
             margin: 10px 0;
+            table-layout: fixed;
         }
         .table-compact th, .table-compact td {
             border: 1px solid #ccc;
             padding: 8px;
             vertical-align: top;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
         }
         .table-compact th { background: #f5f5f5; font-weight: 600; }
         .card-grid-mini {
@@ -323,23 +326,18 @@
             border-collapse: collapse;
             font-size: 0.82rem;
             margin: 10px 0;
+            table-layout: fixed;
         }
         .earn-table th, .earn-table td {
             border: 1px solid #ccc;
             padding: 8px;
             text-align: left;
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
         }
         .earn-table th { background: #f5f5f5; font-weight: 600; }
         .earn-table td:last-child { font-variant-numeric: tabular-nums; font-weight: 600; color: #5b21b6; }
 
-        .data-table-wrap {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            margin: 0.75rem 0;
-            border: 1px solid #ddd;
-            background: #fff;
-        }
-        .data-table-wrap table { min-width: 520px; margin: 0; }
         .doc-h2 {
             font-size: 1.05rem;
             margin: 1rem 0 0.4rem;
@@ -388,6 +386,116 @@
         .tm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         @media (max-width: 560px) { .tm-grid { grid-template-columns: 1fr; } }
 
+        .calc-hub {
+            margin-bottom: 16px;
+        }
+        .calc-mode-tabs {
+            display: flex;
+            gap: 0;
+            margin-bottom: 0;
+            border: 1px solid #ccc;
+            border-bottom: none;
+            background: #fff;
+        }
+        .calc-tab {
+            flex: 1;
+            min-height: 48px;
+            padding: 12px 10px;
+            border: none;
+            border-bottom: 3px solid transparent;
+            background: #f3f3f5;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: #444;
+            line-height: 1.25;
+        }
+        .calc-tab:hover { background: #ece8ff; color: #1a1a1a; }
+        .calc-tab[aria-selected="true"] {
+            background: #fff;
+            border-bottom-color: #7c3aed;
+            color: #5b21b6;
+        }
+        .calc-panel-wrap[hidden] { display: none !important; }
+
+        .summary-block {
+            margin-top: 18px;
+            padding-top: 16px;
+            border-top: 2px solid #e5e5e5;
+        }
+        .summary-title {
+            font-size: 0.88rem;
+            font-weight: 700;
+            margin: 0 0 8px;
+            color: #1a1a1a;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+        .summary-teacher {
+            font-size: 0.85rem;
+            margin: 12px 0 0;
+            padding: 10px 12px;
+            background: #f5f3ff;
+            border-left: 3px solid #7c3aed;
+            color: #333;
+        }
+        .summary-eff-grid {
+            display: grid;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .summary-eff-row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 8px 10px;
+            background: #f7f7f8;
+            font-size: 0.82rem;
+            border-left: 3px solid #c4b5fd;
+        }
+        .summary-eff-row span:first-child { color: #555; max-width: 58%; }
+        .summary-eff-row strong { font-variant-numeric: tabular-nums; color: #1a1a1a; }
+
+        a.tt-link {
+            color: #5b21b6;
+            font-weight: 600;
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            word-break: break-all;
+        }
+        a.tt-link:hover { color: #7c3aed; }
+
+        .data-table-wrap {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0.75rem 0;
+            border: 1px solid #ddd;
+            background: #fff;
+            max-width: 100%;
+        }
+        .data-table-wrap table {
+            width: 100%;
+            min-width: 0;
+            table-layout: fixed;
+            border-collapse: collapse;
+        }
+        .data-table-wrap .earn-table th,
+        .data-table-wrap .earn-table td {
+            word-wrap: break-word;
+            overflow-wrap: anywhere;
+            padding: 6px 5px;
+            font-size: 0.76rem;
+            hyphens: auto;
+        }
+        @media (min-width: 520px) {
+            .data-table-wrap .earn-table th,
+            .data-table-wrap .earn-table td {
+                padding: 8px;
+                font-size: 0.82rem;
+            }
+        }
+
         .disclaimer {
             font-size: 0.75rem;
             color: #777;
@@ -418,6 +526,131 @@
         <h1 class="page-title" data-i18n="h_title">TikTok Shop в Іспанії: сімейний проєкт</h1>
         <p class="page-sub" data-i18n="h_sub">Орієнтовні розрахунки доходу та гайд із запуску. Не є фінансовою чи податковою консультацією.</p>
     </header>
+
+    <div class="calc-hub" id="calcHub">
+        <div class="calc-mode-tabs" role="tablist" aria-label="Режим калькулятора">
+            <button type="button" class="calc-tab" role="tab" id="tabCalcMon" aria-selected="true" aria-controls="calcPanelMon" tabindex="0" data-i18n="calc_tab_mon">Монетизація (перегляди)</button>
+            <button type="button" class="calc-tab" role="tab" id="tabCalcShop" aria-selected="false" aria-controls="calcPanelShop" tabindex="-1" data-i18n="calc_tab_shop">TikTok Shop</button>
+        </div>
+        <div id="calcPanelMon" class="calc-panel-wrap" role="tabpanel" aria-labelledby="tabCalcMon">
+    <section class="calc-card" id="calc-time-money" aria-labelledby="calc-tm-title">
+        <div class="calc-card-head" id="calc-tm-title" data-i18n="calc_tm_title">Калькулятор «Час vs гроші» (перегляди та альтернативна ставка)</div>
+        <div class="calc-card-body">
+            <p class="muted" data-i18n="calc_tm_intro">Порівнюємо <strong>доход від переглядів</strong> (за обраним CPM у €) з тим, скільки ви могли б заробити за той самий час за фіксованою ставкою (секунда / хвилина / година / зміна / місяць). Нижче — порівняння двох підходів: багато роликів з низькими переглядами проти менше роликів, але з вищим охопленням.</p>
+            <div class="slider-block">
+                <label><span data-i18n="tm_lbl_views">Цільові перегляди</span>: <span class="slider-val" id="tmViewsOut">0</span></label>
+                <input type="range" id="tmViewsSlider" min="0" max="1000" value="600" aria-describedby="calc-tm-title">
+            </div>
+            <div class="tm-row">
+                <label><span data-i18n="tm_lbl_cpm">CPM (€ за 1000 переглядів)</span>
+                    <input type="number" id="tmCpm" min="0" max="100" step="0.05" value="2">
+                </label>
+                <label><span data-i18n="tm_lbl_hours">Час на контент (години)</span>
+                    <input type="number" id="tmHours" min="0" max="10000" step="0.25" value="5">
+                </label>
+            </div>
+            <div class="tm-row">
+                <label><span data-i18n="tm_lbl_rate">Ваша ставка (€)</span>
+                    <input type="number" id="tmRate" min="0" step="0.01" value="15">
+                </label>
+                <label><span data-i18n="tm_lbl_unit">За одиницю</span>
+                    <select id="tmUnit">
+                        <option value="sec" data-i18n="tm_unit_sec">за 1 секунду</option>
+                        <option value="min" data-i18n="tm_unit_min">за 1 хвилину</option>
+                        <option value="hour" selected data-i18n="tm_unit_hour">за 1 годину</option>
+                        <option value="shift" data-i18n="tm_unit_shift">за зміну (8 год)</option>
+                        <option value="month" data-i18n="tm_unit_month">за місяць (160 роб. год)</option>
+                    </select>
+                </label>
+            </div>
+            <div class="result-grid" id="tmResultGrid">
+                <div class="result-item"><strong data-i18n="tm_res_rev">Дохід від переглядів (CPM)</strong><span id="tmRev">0 €</span></div>
+                <div class="result-item"><strong data-i18n="tm_res_opp">Альтернативний дохід за той самий час</strong><span id="tmOpp">0 €</span></div>
+                <div class="result-item"><strong data-i18n="tm_res_diff">Різниця (перегляди − альтернатива)</strong><span id="tmDiff">0 €</span></div>
+                <div class="result-item"><strong data-i18n="tm_res_eff">Ефективність: € за годину (перегляди)</strong><span id="tmEph">0 €</span></div>
+                <div class="result-item"><strong data-i18n="tm_res_ratio">Переглядів на годину роботи</strong><span id="tmVph">0</span></div>
+            </div>
+            <div class="tm-scenario">
+                <h4 data-i18n="tm_cmp_title">Порівняння підходів</h4>
+                <p class="muted" data-i18n="tm_cmp_hint">Підставте кількість роликів, середні перегляди на ролик і хвилини на один ролик — побачите сумарні перегляди, години та «перегляди на годину».</p>
+                <div class="tm-grid">
+                    <div>
+                        <strong data-i18n="tm_cmp_a">A: багато роликів / нижче перегляди</strong>
+                        <div class="tm-row">
+                            <label><span data-i18n="tm_lbl_nv">Роликів</span><input type="number" id="tmAn" min="1" step="1" value="10"></label>
+                            <label><span data-i18n="tm_lbl_vpv">Переглядів / ролик</span><input type="number" id="tmAv" min="1" step="1" value="1000"></label>
+                            <label><span data-i18n="tm_lbl_mpv">Хв / ролик</span><input type="number" id="tmAm" min="0.5" step="0.5" value="30"></label>
+                        </div>
+                        <p class="muted" id="tmOutA"></p>
+                    </div>
+                    <div>
+                        <strong data-i18n="tm_cmp_b">B: менше роликів / вище перегляди</strong>
+                        <div class="tm-row">
+                            <label><span data-i18n="tm_lbl_nv">Роликів</span><input type="number" id="tmBn" min="1" step="1" value="1"></label>
+                            <label><span data-i18n="tm_lbl_vpv">Переглядів / ролик</span><input type="number" id="tmBv" min="1" step="1" value="20000"></label>
+                            <label><span data-i18n="tm_lbl_mpv">Хв / ролик</span><input type="number" id="tmBm" min="0.5" step="0.5" value="45"></label>
+                        </div>
+                        <p class="muted" id="tmOutB"></p>
+                    </div>
+                </div>
+                <p class="muted" id="tmCmpVerdict" style="margin-bottom:0;"></p>
+            </div>
+            <div class="summary-block" id="monSummaryBlock">
+                <h3 class="summary-title" data-i18n="sum_mon_title">Орієнтир за місяць (монетизація переглядами)</h3>
+                <p class="muted" data-i18n="sum_mon_intro">Повзунок переглядів вище трактуємо як <strong>перегляди за місяць</strong>. Уточніть середні перегляди на ролик і хвилини на один ролик — оцінимо кількість роликів, години зйомки та ефективність на одиницю часу (якісний контент, психологія глядача, алгоритм, етапи воронки — у порівнянні підходів вище).</p>
+                <div class="tm-row">
+                    <label><span data-i18n="sum_mon_avg_vpv">Середні перегляди на 1 ролик</span>
+                        <input type="number" id="monAvgVpv" min="100" step="100" value="5000"></label>
+                    <label><span data-i18n="sum_mon_min_vid">Хвилин на 1 ролик (зйомка+монтаж)</span>
+                        <input type="number" id="monMinPerVid" min="5" step="1" value="35"></label>
+                </div>
+                <div class="result-grid" id="monSummaryKpis">
+                    <div class="result-item"><strong data-i18n="sum_lbl_rev_m">Дохід за місяць (CPM)</strong><span id="monKpiRev">0 €</span></div>
+                    <div class="result-item"><strong data-i18n="sum_lbl_vids">Роликів (оцінка)</strong><span id="monKpiVids">0</span></div>
+                    <div class="result-item"><strong data-i18n="sum_lbl_shoot">Час на ролики (оцінка)</strong><span id="monKpiShoot">0</span></div>
+                    <div class="result-item"><strong data-i18n="sum_lbl_uah">Орієнтовно в грн (курс)</strong><span id="monKpiUah">0 ₴</span></div>
+                </div>
+                <div class="summary-eff-grid" id="monEffGrid" aria-live="polite"></div>
+                <p class="summary-teacher" id="monTeacher"></p>
+                <p class="muted" data-i18n="sum_kurs_hint" style="margin-top:8px;">Курс орієнтовний: 1 € ≈ 45 грн; зарплата вчителя-орієнтир ~15 000 грн/міс.</p>
+                <p class="muted" data-i18n="sum_quality_note">Ефективність зростає не від «кількості хвилин у кадрі», а від відповідності контенту наміру глядача та етапу воронки (верх / середина / низ), плюс довіра та утримання в перші секунди.</p>
+            </div>
+        </div>
+    </section>
+        </div>
+
+        <div id="calcPanelShop" class="calc-panel-wrap" role="tabpanel" aria-labelledby="tabCalcShop" hidden>
+    <section class="calc-card" id="calc-shop" aria-labelledby="calc-shop-title">
+        <div class="calc-card-head" id="calc-shop-title" data-i18n="calc_shop_title">Калькулятор: TikTok Shop (комісія з продажів)</div>
+        <div class="calc-card-body">
+            <p class="muted" data-i18n="calc_shop_intro">Рахуємо не «гроші за 1000 переглядів», а <strong>орієнтовні замовлення та комісію</strong> з товарів: тематика впливає на середній чек і типовий % комісії, стиль ролика — на те, яка частка переглядів перетворюється на покупку (воронка TOFU / MOFU / BOFU). Додайте один або кілька акаунтів — внизу підсумок по «родині».</p>
+            <div id="accountsRoot"></div>
+            <button type="button" class="btn-add" id="btnAddAccount"><i class="bi bi-plus-lg"></i> <span data-i18n="btn_add">Додати акаунт</span></button>
+            <div class="family-total" id="familyTotal" hidden>
+                <h3 data-i18n="fam_h3">Підсумок по всіх акаунтах</h3>
+                <div class="family-row"><span data-i18n="fam_lbl_comm">Орієнтовна комісія</span><span class="family-big" id="famEur">0 €</span></div>
+                <div class="family-row"><span data-i18n="fam_lbl_ord">Замовлень (оцінка)</span><span id="famOrders">0</span></div>
+                <div class="family-row"><span data-i18n="fam_lbl_vid">Роликів (оцінка)</span><span id="famVideos">0</span></div>
+                <div class="family-row"><span data-i18n="fam_lbl_time">Час на ролики (оцінка)</span><span id="famHours">0</span></div>
+            </div>
+            <div class="summary-block" id="shopSummaryBlock">
+                <h3 class="summary-title" data-i18n="sum_shop_title">Орієнтир за період (TikTok Shop)</h3>
+                <p class="muted" data-i18n="sum_shop_intro">Нижче — <strong>GMV</strong> (обсяг замовлень) та ваша <strong>комісія</strong>, ролики й час; ефективність на 1 хв, 1 год, 8 год, робочий місяць (160 год) і рік системної роботи. У полях акаунта «цільові перегляди» можна читати як перегляди за обраний період (наприклад, місяць).</p>
+                <div class="result-grid" id="shopSummaryKpis">
+                    <div class="result-item"><strong data-i18n="sum_lbl_gmv">GMV (оцінка)</strong><span id="shopKpiGmv">0 €</span></div>
+                    <div class="result-item"><strong data-i18n="sum_lbl_comm">Ваша комісія</strong><span id="shopKpiComm">0 €</span></div>
+                    <div class="result-item"><strong data-i18n="sum_lbl_vids">Роликів (оцінка)</strong><span id="shopKpiVids">0</span></div>
+                    <div class="result-item"><strong data-i18n="sum_lbl_shoot">Час на ролики (оцінка)</strong><span id="shopKpiHours">0</span></div>
+                </div>
+                <div class="summary-eff-grid" id="shopEffGrid" aria-live="polite"></div>
+                <p class="summary-teacher" id="shopTeacher"></p>
+                <p class="muted" data-i18n="sum_kurs_hint" style="margin-top:8px;">Курс орієнтовний: 1 € ≈ 45 грн; зарплата вчителя-орієнтир ~15 000 грн/міс.</p>
+                <p class="muted" data-i18n="sum_shop_funnel">Комісія залежить від тематики товару та стилю ролика (TOFU / MOFU / BOFU); якісний контент під алгоритм і намір покупця робить прогноз надійнішим.</p>
+            </div>
+        </div>
+    </section>
+        </div>
+    </div>
 
     <div class="acc collapsed" id="acc-market">
         <button type="button" class="acc-header" aria-expanded="false">
@@ -624,21 +857,21 @@
             <div class="data-table-wrap"><table class="earn-table">
                 <thead><tr><th>#</th><th>Акаунт</th><th>Підписники</th><th>GMV (грудень 2025)</th></tr></thead>
                 <tbody>
-                    <tr><td>1</td><td>@dealswithty</td><td>136,5k</td><td><strong>$2 720 000</strong></td></tr>
-                    <tr><td>2</td><td>@hannahbentley</td><td>35,9k</td><td><strong>$2 370 000</strong></td></tr>
-                    <tr><td>3</td><td>@myfamilypov</td><td>206,6k</td><td><strong>$2 000 000</strong></td></tr>
-                    <tr><td>4</td><td>@trending_ttok</td><td>164,1k</td><td><strong>$1 920 000</strong></td></tr>
-                    <tr><td>5</td><td>@highland.fashion7</td><td>240,7k</td><td><strong>$1 830 000</strong></td></tr>
-                    <tr><td>6</td><td>@be.lush</td><td>231,6k</td><td><strong>$1 750 000</strong></td></tr>
-                    <tr><td>7</td><td>@mikaylanogueira</td><td>17,4M</td><td><strong>$1 730 000</strong></td></tr>
-                    <tr><td>8</td><td>@anniedanner</td><td>32,8k</td><td><strong>$1 370 000</strong></td></tr>
-                    <tr><td>9</td><td>@sarahgibbons_</td><td>249,4k</td><td><strong>$1 290 000</strong></td></tr>
-                    <tr><td>10</td><td>@sadiejonesuploading</td><td>37,1k</td><td><strong>$1 160 000</strong></td></tr>
+                    <tr><td>1</td><td><a class="tt-link" href="https://www.tiktok.com/@dealswithty" target="_blank" rel="noopener noreferrer">@dealswithty</a></td><td>136,5k</td><td><strong>$2 720 000</strong></td></tr>
+                    <tr><td>2</td><td><a class="tt-link" href="https://www.tiktok.com/@hannahbentley" target="_blank" rel="noopener noreferrer">@hannahbentley</a></td><td>35,9k</td><td><strong>$2 370 000</strong></td></tr>
+                    <tr><td>3</td><td><a class="tt-link" href="https://www.tiktok.com/@myfamilypov" target="_blank" rel="noopener noreferrer">@myfamilypov</a></td><td>206,6k</td><td><strong>$2 000 000</strong></td></tr>
+                    <tr><td>4</td><td><a class="tt-link" href="https://www.tiktok.com/@trending_ttok" target="_blank" rel="noopener noreferrer">@trending_ttok</a></td><td>164,1k</td><td><strong>$1 920 000</strong></td></tr>
+                    <tr><td>5</td><td><a class="tt-link" href="https://www.tiktok.com/@highland.fashion7" target="_blank" rel="noopener noreferrer">@highland.fashion7</a></td><td>240,7k</td><td><strong>$1 830 000</strong></td></tr>
+                    <tr><td>6</td><td><a class="tt-link" href="https://www.tiktok.com/@be.lush" target="_blank" rel="noopener noreferrer">@be.lush</a></td><td>231,6k</td><td><strong>$1 750 000</strong></td></tr>
+                    <tr><td>7</td><td><a class="tt-link" href="https://www.tiktok.com/@mikaylanogueira" target="_blank" rel="noopener noreferrer">@mikaylanogueira</a></td><td>17,4M</td><td><strong>$1 730 000</strong></td></tr>
+                    <tr><td>8</td><td><a class="tt-link" href="https://www.tiktok.com/@anniedanner" target="_blank" rel="noopener noreferrer">@anniedanner</a></td><td>32,8k</td><td><strong>$1 370 000</strong></td></tr>
+                    <tr><td>9</td><td><a class="tt-link" href="https://www.tiktok.com/@sarahgibbons_" target="_blank" rel="noopener noreferrer">@sarahgibbons_</a></td><td>249,4k</td><td><strong>$1 290 000</strong></td></tr>
+                    <tr><td>10</td><td><a class="tt-link" href="https://www.tiktok.com/@sadiejonesuploading" target="_blank" rel="noopener noreferrer">@sadiejonesuploading</a></td><td>37,1k</td><td><strong>$1 160 000</strong></td></tr>
                 </tbody>
             </table></div>
             <p><strong>Спостереження:</strong> підписники не визначають GMV самі по собі (порівняйте @hannahbentley та @mikaylanogueira).</p>
             <h3 class="doc-h2">5. Як GMV перетворюється на дохід креатора: приклад</h3>
-            <p><strong>@dealswithty</strong>, GMV <strong>$2 720 000</strong>. Якщо взяти середню ставку комісії <strong>15%</strong>, валові комісійні ≈ <strong>$408 000</strong>. Після типових 20–30% витрат (податки, команда, продакшн) орієнтир «на руки» ≈ <strong>$285 000–$326 000</strong> / міс — це в <strong>~7–9 разів менше</strong> за заголовковий GMV, але все одно не офіційна виписка з банку.</p>
+            <p><strong><a class="tt-link" href="https://www.tiktok.com/@dealswithty" target="_blank" rel="noopener noreferrer">@dealswithty</a></strong>, GMV <strong>$2 720 000</strong>. Якщо взяти середню ставку комісії <strong>15%</strong>, валові комісійні ≈ <strong>$408 000</strong>. Після типових 20–30% витрат (податки, команда, продакшн) орієнтир «на руки» ≈ <strong>$285 000–$326 000</strong> / міс — це в <strong>~7–9 разів менше</strong> за заголовковий GMV, але все одно не офіційна виписка з банку.</p>
             <h3 class="doc-h2">6. Орієнтири доходу за рівнями (узагальнення з аналітики)</h3>
             <div class="data-table-wrap"><table class="earn-table">
                 <thead><tr><th>Рівень</th><th>Щомісячний орієнтир</th></tr></thead>
@@ -688,89 +921,8 @@
         </div>
     </div>
 
-    <section class="calc-card" id="calc-time-money" aria-labelledby="calc-tm-title">
-        <div class="calc-card-head" id="calc-tm-title" data-i18n="calc_tm_title">Калькулятор «Час vs гроші» (перегляди та альтернативна ставка)</div>
-        <div class="calc-card-body">
-            <p class="muted" data-i18n="calc_tm_intro">Порівнюємо <strong>доход від переглядів</strong> (за обраним CPM у €) з тим, скільки ви могли б заробити за той самий час за фіксованою ставкою (секунда / хвилина / година / зміна / місяць). Нижче — порівняння двох підходів: багато роликів з низькими переглядами проти менше роликів, але з вищим охопленням.</p>
-            <div class="slider-block">
-                <label><span data-i18n="tm_lbl_views">Цільові перегляди</span>: <span class="slider-val" id="tmViewsOut">0</span></label>
-                <input type="range" id="tmViewsSlider" min="0" max="1000" value="600" aria-describedby="calc-tm-title">
-            </div>
-            <div class="tm-row">
-                <label><span data-i18n="tm_lbl_cpm">CPM (€ за 1000 переглядів)</span>
-                    <input type="number" id="tmCpm" min="0" max="100" step="0.05" value="2">
-                </label>
-                <label><span data-i18n="tm_lbl_hours">Час на контент (години)</span>
-                    <input type="number" id="tmHours" min="0" max="10000" step="0.25" value="5">
-                </label>
-            </div>
-            <div class="tm-row">
-                <label><span data-i18n="tm_lbl_rate">Ваша ставка (€)</span>
-                    <input type="number" id="tmRate" min="0" step="0.01" value="15">
-                </label>
-                <label><span data-i18n="tm_lbl_unit">За одиницю</span>
-                    <select id="tmUnit">
-                        <option value="sec" data-i18n="tm_unit_sec">за 1 секунду</option>
-                        <option value="min" data-i18n="tm_unit_min">за 1 хвилину</option>
-                        <option value="hour" selected data-i18n="tm_unit_hour">за 1 годину</option>
-                        <option value="shift" data-i18n="tm_unit_shift">за зміну (8 год)</option>
-                        <option value="month" data-i18n="tm_unit_month">за місяць (160 роб. год)</option>
-                    </select>
-                </label>
-            </div>
-            <div class="result-grid" id="tmResultGrid">
-                <div class="result-item"><strong data-i18n="tm_res_rev">Дохід від переглядів (CPM)</strong><span id="tmRev">0 €</span></div>
-                <div class="result-item"><strong data-i18n="tm_res_opp">Альтернативний дохід за той самий час</strong><span id="tmOpp">0 €</span></div>
-                <div class="result-item"><strong data-i18n="tm_res_diff">Різниця (перегляди − альтернатива)</strong><span id="tmDiff">0 €</span></div>
-                <div class="result-item"><strong data-i18n="tm_res_eff">Ефективність: € за годину (перегляди)</strong><span id="tmEph">0 €</span></div>
-                <div class="result-item"><strong data-i18n="tm_res_ratio">Переглядів на годину роботи</strong><span id="tmVph">0</span></div>
-            </div>
-            <div class="tm-scenario">
-                <h4 data-i18n="tm_cmp_title">Порівняння підходів</h4>
-                <p class="muted" data-i18n="tm_cmp_hint">Підставте кількість роликів, середні перегляди на ролик і хвилини на один ролик — побачите сумарні перегляди, години та «перегляди на годину».</p>
-                <div class="tm-grid">
-                    <div>
-                        <strong data-i18n="tm_cmp_a">A: багато роликів / нижче перегляди</strong>
-                        <div class="tm-row">
-                            <label><span data-i18n="tm_lbl_nv">Роликів</span><input type="number" id="tmAn" min="1" step="1" value="10"></label>
-                            <label><span data-i18n="tm_lbl_vpv">Переглядів / ролик</span><input type="number" id="tmAv" min="1" step="1" value="1000"></label>
-                            <label><span data-i18n="tm_lbl_mpv">Хв / ролик</span><input type="number" id="tmAm" min="0.5" step="0.5" value="30"></label>
-                        </div>
-                        <p class="muted" id="tmOutA"></p>
-                    </div>
-                    <div>
-                        <strong data-i18n="tm_cmp_b">B: менше роликів / вище перегляди</strong>
-                        <div class="tm-row">
-                            <label><span data-i18n="tm_lbl_nv">Роликів</span><input type="number" id="tmBn" min="1" step="1" value="1"></label>
-                            <label><span data-i18n="tm_lbl_vpv">Переглядів / ролик</span><input type="number" id="tmBv" min="1" step="1" value="20000"></label>
-                            <label><span data-i18n="tm_lbl_mpv">Хв / ролик</span><input type="number" id="tmBm" min="0.5" step="0.5" value="45"></label>
-                        </div>
-                        <p class="muted" id="tmOutB"></p>
-                    </div>
-                </div>
-                <p class="muted" id="tmCmpVerdict" style="margin-bottom:0;"></p>
-            </div>
-        </div>
-    </section>
-
-    <section class="calc-card" aria-labelledby="calc-shop-title">
-        <div class="calc-card-head" id="calc-shop-title" data-i18n="calc_shop_title">Калькулятор: TikTok Shop (комісія з продажів)</div>
-        <div class="calc-card-body">
-            <p class="muted" data-i18n="calc_shop_intro">Рахуємо не «гроші за 1000 переглядів», а <strong>орієнтовні замовлення та комісію</strong> з товарів: тематика впливає на середній чек і типовий % комісії, стиль ролика — на те, яка частка переглядів перетворюється на покупку (воронка TOFU / MOFU / BOFU). Додайте один або кілька акаунтів — внизу підсумок по «родині».</p>
-            <div id="accountsRoot"></div>
-            <button type="button" class="btn-add" id="btnAddAccount"><i class="bi bi-plus-lg"></i> <span data-i18n="btn_add">Додати акаунт</span></button>
-            <div class="family-total" id="familyTotal" hidden>
-                <h3 data-i18n="fam_h3">Підсумок по всіх акаунтах</h3>
-                <div class="family-row"><span data-i18n="fam_lbl_comm">Орієнтовна комісія</span><span class="family-big" id="famEur">0 €</span></div>
-                <div class="family-row"><span data-i18n="fam_lbl_ord">Замовлень (оцінка)</span><span id="famOrders">0</span></div>
-                <div class="family-row"><span data-i18n="fam_lbl_vid">Роликів (оцінка)</span><span id="famVideos">0</span></div>
-                <div class="family-row"><span data-i18n="fam_lbl_time">Час на ролики (оцінка)</span><span id="famHours">0</span></div>
-            </div>
-        </div>
-    </section>
-
-    <div class="acc">
-        <button type="button" class="acc-header" aria-expanded="true">
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
             <span data-i18n="acc_hdr_proposal">Пропозиція та ідея проєкту</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
@@ -779,8 +931,8 @@
         </div>
     </div>
 
-    <div class="acc">
-        <button type="button" class="acc-header" aria-expanded="true">
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
             <span data-i18n="acc_hdr_1">1. Запуск: телефон, SIM, IP, верифікація</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
@@ -796,8 +948,8 @@
         </div>
     </div>
 
-    <div class="acc">
-        <button type="button" class="acc-header" aria-expanded="true">
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
             <span data-i18n="acc_hdr_2">2. Комісії TikTok Shop (креатор)</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
@@ -815,8 +967,8 @@
         </div>
     </div>
 
-    <div class="acc">
-        <button type="button" class="acc-header" aria-expanded="true">
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
             <span data-i18n="acc_hdr_3">3. Контент: формати, Іспанія та «американський» референс</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
@@ -833,8 +985,8 @@
         </div>
     </div>
 
-    <div class="acc">
-        <button type="button" class="acc-header" aria-expanded="true">
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
             <span data-i18n="acc_hdr_4">4. Перші 1000–2000 підписників: лише Іспанія</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
@@ -851,8 +1003,8 @@
         </div>
     </div>
 
-    <div class="acc">
-        <button type="button" class="acc-header" aria-expanded="true">
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
             <span data-i18n="acc_hdr_5">5. Оптимальна стратегія за фазами</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
@@ -863,8 +1015,8 @@
         </div>
     </div>
 
-    <div class="acc">
-        <button type="button" class="acc-header" aria-expanded="true">
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
             <span data-i18n="acc_hdr_6">6. Прості формати для набору підписників (ідеї за хештегами)</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
@@ -882,8 +1034,8 @@
         </div>
     </div>
 
-    <div class="acc">
-        <button type="button" class="acc-header" aria-expanded="true">
+    <div class="acc collapsed">
+        <button type="button" class="acc-header" aria-expanded="false">
             <span data-i18n="acc_hdr_6a">6а. Приклад: ланч-бокс з підігрівом на акумуляторі (~11 млн переглядів)</span>
             <i class="bi bi-chevron-down acc-chevron"></i>
         </button>
@@ -991,6 +1143,29 @@
         calc_tm_intro: "Сравниваем <strong>доход от просмотров</strong> (по выбранному CPM в €) с тем, сколько вы могли бы заработать за то же время по фиксированной ставке (секунда / минута / час / смена / месяц). Ниже — сравнение двух подходов: много роликов с низкими просмотрами против меньше роликов, но с большим охватом.",
         calc_shop_title: "Калькулятор: TikTok Shop (комиссия с продаж)",
         calc_shop_intro: "Считаем не «деньги за 1000 просмотров», а <strong>ориентировочные заказы и комиссию</strong> с товаров: тематика влияет на средний чек и типичный % комиссии, стиль ролика — на то, какая доля просмотров превращается в покупку (воронка TOFU / MOFU / BOFU). Добавьте один или несколько аккаунтов — внизу итог по «семье».",
+        calc_tab_mon: "Монетизация (просмотры)",
+        calc_tab_shop: "TikTok Shop",
+        sum_mon_title: "Ориентир за месяц (монетизация просмотрами)",
+        sum_mon_intro: "Ползунок просмотров выше трактуем как <strong>просмотры за месяц</strong>. Уточните средние просмотры на ролик и минуты на ролик — оценим число роликов, часы съёмки и эффективность на единицу времени (качественный контент, психология зрителя, алгоритм, этапы воронки — в сравнении подходов выше).",
+        sum_mon_avg_vpv: "Средние просмотры на 1 ролик",
+        sum_mon_min_vid: "Минут на 1 ролик (съёмка+монтаж)",
+        sum_lbl_rev_m: "Доход за месяц (CPM)",
+        sum_lbl_vids: "Роликов (оценка)",
+        sum_lbl_shoot: "Время на ролики (оценка)",
+        sum_lbl_uah: "Ориентировочно в грн (курс)",
+        sum_lbl_gmv: "GMV (оценка)",
+        sum_lbl_comm: "Ваша комиссия",
+        sum_quality_note: "Эффективность растёт не от «минут в кадре», а от соответствия контента намерению зрителя и этапу воронки (верх / середина / низ), плюс доверие и удержание в первые секунды.",
+        sum_shop_title: "Ориентир за период (TikTok Shop)",
+        sum_shop_intro: "Ниже — <strong>GMV</strong> (объём заказов) и ваша <strong>комиссия</strong>, ролики и время; эффективность на 1 мин, 1 ч, 8 ч, рабочий месяц (160 ч) и год системной работы. В полях аккаунта «целевые просмотры» можно читать как просмотры за выбранный период (например, месяц).",
+        sum_shop_funnel: "Комиссия зависит от тематики товара и стиля ролика (TOFU / MOFU / BOFU); качественный контент под алгоритм и намерение покупателя делает прогноз надёжнее.",
+        sum_eff_1m: "Доход за 1 мин работы (оценка)",
+        sum_eff_1h: "За 1 час работы",
+        sum_eff_8h: "За 8 часов (смена)",
+        sum_eff_160: "За рабочий месяц (160 ч)",
+        sum_eff_year: "За год системной работы (1920 ч)",
+        sum_eff_na: "Укажите ненулевое время на контент или измените просмотры.",
+        sum_kurs_hint: "Курс ориентировочный: 1 € ≈ 45 грн; зарплата учителя-ориентир ~15 000 грн/мес.",
         acc_hdr_market: "TikTok Shop Spain — рыночные данные (EchoTik и отраслевые отчёты, 2026)",
         acc_hdr_earnings: "TikTok Shop: GMV, комиссии и заработки креаторов (2025–2026)",
         tm_lbl_views: "Целевые просмотры",
@@ -1016,7 +1191,7 @@
         tm_lbl_vpv: "Просмотров / ролик",
         tm_lbl_mpv: "Мин / ролик",
         acc_panel_market: "<p class=\"muted\" style=\"margin-top:0;\"><strong>\u041e\u0440\u0438\u0435\u043d\u0442\u0438\u0440 \u0434\u043b\u044f \u043f\u043b\u0430\u043d\u0438\u0440\u043e\u0432\u0430\u043d\u0438\u044f.</strong> \u041e\u0431\u043e\u0431\u0449\u0451\u043d\u043d\u044b\u0435 \u0434\u0430\u043d\u043d\u044b\u0435 \u0430\u043d\u0430\u043b\u0438\u0442\u0438\u043a\u0438 \u0440\u044b\u043d\u043a\u0430 \u0438 \u043f\u0443\u0431\u043b\u0438\u0447\u043d\u044b\u0445 \u043e\u0442\u0447\u0451\u0442\u043e\u0432; \u0440\u0435\u0430\u043b\u044c\u043d\u044b\u0435 \u043f\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u0438 \u0437\u0430\u0432\u0438\u0441\u044f\u0442 \u043e\u0442 \u0430\u043a\u043a\u0430\u0443\u043d\u0442\u0430, \u0442\u043e\u0432\u0430\u0440\u0430 \u0438 \u0441\u0435\u0437\u043e\u043d\u0430.</p>\n            <h3 class=\"doc-h2\">1. \u0421\u0442\u0440\u0443\u043a\u0442\u0443\u0440\u0430 \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0439</h3>\n            <h4 class=\"doc-h3\">1.1. \u041a\u043e\u043c\u0438\u0441\u0441\u0438\u044f \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b (\u043f\u043b\u0430\u0442\u0438\u0442 \u043f\u0440\u043e\u0434\u0430\u0432\u0435\u0446)</h4>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f</th><th>\u0421\u0442\u0430\u0432\u043a\u0430</th><th>\u041f\u0440\u0438\u043c\u0435\u0447\u0430\u043d\u0438\u044f</th></tr></thead>\n                <tbody>\n                    <tr><td>\u0421\u0442\u0430\u043d\u0434\u0430\u0440\u0442</td><td>9%</td><td>\u0421 1 \u044f\u043d\u0432\u0430\u0440\u044f 2026</td></tr>\n                    <tr><td>\u042d\u043b\u0435\u043a\u0442\u0440\u043e\u043d\u0438\u043a\u0430</td><td>7%</td><td>\u041f\u043e\u043d\u0438\u0436\u0435\u043d\u043d\u0430\u044f \u0441\u0442\u0430\u0432\u043a\u0430</td></tr>\n                    <tr><td>\u041d\u043e\u0432\u044b\u0435 \u043f\u0440\u043e\u0434\u0430\u0432\u0446\u044b (\u043f\u0435\u0440\u0432\u044b\u0435 60 \u0434\u043d\u0435\u0439)</td><td>4%</td><td>\u041f\u0440\u043e\u043c\u043e \u0437\u0430 \u0432\u044b\u043f\u043e\u043b\u043d\u0435\u043d\u0438\u0435 \u0437\u0430\u0434\u0430\u043d\u0438\u0439</td></tr>\n                </tbody>\n            </table></div>\n            <h4 class=\"doc-h3\">1.2. \u041a\u043e\u043c\u0438\u0441\u0441\u0438\u044f \u0430\u0444\u0444\u0438\u043b\u0438\u0430\u0442-\u043a\u0440\u0435\u0430\u0442\u043e\u0440\u0430 (\u0432\u044b\u043f\u043b\u0430\u0447\u0438\u0432\u0430\u0435\u0442\u0441\u044f \u043a\u0440\u0435\u0430\u0442\u043e\u0440\u0443)</h4>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u0414\u0438\u0430\u043f\u0430\u0437\u043e\u043d</th><th>\u0422\u0438\u043f\u0438\u0447\u043d\u043e \u043f\u043e \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f\u043c</th></tr></thead>\n                <tbody>\n                    <tr><td>5\u201320%</td><td>\u0417\u0430\u0434\u0430\u0451\u0442 \u043f\u0440\u043e\u0434\u0430\u0432\u0435\u0446 \u043d\u0430 \u0442\u043e\u0432\u0430\u0440</td></tr>\n                    <tr><td>5\u201310%</td><td>\u042d\u043b\u0435\u043a\u0442\u0440\u043e\u043d\u0438\u043a\u0430, \u0433\u0430\u0434\u0436\u0435\u0442\u044b</td></tr>\n                    <tr><td>8\u201312%</td><td>\u0414\u043e\u043c \u0438 \u043a\u0443\u0445\u043d\u044f</td></tr>\n                    <tr><td>8\u201315%</td><td>\u041c\u043e\u0434\u0430, \u0430\u0432\u0442\u043e\u0430\u043a\u0441\u0435\u0441\u0441\u0443\u0430\u0440\u044b</td></tr>\n                    <tr><td>10\u201320%</td><td>\u041a\u0440\u0430\u0441\u043e\u0442\u0430, \u0443\u0445\u043e\u0434</td></tr>\n                    <tr><td>12\u201320%</td><td>\u0421\u043f\u043e\u0440\u0442 \u0438 \u0444\u0438\u0442\u043d\u0435\u0441</td></tr>\n                    <tr><td>15\u201320%</td><td>\u0417\u0434\u043e\u0440\u043e\u0432\u044c\u0435 \u0438 wellness</td></tr>\n                </tbody>\n            </table></div>\n            <h3 class=\"doc-h2\">2. \u041a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u044f</h3>\n            <h4 class=\"doc-h3\">2.1. \u041f\u043e \u0442\u0438\u043f\u0443 \u0442\u0440\u0430\u0444\u0438\u043a\u0430</h4>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u0422\u0438\u043f \u0442\u0440\u0430\u0444\u0438\u043a\u0430</th><th>\u0421\u0440\u0435\u0434\u043d\u0435\u0435</th><th>\u00ab\u0425\u043e\u0440\u043e\u0448\u043e\u00bb</th><th>\u0420\u0435\u043a\u043e\u0440\u0434</th></tr></thead>\n                <tbody>\n                    <tr><td>TikTok Shop \u0432 \u043f\u0440\u0438\u043b\u043e\u0436\u0435\u043d\u0438\u0438</td><td>2,5\u20134,0%</td><td>5,0\u20138,0%</td><td>15%+ (\u044d\u0444\u0438\u0440\u044b)</td></tr>\n                    <tr><td>\u0412\u043d\u0435\u0448\u043d\u0438\u0439 \u0441\u0430\u0439\u0442 (Shopify)</td><td>0,8\u20131,1%</td><td>1,5\u20132,0%</td><td>3,5%+</td></tr>\n                    <tr><td>\u041e\u0440\u0433\u0430\u043d\u0438\u043a\u0430</td><td>0,5\u20131,0%</td><td>\u2014</td><td>\u2014</td></tr>\n                </tbody>\n            </table></div>\n            <h4 class=\"doc-h3\">2.2. \u041f\u043e \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f\u043c (\u0418\u0441\u043f\u0430\u043d\u0438\u044f / \u0415\u0432\u0440\u043e\u043f\u0430)</h4>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f</th><th>\u0421\u0440. \u043a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u044f</th><th>\u041a\u043e\u043c\u0438\u0441\u0441\u0438\u044f \u0430\u0444\u0444\u0438\u043b\u0438\u0430\u0442\u0430</th><th>\u041f\u0440\u0438\u043c\u0435\u0447\u0430\u043d\u0438\u044f</th></tr></thead>\n                <tbody>\n                    <tr><td>\u0415\u0434\u0430 \u0438 \u043d\u0430\u043f\u0438\u0442\u043a\u0438</td><td>8,8%</td><td>8\u201315%</td><td>\u041d\u0438\u0437\u043a\u0430\u044f \u0446\u0435\u043d\u0430, \u0438\u043c\u043f\u0443\u043b\u044c\u0441</td></tr>\n                    <tr><td>\u041a\u0440\u0430\u0441\u043e\u0442\u0430</td><td>7,5%</td><td>10\u201320%</td><td>\u0421\u0438\u043b\u044c\u043d\u044b\u0439 \u0432\u0438\u0437\u0443\u0430\u043b</td></tr>\n                    <tr><td>\u041c\u043e\u0434\u0430</td><td>4,2%</td><td>8\u201315%</td><td>\u0420\u0430\u0437\u043c\u0435\u0440\u044b \u0441\u043d\u0438\u0436\u0430\u044e\u0442 \u043a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u044e</td></tr>\n                    <tr><td>\u0422\u0435\u0445\u043d\u0438\u043a\u0430 / \u0433\u0430\u0434\u0436\u0435\u0442\u044b</td><td>3,5%</td><td>5\u201310%</td><td>\u041d\u0443\u0436\u043d\u043e \u0434\u043e\u0432\u0435\u0440\u0438\u0435, \u0432\u044b\u0448\u0435 \u0446\u0435\u043d\u0430</td></tr>\n                    <tr><td>\u0414\u043e\u043c \u0438 \u043a\u0443\u0445\u043d\u044f</td><td>3,0\u20135,0%</td><td>8\u201312%</td><td>\u0421\u0442\u0430\u0431\u0438\u043b\u044c\u043d\u044b\u0439 \u0441\u043f\u0440\u043e\u0441</td></tr>\n                    <tr><td>\u0421\u043f\u043e\u0440\u0442</td><td>4,5\u20136,0%</td><td>12\u201320%</td><td>\u0412\u044b\u0441\u043e\u043a\u0430\u044f \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u044f, \u0441\u0435\u0437\u043e\u043d\u043d\u043e\u0441\u0442\u044c</td></tr>\n                    <tr><td>\u0410\u0432\u0442\u043e\u0430\u043a\u0441\u0435\u0441\u0441\u0443\u0430\u0440\u044b</td><td>2,5\u20134,0%</td><td>8\u201315%</td><td>\u041d\u0438\u0448\u0430</td></tr>\n                </tbody>\n            </table></div>\n            <h4 class=\"doc-h3\">2.3. \u0412\u043b\u0438\u044f\u043d\u0438\u0435 \u0446\u0435\u043d\u044b \u043d\u0430 \u043a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u044e</h4>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u0426\u0435\u043d\u043e\u0432\u043e\u0439 \u0434\u0438\u0430\u043f\u0430\u0437\u043e\u043d</th><th>\u041a\u043e\u0440\u0440\u0435\u043a\u0446\u0438\u044f \u043a \u0431\u0430\u0437\u043e\u0432\u043e\u0439 \u043a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u0438</th></tr></thead>\n                <tbody>\n                    <tr><td>\u0414\u043e 20 \u20ac</td><td>\u0411\u0430\u0437\u0430 +20\u201330%</td></tr>\n                    <tr><td>20\u201340 \u20ac</td><td>\u0411\u0430\u0437\u0430</td></tr>\n                    <tr><td>40\u201380 \u20ac</td><td>\u0411\u0430\u0437\u0430 \u221240\u201360%</td></tr>\n                    <tr><td>\u0421\u0432\u044b\u0448\u0435 80 \u20ac</td><td>\u0411\u0430\u0437\u0430 \u221260\u201380%</td></tr>\n                </tbody>\n            </table></div>\n            <h3 class=\"doc-h2\">3. \u042f\u0437\u044b\u043a \u0438 \u043e\u0437\u0432\u0443\u0447\u043a\u0430</h3>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u0422\u0438\u043f \u043a\u043e\u043d\u0442\u0435\u043d\u0442\u0430</th><th>\u041f\u043e\u0434\u044a\u0451\u043c \u043a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u0438</th><th>\u041f\u0440\u0438\u043c\u0435\u0447\u0430\u043d\u0438\u044f</th></tr></thead>\n                <tbody>\n                    <tr><td>UGC (\u0436\u0438\u0432\u043e\u0439 \u0447\u0435\u043b\u043e\u0432\u0435\u043a)</td><td>+40%</td><td>\u0412\u044b\u0433\u043b\u044f\u0434\u0438\u0442 \u0430\u0443\u0442\u0435\u043d\u0442\u0438\u0447\u043d\u043e</td></tr>\n                    <tr><td>\u0420\u043e\u0434\u043d\u043e\u0439 \u044f\u0437\u044b\u043a (voiceover)</td><td>+25\u201335%</td><td>\u0411\u043e\u043b\u044c\u0448\u0435 \u0434\u043e\u0432\u0435\u0440\u0438\u044f</td></tr>\n                    <tr><td>\u0422\u0435\u043a\u0441\u0442 \u043d\u0430 \u044d\u043a\u0440\u0430\u043d\u0435</td><td>+15\u201320%</td><td>\u0412\u0430\u0436\u043d\u043e \u0434\u043b\u044f \u00ab\u0431\u0435\u0437 \u0441\u043b\u043e\u0432\u00bb</td></tr>\n                    <tr><td>\u0411\u0435\u0437 \u0441\u043b\u043e\u0432 (\u043c\u0443\u0437\u044b\u043a\u0430 + \u0434\u0435\u043c\u043e)</td><td>\u221210\u201315%</td><td>\u0414\u043b\u044f \u044f\u0440\u043a\u0438\u0445 \u0442\u043e\u0432\u0430\u0440\u043e\u0432 \u043c\u043e\u0436\u0435\u0442 \u0437\u0430\u0439\u0442\u0438</td></tr>\n                </tbody>\n            </table></div>\n            <h3 class=\"doc-h2\">4. \u0422\u043e\u043f-\u0442\u043e\u0432\u0430\u0440\u044b \u0432 \u0418\u0441\u043f\u0430\u043d\u0438\u0438 (\u044f\u043d\u0432\u0430\u0440\u044c 2026, \u043e\u0440\u0438\u0435\u043d\u0442\u0438\u0440)</h3>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u0422\u043e\u0432\u0430\u0440</th><th>\u0426\u0435\u043d\u0430</th><th>\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f</th><th>\u0414\u043e\u0445\u043e\u0434 (\u043e\u0446\u0435\u043d\u043a\u0430)</th></tr></thead>\n                <tbody>\n                    <tr><td>V16 Emergency Signal (GPS)</td><td>35\u201350 \u20ac</td><td>\u0410\u0432\u0442\u043e</td><td>~14,7 \u0442\u044b\u0441. \u20ac</td></tr>\n                    <tr><td>NAD+ \u0430\u043d\u0442\u0438-\u044d\u0439\u0434\u0436 \u0434\u043e\u0431\u0430\u0432\u043a\u0438</td><td>40\u201360 \u20ac</td><td>\u0417\u0434\u043e\u0440\u043e\u0432\u044c\u0435</td><td>~14,7 \u0442\u044b\u0441. \u20ac</td></tr>\n                    <tr><td>\u041f\u043e\u0441\u0443\u0434\u0430 / \u043a\u0443\u0445\u043e\u043d\u043d\u044b\u0435 \u0438\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u044b</td><td>25\u201350 \u20ac</td><td>\u0414\u043e\u043c \u0438 \u043a\u0443\u0445\u043d\u044f</td><td>\u0421\u0442\u0430\u0431\u0438\u043b\u044c\u043d\u043e \u0432 \u0442\u043e\u043f\u0435</td></tr>\n                </tbody>\n            </table></div>\n            <h3 class=\"doc-h2\">5. \u041f\u0440\u0438\u043c\u0435\u0440: \u043b\u0430\u043d\u0447\u0431\u043e\u043a\u0441 \u0441 \u043f\u043e\u0434\u043e\u0433\u0440\u0435\u0432\u043e\u043c (70 \u20ac, 11 \u043c\u043b\u043d \u043f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u043e\u0432)</h3>\n            <h4 class=\"doc-h3\">5.1. \u0421\u0446\u0435\u043d\u0430\u0440\u0438\u0438 \u043a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u0438 (GMV)</h4>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u0421\u0446\u0435\u043d\u0430\u0440\u0438\u0439</th><th>\u041a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u044f</th><th>\u041f\u0440\u043e\u0434\u0430\u0436 (\u0448\u0442.)</th><th>GMV</th></tr></thead>\n                <tbody>\n                    <tr><td>\u041a\u043e\u043d\u0441\u0435\u0440\u0432\u0430\u0442\u0438\u0432\u043d\u044b\u0439</td><td>0,5%</td><td>55 000</td><td>3 850 000 \u20ac</td></tr>\n                    <tr><td>\u041a\u043e\u043d\u0441\u0435\u0440\u0432\u0430\u0442\u0438\u0432\u043d\u044b\u0439+</td><td>0,8%</td><td>88 000</td><td>6 160 000 \u20ac</td></tr>\n                    <tr><td>\u041e\u043f\u0442\u0438\u043c\u0438\u0441\u0442\u0438\u0447\u043d\u044b\u0439</td><td>1,0%</td><td>110 000</td><td>7 700 000 \u20ac</td></tr>\n                    <tr><td>\u0412\u0438\u0440\u0443\u0441\u043d\u044b\u0439 \u0443\u0441\u043f\u0435\u0445</td><td>1,5%</td><td>165 000</td><td>11 550 000 \u20ac</td></tr>\n                </tbody>\n            </table></div>\n            <h4 class=\"doc-h3\">5.2. \u0417\u0430\u0440\u0430\u0431\u043e\u0442\u043e\u043a \u043a\u0440\u0435\u0430\u0442\u043e\u0440\u0430 (\u043a\u043e\u043c\u0438\u0441\u0441\u0438\u044f 5\u201312%)</h4>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u0421\u0446\u0435\u043d\u0430\u0440\u0438\u0439</th><th>\u041f\u0440\u043e\u0434\u0430\u0436</th><th>5%</th><th>8%</th><th>12%</th></tr></thead>\n                <tbody>\n                    <tr><td>\u041a\u043e\u043d\u0441\u0435\u0440\u0432\u0430\u0442\u0438\u0432\u043d\u044b\u0439</td><td>55 000</td><td>192 500 \u20ac</td><td>308 000 \u20ac</td><td>462 000 \u20ac</td></tr>\n                    <tr><td>\u041a\u043e\u043d\u0441\u0435\u0440\u0432\u0430\u0442\u0438\u0432\u043d\u044b\u0439+</td><td>88 000</td><td>308 000 \u20ac</td><td>492 800 \u20ac</td><td>739 200 \u20ac</td></tr>\n                    <tr><td>\u041e\u043f\u0442\u0438\u043c\u0438\u0441\u0442\u0438\u0447\u043d\u044b\u0439</td><td>110 000</td><td>385 000 \u20ac</td><td>616 000 \u20ac</td><td>924 000 \u20ac</td></tr>\n                    <tr><td>\u0412\u0438\u0440\u0443\u0441\u043d\u044b\u0439</td><td>165 000</td><td>577 500 \u20ac</td><td>924 000 \u20ac</td><td>1 386 000 \u20ac</td></tr>\n                </tbody>\n            </table></div>\n            <h3 class=\"doc-h2\">6. \u0424\u0430\u043a\u0442\u043e\u0440\u044b, \u0432\u043b\u0438\u044f\u044e\u0449\u0438\u0435 \u043d\u0430 \u043a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u044e</h3>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u0424\u0430\u043a\u0442\u043e\u0440</th><th>\u0412\u043b\u0438\u044f\u043d\u0438\u0435</th><th>\u0420\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u0430\u0446\u0438\u044f</th></tr></thead>\n                <tbody>\n                    <tr><td>\u0426\u0435\u043d\u0430 &gt;40 \u20ac</td><td>\u221240\u201360% \u043a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u0438</td><td>\u0411\u0430\u043d\u0434\u043b\u044b, \u0430\u043a\u0441\u0435\u0441\u0441\u0443\u0430\u0440\u044b</td></tr>\n                    <tr><td>\u0425\u0443\u043a (\u043f\u0435\u0440\u0432\u044b\u0435 3 \u0441)</td><td>\u0415\u0441\u043b\u0438 \u0443\u0434\u0435\u0440\u0436\u0430\u043d\u0438\u0435 &lt;30% \u2014 \u043f\u0440\u043e\u0434\u0430\u0436 \u043f\u043e\u0447\u0442\u0438 \u043d\u0435\u0442</td><td>\u0421\u0438\u043b\u044c\u043d\u044b\u0439 \u0432\u0438\u0437\u0443\u0430\u043b\u044c\u043d\u044b\u0439 \u0441\u0442\u0430\u0440\u0442</td></tr>\n                    <tr><td>\u041e\u0442\u0437\u044b\u0432\u044b \u0438 \u0441\u043e\u0446\u0434\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u044c\u0441\u0442\u0432\u043e</td><td>+20%</td><td>Spark Ads \u0441 \u043a\u043e\u043c\u043c\u0435\u043d\u0442\u0430\u0440\u0438\u044f\u043c\u0438</td></tr>\n                    <tr><td>Live commerce</td><td>\u0434\u043e ~15% \u043a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u0438</td><td>\u041f\u043e\u0441\u043b\u0435 \u043d\u0430\u0431\u043e\u0440\u0430 \u0430\u0443\u0434\u0438\u0442\u043e\u0440\u0438\u0438</td></tr>\n                </tbody>\n            </table></div>\n            <h3 class=\"doc-h2\">7. \u0420\u044b\u043d\u043e\u043a \u0418\u0441\u043f\u0430\u043d\u0438\u0438 \u2014 \u043a\u0440\u0430\u0442\u043a\u043e</h3>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u044c</th><th>\u0417\u043d\u0430\u0447\u0435\u043d\u0438\u0435</th></tr></thead>\n                <tbody>\n                    <tr><td>\u0417\u0430\u043f\u0443\u0441\u043a TikTok Shop \u0432 \u0418\u0441\u043f\u0430\u043d\u0438\u0438</td><td>2024\u20132025</td></tr>\n                    <tr><td>\u0423\u043a\u0440\u0430\u0438\u043d\u0441\u043a\u0430\u044f \u0434\u0438\u0430\u0441\u043f\u043e\u0440\u0430</td><td>200 000+</td></tr>\n                    <tr><td>\u041f\u043e\u043f\u0443\u043b\u044f\u0440\u043d\u044b\u0435 \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u0438</td><td>\u0422\u043e\u0432\u0430\u0440\u044b \u0434\u043b\u044f \u0434\u043e\u043c\u0430, \u0437\u0434\u043e\u0440\u043e\u0432\u044c\u0435, \u0431\u0435\u0437\u043e\u043f\u0430\u0441\u043d\u043e\u0441\u0442\u044c</td></tr>\n                    <tr><td>\u0421\u0440\u0435\u0434\u043d\u0438\u0439 \u0447\u0435\u043a (AOV)</td><td>20\u201340 \u20ac</td></tr>\n                    <tr><td>\u041f\u0440\u0435\u043c\u0438\u0443\u043c (&gt;40 \u20ac)</td><td>\u041d\u0438\u0436\u0435 \u043a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u044f, \u0432\u044b\u0448\u0435 \u043c\u0430\u0440\u0436\u0430</td></tr>\n                </tbody>\n            </table></div>\n            <h3 class=\"doc-h2\">8. \u0420\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u0430\u0446\u0438\u0438 \u0434\u043b\u044f \u0441\u0435\u043c\u0435\u0439\u043d\u043e\u0433\u043e \u0430\u043a\u043a\u0430\u0443\u043d\u0442\u0430</h3>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u0420\u0435\u0441\u0443\u0440\u0441</th><th>\u0412\u043b\u0438\u044f\u043d\u0438\u0435</th></tr></thead>\n                <tbody>\n                    <tr><td>\u0410\u0440\u0442\u0451\u043c (\u0438\u0441\u043f\u0430\u043d\u0441\u043a\u0430\u044f \u043e\u0437\u0432\u0443\u0447\u043a\u0430)</td><td>+25\u201335% vs \u00ab\u0431\u0435\u0437 \u0441\u043b\u043e\u0432\u00bb</td></tr>\n                    <tr><td>\u0423\u043a\u0440\u0430\u0438\u043d\u0441\u043a\u0438\u0439 \u0432 \u043a\u0430\u0434\u0440\u0435</td><td>\u0414\u043e\u0432\u0435\u0440\u0438\u0435 \u0434\u0438\u0430\u0441\u043f\u043e\u0440\u044b</td></tr>\n                    <tr><td>\u0412\u0438\u0437\u0443\u0430\u043b\u044c\u043d\u043e\u0435 \u00ab\u0434\u043e/\u043f\u043e\u0441\u043b\u0435\u00bb</td><td>+20\u201330% \u043a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u0438</td></tr>\n                    <tr><td>\u0426\u0435\u043d\u0430 ~70 \u20ac</td><td>\u041d\u0438\u0436\u0435 \u043a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u044f, \u0432\u044b\u0448\u0435 \u0447\u0435\u043a</td></tr>\n                </tbody>\n            </table></div>\n            <h3 class=\"doc-h2\">9. \u0418\u0441\u0442\u043e\u0447\u043d\u0438\u043a\u0438</h3>\n            <ul>\n                <li>EchoTik Market Reports (2026)</li>\n                <li>Kalldata Spain Analytics</li>\n                <li>Lengow TikTok Shop Data</li>\n                <li>\u041e\u0444\u0438\u0446\u0438\u0430\u043b\u044c\u043d\u0430\u044f \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u044f TikTok Shop</li>\n                <li>Affiliate Program Guidelines</li>\n            </ul>\n            <h3 class=\"doc-h2\">10. \u041f\u0440\u0438\u043c\u0435\u0447\u0430\u043d\u0438\u0435 \u043f\u043e \u0430\u043a\u0442\u0443\u0430\u043b\u044c\u043d\u043e\u0441\u0442\u0438</h3>\n            <p>\u0414\u0430\u043d\u043d\u044b\u0435 \u043e\u0442\u0440\u0430\u0436\u0430\u044e\u0442 \u0440\u044b\u043d\u043e\u043a \u043d\u0430 <strong>\u043c\u0430\u0440\u0442 2026</strong>. \u0421\u0442\u0430\u0432\u043a\u0438 \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0438 \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b \u0434\u043b\u044f \u043f\u0440\u043e\u0434\u0430\u0432\u0446\u043e\u0432 \u0438\u0437\u043c\u0435\u043d\u0435\u043d\u044b \u0441 <strong>1 \u044f\u043d\u0432\u0430\u0440\u044f 2026</strong> (\u0441\u0442\u0430\u043d\u0434\u0430\u0440\u0442 \u0432\u044b\u0440\u043e\u0441 \u0441 5% \u0434\u043e 9%). \u0410\u0444\u0444\u0438\u043b\u0438\u0430\u0442\u043d\u044b\u0435 \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0438 \u043a\u0440\u0435\u0430\u0442\u043e\u0440\u0430\u043c \u043f\u043e-\u043f\u0440\u0435\u0436\u043d\u0435\u043c\u0443 \u0437\u0430\u0434\u0430\u0451\u0442 \u043f\u0440\u043e\u0434\u0430\u0432\u0435\u0446 (\u043e\u0440\u0438\u0435\u043d\u0442\u0438\u0440 5\u201320%).</p>\n",
-        acc_panel_earnings: "            <div class=\"highlight-inline\">\n                <strong>GMV \u2260 \u0434\u0435\u043d\u044c\u0433\u0438 \u00ab\u0432 \u043a\u0430\u0440\u043c\u0430\u043d\u0435\u00bb.</strong> \u0412 \u0440\u0435\u0439\u0442\u0438\u043d\u0433\u0430\u0445 \u0447\u0430\u0441\u0442\u043e \u043f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u044e\u0442 <strong>\u0432\u0430\u043b\u043e\u0432\u044b\u0439 \u043e\u0431\u044a\u0451\u043c \u043f\u0440\u043e\u0434\u0430\u0436 (GMV)</strong>, \u0430 \u043d\u0435 \u0447\u0438\u0441\u0442\u044b\u0439 \u0434\u043e\u0445\u043e\u0434 \u043a\u0440\u0435\u0430\u0442\u043e\u0440\u0430. \u041a\u043e\u043c\u0438\u0441\u0441\u0438\u044f, \u043d\u0430\u043b\u043e\u0433\u0438, \u043f\u0440\u043e\u0434\u0430\u043a\u0448\u043d, \u0432\u043e\u0437\u0432\u0440\u0430\u0442\u044b \u2014 \u0432\u0441\u0451 \u044d\u0442\u043e \u0443\u043c\u0435\u043d\u044c\u0448\u0430\u0435\u0442 \u0440\u0435\u0430\u043b\u044c\u043d\u0443\u044e \u0441\u0443\u043c\u043c\u0443.\n            </div>\n            <h3 class=\"doc-h2\">1. \u0427\u0442\u043e \u0442\u0430\u043a\u043e\u0435 GMV</h3>\n            <p><strong>GMV (Gross Merchandise Value)</strong> \u2014 \u0441\u0443\u043c\u043c\u0430 \u0437\u0430\u043a\u0430\u0437\u043e\u0432 \u043f\u043e \u0432\u0430\u0448\u0435\u0439 \u0441\u0441\u044b\u043b\u043a\u0435 \u0438\u043b\u0438 \u0432 \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0435 <em>\u0432 \u043c\u043e\u043c\u0435\u043d\u0442 \u043e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u044f</em>; \u044d\u0442\u043e \u043c\u0430\u0441\u0448\u0442\u0430\u0431 \u043f\u0440\u043e\u0434\u0430\u0436, \u0430 \u043d\u0435 \u0432\u0430\u0448 \u043f\u0440\u0438\u0431\u044b\u043b\u044c.</p>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u044c</th><th>\u0412 \u0441\u043e\u0441\u0442\u0430\u0432\u0435 GMV?</th><th>\u0422\u0438\u043f\u0438\u0447\u043d\u043e\u0435 \u0432\u043b\u0438\u044f\u043d\u0438\u0435</th></tr></thead>\n                <tbody>\n                    <tr><td>\u0422\u043e\u0432\u0430\u0440 + \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0430, \u043e\u043f\u043b\u0430\u0447\u0435\u043d\u043d\u044b\u0435 \u043f\u043e\u043a\u0443\u043f\u0430\u0442\u0435\u043b\u0435\u043c</td><td>\u0414\u0430</td><td>100% GMV</td></tr>\n                    <tr><td>\u041a\u043e\u043c\u0438\u0441\u0441\u0438\u044f \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b (referral fee)</td><td>\u041d\u0435\u0442</td><td>\u043e\u0440\u0438\u0435\u043d\u0442\u0438\u0440 ~2\u20138%</td></tr>\n                    <tr><td>\u041a\u043e\u043c\u0438\u0441\u0441\u0438\u044f \u0430\u0444\u0444\u0438\u043b\u0438\u0430\u0442\u0430 (\u0432\u0430\u0448 \u0434\u043e\u0445\u043e\u0434)</td><td>\u041d\u0435\u0442</td><td>\u043e\u0440\u0438\u0435\u043d\u0442\u0438\u0440 ~5\u201330% \u043e\u0442 \u0447\u0435\u043a\u0430</td></tr>\n                    <tr><td>\u0412\u043e\u0437\u0432\u0440\u0430\u0442\u044b</td><td>\u041d\u0435\u0442 (\u043d\u043e \u0432 \u0438\u0441\u0442\u043e\u0440\u0438\u0438 GMV)</td><td>\u221215\u201330% \u0432 \u0447\u0443\u0432\u0441\u0442\u0432\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0445 \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f\u0445</td></tr>\n                    <tr><td>COGS, \u0440\u0435\u043a\u043b\u0430\u043c\u0430, \u043b\u043e\u0433\u0438\u0441\u0442\u0438\u043a\u0430 \u043f\u0440\u043e\u0434\u0430\u0432\u0446\u0430</td><td>\u041d\u0435\u0442</td><td>\u0441\u043d\u0438\u0436\u0430\u044e\u0442 \u043f\u0440\u0438\u0431\u044b\u043b\u044c \u043f\u0440\u043e\u0434\u0430\u0432\u0446\u0430</td></tr>\n                </tbody>\n            </table></div>\n            <p class=\"muted\">\u041e\u043f\u0442\u0438\u043c\u0438\u0437\u0430\u0446\u0438\u044f \u0442\u043e\u043b\u044c\u043a\u043e \u043f\u043e\u0434 GMV \u0431\u0435\u0437 \u0443\u0447\u0451\u0442\u0430 \u0443\u0434\u0435\u0440\u0436\u0430\u043d\u0438\u0439 \u2014 \u0442\u0438\u043f\u0438\u0447\u043d\u0430\u044f \u043e\u0448\u0438\u0431\u043a\u0430.</p>\n            <h3 class=\"doc-h2\">2. \u0418\u043b\u043b\u044e\u0441\u0442\u0440\u0430\u0446\u0438\u044f: $20 000 GMV \u0434\u043b\u044f \u043f\u0440\u043e\u0434\u0430\u0432\u0446\u0430</h3>\n            <p>\u0423\u043f\u0440\u043e\u0449\u0451\u043d\u043d\u044b\u0439 \u043f\u0440\u0438\u043c\u0435\u0440 (USD): \u043f\u043e\u0441\u043b\u0435 \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0439 \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b, \u043f\u0440\u043e\u043c\u043e, \u0430\u0444\u0444\u0438\u043b\u0438\u0430\u0442\u043e\u0432, \u0432\u043e\u0437\u0432\u0440\u0430\u0442\u043e\u0432 \u0438 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0438 <strong>\u0432\u044b\u043f\u043b\u0430\u0442\u0430 \u043d\u0430 \u0441\u0447\u0451\u0442</strong> \u043c\u043e\u0436\u0435\u0442 \u0431\u044b\u0442\u044c \u043d\u0430\u043c\u043d\u043e\u0433\u043e \u043d\u0438\u0436\u0435 GMV.</p>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u0421\u0442\u0430\u0442\u044c\u044f</th><th>\u0421\u0443\u043c\u043c\u0430 (\u043f\u0440\u0438\u043c\u0435\u0440)</th></tr></thead>\n                <tbody>\n                    <tr><td>GMV</td><td><strong>$20 000</strong></td></tr>\n                    <tr><td>\u2212 \u041a\u043e\u043c\u0438\u0441\u0441\u0438\u044f \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b (6%)</td><td>\u2212$1 200</td></tr>\n                    <tr><td>\u2212 Smart Promotion (3,5%)</td><td>\u2212$700</td></tr>\n                    <tr><td>\u2212 \u0410\u0444\u0444\u0438\u043b\u0438\u0430\u0442\u044b (18% \u043d\u0430 \u0434\u043e\u043b\u0435 \u0437\u0430\u043a\u0430\u0437\u043e\u0432)</td><td>\u2212$2 520</td></tr>\n                    <tr><td>\u2212 \u0412\u043e\u0437\u0432\u0440\u0430\u0442\u044b (15%)</td><td>\u2212$3 000</td></tr>\n                    <tr><td>\u2212 \u041f\u0440\u043e\u0447\u0438\u0435 \u0441\u0431\u043e\u0440\u044b \u0438 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0430</td><td>\u2212$636</td></tr>\n                    <tr><td><strong>\u2248 \u0412\u044b\u043f\u043b\u0430\u0442\u0430 \u043f\u0440\u043e\u0434\u0430\u0432\u0446\u0443</strong></td><td><strong>~$11 944</strong></td></tr>\n                </tbody>\n            </table></div>\n            <h3 class=\"doc-h2\">3. \u041a\u043e\u043c\u0438\u0441\u0441\u0438\u0438 \u0430\u0444\u0444\u0438\u043b\u0438\u0430\u0442\u0430 \u043f\u043e \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f\u043c (\u0440\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u0434\u0438\u0430\u043f\u0430\u0437\u043e\u043d\u044b, 2025)</h3>\n            <p>\u0414\u0430\u043d\u043d\u044b\u0435 TikTok Seller Center (\u043f\u0440\u0438\u043c\u0435\u0440 \u0431\u0430\u0437\u044b \u0437\u043d\u0430\u043d\u0438\u0439):</p>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f</th><th>\u0414\u0438\u0430\u043f\u0430\u0437\u043e\u043d \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0438</th></tr></thead>\n                <tbody>\n                    <tr><td>Beauty &amp; Personal Care</td><td>6\u201316%</td></tr>\n                    <tr><td>Womenswear &amp; Underwear</td><td>7\u201314%</td></tr>\n                    <tr><td>Menswear &amp; Underwear</td><td>9\u201316%</td></tr>\n                    <tr><td>Jewelry Accessories</td><td>1\u201318%</td></tr>\n                    <tr><td>Health</td><td>6\u201314%</td></tr>\n                    <tr><td>Phones &amp; Electronics</td><td>1\u201316%</td></tr>\n                    <tr><td>Food &amp; Beverages</td><td>6\u201312%</td></tr>\n                    <tr><td>Sports &amp; Outdoor</td><td>1\u201314%</td></tr>\n                    <tr><td>Home Supplies</td><td>8\u201314%</td></tr>\n                </tbody>\n            </table></div>\n            <p><strong>\u0421\u0440\u0435\u0434\u043d\u044f\u044f \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u044f \u0430\u0444\u0444\u0438\u043b\u0438\u0430\u0442\u0430</strong> \u0432 \u043e\u0431\u0437\u043e\u0440\u0430\u0445 \u2014 \u043e\u043a\u043e\u043b\u043e <strong>13%</strong> (~13,02%). \u0412 \u043c\u043e\u0434\u0435 \u0438 \u043a\u0440\u0430\u0441\u043e\u0442\u0435 \u0432 \u043e\u0442\u0434\u0435\u043b\u044c\u043d\u044b\u0445 \u0441\u0434\u0435\u043b\u043a\u0430\u0445 \u2014 <strong>20\u201330%</strong>.</p>\n            <h3 class=\"doc-h2\">4. \u0422\u043e\u043f-10 \u043f\u043e GMV (Kalodata, \u0434\u0435\u043a\u0430\u0431\u0440\u044c 2025)</h3>\n            <p class=\"muted\">\u0412 \u0442\u0430\u0431\u043b\u0438\u0446\u0435 \u2014 <strong>GMV</strong>, \u043d\u0435 \u0447\u0438\u0441\u0442\u044b\u0439 \u0434\u043e\u0445\u043e\u0434 \u043a\u0440\u0435\u0430\u0442\u043e\u0440\u0430.</p>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>#</th><th>\u0410\u043a\u043a\u0430\u0443\u043d\u0442</th><th>\u041f\u043e\u0434\u043f\u0438\u0441\u0447\u0438\u043a\u0438</th><th>GMV (\u0434\u0435\u043a\u0430\u0431\u0440\u044c 2025)</th></tr></thead>\n                <tbody>\n                    <tr><td>1</td><td>@dealswithty</td><td>136,5k</td><td><strong>$2 720 000</strong></td></tr>\n                    <tr><td>2</td><td>@hannahbentley</td><td>35,9k</td><td><strong>$2 370 000</strong></td></tr>\n                    <tr><td>3</td><td>@myfamilypov</td><td>206,6k</td><td><strong>$2 000 000</strong></td></tr>\n                    <tr><td>4</td><td>@trending_ttok</td><td>164,1k</td><td><strong>$1 920 000</strong></td></tr>\n                    <tr><td>5</td><td>@highland.fashion7</td><td>240,7k</td><td><strong>$1 830 000</strong></td></tr>\n                    <tr><td>6</td><td>@be.lush</td><td>231,6k</td><td><strong>$1 750 000</strong></td></tr>\n                    <tr><td>7</td><td>@mikaylanogueira</td><td>17,4M</td><td><strong>$1 730 000</strong></td></tr>\n                    <tr><td>8</td><td>@anniedanner</td><td>32,8k</td><td><strong>$1 370 000</strong></td></tr>\n                    <tr><td>9</td><td>@sarahgibbons_</td><td>249,4k</td><td><strong>$1 290 000</strong></td></tr>\n                    <tr><td>10</td><td>@sadiejonesuploading</td><td>37,1k</td><td><strong>$1 160 000</strong></td></tr>\n                </tbody>\n            </table></div>\n            <p><strong>\u041d\u0430\u0431\u043b\u044e\u0434\u0435\u043d\u0438\u0435:</strong> \u043f\u043e\u0434\u043f\u0438\u0441\u0447\u0438\u043a\u0438 \u043d\u0435 \u0440\u0430\u0432\u043d\u044b GMV (\u0441\u0440\u0430\u0432\u043d\u0438\u0442\u0435 @hannahbentley \u0438 @mikaylanogueira).</p>\n            <h3 class=\"doc-h2\">5. GMV \u2192 \u0434\u043e\u0445\u043e\u0434 \u043a\u0440\u0435\u0430\u0442\u043e\u0440\u0430: \u043f\u0440\u0438\u043c\u0435\u0440</h3>\n            <p><strong>@dealswithty</strong>, GMV <strong>$2 720 000</strong>. \u041f\u0440\u0438 \u0441\u0442\u0430\u0432\u043a\u0435 <strong>15%</strong> \u0432\u0430\u043b\u043e\u0432\u044b\u0435 \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0438 \u2248 <strong>$408 000</strong>. \u041f\u043e\u0441\u043b\u0435 20\u201330% \u0440\u0430\u0441\u0445\u043e\u0434\u043e\u0432 \u043e\u0440\u0438\u0435\u043d\u0442\u0438\u0440 ~ <strong>$285 000\u2013$326 000</strong> / \u043c\u0435\u0441 \u2014 \u044d\u0442\u043e \u043f\u0440\u0438\u043c\u0435\u0440\u043d\u043e \u0432 <strong>7\u20139 \u0440\u0430\u0437</strong> \u043c\u0435\u043d\u044c\u0448\u0435 \u0437\u0430\u0433\u043e\u043b\u043e\u0432\u043a\u0430 GMV.</p>\n            <h3 class=\"doc-h2\">6. \u041e\u0440\u0438\u0435\u043d\u0442\u0438\u0440\u044b \u0434\u043e\u0445\u043e\u0434\u0430 \u043f\u043e \u0443\u0440\u043e\u0432\u043d\u044f\u043c</h3>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u0423\u0440\u043e\u0432\u0435\u043d\u044c</th><th>\u041c\u0435\u0441\u044f\u0447\u043d\u044b\u0439 \u043e\u0440\u0438\u0435\u043d\u0442\u0438\u0440</th></tr></thead>\n                <tbody>\n                    <tr><td>\u041d\u0430\u0447\u0438\u043d\u0430\u044e\u0449\u0438\u0435</td><td><strong>$280 \u2013 $3 500</strong> (\u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0438)</td></tr>\n                    <tr><td>\u0421\u0442\u0430\u0431\u0438\u043b\u044c\u043d\u044b\u0435 (6\u201312 \u043c\u0435\u0441.)</td><td><strong>$10 000 \u2013 $50 000</strong></td></tr>\n                    <tr><td>\u0422\u043e\u043f ~1%</td><td><strong>$22 000 \u2013 $44 000</strong> \u0447\u0438\u0441\u0442\u043e\u0439 \u043f\u0440\u0438\u0431\u044b\u043b\u0438 / \u043c\u0435\u0441</td></tr>\n                    <tr><td>~0,1% \u00ab\u0441\u0443\u043f\u0435\u0440\u0437\u0432\u0451\u0437\u0434\u044b\u00bb</td><td><strong>$100 000 \u2013 $500 000</strong> \u0447\u0438\u0441\u0442\u043e\u0439 \u043f\u0440\u0438\u0431\u044b\u043b\u0438 / \u043c\u0435\u0441</td></tr>\n                </tbody>\n            </table></div>\n            <p class=\"muted\">\u0414\u043b\u044f <strong>\u0418\u0441\u043f\u0430\u043d\u0438\u0438</strong> \u043e\u0436\u0438\u0434\u0430\u0439\u0442\u0435 \u0431\u043e\u043b\u0435\u0435 \u043a\u043e\u043d\u0441\u0435\u0440\u0432\u0430\u0442\u0438\u0432\u043d\u044b\u0435 \u0446\u0438\u0444\u0440\u044b, \u0447\u0435\u043c US-\u0442\u043e\u043f.</p>\n            <h3 class=\"doc-h2\">7. \u041a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u044f \u0438 \u043f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u044b</h3>\n            <ul>\n                <li>\u0412 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430\u0445 TikTok Shop: <strong>8\u201312%</strong> \u043a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u0438 vs <strong>2\u20134%</strong> \u0443 \u00ab\u043a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u043e\u0439\u00bb e-commerce (\u043e\u0431\u043e\u0431\u0449\u0435\u043d\u0438\u0435).</li>\n                <li>\u041f\u0435\u0440\u0432\u044b\u0435 <strong>~$100</strong> \u0441 \u0442\u043e\u0432\u0430\u0440\u043d\u043e\u0433\u043e \u0432\u0438\u0434\u0435\u043e: \u043e\u0440\u0438\u0435\u043d\u0442\u0438\u0440 <strong>10 000 \u2013 100 000</strong> \u043f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u043e\u0432.</li>\n                <li>\u0412 \u043c\u043e\u0434\u0435 \u0432\u043e\u0437\u0432\u0440\u0430\u0442\u044b \u0434\u043e <strong>15\u201330%</strong>.</li>\n            </ul>\n            <h3 class=\"doc-h2\">8. \u041c\u043e\u043d\u0435\u0442\u0438\u0437\u0430\u0446\u0438\u044f \u0437\u0430 \u043f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u044b (Fund / Rewards)</h3>\n            <p>\u041e\u0442\u0434\u0435\u043b\u044c\u043d\u043e \u043e\u0442 Shop: CPM \u0441\u0438\u043b\u044c\u043d\u043e \u0437\u0430\u0432\u0438\u0441\u0438\u0442 \u043e\u0442 \u0441\u0442\u0440\u0430\u043d\u044b; \u0432 \u0447\u0430\u0441\u0442\u0438 EU \u043c\u043e\u0433\u0443\u0442 \u0434\u0435\u0439\u0441\u0442\u0432\u043e\u0432\u0430\u0442\u044c \u0431\u043e\u043b\u0435\u0435 \u0441\u0442\u0430\u0440\u044b\u0435 \u043c\u043e\u0434\u0435\u043b\u0438 \u2014 \u043f\u0440\u043e\u0432\u0435\u0440\u044f\u0439\u0442\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u0430 \u0432 \u0430\u043a\u043a\u0430\u0443\u043d\u0442\u0435.</p>\n            <h3 class=\"doc-h2\">9. \u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u044b</h3>\n            <ul>\n                <li><strong>Kalodata</strong>, <strong>Dashboardly</strong>, <strong>Seller Center / Data Compass</strong>, <strong>Tabcut</strong>.</li>\n            </ul>\n            <h3 class=\"doc-h2\">10. \u0412\u044b\u0432\u043e\u0434 \u0434\u043b\u044f \u0441\u0435\u043c\u0435\u0439\u043d\u043e\u0433\u043e \u043f\u0440\u043e\u0435\u043a\u0442\u0430 (\u0418\u0441\u043f\u0430\u043d\u0438\u044f)</h3>\n            <ul>\n                <li>\u041e\u0440\u0438\u0435\u043d\u0442\u0438\u0440\u0443\u0439\u0442\u0435\u0441\u044c \u043d\u0430 <strong>\u043a\u043e\u043c\u0438\u0441\u0441\u0438\u044e \u0441 \u043f\u0440\u043e\u0434\u0430\u0436\u0438</strong>, \u0430 \u043d\u0435 \u043d\u0430 \u0447\u0443\u0436\u043e\u0439 GMV.</li>\n                <li>\u0421\u0442\u0430\u0440\u0442 \u0432 EU \u0431\u043b\u0438\u0436\u0435 \u043a \u043d\u0438\u0436\u043d\u0435\u0439 \u0447\u0430\u0441\u0442\u0438 <strong>$280\u2013$3 500</strong>, \u0447\u0435\u043c \u043a \u0442\u0430\u0431\u043b\u0438\u0446\u0435 Kalodata (\u043f\u0440\u0435\u0438\u043c\u0443\u0449\u0435\u0441\u0442\u0432\u0435\u043d\u043d\u043e US).</li>\n                <li>\u0412\u0438\u0440\u0430\u043b\u044c\u043d\u044b\u0439 \u0440\u043e\u043b\u0438\u043a \u0434\u0430\u0451\u0442 <strong>\u0440\u0430\u0437\u043e\u0432\u044b\u0439</strong> \u0432\u0441\u043f\u043b\u0435\u0441\u043a; \u0441\u0447\u0438\u0442\u0430\u0439\u0442\u0435 <strong>GMV \u00d7 \u0441\u0442\u0430\u0432\u043a\u0430</strong> \u043c\u0438\u043d\u0443\u0441 \u0440\u0430\u0441\u0445\u043e\u0434\u044b.</li>\n            </ul>\n            <h3 class=\"doc-h2\">11. \u0418\u0441\u0442\u043e\u0447\u043d\u0438\u043a\u0438</h3>\n            <ol>\n                <li><a href=\"https://www.dashboardly.io/post/what-is-gmv-on-tiktok-shop-and-why-its-not-your-revenue\" target=\"_blank\" rel=\"noopener noreferrer\">Dashboardly \u2014 \u0447\u0442\u043e \u0442\u0430\u043a\u043e\u0435 GMV</a></li>\n                <li><a href=\"https://www.dashboardly.io/post/calculating-true-profit-tiktok-shop\" target=\"_blank\" rel=\"noopener noreferrer\">Dashboardly \u2014 \u043f\u0440\u0438\u0431\u044b\u043b\u044c</a></li>\n                <li><a href=\"https://www.dashboardly.io/post/tiktok-shop-metrics\" target=\"_blank\" rel=\"noopener noreferrer\">Dashboardly \u2014 \u043c\u0435\u0442\u0440\u0438\u043a\u0438</a></li>\n                <li><a href=\"https://seller-vn.tiktok.com/university/essay?knowledge_id=5606783130421008&amp;role=1&amp;course_type=1&amp;identity=1\" target=\"_blank\" rel=\"noopener noreferrer\">TikTok Seller Center (VN)</a></li>\n                <li><a href=\"https://www.facebook.com/kalodata.id/posts/-tren-penjualan-tiktok-shop-desember-2025-kalodataupdate-1-sellersemar-nusantara/122233081622257691/\" target=\"_blank\" rel=\"noopener noreferrer\">Kalodata \u2014 \u0434\u0435\u043a\u0430\u0431\u0440\u044c 2025</a></li>\n                <li><a href=\"https://www.tabcut.com/blog/post/how-kalodata-will-blow-up-your-sales-as-a-tiktok-shop-affiliate1\" target=\"_blank\" rel=\"noopener noreferrer\">Tabcut \u2014 Kalodata</a></li>\n                <li><a href=\"https://www.tabcut.com/blog/post/what-99-tiktok-shop-sellers-are-missing-today\" target=\"_blank\" rel=\"noopener noreferrer\">Tabcut \u2014 \u0441\u0442\u0440\u0430\u0442\u0435\u0433\u0438\u0438</a></li>\n                <li><a href=\"https://www.ikjzd.com/articles/1810625995696060767\" target=\"_blank\" rel=\"noopener noreferrer\">\u041e\u0431\u0437\u043e\u0440 \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0439 2025</a></li>\n            </ol>\n            <p class=\"muted\">\u0421\u0432\u043e\u0434\u043a\u0430 \u0446\u0438\u0444\u0440: \u0444\u0430\u0439\u043b <code>tiktok-shop-data-library.txt</code> \u0432 \u044d\u0442\u043e\u0439 \u043f\u0430\u043f\u043a\u0435.</p>\n",
+        acc_panel_earnings: "            <div class=\"highlight-inline\">\n                <strong>GMV \u2260 \u0434\u0435\u043d\u044c\u0433\u0438 \u00ab\u0432 \u043a\u0430\u0440\u043c\u0430\u043d\u0435\u00bb.</strong> \u0412 \u0440\u0435\u0439\u0442\u0438\u043d\u0433\u0430\u0445 \u0447\u0430\u0441\u0442\u043e \u043f\u043e\u043a\u0430\u0437\u044b\u0432\u0430\u044e\u0442 <strong>\u0432\u0430\u043b\u043e\u0432\u044b\u0439 \u043e\u0431\u044a\u0451\u043c \u043f\u0440\u043e\u0434\u0430\u0436 (GMV)</strong>, \u0430 \u043d\u0435 \u0447\u0438\u0441\u0442\u044b\u0439 \u0434\u043e\u0445\u043e\u0434 \u043a\u0440\u0435\u0430\u0442\u043e\u0440\u0430. \u041a\u043e\u043c\u0438\u0441\u0441\u0438\u044f, \u043d\u0430\u043b\u043e\u0433\u0438, \u043f\u0440\u043e\u0434\u0430\u043a\u0448\u043d, \u0432\u043e\u0437\u0432\u0440\u0430\u0442\u044b \u2014 \u0432\u0441\u0451 \u044d\u0442\u043e \u0443\u043c\u0435\u043d\u044c\u0448\u0430\u0435\u0442 \u0440\u0435\u0430\u043b\u044c\u043d\u0443\u044e \u0441\u0443\u043c\u043c\u0443.\n            </div>\n            <h3 class=\"doc-h2\">1. \u0427\u0442\u043e \u0442\u0430\u043a\u043e\u0435 GMV</h3>\n            <p><strong>GMV (Gross Merchandise Value)</strong> \u2014 \u0441\u0443\u043c\u043c\u0430 \u0437\u0430\u043a\u0430\u0437\u043e\u0432 \u043f\u043e \u0432\u0430\u0448\u0435\u0439 \u0441\u0441\u044b\u043b\u043a\u0435 \u0438\u043b\u0438 \u0432 \u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0435 <em>\u0432 \u043c\u043e\u043c\u0435\u043d\u0442 \u043e\u0444\u043e\u0440\u043c\u043b\u0435\u043d\u0438\u044f</em>; \u044d\u0442\u043e \u043c\u0430\u0441\u0448\u0442\u0430\u0431 \u043f\u0440\u043e\u0434\u0430\u0436, \u0430 \u043d\u0435 \u0432\u0430\u0448 \u043f\u0440\u0438\u0431\u044b\u043b\u044c.</p>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u0435\u043b\u044c</th><th>\u0412 \u0441\u043e\u0441\u0442\u0430\u0432\u0435 GMV?</th><th>\u0422\u0438\u043f\u0438\u0447\u043d\u043e\u0435 \u0432\u043b\u0438\u044f\u043d\u0438\u0435</th></tr></thead>\n                <tbody>\n                    <tr><td>\u0422\u043e\u0432\u0430\u0440 + \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0430, \u043e\u043f\u043b\u0430\u0447\u0435\u043d\u043d\u044b\u0435 \u043f\u043e\u043a\u0443\u043f\u0430\u0442\u0435\u043b\u0435\u043c</td><td>\u0414\u0430</td><td>100% GMV</td></tr>\n                    <tr><td>\u041a\u043e\u043c\u0438\u0441\u0441\u0438\u044f \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b (referral fee)</td><td>\u041d\u0435\u0442</td><td>\u043e\u0440\u0438\u0435\u043d\u0442\u0438\u0440 ~2\u20138%</td></tr>\n                    <tr><td>\u041a\u043e\u043c\u0438\u0441\u0441\u0438\u044f \u0430\u0444\u0444\u0438\u043b\u0438\u0430\u0442\u0430 (\u0432\u0430\u0448 \u0434\u043e\u0445\u043e\u0434)</td><td>\u041d\u0435\u0442</td><td>\u043e\u0440\u0438\u0435\u043d\u0442\u0438\u0440 ~5\u201330% \u043e\u0442 \u0447\u0435\u043a\u0430</td></tr>\n                    <tr><td>\u0412\u043e\u0437\u0432\u0440\u0430\u0442\u044b</td><td>\u041d\u0435\u0442 (\u043d\u043e \u0432 \u0438\u0441\u0442\u043e\u0440\u0438\u0438 GMV)</td><td>\u221215\u201330% \u0432 \u0447\u0443\u0432\u0441\u0442\u0432\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0445 \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f\u0445</td></tr>\n                    <tr><td>COGS, \u0440\u0435\u043a\u043b\u0430\u043c\u0430, \u043b\u043e\u0433\u0438\u0441\u0442\u0438\u043a\u0430 \u043f\u0440\u043e\u0434\u0430\u0432\u0446\u0430</td><td>\u041d\u0435\u0442</td><td>\u0441\u043d\u0438\u0436\u0430\u044e\u0442 \u043f\u0440\u0438\u0431\u044b\u043b\u044c \u043f\u0440\u043e\u0434\u0430\u0432\u0446\u0430</td></tr>\n                </tbody>\n            </table></div>\n            <p class=\"muted\">\u041e\u043f\u0442\u0438\u043c\u0438\u0437\u0430\u0446\u0438\u044f \u0442\u043e\u043b\u044c\u043a\u043e \u043f\u043e\u0434 GMV \u0431\u0435\u0437 \u0443\u0447\u0451\u0442\u0430 \u0443\u0434\u0435\u0440\u0436\u0430\u043d\u0438\u0439 \u2014 \u0442\u0438\u043f\u0438\u0447\u043d\u0430\u044f \u043e\u0448\u0438\u0431\u043a\u0430.</p>\n            <h3 class=\"doc-h2\">2. \u0418\u043b\u043b\u044e\u0441\u0442\u0440\u0430\u0446\u0438\u044f: $20 000 GMV \u0434\u043b\u044f \u043f\u0440\u043e\u0434\u0430\u0432\u0446\u0430</h3>\n            <p>\u0423\u043f\u0440\u043e\u0449\u0451\u043d\u043d\u044b\u0439 \u043f\u0440\u0438\u043c\u0435\u0440 (USD): \u043f\u043e\u0441\u043b\u0435 \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0439 \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b, \u043f\u0440\u043e\u043c\u043e, \u0430\u0444\u0444\u0438\u043b\u0438\u0430\u0442\u043e\u0432, \u0432\u043e\u0437\u0432\u0440\u0430\u0442\u043e\u0432 \u0438 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0438 <strong>\u0432\u044b\u043f\u043b\u0430\u0442\u0430 \u043d\u0430 \u0441\u0447\u0451\u0442</strong> \u043c\u043e\u0436\u0435\u0442 \u0431\u044b\u0442\u044c \u043d\u0430\u043c\u043d\u043e\u0433\u043e \u043d\u0438\u0436\u0435 GMV.</p>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u0421\u0442\u0430\u0442\u044c\u044f</th><th>\u0421\u0443\u043c\u043c\u0430 (\u043f\u0440\u0438\u043c\u0435\u0440)</th></tr></thead>\n                <tbody>\n                    <tr><td>GMV</td><td><strong>$20 000</strong></td></tr>\n                    <tr><td>\u2212 \u041a\u043e\u043c\u0438\u0441\u0441\u0438\u044f \u043f\u043b\u0430\u0442\u0444\u043e\u0440\u043c\u044b (6%)</td><td>\u2212$1 200</td></tr>\n                    <tr><td>\u2212 Smart Promotion (3,5%)</td><td>\u2212$700</td></tr>\n                    <tr><td>\u2212 \u0410\u0444\u0444\u0438\u043b\u0438\u0430\u0442\u044b (18% \u043d\u0430 \u0434\u043e\u043b\u0435 \u0437\u0430\u043a\u0430\u0437\u043e\u0432)</td><td>\u2212$2 520</td></tr>\n                    <tr><td>\u2212 \u0412\u043e\u0437\u0432\u0440\u0430\u0442\u044b (15%)</td><td>\u2212$3 000</td></tr>\n                    <tr><td>\u2212 \u041f\u0440\u043e\u0447\u0438\u0435 \u0441\u0431\u043e\u0440\u044b \u0438 \u0434\u043e\u0441\u0442\u0430\u0432\u043a\u0430</td><td>\u2212$636</td></tr>\n                    <tr><td><strong>\u2248 \u0412\u044b\u043f\u043b\u0430\u0442\u0430 \u043f\u0440\u043e\u0434\u0430\u0432\u0446\u0443</strong></td><td><strong>~$11 944</strong></td></tr>\n                </tbody>\n            </table></div>\n            <h3 class=\"doc-h2\">3. \u041a\u043e\u043c\u0438\u0441\u0441\u0438\u0438 \u0430\u0444\u0444\u0438\u043b\u0438\u0430\u0442\u0430 \u043f\u043e \u043a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f\u043c (\u0440\u0435\u043a\u043e\u043c\u0435\u043d\u0434\u043e\u0432\u0430\u043d\u043d\u044b\u0435 \u0434\u0438\u0430\u043f\u0430\u0437\u043e\u043d\u044b, 2025)</h3>\n            <p>\u0414\u0430\u043d\u043d\u044b\u0435 TikTok Seller Center (\u043f\u0440\u0438\u043c\u0435\u0440 \u0431\u0430\u0437\u044b \u0437\u043d\u0430\u043d\u0438\u0439):</p>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u041a\u0430\u0442\u0435\u0433\u043e\u0440\u0438\u044f</th><th>\u0414\u0438\u0430\u043f\u0430\u0437\u043e\u043d \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0438</th></tr></thead>\n                <tbody>\n                    <tr><td>Beauty &amp; Personal Care</td><td>6\u201316%</td></tr>\n                    <tr><td>Womenswear &amp; Underwear</td><td>7\u201314%</td></tr>\n                    <tr><td>Menswear &amp; Underwear</td><td>9\u201316%</td></tr>\n                    <tr><td>Jewelry Accessories</td><td>1\u201318%</td></tr>\n                    <tr><td>Health</td><td>6\u201314%</td></tr>\n                    <tr><td>Phones &amp; Electronics</td><td>1\u201316%</td></tr>\n                    <tr><td>Food &amp; Beverages</td><td>6\u201312%</td></tr>\n                    <tr><td>Sports &amp; Outdoor</td><td>1\u201314%</td></tr>\n                    <tr><td>Home Supplies</td><td>8\u201314%</td></tr>\n                </tbody>\n            </table></div>\n            <p><strong>\u0421\u0440\u0435\u0434\u043d\u044f\u044f \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u044f \u0430\u0444\u0444\u0438\u043b\u0438\u0430\u0442\u0430</strong> \u0432 \u043e\u0431\u0437\u043e\u0440\u0430\u0445 \u2014 \u043e\u043a\u043e\u043b\u043e <strong>13%</strong> (~13,02%). \u0412 \u043c\u043e\u0434\u0435 \u0438 \u043a\u0440\u0430\u0441\u043e\u0442\u0435 \u0432 \u043e\u0442\u0434\u0435\u043b\u044c\u043d\u044b\u0445 \u0441\u0434\u0435\u043b\u043a\u0430\u0445 \u2014 <strong>20\u201330%</strong>.</p>\n            <h3 class=\"doc-h2\">4. \u0422\u043e\u043f-10 \u043f\u043e GMV (Kalodata, \u0434\u0435\u043a\u0430\u0431\u0440\u044c 2025)</h3>\n            <p class=\"muted\">\u0412 \u0442\u0430\u0431\u043b\u0438\u0446\u0435 \u2014 <strong>GMV</strong>, \u043d\u0435 \u0447\u0438\u0441\u0442\u044b\u0439 \u0434\u043e\u0445\u043e\u0434 \u043a\u0440\u0435\u0430\u0442\u043e\u0440\u0430.</p>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>#</th><th>\u0410\u043a\u043a\u0430\u0443\u043d\u0442</th><th>\u041f\u043e\u0434\u043f\u0438\u0441\u0447\u0438\u043a\u0438</th><th>GMV (\u0434\u0435\u043a\u0430\u0431\u0440\u044c 2025)</th></tr></thead>\n                <tbody>\n                    <tr><td>1</td><td><a class="tt-link" href="https://www.tiktok.com/@dealswithty" target="_blank" rel="noopener noreferrer">@dealswithty</a></td><td>136,5k</td><td><strong>$2 720 000</strong></td></tr>\n                    <tr><td>2</td><td><a class="tt-link" href="https://www.tiktok.com/@hannahbentley" target="_blank" rel="noopener noreferrer">@hannahbentley</a></td><td>35,9k</td><td><strong>$2 370 000</strong></td></tr>\n                    <tr><td>3</td><td><a class="tt-link" href="https://www.tiktok.com/@myfamilypov" target="_blank" rel="noopener noreferrer">@myfamilypov</a></td><td>206,6k</td><td><strong>$2 000 000</strong></td></tr>\n                    <tr><td>4</td><td><a class="tt-link" href="https://www.tiktok.com/@trending_ttok" target="_blank" rel="noopener noreferrer">@trending_ttok</a></td><td>164,1k</td><td><strong>$1 920 000</strong></td></tr>\n                    <tr><td>5</td><td><a class="tt-link" href="https://www.tiktok.com/@highland.fashion7" target="_blank" rel="noopener noreferrer">@highland.fashion7</a></td><td>240,7k</td><td><strong>$1 830 000</strong></td></tr>\n                    <tr><td>6</td><td><a class="tt-link" href="https://www.tiktok.com/@be.lush" target="_blank" rel="noopener noreferrer">@be.lush</a></td><td>231,6k</td><td><strong>$1 750 000</strong></td></tr>\n                    <tr><td>7</td><td><a class="tt-link" href="https://www.tiktok.com/@mikaylanogueira" target="_blank" rel="noopener noreferrer">@mikaylanogueira</a></td><td>17,4M</td><td><strong>$1 730 000</strong></td></tr>\n                    <tr><td>8</td><td><a class="tt-link" href="https://www.tiktok.com/@anniedanner" target="_blank" rel="noopener noreferrer">@anniedanner</a></td><td>32,8k</td><td><strong>$1 370 000</strong></td></tr>\n                    <tr><td>9</td><td><a class="tt-link" href="https://www.tiktok.com/@sarahgibbons_" target="_blank" rel="noopener noreferrer">@sarahgibbons_</a></td><td>249,4k</td><td><strong>$1 290 000</strong></td></tr>\n                    <tr><td>10</td><td><a class="tt-link" href="https://www.tiktok.com/@sadiejonesuploading" target="_blank" rel="noopener noreferrer">@sadiejonesuploading</a></td><td>37,1k</td><td><strong>$1 160 000</strong></td></tr>\n                </tbody>\n            </table></div>\n            <p><strong>\u041d\u0430\u0431\u043b\u044e\u0434\u0435\u043d\u0438\u0435:</strong> \u043f\u043e\u0434\u043f\u0438\u0441\u0447\u0438\u043a\u0438 \u043d\u0435 \u0440\u0430\u0432\u043d\u044b GMV (\u0441\u0440\u0430\u0432\u043d\u0438\u0442\u0435 @hannahbentley \u0438 @mikaylanogueira).</p>\n            <h3 class=\"doc-h2\">5. GMV \u2192 \u0434\u043e\u0445\u043e\u0434 \u043a\u0440\u0435\u0430\u0442\u043e\u0440\u0430: \u043f\u0440\u0438\u043c\u0435\u0440</h3>\n            <p><strong><a class="tt-link" href="https://www.tiktok.com/@dealswithty" target="_blank" rel="noopener noreferrer">@dealswithty</a></strong>, GMV <strong>$2 720 000</strong>. \u041f\u0440\u0438 \u0441\u0442\u0430\u0432\u043a\u0435 <strong>15%</strong> \u0432\u0430\u043b\u043e\u0432\u044b\u0435 \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0438 \u2248 <strong>$408 000</strong>. \u041f\u043e\u0441\u043b\u0435 20\u201330% \u0440\u0430\u0441\u0445\u043e\u0434\u043e\u0432 \u043e\u0440\u0438\u0435\u043d\u0442\u0438\u0440 ~ <strong>$285 000\u2013$326 000</strong> / \u043c\u0435\u0441 \u2014 \u044d\u0442\u043e \u043f\u0440\u0438\u043c\u0435\u0440\u043d\u043e \u0432 <strong>7\u20139 \u0440\u0430\u0437</strong> \u043c\u0435\u043d\u044c\u0448\u0435 \u0437\u0430\u0433\u043e\u043b\u043e\u0432\u043a\u0430 GMV.</p>\n            <h3 class=\"doc-h2\">6. \u041e\u0440\u0438\u0435\u043d\u0442\u0438\u0440\u044b \u0434\u043e\u0445\u043e\u0434\u0430 \u043f\u043e \u0443\u0440\u043e\u0432\u043d\u044f\u043c</h3>\n            <div class=\"data-table-wrap\"><table class=\"earn-table\">\n                <thead><tr><th>\u0423\u0440\u043e\u0432\u0435\u043d\u044c</th><th>\u041c\u0435\u0441\u044f\u0447\u043d\u044b\u0439 \u043e\u0440\u0438\u0435\u043d\u0442\u0438\u0440</th></tr></thead>\n                <tbody>\n                    <tr><td>\u041d\u0430\u0447\u0438\u043d\u0430\u044e\u0449\u0438\u0435</td><td><strong>$280 \u2013 $3 500</strong> (\u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0438)</td></tr>\n                    <tr><td>\u0421\u0442\u0430\u0431\u0438\u043b\u044c\u043d\u044b\u0435 (6\u201312 \u043c\u0435\u0441.)</td><td><strong>$10 000 \u2013 $50 000</strong></td></tr>\n                    <tr><td>\u0422\u043e\u043f ~1%</td><td><strong>$22 000 \u2013 $44 000</strong> \u0447\u0438\u0441\u0442\u043e\u0439 \u043f\u0440\u0438\u0431\u044b\u043b\u0438 / \u043c\u0435\u0441</td></tr>\n                    <tr><td>~0,1% \u00ab\u0441\u0443\u043f\u0435\u0440\u0437\u0432\u0451\u0437\u0434\u044b\u00bb</td><td><strong>$100 000 \u2013 $500 000</strong> \u0447\u0438\u0441\u0442\u043e\u0439 \u043f\u0440\u0438\u0431\u044b\u043b\u0438 / \u043c\u0435\u0441</td></tr>\n                </tbody>\n            </table></div>\n            <p class=\"muted\">\u0414\u043b\u044f <strong>\u0418\u0441\u043f\u0430\u043d\u0438\u0438</strong> \u043e\u0436\u0438\u0434\u0430\u0439\u0442\u0435 \u0431\u043e\u043b\u0435\u0435 \u043a\u043e\u043d\u0441\u0435\u0440\u0432\u0430\u0442\u0438\u0432\u043d\u044b\u0435 \u0446\u0438\u0444\u0440\u044b, \u0447\u0435\u043c US-\u0442\u043e\u043f.</p>\n            <h3 class=\"doc-h2\">7. \u041a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u044f \u0438 \u043f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u044b</h3>\n            <ul>\n                <li>\u0412 \u043c\u0430\u0442\u0435\u0440\u0438\u0430\u043b\u0430\u0445 TikTok Shop: <strong>8\u201312%</strong> \u043a\u043e\u043d\u0432\u0435\u0440\u0441\u0438\u0438 vs <strong>2\u20134%</strong> \u0443 \u00ab\u043a\u043b\u0430\u0441\u0441\u0438\u0447\u0435\u0441\u043a\u043e\u0439\u00bb e-commerce (\u043e\u0431\u043e\u0431\u0449\u0435\u043d\u0438\u0435).</li>\n                <li>\u041f\u0435\u0440\u0432\u044b\u0435 <strong>~$100</strong> \u0441 \u0442\u043e\u0432\u0430\u0440\u043d\u043e\u0433\u043e \u0432\u0438\u0434\u0435\u043e: \u043e\u0440\u0438\u0435\u043d\u0442\u0438\u0440 <strong>10 000 \u2013 100 000</strong> \u043f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u043e\u0432.</li>\n                <li>\u0412 \u043c\u043e\u0434\u0435 \u0432\u043e\u0437\u0432\u0440\u0430\u0442\u044b \u0434\u043e <strong>15\u201330%</strong>.</li>\n            </ul>\n            <h3 class=\"doc-h2\">8. \u041c\u043e\u043d\u0435\u0442\u0438\u0437\u0430\u0446\u0438\u044f \u0437\u0430 \u043f\u0440\u043e\u0441\u043c\u043e\u0442\u0440\u044b (Fund / Rewards)</h3>\n            <p>\u041e\u0442\u0434\u0435\u043b\u044c\u043d\u043e \u043e\u0442 Shop: CPM \u0441\u0438\u043b\u044c\u043d\u043e \u0437\u0430\u0432\u0438\u0441\u0438\u0442 \u043e\u0442 \u0441\u0442\u0440\u0430\u043d\u044b; \u0432 \u0447\u0430\u0441\u0442\u0438 EU \u043c\u043e\u0433\u0443\u0442 \u0434\u0435\u0439\u0441\u0442\u0432\u043e\u0432\u0430\u0442\u044c \u0431\u043e\u043b\u0435\u0435 \u0441\u0442\u0430\u0440\u044b\u0435 \u043c\u043e\u0434\u0435\u043b\u0438 \u2014 \u043f\u0440\u043e\u0432\u0435\u0440\u044f\u0439\u0442\u0435 \u043f\u0440\u0430\u0432\u0438\u043b\u0430 \u0432 \u0430\u043a\u043a\u0430\u0443\u043d\u0442\u0435.</p>\n            <h3 class=\"doc-h2\">9. \u0418\u043d\u0441\u0442\u0440\u0443\u043c\u0435\u043d\u0442\u044b</h3>\n            <ul>\n                <li><strong>Kalodata</strong>, <strong>Dashboardly</strong>, <strong>Seller Center / Data Compass</strong>, <strong>Tabcut</strong>.</li>\n            </ul>\n            <h3 class=\"doc-h2\">10. \u0412\u044b\u0432\u043e\u0434 \u0434\u043b\u044f \u0441\u0435\u043c\u0435\u0439\u043d\u043e\u0433\u043e \u043f\u0440\u043e\u0435\u043a\u0442\u0430 (\u0418\u0441\u043f\u0430\u043d\u0438\u044f)</h3>\n            <ul>\n                <li>\u041e\u0440\u0438\u0435\u043d\u0442\u0438\u0440\u0443\u0439\u0442\u0435\u0441\u044c \u043d\u0430 <strong>\u043a\u043e\u043c\u0438\u0441\u0441\u0438\u044e \u0441 \u043f\u0440\u043e\u0434\u0430\u0436\u0438</strong>, \u0430 \u043d\u0435 \u043d\u0430 \u0447\u0443\u0436\u043e\u0439 GMV.</li>\n                <li>\u0421\u0442\u0430\u0440\u0442 \u0432 EU \u0431\u043b\u0438\u0436\u0435 \u043a \u043d\u0438\u0436\u043d\u0435\u0439 \u0447\u0430\u0441\u0442\u0438 <strong>$280\u2013$3 500</strong>, \u0447\u0435\u043c \u043a \u0442\u0430\u0431\u043b\u0438\u0446\u0435 Kalodata (\u043f\u0440\u0435\u0438\u043c\u0443\u0449\u0435\u0441\u0442\u0432\u0435\u043d\u043d\u043e US).</li>\n                <li>\u0412\u0438\u0440\u0430\u043b\u044c\u043d\u044b\u0439 \u0440\u043e\u043b\u0438\u043a \u0434\u0430\u0451\u0442 <strong>\u0440\u0430\u0437\u043e\u0432\u044b\u0439</strong> \u0432\u0441\u043f\u043b\u0435\u0441\u043a; \u0441\u0447\u0438\u0442\u0430\u0439\u0442\u0435 <strong>GMV \u00d7 \u0441\u0442\u0430\u0432\u043a\u0430</strong> \u043c\u0438\u043d\u0443\u0441 \u0440\u0430\u0441\u0445\u043e\u0434\u044b.</li>\n            </ul>\n            <h3 class=\"doc-h2\">11. \u0418\u0441\u0442\u043e\u0447\u043d\u0438\u043a\u0438</h3>\n            <ol>\n                <li><a href=\"https://www.dashboardly.io/post/what-is-gmv-on-tiktok-shop-and-why-its-not-your-revenue\" target=\"_blank\" rel=\"noopener noreferrer\">Dashboardly \u2014 \u0447\u0442\u043e \u0442\u0430\u043a\u043e\u0435 GMV</a></li>\n                <li><a href=\"https://www.dashboardly.io/post/calculating-true-profit-tiktok-shop\" target=\"_blank\" rel=\"noopener noreferrer\">Dashboardly \u2014 \u043f\u0440\u0438\u0431\u044b\u043b\u044c</a></li>\n                <li><a href=\"https://www.dashboardly.io/post/tiktok-shop-metrics\" target=\"_blank\" rel=\"noopener noreferrer\">Dashboardly \u2014 \u043c\u0435\u0442\u0440\u0438\u043a\u0438</a></li>\n                <li><a href=\"https://seller-vn.tiktok.com/university/essay?knowledge_id=5606783130421008&amp;role=1&amp;course_type=1&amp;identity=1\" target=\"_blank\" rel=\"noopener noreferrer\">TikTok Seller Center (VN)</a></li>\n                <li><a href=\"https://www.facebook.com/kalodata.id/posts/-tren-penjualan-tiktok-shop-desember-2025-kalodataupdate-1-sellersemar-nusantara/122233081622257691/\" target=\"_blank\" rel=\"noopener noreferrer\">Kalodata \u2014 \u0434\u0435\u043a\u0430\u0431\u0440\u044c 2025</a></li>\n                <li><a href=\"https://www.tabcut.com/blog/post/how-kalodata-will-blow-up-your-sales-as-a-tiktok-shop-affiliate1\" target=\"_blank\" rel=\"noopener noreferrer\">Tabcut \u2014 Kalodata</a></li>\n                <li><a href=\"https://www.tabcut.com/blog/post/what-99-tiktok-shop-sellers-are-missing-today\" target=\"_blank\" rel=\"noopener noreferrer\">Tabcut \u2014 \u0441\u0442\u0440\u0430\u0442\u0435\u0433\u0438\u0438</a></li>\n                <li><a href=\"https://www.ikjzd.com/articles/1810625995696060767\" target=\"_blank\" rel=\"noopener noreferrer\">\u041e\u0431\u0437\u043e\u0440 \u043a\u043e\u043c\u0438\u0441\u0441\u0438\u0439 2025</a></li>\n            </ol>\n            <p class=\"muted\">\u0421\u0432\u043e\u0434\u043a\u0430 \u0446\u0438\u0444\u0440: \u0444\u0430\u0439\u043b <code>tiktok-shop-data-library.txt</code> \u0432 \u044d\u0442\u043e\u0439 \u043f\u0430\u043f\u043a\u0435.</p>\n",
         btn_add: "Добавить аккаунт",
         fam_h3: "Итого по всем аккаунтам",
         fam_lbl_comm: "Ориентировочная комиссия",
@@ -1567,6 +1742,158 @@
         return hh + " год " + (mm ? mm + " хв" : "").trim();
     }
 
+    var EUR_TO_UAH = 45;
+    var TEACHER_UAH = 15000;
+    var WORK_MONTH_H = 160;
+    var YEAR_WORK_H = 160 * 12;
+
+    function sumEffTxt(key) {
+        if (L() === "ru" && window.I18N_RU && window.I18N_RU[key]) return window.I18N_RU[key];
+        var uk = {
+            sum_eff_1m: "Дохід за 1 хв роботи (оцінка)",
+            sum_eff_1h: "За 1 год роботи",
+            sum_eff_8h: "За 8 год (зміна)",
+            sum_eff_160: "За робочий місяць (160 год)",
+            sum_eff_year: "За рік системної роботи (1920 год)",
+            sum_eff_na: "Немає часу в базі — змініть перегляди / хвилини на ролик або поле «Час на контент»."
+        };
+        return uk[key] || key;
+    }
+
+    function teacherLine(eur) {
+        if (eur <= 0 || !isFinite(eur)) {
+            return L() === "ru" ? "Нет данных дохода для сравнения." : "Немає даних доходу для порівняння.";
+        }
+        var ru = L() === "ru";
+        var uah = eur * EUR_TO_UAH;
+        var r = uah / TEACHER_UAH;
+        if (r < 0.15) {
+            return ru
+                ? "Ориентировочно меньше одной средней зарплаты учителя в Украине (~15 000 грн/мес)."
+                : "Орієнтовно менше ніж одна середня зарплата вчителя в Україні (~15 000 грн/міс).";
+        }
+        var rounded = Math.round(r);
+        if (r < 100) {
+            return ru
+                ? "≈ как " + rounded + " средних зарплат учителя в Украине (~15 000 грн каждая)."
+                : "≈ як " + rounded + " середніх зарплат вчителя в Україні (~15 000 грн кожна).";
+        }
+        var schools = Math.max(1, Math.round(r / 30));
+        var pop = Math.round(r * 50);
+        return ru
+            ? "≈ как " + rounded + " зарплат учителя — грубо как " + schools + " школ (≈30 педагогов в школе) или порядка " + pop + " человек в аналогии маленького города."
+            : "≈ як " + rounded + " зарплат вчителя — грубо як " + schools + " шкіл (≈30 педагогів на школу) або населення порядку N≈" + pop + " осіб у маленькому місті (оцінка порядку).";
+    }
+
+    function renderEffRows(containerEl, amountEur, workHours) {
+        if (!containerEl) return;
+        containerEl.innerHTML = "";
+        if (!workHours || workHours <= 0 || !isFinite(workHours)) {
+            var p = document.createElement("p");
+            p.className = "muted";
+            p.style.margin = "0";
+            p.textContent = sumEffTxt("sum_eff_na");
+            containerEl.appendChild(p);
+            return;
+        }
+        var eph = amountEur / workHours;
+        var rows = [
+            { label: sumEffTxt("sum_eff_1m"), eur: eph / 60 },
+            { label: sumEffTxt("sum_eff_1h"), eur: eph },
+            { label: sumEffTxt("sum_eff_8h"), eur: eph * 8 },
+            { label: sumEffTxt("sum_eff_160"), eur: eph * WORK_MONTH_H },
+            { label: sumEffTxt("sum_eff_year"), eur: eph * YEAR_WORK_H }
+        ];
+        rows.forEach(function (row) {
+            var div = document.createElement("div");
+            div.className = "summary-eff-row";
+            div.innerHTML = "<span>" + row.label + "</span><strong>" + row.eur.toFixed(2) + " €</strong>";
+            containerEl.appendChild(div);
+        });
+    }
+
+    function renderMonSummary() {
+        var elRev = document.getElementById("monKpiRev");
+        var elVids = document.getElementById("monKpiVids");
+        var elShoot = document.getElementById("monKpiShoot");
+        var elUah = document.getElementById("monKpiUah");
+        var elGr = document.getElementById("monEffGrid");
+        var elTe = document.getElementById("monTeacher");
+        if (!elRev) return;
+
+        var slider = document.getElementById("tmViewsSlider");
+        var pos = slider ? parseInt(slider.value, 10) || 0 : 0;
+        var views = tmPosToViews(pos);
+        var cpm = parseFloat(document.getElementById("tmCpm").value);
+        if (isNaN(cpm) || cpm < 0) cpm = 0;
+        var revenue = (views / 1000) * cpm;
+
+        var avgVpv = parseFloat(document.getElementById("monAvgVpv").value);
+        if (isNaN(avgVpv) || avgVpv < 1) avgVpv = 5000;
+        var minV = parseFloat(document.getElementById("monMinPerVid").value);
+        if (isNaN(minV) || minV < 0.5) minV = 35;
+
+        var videos = Math.max(1, Math.ceil(views / avgVpv));
+        var shootHours = (videos * minV) / 60;
+        var tmHoursInput = document.getElementById("tmHours");
+        var tmH = tmHoursInput ? parseFloat(tmHoursInput.value) : 0;
+        if (isNaN(tmH) || tmH < 0) tmH = 0;
+        var workHours = shootHours > 0 ? shootHours : tmH;
+
+        elRev.textContent = revenue.toFixed(2) + " €";
+        elVids.textContent = String(videos);
+        elShoot.textContent = formatHours(shootHours);
+        elUah.textContent = Math.round(revenue * EUR_TO_UAH).toLocaleString(localeNum()) + " ₴";
+
+        renderEffRows(elGr, revenue, workHours);
+        if (elTe) elTe.textContent = teacherLine(revenue);
+    }
+
+    function renderShopSummary() {
+        var elG = document.getElementById("shopKpiGmv");
+        var elC = document.getElementById("shopKpiComm");
+        var elV = document.getElementById("shopKpiVids");
+        var elH = document.getElementById("shopKpiHours");
+        var elGr = document.getElementById("shopEffGrid");
+        var elTe = document.getElementById("shopTeacher");
+        if (!elG) return;
+
+        var gmv = 0, comm = 0, vids = 0, th = 0;
+        accounts.forEach(function (a) {
+            var r = computeAccount(a);
+            gmv += r.orders * r.price;
+            comm += r.commissionEUR;
+            vids += r.videos;
+            th += r.hours;
+        });
+        elG.textContent = gmv.toFixed(2) + " €";
+        elC.textContent = comm.toFixed(2) + " €";
+        elV.textContent = String(vids);
+        elH.textContent = formatHours(th);
+        renderEffRows(elGr, comm, th);
+        if (elTe) elTe.textContent = teacherLine(comm);
+    }
+
+    function bindCalcTabs() {
+        if (window._calcTabsBound) return;
+        window._calcTabsBound = true;
+        var tabMon = document.getElementById("tabCalcMon");
+        var tabShop = document.getElementById("tabCalcShop");
+        var panelMon = document.getElementById("calcPanelMon");
+        var panelShop = document.getElementById("calcPanelShop");
+        if (!tabMon || !tabShop || !panelMon || !panelShop) return;
+        function switchTab(shop) {
+            tabMon.setAttribute("aria-selected", shop ? "false" : "true");
+            tabShop.setAttribute("aria-selected", shop ? "true" : "false");
+            tabMon.tabIndex = shop ? -1 : 0;
+            tabShop.tabIndex = shop ? 0 : -1;
+            panelMon.hidden = !!shop;
+            panelShop.hidden = !shop;
+        }
+        tabMon.addEventListener("click", function () { switchTab(false); });
+        tabShop.addEventListener("click", function () { switchTab(true); });
+    }
+
     var TM_CMP = {
         uk: {
             line: "Переглядів: {v} · час: {h} · переглядів/год: {vph}",
@@ -1677,12 +2004,13 @@
             else if (vphA > vphB) elVer.textContent = tmCmpText("verdictA");
             else elVer.textContent = tmCmpText("verdictB");
         }
+        renderMonSummary();
     }
 
     function bindTimeMoney() {
         if (window._tmBind) return;
         window._tmBind = true;
-        var ids = ["tmViewsSlider", "tmCpm", "tmHours", "tmRate", "tmUnit", "tmAn", "tmAv", "tmAm", "tmBn", "tmBv", "tmBm"];
+        var ids = ["tmViewsSlider", "tmCpm", "tmHours", "tmRate", "tmUnit", "tmAn", "tmAv", "tmAm", "tmBn", "tmBv", "tmBm", "monAvgVpv", "monMinPerVid"];
         ids.forEach(function (id) {
             var el = document.getElementById(id);
             if (!el) return;
@@ -1720,10 +2048,11 @@
         var fv = document.getElementById("famVideos");
         var fh = document.getElementById("famHours");
         if (accounts.length === 0) {
-            ft.hidden = true;
+            if (ft) ft.hidden = true;
+            renderShopSummary();
             return;
         }
-        ft.hidden = false;
+        if (ft) ft.hidden = false;
         var te = 0, to = 0, tv = 0, th = 0;
         accounts.forEach(function (a) {
             var r = computeAccount(a);
@@ -1736,6 +2065,7 @@
         fo.textContent = formatOrders(to);
         fv.textContent = String(tv);
         fh.textContent = formatHours(th);
+        renderShopSummary();
     }
 
     function renderAll() {
@@ -1789,6 +2119,7 @@
     function initLangUi() {
         window.cacheUKFromDOM();
         window.applyPageLang(window.getPageLang());
+        bindCalcTabs();
         bindTimeMoney();
         renderTimeMoney();
         var ua = document.getElementById("langBtnUa");
