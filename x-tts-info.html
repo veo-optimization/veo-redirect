@@ -432,7 +432,7 @@
             <div class="cat-hint" id="catHint"></div>
 
             <p class="step-label" id="stepTypeQuality">2. Тип та якість контенту</p>
-            <p class="muted" id="qualityBlockLead" style="margin-top:0;">Орієнтири стосуються <strong>середніх переглядів на одне відео</strong> (як «зазвичай» набирає ролик на акаунті), а не сумарного валу за місяць. Низька якість — багато «слабких» роликів (~20 перегл.), але вони швидші у виробництві.</p>
+            <p class="muted" id="qualityBlockLead" style="margin-top:0;">Модель орієнтується на <strong>системну</strong> роботу з контентом: середні перегляди на 1 відео мають сенс після <strong>великої вибірки (мінімум 100 роликів)</strong>, а не за 3–5 останніх. Рівні якості: <strong>~200</strong> / <strong>~5 тис</strong> / <strong>50 тис.+</strong> перегл. на відео (5 / 15 / 30 хв на публікацію).</p>
             <div class="help-row">
                 <button type="button" class="help-pill" id="pillTypeQuality" data-help="typeQualityExplain">Що це таке?</button>
             </div>
@@ -709,9 +709,11 @@
 
     var TEACHER_UAH_FLOOR = 15000;
 
-    /** Якість: орієнтир середніх переглядів на 1 відео + хв на публікацію. */
+    /** Якість: орієнтир середніх переглядів на 1 відео + хв на публікацію (модель ТЗ). */
+    var STABILITY_FACTOR = 1.3;
+    var MIN_VIDEOS_SAMPLE = 100;
     var QUALITY = {
-        low: { v: 20, min: 5 },
+        low: { v: 200, min: 5 },
         mid: { v: 5000, min: 15 },
         high: { v: 50000, min: 30 }
     };
@@ -765,6 +767,14 @@
         state.minPerVideo = q.min;
     }
 
+    function adjustedVideosForScenario(views) {
+        var avgV = Math.max(1, state.avgViewsPerVideo);
+        var needed = views / avgV;
+        var adj = needed * STABILITY_FACTOR;
+        if (adj < MIN_VIDEOS_SAMPLE) adj = MIN_VIDEOS_SAMPLE;
+        return Math.ceil(adj);
+    }
+
     function computeShop() {
         var c = CAT_NUM[state.cat] || CAT_NUM.fashion;
         var f = FUNNEL_NUM[state.funnel] || FUNNEL_NUM.mofu;
@@ -774,7 +784,7 @@
         var orders = views * convPerView;
         var gmv = orders * c.avgPrice;
         var commissionUSD = gmv * (c.defaultCommissionPct / 100);
-        var videos = Math.max(1, Math.ceil(views / Math.max(1, state.avgViewsPerVideo)));
+        var videos = adjustedVideosForScenario(views);
         var m = getMinPerVideo();
         var hours = (videos * m) / 60;
         return {
@@ -792,7 +802,7 @@
     function computeMon() {
         var cpm = CPM_USD[state.cat] != null ? CPM_USD[state.cat] : CPM_USD.fashion;
         var rev = (state.views / 1000) * cpm;
-        var videos = Math.max(1, Math.ceil(state.views / Math.max(1, state.avgViewsPerVideo)));
+        var videos = adjustedVideosForScenario(state.views);
         var m = getMinPerVideo();
         var hours = (videos * m) / 60;
         return { revUSD: rev, cpm: cpm, videos: videos, hours: hours };
@@ -852,11 +862,11 @@
         var wrap = document.getElementById("avgViewsPresets");
         if (!wrap) return;
         var tiers = lang === "ru" ? [
-            { id: "low", q: "Низкая", m: "~20 просм./видео · 5 мин · быстрее снимать" },
+            { id: "low", q: "Низкая", m: "~200 просм./видео · 5 мин · быстрее снимать" },
             { id: "mid", q: "Средняя", m: "~5 тыс / видео · 15 мин" },
             { id: "high", q: "Высокая", m: "50 тыс.+ в ср. на 1 видео · 30 мин" }
         ] : [
-            { id: "low", q: "Низька", m: "~20 перегл./відео · 5 хв · швидше знімати" },
+            { id: "low", q: "Низька", m: "~200 перегл./відео · 5 хв · швидше знімати" },
             { id: "mid", q: "Середня", m: "~5 тис / відео · 15 хв" },
             { id: "high", q: "Висока", m: "50 тис.+ у ср. на 1 відео · 30 хв" }
         ];
@@ -1063,7 +1073,7 @@
         lblTabShop: "TikTok Shop",
         stepCat: "1. Категория / ниша",
         stepTypeQuality: "2. Тип и качество контента",
-        qualityBlockLead: "Ориентиры — это <strong>средние просмотры на одно видео</strong> (как обычно набирает ролик), а не суммарный вал за месяц. Низкое качество — много слабых роликов (~20 просм. в среднем), зато быстрее снимать.",
+        qualityBlockLead: "Модель рассчитана на <strong>системный</strong> подход: средние просмотры на 1 видео имеют смысл после <strong>большой выборки (минимум 100 роликов)</strong>, а не по 3–5 последним. Уровни: <strong>~200</strong> / <strong>~5 тыс</strong> / <strong>50 тыс.+</strong> просм. на видео (5 / 15 / 30 мин на публикацию).",
         stepViews: "3. Суммарные просмотры за месяц",
         lblSlider: "Суммарных просмотров за месяц",
         philosophy: "Высокие суммы ближе к авторам, которые понимают <strong>алгоритм</strong>, <strong>психологию зрителя</strong>, <strong>тип контента</strong> и <strong>производство</strong>, и работают <strong>системно</strong>. Много часов на слабый контент дают худший «заработок в час», чем меньше времени на сильные ролики.",
@@ -1098,11 +1108,11 @@
         },
         calcHow: {
             title: "Як працює калькулятор?",
-            html: "<p>Усі суми в блоці результатів — у <strong>доларах США</strong> (орієнтир).</p><p><strong>TikTok Shop:</strong> оцінюємо замовлення через спрощену <strong>конверсію перегляд → покупка</strong> (ніша + воронка), множимо на середній чек (USD) і на <strong>% комісії креатора</strong> — отримуєте орієнтовну комісію та GMV.</p><p><strong>Монетизація:</strong> перегляди × CPM (USD) по ніші.</p><p>Кількість відео = сумарні перегляди за місяць ÷ <strong>середні перегляди на одне відео</strong> за обраним рівнем якості. Час = відео × хв на ролик (5 / 15 / 30). Податки й повернення не віднімали.</p>"
+            html: "<p>Результати базуються на моделі <strong>системного</strong> створення контенту в TikTok, а не випадкових публікацій. Усі суми в блоці результатів — у <strong>доларах США</strong> (орієнтир).</p><p><strong>TikTok Shop:</strong> <code>конверсія «перегляд → замовлення»</code> = базова ставка по ніші × множник воронки (TOFU / MOFU / BOFU), з обмеженням зверху; <code>замовлення</code> = сумарні перегляди × ця конверсія; <code>GMV</code> = замовлення × середній чек (AOV); <code>дохід креатора</code> = GMV × % комісії афіліата.</p><p><strong>Монетизація:</strong> перегляди × CPM (USD) по ніші.</p><p><strong>Відео та час:</strong> <code>потрібно відео</code> = перегляди ÷ середні перегляди на 1 відео (якість: 200 / 5&nbsp;000 / 50&nbsp;000); далі × коефіцієнт стабілізації <strong>1,3</strong> (+30% до обсягу роликів через нерівномірність алгоритму); якщо виходить менше <strong>100</strong> — приймається мінімум <strong>100 відео</strong> (статистично стійка вибірка). <code>час</code> = кількість відео × хв на ролик (5 / 15 / 30). Податки й повернення не віднімали.</p>"
         },
         typeQualityExplain: {
             title: "Тип та якість контенту",
-            html: "<h4 style=\"margin:0 0 8px;font-size:0.95rem;\">Якість (три кнопки)</h4><p>Це <strong>орієнтир середніх переглядів на одне відео</strong> — як зазвичай набирає типовий ролик на акаунті (усі типи роликів беруться до уваги, але метрика «на 1 відео», а не вал за місяць).</p><ul><li><strong>Низька:</strong> багато слабких роликів, у середньому ~<strong>20</strong> переглядів на відео; швидше зняти й опублікувати (~<strong>5 хв</strong>).</li><li><strong>Середня:</strong> ~<strong>5 тис</strong> переглядів на відео, ~<strong>15 хв</strong> на публікацію.</li><li><strong>Висока:</strong> у середньому <strong>50 тис.+</strong> переглядів на одне відео (топовий рівень по акаунту), ~<strong>30 хв</strong> на публікацію.</li></ul><h4 style=\"margin:14px 0 8px;font-size:0.95rem;\">Воронка (TOFU / MOFU / BOFU)</h4><ul><li><strong>TOFU (верх):</strong> охоплення, тренди — мало прямих продажів з перегляду.</li><li><strong>MOFU (середина):</strong> огляди, довіра.</li><li><strong>BOFU (низ):</strong> демо товару, ціна, заклик купити — вища частка переглядів → замовлення.</li></ul>"
+            html: "<p>У TikTok перегляди мають <strong>нерівномірний розподіл</strong>: частина роликів набирає низькі значення (орієнтир <strong>200–1000</strong>), частина — середні (<strong>1&nbsp;000–10&nbsp;000</strong>), лише невеликий відсоток стає «вірусним» (<strong>100&nbsp;000+</strong>). Тому реалістичний прогноз спирається на <strong>усереднення</strong> після великої вибірки, а не на 3–5 останніх відео — орієнтир: <strong>мінімум 100 роликів</strong> для оцінки «середнього на 1 відео».</p><h4 style=\"margin:14px 0 8px;font-size:0.95rem;\">Якість (три кнопки)</h4><p>Орієнтир <strong>середніх переглядів на одне відео</strong> у моделі (метрика «на 1 відео», не вал за місяць):</p><ul><li><strong>Низька:</strong> ~<strong>200</strong> переглядів на відео, ~<strong>5 хв</strong> на публікацію (швидше виробництво).</li><li><strong>Середня:</strong> ~<strong>5 тис</strong> переглядів, ~<strong>15 хв</strong>.</li><li><strong>Висока:</strong> ~<strong>50 тис</strong> переглядів, ~<strong>30 хв</strong>.</li></ul><p>Модель враховує поведінку алгоритмів: <strong>коефіцієнт 1,3</strong> до кількості відео, мінімум <strong>100</strong> роликів у сценарії — щоб не покладатися на одиничні кейси.</p><p class=\"gloss\" style=\"margin-top:12px;\">⚠️ Якщо ви очікуєте результат від <strong>2–5 відео</strong>, прогноз буде неточним. Калькулятор заточений під <strong>регулярний контент і масштабування</strong>.</p><h4 style=\"margin:14px 0 8px;font-size:0.95rem;\">Воронка (TOFU / MOFU / BOFU)</h4><ul><li><strong>TOFU (верх):</strong> охоплення, тренди — мало прямих продажів з перегляду.</li><li><strong>MOFU (середина):</strong> огляди, довіра.</li><li><strong>BOFU (низ):</strong> демо товару, ціна, заклик купити — вища частка переглядів → замовлення.</li></ul>"
         },
         funnel: {
             title: "Чому воронка важлива?",
@@ -1134,11 +1144,11 @@
         },
         metricVideos: {
             title: "Кількість відео",
-            html: "<p><strong>Сумарні перегляди за місяць</strong> діляться на <strong>середній орієнтир переглядів на одне відео</strong> (рівень якості: ~20 / ~5 тис / 50 тис.+). Округлення вгору — скільки роликів потрібно для сценарію.</p>"
+            html: "<p>Спочатку: сумарні перегляди ÷ <strong>середні перегляди на 1 відео</strong> (якість: ~200 / ~5 тис / ~50 тис). Потім множник стабілізації <strong>×1,3</strong> (компенсація «слабких» роликів) і мінімум <strong>100 відео</strong>, якщо виходить менше — для узгодження з моделлю великої вибірки. Округлення вгору.</p>"
         },
         metricHours: {
             title: "Час на виробництво",
-            html: "<p>Кількість відео множиться на хвилини на один ролик за рівнем якості: спам <strong>5 хв</strong>, середній <strong>15 хв</strong>, топ <strong>30 хв</strong>. Це груба оцінка зйомки, монтажу й публікації.</p>"
+            html: "<p><strong>Кількість відео</strong> у сценарії (після стабілізації та мінімуму 100) множиться на хвилини на один ролик: низька якість <strong>5 хв</strong>, середня <strong>15 хв</strong>, висока <strong>30 хв</strong>. Груба оцінка зйомки, монтажу й публікації.</p>"
         },
         metricExtra: {
             title: "Додатковий рядок",
@@ -1161,11 +1171,11 @@
         },
         calcHow: {
             title: "Как работает калькулятор?",
-            html: "<p>Все суммы в блоке результатов — в <strong>долларах США</strong> (ориентир).</p><p><strong>TikTok Shop:</strong> оцениваем заказы через упрощённую <strong>конверсию просмотр → покупка</strong> (ниша + воронка), умножаем на средний чек (USD) и на <strong>% комиссии креатора</strong>.</p><p><strong>Монетизация:</strong> просмотры × CPM (USD) по нише.</p><p>Число роликов = суммарные просмотры за месяц ÷ <strong>средние просмотры на одно видео</strong> (уровень качества). Время = видео × минуты на ролик (5 / 15 / 30). Налоги и возвраты не вычитались.</p>"
+            html: "<p>Результаты основаны на модели <strong>системного</strong> контента в TikTok. Суммы в блоке — в <strong>долларах США</strong> (ориентир).</p><p><strong>TikTok Shop:</strong> <code>конверсия «просмотр → заказ»</code> = база по нише × множитель воронки (TOFU / MOFU / BOFU), с ограничением сверху; <code>заказы</code> = суммарные просмотры × конверсия; <code>GMV</code> = заказы × средний чек; <code>доход креатора</code> = GMV × % комиссии.</p><p><strong>Монетизация:</strong> просмотры × CPM по нише.</p><p><strong>Видео и время:</strong> нужно роликов = просмотры ÷ средние просмотры на 1 видео (качество: 200 / 5&nbsp;000 / 50&nbsp;000); затем × <strong>1,3</strong> (стабилизация); если меньше <strong>100</strong> — минимум <strong>100 видео</strong>. Время = число видео × минуты на ролик (5 / 15 / 30). Налоги и возвраты не вычитались.</p>"
         },
         typeQualityExplain: {
             title: "Тип и качество контента",
-            html: "<h4 style=\"margin:0 0 8px;font-size:0.95rem;\">Качество (три кнопки)</h4><p>Это <strong>ориентир средних просмотров на одно видео</strong> — как обычно набирает типичный ролик в аккаунте (метрика «на 1 видео», не вал за месяц).</p><ul><li><strong>Низкая:</strong> много слабых роликов, в среднем ~<strong>20</strong> просмотров на видео; быстрее снять (~<strong>5 мин</strong>).</li><li><strong>Средняя:</strong> ~<strong>5 тыс</strong> просмотров на видео, ~<strong>15 мин</strong>.</li><li><strong>Высокая:</strong> в среднем <strong>50 тыс.+</strong> на одно видео (топ по аккаунту), ~<strong>30 мин</strong>.</li></ul><h4 style=\"margin:14px 0 8px;font-size:0.95rem;\">Воронка (TOFU / MOFU / BOFU)</h4><ul><li><strong>TOFU:</strong> охват, тренды — мало прямых продаж с просмотра.</li><li><strong>MOFU:</strong> обзоры, доверие.</li><li><strong>BOFU:</strong> демо, цена, призыв купить — выше доля просмотров → заказ.</li></ul>"
+            html: "<p>В TikTok просмотры распределены <strong>неравномерно</strong>: часть роликов даёт низкие значения (ориентир <strong>200–1000</strong>), часть — средние (<strong>1&nbsp;000–10&nbsp;000</strong>), немногие — «вирусные» (<strong>100&nbsp;000+</strong>). Реалистичный прогноз опирается на <strong>усреднение</strong> по большой выборке, не по 3–5 последним видео — ориентир: <strong>минимум 100 роликов</strong>.</p><h4 style=\"margin:14px 0 8px;font-size:0.95rem;\">Качество (три кнопки)</h4><p>Средние просмотры на одно видео в модели:</p><ul><li><strong>Низкая:</strong> ~<strong>200</strong> просмотров, ~<strong>5 мин</strong> на публикацию.</li><li><strong>Средняя:</strong> ~<strong>5 тыс</strong>, ~<strong>15 мин</strong>.</li><li><strong>Высокая:</strong> ~<strong>50 тыс</strong>, ~<strong>30 мин</strong>.</li></ul><p>Модель учитывает нестабильность: коэффициент <strong>1,3</strong> к числу видео, минимум <strong>100</strong> роликов в сценарии.</p><p class=\"gloss\" style=\"margin-top:12px;\">⚠️ Если вы ждёте результат от <strong>2–5 видео</strong>, прогноз будет неточным. Калькулятор для <strong>регулярного контента и масштабирования</strong>.</p><h4 style=\"margin:14px 0 8px;font-size:0.95rem;\">Воронка (TOFU / MOFU / BOFU)</h4><ul><li><strong>TOFU:</strong> охват, тренды — мало прямых продаж.</li><li><strong>MOFU:</strong> обзоры, доверие.</li><li><strong>BOFU:</strong> демо, цена, призыв — выше доля просмотров → заказ.</li></ul>"
         },
         funnel: {
             title: "Почему важна воронка?",
@@ -1197,11 +1207,11 @@
         },
         metricVideos: {
             title: "Количество видео",
-            html: "<p><strong>Суммарные просмотры за месяц</strong> делятся на <strong>средний ориентир просмотров на одно видео</strong> (уровень качества: ~20 / ~5 тыс / 50 тыс.+). Округление вверх — сколько роликов нужно для сценария.</p>"
+            html: "<p>Сначала: просмотры ÷ <strong>средние просмотры на 1 видео</strong> (~200 / ~5 тыс / ~50 тыс). Затем × <strong>1,3</strong> и минимум <strong>100 видео</strong>, если получилось меньше. Округление вверх.</p>"
         },
         metricHours: {
             title: "Время на производство",
-            html: "<p>Число видео умножается на минуты на ролик по уровню качества: спам <strong>5</strong>, средний <strong>15</strong>, топ <strong>30</strong>. Грубая оценка съёмки, монтажа и публикации.</p>"
+            html: "<p>Число видео в сценарии (после стабилизации и минимума 100) × минуты на ролик: <strong>5 / 15 / 30</strong>. Грубая оценка съёмки и публикации.</p>"
         },
         metricExtra: {
             title: "Дополнительная строка",
@@ -1326,7 +1336,7 @@
         var stq = document.getElementById("stepTypeQuality");
         if (stq) stq.textContent = "2. Тип та якість контенту";
         var qb = document.getElementById("qualityBlockLead");
-        if (qb) qb.innerHTML = "Орієнтири стосуються <strong>середніх переглядів на одне відео</strong> (як «зазвичай» набирає ролик на акаунті), а не сумарного валу за місяць. Низька якість — багато «слабких» роликів (~20 перегл. у середньому), але вони швидші у виробництві.";
+        if (qb) qb.innerHTML = "Модель орієнтується на <strong>системну</strong> роботу з контентом: середні перегляди на 1 відео мають сенс після <strong>великої вибірки (мінімум 100 роликів)</strong>, а не за 3–5 останніх. Рівні якості: <strong>~200</strong> / <strong>~5 тис</strong> / <strong>50 тис.+</strong> перегл. на відео (5 / 15 / 30 хв на публікацію).";
         document.getElementById("stepViews").textContent = "3. Сумарні перегляди за місяць";
         document.getElementById("lblSlider").textContent = "Переглядів за місяць (сценарій)";
         document.getElementById("calcFootnote").textContent = "«Чистий» у значенні дохід від монетизації/комісії до податків і витрат — податки та повернення не віднімали.";
