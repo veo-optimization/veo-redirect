@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Додати товар</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #ffffff;
+    margin: 0;
+    padding: 10px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 6px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #cfe8ff;
+    border: none;
+    font-size: 16px;
+}
+
+.section {
+    margin-bottom: 20px;
+}
+
+.row {
+    display: flex;
+    gap: 10px;
+}
+
+.row input {
+    flex: 1;
+}
+
+.size-btn, .color-btn {
+    display: inline-block;
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin: 4px;
+}
+
+.size-btn.active, .color-btn.active {
+    background: #cfe8ff;
+}
+
+.variant {
+    border: 1px solid #eee;
+    padding: 10px;
+    margin-top: 10px;
+}
+</style>
+
+</head>
+<body>
+
+<h2>Додати товар</h2>
+
+<div class="section">
+    <label>Назва</label>
+    <input type="text">
+
+    <label>SKU</label>
+    <input type="text">
+
+    <label>Ціна</label>
+    <input type="number">
+
+    <label>Кількість</label>
+    <input type="number">
+</div>
+
+<div class="section">
+    <label>Категорія</label>
+    <select>
+        <option>Одяг</option>
+    </select>
+
+    <label>Підкатегорія</label>
+    <select>
+        <option>Светри</option>
+    </select>
+</div>
+
+<div class="section">
+    <button onclick="toggleMulti()">Декілька видів товару</button>
+</div>
+
+<div id="multiBlock" style="display:none">
+
+    <h3>Оберіть розміри</h3>
+    <div id="sizes">
+        <span class="size-btn" onclick="toggleSize(this)">S</span>
+        <span class="size-btn" onclick="toggleSize(this)">M</span>
+        <span class="size-btn" onclick="toggleSize(this)">L</span>
+        <span class="size-btn" onclick="toggleSize(this)">XL</span>
+    </div>
+
+    <h3>Оберіть кольори</h3>
+    <div id="colors">
+        <span class="color-btn" onclick="toggleColor(this)">Чорний</span>
+        <span class="color-btn" onclick="toggleColor(this)">Білий</span>
+        <span class="color-btn" onclick="toggleColor(this)">Беж</span>
+    </div>
+
+    <div id="variants"></div>
+
+</div>
+
+<div class="section">
+    <label>Опис</label>
+    <textarea></textarea>
+
+    <label><input type="checkbox"> Відправити в бот</label><br>
+    <label><input type="checkbox"> Топ товар</label>
+</div>
+
+<div class="section">
+    <button>Зберегти</button>
+    <button>Зберегти і додати ще</button>
+    <button>Скасувати</button>
+</div>
+
+<script>
+let selectedSizes = [];
+let selectedColors = [];
+
+function toggleMulti() {
+    document.getElementById('multiBlock').style.display = 'block';
+}
+
+function toggleSize(el) {
+    el.classList.toggle('active');
+    updateSelections();
+}
+
+function toggleColor(el) {
+    el.classList.toggle('active');
+    updateSelections();
+}
+
+function updateSelections() {
+    selectedSizes = [...document.querySelectorAll('.size-btn.active')].map(e => e.innerText);
+    selectedColors = [...document.querySelectorAll('.color-btn.active')].map(e => e.innerText);
+    renderVariants();
+}
+
+function renderVariants() {
+    const container = document.getElementById('variants');
+    container.innerHTML = '';
+
+    selectedSizes.forEach(size => {
+        selectedColors.forEach(color => {
+            const div = document.createElement('div');
+            div.className = 'variant';
+
+            div.innerHTML = `
+                <b>${size} / ${color}</b>
+                <div class="row">
+                    <input placeholder="Кількість">
+                    <input placeholder="Ціна">
+                </div>
+                <button onclick="alert('Тут відкриється форма замірів')">Внести заміри</button>
+            `;
+
+            container.appendChild(div);
+        });
+    });
+}
+</script>
+
+</body>
+</html>
