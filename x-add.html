@@ -1,56 +1,46 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Додати товар</title>
+<meta charset="UTF-8">
+<title>CRM Товар</title>
 
 <style>
 body {
-    font-family: Arial, sans-serif;
-    background: #ffffff;
+    font-family: Arial;
     margin: 0;
-    padding: 10px;
+    padding: 12px;
+    background: #fff;
 }
 
 input, select, textarea {
     width: 100%;
-    padding: 10px;
-    margin-top: 6px;
-    margin-bottom: 12px;
+    padding: 12px;
+    margin: 6px 0;
     border: 1px solid #ccc;
 }
 
 button {
     width: 100%;
-    padding: 12px;
+    padding: 14px;
     margin-top: 10px;
     background: #cfe8ff;
     border: none;
-    font-size: 16px;
 }
 
-.section {
-    margin-bottom: 20px;
-}
-
-.row {
+.grid {
     display: flex;
-    gap: 10px;
+    flex-wrap: wrap;
+    gap: 6px;
 }
 
-.row input {
-    flex: 1;
-}
-
-.size-btn, .color-btn {
-    display: inline-block;
+.tag {
     padding: 10px;
     border: 1px solid #ccc;
-    margin: 4px;
+    font-size: 14px;
 }
 
-.size-btn.active, .color-btn.active {
+.tag.active {
     background: #cfe8ff;
 }
 
@@ -59,124 +49,214 @@ button {
     padding: 10px;
     margin-top: 10px;
 }
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    display: none;
+    overflow: auto;
+    padding: 15px;
+}
+
+.color {
+    width: 30%;
+    text-align: center;
+    padding: 10px;
+    border: 2px solid;
+}
+
+.beige { border-color: #d6c2a6 }
+.black { border-color: #000 }
+.white { border-color: #ccc }
+.tiffany { border-color: #0abab5 }
+.smaragd { border-color: #50c878 }
+.red { border-color: #ff0000 }
+.blue { border-color: #0000ff }
+.gray { border-color: #888 }
+.pink { border-color: #ff69b4 }
+.brown { border-color: #8b4513 }
+
+.highlight {
+    background: #a8d8ff;
+}
 </style>
 
 </head>
+
 <body>
 
-<h2>Додати товар</h2>
+<h3>Додати товар</h3>
 
-<div class="section">
-    <label>Назва</label>
-    <input type="text">
+<input placeholder="Назва товару">
+<input placeholder="SKU">
+<input placeholder="Ціна">
+<input placeholder="Кількість">
 
-    <label>SKU</label>
-    <input type="text">
+<select>
+<option>Одяг</option>
+<option>Взуття</option>
+<option>Аксесуари</option>
+<option>Косметика</option>
+<option>Електроніка</option>
+</select>
 
-    <label>Ціна</label>
-    <input type="number">
+<select>
+<option>Светри</option>
+<option>Штани</option>
+<option>Футболки</option>
+<option>Куртки</option>
+<option>Сукні</option>
+</select>
 
-    <label>Кількість</label>
-    <input type="number">
+<label><input type="checkbox"> Тягнеться (стрейч)</label>
+
+<button onclick="toggleMulti()">Декілька товарів</button>
+
+<div id="multi" style="display:none">
+
+<h4>Розміри</h4>
+<div class="grid" id="sizes"></div>
+
+<h4>Кольори</h4>
+<div class="grid">
+<div class="color beige" onclick="toggle(this)">Beige</div>
+<div class="color black" onclick="toggle(this)">Black</div>
+<div class="color white" onclick="toggle(this)">White</div>
+<div class="color tiffany" onclick="toggle(this)">Tiffany</div>
+<div class="color smaragd" onclick="toggle(this)">Smaragd</div>
+<div class="color red" onclick="toggle(this)">Red</div>
+<div class="color blue" onclick="toggle(this)">Blue</div>
+<div class="color gray" onclick="toggle(this)">Gray</div>
+<div class="color pink" onclick="toggle(this)">Pink</div>
+<div class="color brown" onclick="toggle(this)">Brown</div>
 </div>
 
-<div class="section">
-    <label>Категорія</label>
-    <select>
-        <option>Одяг</option>
-    </select>
-
-    <label>Підкатегорія</label>
-    <select>
-        <option>Светри</option>
-    </select>
-</div>
-
-<div class="section">
-    <button onclick="toggleMulti()">Декілька видів товару</button>
-</div>
-
-<div id="multiBlock" style="display:none">
-
-    <h3>Оберіть розміри</h3>
-    <div id="sizes">
-        <span class="size-btn" onclick="toggleSize(this)">S</span>
-        <span class="size-btn" onclick="toggleSize(this)">M</span>
-        <span class="size-btn" onclick="toggleSize(this)">L</span>
-        <span class="size-btn" onclick="toggleSize(this)">XL</span>
-    </div>
-
-    <h3>Оберіть кольори</h3>
-    <div id="colors">
-        <span class="color-btn" onclick="toggleColor(this)">Чорний</span>
-        <span class="color-btn" onclick="toggleColor(this)">Білий</span>
-        <span class="color-btn" onclick="toggleColor(this)">Беж</span>
-    </div>
-
-    <div id="variants"></div>
+<div id="variants"></div>
 
 </div>
 
-<div class="section">
-    <label>Опис</label>
-    <textarea></textarea>
+<textarea placeholder="Опис"></textarea>
 
-    <label><input type="checkbox"> Відправити в бот</label><br>
-    <label><input type="checkbox"> Топ товар</label>
+<button class="highlight" onclick="openExtra()">Внести додаткові характеристики</button>
+
+<label><input type="checkbox"> Відправити в бот</label>
+<label><input type="checkbox"> Топ товар</label>
+
+<button>Зберегти</button>
+<button>Зберегти і ще</button>
+<button>Скасувати</button>
+
+<!-- МОДАЛКА ЗАМІРІВ -->
+<div class="modal" id="measureModal">
+<h3>Заміри</h3>
+
+<label><input type="checkbox"> Напівоб'єм</label>
+
+<input placeholder="ОГ">
+<input placeholder="ОБ">
+<input placeholder="Талія">
+<input placeholder="Довжина">
+<input placeholder="Рукав">
+
+<label><input type="checkbox"> Тягнеться</label>
+
+<button onclick="closeModal()">Зберегти</button>
 </div>
 
-<div class="section">
-    <button>Зберегти</button>
-    <button>Зберегти і додати ще</button>
-    <button>Скасувати</button>
+<!-- ДОДАТКОВІ -->
+<div class="modal" id="extraModal">
+<h3>Додаткові характеристики</h3>
+
+<select>
+<option>Китай</option>
+<option>Туреччина</option>
+<option>Італія</option>
+<option>Польща</option>
+<option>Україна</option>
+</select>
+
+<h4>Матеріал</h4>
+
+<div class="grid">
+<div class="tag" onclick="toggle(this)">Бавовна</div>
+<div class="tag" onclick="toggle(this)">Поліестер</div>
+<div class="tag" onclick="toggle(this)">Еластан</div>
+<div class="tag" onclick="toggle(this)">Вовна</div>
+<div class="tag" onclick="toggle(this)">Льон</div>
+</div>
+
+<input placeholder="% матеріалу">
+
+<button onclick="closeExtra()">Зберегти</button>
 </div>
 
 <script>
-let selectedSizes = [];
-let selectedColors = [];
 
-function toggleMulti() {
-    document.getElementById('multiBlock').style.display = 'block';
-}
+// sizes generate
+let sizes = ["XXS","XS","S","M","L","XL","2XL","3XL","4XL","5XL","6XL"];
+let sizesDiv = document.getElementById("sizes");
 
-function toggleSize(el) {
-    el.classList.toggle('active');
-    updateSelections();
-}
+sizes.forEach(s=>{
+    let el = document.createElement("div");
+    el.className="tag";
+    el.innerText=s;
+    el.onclick=()=>toggle(el);
+    sizesDiv.appendChild(el);
+});
 
-function toggleColor(el) {
-    el.classList.toggle('active');
-    updateSelections();
-}
-
-function updateSelections() {
-    selectedSizes = [...document.querySelectorAll('.size-btn.active')].map(e => e.innerText);
-    selectedColors = [...document.querySelectorAll('.color-btn.active')].map(e => e.innerText);
+function toggle(el){
+    el.classList.toggle("active");
     renderVariants();
 }
 
-function renderVariants() {
-    const container = document.getElementById('variants');
-    container.innerHTML = '';
+function toggleMulti(){
+    document.getElementById("multi").style.display="block";
+}
 
-    selectedSizes.forEach(size => {
-        selectedColors.forEach(color => {
-            const div = document.createElement('div');
-            div.className = 'variant';
+function renderVariants(){
+    let selectedSizes = [...document.querySelectorAll("#sizes .active")].map(e=>e.innerText);
+    let selectedColors = [...document.querySelectorAll(".color.active")].map(e=>e.innerText);
 
-            div.innerHTML = `
-                <b>${size} / ${color}</b>
-                <div class="row">
-                    <input placeholder="Кількість">
-                    <input placeholder="Ціна">
-                </div>
-                <button onclick="alert('Тут відкриється форма замірів')">Внести заміри</button>
+    let box = document.getElementById("variants");
+    box.innerHTML="";
+
+    selectedSizes.forEach(s=>{
+        selectedColors.forEach(c=>{
+            let v = document.createElement("div");
+            v.className="variant";
+
+            v.innerHTML=`
+            <b>${s} / ${c}</b>
+            <input placeholder="Кількість">
+            <input placeholder="Ціна">
+            <button onclick="openModal()">Внести заміри</button>
             `;
 
-            container.appendChild(div);
+            box.appendChild(v);
         });
     });
 }
+
+function openModal(){
+    document.getElementById("measureModal").style.display="block";
+}
+
+function closeModal(){
+    document.getElementById("measureModal").style.display="none";
+}
+
+function openExtra(){
+    document.getElementById("extraModal").style.display="block";
+}
+
+function closeExtra(){
+    document.getElementById("extraModal").style.display="none";
+}
+
 </script>
 
 </body>
