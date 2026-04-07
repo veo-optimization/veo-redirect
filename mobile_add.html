@@ -485,11 +485,47 @@
             color: #fff;
         }
         .form-checkbox-wrap { margin-bottom: 8px; }
+        /* Три блоки сторінки */
+        .page-block {
+            max-width: 480px;
+            margin: 0 auto;
+        }
+        .page-block-heading {
+            font-size: clamp(1rem, 3.5vw, 1.15rem);
+            font-weight: 700;
+            color: #333;
+            margin: 0 0 12px;
+            padding: 0 4px;
+        }
+        .page-block-stub-text {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #555;
+            margin: 0;
+            padding: 16px 18px;
+            background: #fff;
+            border-radius: 12px;
+            border: 1px dashed #ccc;
+        }
+        .block-divider {
+            width: 100%;
+            max-width: 480px;
+            margin: 20px auto;
+            min-height: 3lh;
+            background: #adff2f;
+            border-radius: 6px;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.06);
+        }
+        @supports not (min-height: 3lh) {
+            .block-divider { min-height: calc(1.5em * 3); }
+        }
     </style>
 </head>
 <body>
 
-<div class="form-container">
+<section class="page-block page-block--add" id="block-add-product" aria-labelledby="heading-block-add">
+    <h2 class="page-block-heading" id="heading-block-add">1. Додавання товару</h2>
+    <div class="form-container">
     <header class="page-header">
         <h1 class="page-title">Створити новий товар</h1>
     </header>
@@ -593,33 +629,40 @@
             </button>
             <div class="form-accordion-panel">
         <div class="form-group">
-            <label for="category">Категорія</label>
+            <label for="category">Категорія (верхній рівень)</label>
             <select id="category" name="category" class="form-select">
                 <option value="Жіночий одяг">Жіночий одяг</option>
                 <option value="Чоловічий одяг">Чоловічий одяг</option>
-                <option value="Взуття">Взуття</option>
-                <option value="Аксесуари">Аксесуари</option>
                 <option value="Дитячий одяг">Дитячий одяг</option>
+                <option value="Взуття">Взуття</option>
             </select>
         </div>
-
-        <div class="form-accordion form-accordion-nested" data-acc-id="subcat">
-            <button type="button" class="form-accordion-header" aria-expanded="true" id="accHeader-subcat">
-                <span class="form-accordion-title-row">
-                    <span>Підкатегорія</span>
-                    <span class="form-accordion-count" data-count="0"></span>
-                </span>
-                <i class="bi bi-chevron-down form-accordion-chevron"></i>
-            </button>
-            <div class="form-accordion-panel">
+        <p class="quick-buttons-label" style="margin-top:-4px;margin-bottom:10px;color:#666">Каталог за структурою з categories.txt</p>
+        <div class="form-group">
+            <label for="categoryL2">Розділ каталогу</label>
+            <select id="categoryL2" class="form-select" aria-describedby="catTreeHint">
+                <option value="">— Оберіть розділ —</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="categoryL3">Підкатегорія</label>
+            <select id="categoryL3" class="form-select" disabled>
+                <option value="">— Спочатку розділ —</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="categoryLeaf">Тип / уточнення</label>
+            <select id="categoryLeaf" class="form-select" disabled>
+                <option value="">— Не обов’язково —</option>
+            </select>
+        </div>
         <div class="form-group" id="subcategoryGroup" style="margin-bottom:0">
-            <div id="subcategoryButtons" class="quick-buttons"></div>
-            <div id="customSubcategoryWrap" class="custom-input-wrap">
-                <input type="text" id="customSubcategory" class="form-input" placeholder="Введіть свою підкатегорію">
-            </div>
+            <label for="customSubcategory">Свій варіант (якщо немає в списку)</label>
+            <input type="text" id="customSubcategory" name="customSubcategory" class="form-input" placeholder="Опціонально" autocomplete="off">
         </div>
-            </div>
-        </div>
+        <input type="hidden" id="categoryPathHidden" name="categoryPath" value="">
+        <p class="media-hint" id="catTreeHint" style="margin-top:-8px">Якщо список не завантажився, перевірте шлях до TTS/categories.txt на сервері.</p>
+
 
         <!-- 5d. Розмір та параметри (підблоки — акордеони) -->
         <div class="form-group" id="attributesGroup">
@@ -874,21 +917,297 @@
             <button type="button" class="btn btn-cancel">Скасувати</button>
         </div>
     </form>
-</div>
+    </div>
+</section>
+
+<div class="block-divider" role="separator" aria-hidden="true"></div>
+
+<section class="page-block page-block--stub" id="block-questionnaire" aria-labelledby="heading-block-anketa">
+    <h2 class="page-block-heading" id="heading-block-anketa">2. Заповнення анкети</h2>
+    <p class="page-block-stub-text"><strong>Блок у розробці.</strong> Тут буде анкета користувача: заміри тіла та взуття, збереження профілю для підбору розмірів.</p>
+</section>
+
+<div class="block-divider" role="separator" aria-hidden="true"></div>
+
+<section class="page-block page-block--stub" id="block-site-display" aria-labelledby="heading-block-site">
+    <h2 class="page-block-heading" id="heading-block-site">3. Відображення на сайті</h2>
+    <p class="page-block-stub-text"><strong>Блок у розробці.</strong> Тут буде показ каталогу на сайті з урахуванням даних з анкети: персональний підбір і відображення товарів під заміри клієнта.</p>
+</section>
 
 <script>
 // Підкатегорії типу "верх" / "низ" (для авто-перемикання)
 const SUBCAT_TOP = ["Футболки","Блузки","Светри","Куртки","Сорочки","Піджаки","Светшоти","Поло","Топи","Кофти","Плащі","Жилети","Світшоти","Боді","Піжами","Костюми"];
 const SUBCAT_BOTTOM = ["Лосини","Спідниці","Шорти","Джинси","Штани","Брюки","Спідня білизна"];
 
-// Дані підкатегорій (Верх/Низ на початку для одягу, +50% елементів)
-const SUBCATEGORIES = {
-    "Жіночий одяг": ["Верх", "Низ", "Футболки", "Лосини", "Сукні", "Блузки", "Светри", "Куртки", "Спідниці", "Шорти", "Джинси", "Спідня білизна", "Плащі", "Топи", "Світшоти", "Брюки", "Кофти"],
-    "Чоловічий одяг": ["Верх", "Низ", "Футболки", "Сорочки", "Джинси", "Шорти", "Куртки", "Светри", "Штани", "Піджаки", "Светшоти", "Поло", "Плащі", "Світшоти", "Брюки", "Жилети"],
-    "Взуття": ["Жіноче", "Чоловіче", "Дитяче"],
-    "Аксесуари": ["Сумки", "Годинники", "Ремені", "Прикраси", "Капелюхи", "Шарфи", "Шали", "Гаманці", "Окуляри", "Краватки", "Підтяжки", "Шарфи-пашміни", "Рюкзаки", "Косметички"],
-    "Дитячий одяг": ["Верх", "Низ", "Футболки", "Сукні", "Штани", "Куртки", "Комбінезони", "Светри", "Шорти", "Спідниці", "Шапки", "Шкарпетки", "Боді", "Піжами", "Костюми"]
-};
+const CAT_TOP_MAP = { "Жіночий одяг": "1", "Чоловічий одяг": "2", "Дитячий одяг": "3", "Взуття": "4" };
+const CAT_TOP_REVERSE = { "1": "Жіночий одяг", "2": "Чоловічий одяг", "3": "Дитячий одяг", "4": "Взуття" };
+
+let catalogTree = null;
+let catalogTreeLoadError = null;
+
+function parseCategoriesTxt(text) {
+    const lines = text.split(/\r?\n/);
+    const tree = {};
+    let currentL2 = null;
+    let currentL3 = null;
+
+    function ensureL3(key) {
+        if (!currentL2 || !tree[currentL2]) return;
+        if (!tree[currentL2].l3[key]) tree[currentL2].l3[key] = { label: "", leaves: [] };
+    }
+
+    for (let i = 0; i < lines.length; i++) {
+        let line = lines[i];
+        if (/^```/.test(line)) continue;
+        const t = line.trim();
+        if (!t || /^=+$/.test(t)) continue;
+        if (/^5\.\s*РОЗМІРИ|^6\.\s*МАТЕРІАЛИ|^7\.\s*СЕЗОНИ/i.test(t)) break;
+
+        let m;
+        if (m = t.match(/^(\d+\.\d+\.\d+)\.\s+(.+)$/)) {
+            currentL3 = m[1];
+            currentL2 = currentL3.split(".").slice(0, 2).join(".");
+            if (!tree[currentL2]) tree[currentL2] = { label: "", l3: {} };
+            if (!tree[currentL2].l3[currentL3]) tree[currentL2].l3[currentL3] = { label: m[2].trim(), leaves: [] };
+            else tree[currentL2].l3[currentL3].label = m[2].trim();
+            continue;
+        }
+        if (m = t.match(/^(\d+\.\d+)\.\s+(.+)$/)) {
+            currentL2 = m[1];
+            currentL3 = null;
+            if (!tree[currentL2]) tree[currentL2] = { label: m[2].trim(), l3: {} };
+            else tree[currentL2].label = m[2].trim();
+            continue;
+        }
+        if (m = t.match(/^([1-4])\.\s+(.+)$/)) {
+            currentL2 = null;
+            currentL3 = null;
+            continue;
+        }
+        if (m = t.match(/^\-\s+(.+)$/)) {
+            if (currentL3 && currentL2 && tree[currentL2] && tree[currentL2].l3[currentL3]) {
+                tree[currentL2].l3[currentL3].leaves.push(m[1].trim());
+            }
+        }
+    }
+    return tree;
+}
+
+function getL2KeysForTop(topNum) {
+    if (!catalogTree) return [];
+    const prefix = topNum + ".";
+    const keys = Object.keys(catalogTree).filter(k => k.startsWith(prefix) && k.split(".").length === 2);
+    return keys.sort((a, b) => {
+        const pa = a.split(".").map(Number);
+        const pb = b.split(".").map(Number);
+        for (let i = 0; i < Math.max(pa.length, pb.length); i++) {
+            const da = pa[i] || 0, db = pb[i] || 0;
+            if (da !== db) return da - db;
+        }
+        return 0;
+    });
+}
+
+function fillSelect(selectEl, options, placeholder, valueToSelect) {
+    const ph = placeholder || "— Оберіть —";
+    selectEl.innerHTML = `<option value="">${ph}</option>` +
+        options.map(o => {
+            const v = typeof o === "string" ? o : o.value;
+            const lab = typeof o === "string" ? o : o.label;
+            return `<option value="${String(v).replace(/"/g, "&quot;")}">${lab.replace(/</g, "&lt;")}</option>`;
+        }).join("");
+    if (valueToSelect && selectEl.querySelector(`option[value="${CSS.escape(valueToSelect)}"]`)) {
+        selectEl.value = valueToSelect;
+    } else if (valueToSelect) {
+        for (const opt of selectEl.options) {
+            if (opt.value === valueToSelect) { selectEl.value = valueToSelect; break; }
+        }
+    }
+}
+
+function syncCategoryL2FromTree() {
+    const top = CAT_TOP_MAP[document.getElementById("category").value];
+    const sel = document.getElementById("categoryL2");
+    if (!catalogTree || !top) {
+        fillSelect(sel, [], "— Каталог не завантажено —");
+        sel.disabled = true;
+        return;
+    }
+    const keys = getL2KeysForTop(top);
+    const opts = keys.map(k => ({ value: k, label: catalogTree[k].label || k }));
+    sel.disabled = opts.length === 0;
+    fillSelect(sel, opts, "— Оберіть розділ —");
+}
+
+function syncCategoryL3FromL2() {
+    const l2 = document.getElementById("categoryL2").value;
+    const sel = document.getElementById("categoryL3");
+    if (!l2 || !catalogTree || !catalogTree[l2] || !catalogTree[l2].l3) {
+        fillSelect(sel, [], "— Спочатку розділ —");
+        sel.disabled = true;
+        return;
+    }
+    const keys = Object.keys(catalogTree[l2].l3).sort((a, b) => {
+        const pa = a.split(".").map(Number);
+        const pb = b.split(".").map(Number);
+        for (let i = 0; i < 3; i++) {
+            const da = pa[i] || 0, db = pb[i] || 0;
+            if (da !== db) return da - db;
+        }
+        return 0;
+    });
+    const opts = keys.map(k => ({ value: k, label: catalogTree[l2].l3[k].label || k }));
+    sel.disabled = opts.length === 0;
+    fillSelect(sel, opts, "— Оберіть підкатегорію —");
+}
+
+function syncCategoryLeafFromL3() {
+    const l2 = document.getElementById("categoryL2").value;
+    const l3 = document.getElementById("categoryL3").value;
+    const sel = document.getElementById("categoryLeaf");
+    if (!l2 || !l3 || !catalogTree || !catalogTree[l2] || !catalogTree[l2].l3[l3]) {
+        fillSelect(sel, [], "— Не обов’язково —");
+        sel.disabled = true;
+        return;
+    }
+    const leaves = catalogTree[l2].l3[l3].leaves || [];
+    if (leaves.length === 0) {
+        fillSelect(sel, [], "— Немає варіантів —");
+        sel.disabled = true;
+        return;
+    }
+    const opts = leaves.map((l, i) => ({ value: "leaf_" + i, label: l }));
+    sel.disabled = false;
+    fillSelect(sel, opts, "— Оберіть уточнення —");
+    sel.dataset.leavesJson = JSON.stringify(leaves);
+}
+
+function computeSelectedSubcategoryFromCatalog() {
+    const l2 = document.getElementById("categoryL2").value;
+    const l3 = document.getElementById("categoryL3").value;
+    const leafSel = document.getElementById("categoryLeaf");
+    const custom = (document.getElementById("customSubcategory").value || "").trim();
+    if (custom) return custom;
+    if (!l2 || !l3 || !catalogTree || !catalogTree[l2] || !catalogTree[l2].l3[l3]) return "";
+    const node = catalogTree[l2].l3[l3];
+    const leaves = node.leaves || [];
+    if (leafSel.value && leafSel.dataset.leavesJson) {
+        try {
+            const arr = JSON.parse(leafSel.dataset.leavesJson);
+            const idx = parseInt(leafSel.value.replace("leaf_", ""), 10);
+            if (!isNaN(idx) && arr[idx]) return arr[idx];
+        } catch (e) {}
+    }
+    return node.label || "";
+}
+
+function updateCategoryPathHidden() {
+    const parts = [
+        document.getElementById("category").value,
+        document.getElementById("categoryL2").value,
+        document.getElementById("categoryL3").value
+    ];
+    const leafSel = document.getElementById("categoryLeaf");
+    let leafText = "";
+    if (leafSel.value && leafSel.dataset.leavesJson) {
+        try {
+            const arr = JSON.parse(leafSel.dataset.leavesJson);
+            const idx = parseInt(leafSel.value.replace("leaf_", ""), 10);
+            if (!isNaN(idx) && arr[idx]) leafText = arr[idx];
+        } catch (e) {}
+    }
+    if (leafText) parts.push(leafText);
+    document.getElementById("categoryPathHidden").value = parts.filter(Boolean).join(" › ");
+    selectedSubcategory = computeSelectedSubcategoryFromCatalog() || null;
+}
+
+function inferTopBottomFromCatalogPath() {
+    const l2 = document.getElementById("categoryL2").value;
+    const l3 = document.getElementById("categoryL3").value;
+    const custom = (document.getElementById("customSubcategory").value || "").trim();
+    const sub = custom || selectedSubcategory || "";
+    const l2Label = (l2 && catalogTree && catalogTree[l2]) ? (catalogTree[l2].label || "") : "";
+    const l3Label = (l2 && l3 && catalogTree && catalogTree[l2] && catalogTree[l2].l3[l3]) ? (catalogTree[l2].l3[l3].label || "") : "";
+    const hay = (l2Label + " " + l3Label + " " + sub).toLowerCase();
+    if (/верхній|топи|футболк|светр|куртк|кардиган|костюм|блуз|сорочк|сукн|білизн|бюст|купальник|худі|світшот|бомбер|пальто|парка|плащ|жилет/i.test(hay)) {
+        selectedTopBottom = ["Верх"];
+        return;
+    }
+    if (/штан|шорти|брюк|джинс|спідниц|легінс|лосин|кюлот|піжам|низ/i.test(hay)) {
+        selectedTopBottom = ["Низ"];
+        return;
+    }
+    if (SUBCAT_TOP.some(s => sub.includes(s) || l3Label.includes(s))) {
+        selectedTopBottom = ["Верх"];
+        return;
+    }
+    if (SUBCAT_BOTTOM.some(s => sub.includes(s) || l3Label.includes(s))) {
+        selectedTopBottom = ["Низ"];
+        return;
+    }
+}
+
+function onCatalogCategoryChange() {
+    syncCategoryL2FromTree();
+    document.getElementById("categoryL3").innerHTML = "<option value=\"\">— Спочатку розділ —</option>";
+    document.getElementById("categoryL3").disabled = true;
+    document.getElementById("categoryLeaf").innerHTML = "<option value=\"\">— Не обов’язково —</option>";
+    document.getElementById("categoryLeaf").disabled = true;
+    updateCategoryPathHidden();
+    inferTopBottomFromCatalogPath();
+    renderAttributeButtons();
+    if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
+}
+
+function onCatalogL2Change() {
+    syncCategoryL3FromL2();
+    document.getElementById("categoryLeaf").innerHTML = "<option value=\"\">— Не обов’язково —</option>";
+    document.getElementById("categoryLeaf").disabled = true;
+    updateCategoryPathHidden();
+    inferTopBottomFromCatalogPath();
+    renderAttributeButtons();
+    if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
+}
+
+function onCatalogL3Change() {
+    syncCategoryLeafFromL3();
+    updateCategoryPathHidden();
+    inferTopBottomFromCatalogPath();
+    renderAttributeButtons();
+    if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
+}
+
+function onCatalogLeafChange() {
+    updateCategoryPathHidden();
+    inferTopBottomFromCatalogPath();
+    renderAttributeButtons();
+    if (typeof updateAllAccordionCounts === "function") updateAllAccordionCounts();
+}
+
+async function loadCatalogTree() {
+    try {
+        const res = await fetch("TTS/categories.txt", { cache: "no-store" });
+        if (!res.ok) throw new Error(String(res.status));
+        const text = await res.text();
+        const start = text.indexOf("```");
+        const slice = start >= 0 ? text.slice(text.indexOf("\n", start) + 1) : text;
+        catalogTree = parseCategoriesTxt(slice);
+        catalogTreeLoadError = null;
+    } catch (e) {
+        catalogTreeLoadError = e;
+        catalogTree = parseCategoriesTxt("");
+    }
+    syncCategoryL2FromTree();
+    document.getElementById("categoryL3").innerHTML = "<option value=\"\">— Спочатку розділ —</option>";
+    document.getElementById("categoryL3").disabled = true;
+    document.getElementById("categoryLeaf").innerHTML = "<option value=\"\">— Не обов’язково —</option>";
+    document.getElementById("categoryLeaf").disabled = true;
+    updateCategoryPathHidden();
+    if (catalogTreeLoadError) {
+        const hint = document.getElementById("catTreeHint");
+        if (hint) hint.textContent = "Не вдалося завантажити TTS/categories.txt. Перевірте шлях або відкрийте сторінку через локальний сервер.";
+    }
+}
 
 // Типи взуття за підкатегорією
 const SHOE_TYPES_WOMEN = ["Туфлі", "Балетки", "Босоніжки", "Сандалі", "Лофери", "Черевики", "Кросівки", "Мокасини", "Угги", "Боти", "Еспадрильї", "Капці", "Шльопанці", "Пінетки"];
