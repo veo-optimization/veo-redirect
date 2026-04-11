@@ -357,6 +357,39 @@
         .verdict-sub + .verdict-sub { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(254, 44, 85, 0.12); }
         .verdict-sub h4 { font-size: 0.9rem; margin: 0 0 6px; color: var(--tt-red); }
 
+        .mini-quiz-wrap {
+            margin-top: 18px; padding: 16px 0 4px;
+            border-top: 1px dashed rgba(254, 44, 85, 0.35);
+        }
+        .mini-quiz-label {
+            font-weight: 700; color: var(--tt-red); margin: 0 0 12px;
+            font-size: 0.88rem; text-transform: uppercase; letter-spacing: 0.04em;
+        }
+        .checklist-section, .veo-summary-section {
+            margin-top: 8px; padding: 20px var(--container-pad);
+            background: #fafafa; border-top: 1px solid #eee;
+        }
+        .checklist-section h2, .veo-summary-section h2 { font-size: 1.1rem; margin: 0 0 12px; }
+        .checklist-grid { display: flex; flex-direction: column; gap: 10px; }
+        .check-item {
+            display: flex; align-items: flex-start; gap: 10px;
+            padding: 10px 12px; border-radius: 10px; border: 1px solid #e8e8e8;
+            background: #fff; font-size: 0.88rem; line-height: 1.4;
+        }
+        .check-item input { margin-top: 3px; accent-color: var(--tt-red); width: 18px; height: 18px; flex-shrink: 0; }
+        .veo-formula-box {
+            font-size: 0.86rem; line-height: 1.5; padding: 14px; border-radius: 12px;
+            background: #fff; border: 1px solid #eee; margin: 12px 0;
+        }
+        .veo-formula-box code { font-size: 0.82rem; background: #f3f3f3; padding: 2px 6px; border-radius: 4px; }
+        .veo-criteria-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin: 10px 0; }
+        .veo-criteria-table th, .veo-criteria-table td { border: 1px solid #eee; padding: 8px 10px; text-align: left; }
+        .veo-criteria-table th { background: #fafafa; }
+        .veo-meter { font-size: 2rem; font-weight: 800; color: var(--tt-red); margin: 8px 0; }
+        .veo-grade-name { font-weight: 700; font-size: 1.05rem; margin-bottom: 8px; }
+        .veo-live-row { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 8px 0; font-size: 0.85rem; }
+        .veo-live-row span { opacity: 0.85; }
+
         .verdict-box {
             margin-top: 16px; padding: 16px; border-radius: 12px;
             background: linear-gradient(135deg, #fff5f7 0%, #fff 100%);
@@ -407,6 +440,8 @@
             display: inline-flex; align-items: center; gap: 6px;
             padding: 8px 12px; border-radius: 999px; border: 1px solid #ddd;
             background: #fff; font-size: 0.82rem; font-weight: 600; cursor: pointer; color: #333;
+            text-decoration: none;
+            box-sizing: border-box;
         }
         .pill-btn:hover { border-color: var(--tt-red); color: var(--tt-red); }
 
@@ -687,25 +722,25 @@
         <header class="page-header">
             <span class="block-label">Сторінка-гайд</span>
             <h1 class="page-title">Готовність TikTok-продавця</h1>
-            <p class="page-sub">Спочатку — контекст ринку й змін у TikTok; далі — орієнтири (EchoTik, Kalodata), міні-калькулятор і тест. Окремо — логіка <strong>VEO FORCE</strong>: екосистема для українських продавців (каталог, бот, інтеграції, консалтинг, ведення).</p>
         </header>
         <div class="jump-row">
             <a href="#block-context"><i class="bi bi-book"></i> Блок 1 — Контекст</a>
             <a href="#block-tools"><i class="bi bi-graph-up-arrow"></i> Блок 2 — Орієнтири й калькулятор</a>
-            <a href="#block-test"><i class="bi bi-patch-check"></i> Блок 3 — Три тести</a>
+            <a href="#block-summary"><i class="bi bi-patch-check"></i> Чеклист і VEO-index</a>
         </div>
         <div class="toolbar-row">
-            <button type="button" class="pill-btn" id="btnHelpIntro" aria-haspopup="dialog"><i class="bi bi-info-circle"></i> Про сторінку</button>
-            <button type="button" class="pill-btn" id="btnHelpCalc" aria-haspopup="dialog"><i class="bi bi-calculator"></i> Формула доходу</button>
+            <a class="pill-btn" href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener noreferrer"><i class="bi bi-tiktok" aria-hidden="true"></i> TikTok Vasil VEO (@vasil_veo)</a>
+            <a class="pill-btn" href="https://t.me/veoforce_support" target="_blank" rel="noopener noreferrer"><i class="bi bi-telegram" aria-hidden="true"></i> Чат у Telegram: @veoforce_support</a>
         </div>
     </div>
 
+    <form id="veoAssessment" action="#" onsubmit="return false">
     <!-- ========== БЛОК 1: КОНТЕКСТ ========== -->
     <div class="form-accordion block-section collapsed" id="wrapBlock1">
         <button type="button" class="form-accordion-header" id="block-context" aria-expanded="false" aria-controls="panelBlock1">
             <span class="block-header-text">
                 <span class="block-header-title">Блок 1. TikTok Shop, Україна та досвід інших ринків</span>
-                <span class="block-header-preview">П’ять тем: вступ; ЄС; логіка TikTok; магазин / Україна / VEO FORCE; <strong>правила спільноти для продавців</strong> (теорія для тесту).</span>
+                <span class="block-header-preview">П’ять тем: вступ; ЄС; логіка TikTok; магазин / Україна / VEO FORCE; правила спільноти. Після кожної теми — міні-тест (3–5 питань).</span>
             </span>
             <i class="bi bi-chevron-down form-accordion-chevron"></i>
         </button>
@@ -719,6 +754,49 @@
         <p><strong>TikTok Shop</strong> — це продажі товарів усередині екосистеми TikTok: картки товарів у відео, оформлення замовлення, афіліатні програми. Для глядача стрічка лишається розвагою; для бізнесу це вже <strong>комерційна система</strong> з правилами, модерацією та комісіями.</p>
         <p>У <strong>Україні</strong> багато продавців бачать одночасно кілька симптомів: <strong>блокування й видалення акаунтів</strong>, <strong>обмеження ефірів</strong>, <strong>падіння охоплень</strong>, різкий тиск на «сірий» продаж у коментарях і лайвах без офіційного Shop. Це узгоджується з тим, як платформа вже діяла в інших країнах: спочатку — масове залучення аудиторії та звички, потім — <strong>закручування правил</strong>, фільтрація комерційного контенту й перехід до <strong>офіційних інструментів</strong> (відео з товаром, Shop, афіліат).</p>
         <p>Нижче — узагальнена «карта етапів» на прикладі <strong>Іспанії</strong> (найдетальніше) та короткі орієнтири для <strong>Німеччини</strong> й <strong>Франції</strong> у тій самій логіці масштабування Shop у ЄС.</p>
+    </div>
+    <div class="form-container mini-quiz-wrap" id="quiz-s01">
+        <p class="mini-quiz-label">Міні-тест після «Вступу»</p>
+        <div class="q-block">
+            <div class="q-num">В1</div>
+            <p class="q-text">Що найкраще описує <strong>TikTok Shop</strong> у порівнянні з «просто відео в стрічці»?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="s01q1" value="0"> Це лише реклама в Google без відео.</label>
+                <label class="q-opt"><input type="radio" name="s01q1" value="1"> Продажі тільки через коментарі без правил і без карток товарів.</label>
+                <label class="q-opt"><input type="radio" name="s01q1" value="2"> Дохід креатора завжди нараховується лише за перегляди, без продажів.</label>
+                <label class="q-opt"><input type="radio" name="s01q1" value="3"> Картки товарів, оформлення в екосистемі, афіліат — тобто комерційна система з правилами й модерацією.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">В2</div>
+            <p class="q-text">Які симптоми для українського продавця найбільш узгоджені з текстом розділу?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="s01q2" value="0"> TikTok гарантує однакове охоплення всім назавжди.</label>
+                <label class="q-opt"><input type="radio" name="s01q2" value="1"> Shop у країні завжди працює без обмежень з першого дня.</label>
+                <label class="q-opt"><input type="radio" name="s01q2" value="2"> Блоки, зріз ефірів, падіння охоплень і тиск на «сірий» продаж без Shop — на кшталт інших ринків.</label>
+                <label class="q-opt"><input type="radio" name="s01q2" value="3"> Платформа забороняє будь-який контент з товаром.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">В3</div>
+            <p class="q-text">Навіщо платформі з часом «офіційні» інструменти (Shop, відео з товаром, афіліат)?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="s01q3" value="0"> Щоб усунути всіх малих продавців без винятку.</label>
+                <label class="q-opt"><input type="radio" name="s01q3" value="1"> Щоб замінити TikTok на маркетплейс без відео.</label>
+                <label class="q-opt"><input type="radio" name="s01q3" value="2"> Бо в ЄС немає споживчих прав.</label>
+                <label class="q-opt"><input type="radio" name="s01q3" value="3"> Щоб перевести комерцію в передбачувані правила й інструменти замість хаосу в коментарях і лайвах.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">В4</div>
+            <p class="q-text">Що варто винести з порівняння з ЄС для українського сценарію?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="s01q4" value="0"> Копіювати лише Іспанію дослівно, ігноруючи локаль.</label>
+                <label class="q-opt"><input type="radio" name="s01q4" value="1"> Правила слабшають з часом автоматично.</label>
+                <label class="q-opt"><input type="radio" name="s01q4" value="2"> Достатньо сайту без аудиторії в застосунку.</label>
+                <label class="q-opt"><input type="radio" name="s01q4" value="3"> Логіка «спочатку трафік і звичка → потім обмеження неофіційних продажів → офіційні канали» повторюється; важливі дані й відповідність правилам.</label>
+            </div>
+        </div>
     </div>
         </div>
     </div>
@@ -746,6 +824,49 @@
         <div class="flag-row">🇫🇷 <strong>Франція (орієнтир)</strong></div>
         <p>Французький ринок також підпадає під єдині європейські рамки (споживчі права, мова та маркування). У практиці креаторів і продавців повторюється та сама послідовність: <strong>спочатку трафік і звичка</strong>, потім <strong>обмеження неофіційних продажів</strong>, далі — <strong>офіційний каталог, афіліат, доставка</strong>. Для України важливий не «копіювати країну», а розуміти: <strong>правила уніфікуються</strong>, а не послаблюються.</p>
     </div>
+    <div class="form-container mini-quiz-wrap" id="quiz-s02">
+        <p class="mini-quiz-label">Міні-тест після розділу «ЄС» (тенденції платформи)</p>
+        <div class="q-block">
+            <div class="q-num">Є1</div>
+            <p class="q-text">Як узагальнено виглядає типова послідовність масштабування TikTok Shop на ринках?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="t2q1" value="0"> Спочатку повна заборона будь-якої комерції в додатку.</label>
+                <label class="q-opt"><input type="radio" name="t2q1" value="1"> Одразу офіційні лайви та Shop для всіх без етапів.</label>
+                <label class="q-opt"><input type="radio" name="t2q1" value="2"> Назавжди «сірий» продаж без правил і без змін.</label>
+                <label class="q-opt"><input type="radio" name="t2q1" value="3"> Трафік і звичка → обмеження неофіційної комерції → офіційні інструменти (Shop, афіліат).</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">Є2</div>
+            <p class="q-text">Чому платформа поступово «закручує гайки» для продавців і креаторів (узагальнено)?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="t2q2" value="0"> TikTok принципово проти будь-якого заробітку в додатку.</label>
+                <label class="q-opt"><input type="radio" name="t2q2" value="1"> Бо реклама можлива лише в Meta.</label>
+                <label class="q-opt"><input type="radio" name="t2q2" value="2"> Бо алгоритми не використовують дані про поведінку.</label>
+                <label class="q-opt"><input type="radio" name="t2q2" value="3"> Через витрати на інфраструктуру й потребу в передбачуваних правилах і фільтрації комерційного контенту.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">Є3</div>
+            <p class="q-text">Що з переліченого найкраще описує роль GMV у публічних рейтингах TikTok Shop для афіліата?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="t2q3" value="0"> GMV — це завжди готівка на картку креатора без відсотків.</label>
+                <label class="q-opt"><input type="radio" name="t2q3" value="1"> Високий GMV автоматично означає найвищий особистий дохід без урахування комісії та чека.</label>
+                <label class="q-opt"><input type="radio" name="t2q3" value="2"> Основний дохід у Shop — саме за перегляди (Fund), а не за продажі.</label>
+                <label class="q-opt"><input type="radio" name="t2q3" value="3"> GMV — обіг замовлень за посиланням; дохід креатора зазвичай — відсоток комісії від чека; великий GMV не завжди дорівнює найбільшому особистому заробітку.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">Є4</div>
+            <p class="q-text">Як платформа зазвичай ставиться до виведення трафіку в зовнішні месенджери як основної дії замість покупки в Shop?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="t2q4" value="0"> Заохочує бонусами за кожне таке звернення.</label>
+                <label class="q-opt"><input type="radio" name="t2q4" value="1"> Повністю ігнорує — правила не поширюються на опис профілю.</label>
+                <label class="q-opt"><input type="radio" name="t2q4" value="2"> Рекомендує як основний канал продажів для всіх ніш.</label>
+                <label class="q-opt"><input type="radio" name="t2q4" value="3"> Обмежує: це конкуренція офіційному шляху покупки та ризик обходу платформи.</label>
+            </div>
+        </div>
+    </div>
         </div>
     </div>
 
@@ -761,6 +882,49 @@
         <p><strong>Роль AI.</strong> Алгоритм відстежує перегляди, зупинки, лайки, коментарі — формується профіль інтересів. Для продавця це означає: оцінюють не лише товар, а й <strong>як ви подаєте</strong> і як реагує аудиторія.</p>
         <p><strong>Що далі.</strong> Розвиток TikTok Shop, афіліатних програм і вищої конкуренції серед тих, хто вже працює в рамках правил. <strong>Висновок:</strong> TikTok не проти бізнесу — він проти хаосу. Виграють ті, хто адаптується; програють ті, хто ігнорує зміни.</p>
         <p><strong>Що робити зараз.</strong> Зрозуміти, на якій фазі ви зараз перебуваєте; опиратися на дані та правила; пройти тест у блоці нижче й чесно оцінити, чи ваша модель відповідає тому, як платформа монетизує увагу зараз. Якщо потрібен каталог, бот і інтеграції під українські реалії — орієнтуйтеся на екосистему <strong>VEO FORCE</strong> (докладно в <strong>четвертому підблоці</strong> цього розділу).</p>
+    </div>
+    <div class="form-container mini-quiz-wrap" id="quiz-s03">
+        <p class="mini-quiz-label">Міні-тест «Логіка TikTok» — контент і подача</p>
+        <div class="q-block">
+            <div class="q-num">П1</div>
+            <p class="q-text">Що з переліченого найкраще описує «якісний» комерційний ролик для TikTok Shop?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="t1q1" value="0"> Достатньо 10 секунд лише логотипу бренду без товару.</label>
+                <label class="q-opt"><input type="radio" name="t1q1" value="1"> Копіювати чужі ролики дослівно — так швидше за все вийде охоплення.</label>
+                <label class="q-opt"><input type="radio" name="t1q1" value="2"> Публікувати десятки однакових відео підряд лише заради частоти.</label>
+                <label class="q-opt"><input type="radio" name="t1q1" value="3"> Зрозуміла користь або огляд товару, природна подача, довіра — без агресивного спаму закликів.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">П2</div>
+            <p class="q-text">Як реалістичніше планувати контент для стабільних продажів у довгій перспективі?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="t1q2" value="0"> Лише лайви щодня, без відео в стрічці.</label>
+                <label class="q-opt"><input type="radio" name="t1q2" value="1"> Покладатися на один вірусний ролик як на «назавжди» зафіксовану конверсію.</label>
+                <label class="q-opt"><input type="radio" name="t1q2" value="2"> Ігнорувати коментарі та аналітику — головне кількість постів.</label>
+                <label class="q-opt"><input type="radio" name="t1q2" value="3"> Регулярні ролики, тест форматів, велика вибірка для усереднення — перегляди нерівномірні.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">П3</div>
+            <p class="q-text">Що з переліченого найчастіше підриває довіру до «продаючого» контенту в стрічці?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="t1q3" value="0"> Відео з реальним використанням товару.</label>
+                <label class="q-opt"><input type="radio" name="t1q3" value="1"> Чесний розбір мінусів поряд із плюсами.</label>
+                <label class="q-opt"><input type="radio" name="t1q3" value="2"> Штучний дефіцит без підстав, хибні «остання знижка», порожній контент лише з закликом купити.</label>
+                <label class="q-opt"><input type="radio" name="t1q3" value="3"> Відповіді автора в коментарях.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">П4</div>
+            <p class="q-text">Який підхід узгоджується з логікою платформи й зменшує ризик позначки як надмірної «комерційної спамності»?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="t1q4" value="0"> Однакові ролики з кількох акаунтів для обходу модерації.</label>
+                <label class="q-opt"><input type="radio" name="t1q4" value="1"> Контент із користю, різноманітність форматів, помірний комерційний заклик.</label>
+                <label class="q-opt"><input type="radio" name="t1q4" value="2"> Лише перепости чужих відео без власної думки.</label>
+                <label class="q-opt"><input type="radio" name="t1q4" value="3"> У кожному кадрі лише номер телефону й «пишіть у месенджер».</label>
+            </div>
+        </div>
     </div>
         </div>
     </div>
@@ -784,6 +948,49 @@
             <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.55"><strong>Навіщо це зараз.</strong> Поки аудиторія ще <strong>«тримається»</strong> за знайомих блогерів і ведучих, варто навчитися <strong>вносити товари в каталог VEO FORCE</strong> — щоб згодом, коли з’явиться стабільний експорт у TikTok Shop, не починати з нуля. Паралельно можна вести <strong>оглядові ефіри</strong>: під час трансляції глядачі оформлюють покупку через <strong>push-сповіщення</strong> (повідомлення над стрімом), не гублячи зв’язок між ефіром і замовленням.</p>
             <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.55"><strong>Оплата.</strong> Щоб покупки проходили швидко, варто орієнтуватися на глядачів із підключеними <strong>Google Pay</strong> та <strong>Apple Pay</strong> — це скорочує шлях від «подобається» до «оплачено» (інтеграції підключаються в рамках VEO FORCE).</p>
             <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.55"><strong>Далі, коли запуститься TikTok Shop.</strong> Продавець у <strong>боті VEO FORCE</strong> зможе робити <strong>розсилку відео-огляду</strong> на будь-який товар з каталогу — щоб одразу підігріти інтерес і отримати <strong>перші продажі з «продаючого» відео</strong> під майбутній TikTok Shop, не чекаючи, поки все збереться лише в застосунку.</p>
+        </div>
+    </div>
+    <div class="form-container mini-quiz-wrap" id="quiz-s04">
+        <p class="mini-quiz-label">Міні-тест «Магазин, Україна, VEO FORCE» — інструментарій</p>
+        <div class="q-block">
+            <div class="q-num">F1</div>
+            <p class="q-text">Навіщо продавцю повноцінний каталог і кабінет замість схеми «напишіть у коментарях, домовимось»?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="t3q1" value="0"> Щоб не платити за інтернет-з’єднання.</label>
+                <label class="q-opt"><input type="radio" name="t3q1" value="1"> Щоб зберігати замовлення, ціни, залишки й оплату в одній логіці та зменшити хаос.</label>
+                <label class="q-opt"><input type="radio" name="t3q1" value="2"> Щоб заборонити будь-яке відвантаження товару.</label>
+                <label class="q-opt"><input type="radio" name="t3q1" value="3"> Це не потрібно: достатньо Excel на одному ПК без доступу клієнтів.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">F2</div>
+            <p class="q-text">Інтеграція з платіжним шлюзом і службою доставки потрібна переважно для того, щоб:</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="t3q2" value="0"> Приховати суму замовлення від покупця.</label>
+                <label class="q-opt"><input type="radio" name="t3q2" value="1"> Зменшити кількість кроків для покупця та помилок ручного перенесення даних.</label>
+                <label class="q-opt"><input type="radio" name="t3q2" value="2"> Повністю відключити можливість повернення.</label>
+                <label class="q-opt"><input type="radio" name="t3q2" value="3"> Заборонити будь-які карткові платежі.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">F3</div>
+            <p class="q-text">Telegram-бот у моделі на кшталт VEO FORCE типово допомагає з тим, щоб:</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="t3q3" value="0"> Повністю обійти правила TikTok без ризиків.</label>
+                <label class="q-opt"><input type="radio" name="t3q3" value="1"> Замінити бухгалтерію та податкову звітність.</label>
+                <label class="q-opt"><input type="radio" name="t3q3" value="2"> Заборонити підписникам оформлювати покупки.</label>
+                <label class="q-opt"><input type="radio" name="t3q3" value="3"> Дублювати заклик до покупки там, де аудиторія звикла натискати (на кшталт «Беру»), і слати сповіщення про товари.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">F4</div>
+            <p class="q-text">Автоматизація нагадувань, статусу замовлення та ТТН дає найбільше користі, коли:</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="t3q4" value="0"> Клієнт ніколи не отримує підтвердження оплати.</label>
+                <label class="q-opt"><input type="radio" name="t3q4" value="1"> Уся інформація лише «в голові» менеджера.</label>
+                <label class="q-opt"><input type="radio" name="t3q4" value="2"> Кожне замовлення вручну в десяти різних чатах без єдиної системи.</label>
+                <label class="q-opt"><input type="radio" name="t3q4" value="3"> Є єдине джерело правди: замовлення → оплата → відправка, з прозорістю для покупця.</label>
+            </div>
         </div>
     </div>
         </div>
@@ -951,6 +1158,59 @@
 
         <p class="rules-test-note"><strong>Для тесту (суть):</strong> багато продавців порушують пункти навіть не з злого наміру — через незнання або «як у всіх у коментарях». Проблема часто не в тому, що «TikTok несправедливий», а в тому, що <strong>модель роботи</strong> не відповідає правилам і якості контенту.</p>
     </div>
+    <div class="form-container mini-quiz-wrap" id="quiz-s05">
+        <p class="mini-quiz-label">Міні-тест «Правила спільноти»</p>
+        <div class="q-block">
+            <div class="q-num">R1</div>
+            <p class="q-text">Що з переліченого найчастіше порушує політику щодо <strong>контактів і обходу платформи</strong>?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="s05q1" value="0"> Посилання на офіційний магазин у TikTok Shop у шапці профілю.</label>
+                <label class="q-opt"><input type="radio" name="s05q1" value="1"> Відповіді в коментарях про наявність товару без сторонніх месенджерів.</label>
+                <label class="q-opt"><input type="radio" name="s05q1" value="2"> Номер телефону в біо та заклик «пишіть у WhatsApp / Telegram» як основний шлях покупки.</label>
+                <label class="q-opt"><input type="radio" name="s05q1" value="3"> Показ товару в ролику з ціною в картці TikTok Shop.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">R2</div>
+            <p class="q-text">Яка поведінка найбільше схожа на <strong>спам-комерцію</strong> з точки зору платформи?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="s05q2" value="0"> Огляд товару з чесним описом плюсів і мінусів.</label>
+                <label class="q-opt"><input type="radio" name="s05q2" value="1"> Рідкісні ролики з різними сюжетами й помірним закликом.</label>
+                <label class="q-opt"><input type="radio" name="s05q2" value="2"> Масові шаблонні «беру / оплатила», постійний тиск «тільки сьогодні» без контексту, десятки однакових відео.</label>
+                <label class="q-opt"><input type="radio" name="s05q2" value="3"> Розповідь про досвід використання товару протягом тижня.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">R3</div>
+            <p class="q-text">Що з цього найкраще описує ризик <strong>перенаправлення трафіку</strong> в інші застосунки як основної схеми продажу?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="s05q3" value="0"> TikTok заохочує будь-які зовнішні посилання без обмежень.</label>
+                <label class="q-opt"><input type="radio" name="s05q3" value="1"> Платформа нейтральна, якщо не згадувати Instagram.</label>
+                <label class="q-opt"><input type="radio" name="s05q3" value="2"> Основний заклик «купити в Telegram / Instagram» замість легальної покупки в екосистемі — конкуренція інструментам TikTok і ризик санкцій.</label>
+                <label class="q-opt"><input type="radio" name="s05q3" value="3"> Зовнішні посилання завжди дають більше охоплення.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">R4</div>
+            <p class="q-text">Що з переліченого підпадає під типові порушення <strong>інтелектуальної власності</strong>?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="s05q4" value="0"> Продаж ліцензійного товару з прозорим брендом і документами.</label>
+                <label class="q-opt"><input type="radio" name="s05q4" value="1"> Відкритий огляд товару без згадки бренду.</label>
+                <label class="q-opt"><input type="radio" name="s05q4" value="2"> Імітація відомих брендів, «сірий» імпорт під виглядом оригіналу, введення в оману.</label>
+                <label class="q-opt"><input type="radio" name="s05q4" value="3"> Чесне порівняння двох легальних товарів.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">R5</div>
+            <p class="q-text">Яка практика на <strong>ефірах (LIVE)</strong> найчастіше збільшує ризик санкцій?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="s05q5" value="0"> Різноманітний контент і відповіді на питання глядачів.</label>
+                <label class="q-opt"><input type="radio" name="s05q5" value="1"> Паузи та дотримання правил спільноти.</label>
+                <label class="q-opt"><input type="radio" name="s05q5" value="2"> Нескінченні ефіри лише під «купи» без доданої цінності, копії одного стріму, обхід банів новими акаунтами для тих самих продажів.</label>
+                <label class="q-opt"><input type="radio" name="s05q5" value="3"> Демонстрація товару з дотриманням вимог категорії.</label>
+            </div>
+        </div>
+    </div>
         </div>
     </div>
         </div>
@@ -961,7 +1221,7 @@
         <button type="button" class="form-accordion-header" id="block-tools" aria-expanded="false" aria-controls="panelBlock2">
             <span class="block-header-text">
                 <span class="block-header-title">Блок 2. Орієнтири EchoTik і міні-калькулятор</span>
-                <span class="block-header-preview">EchoTik, зрізи США й Kalodata; вбудовані приклади відео та розбір статистики афіліата; міні-калькулятор і GMV.</span>
+                <span class="block-header-preview">EchoTik, відео, метрики; ніші й комісії; зрізи США та Kalodata; міні-калькулятор. Після відповідних підрозділів — міні-тести; унизу сторінки — чеклист і VEO-index.</span>
             </span>
             <i class="bi bi-chevron-down form-accordion-chevron"></i>
         </button>
@@ -1097,6 +1357,50 @@
         <p class="hint"><strong>Приклад.</strong> <a class="tt-link" href="https://www.tiktok.com/@be.lush" target="_blank" rel="noopener noreferrer">@be.lush</a> — орієнтир топ-креатора TikTok Shop. Статистика з EchoTik, <strong>29.03.2026</strong>: для розрахунків у моделі беруть кількість <strong>опублікованих комерційних відео-оглядів</strong> і <strong>середню кількість переглядів на 1 відео</strong>, а не рядок «нові відео». За 30 днів: <strong>158</strong> таких відео, <strong>22,63 млн</strong> переглядів за період, <strong>~646,7 тис.</strong> середніх переглядів на одне відео; <strong>GPM ~$96,29</strong> — умовно «на 1000 переглядів припало стільки-то доларів продажів»; див. картки вкладок вище.</p>
     </div>
 
+    <div class="form-container mini-quiz-wrap" id="quiz-s06">
+        <p class="mini-quiz-label">Міні-тест «EchoTik, відео, метрики»</p>
+        <div class="q-block">
+            <div class="q-num">D1</div>
+            <p class="q-text">Що показує <strong>GPM</strong> у зрізі на кшталт EchoTik (узагальнено)?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="s06q1" value="0"> Кількість підписників на 1000 переглядів.</label>
+                <label class="q-opt"><input type="radio" name="s06q1" value="1"> Гарантована ставка Fund від TikTok.</label>
+                <label class="q-opt"><input type="radio" name="s06q1" value="2"> Орієнтир продажів на суму на 1000 переглядів (у $); зв’язок з GMV залежить від моделі.</label>
+                <label class="q-opt"><input type="radio" name="s06q1" value="3"> Податок на кожне відео.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">D2</div>
+            <p class="q-text">Як реалістичніше оцінювати продажі з контенту в TikTok Shop?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="s06q2" value="0"> Лише за останні 2–3 відео.</label>
+                <label class="q-opt"><input type="radio" name="s06q2" value="1"> Достатньо одного вірусного ролика назавжди.</label>
+                <label class="q-opt"><input type="radio" name="s06q2" value="2"> Велика вибірка роликів, усереднення; метрики в дашборді можуть відрізнятися від спрощеної моделі.</label>
+                <label class="q-opt"><input type="radio" name="s06q2" value="3"> Конверсія в звітах завжди дорівнює простій формулі «перегляди × %» без похибки.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">D3</div>
+            <p class="q-text">У розборі статистики афіліата рядок <strong>Est. Commission</strong> найкраще трактувати як:</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="s06q3" value="0"> Точний «чистий» прибуток після податків.</label>
+                <label class="q-opt"><input type="radio" name="s06q3" value="1"> Готівку на картку без урахування повернень.</label>
+                <label class="q-opt"><input type="radio" name="s06q3" value="2"> Оцінку комісії афіліата з продажів; не повний залишок «на руки».</label>
+                <label class="q-opt"><input type="radio" name="s06q3" value="3"> Фіксовану зарплату від TikTok.</label>
+            </div>
+        </div>
+        <div class="q-block">
+            <div class="q-num">D4</div>
+            <p class="q-text">Що показує рядок «ефективність ($/год)» у розширених калькуляторах доходу (якщо такий є)?</p>
+            <div class="q-options">
+                <label class="q-opt"><input type="radio" name="s06q4" value="0"> Офіційну ставку оплати години від TikTok.</label>
+                <label class="q-opt"><input type="radio" name="s06q4" value="1"> Завжди має бути вище за ставку вчителя в Україні.</label>
+                <label class="q-opt"><input type="radio" name="s06q4" value="2"> Спрощене відношення доходу від комісії до часу виробництва для порівняння сценаріїв.</label>
+                <label class="q-opt"><input type="radio" name="s06q4" value="3"> Лише вартість реклами в TikTok Ads.</label>
+            </div>
+        </div>
+    </div>
+
     <div class="form-container">
         <div class="form-accordion collapsed" id="accGmvMoney">
             <button type="button" class="form-accordion-header" aria-expanded="false"><span>GMV і «гроші в кишені»</span><i class="bi bi-chevron-down form-accordion-chevron"></i></button>
@@ -1119,6 +1423,40 @@
             </div>
         </div>
 
+        <div class="mini-quiz-wrap" id="quiz-s07" style="padding-top:12px;margin-top:8px;border-top:1px dashed rgba(254,44,85,0.25)">
+            <p class="mini-quiz-label">Міні-тест після «GMV і гроші в кишені»</p>
+            <div class="q-block">
+                <div class="q-num">G1</div>
+                <p class="q-text">GMV у рейтингах афіліата — це насамперед:</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s07q1" value="0"> Особистий «чистий» прибуток після податків.</label>
+                    <label class="q-opt"><input type="radio" name="s07q1" value="1"> Виплати Fund за перегляди без продажів.</label>
+                    <label class="q-opt"><input type="radio" name="s07q1" value="2"> Оборот замовлень за посиланням; не плутати з комісією креатора.</label>
+                    <label class="q-opt"><input type="radio" name="s07q1" value="3"> Кількість лайків помножена на середній чек.</label>
+                </div>
+            </div>
+            <div class="q-block">
+                <div class="q-num">G2</div>
+                <p class="q-text">Дохід афіліата в спрощеній моделі найближче до:</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s07q2" value="0"> GMV × 100%.</label>
+                    <label class="q-opt"><input type="radio" name="s07q2" value="1"> Перегляди ÷ комісія платформи.</label>
+                    <label class="q-opt"><input type="radio" name="s07q2" value="2"> GMV × (комісія афіліата % / 100) — орієнтир, без податків і повернень у базовій формулі.</label>
+                    <label class="q-opt"><input type="radio" name="s07q2" value="3"> Фіксована ставка за годину ефіру.</label>
+                </div>
+            </div>
+            <div class="q-block">
+                <div class="q-num">G3</div>
+                <p class="q-text">Чому рядок «Est. Commission» у кабінеті не дорівнює «готівці на картці»?</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s07q3" value="0"> Бо TikTok завжди додає 50% зверху.</label>
+                    <label class="q-opt"><input type="radio" name="s07q3" value="1"> Бо комісія не залежить від товару.</label>
+                    <label class="q-opt"><input type="radio" name="s07q3" value="2"> Бо це оцінка; можливі повернення, витрати, податки та інші утримання поза цим рядком.</label>
+                    <label class="q-opt"><input type="radio" name="s07q3" value="3"> Бо рядок показує лише перегляди.</label>
+                </div>
+            </div>
+        </div>
+
         <div class="form-accordion collapsed" id="accShopComm">
             <button type="button" class="form-accordion-header" aria-expanded="false"><span>TikTok Shop: ніша, приклади комісій</span><i class="bi bi-chevron-down form-accordion-chevron"></i></button>
             <div class="form-accordion-panel">
@@ -1133,6 +1471,40 @@
                     <li>Ремінь шкіряний — <strong>10–14%</strong></li>
                 </ul>
                 <p class="hint">Середня ставка по ніші «одяг» у моделі ~<strong>12%</strong> від чека (у картці товару в продавця).</p>
+            </div>
+        </div>
+
+        <div class="mini-quiz-wrap" id="quiz-s08">
+            <p class="mini-quiz-label">Міні-тест «Ніші й комісії»</p>
+            <div class="q-block">
+                <div class="q-num">Н1</div>
+                <p class="q-text">У ніші «одяг та аксесуари» орієнтир середньої комісії афіліата в таблиці на сторінці — близько:</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s08q1" value="0"> 5%</label>
+                    <label class="q-opt"><input type="radio" name="s08q1" value="1"> 12%</label>
+                    <label class="q-opt"><input type="radio" name="s08q1" value="2"> 30%</label>
+                    <label class="q-opt"><input type="radio" name="s08q1" value="3"> 50%</label>
+                </div>
+            </div>
+            <div class="q-block">
+                <div class="q-num">Н2</div>
+                <p class="q-text">Для ніші «краса та догляд» у таблиці орієнтир комісії та чека — це:</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s08q2" value="0"> ~8% і ~$58</label>
+                    <label class="q-opt"><input type="radio" name="s08q2" value="1"> ~14% і ~$34</label>
+                    <label class="q-opt"><input type="radio" name="s08q2" value="2"> ~12% і ~$40</label>
+                    <label class="q-opt"><input type="radio" name="s08q2" value="3"> ~11% і ~$50</label>
+                </div>
+            </div>
+            <div class="q-block">
+                <div class="q-num">Н3</div>
+                <p class="q-text">Для ніші «техніка» орієнтир середнього чека (USD) у таблиці — близько:</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s08q3" value="0"> $34</label>
+                    <label class="q-opt"><input type="radio" name="s08q3" value="1"> $40</label>
+                    <label class="q-opt"><input type="radio" name="s08q3" value="2"> $58</label>
+                    <label class="q-opt"><input type="radio" name="s08q3" value="3"> $44</label>
+                </div>
             </div>
         </div>
 
@@ -1183,6 +1555,40 @@
             </div>
         </div>
 
+        <div class="mini-quiz-wrap" id="quiz-s09">
+            <p class="mini-quiz-label">Міні-тест «Зрізи США»</p>
+            <div class="q-block">
+                <div class="q-num">U1</div>
+                <p class="q-text">Топ товарів FastMoss у прикладі сторінки ранжується переважно за:</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s09q1" value="0"> Кількістю переглядів відео</label>
+                    <label class="q-opt"><input type="radio" name="s09q1" value="1"> Проданими одиницями за день</label>
+                    <label class="q-opt"><input type="radio" name="s09q1" value="2"> Кількістю підписників магазину</label>
+                    <label class="q-opt"><input type="radio" name="s09q1" value="3"> Коментарями під відео</label>
+                </div>
+            </div>
+            <div class="q-block">
+                <div class="q-num">U2</div>
+                <p class="q-text">Який магазин у зрізі з’являється і серед топу товарів (medicube), і на першому місці топу магазинів?</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s09q2" value="0"> Halara US</label>
+                    <label class="q-opt"><input type="radio" name="s09q2" value="1"> medicube US Store</label>
+                    <label class="q-opt"><input type="radio" name="s09q2" value="2"> OIAK Apparel</label>
+                    <label class="q-opt"><input type="radio" name="s09q2" value="3"> Caffeine, Candles &amp; Chaos</label>
+                </div>
+            </div>
+            <div class="q-block">
+                <div class="q-num">U3</div>
+                <p class="q-text">Великий обсяг продажів при відносно низьких середніх переглядах на відео (конвеєр) означає насамперед:</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s09q3" value="0"> Помилку в даних EchoTik</label>
+                    <label class="q-opt"><input type="radio" name="s09q3" value="1"> Системну роботу без вірусу на кожен ролик</label>
+                    <label class="q-opt"><input type="radio" name="s09q3" value="2"> Обов’язковий бан акаунта</label>
+                    <label class="q-opt"><input type="radio" name="s09q3" value="3"> Що GMV дорівнює чистому прибутку</label>
+                </div>
+            </div>
+        </div>
+
         <div class="form-accordion collapsed" id="accKalodata">
             <button type="button" class="form-accordion-header" aria-expanded="false"><span>Топ-10 за GMV (Kalodata, грудень 2025)</span><i class="bi bi-chevron-down form-accordion-chevron"></i></button>
             <div class="form-accordion-panel">
@@ -1210,6 +1616,40 @@
                 <p class="tt-open-label"><strong>Відкрити відео в TikTok:</strong> <a class="tt-link" href="https://vt.tiktok.com/ZSHC4LcDB/" target="_blank" rel="noopener noreferrer">https://vt.tiktok.com/ZSHC4LcDB/</a></p>
                 <div class="embed-wrap embed-wrap--iframe">
                     <iframe src="https://www.tiktok.com/embed/v2/7591524857016290590" allowfullscreen allow="encrypted-media; fullscreen" loading="lazy" title="Інтерв’ю @be.lush, студія"></iframe>
+                </div>
+            </div>
+        </div>
+
+        <div class="mini-quiz-wrap" id="quiz-s10">
+            <p class="mini-quiz-label">Міні-тест «Kalodata, GMV»</p>
+            <div class="q-block">
+                <div class="q-num">K1</div>
+                <p class="q-text">GMV у рейтингу Kalodata на сторінці — це насамперед:</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s10q1" value="0"> Чистий прибуток креатора «на руки»</label>
+                    <label class="q-opt"><input type="radio" name="s10q1" value="1"> Валовий обіг за посиланням; не дорівнює чистому доходу</label>
+                    <label class="q-opt"><input type="radio" name="s10q1" value="2"> Сума податків TikTok</label>
+                    <label class="q-opt"><input type="radio" name="s10q1" value="3"> Кількість лайків у профілі</label>
+                </div>
+            </div>
+            <div class="q-block">
+                <div class="q-num">K2</div>
+                <p class="q-text">Кількість підписників і величина GMV у топі:</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s10q2" value="0"> Завжди прямо пропорційні</label>
+                    <label class="q-opt"><input type="radio" name="s10q2" value="1"> Не завжди корелюють: великий GMV буває й при різній аудиторії</label>
+                    <label class="q-opt"><input type="radio" name="s10q2" value="2"> GMV залежить лише від Fund</label>
+                    <label class="q-opt"><input type="radio" name="s10q2" value="3"> Підписники не впливають ніколи</label>
+                </div>
+            </div>
+            <div class="q-block">
+                <div class="q-num">K3</div>
+                <p class="q-text">Акаунт <strong>@be.lush</strong> у таблиці топ-10 за GMV (грудень 2025) у прикладі займає рядок:</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s10q3" value="0"> 1</label>
+                    <label class="q-opt"><input type="radio" name="s10q3" value="1"> 3</label>
+                    <label class="q-opt"><input type="radio" name="s10q3" value="2"> 6</label>
+                    <label class="q-opt"><input type="radio" name="s10q3" value="3"> 10</label>
                 </div>
             </div>
         </div>
@@ -1267,208 +1707,190 @@
                 </table>
             </div>
         </div>
-    </div>
-        </div>
-    </div>
 
-    <div class="form-accordion block-section collapsed" id="wrapBlock3">
-        <button type="button" class="form-accordion-header" id="block-test" aria-expanded="false" aria-controls="panelBlock3">
-            <span class="block-header-text">
-                <span class="block-header-title">Блок 3. Три тести</span>
-                <span class="block-header-preview">Контент, платформа й тренди, інструментарій — по чотири питання з одним вірним варіантом. Загальний підсумок і оцінка по кожному блоці.</span>
-            </span>
-            <i class="bi bi-chevron-down form-accordion-chevron"></i>
-        </button>
-        <div class="form-accordion-panel" id="panelBlock3">
-    <div class="form-container">
-        <p class="page-sub" style="margin-bottom:16px">Три окремі тести по чотири питання. У кожному питанні один вірний варіант.</p>
-
-        <form id="quizForm" action="#" onsubmit="return false;">
-            <section class="quiz-module" aria-labelledby="quiz1-title">
-                <h3 class="quiz-module-title" id="quiz1-title">Тест 1. Створення контенту</h3>
-                <div class="q-block">
-                    <div class="q-num">1.1</div>
-                    <p class="q-text">Що з переліченого найкраще описує «якісний» комерційний ролик для TikTok Shop?</p>
-                    <div class="q-options">
-                        <label class="q-opt"><input type="radio" name="t1q1" value="0"> Достатньо 10 секунд лише логотипу бренду без товару.</label>
-                        <label class="q-opt"><input type="radio" name="t1q1" value="1"> Копіювати чужі ролики дослівно — так швидше за все вийде охоплення.</label>
-                        <label class="q-opt"><input type="radio" name="t1q1" value="2"> Публікувати десятки однакових відео підряд лише заради частоти.</label>
-                        <label class="q-opt"><input type="radio" name="t1q1" value="3"> Зрозуміла користь або огляд товару, природна подача, довіра — без агресивного спаму закликів.</label>
-                    </div>
+        <div class="mini-quiz-wrap" id="quiz-s11">
+            <p class="mini-quiz-label">Міні-тест «Модель калькулятора»</p>
+            <div class="q-block">
+                <div class="q-num">C1</div>
+                <p class="q-text">У спрощеній формулі на сторінці кількість замовлень найближче до:</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s11q1" value="0"> Перегляди ÷ конверсія (%)</label>
+                    <label class="q-opt"><input type="radio" name="s11q1" value="1"> Перегляди × конверсія (без ділення на 100)</label>
+                    <label class="q-opt"><input type="radio" name="s11q1" value="2"> Перегляди × (конверсія / 100)</label>
+                    <label class="q-opt"><input type="radio" name="s11q1" value="3"> Середній чек × комісія (%)</label>
                 </div>
-                <div class="q-block">
-                    <div class="q-num">1.2</div>
-                    <p class="q-text">Як реалістичніше планувати контент для стабільних продажів у довгій перспективі?</p>
-                    <div class="q-options">
-                        <label class="q-opt"><input type="radio" name="t1q2" value="0"> Лише лайви щодня, без відео в стрічці.</label>
-                        <label class="q-opt"><input type="radio" name="t1q2" value="1"> Покладатися на один вірусний ролик як на «назавжди» зафіксовану конверсію.</label>
-                        <label class="q-opt"><input type="radio" name="t1q2" value="2"> Ігнорувати коментарі та аналітику — головне кількість постів.</label>
-                        <label class="q-opt"><input type="radio" name="t1q2" value="3"> Регулярні ролики, тест форматів, велика вибірка для усереднення — перегляди нерівномірні.</label>
-                    </div>
-                </div>
-                <div class="q-block">
-                    <div class="q-num">1.3</div>
-                    <p class="q-text">Що з переліченого найчастіше підриває довіру до «продаючого» контенту в стрічці?</p>
-                    <div class="q-options">
-                        <label class="q-opt"><input type="radio" name="t1q3" value="0"> Відео з реальним використанням товару.</label>
-                        <label class="q-opt"><input type="radio" name="t1q3" value="1"> Чесний розбір мінусів поряд із плюсами.</label>
-                        <label class="q-opt"><input type="radio" name="t1q3" value="2"> Штучний дефіцит без підстав, хибні «остання знижка», порожній контент лише з закликом купити.</label>
-                        <label class="q-opt"><input type="radio" name="t1q3" value="3"> Відповіді автора в коментарях.</label>
-                    </div>
-                </div>
-                <div class="q-block">
-                    <div class="q-num">1.4</div>
-                    <p class="q-text">Який підхід узгоджується з логікою платформи й зменшує ризик позначки як надмірної «комерційної спамності»?</p>
-                    <div class="q-options">
-                        <label class="q-opt"><input type="radio" name="t1q4" value="0"> Однакові ролики з кількох акаунтів для обходу модерації.</label>
-                        <label class="q-opt"><input type="radio" name="t1q4" value="1"> Контент із користю, різноманітність форматів, помірний комерційний заклик.</label>
-                        <label class="q-opt"><input type="radio" name="t1q4" value="2"> Лише перепости чужих відео без власної думки.</label>
-                        <label class="q-opt"><input type="radio" name="t1q4" value="3"> У кожному кадрі лише номер телефону й «пишіть у месенджер».</label>
-                    </div>
-                </div>
-            </section>
-
-            <section class="quiz-module" aria-labelledby="quiz2-title">
-                <h3 class="quiz-module-title" id="quiz2-title">Тест 2. Платформа й тенденції розвитку</h3>
-                <div class="q-block">
-                    <div class="q-num">2.1</div>
-                    <p class="q-text">Як узагальнено виглядає типова послідовність масштабування TikTok Shop на ринках?</p>
-                    <div class="q-options">
-                        <label class="q-opt"><input type="radio" name="t2q1" value="0"> Спочатку повна заборона будь-якої комерції в додатку.</label>
-                        <label class="q-opt"><input type="radio" name="t2q1" value="1"> Одразу офіційні лайви та Shop для всіх без етапів.</label>
-                        <label class="q-opt"><input type="radio" name="t2q1" value="2"> Назавжди «сірий» продаж без правил і без змін.</label>
-                        <label class="q-opt"><input type="radio" name="t2q1" value="3"> Трафік і звичка → обмеження неофіційної комерції → офіційні інструменти (Shop, афіліат).</label>
-                    </div>
-                </div>
-                <div class="q-block">
-                    <div class="q-num">2.2</div>
-                    <p class="q-text">Чому платформа поступово «закручує гайки» для продавців і креаторів (узагальнено)?</p>
-                    <div class="q-options">
-                        <label class="q-opt"><input type="radio" name="t2q2" value="0"> TikTok принципово проти будь-якого заробітку в додатку.</label>
-                        <label class="q-opt"><input type="radio" name="t2q2" value="1"> Бо реклама можлива лише в Meta.</label>
-                        <label class="q-opt"><input type="radio" name="t2q2" value="2"> Бо алгоритми не використовують дані про поведінку.</label>
-                        <label class="q-opt"><input type="radio" name="t2q2" value="3"> Через витрати на інфраструктуру й потребу в передбачуваних правилах і фільтрації комерційного контенту.</label>
-                    </div>
-                </div>
-                <div class="q-block">
-                    <div class="q-num">2.3</div>
-                    <p class="q-text">Що з переліченого найкраще описує роль GMV у публічних рейтингах TikTok Shop для афіліата?</p>
-                    <div class="q-options">
-                        <label class="q-opt"><input type="radio" name="t2q3" value="0"> GMV — це завжди готівка на картку креатора без відсотків.</label>
-                        <label class="q-opt"><input type="radio" name="t2q3" value="1"> Високий GMV автоматично означає найвищий особистий дохід без урахування комісії та чека.</label>
-                        <label class="q-opt"><input type="radio" name="t2q3" value="2"> Основний дохід у Shop — саме за перегляди (Fund), а не за продажі.</label>
-                        <label class="q-opt"><input type="radio" name="t2q3" value="3"> GMV — обіг замовлень за посиланням; дохід креатора зазвичай — відсоток комісії від чека; великий GMV не завжди дорівнює найбільшому особистому заробітку.</label>
-                    </div>
-                </div>
-                <div class="q-block">
-                    <div class="q-num">2.4</div>
-                    <p class="q-text">Як платформа зазвичай ставиться до виведення трафіку в зовнішні месенджери як основної дії замість покупки в Shop?</p>
-                    <div class="q-options">
-                        <label class="q-opt"><input type="radio" name="t2q4" value="0"> Заохочує бонусами за кожне таке звернення.</label>
-                        <label class="q-opt"><input type="radio" name="t2q4" value="1"> Повністю ігнорує — правила не поширюються на опис профілю.</label>
-                        <label class="q-opt"><input type="radio" name="t2q4" value="2"> Рекомендує як основний канал продажів для всіх ніш.</label>
-                        <label class="q-opt"><input type="radio" name="t2q4" value="3"> Обмежує: це конкуренція офіційному шляху покупки та ризик обходу платформи.</label>
-                    </div>
-                </div>
-            </section>
-
-            <section class="quiz-module" aria-labelledby="quiz3-title">
-                <h3 class="quiz-module-title" id="quiz3-title">Тест 3. Інструментарій (каталоги, автоматизація, інтеграції)</h3>
-                <div class="q-block">
-                    <div class="q-num">3.1</div>
-                    <p class="q-text">Навіщо продавцю повноцінний каталог і кабінет замість схеми «напишіть у коментарях, домовимось»?</p>
-                    <div class="q-options">
-                        <label class="q-opt"><input type="radio" name="t3q1" value="0"> Щоб не платити за інтернет-з’єднання.</label>
-                        <label class="q-opt"><input type="radio" name="t3q1" value="1"> Щоб зберігати замовлення, ціни, залишки й оплату в одній логіці та зменшити хаос.</label>
-                        <label class="q-opt"><input type="radio" name="t3q1" value="2"> Щоб заборонити будь-яке відвантаження товару.</label>
-                        <label class="q-opt"><input type="radio" name="t3q1" value="3"> Це не потрібно: достатньо Excel на одному ПК без доступу клієнтів.</label>
-                    </div>
-                </div>
-                <div class="q-block">
-                    <div class="q-num">3.2</div>
-                    <p class="q-text">Інтеграція з платіжним шлюзом і службою доставки потрібна переважно для того, щоб:</p>
-                    <div class="q-options">
-                        <label class="q-opt"><input type="radio" name="t3q2" value="0"> Приховати суму замовлення від покупця.</label>
-                        <label class="q-opt"><input type="radio" name="t3q2" value="1"> Зменшити кількість кроків для покупця та помилок ручного перенесення даних.</label>
-                        <label class="q-opt"><input type="radio" name="t3q2" value="2"> Повністю відключити можливість повернення.</label>
-                        <label class="q-opt"><input type="radio" name="t3q2" value="3"> Заборонити будь-які карткові платежі.</label>
-                    </div>
-                </div>
-                <div class="q-block">
-                    <div class="q-num">3.3</div>
-                    <p class="q-text">Telegram-бот у моделі на кшталт VEO FORCE типово допомагає з тим, щоб:</p>
-                    <div class="q-options">
-                        <label class="q-opt"><input type="radio" name="t3q3" value="0"> Повністю обійти правила TikTok без ризиків.</label>
-                        <label class="q-opt"><input type="radio" name="t3q3" value="1"> Замінити бухгалтерію та податкову звітність.</label>
-                        <label class="q-opt"><input type="radio" name="t3q3" value="2"> Заборонити підписникам оформлювати покупки.</label>
-                        <label class="q-opt"><input type="radio" name="t3q3" value="3"> Дублювати заклик до покупки там, де аудиторія звикла натискати (на кшталт «Беру»), і слати сповіщення про товари.</label>
-                    </div>
-                </div>
-                <div class="q-block">
-                    <div class="q-num">3.4</div>
-                    <p class="q-text">Автоматизація нагадувань, статусу замовлення та ТТН дає найбільше користі, коли:</p>
-                    <div class="q-options">
-                        <label class="q-opt"><input type="radio" name="t3q4" value="0"> Клієнт ніколи не отримує підтвердження оплати.</label>
-                        <label class="q-opt"><input type="radio" name="t3q4" value="1"> Уся інформація лише «в голові» менеджера.</label>
-                        <label class="q-opt"><input type="radio" name="t3q4" value="2"> Кожне замовлення вручну в десяти різних чатах без єдиної системи.</label>
-                        <label class="q-opt"><input type="radio" name="t3q4" value="3"> Є єдине джерело правди: замовлення → оплата → відправка, з прозорістю для покупця.</label>
-                    </div>
-                </div>
-            </section>
-
-            <button type="button" class="btn btn-primary" id="btnGrade">Підрахувати всі три тести</button>
-            <button type="button" class="btn btn-secondary" id="btnResetQuiz">Скинути відповіді</button>
-            <div class="verdict-box" id="verdictBox" hidden>
-                <div class="verdict-title" id="verdictTitle">Підсумок</div>
-                <div class="verdict-score" id="verdictScore"></div>
-                <p class="verdict-rec" id="verdictRec"></p>
-                <div class="verdict-sub" id="verdictSub1" hidden></div>
-                <div class="verdict-sub" id="verdictSub2" hidden></div>
-                <div class="verdict-sub" id="verdictSub3" hidden></div>
             </div>
-        </form>
+            <div class="q-block">
+                <div class="q-num">C2</div>
+                <p class="q-text">GMV у цій моделі найближче до:</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s11q2" value="0"> Перегляди × середній чек</label>
+                    <label class="q-opt"><input type="radio" name="s11q2" value="1"> Кількість замовлень × середній чек</label>
+                    <label class="q-opt"><input type="radio" name="s11q2" value="2"> Комісія афіліата × перегляди</label>
+                    <label class="q-opt"><input type="radio" name="s11q2" value="3"> GPM × 1000</label>
+                </div>
+            </div>
+            <div class="q-block">
+                <div class="q-num">C3</div>
+                <p class="q-text">Дохід афіліата в спрощеній формулі на сторінці:</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s11q3" value="0"> GMV ÷ комісія (%)</label>
+                    <label class="q-opt"><input type="radio" name="s11q3" value="1"> GMV × (комісія афіліата % / 100)</label>
+                    <label class="q-opt"><input type="radio" name="s11q3" value="2"> Перегляди × GPM</label>
+                    <label class="q-opt"><input type="radio" name="s11q3" value="3"> Середній чек × кількість підписників</label>
+                </div>
+            </div>
+            <div class="q-block">
+                <div class="q-num">C4</div>
+                <p class="q-text">Значення конверсії за замовчуванням (0,85%) у тексті сторінки подано як:</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="s11q4" value="0"> Гарантований мінімум для всіх ніш</label>
+                    <label class="q-opt"><input type="radio" name="s11q4" value="1"> Орієнтир «середнього» сценарію; діапазон часто близько 0,5–1,5%</label>
+                    <label class="q-opt"><input type="radio" name="s11q4" value="2"> Максимум, який дозволяє алгоритм</label>
+                    <label class="q-opt"><input type="radio" name="s11q4" value="3"> Фіксована ставка TikTok Shop для України</label>
+                </div>
+            </div>
+        </div>
     </div>
         </div>
     </div>
 
-    <dialog class="help-dlg" id="dlgIntro" aria-labelledby="dlgIntroTitle">
-        <div class="help-dlg-inner">
-            <h3 id="dlgIntroTitle">Про цю сторінку</h3>
-            <p>Макет у дусі <strong>mobile_add</strong>: картки, акордеони, діалоги. Акцентний колір — <strong>TikTok Red</strong> (#FE2C55).</p>
-            <p>На головній — три згорнуті блоки: <strong>блок 1</strong> (п’ять підблоків-акордеонів: вступ, ЄС, логіка TikTok, магазин + Україна + VEO FORCE, теорія правил спільноти для продавців), <strong>блок 2</strong> (EchoTik, Kalodata, калькулятор) і <strong>блок 3</strong> (три тести: контент, платформа, інструментарій).</p>
-            <button type="button" class="help-dlg-close" id="dlgIntroClose">Зрозуміло</button>
+    <div class="form-container checklist-section" id="block-summary">
+        <h2>Чеклист готовності бізнесу (20 пунктів)</h2>
+        <p class="hint" style="margin-top:0">Позначте, що <strong>вже виконується</strong> для вашого бізнесу (профіль, політика, контент, інфраструктура, досвід зі зворотним зв’язком TikTok).</p>
+        <div class="checklist-grid" id="checklistGrid">
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="1"> У профілі немає телефону чи заклику «пишіть у WhatsApp / Telegram» як основного способу купити поза Shop.</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="2"> Опис і ціна товару відповідають реальності (немає обману).</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="3"> Покупцеві доступні зрозумілі умови повернення / обміну.</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="4"> Контент не зводиться до десятків копій одного відео (немає спам-повторів).</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="5"> Не використовуєте накрутку переглядів, лайків чи ботів.</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="6"> У ефірах і відео немає токсичності й зневаги до глядачів.</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="7"> Не будуєте продажі лише на масовому виведенні в зовнішні месенджери замість легальної покупки в екосистемі.</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="8"> Є каталог / картки товарів або прозора сторінка замовлення (зокрема через інтеграції).</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="9"> Оплата для клієнта зрозуміла (картки, за можливості GPay / Apple Pay).</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="10"> Замовлення обліковуються в одній системі (CRM / кабінет), а не лише розкидані по чатах.</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="11"> Є відстеження доставки / ТТН або аналог, клієнт отримує статус.</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="12"> Якщо TikTok давав попередження — ви відреагували й усунули причину.</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="13"> Немає повторних санкцій за ті самі порушення.</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="14"> Тип акаунта / бізнес-профіль оформлені відповідно до вашої моделі.</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="15"> Аватар, назва й опис профілю узгоджені з брендом, без оманливих згадок.</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="16"> У роликах є користь чи емоція, а не лише тиск «купи зараз».</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="17"> Є регулярність публікацій (система, а не випадковий ролик раз на місяць без стратегії).</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="18"> Відповіді в коментарях ввічливі, без образ і дискримінації.</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="19"> Документи та допустимість товарів у ніші відповідають вимогам (орієнтир).</label>
+            <label class="check-item"><input type="checkbox" name="chk" value="1" data-chk="20"> Є план виходу на офіційний Shop / афіліат, а не лише довгостроковий «сірий» обхід.</label>
         </div>
-    </dialog>
+    </div>
 
-    <dialog class="help-dlg" id="dlgCalc" aria-labelledby="dlgCalcTitle">
-        <div class="help-dlg-inner">
-            <h3 id="dlgCalcTitle">Формула</h3>
-            <p><strong>Замовлення</strong> ≈ N<sub>переглядів</sub> × (C% / 100).</p>
-            <p><strong>GMV</strong> ≈ замовлення × середній чек.</p>
-            <p><strong>Дохід афіліата</strong> ≈ GMV × (комісія% / 100).</p>
-            <p class="hint">Податки та повернення в суму не входили.</p>
-            <button type="button" class="help-dlg-close" id="dlgCalcClose">Закрити</button>
+    <div class="form-container veo-summary-section">
+        <h2>VEO-index діяльності</h2>
+        <p class="hint" style="margin-top:0">Індекс 0–100 з п’яти критеріїв з різною вагою. Частка балів береться з міні-тестів унизу сторінки, частка — з чеклисту (пункти зіставлені з критеріями).</p>
+        <div class="veo-formula-box">
+            <p style="margin:0 0 8px"><strong>Формула:</strong></p>
+            <p style="margin:0"><code>VEO = 0,22·S₁ + 0,20·S₂ + 0,22·S₃ + 0,18·S₄ + 0,18·S₅</code></p>
+            <p class="hint" style="margin:10px 0 0">Кожне <strong>Sᵢ</strong> — від 0 до 100: зважена сумка правильних відповідей у відповідних питаннях і відмічених пунктів чеклисту для цього критерію (деталі — у підсумку після кнопки).</p>
+            <table class="veo-criteria-table">
+                <thead><tr><th>Критерій</th><th>Вага</th><th>Зміст</th></tr></thead>
+                <tbody>
+                    <tr><td>S₁ Контент і довіра</td><td>0,22</td><td>Вступ, логіка контенту, чеклист: 4, 6, 16, 18</td></tr>
+                    <tr><td>S₂ Ринок і платформа</td><td>0,20</td><td>ЄС / тренди, зріз США, чеклист: 7, 12, 13</td></tr>
+                    <tr><td>S₃ Метрики й економіка Shop</td><td>0,22</td><td>EchoTik, GMV, ніші, калькулятор, чеклист: 8, 9, 10, 11</td></tr>
+                    <tr><td>S₄ Правила й модерація</td><td>0,18</td><td>Тест «Правила», чеклист: 1, 2, 3, 5, 14, 15</td></tr>
+                    <tr><td>S₅ Операційна готовність</td><td>0,18</td><td>VEO FORCE / інструменти, Kalodata, чеклист: 17, 19, 20</td></tr>
+                </tbody>
+            </table>
         </div>
-    </dialog>
+        <p class="veo-grade-name" id="veoGradeName" aria-live="polite">—</p>
+        <div class="veo-meter" id="veoMeter">—</div>
+        <div class="veo-live-row" id="veoBreakdown"></div>
+
+        <button type="button" class="btn btn-primary" id="btnGradeAll">Підрахувати тести, чеклист і VEO-index</button>
+        <button type="button" class="btn btn-secondary" id="btnResetAll">Скинути всі відповіді</button>
+
+        <div class="verdict-box" id="verdictBox" hidden>
+            <div class="verdict-title" id="verdictTitle">Підсумок</div>
+            <div class="verdict-score" id="verdictScore"></div>
+            <p class="verdict-rec" id="verdictRec"></p>
+            <div class="verdict-sub" id="verdictDetail"></div>
+        </div>
+    </div>
+    </form>
 </div>
 
 <script>
 (function () {
     var CORRECT = {
+        s01q1: "3", s01q2: "2", s01q3: "3", s01q4: "3",
         t1q1: "3", t1q2: "3", t1q3: "2", t1q4: "1",
         t2q1: "3", t2q2: "3", t2q3: "3", t2q4: "3",
-        t3q1: "1", t3q2: "1", t3q3: "3", t3q4: "3"
+        t3q1: "1", t3q2: "1", t3q3: "3", t3q4: "3",
+        s05q1: "2", s05q2: "2", s05q3: "2", s05q4: "2", s05q5: "2",
+        s06q1: "2", s06q2: "2", s06q3: "2", s06q4: "2",
+        s07q1: "2", s07q2: "2", s07q3: "2",
+        s08q1: "1", s08q2: "1", s08q3: "2",
+        s09q1: "1", s09q2: "1", s09q3: "1",
+        s10q1: "1", s10q2: "1", s10q3: "2",
+        s11q1: "2", s11q2: "1", s11q3: "1", s11q4: "1"
     };
 
-    var QUIZ_KEYS = [
-        ["t1q1", "t1q2", "t1q3", "t1q4"],
-        ["t2q1", "t2q2", "t2q3", "t2q4"],
-        ["t3q1", "t3q2", "t3q3", "t3q4"]
+    var ALL_QUIZ_KEYS = [
+        "s01q1", "s01q2", "s01q3", "s01q4",
+        "t2q1", "t2q2", "t2q3", "t2q4",
+        "t1q1", "t1q2", "t1q3", "t1q4",
+        "t3q1", "t3q2", "t3q3", "t3q4",
+        "s05q1", "s05q2", "s05q3", "s05q4", "s05q5",
+        "s06q1", "s06q2", "s06q3", "s06q4",
+        "s07q1", "s07q2", "s07q3",
+        "s08q1", "s08q2", "s08q3",
+        "s09q1", "s09q2", "s09q3",
+        "s10q1", "s10q2", "s10q3",
+        "s11q1", "s11q2", "s11q3", "s11q4"
     ];
-    var QUIZ_LABELS = [
-        "Тест 1. Контент",
-        "Тест 2. Платформа й тренди",
-        "Тест 3. Інструментарій"
+
+    var CRITERIA = [
+        {
+            label: "S₁ Контент і довіра",
+            weight: 0.22,
+            keys: ["s01q1", "s01q2", "s01q3", "s01q4", "t1q1", "t1q2", "t1q3", "t1q4"],
+            chk: [4, 6, 16, 18]
+        },
+        {
+            label: "S₂ Ринок і платформа",
+            weight: 0.20,
+            keys: ["t2q1", "t2q2", "t2q3", "t2q4", "s09q1", "s09q2", "s09q3"],
+            chk: [7, 12, 13]
+        },
+        {
+            label: "S₃ Метрики й економіка Shop",
+            weight: 0.22,
+            keys: ["s06q1", "s06q2", "s06q3", "s06q4", "s07q1", "s07q2", "s07q3", "s08q1", "s08q2", "s08q3", "s11q1", "s11q2", "s11q3", "s11q4"],
+            chk: [8, 9, 10, 11]
+        },
+        {
+            label: "S₄ Правила й модерація",
+            weight: 0.18,
+            keys: ["s05q1", "s05q2", "s05q3", "s05q4", "s05q5"],
+            chk: [1, 2, 3, 5, 14, 15]
+        },
+        {
+            label: "S₅ Операційна готовність",
+            weight: 0.18,
+            keys: ["t3q1", "t3q2", "t3q3", "t3q4", "s10q1", "s10q2", "s10q3"],
+            chk: [17, 19, 20]
+        }
+    ];
+
+    var GRADE_NAMES = [
+        "1 — Критичний розрив (0–9)",
+        "2 — Дуже слабко (10–19)",
+        "3 — Слабко (20–29)",
+        "4 — Нижче середнього (30–39)",
+        "5 — Базовий мінімум (40–49)",
+        "6 — Середній рівень (50–59)",
+        "7 — Вище середнього (60–69)",
+        "8 — Добре (70–79)",
+        "9 — Дуже добре (80–89)",
+        "10 — VEO-ready / системна готовність (90–100)"
     ];
 
     var ECHOTIK = {
@@ -1549,88 +1971,123 @@
     });
     runCalc();
 
-    var dlgIntro = document.getElementById("dlgIntro");
-    var dlgCalc = document.getElementById("dlgCalc");
-    document.getElementById("btnHelpIntro").addEventListener("click", function () { dlgIntro.showModal(); });
-    document.getElementById("btnHelpCalc").addEventListener("click", function () { dlgCalc.showModal(); });
-    document.getElementById("dlgIntroClose").addEventListener("click", function () { dlgIntro.close(); });
-    document.getElementById("dlgCalcClose").addEventListener("click", function () { dlgCalc.close(); });
-    dlgIntro.addEventListener("click", function (e) { if (e.target === dlgIntro) dlgIntro.close(); });
-    dlgCalc.addEventListener("click", function (e) { if (e.target === dlgCalc) dlgCalc.close(); });
+    function countAnsweredQuiz() {
+        var n = 0;
+        for (var i = 0; i < ALL_QUIZ_KEYS.length; i++) {
+            var k = ALL_QUIZ_KEYS[i];
+            if (document.querySelector('input[name="' + k + '"]:checked')) n++;
+        }
+        return n;
+    }
 
-    function scoreBlock(keys) {
-        var s = 0;
-        for (var i = 0; i < keys.length; i++) {
+    function countChecklist() {
+        var boxes = document.querySelectorAll('#checklistGrid input[type="checkbox"]');
+        var on = 0;
+        boxes.forEach(function (c) { if (c.checked) on++; });
+        return { on: on, total: boxes.length };
+    }
+
+    function scoreCriterion(crit) {
+        var correct = 0;
+        var keys = crit.keys;
+        var i;
+        for (i = 0; i < keys.length; i++) {
             var k = keys[i];
             var sel = document.querySelector('input[name="' + k + '"]:checked');
-            if (sel && sel.value === CORRECT[k]) s++;
+            if (sel && sel.value === CORRECT[k]) correct++;
         }
-        return s;
+        var quizPct = keys.length ? (correct / keys.length) * 100 : 0;
+        var chkN = 0;
+        var chkTot = crit.chk.length;
+        for (i = 0; i < chkTot; i++) {
+            var el = document.querySelector('input[data-chk="' + crit.chk[i] + '"]');
+            if (el && el.checked) chkN++;
+        }
+        var chkPct = chkTot ? (chkN / chkTot) * 100 : 0;
+        var Si = 0.65 * quizPct + 0.35 * chkPct;
+        return {
+            Si: Si,
+            correct: correct,
+            totalQ: keys.length,
+            quizPct: quizPct,
+            chkN: chkN,
+            chkTot: chkTot,
+            chkPct: chkPct
+        };
     }
 
-    function recPerBlock(label, sc, max) {
-        var t;
-        if (sc === max) {
-            t = "Сильна база в цьому блоці — можна переходити до практики й уточнень.";
-        } else if (sc >= max - 1) {
-            t = "Майже все зрозуміло; перечитайте відповідний розділ блоку 1–2 і закріпіть формулювання.";
-        } else {
-            t = "Варто повторити матеріал сторінки в цій темі та пройти тест ще раз після перегляду.";
-        }
-        return "<h4>" + label + " — " + sc + " з " + max + "</h4><p>" + t + "</p>";
+    function veoGradeBand(veo) {
+        if (!isFinite(veo)) return { idx: 0, name: GRADE_NAMES[0] };
+        var v = Math.max(0, Math.min(100, veo));
+        var idx = Math.floor(v / 10);
+        if (idx >= 10) idx = 9;
+        if (v >= 100) idx = 9;
+        return { idx: idx, name: GRADE_NAMES[idx] };
     }
 
-    function gradeQuiz() {
-        var per = [];
-        var total = 0;
-        var maxTotal = 0;
-        for (var b = 0; b < QUIZ_KEYS.length; b++) {
-            var keys = QUIZ_KEYS[b];
-            var sc = scoreBlock(keys);
-            per.push(sc);
-            total += sc;
-            maxTotal += keys.length;
+    function gradeAll() {
+        var answered = countAnsweredQuiz();
+        var totalQ = ALL_QUIZ_KEYS.length;
+        var chk = countChecklist();
+        var veoSum = 0;
+        var breakdown = [];
+        var critical = [];
+        var htmlParts = [];
+        var ci;
+        for (ci = 0; ci < CRITERIA.length; ci++) {
+            var c = CRITERIA[ci];
+            var st = scoreCriterion(c);
+            veoSum += c.weight * st.Si;
+            breakdown.push(c.label + ": " + Math.round(st.Si) + " (тести " + st.correct + "/" + st.totalQ + ", чеклист " + st.chkN + "/" + st.chkTot + ")");
+            if (st.Si < 45) {
+                critical.push(c.label + " — низький підсумок; перегляньте відповідні розділи та пункти чеклисту.");
+            }
+            htmlParts.push(
+                "<p><strong>" + c.label + "</strong> — S≈" + Math.round(st.Si) +
+                " (з тестів " + Math.round(st.quizPct) + "%, з чеклисту " + Math.round(st.chkPct) + "%).</p>"
+            );
         }
+
+        var band = veoGradeBand(veoSum);
+        document.getElementById("veoMeter").textContent = Math.round(veoSum) + " / 100";
+        document.getElementById("veoGradeName").textContent = "Градація: " + band.name;
+        document.getElementById("veoBreakdown").innerHTML = breakdown.map(function (b) {
+            return "<span>" + b + "</span>";
+        }).join("");
+
         var box = document.getElementById("verdictBox");
-        var titleEl = document.getElementById("verdictTitle");
-        var scoreEl = document.getElementById("verdictScore");
-        var recEl = document.getElementById("verdictRec");
-        var title, rec;
-        if (total === maxTotal) {
-            title = "Відмінно";
-            rec = "Усі три напрями на рівні — добре поєднуєте контент, розуміння платформи й роботу з інструментами.";
-        } else if (total >= 10) {
-            title = "Дуже добре";
-            rec = "Солідний результат; підтягніть теми, де випадкові помилки або прогалини.";
-        } else if (total >= 8) {
-            title = "Добре";
-            rec = "База є; зосередьтесь на блоці з найнижчим балом і повторіть відповідні розділи.";
-        } else if (total >= 6) {
-            title = "Задовільно";
-            rec = "Є що підкріпити: пройдіть матеріал блоків 1–2 ще раз, особливо слабший з трьох тестів.";
-        } else {
-            title = "Варто підтягнути базу";
-            rec = "Рекомендуємо спокійно перечитати сторінку, зосередитись на трьох темах тестів і повторити спробу.";
+        document.getElementById("verdictTitle").textContent = "Підсумок оцінювання";
+        document.getElementById("verdictScore").textContent =
+            "Відповіді на тести: " + answered + " з " + totalQ + " питань. Чеклист відмічено: " + chk.on + " з " + chk.total + " пунктів.";
+        var rec = "VEO-index ≈ " + Math.round(veoSum) + " з 100. ";
+        if (answered < totalQ) {
+            rec += "Доки не відповісте на всі питання, індекс змішує прогалини як нулі в тестовій частині критеріїв — краще завершити опитування. ";
         }
-        titleEl.textContent = "Загальний вирок: " + title;
-        scoreEl.textContent = "Правильних відповідей загалом: " + total + " з " + maxTotal + ".";
-        recEl.textContent = rec;
-        for (var j = 0; j < 3; j++) {
-            var sub = document.getElementById("verdictSub" + (j + 1));
-            sub.innerHTML = recPerBlock(QUIZ_LABELS[j], per[j], QUIZ_KEYS[j].length);
-            sub.hidden = false;
+        if (chk.on < chk.total) {
+            rec += "Чеклист відображає вашу практику: не відмічені пункти знижують відповідний критерій. ";
         }
+        document.getElementById("verdictRec").textContent = rec;
+        var detailHtml = htmlParts.join("");
+        if (critical.length) {
+            detailHtml += "<h4 style='margin:12px 0 6px;font-size:0.9rem'>На що звернути увагу</h4><ul style='margin:0;padding-left:1.1rem'>";
+            critical.forEach(function (t) {
+                detailHtml += "<li style='margin-bottom:4px'>" + t + "</li>";
+            });
+            detailHtml += "</ul>";
+        }
+        document.getElementById("verdictDetail").innerHTML = detailHtml;
         box.hidden = false;
     }
-    document.getElementById("btnGrade").addEventListener("click", gradeQuiz);
-    document.getElementById("btnResetQuiz").addEventListener("click", function () {
-        document.querySelectorAll('#quizForm input[type="radio"]').forEach(function (r) { r.checked = false; });
+
+    document.getElementById("btnGradeAll").addEventListener("click", gradeAll);
+    document.getElementById("btnResetAll").addEventListener("click", function () {
+        document.querySelectorAll('#veoAssessment input[type="radio"]').forEach(function (r) { r.checked = false; });
+        document.querySelectorAll('#checklistGrid input[type="checkbox"]').forEach(function (c) { c.checked = false; });
         document.getElementById("verdictBox").hidden = true;
-        for (var r = 1; r <= 3; r++) {
-            var el = document.getElementById("verdictSub" + r);
-            el.hidden = true;
-            el.innerHTML = "";
-        }
+        document.getElementById("verdictDetail").innerHTML = "";
+        document.getElementById("veoMeter").textContent = "—";
+        document.getElementById("veoGradeName").textContent = "—";
+        document.getElementById("veoBreakdown").innerHTML = "";
     });
 })();
 </script>
