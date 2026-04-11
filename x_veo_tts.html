@@ -619,6 +619,54 @@
             .aff-legend,
             .aff-metric-values { grid-template-columns: repeat(2, minmax(0, 1fr)); }
         }
+
+        /* Теорія: правила спільноти TikTok (продавці) */
+        .rules-theory h3 { font-size: 1.02rem; margin: 0 0 10px; color: var(--tt-black); }
+        .rules-theory .rules-intro { font-size: 0.9rem; line-height: 1.55; margin: 0 0 14px; color: #333; }
+        .rules-theory .rules-card {
+            margin: 0 0 12px;
+            padding: 12px 12px 12px 14px;
+            border-left: 3px solid var(--tt-red);
+            background: #fafafa;
+            border-radius: 0 10px 10px 0;
+        }
+        .rules-theory .rules-card h4 {
+            margin: 0 0 8px;
+            font-size: 0.88rem;
+            font-weight: 700;
+            color: var(--tt-black);
+            line-height: 1.3;
+        }
+        .rules-theory .rules-card ul { margin: 6px 0 0; padding-left: 1.15rem; font-size: 0.86rem; line-height: 1.45; color: #333; }
+        .rules-theory .rules-card li { margin-bottom: 4px; }
+        .rules-theory .rules-why {
+            font-size: 0.8rem;
+            color: #555;
+            margin: 10px 0 0;
+            padding-top: 8px;
+            border-top: 1px dashed #ddd;
+            line-height: 1.45;
+        }
+        .rules-theory .rules-callout {
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            background: #fff8f9;
+            border: 1px solid rgba(254, 44, 85, 0.2);
+            font-size: 0.86rem;
+            line-height: 1.5;
+            color: #333;
+        }
+        .rules-theory .rules-callout strong { color: var(--tt-black); }
+        .rules-theory .rules-test-note {
+            margin-top: 14px;
+            font-size: 0.84rem;
+            color: #555;
+            padding: 10px 12px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            line-height: 1.45;
+        }
     </style>
 </head>
 <body>
@@ -646,7 +694,7 @@
         <button type="button" class="form-accordion-header" id="block-context" aria-expanded="false" aria-controls="panelBlock1">
             <span class="block-header-text">
                 <span class="block-header-title">Блок 1. TikTok Shop, Україна та досвід інших ринків</span>
-                <span class="block-header-preview">Чотири підблоки: вступ; ЄС; логіка TikTok; об’єднаний блок про досвід інтернет-магазину, Україну та екосистему VEO FORCE.</span>
+                <span class="block-header-preview">П’ять тем: вступ; ЄС; логіка TikTok; магазин / Україна / VEO FORCE; <strong>правила спільноти для продавців</strong> (теорія для тесту).</span>
             </span>
             <i class="bi bi-chevron-down form-accordion-chevron"></i>
         </button>
@@ -726,6 +774,171 @@
             <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.55"><strong>Оплата.</strong> Щоб покупки проходили швидко, варто орієнтуватися на глядачів із підключеними <strong>Google Pay</strong> та <strong>Apple Pay</strong> — це скорочує шлях від «подобається» до «оплачено» (інтеграції підключаються в рамках VEO FORCE).</p>
             <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.55"><strong>Далі, коли запуститься TikTok Shop.</strong> Продавець у <strong>боті VEO FORCE</strong> зможе робити <strong>розсилку відео-огляду</strong> на будь-який товар з каталогу — щоб одразу підігріти інтерес і отримати <strong>перші продажі з «продаючого» відео</strong> під майбутній TikTok Shop, не чекаючи, поки все збереться лише в застосунку.</p>
         </div>
+    </div>
+        </div>
+    </div>
+
+    <div class="form-accordion nested collapsed" id="in1-rules">
+        <button type="button" class="form-accordion-header" aria-expanded="false" aria-controls="in1-rules-panel"><span>Теорія: правила спільноти для продавців (що не можна)</span><i class="bi bi-chevron-down form-accordion-chevron"></i></button>
+        <div class="form-accordion-panel" id="in1-rules-panel">
+    <div class="form-container content-prose rules-theory">
+        <h3>Що не можна робити в TikTok (орієнтир для продавців)</h3>
+        <p class="rules-intro">Нижче — узагальнений список типових порушень і «сірих» зон. Формулювання спрощені для навчання; актуальні правила завжди дивіться в <strong>Community Guidelines</strong> та <strong>Commerce / Shop policies</strong> у застосунку й на сайті TikTok. Цей блок можна використовувати як <strong>базу для тесту</strong>.</p>
+
+        <div class="rules-card" id="rule-1">
+            <h4>1. Особисті дані та контакти</h4>
+            <ul>
+                <li>Номер телефону в профілі, відео, коментарях чи ефірах.</li>
+                <li>Закріплений номер у чаті або на стікерах.</li>
+                <li>Прохання писати в особисті з метою передати контакти.</li>
+                <li>Фрази на кшталт «напишіть у WhatsApp / Viber / Telegram, ось номер…».</li>
+            </ul>
+            <p class="rules-why"><strong>Навіщо так:</strong> платформа розцінює це як спробу <strong>обійти оплату й інструменти TikTok</strong> і як ризик шахрайства для користувачів.</p>
+        </div>
+
+        <div class="rules-card" id="rule-2">
+            <h4>2. Агресивні продажі (спам-комерція)</h4>
+            <ul>
+                <li>Постійний тиск: «купи зараз», «остання можливість», «тільки сьогодні» без реального контексту.</li>
+                <li>Масові шаблонні фрази: «беру», «оплатила», «хто оплатив — пишіть».</li>
+                <li>Прямий продаж без користі чи сюжету в контенті.</li>
+                <li>Десятки однакових або майже однакових відео (спам).</li>
+            </ul>
+            <p class="rules-why"><strong>Наслідок:</strong> сигнали low-quality / spam behaviour, зріз охоплення.</p>
+        </div>
+
+        <div class="rules-card" id="rule-3">
+            <h4>3. Перенаправлення на інші платформи</h4>
+            <ul>
+                <li>«Йдіть у Telegram / Instagram» як основний заклик замість контенту в TikTok.</li>
+                <li>Посилання на Instagram у біо як головний «магазин», обхід Shop.</li>
+                <li>Закриті Telegram-канали з непрозорими юзернеймами під «сірі» продажі.</li>
+                <li>Примус: «купити можна тільки там».</li>
+            </ul>
+            <p class="rules-why">TikTok трактує це як <strong>виведення трафіку</strong> й конкуренцію власним комерційним інструментам.</p>
+        </div>
+
+        <div class="rules-card" id="rule-4">
+            <h4>4. Нецензурна поведінка (особливо в ефірі)</h4>
+            <ul>
+                <li>Лайка, агресія до глядачів, зневажливі висловлювання.</li>
+                <li>Приниження, цькування, погрози.</li>
+                <li>«Заблокую всіх», «ви тупі» тощо.</li>
+            </ul>
+            <p class="rules-why">Це потрапляє під політики <strong>harassment &amp; abuse</strong>.</p>
+        </div>
+
+        <div class="rules-card" id="rule-5">
+            <h4>5. Небезпечний або чутливий контент</h4>
+            <ul>
+                <li>Заохочення куріння чи алкоголю в контексті, який порушує правила (залежно від регіону та подачі).</li>
+                <li>Поради щодо ліків, самолікування, обговорення лікування без відповідної кваліфікації.</li>
+            </ul>
+            <p class="rules-why">Категорії <strong>unsafe / regulated content</strong> — жорстка модерація.</p>
+        </div>
+
+        <div class="rules-card" id="rule-6">
+            <h4>6. Бренди та інтелектуальна власність</h4>
+            <ul>
+                <li>Показ або продаж товарів, що імітують відомі бренди без правомірності.</li>
+                <li>Порівняння «як Zara / Nike», якщо це не оригінал і вводить в оману.</li>
+                <li>Підробки та «сірий» імпорт через зовнішні посилання.</li>
+            </ul>
+            <p class="rules-why">Ризик <strong>intellectual property violation</strong> і скарг брендів.</p>
+        </div>
+
+        <div class="rules-card" id="rule-7">
+            <h4>7. Обман покупця</h4>
+            <ul>
+                <li>Категоричні заяви «немає повернення / обміну», якщо це суперечить правилам платформи чи закону.</li>
+                <li>Хибний опис товару, приховані умови доставки чи оплати.</li>
+            </ul>
+            <p class="rules-why">Порушення правил TikTok і вимог до <strong>чесної комерції</strong>.</p>
+        </div>
+
+        <div class="rules-card" id="rule-8">
+            <h4>8. Маніпуляції з акаунтами</h4>
+            <ul>
+                <li>Купівля / продаж акаунтів, масова реєстрація «під замовлення».</li>
+                <li>Обхід блокувань через нові профілі з тим самим контентом.</li>
+                <li>Використання чужих ідентичностей або фейкових даних.</li>
+            </ul>
+            <p class="rules-why">Порушення політик цілісності акаунта.</p>
+        </div>
+
+        <div class="rules-card" id="rule-9">
+            <h4>9. Накрутка</h4>
+            <ul>
+                <li>Боти для лайків і переглядів.</li>
+                <li>Штучні глядачі на ефірі, накручений «онлайн».</li>
+            </ul>
+            <p class="rules-why">Платформа відстежує аномалії в поведінці трафіку.</p>
+        </div>
+
+        <div class="rules-card" id="rule-10">
+            <h4>10. Недобросовісна конкуренція</h4>
+            <ul>
+                <li>Масові необґрунтовані скарги на конкурентів.</li>
+                <li>Мережа акаунтів для «зливу» чужих сторінок, найм сервісів атак.</li>
+            </ul>
+            <p class="rules-why">Ризик санкцій для <strong>обох сторін</strong>, не лише цілі.</p>
+        </div>
+
+        <div class="rules-card" id="rule-11">
+            <h4>11. Невідповідний тип акаунта та маркування</h4>
+            <ul>
+                <li>Бізнес-функції без відповідності вимогам верифікації.</li>
+                <li>Відсутність коректного маркування комерційного контенту, коли воно обов’язкове.</li>
+                <li>Плутанина між особистим і бізнес-профілем там, де це важливо для Shop.</li>
+            </ul>
+            <p class="rules-why">Орієнтуйтеся на актуальні вимоги TikTok до типу акаунта в вашому регіоні.</p>
+        </div>
+
+        <div class="rules-card" id="rule-12">
+            <h4>12. Комерційний і брендований контент</h4>
+            <p style="margin:0 0 6px;font-size:0.86rem">Якщо використовуєте режими на кшталт <strong>Branded Content</strong>:</p>
+            <ul>
+                <li><strong>Прозорість</strong> — зрозуміло, що це реклама чи партнерство.</li>
+                <li><strong>Правдивість</strong> — без обманних обіцянок.</li>
+                <li><strong>Відповідність</strong> — заборонені товари й теми не просуваються.</li>
+            </ul>
+            <p class="rules-why">Це узгоджується з вимогами до реклами та довіри аудиторії.</p>
+        </div>
+
+        <div class="rules-card" id="rule-13">
+            <h4>13. Обхід регіональних обмежень</h4>
+            <ul>
+                <li>Робота через чужі документи або «фіктивні» регіони для Shop.</li>
+                <li>Схеми обходу доступу до монетизації, недоступної для вашої юрисдикції.</li>
+            </ul>
+            <p class="rules-why">Фінансові та юридичні ризики, можливі <strong>блокування виплат і акаунта</strong>.</p>
+        </div>
+
+        <div class="rules-card" id="rule-14">
+            <h4>14. Зловживання ефірами (LIVE)</h4>
+            <ul>
+                <li>Нескінченні ефіри лише під «купи» без варіативного контенту.</li>
+                <li>Копії одного й того ж ефіру без доданої цінності.</li>
+                <li>Обхід банів через чергу нових акаунтів для тих самих продажів.</li>
+            </ul>
+            <p class="rules-why">Модерація LIVE посилена; повторюваний спам у стрімах карається швидше.</p>
+        </div>
+
+        <div class="rules-card" id="rule-15">
+            <h4>15. Слабкий і однотипний контент</h4>
+            <ul>
+                <li>Відео без сенсу, користі чи емоції для глядача.</li>
+                <li>Масові копії одного формату без оновлення.</li>
+            </ul>
+            <p class="rules-why">Алгоритм знижує охоплення: акаунт виглядає як <strong>low engagement / spam</strong>.</p>
+        </div>
+
+        <div class="rules-callout">
+            <p style="margin:0 0 8px"><strong>Головний висновок.</strong> TikTok опирається на аналіз сигналів (зокрема звук, текст, поведінку), намагається відрізнити корисну комерцію від обходу правил і спаму й «чистить» ринок. Для <strong>комерційних акаунтів</strong> поєднання порушень часто дає <strong>швидший бан</strong>, ніж для чисто розважальних сторінок.</p>
+            <p style="margin:0"><strong>Особливо жорстко:</strong> обхід платформи (контакти, зовнішні продажі), шахрайство, IP і небезпека для користувачів.</p>
+        </div>
+
+        <p class="rules-test-note"><strong>Для тесту (суть):</strong> багато продавців порушують пункти навіть не з злого наміру — через незнання або «як у всіх у коментарях». Проблема часто не в тому, що «TikTok несправедливий», а в тому, що <strong>модель роботи</strong> не відповідає правилам і якості контенту.</p>
     </div>
         </div>
     </div>
@@ -1126,7 +1339,7 @@
         <div class="help-dlg-inner">
             <h3 id="dlgIntroTitle">Про цю сторінку</h3>
             <p>Макет у дусі <strong>mobile_add</strong>: картки, акордеони, діалоги. Акцентний колір — <strong>TikTok Red</strong> (#FE2C55).</p>
-            <p>На головній — три згорнуті блоки: <strong>блок 1</strong> (чотири підблоки-акордеони: вступ, ЄС, логіка TikTok, магазин + Україна + VEO FORCE), <strong>блок 2</strong> (EchoTik, Kalodata, калькулятор) і <strong>блок 3</strong> (тест).</p>
+            <p>На головній — три згорнуті блоки: <strong>блок 1</strong> (п’ять підблоків-акордеонів: вступ, ЄС, логіка TikTok, магазин + Україна + VEO FORCE, теорія правил спільноти для продавців), <strong>блок 2</strong> (EchoTik, Kalodata, калькулятор) і <strong>блок 3</strong> (тест).</p>
             <button type="button" class="help-dlg-close" id="dlgIntroClose">Зрозуміло</button>
         </div>
     </dialog>
