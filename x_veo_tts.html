@@ -365,6 +365,28 @@
             max-width: 100%;
         }
         .embed-wrap iframe, .embed-wrap .tiktok-embed { max-width: 100% !important; }
+        .embed-wrap--iframe {
+            position: relative;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            min-height: 420px;
+        }
+        .embed-wrap--iframe iframe {
+            display: block;
+            width: 100%;
+            min-height: min(85vh, 760px);
+            border: 0;
+            vertical-align: top;
+        }
+        .tt-open-label {
+            font-size: 0.86rem;
+            margin: 0 0 10px;
+            line-height: 1.45;
+            color: #444;
+        }
+        .tt-open-label a { word-break: break-all; }
 
         .toolbar-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
         @media (min-width: 768px) {
@@ -737,35 +759,23 @@
         </div>
 
         <p class="form-section-title" id="tt-clips">Приклади відео TikTok Shop</p>
-        <p class="hint" style="margin-top:0">Нижче — вбудовані плеєри TikTok (завантажуються з сервісів TikTok). Якщо ролик не з’явився, відкрийте посилання в застосунку.</p>
-
-        <div class="tt-clip">
-            <p class="tt-clip-title">@be.lush — інтерв’ю, студія</p>
-            <p class="tt-clip-desc">Креатор розповідає про свою студію та показує, як влаштована робота з контентом.</p>
-            <div class="embed-wrap">
-                <blockquote class="tiktok-embed" cite="https://vt.tiktok.com/ZSHC4LcDB/" data-video-id="" style="max-width:100%;min-width:280px;">
-                    <section><a target="_blank" rel="noopener noreferrer" title="TikTok" href="https://vt.tiktok.com/ZSHC4LcDB/">TikTok</a></section>
-                </blockquote>
-            </div>
-        </div>
+        <p class="hint" style="margin-top:0">Нижче — вбудовані плеєри TikTok (iframe з tiktok.com/embed). Якщо плеєр не з’явився (блокування трекерів, регіон), натисніть <strong>Відкрити відео в TikTok</strong> під роликом.</p>
 
         <div class="tt-clip">
             <p class="tt-clip-title">Афіліат про «легкий» заробіток</p>
-            <p class="tt-clip-desc">Авторка емоційно реагує на результати: на кшталт <strong>~$56 тис. за 6 днів</strong> зі зйомки вдома для TikTok Shop — на відео звучать саме такі орієнтири (це не норма для всіх і не «чисті гроші»).</p>
-            <div class="embed-wrap">
-                <blockquote class="tiktok-embed" cite="https://vt.tiktok.com/ZSHC4dMhU/" data-video-id="" style="max-width:100%;min-width:280px;">
-                    <section><a target="_blank" rel="noopener noreferrer" title="TikTok" href="https://vt.tiktok.com/ZSHC4dMhU/">TikTok</a></section>
-                </blockquote>
+            <p class="tt-clip-desc">Авторка емоційно реагує на результати: на кшталт <strong>~$56 тис. за 6 днів</strong> зі зйомки вдома для TikTok Shop — на відео звучать саме такі орієнтири. Це <strong>не норма для всіх</strong> і <strong>не «чисті гроші»</strong>: з таких сум ще мають бути сплачені <strong>податки</strong> (залежно від країни й статусу), можливі <strong>оренда техніки й студії</strong>, <strong>зарплата чи оплата помічникам</strong>, реклама, софт, повернення товарів тощо — у кабінеті зазвичай видно лише орієнтовну комісію, а не ваш реальний залишок «на руки».</p>
+            <p class="tt-open-label"><strong>Відкрити відео в TikTok:</strong> <a class="tt-link" href="https://vt.tiktok.com/ZSHC4dMhU/" target="_blank" rel="noopener noreferrer">https://vt.tiktok.com/ZSHC4dMhU/</a></p>
+            <div class="embed-wrap embed-wrap--iframe">
+                <iframe src="https://www.tiktok.com/embed/v2/7569863540396379405" allowfullscreen allow="encrypted-media; fullscreen" loading="lazy" title="Відео TikTok"></iframe>
             </div>
         </div>
 
         <div class="tt-clip">
             <p class="tt-clip-title">Статистика на скрінах (4 акаунти)</p>
             <p class="tt-clip-desc">У ролику показані зведені показники з кабінету — нижче той самий зміст у зручному вигляді для телефона.</p>
-            <div class="embed-wrap">
-                <blockquote class="tiktok-embed" cite="https://vt.tiktok.com/ZSHCV7haH/" data-video-id="" style="max-width:100%;min-width:280px;">
-                    <section><a target="_blank" rel="noopener noreferrer" title="TikTok" href="https://vt.tiktok.com/ZSHCV7haH/">TikTok</a></section>
-                </blockquote>
+            <p class="tt-open-label"><strong>Відкрити відео в TikTok:</strong> <a class="tt-link" href="https://vt.tiktok.com/ZSHCV7haH/" target="_blank" rel="noopener noreferrer">https://vt.tiktok.com/ZSHCV7haH/</a></p>
+            <div class="embed-wrap embed-wrap--iframe">
+                <iframe src="https://www.tiktok.com/embed/v2/7570007050999090462" allowfullscreen allow="encrypted-media; fullscreen" loading="lazy" title="Відео TikTok"></iframe>
             </div>
 
             <div class="aff-stats-wrap" aria-label="Розбір статистики TikTok Shop Affiliate">
@@ -833,30 +843,27 @@
         <div class="tt-clip">
             <p class="tt-clip-title">Відбілююча стрічка для зубів · ~105 млн переглядів</p>
             <p class="tt-clip-desc">Товар «на камеру», короткий формат, зрозуміла користь.</p>
-            <div class="embed-wrap">
-                <blockquote class="tiktok-embed" cite="https://vt.tiktok.com/ZSHCqJhaA/" data-video-id="" style="max-width:100%;min-width:280px;">
-                    <section><a target="_blank" rel="noopener noreferrer" title="TikTok" href="https://vt.tiktok.com/ZSHCqJhaA/">TikTok</a></section>
-                </blockquote>
+            <p class="tt-open-label"><strong>Відкрити відео в TikTok:</strong> <a class="tt-link" href="https://vt.tiktok.com/ZSHCqJhaA/" target="_blank" rel="noopener noreferrer">https://vt.tiktok.com/ZSHCqJhaA/</a></p>
+            <div class="embed-wrap embed-wrap--iframe">
+                <iframe src="https://www.tiktok.com/embed/v2/7602038446722436382" allowfullscreen allow="encrypted-media; fullscreen" loading="lazy" title="Відео TikTok"></iframe>
             </div>
         </div>
 
         <div class="tt-clip">
             <p class="tt-clip-title">Автомобільний пилосос у дії · ~57 млн переглядів</p>
             <p class="tt-clip-desc">Демонстрація ефекту «до/після» в реальних умовах.</p>
-            <div class="embed-wrap">
-                <blockquote class="tiktok-embed" cite="https://vt.tiktok.com/ZSHCqh2q4/" data-video-id="" style="max-width:100%;min-width:280px;">
-                    <section><a target="_blank" rel="noopener noreferrer" title="TikTok" href="https://vt.tiktok.com/ZSHCqh2q4/">TikTok</a></section>
-                </blockquote>
+            <p class="tt-open-label"><strong>Відкрити відео в TikTok:</strong> <a class="tt-link" href="https://vt.tiktok.com/ZSHCqh2q4/" target="_blank" rel="noopener noreferrer">https://vt.tiktok.com/ZSHCqh2q4/</a></p>
+            <div class="embed-wrap embed-wrap--iframe">
+                <iframe src="https://www.tiktok.com/embed/v2/7513960109190417695" allowfullscreen allow="encrypted-media; fullscreen" loading="lazy" title="Відео TikTok"></iframe>
             </div>
         </div>
 
         <div class="tt-clip">
             <p class="tt-clip-title">Жіночі лосини · ~14 млн переглядів</p>
             <p class="tt-clip-desc">Одяг і аксесуари — типова ніша для Shop; охоплення залежить від подачі й тренду.</p>
-            <div class="embed-wrap">
-                <blockquote class="tiktok-embed" cite="https://vt.tiktok.com/ZSHCVoeYm/" data-video-id="" style="max-width:100%;min-width:280px;">
-                    <section><a target="_blank" rel="noopener noreferrer" title="TikTok" href="https://vt.tiktok.com/ZSHCVoeYm/">TikTok</a></section>
-                </blockquote>
+            <p class="tt-open-label"><strong>Відкрити відео в TikTok:</strong> <a class="tt-link" href="https://vt.tiktok.com/ZSHCVoeYm/" target="_blank" rel="noopener noreferrer">https://vt.tiktok.com/ZSHCVoeYm/</a></p>
+            <div class="embed-wrap embed-wrap--iframe">
+                <iframe src="https://www.tiktok.com/embed/v2/7542965490960846094" allowfullscreen allow="encrypted-media; fullscreen" loading="lazy" title="Відео TikTok"></iframe>
             </div>
             <p class="tt-clip-note">Можна порівняти з орієнтирами EchoTik у таблицях вище: там інші масштаби й періоди, але логіка «багато переглядів + товар у кадрі» та сама.</p>
         </div>
@@ -972,6 +979,13 @@
                             <tr><td>10</td><td><a class="tt-link" href="https://www.tiktok.com/@sadiejonesuploading" target="_blank" rel="noopener noreferrer">@sadiejonesuploading</a></td><td>37,1k</td><td><strong>$1 160 000</strong></td></tr>
                         </tbody>
                     </table>
+                </div>
+
+                <p class="form-section-title" style="margin-top:20px">@be.lush — інтерв’ю, студія</p>
+                <p class="hint" style="margin-top:0">Креатор розповідає про студію та те, як влаштована робота з контентом (орієнтир для порівняння з рядком <strong>@be.lush</strong> у таблиці топ-10 вище).</p>
+                <p class="tt-open-label"><strong>Відкрити відео в TikTok:</strong> <a class="tt-link" href="https://vt.tiktok.com/ZSHC4LcDB/" target="_blank" rel="noopener noreferrer">https://vt.tiktok.com/ZSHC4LcDB/</a></p>
+                <div class="embed-wrap embed-wrap--iframe">
+                    <iframe src="https://www.tiktok.com/embed/v2/7591524857016290590" allowfullscreen allow="encrypted-media; fullscreen" loading="lazy" title="Інтерв’ю @be.lush, студія"></iframe>
                 </div>
             </div>
         </div>
@@ -1129,7 +1143,6 @@
     </dialog>
 </div>
 
-<script async src="https://www.tiktok.com/embed.js"></script>
 <script>
 (function () {
     var CORRECT = { q1: "3", q2: "3", q3: "3", q4: "3", q5: "3" };
