@@ -409,9 +409,19 @@
             margin-right: auto;
             margin-bottom: 12px;
         }
-        .block-section .form-accordion-header {
+        .block-section.form-accordion > .form-accordion-header {
             font-size: clamp(0.95rem, 3.2vw, 1.05rem);
             padding: 16px var(--container-pad);
+            background: var(--tt-red);
+            color: #fff;
+            font-weight: 700;
+        }
+        .block-section.form-accordion > .form-accordion-header:hover {
+            background: var(--tt-red-dark);
+            color: #fff;
+        }
+        .block-section.form-accordion > .form-accordion-header .form-accordion-chevron {
+            color: rgba(255, 255, 255, 0.95);
         }
         .block-section .form-accordion-panel {
             padding: 0 0 8px;
@@ -892,16 +902,17 @@
     });
     renderBench();
 
-    function bindAccordion(id) {
-        var acc = document.getElementById(id);
-        if (!acc) return;
-        var btn = acc.querySelector(".form-accordion-header");
-        btn.addEventListener("click", function () {
+    /* Кожен .form-accordion отримує клік на своєму прямому заголовку; вкладені id більше не потрібні. */
+    document.querySelectorAll(".form-accordion").forEach(function (acc) {
+        var btn = acc.querySelector(":scope > .form-accordion-header");
+        if (!btn) btn = acc.querySelector(".form-accordion-header");
+        if (!btn) return;
+        btn.addEventListener("click", function (e) {
+            e.stopPropagation();
             var collapsed = acc.classList.toggle("collapsed");
             btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
         });
-    }
-    ["wrapBlock1", "wrapBlock2", "wrapBlock3", "accGmvMoney", "accShopComm", "accUsaSlice", "accKalodata", "accCommRef"].forEach(bindAccordion);
+    });
 
     function formatUsd(n) {
         if (!isFinite(n)) return "—";
