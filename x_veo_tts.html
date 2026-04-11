@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="uk" translate="no">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="google" content="notranslate">
+    <title>Тест: Готовність TikTok-продавця</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <style>
+        :root {
+            --tt-red: #fe2c55;
+            --tt-red-dark: #e02448;
+            --tt-red-soft: rgba(254, 44, 85, 0.12);
+            --tt-black: #161823;
+            --tt-muted: #666;
+            --surface: #fff;
+            --page-bg: #f5f5f5;
+        }
+        * { box-sizing: border-box; }
+        html { overflow-x: hidden; -webkit-text-size-adjust: 100%; }
+        body {
+            margin: 0;
+            padding: 12px 16px calc(24px + env(safe-area-inset-bottom));
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: var(--page-bg);
+            color: #333;
+            min-height: 100vh;
+        }
+        @media (min-width: 360px) { body { padding: 16px; } }
+
+        .page-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding: 0 2px;
+        }
+        .page-title {
+            font-size: clamp(1.2rem, 4.5vw, 1.45rem);
+            font-weight: 700;
+            margin: 0 0 6px;
+            color: var(--tt-black);
+        }
+        .page-sub { font-size: 0.88rem; color: var(--tt-muted); margin: 0; line-height: 1.4; }
+
+        .form-container {
+            max-width: 480px;
+            margin: 0 auto 20px;
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 20px 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+        }
+        @media (min-width: 360px) { .form-container { padding: 22px 20px; } }
+
+        .form-section-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: var(--tt-red);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin: 0 0 12px;
+        }
+
+        .form-group { margin-bottom: 16px; }
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 8px;
+        }
+        .form-input, .form-select {
+            width: 100%;
+            min-height: 48px;
+            padding: 12px 14px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: inherit;
+            background: #fff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--tt-red);
+            box-shadow: 0 0 0 3px var(--tt-red-soft);
+        }
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            padding-right: 40px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        @media (max-width: 400px) { .form-row { grid-template-columns: 1fr; } }
+
+        .hint { font-size: 0.78rem; color: #888; margin-top: 6px; line-height: 1.35; }
+
+        .calc-out {
+            margin-top: 14px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            background: var(--tt-black);
+            color: #fff;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .calc-out strong { color: #fff; }
+        .calc-out .row { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 8px; font-size: 0.88rem; opacity: 0.92; }
+        .calc-out .row:last-child { margin-bottom: 0; font-size: 1.05rem; font-weight: 700; opacity: 1; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.2); }
+
+        /* Accordions (як у mobile_add, кольори TikTok) */
+        .form-accordion {
+            border: 1px solid #e8e8e8;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            background: #fff;
+            overflow: hidden;
+        }
+        .form-accordion-header {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 14px 16px;
+            min-height: 48px;
+            border: none;
+            background: #fafafa;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #333;
+            text-align: left;
+            cursor: pointer;
+        }
+        .form-accordion-header:hover { background: #fff5f7; }
+        .form-accordion-chevron {
+            flex-shrink: 0;
+            transition: transform 0.25s ease;
+            color: #666;
+        }
+        .form-accordion.collapsed .form-accordion-chevron { transform: rotate(-90deg); }
+        .form-accordion-panel {
+            padding: 0 16px 16px;
+            border-top: 1px solid #eee;
+            font-size: 0.88rem;
+            color: #444;
+            line-height: 1.45;
+        }
+        .form-accordion.collapsed .form-accordion-panel { display: none; }
+
+        .comm-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 8px; }
+        .comm-table th, .comm-table td { border: 1px solid #eee; padding: 8px 10px; text-align: left; }
+        .comm-table th { background: #fafafa; font-weight: 600; }
+        .comm-list { margin: 8px 0 0; padding-left: 18px; }
+        .comm-list li { margin-bottom: 4px; }
+
+        .btn {
+            min-height: 48px;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: background 0.2s, transform 0.1s;
+            width: 100%;
+        }
+        .btn:active { transform: scale(0.98); }
+        .btn-primary {
+            background: var(--tt-red);
+            color: #fff;
+        }
+        .btn-primary:hover { background: var(--tt-red-dark); }
+        .btn-secondary {
+            background: #e8e8e8;
+            color: #333;
+            margin-top: 10px;
+        }
+        .btn-secondary:hover { background: #ddd; }
+
+        /* Quiz */
+        .q-block {
+            margin-bottom: 20px;
+            padding-bottom: 18px;
+            border-bottom: 1px solid #eee;
+        }
+        .q-block:last-of-type { border-bottom: none; }
+        .q-num { font-size: 0.75rem; font-weight: 700; color: var(--tt-red); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+        .q-text { font-weight: 600; margin: 0 0 12px; font-size: 0.95rem; line-height: 1.35; }
+        .q-options { display: flex; flex-direction: column; gap: 8px; }
+        .q-opt {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px 14px;
+            border: 2px solid #e5e5e5;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            font-size: 0.92rem;
+            line-height: 1.35;
+        }
+        .q-opt:hover { border-color: var(--tt-red); background: var(--tt-red-soft); }
+        .q-opt:has(input:checked) {
+            border-color: var(--tt-red);
+            background: var(--tt-red-soft);
+        }
+        .q-opt input {
+            margin-top: 3px;
+            accent-color: var(--tt-red);
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+        }
+
+        .verdict-box {
+            margin-top: 16px;
+            padding: 16px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #fff5f7 0%, #fff 100%);
+            border: 1px solid rgba(254, 44, 85, 0.25);
+        }
+        .verdict-title { font-weight: 700; font-size: 1.05rem; margin: 0 0 8px; color: var(--tt-black); }
+        .verdict-score { font-size: 0.95rem; color: var(--tt-muted); margin-bottom: 10px; }
+        .verdict-rec { font-size: 0.92rem; line-height: 1.5; margin: 0; color: #333; }
+
+        /* Media / TikTok embed */
+        .embed-wrap {
+            margin: 12px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            min-height: 200px;
+        }
+        .embed-wrap iframe { display: block; width: 100%; min-height: 280px; border: 0; }
+
+        .toolbar-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .pill-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid #ddd;
+            background: #fff;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #333;
+        }
+        .pill-btn:hover { border-color: var(--tt-red); color: var(--tt-red); }
+
+        dialog.help-dlg {
+            border: none;
+            border-radius: 16px;
+            padding: 0;
+            max-width: min(440px, 92vw);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+        dialog.help-dlg::backdrop { background: rgba(0,0,0,0.45); }
+        .help-dlg-inner { padding: 20px; }
+        .help-dlg h3 { margin: 0 0 10px; font-size: 1.05rem; color: var(--tt-black); }
+        .help-dlg p { margin: 0 0 10px; font-size: 0.9rem; line-height: 1.45; color: #444; }
+        .help-dlg-close {
+            margin-top: 12px;
+            width: 100%;
+            min-height: 44px;
+            border-radius: 10px;
+            border: none;
+            background: var(--tt-red);
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .page-block-heading {
+            font-size: clamp(1rem, 3.5vw, 1.12rem);
+            font-weight: 700;
+            color: #333;
+            margin: 28px 0 12px;
+            padding: 0 4px;
+            max-width: 480px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <header class="page-header">
+            <div>
+                <h1 class="page-title">Готовність TikTok-продавця</h1>
+                <p class="page-sub">Орієнтири TikTok Shop, міні-калькулятор і тест із п’яти питань. Дизайн у стилі TikTok.</p>
+            </div>
+        </header>
+
+        <div class="toolbar-row">
+            <button type="button" class="pill-btn" id="btnHelpIntro" aria-haspopup="dialog"><i class="bi bi-info-circle"></i> Про сторінку</button>
+            <button type="button" class="pill-btn" id="btnHelpCalc" aria-haspopup="dialog"><i class="bi bi-calculator"></i> Формула доходу</button>
+        </div>
+
+        <p class="form-section-title">Приклад відео (вставка TikTok)</p>
+        <div class="embed-wrap" id="tiktokEmbedHost">
+            <!-- Замініть data-video-id на свій або залиште блок порожнім і додайте скрипт з tiktok.com -->
+            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@tiktok/video/0000000000000000000" data-video-id="0000000000000000000" style="max-width: 100%; min-width: 280px;">
+                <section><a target="_blank" title="@tiktok" href="https://www.tiktok.com/@tiktok?refer=embed">@tiktok</a></section>
+            </blockquote>
+        </div>
+        <p class="hint">Щоб відео підвантажилось, у коді вкажіть реальний посилання / video id з TikTok. Скрипт embed підключається внизу сторінки.</p>
+    </div>
+
+    <h2 class="page-block-heading">Калькулятор орієнтовного заробітку (TikTok Shop)</h2>
+    <div class="form-container">
+        <p class="form-section-title">Вхідні дані</p>
+        <div class="form-group">
+            <label for="calcViews">Кількість переглядів (за період)</label>
+            <input type="number" class="form-input" id="calcViews" min="0" step="1" value="100000" inputmode="numeric">
+        </div>
+        <div class="form-group">
+            <label for="calcConv">Орієнтовна конверсія: перегляд → замовлення (%)</label>
+            <input type="number" class="form-input" id="calcConv" min="0" max="100" step="0.01" value="0.85" inputmode="decimal">
+            <p class="hint">У моделі з гайду tts-info орієнтири для MOFU часто ~0,5–1,5%; для «продажного» контенту вище. Підлаштуйте під свою статистику.</p>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label for="calcComm">Комісія афіліата (% від суми замовлення)</label>
+                <input type="number" class="form-input" id="calcComm" min="0" max="100" step="0.1" value="12" inputmode="decimal">
+            </div>
+            <div class="form-group">
+                <label for="calcAov">Середній чек (USD, орієнтир)</label>
+                <input type="number" class="form-input" id="calcAov" min="0" step="0.01" value="40" inputmode="decimal">
+            </div>
+        </div>
+        <p class="hint">Формула: замовлення ≈ перегляди × (конверсія / 100); GMV ≈ замовлення × середній чек; дохід афіліата ≈ GMV × (комісія / 100). Без податків і повернень — як у tts-info.</p>
+
+        <div class="calc-out" id="calcOut" aria-live="polite">
+            <div class="row"><span>Орієнтовні замовлення</span><span id="outOrders">—</span></div>
+            <div class="row"><span>Орієнтовний GMV (USD)</span><span id="outGmv">—</span></div>
+            <div class="row"><span>Дохід афіліата (USD)</span><span id="outAff">—</span></div>
+        </div>
+
+        <div class="form-accordion collapsed" id="accCommRef">
+            <button type="button" class="form-accordion-header" aria-expanded="false" id="accCommRefBtn">
+                <span>Орієнтовні комісії та приклади товарів (з tts-info)</span>
+                <i class="bi bi-chevron-down form-accordion-chevron"></i>
+            </button>
+            <div class="form-accordion-panel">
+                <p class="hint" style="margin-top:0">Дані ілюстративні; реальна ставка в картці товару встановлюється продавцем. Середні ставки по нішах у моделі гайду:</p>
+                <table class="comm-table">
+                    <thead>
+                        <tr><th>Ніша</th><th>~Сер. комісія %</th><th>~Сер. чек USD</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Одяг та аксесуари</td><td>12%</td><td>40</td></tr>
+                        <tr><td>Краса та догляд</td><td>14%</td><td>34</td></tr>
+                        <tr><td>Техніка</td><td>8%</td><td>58</td></tr>
+                        <tr><td>Дім / кухня</td><td>10%</td><td>44</td></tr>
+                        <tr><td>Автотовари</td><td>11%</td><td>50</td></tr>
+                    </tbody>
+                </table>
+                <p style="margin:12px 0 4px;font-weight:600;font-size:0.85rem">Приклади діапазонів комісії афіліата з замовлення (той самий гайд):</p>
+                <ul class="comm-list">
+                    <li><strong>Fashion:</strong> футболка оверсайз 10–14%, джинси slim 9–13%, кросівки 8–12%…</li>
+                    <li><strong>Beauty:</strong> сироватка 12–16%, крем SPF 11–15%, бальзам для губ 10–14%…</li>
+                    <li><strong>Electronics:</strong> TWS 6–10%, павербанк 7–11%, кабель 5–9%…</li>
+                    <li><strong>Home:</strong> дозатор для мила 9–13%, каструля 8–12%…</li>
+                    <li><strong>Auto:</strong> тримач телефону 8–12%, поліроль 9–13%…</li>
+                </ul>
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-secondary" id="btnPresetFashion">Підставити нішу «одяг» (12% комісії, $40 чек)</button>
+    </div>
+
+    <h2 class="page-block-heading">Тест (5 питань)</h2>
+    <div class="form-container">
+        <p class="page-sub" style="margin-bottom:16px">У кожному питанні один вірний варіант. Четвертий варіант — «усі перераховані вище», коли пункти 1–3 є коректними разом.</p>
+
+        <form id="quizForm" action="#" onsubmit="return false;">
+            <div class="q-block" data-q="1">
+                <div class="q-num">Питання 1</div>
+                <p class="q-text">Що з переліченого найкраще описує роль GMV у публічних рейтингах TikTok Shop для афіліата?</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="q1" value="0"> GMV — це завжди готівка на картку креатора без відсотків.</label>
+                    <label class="q-opt"><input type="radio" name="q1" value="1"> Високий GMV автоматично означає найвищий особистий дохід без урахування комісії та чека.</label>
+                    <label class="q-opt"><input type="radio" name="q1" value="2"> TikTok Shop виплачує основний дохід саме за перегляди (Fund), а не за продажі.</label>
+                    <label class="q-opt"><input type="radio" name="q1" value="3"> GMV — обіг замовлень за посиланням; дохід креатора зазвичай — відсоток комісії від суми чека, який задає продавець; великий GMV не завжди дорівнює найбільшому особистому заробітку без конверсії й середнього чека.</label>
+                </div>
+            </div>
+
+            <div class="q-block" data-q="2">
+                <div class="q-num">Питання 2</div>
+                <p class="q-text">Як реалістичніше оцінювати продажі з контенту в TikTok Shop?</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="q2" value="0"> Лише за останні 2–3 відео, без великої вибірки.</label>
+                    <label class="q-opt"><input type="radio" name="q2" value="1"> Достатньо одного вірального ролика, щоб назавжди зафіксувати конверсію.</label>
+                    <label class="q-opt"><input type="radio" name="q2" value="2"> Конверсія в звітах TikTok завжди збігається з «перегляд → замовлення» у простій формулі калькулятора.</label>
+                    <label class="q-opt"><input type="radio" name="q2" value="3"> Варто спиратися на велику вибірку роликів (у гайді — орієнтир від ~100+), усереднювати; перегляди нерівномірні; метрики в дашборді можуть рахуватись інакше, ніж спрощена модель.</label>
+                </div>
+            </div>
+
+            <div class="q-block" data-q="3">
+                <div class="q-num">Питання 3</div>
+                <p class="q-text">Що таке GPM у контексті аналітики на кшталт EchoTik (як у гайді)?</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="q3" value="0"> Кількість підписників на тисячу переглядів.</label>
+                    <label class="q-opt"><input type="radio" name="q3" value="1"> Гарантована місячна зарплата від TikTok.</label>
+                    <label class="q-opt"><input type="radio" name="q3" value="2"> Сума податків на 1000 переглядів.</label>
+                    <label class="q-opt"><input type="radio" name="q3" value="3"> Орієнтир валового прибутку з продажів на 1000 переглядів (у доларах); зв’язок з GMV і комісією — у повній версії гайду.</label>
+                </div>
+            </div>
+
+            <div class="q-block" data-q="4">
+                <div class="q-num">Питання 4</div>
+                <p class="q-text">Як у спрощеній моделі воронки змінюється конверсія «перегляд → замовлення»?</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="q4" value="0"> TOFU завжди дає вищу конверсію, ніж BOFU.</label>
+                    <label class="q-opt"><input type="radio" name="q4" value="1"> MOFU та BOFU не відрізняються множниками.</label>
+                    <label class="q-opt"><input type="radio" name="q4" value="2"> Верх воронки (охоплення) завжди дає максимальні прямі продажі з кожного перегляду.</label>
+                    <label class="q-opt"><input type="radio" name="q4" value="3"> BOFU (демо, ціна, чіткий заклик) зазвичай підсилює частку переглядів, що стають замовленнями; TOFU слабше для прямих продажів; у гайді є множники TOFU/MOFU/BOFU.</label>
+                </div>
+            </div>
+
+            <div class="q-block" data-q="5">
+                <div class="q-num">Питання 5</div>
+                <p class="q-text">Що показує рядок «ефективність ($/год)» у розширеному калькуляторі з tts-info?</p>
+                <div class="q-options">
+                    <label class="q-opt"><input type="radio" name="q5" value="0"> Офіційну ставку оплати години від TikTok.</label>
+                    <label class="q-opt"><input type="radio" name="q5" value="1"> Завжди має бути вище за ставку вчителя в Україні.</label>
+                    <label class="q-opt"><input type="radio" name="q5" value="2"> Лише вартість реклами в TikTok Ads.</label>
+                    <label class="q-opt"><input type="radio" name="q5" value="3"> Спрощене відношення доходу від комісії до сумарного часу виробництва в сценарії — щоб порівнювати сценарії між собою, а не як універсальну норму.</label>
+                </div>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="btnGrade">Підрахувати результат</button>
+            <button type="button" class="btn btn-secondary" id="btnResetQuiz">Скинути відповіді</button>
+
+            <div class="verdict-box" id="verdictBox" hidden>
+                <div class="verdict-title" id="verdictTitle">Вирок</div>
+                <div class="verdict-score" id="verdictScore"></div>
+                <p class="verdict-rec" id="verdictRec"></p>
+            </div>
+        </form>
+    </div>
+
+    <dialog class="help-dlg" id="dlgIntro" aria-labelledby="dlgIntroTitle">
+        <div class="help-dlg-inner">
+            <h3 id="dlgIntroTitle">Про цю сторінку</h3>
+            <p>Макет у дусі форми <strong>mobile_add</strong>: картки, акордеони, діалоги. Акцентний колір — <strong>TikTok Red</strong> (#FE2C55) замість фіолетового.</p>
+            <p>Калькулятор і таблиці комісій узгоджені з логікою та даними з <strong>tts-info</strong> (орієнтири, не оферта).</p>
+            <button type="button" class="help-dlg-close" id="dlgIntroClose">Зрозуміло</button>
+        </div>
+    </dialog>
+
+    <dialog class="help-dlg" id="dlgCalc" aria-labelledby="dlgCalcTitle">
+        <div class="help-dlg-inner">
+            <h3 id="dlgCalcTitle">Формула</h3>
+            <p><strong>Замовлення</strong> ≈ N<sub>переглядів</sub> × (C% / 100), де C — частка переглядів, що перетворились на замовлення.</p>
+            <p><strong>GMV</strong> ≈ замовлення × середній чек.</p>
+            <p><strong>Дохід афіліата</strong> ≈ GMV × (комісія% / 100).</p>
+            <p class="hint">Податки, повернення та точні правила платформи не віднімали — як у примітці калькулятора на гайді.</p>
+            <button type="button" class="help-dlg-close" id="dlgCalcClose">Закрити</button>
+        </div>
+    </dialog>
+
+    <script async src="https://www.tiktok.com/embed.js"></script>
+    <script>
+(function () {
+    /** Ключі правильних відповідей: у всіх питаннях вірний варіант — четвертий (value "3") */
+    var CORRECT = { q1: "3", q2: "3", q3: "3", q4: "3", q5: "3" };
+
+    function formatUsd(n) {
+        if (!isFinite(n)) return "—";
+        return "$" + n.toLocaleString("uk-UA", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+    function formatNum(n) {
+        if (!isFinite(n)) return "—";
+        return n.toLocaleString("uk-UA", { maximumFractionDigits: 2 });
+    }
+
+    function runCalc() {
+        var views = parseFloat(document.getElementById("calcViews").value) || 0;
+        var convPct = parseFloat(document.getElementById("calcConv").value) || 0;
+        var commPct = parseFloat(document.getElementById("calcComm").value) || 0;
+        var aov = parseFloat(document.getElementById("calcAov").value) || 0;
+        var orders = views * (convPct / 100);
+        var gmv = orders * aov;
+        var aff = gmv * (commPct / 100);
+        document.getElementById("outOrders").textContent = formatNum(orders);
+        document.getElementById("outGmv").textContent = formatUsd(gmv);
+        document.getElementById("outAff").textContent = formatUsd(aff);
+    }
+
+    ["calcViews", "calcConv", "calcComm", "calcAov"].forEach(function (id) {
+        document.getElementById(id).addEventListener("input", runCalc);
+    });
+    runCalc();
+
+    document.getElementById("btnPresetFashion").addEventListener("click", function () {
+        document.getElementById("calcComm").value = "12";
+        document.getElementById("calcAov").value = "40";
+        runCalc();
+    });
+
+    /* Акордеон комісій */
+    (function () {
+        var acc = document.getElementById("accCommRef");
+        var btn = document.getElementById("accCommRefBtn");
+        btn.addEventListener("click", function () {
+            var collapsed = acc.classList.toggle("collapsed");
+            btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+        });
+    })();
+
+    /* Діалоги */
+    var dlgIntro = document.getElementById("dlgIntro");
+    var dlgCalc = document.getElementById("dlgCalc");
+    document.getElementById("btnHelpIntro").addEventListener("click", function () { dlgIntro.showModal(); });
+    document.getElementById("btnHelpCalc").addEventListener("click", function () { dlgCalc.showModal(); });
+    document.getElementById("dlgIntroClose").addEventListener("click", function () { dlgIntro.close(); });
+    document.getElementById("dlgCalcClose").addEventListener("click", function () { dlgCalc.close(); });
+    dlgIntro.addEventListener("click", function (e) { if (e.target === dlgIntro) dlgIntro.close(); });
+    dlgCalc.addEventListener("click", function (e) { if (e.target === dlgCalc) dlgCalc.close(); });
+
+    function gradeQuiz() {
+        var score = 0;
+        for (var i = 1; i <= 5; i++) {
+            var name = "q" + i;
+            var sel = document.querySelector('input[name="' + name + '"]:checked');
+            if (sel && sel.value === CORRECT[name]) score++;
+        }
+        var box = document.getElementById("verdictBox");
+        var titleEl = document.getElementById("verdictTitle");
+        var scoreEl = document.getElementById("verdictScore");
+        var recEl = document.getElementById("verdictRec");
+
+        var title, rec;
+        if (score === 5) {
+            title = "Відмінно";
+            rec = "[Заповніть пізніше] Рекомендація для 5/5: закріпити сильні сторони й перейти до практики в кабінеті.";
+        } else if (score >= 4) {
+            title = "Добре";
+            rec = "[Заповніть пізніше] Рекомендація для 4/5: уточнити один прогалиний блок з результатів тесту.";
+        } else if (score >= 3) {
+            title = "Задовільно";
+            rec = "[Заповніть пізніше] Рекомендація для 3/5: повторити розділ гайду tts-info про GMV, конверсію та GPM.";
+        } else {
+            title = "Варто підтягнути базу";
+            rec = "[Заповніть пізніше] Рекомендація: пройти гайд TikTok Shop і повторити тест після ознайомлення.";
+        }
+
+        titleEl.textContent = "Вирок: " + title;
+        scoreEl.textContent = "Правильних відповідей: " + score + " з 5.";
+        recEl.textContent = rec;
+        box.hidden = false;
+    }
+
+    document.getElementById("btnGrade").addEventListener("click", gradeQuiz);
+    document.getElementById("btnResetQuiz").addEventListener("click", function () {
+        document.querySelectorAll('#quizForm input[type="radio"]').forEach(function (r) { r.checked = false; });
+        document.getElementById("verdictBox").hidden = true;
+    });
+})();
+    </script>
+</body>
+</html>
