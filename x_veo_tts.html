@@ -331,6 +331,24 @@
             margin: 8px 0 12px; padding: 0 4px;
             max-width: 640px; margin-left: auto; margin-right: auto;
         }
+        /* Великі секції сторінки */
+        .block-section.form-accordion {
+            max-width: 640px;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 12px;
+        }
+        .block-section .form-accordion-header {
+            font-size: clamp(0.95rem, 3.2vw, 1.05rem);
+            padding: 16px 18px;
+        }
+        .block-section .form-accordion-panel {
+            padding: 0 0 8px;
+            border-top: none;
+        }
+        .block-section .form-accordion-panel > .form-container:first-child {
+            border-radius: 0 0 16px 16px;
+        }
     </style>
 </head>
 <body>
@@ -340,11 +358,12 @@
         <header class="page-header">
             <span class="block-label">Сторінка-гайд</span>
             <h1 class="page-title">Готовність TikTok-продавця</h1>
-            <p class="page-sub">Спочатку — контекст ринку й змін у TikTok; далі — орієнтири (EchoTik, Kalodata), міні-калькулятор і тест із п’яти питань.</p>
+            <p class="page-sub">Спочатку — контекст ринку й змін у TikTok; далі — орієнтири (EchoTik, Kalodata), міні-калькулятор і тест. Окремо — логіка <strong>VEO FORCE</strong>: екосистема для українських продавців (каталог, бот, інтеграції, консалтинг, ведення).</p>
         </header>
         <div class="jump-row">
             <a href="#block-context"><i class="bi bi-book"></i> Блок 1 — Контекст</a>
-            <a href="#block-tools"><i class="bi bi-graph-up-arrow"></i> Блок 2 — Орієнтири та тест</a>
+            <a href="#block-tools"><i class="bi bi-graph-up-arrow"></i> Блок 2 — Орієнтири й калькулятор</a>
+            <a href="#block-test"><i class="bi bi-patch-check"></i> Тест</a>
         </div>
         <div class="toolbar-row">
             <button type="button" class="pill-btn" id="btnHelpIntro" aria-haspopup="dialog"><i class="bi bi-info-circle"></i> Про сторінку</button>
@@ -353,8 +372,12 @@
     </div>
 
     <!-- ========== БЛОК 1: КОНТЕКСТ ========== -->
-    <h2 class="page-block-heading" id="block-context">Блок 1. TikTok Shop, Україна та досвід інших ринків</h2>
-
+    <div class="form-accordion block-section collapsed" id="wrapBlock1">
+        <button type="button" class="form-accordion-header" id="block-context" aria-expanded="false" aria-controls="panelBlock1">
+            <span>Блок 1. TikTok Shop, Україна та досвід інших ринків</span>
+            <i class="bi bi-chevron-down form-accordion-chevron"></i>
+        </button>
+        <div class="form-accordion-panel" id="panelBlock1">
     <div class="form-container content-prose">
         <h3>Що таке TikTok Shop і чому в Україні відчутні зміни</h3>
         <p><strong>TikTok Shop</strong> — це продажі товарів усередині екосистеми TikTok: картки товарів у відео, оформлення замовлення, афіліатні програми. Для глядача стрічка лишається розвагою; для бізнесу це вже <strong>комерційна система</strong> з правилами, модерацією та комісіями.</p>
@@ -391,7 +414,7 @@
         <p><strong>Чому зараз «закручують гайки».</strong> Сервери, трафік і зокрема AI коштують дорого — платформі потрібні передбачувані правила, фільтрація та комерційні інструменти (Shop, реклама, афіліат). Для бізнесу TikTok — це <strong>комерційна система</strong>: або ви виглядаєте партнером з якісним контентом, або ризикуєте втратити охоплення й акаунт через спам, порушення правил і токсичність.</p>
         <p><strong>Роль AI.</strong> Алгоритм відстежує перегляди, зупинки, лайки, коментарі — формується профіль інтересів. Для продавця це означає: оцінюють не лише товар, а й <strong>як ви подаєте</strong> і як реагує аудиторія.</p>
         <p><strong>Що далі.</strong> Розвиток TikTok Shop, афіліатних програм і вищої конкуренції серед тих, хто вже працює в рамках правил. <strong>Висновок:</strong> TikTok не проти бізнесу — він проти хаосу. Виграють ті, хто адаптується; програють ті, хто ігнорує зміни.</p>
-        <p><strong>Що робити зараз.</strong> Зрозуміти, на якій фазі ви зараз перебуваєте; опиратися на дані та правила; пройти тест у блоці нижче й чесно оцінити, чи ваша модель відповідає тому, як платформа монетизує увагу зараз.</p>
+        <p><strong>Що робити зараз.</strong> Зрозуміти, на якій фазі ви зараз перебуваєте; опиратися на дані та правила; пройти тест у блоці нижче й чесно оцінити, чи ваша модель відповідає тому, як платформа монетизує увагу зараз. Якщо потрібен каталог, бот і інтеграції під українські реалії — орієнтуйтеся на екосистему <strong>VEO FORCE</strong> (опис у згорнутому блоці «Практичний вихід»).</p>
     </div>
 
     <div class="form-container content-prose">
@@ -403,25 +426,32 @@
         <h3>Україна: нова хвиля магазинів, лайви й пріоритет — не втратити аудиторію</h3>
         <p>Зараз у країні видно <strong>різкий наплив великої кількості магазинів</strong>, які <strong>не мають досвіду прямих ефірів</strong>, а їхні акаунти часто мають лише <strong>30–200 підписників</strong>. Масово такі сторінки з’являються з <strong>початку 2026 року</strong>. Через це не варто очікувати, що <strong>TikTok Shop Live</strong> (офіційні лайв-продажі в Shop) запрацюють для всіх <strong>одразу</strong>. Ключове завдання на цьому етапі — <strong>утримати й не розгубити аудиторію</strong>, яку ще можна зібрати навколо бренду чи ведучого.</p>
         <p>Тим, хто <strong>кілька років поспіль</strong> (поки це було можливо) працював у форматі <strong>TikTok-лайву</strong> і встиг <strong>набрати підписників і довіру</strong>, зараз зазвичай <strong>простіше</strong>, ніж тим, хто має лише сайт із товарами без живої аудиторії в застосунку. Сайт і каталог самі по собі не замінюють підписників у стрічці.</p>
-        <p><strong>Перехідний період</strong> виглядає так: лайви обмежують або блокують, охоплення падає, частина глядачів <strong>розсіюється</strong>; хтось майне знімає відео, бо <strong>немає готового каталогу чи сторінки під замовлення</strong>. Водночас ті, хто вже має <strong>сайт і товари в кошику</strong>, часто <strong>не мають сформованої аудиторії в TikTok</strong> — виходить розрив між «хто дивиться» і «що можна купити».</p>
+        <p><strong>Перехідний період</strong> виглядає так: лайви обмежують або блокують, охоплення падає, частина глядачів <strong>розсіюється</strong>; хтось майне знімає відео, бо <strong>немає готового каталогу чи сторінки під замовлення</strong>. Водночас ті, хто вже має <strong>сайт і товари в кошику</strong>, часто <strong>не мають сформованої аудиторії в TikTok</strong> — виходить розрив між «хто дивиться» і «що можна купити». Його якраз і закриває зв’язка «ефір → каталог → оплата → доставка» у межах екосистеми <strong>VEO FORCE</strong> (деталі нижче в окремому блоці).</p>
     </div>
 
     <div class="form-container">
         <div class="callout-labor" style="border-left-width:4px;margin-top:0">
-            <p style="margin:0 0 10px;font-weight:700;color:var(--tt-black)">Практичний вихід: каталог, оплата, бот і зв’язка з ефіром</p>
-            <p style="margin:0;font-size:0.9rem;line-height:1.55">Щоб закрити цей розрив, підходить <strong>система з безкоштовним створенням каталогу</strong>: підключення <strong>платіжних шлюзів</strong>, швидке й просте <strong>завантаження товарів</strong>, власний <strong>кабінет (CRM)</strong> для заявок і замовлень, оформлення <strong>ТТН Нової пошти</strong> та головне — можливість <strong>сповіщати підписників у Telegram-боті</strong> про товари: глядачі натискають <strong>«Беру»</strong> в боті так само звично, як раніше писали в коментарях під ефіром.</p>
-            <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.55"><strong>Навіщо це зараз.</strong> Поки аудиторія ще <strong>«тримається»</strong> за знайомих блогерів і ведучих, варто навчитися <strong>вносити товари в свій каталог</strong> — щоб згодом, коли з’явиться стабільний експорт у TikTok Shop, не починати з нуля. Паралельно можна вести <strong>оглядові ефіри</strong>: під час трансляції глядачі оформлюють покупку через <strong>push-сповіщення</strong> (повідомлення над стрімом), не гублячи зв’язок між ефіром і замовленням.</p>
-            <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.55"><strong>Оплата.</strong> Щоб покупки проходили швидко, варто орієнтуватися на глядачів із підключеними <strong>Google Pay</strong> та <strong>Apple Pay</strong> — це скорочує шлях від «подобається» до «оплачено».</p>
-            <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.55"><strong>Далі, коли запуститься TikTok Shop.</strong> Такий продавець зможе в боті робити <strong>розсилку відео-огляду</strong> на будь-який товар з каталогу — щоб одразу підігріти інтерес і отримати <strong>перші продажі з «продаючого» відео</strong> під майбутній TikTok Shop, не чекаючи, поки все збереться лише в застосунку.</p>
+            <p style="margin:0 0 10px;font-weight:700;color:var(--tt-black)">Практичний вихід: VEO FORCE — каталог, оплата, бот і зв’язка з ефіром</p>
+            <p style="margin:0;font-size:0.9rem;line-height:1.55"><strong>VEO FORCE</strong> — це <strong>екосистема для українських продавців</strong>: не лише безкоштовне створення каталогу, а й <strong>HCM</strong> (кабінет і керування товарами), <strong>Telegram-бот</strong> для покупок і розсилок, <strong>інтеграції</strong> з платіжними системами та логістикою, <strong>консалтинг</strong> і <strong>ведення</strong> — супровід процесів від завантаження товарів до відправок.</p>
+            <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.55">Щоб закрити розрив «глядачі — замовлення», підходить саме така <strong>система з безкоштовним створенням каталогу в межах VEO FORCE</strong>: підключення <strong>платіжних шлюзів</strong>, швидке й просте <strong>завантаження товарів</strong>, власний <strong>кабінет (CRM)</strong> для заявок і замовлень, оформлення <strong>ТТН Нової пошти</strong> та головне — можливість <strong>сповіщати підписників у Telegram-боті</strong> про товари: глядачі натискають <strong>«Беру»</strong> в боті так само звично, як раніше писали в коментарях під ефіром.</p>
+            <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.55"><strong>Навіщо це зараз.</strong> Поки аудиторія ще <strong>«тримається»</strong> за знайомих блогерів і ведучих, варто навчитися <strong>вносити товари в каталог VEO FORCE</strong> — щоб згодом, коли з’явиться стабільний експорт у TikTok Shop, не починати з нуля. Паралельно можна вести <strong>оглядові ефіри</strong>: під час трансляції глядачі оформлюють покупку через <strong>push-сповіщення</strong> (повідомлення над стрімом), не гублячи зв’язок між ефіром і замовленням.</p>
+            <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.55"><strong>Оплата.</strong> Щоб покупки проходили швидко, варто орієнтуватися на глядачів із підключеними <strong>Google Pay</strong> та <strong>Apple Pay</strong> — це скорочує шлях від «подобається» до «оплачено» (інтеграції підключаються в рамках VEO FORCE).</p>
+            <p style="margin:12px 0 0;font-size:0.9rem;line-height:1.55"><strong>Далі, коли запуститься TikTok Shop.</strong> Продавець у <strong>боті VEO FORCE</strong> зможе робити <strong>розсилку відео-огляду</strong> на будь-який товар з каталогу — щоб одразу підігріти інтерес і отримати <strong>перші продажі з «продаючого» відео</strong> під майбутній TikTok Shop, не чекаючи, поки все збереться лише в застосунку.</p>
+        </div>
+    </div>
         </div>
     </div>
 
-    <!-- ========== БЛОК 2: ДАНІ, КАЛЬКУЛЯТОР, ТЕСТ ========== -->
-    <h2 class="page-block-heading" id="block-tools">Блок 2. Орієнтири EchoTik, калькулятор і тест</h2>
-
+    <!-- ========== БЛОК 2: ДАНІ, КАЛЬКУЛЯТОР ========== -->
+    <div class="form-accordion block-section collapsed" id="wrapBlock2">
+        <button type="button" class="form-accordion-header" id="block-tools" aria-expanded="false" aria-controls="panelBlock2">
+            <span>Блок 2. Орієнтири EchoTik і міні-калькулятор</span>
+            <i class="bi bi-chevron-down form-accordion-chevron"></i>
+        </button>
+        <div class="form-accordion-panel" id="panelBlock2">
     <div class="form-container">
         <h2 class="form-section-title" style="margin-bottom:8px">Орієнтир @be.lush (EchoTik Overview)</h2>
-        <p class="benchmark-meta">Дані з аналітичного сервісу EchoTik (не внутрішня панель TikTok). Оновлено <strong>29.03.2026</strong>. На вкладках 7 / 15 / 30 днів цифри різні; наприклад, <strong>158</strong> відео з товарами — це зріз за <strong>30 днів</strong>. У повних моделях доходу зазвичай беруть саме «відео з товарами» і середні перегляди на відео, а не лише рядок «нові відео».</p>
+        <p class="benchmark-meta">Дані з аналітичного сервісу EchoTik (не внутрішня панель TikTok). Оновлено <strong>29.03.2026</strong>. На вкладках 7 / 15 / 30 днів цифри різні; наприклад, <strong>158</strong> опублікованих комерційних відео-оглядів — це зріз за <strong>30 днів</strong>. У повних моделях доходу зазвичай беруть саме цей показник і середню кількість переглядів на одне відео, а не лише рядок «нові відео».</p>
 
         <div class="bench-tabs" role="tablist" aria-label="Період EchoTik">
             <button type="button" class="bench-tab active" data-bench="7d" role="tab" aria-selected="true">7 днів</button>
@@ -445,7 +475,7 @@
 
         <p class="form-section-title">Швидкий розрахунок (підсумок у блоці нижче)</p>
         <p class="hint" style="margin-top:0">Тут — спрощений міні-калькулятор. Підсумок у чорному блоці нижче стосується лише моделі TikTok Shop (афіліат).</p>
-        <p class="hint"><strong>Приклад.</strong> <a class="tt-link" href="https://www.tiktok.com/@be.lush" target="_blank" rel="noopener noreferrer">@be.lush</a> — орієнтир топ-креатора TikTok Shop. Статистика з EchoTik, <strong>29.03.2026</strong>: для розрахунків у моделі беруть <strong>відео з товарами</strong> і <strong>середні перегляди на відео</strong>, а не рядок «нові відео». За 30 днів: <strong>158</strong> відео з товарами, <strong>22,63 млн</strong> переглядів, <strong>~646,7 тис.</strong> середнє на відео, <strong>GPM ~$96,29</strong> — див. картки вкладок вище.</p>
+        <p class="hint"><strong>Приклад.</strong> <a class="tt-link" href="https://www.tiktok.com/@be.lush" target="_blank" rel="noopener noreferrer">@be.lush</a> — орієнтир топ-креатора TikTok Shop. Статистика з EchoTik, <strong>29.03.2026</strong>: для розрахунків у моделі беруть кількість <strong>опублікованих комерційних відео-оглядів</strong> і <strong>середню кількість переглядів на 1 відео</strong>, а не рядок «нові відео». За 30 днів: <strong>158</strong> таких відео, <strong>22,63 млн</strong> переглядів за період, <strong>~646,7 тис.</strong> середніх переглядів на одне відео; <strong>GPM ~$96,29</strong> — умовно «на 1000 переглядів припало стільки-то доларів продажів»; див. картки вкладок вище.</p>
     </div>
 
     <div class="form-container">
@@ -559,13 +589,13 @@
         </div>
     </div>
 
-    <h2 class="page-block-heading">Міні-калькулятор (орієнтир)</h2>
+    <h2 class="page-block-heading" style="max-width:640px;margin-left:auto;margin-right:auto;padding:0 4px">Міні-калькулятор (орієнтир)</h2>
     <div class="form-container content-prose" style="font-size:0.9rem;margin-bottom:16px">
         <p style="margin-top:0"><strong>Про «воронку» простими словами.</strong> Шлях глядача до покупки умовно ділять на три рівні: спочатку людина лише бачить товар або тренд і рідко купує одразу; далі — уже цікавиться, порівнює, дивиться огляди; наприкінці — готова натиснути «купити» і оформити замовлення. У підручниках ці рівні інколи позначають скороченнями TOFU, MOFU, BOFU — <strong>запам’ятовувати їх не обов’язково</strong>. На цій сторінці в полі конверсії за замовчуванням стоїть <strong>середнє</strong> значення: між «дуже мало покупок з перегляду» (лише розвага) і «дуже багато» (жорсткий прямий продаж) — щоб не занижувати й не завищувати прогноз навмання.</p>
     </div>
     <div class="form-container">
         <p class="form-section-title">Вхідні дані</p>
-        <p class="hint" style="margin-top:0">За замовчуванням підставлені <strong>середні орієнтири</strong> для ніші «одяг»: комісія афіліата <strong>12%</strong>, середній чек <strong>$40</strong> — як у таблицях вище. Це не прогноз саме для України: у реальності аудиторія часто <strong>менш платоспроможна</strong>, не в усіх є зручна оплата картками чи <strong>Google Pay / Apple Pay</strong>, «продаючі» відео не завжди такі ж сильні й переконливі, як у топових ринків, а товари й середній чек зазвичай <strong>нижчі</strong>. Тому сприймайте цифри в блоці результатів як <strong>навчальний приклад</strong>, а не гарантований заробіток.</p>
+        <p class="hint" style="margin-top:0">За замовчуванням підставлені <strong>середні орієнтири</strong> для ніші «одяг»: комісія афіліата <strong>12%</strong>, середній чек <strong>$40</strong> — як у таблицях вище. Це не прогноз саме для України: у реальності аудиторія часто <strong>менш платоспроможна</strong>, не в усіх є зручна оплата картками чи <strong>Google Pay / Apple Pay</strong>, «продаючі» відео не завжди такі ж сильні й переконливі, як у топових ринків, а товари й середній чек зазвичай <strong>нижчі</strong>. Тому сприймайте цифри в блоці результатів як <strong>навчальний приклад</strong>, а не гарантований заробіток. Для реальних продажів у країні зручніше спиратися на власний каталог і бота в екосистемі <strong>VEO FORCE</strong> (див. блок 1).</p>
         <div class="form-group">
             <label for="calcViews">Кількість переглядів (за період)</label>
             <input type="number" class="form-input" id="calcViews" min="0" step="1" value="100000" inputmode="numeric">
@@ -612,8 +642,15 @@
             </div>
         </div>
     </div>
+        </div>
+    </div>
 
-    <h2 class="page-block-heading">Тест (5 питань)</h2>
+    <div class="form-accordion block-section collapsed" id="wrapBlock3">
+        <button type="button" class="form-accordion-header" id="block-test" aria-expanded="false" aria-controls="panelBlock3">
+            <span>Тест (5 питань)</span>
+            <i class="bi bi-chevron-down form-accordion-chevron"></i>
+        </button>
+        <div class="form-accordion-panel" id="panelBlock3">
     <div class="form-container">
         <p class="page-sub" style="margin-bottom:16px">У кожному питанні один вірний варіант. Четвертий варіант узагальнює коректні тези з перших трьох, коли вони разом є правильними.</p>
 
@@ -677,12 +714,14 @@
             </div>
         </form>
     </div>
+        </div>
+    </div>
 
     <dialog class="help-dlg" id="dlgIntro" aria-labelledby="dlgIntroTitle">
         <div class="help-dlg-inner">
             <h3 id="dlgIntroTitle">Про цю сторінку</h3>
             <p>Макет у дусі <strong>mobile_add</strong>: картки, акордеони, діалоги. Акцентний колір — <strong>TikTok Red</strong> (#FE2C55).</p>
-            <p>Блок 1 пояснює контекст TikTok Shop і зміни в Україні; блок 2 містить орієнтири (EchoTik, Kalodata), міні-калькулятор і тест.</p>
+            <p>Блок 1 пояснює контекст TikTok Shop і зміни в Україні; у кінці блоку 1 — <strong>VEO FORCE</strong>: екосистема для українських продавців (безкоштовний каталог, HCM/кабінет, Telegram-бот, інтеграції, консалтинг, ведення). Блок 2 — орієнтири (EchoTik, Kalodata) і міні-калькулятор; тест — окремим згорнутим блоком нижче.</p>
             <button type="button" class="help-dlg-close" id="dlgIntroClose">Зрозуміло</button>
         </div>
     </dialog>
@@ -723,12 +762,13 @@
         var grid = document.getElementById("benchGrid");
         var extra = document.getElementById("benchExtraLine");
         var vpd = (b.videoProducts / b.days).toFixed(2);
+        var periodPhrase = { "7d": "7 днів", "15d": "15 днів", "30d": "30 днів" }[benchKey] || "обраний період";
         grid.innerHTML =
-            '<div class="bench-card"><span class="k">Відео з товарами (база моделі)</span><span class="v">' + b.videoProducts + '</span></div>' +
-            '<div class="bench-card"><span class="k">Перегляди</span><span class="v">' + formatCompact(b.views) + '</span></div>' +
-            '<div class="bench-card"><span class="k">Середнє на відео</span><span class="v">' + formatCompact(b.avgView) + '</span></div>' +
-            '<div class="bench-card"><span class="k">GPM ($ / 1000 перегл.)</span><span class="v">$' + b.gpm.toFixed(2).replace(".", ",") + '</span></div>';
-        extra.textContent = "Відео з товарів на день (орієнтир): " + vpd + "; для порівняння: у режимі «якісний» контент на кшталт орієнтиру @be.lush на повний цикл одного ролика може йти порядку ~90 хвилин роботи (не лише час самого кліпу).";
+            '<div class="bench-card"><span class="k">Опубліковано комерційних відео-оглядів</span><span class="v">' + b.videoProducts + '</span></div>' +
+            '<div class="bench-card"><span class="k">Перегляди за ' + periodPhrase + ' (залежить від обраної кнопки)</span><span class="v">' + formatCompact(b.views) + '</span></div>' +
+            '<div class="bench-card"><span class="k">Середня кількість переглядів на 1 відео</span><span class="v">' + formatCompact(b.avgView) + '</span></div>' +
+            '<div class="bench-card"><span class="k">На 1000 переглядів — продажів на суму (GPM, $)</span><span class="v">$' + b.gpm.toFixed(2).replace(".", ",") + '</span></div>';
+        extra.textContent = "Комерційних відео-оглядів на день (орієнтир): " + vpd + "; для порівняння: у режимі «якісний» контент на кшталт орієнтиру @be.lush на повний цикл одного ролика може йти порядку ~90 хвилин роботи (не лише час самого кліпу).";
     }
 
     document.querySelectorAll(".bench-tab").forEach(function (tab) {
@@ -752,7 +792,7 @@
             btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
         });
     }
-    ["accGmvMoney", "accShopComm", "accUsaSlice", "accKalodata", "accCommRef"].forEach(bindAccordion);
+    ["wrapBlock1", "wrapBlock2", "wrapBlock3", "accGmvMoney", "accShopComm", "accUsaSlice", "accKalodata", "accCommRef"].forEach(bindAccordion);
 
     function formatUsd(n) {
         if (!isFinite(n)) return "—";
