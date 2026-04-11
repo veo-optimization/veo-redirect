@@ -17,10 +17,10 @@
             --page-bg: #f5f5f5;
         }
         * { box-sizing: border-box; }
-        html { overflow-x: hidden; -webkit-text-size-adjust: 100%; }
+        html { overflow-x: hidden; -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
         body {
             margin: 0;
-            padding: 12px 16px calc(24px + env(safe-area-inset-bottom));
+            padding: 12px 16px calc(28px + env(safe-area-inset-bottom));
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background: var(--page-bg);
             color: #333;
@@ -28,24 +28,46 @@
         }
         @media (min-width: 360px) { body { padding: 16px; } }
 
-        .page-header {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 12px;
-            margin-bottom: 16px;
-            padding: 0 2px;
+        .wrap { max-width: 640px; margin: 0 auto; }
+
+        .block-label {
+            display: inline-block;
+            font-size: 0.7rem;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--tt-red);
+            margin-bottom: 8px;
         }
+        .page-header { margin-bottom: 16px; padding: 0 2px; }
         .page-title {
             font-size: clamp(1.2rem, 4.5vw, 1.45rem);
             font-weight: 700;
             margin: 0 0 6px;
             color: var(--tt-black);
         }
-        .page-sub { font-size: 0.88rem; color: var(--tt-muted); margin: 0; line-height: 1.4; }
+        .page-sub { font-size: 0.88rem; color: var(--tt-muted); margin: 0; line-height: 1.45; }
+
+        .jump-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        .jump-row a {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--tt-red);
+            text-decoration: none;
+            padding: 8px 12px;
+            border-radius: 999px;
+            border: 1px solid rgba(254, 44, 85, 0.35);
+            background: #fff;
+        }
+        .jump-row a:hover { background: var(--tt-red-soft); }
 
         .form-container {
-            max-width: 480px;
+            max-width: 640px;
             margin: 0 auto 20px;
             background: var(--surface);
             border-radius: 16px;
@@ -53,6 +75,75 @@
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
         }
         @media (min-width: 360px) { .form-container { padding: 22px 20px; } }
+
+        .content-prose {
+            font-size: 0.92rem;
+            line-height: 1.55;
+            color: #333;
+        }
+        .content-prose h3 {
+            font-size: 1rem;
+            margin: 22px 0 10px;
+            color: var(--tt-black);
+        }
+        .content-prose p { margin: 0 0 12px; }
+        .content-prose ul { margin: 8px 0 14px; padding-left: 1.2rem; }
+        .content-prose li { margin-bottom: 6px; }
+        .content-prose .hr { border: none; border-top: 1px solid #eee; margin: 16px 0; }
+        .flag-row { font-size: 1.1rem; margin-bottom: 6px; }
+
+        .callout-labor {
+            padding: 14px 16px;
+            border-radius: 12px;
+            border-left: 4px solid var(--tt-red);
+            background: #fff8f9;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 14px 0;
+        }
+
+        .benchmark-meta {
+            font-size: 0.8rem;
+            color: var(--tt-muted);
+            line-height: 1.45;
+            margin: 0 0 14px;
+        }
+
+        .bench-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        .bench-tab {
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 2px solid #ddd;
+            background: #fff;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .bench-tab:hover { border-color: var(--tt-red); }
+        .bench-tab.active { border-color: var(--tt-red); background: var(--tt-red); color: #fff; }
+
+        .bench-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        @media (max-width: 420px) { .bench-grid { grid-template-columns: 1fr; } }
+        .bench-card {
+            padding: 12px;
+            border-radius: 10px;
+            background: #fafafa;
+            border: 1px solid #eee;
+            font-size: 0.82rem;
+        }
+        .bench-card .k { display: block; color: #888; font-size: 0.72rem; margin-bottom: 4px; }
+        .bench-card .v { font-weight: 700; color: var(--tt-black); }
 
         .form-section-title {
             font-size: 0.75rem;
@@ -94,11 +185,7 @@
             background-position: right 14px center;
             padding-right: 40px;
         }
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         @media (max-width: 400px) { .form-row { grid-template-columns: 1fr; } }
 
         .hint { font-size: 0.78rem; color: #888; margin-top: 6px; line-height: 1.35; }
@@ -112,11 +199,9 @@
             font-size: 0.95rem;
             line-height: 1.5;
         }
-        .calc-out strong { color: #fff; }
         .calc-out .row { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 8px; font-size: 0.88rem; opacity: 0.92; }
         .calc-out .row:last-child { margin-bottom: 0; font-size: 1.05rem; font-weight: 700; opacity: 1; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.2); }
 
-        /* Accordions (як у mobile_add, кольори TikTok) */
         .form-accordion {
             border: 1px solid #e8e8e8;
             border-radius: 12px;
@@ -134,33 +219,45 @@
             min-height: 48px;
             border: none;
             background: #fafafa;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: #333;
             text-align: left;
             cursor: pointer;
         }
         .form-accordion-header:hover { background: #fff5f7; }
-        .form-accordion-chevron {
-            flex-shrink: 0;
-            transition: transform 0.25s ease;
-            color: #666;
-        }
+        .form-accordion-chevron { flex-shrink: 0; transition: transform 0.25s ease; color: #666; }
         .form-accordion.collapsed .form-accordion-chevron { transform: rotate(-90deg); }
         .form-accordion-panel {
             padding: 0 16px 16px;
             border-top: 1px solid #eee;
-            font-size: 0.88rem;
+            font-size: 0.85rem;
             color: #444;
             line-height: 1.45;
         }
         .form-accordion.collapsed .form-accordion-panel { display: none; }
 
+        .data-table-wrap { overflow-x: auto; margin: 10px 0; -webkit-overflow-scrolling: touch; }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.78rem;
+            min-width: 520px;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #eee;
+            padding: 8px 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .data-table th { background: #fafafa; font-weight: 600; white-space: nowrap; }
+        .tt-link { color: var(--tt-red); font-weight: 600; text-decoration: none; }
+        .tt-link:hover { text-decoration: underline; }
+
         .comm-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; margin-top: 8px; }
         .comm-table th, .comm-table td { border: 1px solid #eee; padding: 8px 10px; text-align: left; }
         .comm-table th { background: #fafafa; font-weight: 600; }
         .comm-list { margin: 8px 0 0; padding-left: 18px; }
-        .comm-list li { margin-bottom: 4px; }
 
         .btn {
             min-height: 48px;
@@ -174,57 +271,28 @@
             width: 100%;
         }
         .btn:active { transform: scale(0.98); }
-        .btn-primary {
-            background: var(--tt-red);
-            color: #fff;
-        }
+        .btn-primary { background: var(--tt-red); color: #fff; }
         .btn-primary:hover { background: var(--tt-red-dark); }
-        .btn-secondary {
-            background: #e8e8e8;
-            color: #333;
-            margin-top: 10px;
-        }
+        .btn-secondary { background: #e8e8e8; color: #333; margin-top: 10px; }
         .btn-secondary:hover { background: #ddd; }
 
-        /* Quiz */
-        .q-block {
-            margin-bottom: 20px;
-            padding-bottom: 18px;
-            border-bottom: 1px solid #eee;
-        }
+        .q-block { margin-bottom: 20px; padding-bottom: 18px; border-bottom: 1px solid #eee; }
         .q-block:last-of-type { border-bottom: none; }
         .q-num { font-size: 0.75rem; font-weight: 700; color: var(--tt-red); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
         .q-text { font-weight: 600; margin: 0 0 12px; font-size: 0.95rem; line-height: 1.35; }
         .q-options { display: flex; flex-direction: column; gap: 8px; }
         .q-opt {
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            padding: 12px 14px;
-            border: 2px solid #e5e5e5;
-            border-radius: 10px;
-            cursor: pointer;
-            transition: border-color 0.2s, background 0.2s;
-            font-size: 0.92rem;
-            line-height: 1.35;
+            display: flex; align-items: flex-start; gap: 10px;
+            padding: 12px 14px; border: 2px solid #e5e5e5; border-radius: 10px;
+            cursor: pointer; transition: border-color 0.2s, background 0.2s;
+            font-size: 0.92rem; line-height: 1.35;
         }
         .q-opt:hover { border-color: var(--tt-red); background: var(--tt-red-soft); }
-        .q-opt:has(input:checked) {
-            border-color: var(--tt-red);
-            background: var(--tt-red-soft);
-        }
-        .q-opt input {
-            margin-top: 3px;
-            accent-color: var(--tt-red);
-            width: 18px;
-            height: 18px;
-            flex-shrink: 0;
-        }
+        .q-opt:has(input:checked) { border-color: var(--tt-red); background: var(--tt-red-soft); }
+        .q-opt input { margin-top: 3px; accent-color: var(--tt-red); width: 18px; height: 18px; flex-shrink: 0; }
 
         .verdict-box {
-            margin-top: 16px;
-            padding: 16px;
-            border-radius: 12px;
+            margin-top: 16px; padding: 16px; border-radius: 12px;
             background: linear-gradient(135deg, #fff5f7 0%, #fff 100%);
             border: 1px solid rgba(254, 44, 85, 0.25);
         }
@@ -232,41 +300,18 @@
         .verdict-score { font-size: 0.95rem; color: var(--tt-muted); margin-bottom: 10px; }
         .verdict-rec { font-size: 0.92rem; line-height: 1.5; margin: 0; color: #333; }
 
-        /* Media / TikTok embed */
-        .embed-wrap {
-            margin: 12px 0;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #000;
-            min-height: 200px;
-        }
-        .embed-wrap iframe { display: block; width: 100%; min-height: 280px; border: 0; }
+        .embed-wrap { margin: 12px 0; border-radius: 12px; overflow: hidden; background: #000; min-height: 120px; }
 
-        .toolbar-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 12px;
-        }
+        .toolbar-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
         .pill-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 12px;
-            border-radius: 999px;
-            border: 1px solid #ddd;
-            background: #fff;
-            font-size: 0.82rem;
-            font-weight: 600;
-            cursor: pointer;
-            color: #333;
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 12px; border-radius: 999px; border: 1px solid #ddd;
+            background: #fff; font-size: 0.82rem; font-weight: 600; cursor: pointer; color: #333;
         }
         .pill-btn:hover { border-color: var(--tt-red); color: var(--tt-red); }
 
         dialog.help-dlg {
-            border: none;
-            border-radius: 16px;
-            padding: 0;
+            border: none; border-radius: 16px; padding: 0;
             max-width: min(440px, 92vw);
             box-shadow: 0 8px 32px rgba(0,0,0,0.2);
         }
@@ -275,55 +320,225 @@
         .help-dlg h3 { margin: 0 0 10px; font-size: 1.05rem; color: var(--tt-black); }
         .help-dlg p { margin: 0 0 10px; font-size: 0.9rem; line-height: 1.45; color: #444; }
         .help-dlg-close {
-            margin-top: 12px;
-            width: 100%;
-            min-height: 44px;
-            border-radius: 10px;
-            border: none;
-            background: var(--tt-red);
-            color: #fff;
-            font-weight: 600;
-            cursor: pointer;
+            margin-top: 12px; width: 100%; min-height: 44px;
+            border-radius: 10px; border: none; background: var(--tt-red);
+            color: #fff; font-weight: 600; cursor: pointer;
         }
 
         .page-block-heading {
             font-size: clamp(1rem, 3.5vw, 1.12rem);
-            font-weight: 700;
-            color: #333;
-            margin: 28px 0 12px;
-            padding: 0 4px;
-            max-width: 480px;
-            margin-left: auto;
-            margin-right: auto;
+            font-weight: 700; color: #333;
+            margin: 8px 0 12px; padding: 0 4px;
+            max-width: 640px; margin-left: auto; margin-right: auto;
         }
     </style>
 </head>
 <body>
 
+<div class="wrap">
     <div class="form-container">
         <header class="page-header">
-            <div>
-                <h1 class="page-title">Готовність TikTok-продавця</h1>
-                <p class="page-sub">Орієнтири TikTok Shop, міні-калькулятор і тест із п’яти питань. Дизайн у стилі TikTok.</p>
-            </div>
+            <span class="block-label">Сторінка-гайд</span>
+            <h1 class="page-title">Готовність TikTok-продавця</h1>
+            <p class="page-sub">Спочатку — контекст ринку й змін у TikTok; далі — орієнтири з гайду (EchoTik, Kalodata), міні-калькулятор і тест із п’яти питань.</p>
         </header>
-
+        <div class="jump-row">
+            <a href="#block-context"><i class="bi bi-book"></i> Блок 1 — Контекст</a>
+            <a href="#block-tools"><i class="bi bi-graph-up-arrow"></i> Блок 2 — Орієнтири та тест</a>
+        </div>
         <div class="toolbar-row">
             <button type="button" class="pill-btn" id="btnHelpIntro" aria-haspopup="dialog"><i class="bi bi-info-circle"></i> Про сторінку</button>
             <button type="button" class="pill-btn" id="btnHelpCalc" aria-haspopup="dialog"><i class="bi bi-calculator"></i> Формула доходу</button>
         </div>
-
-        <p class="form-section-title">Приклад відео (вставка TikTok)</p>
-        <div class="embed-wrap" id="tiktokEmbedHost">
-            <!-- Замініть data-video-id на свій або залиште блок порожнім і додайте скрипт з tiktok.com -->
-            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@tiktok/video/0000000000000000000" data-video-id="0000000000000000000" style="max-width: 100%; min-width: 280px;">
-                <section><a target="_blank" title="@tiktok" href="https://www.tiktok.com/@tiktok?refer=embed">@tiktok</a></section>
-            </blockquote>
-        </div>
-        <p class="hint">Щоб відео підвантажилось, у коді вкажіть реальний посилання / video id з TikTok. Скрипт embed підключається внизу сторінки.</p>
     </div>
 
-    <h2 class="page-block-heading">Калькулятор орієнтовного заробітку (TikTok Shop)</h2>
+    <!-- ========== БЛОК 1: КОНТЕКСТ ========== -->
+    <h2 class="page-block-heading" id="block-context">Блок 1. TikTok Shop, Україна та досвід інших ринків</h2>
+
+    <div class="form-container content-prose">
+        <h3>Що таке TikTok Shop і чому в Україні відчутні зміни</h3>
+        <p><strong>TikTok Shop</strong> — це продажі товарів усередині екосистеми TikTok: картки товарів у відео, оформлення замовлення, афіліатні програми. Для глядача стрічка лишається розвагою; для бізнесу це вже <strong>комерційна система</strong> з правилами, модерацією та комісіями.</p>
+        <p>У <strong>Україні</strong> багато продавців бачать одночасно кілька симптомів: <strong>блокування й видалення акаунтів</strong>, <strong>обмеження ефірів</strong>, <strong>падіння охоплень</strong>, різкий тиск на «сірий» продаж у коментарях і лайвах без офіційного Shop. Це узгоджується з тим, як платформа вже діяла в інших країнах: спочатку — масове залучення аудиторії та звички, потім — <strong>закручування правил</strong>, фільтрація комерційного контенту й перехід до <strong>офіційних інструментів</strong> (відео з товаром, Shop, афіліат).</p>
+        <p>Нижче — узагальнена «карта етапів» на прикладі <strong>Іспанії</strong> (найдетальніше) та короткі орієнтири для <strong>Німеччини</strong> й <strong>Франції</strong> у тій самій логіці масштабування Shop у ЄС.</p>
+    </div>
+
+    <div class="form-container content-prose">
+        <div class="flag-row">🇪🇸 <strong>Іспанія — вхід TikTok Shop (узагальнено)</strong></div>
+        <p><strong>Коли:</strong> основний запуск — кінець 2023 – початок 2024; Іспанія входила до перших хвиль тестів у ЄС після UK.</p>
+        <p><strong>Етапи:</strong></p>
+        <ul>
+            <li><strong>Тест (кінець 2023):</strong> запрошення для обраних продавців, підключення через агентства, обмежений функціонал — базові каталоги, відео з товарами, перші інтеграції checkout; лайви ще не були головним каналом.</li>
+            <li><strong>Розширення (Q1 2024):</strong> більше продавців, Seller Center для ЄС, товарні картки, логістика, аналітика.</li>
+            <li><strong>Акцент на відео (Q1–Q2 2024):</strong> платформа посилила саме <strong>ролики з кнопкою «купити»</strong>, UGC і інфлюенсерів — це близько до того, що готується в інших ринках, включно з Україною.</li>
+            <li><strong>Лайви пізніше:</strong> масштабування — переважно для перевірених продавців з історією та якісним контентом.</li>
+        </ul>
+        <p><strong>До запуску Shop</strong> часто був «хаос»: масові продажі в лайвах, коменти «беру», «ціна», сірі схеми. <strong>Реакція TikTok:</strong> зріз охоплень, блоки ефірів, жорсткіші правила, фільтрація комерції. Це <strong>дуже схоже на те, що відбувається в Україні зараз</strong> — не випадковість, а повторювана модель.</p>
+        <p><strong>Вимоги до продавців (Іспанія, орієнтир):</strong> для бізнесу — реєстрація в ЄС, VAT, банківський рахунок, верифікація; для товарів — відповідність стандартам ЄС (зокрема CE, де потрібно), чесний опис, повернення, гарантії; для контенту — без обману, фейкових характеристик, токсичності та агресивного тиску.</p>
+        <p><strong>Після запуску</strong> ринок зазвичай ділиться: невелика частка адаптується й стабільно заробляє в Shop; значна — випадає через модерацію й невідповідність правилам. <strong>Стратегія платформи:</strong> хаос → обмеження → навчання відео → Shop → масштаб. <strong>Інсайт:</strong> TikTok не завжди одразу дає «продавати всім» — спочатку вимагає навчитися знімати й будувати довіру.</p>
+        <hr class="hr">
+        <div class="flag-row">🇩🇪 <strong>Німеччина (орієнтир)</strong></div>
+        <p>На великому європейському ринку з жорсткими вимогами до <strong>податків (VAT)</strong>, споживчих прав і маркування товарів сценарій зазвичай той самий: спочатку обмежений доступ або пілот, підключення бізнес-акаунтів і підтвердження компанії, акцент на <strong>відео з товаром</strong> та відповідність реклами правді про товар. Падіння охоплень «сірих» лайвів і посилення модерації — типові сигнали на фазі «очищення» перед і після розширення Shop.</p>
+        <hr class="hr">
+        <div class="flag-row">🇫🇷 <strong>Франція (орієнтир)</strong></div>
+        <p>Французький ринок також підпадає під єдині європейські рамки (споживчі права, мова та маркування). У практиці креаторів і продавців повторюється та сама послідовність: <strong>спочатку трафік і звичка</strong>, потім <strong>обмеження неофіційних продажів</strong>, далі — <strong>офіційний каталог, афіліат, доставка</strong>. Для України важливий не «копіювати країну», а розуміти: <strong>правила уніфікуються</strong>, а не послаблюються.</p>
+    </div>
+
+    <div class="form-container content-prose">
+        <h3>Що насправді відбувається з TikTok</h3>
+        <p>TikTok не став «іншим» випадково — він наближається до тієї комерційної моделі, яку закладав, коли нарощував аудиторію.</p>
+        <p><strong>Як усе починалось.</strong> Спочатку це був додаток про танці, музику й фільтри. Під час Covid зріс попит на спілкування та короткі відео; з’явилися гумор і репости в інші мережі — і доросла аудиторія зайшла масово. Далі випадкові вірусні ролики показали бізнесу <strong>безкоштовний трафік</strong> — і почався масовий захід: коментарі «беру», лайви, «пишіть у директ», хаос.</p>
+        <p><strong>Типова логіка платформи:</strong> захопити ринок → набрати аудиторію → сформувати звичку → <strong>потім монетизувати</strong>. Роки «вільного режиму» часто є частиною стратегії, а не постійним станом.</p>
+        <p><strong>Чому зараз «закручують гайки».</strong> Сервери, трафік і зокрема AI коштують дорого — платформі потрібні передбачувані правила, фільтрація та комерційні інструменти (Shop, реклама, афіліат). Для бізнесу TikTok — це <strong>комерційна система</strong>: або ви виглядаєте партнером з якісним контентом, або ризикуєте втратити охоплення й акаунт через спам, порушення правил і токсичність.</p>
+        <p><strong>Роль AI.</strong> Алгоритм відстежує перегляди, зупинки, лайки, коментарі — формується профіль інтересів. Для продавця це означає: оцінюють не лише товар, а й <strong>як ви подаєте</strong> і як реагує аудиторія.</p>
+        <p><strong>Що далі.</strong> Розвиток TikTok Shop, афіліатних програм і вищої конкуренції серед тих, хто вже працює в рамках правил. <strong>Висновок:</strong> TikTok не проти бізнесу — він проти хаосу. Виграють ті, хто адаптується; програють ті, хто ігнорує зміни.</p>
+        <p><strong>Що робити зараз.</strong> Зрозуміти, на якій фазі ви зараз перебуваєте; опиратися на дані та правила; пройти тест у блоці нижче й чесно оцінити, чи ваша модель відповідає тому, як платформа монетизує увагу зараз.</p>
+    </div>
+
+    <!-- ========== БЛОК 2: ДАНІ, КАЛЬКУЛЯТОР, ТЕСТ ========== -->
+    <h2 class="page-block-heading" id="block-tools">Блок 2. Орієнтири EchoTik, калькулятор і тест</h2>
+
+    <div class="form-container">
+        <h2 class="form-section-title" style="margin-bottom:8px">Орієнтир @be.lush (EchoTik Overview)</h2>
+        <p class="benchmark-meta">Дані з аналітичного сервісу EchoTik (не внутрішня панель TikTok). Оновлено <strong>29.03.2026</strong>. На вкладках 7 / 15 / 30 днів цифри різні; наприклад, <strong>158</strong> відео з товарами — це зріз за <strong>30 днів</strong>. У повному калькуляторі на гайді tts-info база — «відео з товарами» і середні перегляди на відео.</p>
+
+        <div class="bench-tabs" role="tablist" aria-label="Період EchoTik">
+            <button type="button" class="bench-tab active" data-bench="7d" role="tab" aria-selected="true">7 днів</button>
+            <button type="button" class="bench-tab" data-bench="15d" role="tab" aria-selected="false">15 днів</button>
+            <button type="button" class="bench-tab" data-bench="30d" role="tab" aria-selected="false">30 днів</button>
+        </div>
+        <div id="benchGrid" class="bench-grid"></div>
+        <p class="hint" id="benchExtraLine"></p>
+
+        <div class="callout-labor" id="laborCallout">
+            <strong>Системний TikTok Shop</strong> — це праця: орієнтир <strong>8 год робочого дня</strong> (з перервами), у який входять аналітика топ-товарів, пошук оферів, сценарій і формат подачі, аналіз середовища навколо товару, відгуки й коментарі — не лише зйомка й монтаж. Це інша ефективність, ніж «квартирний» швидкий огляд.
+        </div>
+
+        <p class="form-section-title">Приклад ролика з товаром</p>
+        <p class="hint" style="margin-top:0">Коротке демо товару — <a class="tt-link" href="https://vt.tiktok.com/ZSHdS4gWW/" target="_blank" rel="noopener noreferrer">відео @be.lush</a> (як у файлі tts-info).</p>
+        <div class="embed-wrap">
+            <blockquote class="tiktok-embed" cite="https://vt.tiktok.com/ZSHdS4gWW/" data-video-id="" style="max-width:100%;min-width:280px;">
+                <section><a target="_blank" title="@be.lush" href="https://www.tiktok.com/@be.lush?refer=embed">@be.lush</a></section>
+            </blockquote>
+        </div>
+
+        <p class="form-section-title">Швидкий розрахунок (підсумок у блоці нижче)</p>
+        <p class="hint" style="margin-top:0">Оберіть нішу, якість контенту й воронку в <strong>повній версії</strong> гайду <strong>tts-info</strong>; тут — спрощений міні-калькулятор. Підсумок у чорному блоці нижче стосується лише моделі TikTok Shop (афіліат).</p>
+        <p class="hint"><strong>Приклад.</strong> <a class="tt-link" href="https://www.tiktok.com/@be.lush" target="_blank" rel="noopener noreferrer">@be.lush</a> — орієнтир топ-креатора TikTok Shop. Статистика з EchoTik, <strong>29.03.2026</strong>: для розрахунків у моделі беруть <strong>відео з товарами</strong> і <strong>середні перегляди на відео</strong>, а не рядок «нові відео». За 30 днів: <strong>158</strong> відео з товарами, <strong>22,63 млн</strong> переглядів, <strong>~646,7 тис.</strong> середнє на відео, <strong>GPM ~$96,29</strong> — див. картки вкладок вище.</p>
+    </div>
+
+    <div class="form-container">
+        <div class="form-accordion collapsed" id="accGmvMoney">
+            <button type="button" class="form-accordion-header" aria-expanded="false"><span>GMV і «гроші в кишені»</span><i class="bi bi-chevron-down form-accordion-chevron"></i></button>
+            <div class="form-accordion-panel content-prose" style="font-size:0.88rem">
+                <p><strong>GMV (Gross Merchandise Value)</strong> — загальна сума замовлень товарів за вашим посиланням у TikTok Shop за період. Це <strong>не</strong> готівка креатора: з неї ще віднімають комісії платформи, повернення тощо (у продавця своя економіка).</p>
+                <p>У звітах і рейтингах часто показують саме GMV — <strong>не плутайте</strong> з особистим заробітком афіліата.</p>
+                <p><strong>Хто такий креатор і афіліат?</strong> Креатор — автор відео. Афіліат у Shop — партнер продавця: ви ведете трафік на товар і отримуєте відсоток від оплаченого замовлення (типово орієнтир <strong>5–20%</strong>, ставить продавець).</p>
+                <p><strong>Що зазвичай не дорівнює «чистим грошам» з GMV</strong></p>
+                <div class="data-table-wrap">
+                    <table class="data-table" style="min-width:0">
+                        <thead><tr><th>Стаття</th><th>Коротко</th></tr></thead>
+                        <tbody>
+                            <tr><td>Комісія платформи</td><td>Знімається з обороту продавця</td></tr>
+                            <tr><td>Ваша комісія (афіліат)</td><td>Відсоток від чека — окремий рядок доходу креатора</td></tr>
+                            <tr><td>Повернення товару</td><td>Зменшують реальний результат</td></tr>
+                            <tr><td>Податки, продакшн</td><td>Не входять у спрощені цифри калькулятора</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-accordion collapsed" id="accShopComm">
+            <button type="button" class="form-accordion-header" aria-expanded="false"><span>TikTok Shop: ніша, приклади комісій</span><i class="bi bi-chevron-down form-accordion-chevron"></i></button>
+            <div class="form-accordion-panel">
+                <p class="hint" style="margin-top:0"><strong>1. Категорія / ніша</strong> — одяг, краса, техніка, дім, авто. Приклади товарів і орієнтир комісії афіліата з замовлення (ілюстративно):</p>
+                <ul class="comm-list">
+                    <li>Футболка оверсайз — комісія афіліата <strong>10–14%</strong></li>
+                    <li>Джинси slim — <strong>9–13%</strong></li>
+                    <li>Кросівки casual — <strong>8–12%</strong></li>
+                    <li>Сумка shopper — <strong>11–15%</strong></li>
+                    <li>Шарф / хустка — <strong>10–14%</strong></li>
+                    <li>Сонцезахисні окуляри — <strong>9–13%</strong></li>
+                    <li>Ремінь шкіряний — <strong>10–14%</strong></li>
+                </ul>
+                <p class="hint">Середня ставка по ніші «одяг» у моделі ~<strong>12%</strong> від чека (у картці товару в продавця).</p>
+                <p class="hint"><strong>2. Тип і якість контенту</strong> — у повному калькуляторі tts-info є два режими: спам і якісний (орієнтир EchoTik для вкладки 7 / 15 / 30 днів). Деталі й формули — у гайді в підказці «Що це таке?».</p>
+            </div>
+        </div>
+
+        <div class="form-accordion collapsed" id="accUsaSlice">
+            <button type="button" class="form-accordion-header" aria-expanded="false"><span>Три зрізи ринку США (березень 2026)</span><i class="bi bi-chevron-down form-accordion-chevron"></i></button>
+            <div class="form-accordion-panel">
+                <p class="hint" style="margin-top:0">Пов’язані зрізи з різних панелей: FastMoss — щоденний топ товарів; EchoTik — топ магазинів за той самий день; EchoTik — топ креаторів за 28 днів. Регіон: США. Дата для товарів і магазинів: <strong>28.03.2026</strong> (daily). Це зовнішні аналітичні сервіси, не внутрішня звітність TikTok.</p>
+                <p class="hint"><strong>1. Топ товарів (FastMoss)</strong> — рейтинг за проданими одиницями за день. Комісія афіліата в топі — 13–30%.</p>
+                <div class="data-table-wrap">
+                    <table class="data-table">
+                        <thead><tr><th>#</th><th>Товар</th><th>Магазин</th><th>Коміс.</th><th>Од./день</th><th>GMV (день)</th></tr></thead>
+                        <tbody>
+                            <tr><td>1</td><td>Loaded Tea (напої порошкові)</td><td>Caffeine, Candles &amp; Chaos</td><td>14%</td><td>7.9k</td><td>$29.7k</td></tr>
+                            <tr><td>2</td><td>medicube PDRN Pink</td><td>medicube US Store</td><td>15%</td><td>7.4k</td><td>$155.8k</td></tr>
+                            <tr><td>3</td><td>Toplux Magnesium</td><td>Toplux Nutrition</td><td>30%</td><td>5.8k</td><td>$143.6k</td></tr>
+                            <tr><td>4</td><td>Hismile iD Whitening</td><td>Hismile US</td><td>20%</td><td>5.5k</td><td>$111.5k</td></tr>
+                            <tr><td>5</td><td>OIAK Jelly Bras</td><td>OIAK Apparel</td><td>13%</td><td>4.0k</td><td>$80.3k</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="hint"><strong>2. Топ магазинів (EchoTik)</strong> — одиниці за день; GMV за день; активні SKU; креатори з продажами.</p>
+                <div class="data-table-wrap">
+                    <table class="data-table">
+                        <thead><tr><th>#</th><th>Магазин</th><th>Ніша</th><th>Од.</th><th>GMV</th><th>SKU</th><th>Креаторів</th></tr></thead>
+                        <tbody>
+                            <tr><td>1</td><td>medicube US Store</td><td>Beauty</td><td>17.6k</td><td>$933.0k</td><td>124</td><td>96.5k</td></tr>
+                            <tr><td>2</td><td>Tarte Cosmetics</td><td>Beauty</td><td>17.5k</td><td>$601.3k</td><td>104</td><td>84.0k</td></tr>
+                            <tr><td>3</td><td>Dr. Melaxin / BRAND501</td><td>Beauty</td><td>17.4k</td><td>$633.7k</td><td>108</td><td>42.3k</td></tr>
+                            <tr><td>4</td><td>Caffeine, Candles &amp; Chaos</td><td>Food &amp; beverages</td><td>13.9k</td><td>$74.7k</td><td>14</td><td>5.8k</td></tr>
+                            <tr><td>5</td><td>Halara US</td><td>Sports &amp; outdoor</td><td>11.0k</td><td>$418.1k</td><td>193</td><td>51.8k</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="hint"><strong>3. Топ креаторів за 28 днів (EchoTik)</strong> — продані одиниці та середні перегляди на відео; різні стратегії охоплення.</p>
+                <div class="data-table-wrap">
+                    <table class="data-table">
+                        <thead><tr><th>#</th><th>Акаунт</th><th>Фокус</th><th>Од. 28д</th><th>Сер. перегл.</th><th>Підписники</th><th>ER</th></tr></thead>
+                        <tbody>
+                            <tr><td>1</td><td><strong>BASED</strong></td><td>Волосся, догляд</td><td>118.8k</td><td>179.9k</td><td>2.8M</td><td>1.97%</td></tr>
+                            <tr><td>2</td><td><a class="tt-link" href="https://www.tiktok.com/@highlanddaily1" target="_blank" rel="noopener noreferrer">highlanddaily1</a></td><td>Sets, піжами</td><td>92.0k</td><td>5.6k</td><td>44.3k</td><td>0.4%</td></tr>
+                            <tr><td>3</td><td><a class="tt-link" href="https://www.tiktok.com/@highland.fashion30" target="_blank" rel="noopener noreferrer">highland.fashion30</a></td><td>Костюми, сукні</td><td>78.8k</td><td>5.0k</td><td>89.0k</td><td>0.72%</td></tr>
+                            <tr><td>4</td><td><a class="tt-link" href="https://www.tiktok.com/@highland.fashion7" target="_blank" rel="noopener noreferrer">highland.fashion7</a></td><td>Sets, куртки</td><td>70.6k</td><td>5.6k</td><td>254.8k</td><td>0.65%</td></tr>
+                            <tr><td>5</td><td><a class="tt-link" href="https://www.tiktok.com/@yazzy.fashion7" target="_blank" rel="noopener noreferrer">yazzy.fashion7</a></td><td>Шарфи, комплекти</td><td>49.2k</td><td>1.0k</td><td>51.3k</td><td>0.41%</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="hint"><strong>Як це зв’язати:</strong> medicube — і в топі товарів, і 1-й серед магазинів; Caffeine, Candles &amp; Chaos — вузький асортимент при високих одиницях. Комісії у топі товарів 13–30%. Креатор <strong>BASED</strong> поєднує великі продажі з високими середніми переглядами; Highland / yazzy — великі обсяги при ~1–6k середніх переглядів на відео (конвеєр без вірусу на кожен ролик) — порівняйте з блоком про системну роботу вище.</p>
+            </div>
+        </div>
+
+        <div class="form-accordion collapsed" id="accKalodata">
+            <button type="button" class="form-accordion-header" aria-expanded="false"><span>Топ-10 за GMV (Kalodata, грудень 2025)</span><i class="bi bi-chevron-down form-accordion-chevron"></i></button>
+            <div class="form-accordion-panel">
+                <p class="hint" style="margin-top:0">GMV — валовий обіг за посиланням креатора; це <strong>не</strong> чистий дохід: комісія %, податки та інші витрати рахуються окремо. Кількість підписників не завжди корелює з GMV.</p>
+                <div class="data-table-wrap">
+                    <table class="data-table" style="min-width:360px">
+                        <thead><tr><th>#</th><th>Акаунт</th><th>Підписники</th><th>GMV</th></tr></thead>
+                        <tbody>
+                            <tr><td>1</td><td><a class="tt-link" href="https://www.tiktok.com/@dealswithty" target="_blank" rel="noopener noreferrer">@dealswithty</a></td><td>136,5k</td><td><strong>$2 720 000</strong></td></tr>
+                            <tr><td>2</td><td><a class="tt-link" href="https://www.tiktok.com/@hannahbentley" target="_blank" rel="noopener noreferrer">@hannahbentley</a></td><td>35,9k</td><td><strong>$2 370 000</strong></td></tr>
+                            <tr><td>3</td><td><a class="tt-link" href="https://www.tiktok.com/@myfamilypov" target="_blank" rel="noopener noreferrer">@myfamilypov</a></td><td>206,6k</td><td><strong>$2 000 000</strong></td></tr>
+                            <tr><td>4</td><td><a class="tt-link" href="https://www.tiktok.com/@trending_ttok" target="_blank" rel="noopener noreferrer">@trending_ttok</a></td><td>164,1k</td><td><strong>$1 920 000</strong></td></tr>
+                            <tr><td>5</td><td><a class="tt-link" href="https://www.tiktok.com/@highland.fashion7" target="_blank" rel="noopener noreferrer">@highland.fashion7</a></td><td>240,7k</td><td><strong>$1 830 000</strong></td></tr>
+                            <tr><td>6</td><td><a class="tt-link" href="https://www.tiktok.com/@be.lush" target="_blank" rel="noopener noreferrer">@be.lush</a></td><td>231,6k</td><td><strong>$1 750 000</strong></td></tr>
+                            <tr><td>7</td><td><a class="tt-link" href="https://www.tiktok.com/@mikaylanogueira" target="_blank" rel="noopener noreferrer">@mikaylanogueira</a></td><td>17,4M</td><td><strong>$1 730 000</strong></td></tr>
+                            <tr><td>8</td><td><a class="tt-link" href="https://www.tiktok.com/@anniedanner" target="_blank" rel="noopener noreferrer">@anniedanner</a></td><td>32,8k</td><td><strong>$1 370 000</strong></td></tr>
+                            <tr><td>9</td><td><a class="tt-link" href="https://www.tiktok.com/@sarahgibbons_" target="_blank" rel="noopener noreferrer">@sarahgibbons_</a></td><td>249,4k</td><td><strong>$1 290 000</strong></td></tr>
+                            <tr><td>10</td><td><a class="tt-link" href="https://www.tiktok.com/@sadiejonesuploading" target="_blank" rel="noopener noreferrer">@sadiejonesuploading</a></td><td>37,1k</td><td><strong>$1 160 000</strong></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2 class="page-block-heading">Міні-калькулятор (орієнтир)</h2>
     <div class="form-container">
         <p class="form-section-title">Вхідні дані</p>
         <div class="form-group">
@@ -333,7 +548,7 @@
         <div class="form-group">
             <label for="calcConv">Орієнтовна конверсія: перегляд → замовлення (%)</label>
             <input type="number" class="form-input" id="calcConv" min="0" max="100" step="0.01" value="0.85" inputmode="decimal">
-            <p class="hint">У моделі з гайду tts-info орієнтири для MOFU часто ~0,5–1,5%; для «продажного» контенту вище. Підлаштуйте під свою статистику.</p>
+            <p class="hint">У моделі з гайду tts-info орієнтири для MOFU часто ~0,5–1,5%; для «продажного» контенту вище.</p>
         </div>
         <div class="form-row">
             <div class="form-group">
@@ -341,11 +556,11 @@
                 <input type="number" class="form-input" id="calcComm" min="0" max="100" step="0.1" value="12" inputmode="decimal">
             </div>
             <div class="form-group">
-                <label for="calcAov">Середній чек (USD, орієнтир)</label>
+                <label for="calcAov">Середній чек (USD)</label>
                 <input type="number" class="form-input" id="calcAov" min="0" step="0.01" value="40" inputmode="decimal">
             </div>
         </div>
-        <p class="hint">Формула: замовлення ≈ перегляди × (конверсія / 100); GMV ≈ замовлення × середній чек; дохід афіліата ≈ GMV × (комісія / 100). Без податків і повернень — як у tts-info.</p>
+        <p class="hint">Формула: замовлення ≈ перегляди × (конверсія / 100); GMV ≈ замовлення × середній чек; дохід афіліата ≈ GMV × (комісія / 100). Податки та повернення не віднімали.</p>
 
         <div class="calc-out" id="calcOut" aria-live="polite">
             <div class="row"><span>Орієнтовні замовлення</span><span id="outOrders">—</span></div>
@@ -355,15 +570,12 @@
 
         <div class="form-accordion collapsed" id="accCommRef">
             <button type="button" class="form-accordion-header" aria-expanded="false" id="accCommRefBtn">
-                <span>Орієнтовні комісії та приклади товарів (з tts-info)</span>
+                <span>Орієнтовні комісії по нішах (tts-info)</span>
                 <i class="bi bi-chevron-down form-accordion-chevron"></i>
             </button>
             <div class="form-accordion-panel">
-                <p class="hint" style="margin-top:0">Дані ілюстративні; реальна ставка в картці товару встановлюється продавцем. Середні ставки по нішах у моделі гайду:</p>
                 <table class="comm-table">
-                    <thead>
-                        <tr><th>Ніша</th><th>~Сер. комісія %</th><th>~Сер. чек USD</th></tr>
-                    </thead>
+                    <thead><tr><th>Ніша</th><th>~Комісія %</th><th>~Чек USD</th></tr></thead>
                     <tbody>
                         <tr><td>Одяг та аксесуари</td><td>12%</td><td>40</td></tr>
                         <tr><td>Краса та догляд</td><td>14%</td><td>34</td></tr>
@@ -372,23 +584,14 @@
                         <tr><td>Автотовари</td><td>11%</td><td>50</td></tr>
                     </tbody>
                 </table>
-                <p style="margin:12px 0 4px;font-weight:600;font-size:0.85rem">Приклади діапазонів комісії афіліата з замовлення (той самий гайд):</p>
-                <ul class="comm-list">
-                    <li><strong>Fashion:</strong> футболка оверсайз 10–14%, джинси slim 9–13%, кросівки 8–12%…</li>
-                    <li><strong>Beauty:</strong> сироватка 12–16%, крем SPF 11–15%, бальзам для губ 10–14%…</li>
-                    <li><strong>Electronics:</strong> TWS 6–10%, павербанк 7–11%, кабель 5–9%…</li>
-                    <li><strong>Home:</strong> дозатор для мила 9–13%, каструля 8–12%…</li>
-                    <li><strong>Auto:</strong> тримач телефону 8–12%, поліроль 9–13%…</li>
-                </ul>
             </div>
         </div>
-
-        <button type="button" class="btn btn-secondary" id="btnPresetFashion">Підставити нішу «одяг» (12% комісії, $40 чек)</button>
+        <button type="button" class="btn btn-secondary" id="btnPresetFashion">Підставити нішу «одяг» (12%, $40)</button>
     </div>
 
     <h2 class="page-block-heading">Тест (5 питань)</h2>
     <div class="form-container">
-        <p class="page-sub" style="margin-bottom:16px">У кожному питанні один вірний варіант. Четвертий варіант — «усі перераховані вище», коли пункти 1–3 є коректними разом.</p>
+        <p class="page-sub" style="margin-bottom:16px">У кожному питанні один вірний варіант. Четвертий варіант узагальнює коректні тези з перших трьох, коли вони разом є правильними.</p>
 
         <form id="quizForm" action="#" onsubmit="return false;">
             <div class="q-block" data-q="1">
@@ -401,7 +604,6 @@
                     <label class="q-opt"><input type="radio" name="q1" value="3"> GMV — обіг замовлень за посиланням; дохід креатора зазвичай — відсоток комісії від суми чека, який задає продавець; великий GMV не завжди дорівнює найбільшому особистому заробітку без конверсії й середнього чека.</label>
                 </div>
             </div>
-
             <div class="q-block" data-q="2">
                 <div class="q-num">Питання 2</div>
                 <p class="q-text">Як реалістичніше оцінювати продажі з контенту в TikTok Shop?</p>
@@ -412,7 +614,6 @@
                     <label class="q-opt"><input type="radio" name="q2" value="3"> Варто спиратися на велику вибірку роликів (у гайді — орієнтир від ~100+), усереднювати; перегляди нерівномірні; метрики в дашборді можуть рахуватись інакше, ніж спрощена модель.</label>
                 </div>
             </div>
-
             <div class="q-block" data-q="3">
                 <div class="q-num">Питання 3</div>
                 <p class="q-text">Що таке GPM у контексті аналітики на кшталт EchoTik (як у гайді)?</p>
@@ -423,7 +624,6 @@
                     <label class="q-opt"><input type="radio" name="q3" value="3"> Орієнтир валового прибутку з продажів на 1000 переглядів (у доларах); зв’язок з GMV і комісією — у повній версії гайду.</label>
                 </div>
             </div>
-
             <div class="q-block" data-q="4">
                 <div class="q-num">Питання 4</div>
                 <p class="q-text">Як у спрощеній моделі воронки змінюється конверсія «перегляд → замовлення»?</p>
@@ -434,7 +634,6 @@
                     <label class="q-opt"><input type="radio" name="q4" value="3"> BOFU (демо, ціна, чіткий заклик) зазвичай підсилює частку переглядів, що стають замовленнями; TOFU слабше для прямих продажів; у гайді є множники TOFU/MOFU/BOFU.</label>
                 </div>
             </div>
-
             <div class="q-block" data-q="5">
                 <div class="q-num">Питання 5</div>
                 <p class="q-text">Що показує рядок «ефективність ($/год)» у розширеному калькуляторі з tts-info?</p>
@@ -445,10 +644,8 @@
                     <label class="q-opt"><input type="radio" name="q5" value="3"> Спрощене відношення доходу від комісії до сумарного часу виробництва в сценарії — щоб порівнювати сценарії між собою, а не як універсальну норму.</label>
                 </div>
             </div>
-
             <button type="button" class="btn btn-primary" id="btnGrade">Підрахувати результат</button>
             <button type="button" class="btn btn-secondary" id="btnResetQuiz">Скинути відповіді</button>
-
             <div class="verdict-box" id="verdictBox" hidden>
                 <div class="verdict-title" id="verdictTitle">Вирок</div>
                 <div class="verdict-score" id="verdictScore"></div>
@@ -460,8 +657,8 @@
     <dialog class="help-dlg" id="dlgIntro" aria-labelledby="dlgIntroTitle">
         <div class="help-dlg-inner">
             <h3 id="dlgIntroTitle">Про цю сторінку</h3>
-            <p>Макет у дусі форми <strong>mobile_add</strong>: картки, акордеони, діалоги. Акцентний колір — <strong>TikTok Red</strong> (#FE2C55) замість фіолетового.</p>
-            <p>Калькулятор і таблиці комісій узгоджені з логікою та даними з <strong>tts-info</strong> (орієнтири, не оферта).</p>
+            <p>Макет у дусі <strong>mobile_add</strong>: картки, акордеони, діалоги. Акцентний колір — <strong>TikTok Red</strong> (#FE2C55).</p>
+            <p>Блок 1 пояснює контекст TikTok Shop і зміни в Україні; блок 2 містить орієнтири з <strong>tts-info</strong> (EchoTik, Kalodata), міні-калькулятор і тест.</p>
             <button type="button" class="help-dlg-close" id="dlgIntroClose">Зрозуміло</button>
         </div>
     </dialog>
@@ -469,19 +666,69 @@
     <dialog class="help-dlg" id="dlgCalc" aria-labelledby="dlgCalcTitle">
         <div class="help-dlg-inner">
             <h3 id="dlgCalcTitle">Формула</h3>
-            <p><strong>Замовлення</strong> ≈ N<sub>переглядів</sub> × (C% / 100), де C — частка переглядів, що перетворились на замовлення.</p>
+            <p><strong>Замовлення</strong> ≈ N<sub>переглядів</sub> × (C% / 100).</p>
             <p><strong>GMV</strong> ≈ замовлення × середній чек.</p>
             <p><strong>Дохід афіліата</strong> ≈ GMV × (комісія% / 100).</p>
-            <p class="hint">Податки, повернення та точні правила платформи не віднімали — як у примітці калькулятора на гайді.</p>
+            <p class="hint">Податки та повернення не віднімали — як у примітці на гайді tts-info.</p>
             <button type="button" class="help-dlg-close" id="dlgCalcClose">Закрити</button>
         </div>
     </dialog>
+</div>
 
-    <script async src="https://www.tiktok.com/embed.js"></script>
-    <script>
+<script async src="https://www.tiktok.com/embed.js"></script>
+<script>
 (function () {
-    /** Ключі правильних відповідей: у всіх питаннях вірний варіант — четвертий (value "3") */
     var CORRECT = { q1: "3", q2: "3", q3: "3", q4: "3", q5: "3" };
+
+    var ECHOTIK = {
+        "7d": { videoProducts: 35, views: 7460000, avgView: 372850, gpm: 86.97, days: 7 },
+        "15d": { videoProducts: 79, views: 18980000, avgView: 948880, gpm: 103.85, days: 15 },
+        "30d": { videoProducts: 158, views: 22630000, avgView: 646700, gpm: 96.29, days: 30 }
+    };
+
+    var benchKey = "7d";
+
+    function formatCompact(n) {
+        if (n >= 1e6) return (n / 1e6).toFixed(2).replace(".", ",") + "M";
+        if (n >= 1e3) return (n / 1e3).toFixed(2).replace(".", ",") + "K";
+        return String(Math.round(n));
+    }
+
+    function renderBench() {
+        var b = ECHOTIK[benchKey];
+        var grid = document.getElementById("benchGrid");
+        var extra = document.getElementById("benchExtraLine");
+        var vpd = (b.videoProducts / b.days).toFixed(2);
+        grid.innerHTML =
+            '<div class="bench-card"><span class="k">Відео з товарами (база моделі)</span><span class="v">' + b.videoProducts + '</span></div>' +
+            '<div class="bench-card"><span class="k">Перегляди</span><span class="v">' + formatCompact(b.views) + '</span></div>' +
+            '<div class="bench-card"><span class="k">Середнє на відео</span><span class="v">' + formatCompact(b.avgView) + '</span></div>' +
+            '<div class="bench-card"><span class="k">GPM ($ / 1000 перегл.)</span><span class="v">$' + b.gpm.toFixed(2).replace(".", ",") + '</span></div>';
+        extra.textContent = "Відео з товарів на день (орієнтир): " + vpd + "; у режимі «якісний» на цій сторінці для прикладу: ~90 хв на повний цикл одного відео (деталі формули — у гайді tts-info).";
+    }
+
+    document.querySelectorAll(".bench-tab").forEach(function (tab) {
+        tab.addEventListener("click", function () {
+            benchKey = tab.getAttribute("data-bench") || "7d";
+            document.querySelectorAll(".bench-tab").forEach(function (t) {
+                t.classList.toggle("active", t.getAttribute("data-bench") === benchKey);
+                t.setAttribute("aria-selected", t.getAttribute("data-bench") === benchKey ? "true" : "false");
+            });
+            renderBench();
+        });
+    });
+    renderBench();
+
+    function bindAccordion(id) {
+        var acc = document.getElementById(id);
+        if (!acc) return;
+        var btn = acc.querySelector(".form-accordion-header");
+        btn.addEventListener("click", function () {
+            var collapsed = acc.classList.toggle("collapsed");
+            btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
+        });
+    }
+    ["accGmvMoney", "accShopComm", "accUsaSlice", "accKalodata", "accCommRef"].forEach(bindAccordion);
 
     function formatUsd(n) {
         if (!isFinite(n)) return "—";
@@ -504,7 +751,6 @@
         document.getElementById("outGmv").textContent = formatUsd(gmv);
         document.getElementById("outAff").textContent = formatUsd(aff);
     }
-
     ["calcViews", "calcConv", "calcComm", "calcAov"].forEach(function (id) {
         document.getElementById(id).addEventListener("input", runCalc);
     });
@@ -516,17 +762,6 @@
         runCalc();
     });
 
-    /* Акордеон комісій */
-    (function () {
-        var acc = document.getElementById("accCommRef");
-        var btn = document.getElementById("accCommRefBtn");
-        btn.addEventListener("click", function () {
-            var collapsed = acc.classList.toggle("collapsed");
-            btn.setAttribute("aria-expanded", collapsed ? "false" : "true");
-        });
-    })();
-
-    /* Діалоги */
     var dlgIntro = document.getElementById("dlgIntro");
     var dlgCalc = document.getElementById("dlgCalc");
     document.getElementById("btnHelpIntro").addEventListener("click", function () { dlgIntro.showModal(); });
@@ -547,34 +782,31 @@
         var titleEl = document.getElementById("verdictTitle");
         var scoreEl = document.getElementById("verdictScore");
         var recEl = document.getElementById("verdictRec");
-
         var title, rec;
         if (score === 5) {
             title = "Відмінно";
-            rec = "[Заповніть пізніше] Рекомендація для 5/5: закріпити сильні сторони й перейти до практики в кабінеті.";
+            rec = "[Заповніть пізніше] Рекомендація для 5/5.";
         } else if (score >= 4) {
             title = "Добре";
-            rec = "[Заповніть пізніше] Рекомендація для 4/5: уточнити один прогалиний блок з результатів тесту.";
+            rec = "[Заповніть пізніше] Рекомендація для 4/5.";
         } else if (score >= 3) {
             title = "Задовільно";
-            rec = "[Заповніть пізніше] Рекомендація для 3/5: повторити розділ гайду tts-info про GMV, конверсію та GPM.";
+            rec = "[Заповніть пізніше] Рекомендація для 3/5.";
         } else {
             title = "Варто підтягнути базу";
-            rec = "[Заповніть пізніше] Рекомендація: пройти гайд TikTok Shop і повторити тест після ознайомлення.";
+            rec = "[Заповніть пізніше] Рекомендація: повторити матеріал блоку 2.";
         }
-
         titleEl.textContent = "Вирок: " + title;
         scoreEl.textContent = "Правильних відповідей: " + score + " з 5.";
         recEl.textContent = rec;
         box.hidden = false;
     }
-
     document.getElementById("btnGrade").addEventListener("click", gradeQuiz);
     document.getElementById("btnResetQuiz").addEventListener("click", function () {
         document.querySelectorAll('#quizForm input[type="radio"]').forEach(function (r) { r.checked = false; });
         document.getElementById("verdictBox").hidden = true;
     });
 })();
-    </script>
+</script>
 </body>
 </html>
