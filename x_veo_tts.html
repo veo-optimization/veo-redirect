@@ -415,6 +415,7 @@
             background: var(--tt-red);
             color: #fff;
             font-weight: 700;
+            align-items: flex-start;
         }
         .block-section.form-accordion > .form-accordion-header:hover {
             background: var(--tt-red-dark);
@@ -422,6 +423,27 @@
         }
         .block-section.form-accordion > .form-accordion-header .form-accordion-chevron {
             color: rgba(255, 255, 255, 0.95);
+        }
+        .block-header-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 6px;
+            text-align: left;
+            flex: 1;
+            min-width: 0;
+        }
+        .block-header-title {
+            display: block;
+            line-height: 1.3;
+        }
+        .block-header-preview {
+            display: block;
+            font-size: clamp(0.78rem, 2vw, 0.88rem);
+            font-weight: 500;
+            line-height: 1.4;
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 62rem;
         }
         .block-section .form-accordion-panel {
             padding: 0 0 8px;
@@ -468,7 +490,7 @@
         <div class="jump-row">
             <a href="#block-context"><i class="bi bi-book"></i> Блок 1 — Контекст</a>
             <a href="#block-tools"><i class="bi bi-graph-up-arrow"></i> Блок 2 — Орієнтири й калькулятор</a>
-            <a href="#block-test"><i class="bi bi-patch-check"></i> Тест</a>
+            <a href="#block-test"><i class="bi bi-patch-check"></i> Блок 3 — Тест</a>
         </div>
         <div class="toolbar-row">
             <button type="button" class="pill-btn" id="btnHelpIntro" aria-haspopup="dialog"><i class="bi bi-info-circle"></i> Про сторінку</button>
@@ -479,7 +501,10 @@
     <!-- ========== БЛОК 1: КОНТЕКСТ ========== -->
     <div class="form-accordion block-section collapsed" id="wrapBlock1">
         <button type="button" class="form-accordion-header" id="block-context" aria-expanded="false" aria-controls="panelBlock1">
-            <span>Блок 1. TikTok Shop, Україна та досвід інших ринків</span>
+            <span class="block-header-text">
+                <span class="block-header-title">Блок 1. TikTok Shop, Україна та досвід інших ринків</span>
+                <span class="block-header-preview">Що таке TikTok Shop і які зміни в Україні; етапи в ЄС і логіка платформи. Окремо — український контекст, Shopify та практичний вихід через VEO FORCE.</span>
+            </span>
             <i class="bi bi-chevron-down form-accordion-chevron"></i>
         </button>
         <div class="form-accordion-panel" id="panelBlock1">
@@ -535,6 +560,8 @@
         <p><strong>Що далі.</strong> Розвиток TikTok Shop, афіліатних програм і вищої конкуренції серед тих, хто вже працює в рамках правил. <strong>Висновок:</strong> TikTok не проти бізнесу — він проти хаосу. Виграють ті, хто адаптується; програють ті, хто ігнорує зміни.</p>
         <p><strong>Що робити зараз.</strong> Зрозуміти, на якій фазі ви зараз перебуваєте; опиратися на дані та правила; пройти тест у блоці нижче й чесно оцінити, чи ваша модель відповідає тому, як платформа монетизує увагу зараз. Якщо потрібен каталог, бот і інтеграції під українські реалії — орієнтуйтеся на екосистему <strong>VEO FORCE</strong> (опис у згорнутому блоці «Практичний вихід»).</p>
     </div>
+        </div>
+    </div>
 
     <div class="form-container content-prose">
         <h3>Чому тим, хто вже вмів вести інтернет-магазин, легше зайти в TikTok Shop</h3>
@@ -564,7 +591,10 @@
     <!-- ========== БЛОК 2: ДАНІ, КАЛЬКУЛЯТОР ========== -->
     <div class="form-accordion block-section collapsed" id="wrapBlock2">
         <button type="button" class="form-accordion-header" id="block-tools" aria-expanded="false" aria-controls="panelBlock2">
-            <span>Блок 2. Орієнтири EchoTik і міні-калькулятор</span>
+            <span class="block-header-text">
+                <span class="block-header-title">Блок 2. Орієнтири EchoTik і міні-калькулятор</span>
+                <span class="block-header-preview">Картки EchoTik для @be.lush, зрізи США та Kalodata. Міні-калькулятор афіліатного доходу й підказки щодо GMV і комісій.</span>
+            </span>
             <i class="bi bi-chevron-down form-accordion-chevron"></i>
         </button>
         <div class="form-accordion-panel" id="panelBlock2">
@@ -766,7 +796,10 @@
 
     <div class="form-accordion block-section collapsed" id="wrapBlock3">
         <button type="button" class="form-accordion-header" id="block-test" aria-expanded="false" aria-controls="panelBlock3">
-            <span>Тест (5 питань)</span>
+            <span class="block-header-text">
+                <span class="block-header-title">Блок 3. Тест (5 питань)</span>
+                <span class="block-header-preview">П’ять питань з одним вірним варіантом у кожному: GMV, GPM, модель конверсії й робота калькулятора. Підсумок після перевірки.</span>
+            </span>
             <i class="bi bi-chevron-down form-accordion-chevron"></i>
         </button>
         <div class="form-accordion-panel" id="panelBlock3">
@@ -840,7 +873,7 @@
         <div class="help-dlg-inner">
             <h3 id="dlgIntroTitle">Про цю сторінку</h3>
             <p>Макет у дусі <strong>mobile_add</strong>: картки, акордеони, діалоги. Акцентний колір — <strong>TikTok Red</strong> (#FE2C55).</p>
-            <p>Блок 1 пояснює контекст TikTok Shop і зміни в Україні; у кінці блоку 1 — <strong>VEO FORCE</strong>: екосистема для українських продавців (безкоштовний каталог, HCM/кабінет, Telegram-бот, інтеграції, консалтинг, ведення). Блок 2 — орієнтири (EchoTik, Kalodata) і міні-калькулятор; тест — окремим згорнутим блоком нижче.</p>
+            <p>На головній — три згорнуті блоки: <strong>блок 1</strong> (контекст Shop, ЄС, Україна, VEO FORCE), <strong>блок 2</strong> (EchoTik, Kalodata, калькулятор) і <strong>блок 3</strong> (тест). У блоці 1 є вкладені підрозділи-акордеони.</p>
             <button type="button" class="help-dlg-close" id="dlgIntroClose">Зрозуміло</button>
         </div>
     </dialog>
