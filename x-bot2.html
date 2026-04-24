@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+
+<title>VEO BOT</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 16px;
+    background: #fff;
+    color: #000;
+}
+
+.container {
+    max-width: 480px;
+    margin: auto;
+}
+
+h1 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+p {
+    font-size: 15px;
+    line-height: 1.4;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    font-size: 16px;
+    border: 1px solid #000;
+    background: #fff;
+}
+
+.primary {
+    background: #e6f2ff;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    background: #fff;
+    padding: 16px;
+    overflow-y: auto;
+    display: none;
+}
+
+.close {
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🚀 VEO BOT</h1>
+
+<p>
+Купуйте з ефіру в 1 клік — без “беру” в чаті, без хаосу і без ризику блокувань.
+</p>
+
+<p>
+👉 Дивитесь ефір → отримуєте повідомлення → натискаєте “Беру”
+</p>
+
+<button class="primary">🤖 Підписатися на бот</button>
+<button>📋 Скопіювати юзернейм</button>
+
+<button onclick="openModal('buyers')">🛍 Користь для покупців</button>
+<button onclick="openModal('sellers')">👤 Користь для продавців</button>
+
+</div>
+
+<!-- МОДАЛКА ПОКУПЦІ -->
+<div class="modal" id="buyers">
+
+<h2>🛍 Для покупців</h2>
+
+<p>
+Ви звикли купувати в TikTok — швидко, дешево і прямо з ефірів.
+</p>
+
+<p>
+Але зараз TikTok обмежує прямі продажі:
+❗ коментарі “беру”
+❗ обговорення ціни
+❗ оформлення в чаті
+</p>
+
+<p>
+Через це:
+👉 продавців блокують  
+👉 ефіри зникають  
+👉 вигідні товари пропадають  
+</p>
+
+<p>
+Щоб це зберегти — потрібно змінити спосіб покупки.
+</p>
+
+<p>
+Тепер:
+✔ ефір — це огляд і демонстрація  
+✔ покупка — через бот  
+</p>
+
+<p>
+Ви отримуєте:
+🔔 миттєві повідомлення  
+💰 ціну і код товару  
+⚡ кнопку “Беру”  
+⏳ автоматичну чергу  
+📦 ТТН після відправки  
+</p>
+
+<p>
+👉 Ви не пропускаєте товар  
+👉 Купуєте як і раніше — але швидше і зручніше  
+</p>
+
+<p>
+💡 Щоб продавці могли і далі продавати вигідно — важливо бути підписаним на бот і діяти разом.
+</p>
+
+<button class="close" onclick="closeModal()">Закрити</button>
+
+</div>
+
+<!-- МОДАЛКА ПРОДАВЦІ -->
+<div class="modal" id="sellers">
+
+<h2>👤 Для продавців</h2>
+
+<p>
+Ситуація змінюється.
+</p>
+
+<p>
+TikTok послідовно обмежує комерційний контент у прямих ефірах.
+Це вже відбулося на західних ринках і зараз активно відбувається тут.
+</p>
+
+<p>
+Що відбувається:
+❗ зниження охоплень  
+❗ блокування ефірів  
+❗ переведення акаунтів у персональні  
+❗ обмеження продажів через чат  
+</p>
+
+<p>
+Платформа рухається до:
+👉 TikTok Shop  
+👉 відео-контенту без “прямих продажів”  
+</p>
+
+<p>
+Тобто:
+Ефір має виглядати як:
+✔ огляд  
+✔ стиль  
+✔ демонстрація  
+</p>
+
+<p>
+А не як:
+❌ “хто бере?”  
+❌ “пишіть в чат”  
+❌ “ціна така-то”  
+</p>
+
+<p>
+Саме тому потрібен інструмент, який:
+👉 забирає продаж з ефіру  
+👉 залишає ефір “чистим”  
+</p>
+
+<p>
+Як це працює:
+✔ ви показуєте товар  
+✔ називаєте код  
+✔ модератор відправляє в бот  
+✔ клієнти купують там  
+</p>
+
+<p>
+Результат:
+✔ менше блокувань  
+✔ стабільні ефіри  
+✔ автоматизація  
+✔ черга без хаосу  
+✔ масштабування  
+</p>
+
+<p>
+💡 Це не “опція” — це перехід ринку.
+Хто адаптується — продовжить продавати.
+</p>
+
+<button class="close" onclick="closeModal()">Закрити</button>
+
+</div>
+
+<script>
+function openModal(type){
+    document.getElementById(type).style.display = "block";
+}
+
+function closeModal(){
+    document.getElementById("buyers").style.display = "none";
+    document.getElementById("sellers").style.display = "none";
+}
+</script>
+
+</body>
+</html>
