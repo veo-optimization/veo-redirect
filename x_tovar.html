@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Товари — Beroo</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --p:#7C3AED;--p2:#6D28D9;--ps:#EDE9FE;
+  --tg:#229ED9;--tgs:#E3F4FC;
+  --g:#059669;--gs:#D1FAE5;
+  --r:#DC2626;--rs:#FEE2E2;
+  --a:#D97706;--as:#FEF3C7;
+  --tx:#111827;--sub:#6B7280;--brd:#E5E7EB;--bg:#F9FAFB;--card:#fff;
+  --rad:16px;--sh:0 1px 3px rgba(0,0,0,.07),0 4px 12px rgba(0,0,0,.04);
+}
+html,body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--tx);overscroll-behavior:none;min-height:100vh}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--brd);display:flex;align-items:center;padding:0 16px;height:56px;gap:10px}
+.tlogo{width:32px;height:32px;background:var(--p);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0}
+.ttitle{font-size:17px;font-weight:700;flex:1}
+.tmenu{width:34px;height:34px;border:none;background:var(--bg);border-radius:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+
+/* TABS */
+.tabs{display:flex;padding:10px 16px 0;gap:2px;border-bottom:1px solid var(--brd);background:#fff}
+.tab{flex:1;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:600;color:var(--sub);padding:8px 4px;cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1px;transition:color .15s,border-color .15s;white-space:nowrap}
+.tab.active{color:var(--p);border-bottom-color:var(--p)}
+.tbadge{display:inline-flex;align-items:center;justify-content:center;background:var(--bg);color:var(--sub);font-size:10px;font-weight:700;border-radius:10px;padding:1px 6px;margin-left:3px}
+.tab.active .tbadge{background:var(--ps);color:var(--p)}
+
+/* SEARCH */
+.bar{padding:10px 16px 6px;display:flex;gap:8px;align-items:center}
+.sw{flex:1;position:relative}
+.sw svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--sub);pointer-events:none}
+.sw input{width:100%;border:1.5px solid var(--brd);border-radius:12px;padding:9px 12px 9px 34px;font-family:inherit;font-size:14px;color:var(--tx);background:var(--card);outline:none;transition:border-color .15s}
+.sw input:focus{border-color:var(--p)}
+
+/* SELECT ROW */
+.sel-row{display:flex;align-items:center;padding:4px 16px 8px;gap:10px}
+.sel-all{display:flex;align-items:center;gap:8px;cursor:pointer;user-select:none}
+.sel-all input[type=checkbox]{width:18px;height:18px;accent-color:var(--p);cursor:pointer}
+.sel-lbl{font-size:13px;font-weight:600;color:var(--sub)}
+.sel-badge{display:none;background:var(--ps);color:var(--p);font-size:12px;font-weight:700;border-radius:20px;padding:2px 10px}
+.sel-badge.show{display:inline-flex}
+
+/* BULK PANEL */
+.bulk{display:none;background:var(--card);border-top:2px solid var(--p);border-bottom:1px solid var(--brd);padding:10px 16px;gap:8px;flex-wrap:wrap;position:sticky;top:56px;z-index:40;animation:slideD .18s ease}
+.bulk.open{display:flex}
+@keyframes slideD{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}
+.blbl{width:100%;font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.05em}
+.ba{display:flex;align-items:center;gap:5px;border:1.5px solid var(--brd);border-radius:10px;padding:7px 10px;font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;background:var(--card);transition:all .15s;flex:1;justify-content:center}
+.ba.send{border-color:var(--p);color:var(--p)}.ba.send:active{background:var(--ps)}
+.ba.act{border-color:var(--g);color:var(--g)}.ba.act:active{background:var(--gs)}
+.ba.dea{border-color:var(--a);color:var(--a)}.ba.dea:active{background:var(--as)}
+.ba.del{border-color:var(--r);color:var(--r)}.ba.del:active{background:var(--rs)}
+.ba.restore{border-color:var(--g);color:var(--g)}.ba.restore:active{background:var(--gs)}
+
+/* CATS */
+.cats{display:flex;gap:6px;padding:0 16px 10px;overflow-x:auto;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.chip{flex-shrink:0;background:var(--card);border:1px solid var(--brd);border-radius:10px;padding:6px 12px;display:flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:var(--sub);white-space:nowrap;cursor:pointer;transition:all .15s}
+.chip strong{color:var(--tx);font-size:12px;font-weight:700}
+.chip.active{border-color:var(--p);color:var(--p);background:var(--ps)}
+.chip.active strong{color:var(--p)}
+
+/* DELETED NOTICE */
+.del-notice{margin:0 16px 10px;background:var(--rs);border-radius:10px;padding:10px 14px;font-size:12px;color:var(--r);font-weight:500;display:none}
+.del-notice.show{display:block}
+
+/* LIST */
+.list{padding:0 16px 100px;display:flex;flex-direction:column;gap:8px}
+
+/* SWIPE WRAPPER */
+.card-wrap{position:relative;overflow:hidden;border-radius:var(--rad)}
+.swipe-hint{position:absolute;inset:0;border-radius:var(--rad);display:flex;align-items:center;pointer-events:none;opacity:0;transition:opacity .15s}
+.swipe-hint.sh-left{background:linear-gradient(90deg,rgba(220,38,38,.12) 0%,rgba(220,38,38,.05) 100%);justify-content:flex-end;padding-right:18px}
+.swipe-hint.sh-right{background:linear-gradient(270deg,rgba(34,158,217,.15) 0%,rgba(34,158,217,.05) 100%);justify-content:flex-start;padding-left:18px}
+
+/* CARD */
+.card{background:var(--card);border-radius:var(--rad);box-shadow:var(--sh);border:1.5px solid transparent;transition:border-color .15s,box-shadow .15s;overflow:hidden;position:relative;touch-action:pan-y;user-select:none}
+.card.checked{border-color:var(--p);box-shadow:0 0 0 3px var(--ps)}
+.card.dim{opacity:.65}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card.an{animation:fadeUp .22s ease both}
+@keyframes swipeLeftAnim{0%{transform:translateX(0)}30%{transform:translateX(-60px)}100%{transform:translateX(0)}}
+@keyframes swipeRightAnim{0%{transform:translateX(0)}30%{transform:translateX(60px)}100%{transform:translateX(0)}}
+.card.do-left .card{animation:swipeLeftAnim .4s cubic-bezier(.36,.07,.19,.97)}
+.card.do-right .card{animation:swipeRightAnim .4s cubic-bezier(.36,.07,.19,.97)}
+
+/* deactivate flash */
+@keyframes flashRed{0%,100%{background:var(--card)}40%{background:#FEE2E2}}
+.card.flash-red{animation:flashRed .5s ease}
+/* bot flash */
+@keyframes flashTg{0%,100%{background:var(--card)}40%{background:#E3F4FC}}
+.card.flash-tg{animation:flashTg .5s ease}
+
+.cmain{display:flex;align-items:flex-start;padding:12px 12px 10px;gap:10px}
+.cchk{width:20px;height:20px;flex-shrink:0;margin-top:2px;accent-color:var(--p);cursor:pointer}
+
+/* THUMB + eye */
+.cthumb{width:56px;height:56px;flex-shrink:0;border-radius:10px;position:relative;cursor:pointer}
+.cthumb-inner{width:100%;height:100%;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:30px;overflow:hidden}
+.cthumb img{width:100%;height:100%;border-radius:10px;object-fit:cover}
+.eye-btn{position:absolute;bottom:3px;right:3px;width:20px;height:20px;background:#fff;border-radius:4px;box-shadow:0 1px 4px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;cursor:pointer;z-index:2}
+
+/* CARD INFO clickable */
+.cinfo-tap{flex:1;min-width:0;cursor:pointer}
+.cname{font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:2px}
+.ccode{font-family:'DM Mono',monospace;font-size:11px;color:var(--sub);margin-bottom:5px}
+.cmeta{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ccat{font-size:11px;font-weight:500;color:var(--sub);background:var(--bg);border-radius:6px;padding:2px 6px}
+.cprice{font-size:14px;font-weight:700}
+.cqty{font-size:12px;color:var(--sub)}
+.cqty.low{color:var(--a);font-weight:600}
+.cqty.zero{color:var(--r);font-weight:600}
+.cbadge{margin-left:auto;font-size:11px;font-weight:600;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.cbadge.on{background:var(--gs);color:var(--g)}
+.cbadge.off{background:#F3F4F6;color:var(--sub)}
+.cbadge.trash{background:var(--rs);color:var(--r)}
+
+/* CARD ACTIONS */
+.cacts{display:flex;border-top:1px solid var(--brd)}
+.ca{flex:1;display:flex;align-items:center;justify-content:center;gap:5px;padding:10px 0;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background .12s;color:var(--sub)}
+.ca+.ca{border-left:1px solid var(--brd)}
+.ca.send{color:var(--p)}.ca.edit{color:var(--tx)}.ca.del{color:var(--r)}.ca.restore{color:var(--g)}.ca.permdel{color:var(--r)}
+.ca:active{background:var(--bg)}
+.del-days{font-size:10px;color:var(--r);font-weight:500;margin-left:3px;opacity:.8}
+
+/* FAB */
+.fab{position:fixed;bottom:24px;right:20px;z-index:60;background:var(--p);color:#fff;border:none;border-radius:18px;padding:13px 20px;font-family:inherit;font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(124,58,237,.4);cursor:pointer;transition:transform .15s}
+.fab:active{transform:scale(.95)}
+
+/* EMPTY */
+.empty{text-align:center;padding:60px 24px;display:none}
+.empty.show{display:block}
+.empty-ico{font-size:48px;margin-bottom:12px}
+.empty p{font-size:15px;color:var(--sub)}
+
+/* ─── OVERLAYS ─── */
+.ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(3px);z-index:100;align-items:flex-end;justify-content:center}
+.ov.open{display:flex}
+.sheet{background:var(--card);border-radius:24px 24px 0 0;width:100%;max-width:480px;padding:8px 20px 28px;animation:shUp .25s cubic-bezier(.32,1,.46,1);max-height:92vh;overflow-y:auto}
+@keyframes shUp{from{transform:translateY(50px);opacity:0}to{transform:translateY(0);opacity:1}}
+.sh-handle{width:40px;height:4px;background:var(--brd);border-radius:2px;margin:8px auto 18px}
+.sh-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.sh-head h2{font-size:18px;font-weight:700}
+.xbtn{width:32px;height:32px;border:none;background:var(--bg);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--sub);cursor:pointer;flex-shrink:0}
+
+/* GALLERY */
+.gal-ov{display:none;position:fixed;inset:0;background:#000;z-index:200;flex-direction:column;align-items:center;justify-content:center}
+.gal-ov.open{display:flex}
+.gal-top{position:absolute;top:0;left:0;right:0;display:flex;justify-content:flex-end;padding:14px 16px;z-index:5}
+.gal-close-btn{width:34px;height:34px;background:#fff;border:1px solid rgba(0,0,0,.12);border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.gal-name{position:absolute;top:18px;left:16px;color:#fff;font-size:15px;font-weight:600;z-index:5}
+.gal-img{width:90vw;max-width:360px;aspect-ratio:1;border-radius:16px;background:#1a1a2e;display:flex;align-items:center;justify-content:center;font-size:90px;user-select:none;transition:transform .25s,opacity .25s}
+.gal-dots{display:flex;gap:6px;margin-top:20px}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.3);cursor:pointer;transition:background .2s,transform .2s}
+.dot.active{background:#fff;transform:scale(1.3)}
+.gal-arrows{display:flex;gap:12px;margin-top:20px}
+.garr{width:44px;height:44px;border:none;border-radius:50%;background:rgba(255,255,255,.15);color:#fff;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.garr:active{background:rgba(255,255,255,.3)}
+.gal-actions{display:flex;gap:10px;margin-top:24px;width:90vw;max-width:360px}
+.ga-btn{flex:1;border:none;border-radius:14px;padding:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.ga-btn.bot{background:var(--tg);color:#fff}
+.ga-btn.edit{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.ga-btn.back{background:rgba(255,255,255,.1);color:#fff}
+
+/* FORM */
+.fld{margin-bottom:14px}
+.fld label{display:block;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--sub);margin-bottom:5px}
+.fld input,.fld select{width:100%;border:1.5px solid var(--brd);border-radius:12px;padding:10px 12px;font-family:inherit;font-size:15px;color:var(--tx);background:var(--card);outline:none;appearance:none;transition:border-color .15s}
+.fld input:focus,.fld select:focus{border-color:var(--p)}
+.fhint{font-size:11px;color:#9CA3AF;margin-top:3px}
+.frow{display:flex;gap:10px}.frow .fld{flex:1}
+.mtog{display:flex;background:var(--bg);border-radius:10px;padding:3px;margin-bottom:16px;gap:2px}
+.mtog button{flex:1;border:none;background:transparent;border-radius:8px;padding:8px 0;font-family:inherit;font-size:13px;font-weight:600;color:var(--sub);cursor:pointer;transition:background .15s,color .15s}
+.mtog button.active{background:var(--p);color:#fff}
+.chkrow{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.chkrow input{width:18px;height:18px;accent-color:var(--p);cursor:pointer}
+.upbtn{border:1.5px dashed var(--brd);border-radius:10px;padding:9px 14px;display:inline-flex;align-items:center;gap:6px;font-family:inherit;font-size:12px;font-weight:500;color:var(--sub);background:var(--bg);cursor:pointer}
+.fdiv{height:1px;background:var(--brd);margin:12px 0}
+.factions{display:flex;gap:8px;margin-top:6px}
+.cancelbtn{flex:1;border:1.5px solid var(--brd);background:transparent;border-radius:12px;padding:12px;font-family:inherit;font-size:14px;font-weight:600;color:var(--sub);cursor:pointer}
+.savebtn{flex:2;background:var(--p);color:#fff;border:none;border-radius:12px;padding:12px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s}
+.savebtn:hover{background:var(--p2)}
+
+/* BROADCAST */
+.bcstep{display:none}.bcstep.active{display:block}
+.limbar-wrap{margin:14px 0}
+.limmeta{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.limmeta .lt{font-size:13px;font-weight:600}
+.limmeta .ln{font-size:12px;color:var(--sub)}
+.limmeta .ln b{color:var(--tx);font-weight:700}
+.limtrack{height:8px;background:var(--brd);border-radius:4px;overflow:hidden}
+.limfill{height:100%;background:linear-gradient(90deg,var(--p),#A78BFA);border-radius:4px;transition:width .4s}
+.limfill.warn{background:linear-gradient(90deg,var(--a),#FCD34D)}
+.topupbtn{width:100%;margin-top:10px;border:1.5px solid var(--p);background:var(--ps);color:var(--p);border-radius:12px;padding:10px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+.bcdiv{height:1px;background:var(--brd);margin:14px 0}
+.bcsect{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--sub);margin-bottom:10px}
+.audcard{border:2px solid var(--brd);border-radius:14px;padding:13px 14px;cursor:pointer;margin-bottom:10px;transition:all .15s;display:flex;align-items:center;gap:12px}
+.audcard:hover{border-color:#C4B5FD}
+.audcard.selected{border-color:var(--p);background:var(--ps)}
+.audico{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.audinfo{flex:1}
+.audtit{font-size:15px;font-weight:600;margin-bottom:1px}
+.audsub{font-size:12px;color:var(--sub)}
+.audbadge{font-size:11px;font-weight:700;background:var(--gs);color:var(--g);border-radius:20px;padding:2px 8px;flex-shrink:0}
+.audchk{width:20px;height:20px;border-radius:50%;border:2px solid var(--brd);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.audcard.selected .audchk{border-color:var(--p);background:var(--p)}
+.audchkd{width:8px;height:8px;border-radius:50%;background:#fff;display:none}
+.audcard.selected .audchkd{display:block}
+.bcfoot{display:flex;gap:8px;margin-top:18px}
+.bcback{flex:1;border:1.5px solid var(--brd);background:transparent;border-radius:12px;padding:12px;font-family:inherit;font-size:14px;font-weight:600;color:var(--sub);cursor:pointer}
+.bcnext{flex:2;background:var(--p);color:#fff;border:none;border-radius:12px;padding:12px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:background .15s}
+.bcnext:hover{background:var(--p2)}
+.pchips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.pchip{background:var(--bg);border:1px solid var(--brd);border-radius:8px;padding:4px 9px;font-size:12px;font-weight:600}
+.pc{color:var(--sub);font-family:'DM Mono',monospace;font-size:11px}
+.reviewbox{background:var(--bg);border-radius:12px;padding:14px;margin-bottom:14px}
+.rlbl{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--sub);margin-bottom:8px}
+
+/* GROUP PICKER */
+.gsheet{background:var(--card);border-radius:24px 24px 0 0;width:100%;max-width:480px;padding:8px 20px 28px;animation:shUp .25s cubic-bezier(.32,1,.46,1);max-height:80vh;overflow-y:auto}
+.glimbox{background:var(--bg);border-radius:12px;padding:12px 14px;margin-bottom:6px}
+.glimrow{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.glimtit{font-size:12px;font-weight:700}
+.glimnums{font-size:12px;color:var(--sub)}
+.gllval{color:var(--a);font-weight:700}
+.gllval.over{color:var(--r)}
+.gselbar{display:flex;align-items:center;justify-content:space-between;background:var(--ps);border-radius:8px;padding:7px 11px;margin:8px 0 8px}
+.gseltxt{font-size:13px;font-weight:700;color:var(--p)}
+.gseltxt.over{color:var(--r)}
+.glimwarn{font-size:11px;font-weight:700;color:var(--r)}
+.gsect{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--sub);margin:12px 0 8px}
+.gitem{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--brd);cursor:pointer}
+.gitem:last-of-type{border-bottom:none}
+.gemo{font-size:22px;width:36px;text-align:center;flex-shrink:0}
+.ginfo{flex:1}
+.gname{font-size:15px;font-weight:600}
+.gcnt{font-size:12px;color:var(--sub)}
+.gpick{width:22px;height:22px;border-radius:6px;border:2px solid var(--brd);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.gitem.picked .gpick{border-color:var(--p);background:var(--p)}
+.gpickd{display:none;width:11px;height:9px}
+.gitem.picked .gpickd{display:block}
+
+/* CENTER MODAL */
+.cov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;padding:24px}
+.cov.open{display:flex;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.cbox{background:var(--card);border-radius:20px;padding:24px;width:100%;max-width:320px;animation:scaleIn .2s cubic-bezier(.32,1,.46,1);text-align:center}
+@keyframes scaleIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.cbox h3{font-size:17px;font-weight:700;margin-bottom:8px}
+.cbox p{font-size:14px;color:var(--sub);margin-bottom:20px}
+.cacts{display:flex;gap:10px}
+.cno{flex:1;border:1.5px solid var(--brd);background:transparent;border-radius:10px;padding:11px;font-family:inherit;font-size:14px;font-weight:600;color:var(--sub);cursor:pointer}
+.cyes-r{flex:1;border:none;background:var(--r);border-radius:10px;padding:11px;font-family:inherit;font-size:14px;font-weight:600;color:#fff;cursor:pointer}
+.cyes-p{flex:1;border:none;background:var(--p);border-radius:10px;padding:11px;font-family:inherit;font-size:14px;font-weight:600;color:#fff;cursor:pointer}
+.topup-opt{border:1.5px solid var(--brd);border-radius:10px;padding:11px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;background:var(--card);width:100%;margin-bottom:8px;text-align:left}
+.topup-opt.best{border-color:var(--p);background:var(--ps);color:var(--p);font-weight:700}
+
+/* TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 20px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;white-space:nowrap;animation:toastIn .3s ease;pointer-events:none}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* swipe-to-bot confirm checkbox */
+.sconf-chk{display:flex;align-items:center;gap:8px;margin:12px 0 0;cursor:pointer;user-select:none}
+.sconf-chk input{width:16px;height:16px;accent-color:var(--p)}
+.sconf-chk span{font-size:12px;color:var(--sub)}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <button class="tmenu"><svg width="18" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" viewBox="0 0 18 14"><path d="M1 1h16M1 7h10M1 13h16"/></svg></button>
+  <div class="tlogo">B</div>
+  <span class="ttitle">Товари</span>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" id="tab-active" onclick="switchTab('active',this)">Активні <span class="tbadge" id="cnt-active">0</span></button>
+  <button class="tab" id="tab-inactive" onclick="switchTab('inactive',this)">Неактивні <span class="tbadge" id="cnt-inactive">0</span></button>
+  <button class="tab" id="tab-deleted" onclick="switchTab('deleted',this)">Видалені <span class="tbadge" id="cnt-deleted">0</span></button>
+</div>
+
+<!-- DELETED NOTICE -->
+<div class="del-notice" id="del-notice">🗑 Товари у цій вкладці автоматично видаляються через 10 днів після переміщення до кошика</div>
+
+<!-- SEARCH -->
+<div class="bar">
+  <div class="sw">
+    <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input type="text" placeholder="Пошук товару або коду..." id="srch" oninput="doSearch()">
+  </div>
+</div>
+
+<!-- SELECT ROW -->
+<div class="sel-row">
+  <label class="sel-all" onclick="toggleAll()">
+    <input type="checkbox" id="allChk" readonly>
+    <span class="sel-lbl" id="allLbl">Вибрати всі</span>
+  </label>
+  <span class="sel-badge" id="selBadge">0 обрано</span>
+</div>
+
+<!-- BULK PANEL -->
+<div class="bulk" id="bulk">
+  <div class="blbl">Обрати дію:</div>
+  <button class="ba send" id="baSend" onclick="openBC()"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>У бот</button>
+  <button class="ba act"  id="baAct"  onclick="bulkAct(true)"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>Активувати</button>
+  <button class="ba dea"  id="baDea"  onclick="bulkAct(false)"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9 9l6 6M15 9l-6 6"/></svg>Деактивувати</button>
+  <button class="ba del"  id="baDel"  onclick="openBulkDel()"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>Видалити</button>
+  <button class="ba restore" id="baRestore" onclick="bulkRestore()" style="display:none"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 12a9 9 0 109-9H9m0 0l3-3m-3 3l3 3"/></svg>Відновити</button>
+  <button class="ba del" id="baPermDel" onclick="openBulkPerm()" style="display:none"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>Видалити назавжди</button>
+</div>
+
+<!-- CATS -->
+<div class="cats" id="cats"></div>
+
+<!-- LIST -->
+<div class="list" id="plist"></div>
+<div class="empty" id="emp">
+  <div class="empty-ico">📦</div>
+  <p>Товарів не знайдено</p>
+</div>
+
+<!-- FAB (hidden on deleted tab) -->
+<button class="fab" id="fab" onclick="openAdd()">
+  <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+  Додати товар
+</button>
+
+<!-- ═══ ADD/EDIT SHEET ═══ -->
+<div class="ov" id="addOv" onclick="ovClick(event,'addOv')">
+  <div class="sheet">
+    <div class="sh-handle"></div>
+    <div class="sh-head"><h2 id="modTitle">Додати товар</h2><button class="xbtn" onclick="closeM('addOv')">×</button></div>
+    <div class="mtog"><button class="active" id="mq" onclick="setM('q')">Швидко</button><button id="ma" onclick="setM('a')">Розширена</button></div>
+    <div class="fld">
+      <label>Назва товару</label>
+      <input type="text" id="fn" placeholder="Введіть назву">
+      <div id="cu" style="display:none;font-size:12px;color:var(--sub);margin-top:4px">Код товару: <b id="fcd" style="font-family:'DM Mono',monospace"></b></div>
+    </div>
+    <div class="fld">
+      <label style="opacity:.65">SKU</label>
+      <input type="text" id="fsk" placeholder="SKU" style="font-size:13px;padding:8px 12px;background:#FAFAFA">
+      <div class="fhint">Внутрішній додатковий код товару, якщо необхідно</div>
+    </div>
+    <div class="frow">
+      <div class="fld"><label>Ціна (грн)</label><input type="number" id="fp" placeholder="0" min="0"></div>
+      <div class="fld"><label>Кількість</label><input type="number" id="fq" value="1" min="0"></div>
+    </div>
+    <div class="fld"><label>Категорія</label>
+      <select id="fc"><option value="" disabled selected>Виберіть категорію</option>
+        <option>Жіночий одяг</option><option>Чоловічий одяг</option><option>Аксесуари</option><option>Взуття</option><option>Сумки</option>
+      </select>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div class="chkrow" style="margin:0"><input type="checkbox" id="fb"><label for="fb">Відправити в бот</label></div>
+      <button class="upbtn"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg> Фото / відео</button>
+    </div>
+    <div class="fdiv"></div>
+    <div class="factions">
+      <button class="cancelbtn" onclick="closeM('addOv')">Скасувати</button>
+      <button class="savebtn" onclick="saveProd()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>Зберегти</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GALLERY ═══ -->
+<div class="gal-ov" id="galOv">
+  <div class="gal-name" id="galName"></div>
+  <div class="gal-top">
+    <div class="gal-close-btn" onclick="closeM('galOv')">
+      <svg width="14" height="14" fill="none" stroke="#000" stroke-width="2.5" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </div>
+  </div>
+  <div class="gal-img" id="galImg" style="font-size:100px"></div>
+  <div class="gal-dots" id="galDots"></div>
+  <div class="gal-arrows">
+    <button class="garr" onclick="galGo(galIdx-1)">‹</button>
+    <button class="garr" onclick="galGo(galIdx+1)">›</button>
+  </div>
+  <div class="gal-actions">
+    <button class="ga-btn bot" onclick="galSend()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>У бот</button>
+    <button class="ga-btn edit" onclick="galEdit()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Змінити</button>
+    <button class="ga-btn back" onclick="closeM('galOv')">← Назад</button>
+  </div>
+</div>
+
+<!-- ═══ BROADCAST SHEET ═══ -->
+<div class="ov" id="bcOv" onclick="ovClick(event,'bcOv')">
+  <div class="sheet">
+    <div class="sh-handle"></div>
+    <!-- s0: single -->
+    <div class="bcstep" id="s0">
+      <div class="sh-head"><h2>Відправити в бот</h2><button class="xbtn" onclick="closeM('bcOv')">×</button></div>
+      <div class="pchips" id="pp0"></div>
+      <p style="font-size:14px;color:var(--sub);margin-bottom:20px">Товар буде надісланий підписникам вашого Telegram-боту.</p>
+      <div class="factions"><button class="cancelbtn" onclick="closeM('bcOv')">Скасувати</button><button class="savebtn" onclick="doSingle()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>Надіслати</button></div>
+    </div>
+    <!-- s1: limit + audience -->
+    <div class="bcstep" id="s1">
+      <div class="sh-head"><h2>Створити розсилку</h2><button class="xbtn" onclick="closeM('bcOv')">×</button></div>
+      <div class="pchips" id="pp1"></div>
+      <div class="limbar-wrap">
+        <div class="limmeta"><span class="lt">Ліміт повідомлень</span><span class="ln"><b id="lu">523</b> / <b>550</b> · залишилось <b id="ll">27</b></span></div>
+        <div class="limtrack"><div class="limfill warn" id="lf" style="width:95%"></div></div>
+        <div style="font-size:12px;color:var(--a);font-weight:600;margin-top:6px">⚠ Залишилось мало повідомлень</div>
+        <button class="topupbtn" onclick="openM('tpOv')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Поповнити ліміт</button>
+      </div>
+      <div class="bcdiv"></div>
+      <div class="bcsect">Кому відправити</div>
+      <div class="audcard" id="aAll" onclick="selAud('all')">
+        <div class="audico" style="background:var(--ps)">👥</div>
+        <div class="audinfo"><div class="audtit">Усім користувачам</div><div class="audsub">Усі підписники вашого боту</div></div>
+        <span class="audbadge">523</span>
+        <div class="audchk"><div class="audchkd"></div></div>
+      </div>
+      <div class="audcard" id="aGrp" onclick="selAud('group')">
+        <div class="audico" style="background:var(--gs)">🎯</div>
+        <div class="audinfo"><div class="audtit">Обрати групу клієнтів</div><div class="audsub" id="grpSub">Ваші сегменти аудиторії</div></div>
+        <div class="audchk"><div class="audchkd"></div></div>
+      </div>
+      <div class="bcfoot"><button class="cancelbtn" onclick="closeM('bcOv')">Скасувати</button><button class="bcnext" id="bn1" onclick="goS2()" disabled style="opacity:.4;cursor:not-allowed">Далі →</button></div>
+    </div>
+    <!-- s2: review -->
+    <div class="bcstep" id="s2">
+      <div class="sh-head"><h2>Підтвердити розсилку</h2><button class="xbtn" onclick="closeM('bcOv')">×</button></div>
+      <div class="reviewbox"><div class="rlbl">Товари</div><div class="pchips" id="pp2"></div><div style="height:1px;background:var(--brd);margin:8px 0"></div><div class="rlbl">Аудиторія</div><div id="audSum" style="font-size:15px;font-weight:600"></div><div id="cntSum" style="font-size:12px;color:var(--sub);margin-top:2px"></div></div>
+      <div class="bcfoot"><button class="bcback" onclick="goS1()">← Назад</button><button class="bcnext" onclick="doSend()"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>Надіслати</button></div>
+    </div>
+    <!-- s3: success -->
+    <div class="bcstep" id="s3" style="text-align:center;padding:20px 0">
+      <div style="font-size:52px;margin-bottom:12px">🎉</div>
+      <h2 style="margin-bottom:8px">Розсилку відправлено!</h2>
+      <p id="sucMsg" style="font-size:14px;color:var(--sub);margin-bottom:24px"></p>
+      <button class="savebtn" style="width:100%" onclick="closeM('bcOv')">Чудово!</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ GROUP PICKER ═══ -->
+<div class="ov" id="grpOv" onclick="ovClick(event,'grpOv')">
+  <div class="gsheet">
+    <div class="sh-handle"></div>
+    <div class="sh-head"><h2>Оберіть групи клієнтів</h2><button class="xbtn" onclick="closeM('grpOv')">×</button></div>
+    <div class="glimbox">
+      <div class="glimrow"><span class="glimtit">Ліміт повідомлень</span><span class="glimnums"><b id="glu">523</b> / <b>550</b> · залишилось <b id="gll" class="gllval">27</b></span></div>
+      <div class="limtrack" style="margin:6px 0 10px"><div class="limfill warn" id="glf" style="width:95%"></div></div>
+      <div id="gSelBar" class="gselbar" style="display:none">
+        <span id="gSelTxt" class="gseltxt">Обрано 0 клієнтів</span>
+        <span id="gLimWarn" class="glimwarn" style="display:none">⚠ Перевищує ліміт!</span>
+      </div>
+      <button class="topupbtn" style="margin-top:0" onclick="openM('tpOv')"><svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>Поповнити ліміт</button>
+    </div>
+    <div class="gsect">Групи — можна обрати декілька</div>
+    <div id="glist"></div>
+    <div style="height:12px"></div>
+    <button class="bcnext" id="grpConfBtn" style="width:100%;opacity:.4;cursor:not-allowed" disabled onclick="confirmGrp()">Підтвердити вибір</button>
+  </div>
+</div>
+
+<!-- ═══ TOPUP ═══ -->
+<div class="cov" id="tpOv">
+  <div class="cbox">
+    <div style="font-size:44px;margin-bottom:8px">⚡</div>
+    <h3>Поповнити ліміт</h3>
+    <p>Оберіть кількість повідомлень для поповнення.</p>
+    <button class="topup-opt" onclick="doTopup(500)">+500 повідомлень — 99 ₴</button>
+    <button class="topup-opt best" onclick="doTopup(1000)">+1000 повідомлень — 179 ₴ ⭐ Найпопулярніший</button>
+    <button class="topup-opt" onclick="doTopup(3000)">+3000 повідомлень — 399 ₴</button>
+    <div style="height:6px"></div>
+    <button class="cno" style="width:100%" onclick="closeM('tpOv')">Скасувати</button>
+  </div>
+</div>
+
+<!-- ═══ DELETE CONFIRM ═══ -->
+<div class="cov" id="delOv">
+  <div class="cbox">
+    <div style="font-size:40px;margin-bottom:8px">🗑</div>
+    <h3 id="delTitle">Видалити товар?</h3>
+    <p id="delMsg">Товар переміститься до кошика і буде автоматично видалено через 10 днів.</p>
+    <div class="cacts"><button class="cno" onclick="closeM('delOv')">Скасувати</button><button class="cyes-r" onclick="doDel()">Видалити</button></div>
+  </div>
+</div>
+
+<!-- ═══ PERM DELETE CONFIRM ═══ -->
+<div class="cov" id="permDelOv">
+  <div class="cbox">
+    <div style="font-size:40px;margin-bottom:8px">💀</div>
+    <h3>Видалити назавжди?</h3>
+    <p id="permDelMsg">Цю дію неможливо скасувати. Товар зникне без можливості відновлення.</p>
+    <div class="cacts"><button class="cno" onclick="closeM('permDelOv')">Скасувати</button><button class="cyes-r" onclick="doPermDel()">Видалити назавжди</button></div>
+  </div>
+</div>
+
+<!-- ═══ SWIPE-TO-BOT CONFIRM ═══ -->
+<div class="cov" id="swipeBotOv">
+  <div class="cbox">
+    <div style="font-size:40px;margin-bottom:8px">🤖</div>
+    <h3>Відправити в бот?</h3>
+    <p id="swipeBotMsg">Товар буде надісланий підписникам вашого Telegram-боту.</p>
+    <div class="cacts"><button class="cno" onclick="closeM('swipeBotOv')">Ні</button><button class="cyes-p" onclick="confirmSwipeBot()">Так, надіслати</button></div>
+    <label class="sconf-chk"><input type="checkbox" id="skipBotChk"><span>Не питати для наступних 10 відправок</span></label>
+  </div>
+</div>
+
+<script>
+// ══ CONSTANTS ══
+const LIMIT = 550;
+let limitUsed = 523;
+
+const ICONS = ['👗','👚','🧥','👔','🧣','👟','👠','👜','🎒','🕶','💍','🧤','🧦','🧢','🪖','👒','🩱','🩲','🩳','🩴'];
+const CATS = ['Жіночий одяг','Чоловічий одяг','Аксесуари','Взуття','Сумки'];
+
+const GROUPS = [
+  {id:'g1',e:'👶',n:'Молоді мами',c:87},
+  {id:'g2',e:'💎',n:'VIP — чек 1000+',c:34},
+  {id:'g3',e:'🏷',n:'Любителі знижок',c:158},
+  {id:'g4',e:'👗',n:'Фанати суконь',c:62},
+  {id:'g5',e:'🔁',n:'Постійні клієнти',c:120},
+  {id:'g6',e:'🛍',n:'Новинки першими',c:45},
+];
+
+// ══ PRODUCTS (20) ══
+let prods = [
+  {id:1,code:8334,name:'Сукня вечірня',sku:'',price:340,qty:0,cat:'Жіночий одяг',status:'active',deletedAt:null,icon:'👗'},
+  {id:2,code:8333,name:'Кофтинка базова',sku:'',price:100,qty:0,cat:'Жіночий одяг',status:'active',deletedAt:null,icon:'👚'},
+  {id:3,code:8332,name:'Спідничка міді',sku:'',price:290,qty:1,cat:'Жіночий одяг',status:'active',deletedAt:null,icon:'🩱'},
+  {id:4,code:8331,name:'Топ літній',sku:'',price:100,qty:1,cat:'Жіночий одяг',status:'active',deletedAt:null,icon:'🧣'},
+  {id:5,code:8330,name:'Блузка шовкова',sku:'',price:220,qty:3,cat:'Жіночий одяг',status:'inactive',deletedAt:null,icon:'👔'},
+  {id:6,code:8329,name:'Джинси slim',sku:'',price:450,qty:5,cat:'Чоловічий одяг',status:'active',deletedAt:null,icon:'🩲'},
+  {id:7,code:8328,name:'Худі оверсайз',sku:'',price:380,qty:2,cat:'Чоловічий одяг',status:'active',deletedAt:null,icon:'🧥'},
+  {id:8,code:8327,name:'Кросівки Nike',sku:'',price:1200,qty:4,cat:'Взуття',status:'active',deletedAt:null,icon:'👟'},
+  {id:9,code:8326,name:'Туфлі класичні',sku:'',price:890,qty:1,cat:'Взуття',status:'inactive',deletedAt:null,icon:'👠'},
+  {id:10,code:8325,name:'Сумка шкіряна',sku:'',price:650,qty:2,cat:'Сумки',status:'active',deletedAt:null,icon:'👜'},
+  {id:11,code:8324,name:'Рюкзак міський',sku:'',price:520,qty:6,cat:'Сумки',status:'active',deletedAt:null,icon:'🎒'},
+  {id:12,code:8323,name:'Окуляри сонцезахисні',sku:'',price:280,qty:8,cat:'Аксесуари',status:'active',deletedAt:null,icon:'🕶'},
+  {id:13,code:8322,name:'Каблучка срібна',sku:'',price:340,qty:3,cat:'Аксесуари',status:'active',deletedAt:null,icon:'💍'},
+  {id:14,code:8321,name:'Рукавички шкіряні',sku:'',price:190,qty:0,cat:'Аксесуари',status:'inactive',deletedAt:null,icon:'🧤'},
+  {id:15,code:8320,name:'Шкарпетки комплект',sku:'',price:80,qty:12,cat:'Аксесуари',status:'active',deletedAt:null,icon:'🧦'},
+  {id:16,code:8319,name:'Кепка літня',sku:'',price:150,qty:4,cat:'Аксесуари',status:'active',deletedAt:null,icon:'🧢'},
+  {id:17,code:8318,name:'Шорти спортивні',sku:'',price:210,qty:7,cat:'Чоловічий одяг',status:'active',deletedAt:null,icon:'🩳'},
+  {id:18,code:8317,name:'Пальто осіннє',sku:'',price:1450,qty:1,cat:'Жіночий одяг',status:'deleted',deletedAt:Date.now()-7*86400000,icon:'🧥'},
+  {id:19,code:8316,name:'Босоніжки',sku:'',price:320,qty:3,cat:'Взуття',status:'deleted',deletedAt:Date.now()-2*86400000,icon:'🩴'},
+  {id:20,code:8315,name:'Шапка вʼязана',sku:'',price:120,qty:5,cat:'Аксесуари',status:'deleted',deletedAt:Date.now()-9*86400000,icon:'🪖'},
+];
+let nid=21,ncode=8314;
+
+// ══ STATE ══
+let sel=new Set(),curTab='active',curCat='all',q='';
+let delTarget=null,permDelTarget=null,editTarget=null;
+let bcAud=null,bcGrp=null;
+let tmpGrps=new Set();
+let galId=null,galIdx=0;
+let skipBotConfirm=0; // countdown
+let swipeBotTarget=null;
+
+// ══ HELPERS ══
+function openM(id){document.getElementById(id).classList.add('open');document.body.style.overflow='hidden';}
+function closeM(id){document.getElementById(id).classList.remove('open');document.body.style.overflow='';}
+function ovClick(e,id){if(e.target.id===id)closeM(id);}
+function setM(m){document.getElementById('mq').classList.toggle('active',m==='q');document.getElementById('ma').classList.toggle('active',m==='a');}
+function toast(msg,color='#111827'){
+  document.querySelectorAll('.toast').forEach(t=>t.remove());
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  t.style.background=color;document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);},2200);
+}
+function daysLeft(ts){return Math.max(0,10-Math.round((Date.now()-ts)/86400000));}
+
+// ══ TABS ══
+function switchTab(tab,el){
+  curTab=tab;sel.clear();q='';curCat='all';
+  document.getElementById('srch').value='';
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('del-notice').classList.toggle('show',tab==='deleted');
+  document.getElementById('fab').style.display=tab==='deleted'?'none':'flex';
+  render();
+}
+
+function updTabs(){
+  document.getElementById('cnt-active').textContent=prods.filter(p=>p.status==='active').length;
+  document.getElementById('cnt-inactive').textContent=prods.filter(p=>p.status==='inactive').length;
+  document.getElementById('cnt-deleted').textContent=prods.filter(p=>p.status==='deleted').length;
+}
+
+// ══ RENDER ══
+function render(){
+  const list=document.getElementById('plist'),emp=document.getElementById('emp');
+  let filtered=prods.filter(p=>{
+    if(p.status!==curTab)return false;
+    if(curCat!=='all'&&p.cat!==curCat)return false;
+    if(q&&!p.name.toLowerCase().includes(q)&&!String(p.code).includes(q))return false;
+    return true;
+  });
+  list.innerHTML='';emp.classList.toggle('show',filtered.length===0);
+  filtered.forEach((p,i)=>{
+    const wrap=document.createElement('div');wrap.className='card-wrap';wrap.style.animationDelay=(i*.04)+'s';
+    // swipe hint backgrounds
+    const hL=document.createElement('div');hL.className='swipe-hint sh-left';hL.innerHTML='<span style="font-size:22px">🔕</span>';
+    const hR=document.createElement('div');hR.className='swipe-hint sh-right';hR.innerHTML='<span style="font-size:22px">✈️</span>';
+    wrap.appendChild(hL);wrap.appendChild(hR);
+
+    const card=document.createElement('div');
+    card.className='card an'+(sel.has(p.id)?' checked':'')+(p.status==='inactive'?' dim':'');
+    card.style.animationDelay=(i*.04)+'s';
+
+    const qc=p.qty===0?'zero':p.qty<=2?'low':'',ql=p.qty===0?'⚠ 0 шт':`${p.qty} шт`;
+    const badgeCls=p.status==='deleted'?'trash':p.status==='active'?'on':'off';
+    const badgeLbl=p.status==='deleted'?`🗑 ${daysLeft(p.deletedAt)} дн.`:p.status==='active'?'Активний':'Неактивний';
+
+    // gallery images (simulate 2-3 per product)
+    const galCount=Math.floor(Math.random()*2)+2;
+
+    let actsBtns='';
+    if(curTab==='active'||curTab==='inactive'){
+      actsBtns=`
+        <button class="ca send" onclick="s1click(${p.id})"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/></svg>У бот</button>
+        <button class="ca edit" onclick="openEdit(${p.id})"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Змінити</button>
+        <button class="ca del" onclick="openDelOne(${p.id})"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>Видалити</button>`;
+    } else {
+      const dl=daysLeft(p.deletedAt);
+      actsBtns=`
+        <button class="ca restore" onclick="restoreOne(${p.id})"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M3 12a9 9 0 109-9H9m0 0l3-3m-3 3l3 3"/></svg>Відновити</button>
+        <button class="ca permdel" onclick="openPermDel(${p.id})"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg>Видалити назавжди<span class="del-days">${dl}дн.</span></button>`;
+    }
+
+    card.innerHTML=`
+      <div class="cmain">
+        <input type="checkbox" class="cchk" ${sel.has(p.id)?'checked':''} onchange="chk(${p.id},this)">
+        <div class="cthumb" onclick="openGal(${p.id})">
+          <div class="cthumb-inner">${p.icon}</div>
+          <div class="eye-btn"><svg width="11" height="11" fill="none" stroke="#333" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg></div>
+        </div>
+        <div class="cinfo-tap" onclick="openEdit(${p.id})">
+          <div class="cname">${p.name}</div>
+          <div class="ccode">#${p.code}</div>
+          <div class="cmeta">
+            <span class="ccat">${p.cat}</span>
+            <span class="cprice">${p.price.toFixed(2)} ₴</span>
+            <span class="cqty ${qc}">${ql}</span>
+          </div>
+        </div>
+        <span class="cbadge ${badgeCls}">${badgeLbl}</span>
+      </div>
+      <div class="cacts">${actsBtns}</div>`;
+
+    wrap.appendChild(card);
+    list.appendChild(wrap);
+    initSwipe(card,wrap,hL,hR,p.id);
+  });
+
+  updBulk();
+  updTabs();
+  renderCats(filtered);
+}
+
+// ══ SWIPE ══
+function initSwipe(card,wrap,hL,hR,id){
+  let sx=0,sy=0,dx=0,moved=false;
+  card.addEventListener('touchstart',e=>{
+    sx=e.touches[0].clientX;sy=e.touches[0].clientY;dx=0;moved=false;
+  },{passive:true});
+  card.addEventListener('touchmove',e=>{
+    dx=e.touches[0].clientX-sx;
+    const dy=Math.abs(e.touches[0].clientY-sy);
+    if(Math.abs(dx)<5&&dy<5)return;
+    moved=true;
+    const progress=Math.min(Math.abs(dx)/100,1);
+    if(dx<-10){hL.style.opacity=progress;hR.style.opacity=0;card.style.transform=`translateX(${Math.max(dx,-60)}px)`;}
+    else if(dx>10){hR.style.opacity=progress;hL.style.opacity=0;card.style.transform=`translateX(${Math.min(dx,60)}px)`;}
+  },{passive:true});
+  card.addEventListener('touchend',()=>{
+    card.style.transform='';hL.style.opacity=0;hR.style.opacity=0;
+    if(!moved)return;
+    if(dx<-60){
+      // swipe left → deactivate
+      card.classList.add('flash-red');
+      setTimeout(()=>card.classList.remove('flash-red'),500);
+      deactivateOne(id);
+    } else if(dx>60){
+      // swipe right → send to bot
+      card.classList.add('flash-tg');
+      setTimeout(()=>card.classList.remove('flash-tg'),500);
+      swipeSendBot(id);
+    }
+  },{passive:true});
+}
+
+function deactivateOne(id){
+  const p=prods.find(x=>x.id===id);if(!p)return;
+  p.status=p.status==='active'?'inactive':'active';
+  render();
+  toast(p.status==='inactive'?'Товар деактивовано':'Товар активовано');
+}
+
+function swipeSendBot(id){
+  swipeBotTarget=id;
+  if(skipBotConfirm>0){
+    skipBotConfirm--;
+    sel.clear();sel.add(id);openBC();
+    return;
+  }
+  const p=prods.find(x=>x.id===id);
+  document.getElementById('swipeBotMsg').textContent=`«${p.name}» буде надісланий підписникам Telegram-боту.`;
+  document.getElementById('skipBotChk').checked=false;
+  openM('swipeBotOv');
+}
+function confirmSwipeBot(){
+  if(document.getElementById('skipBotChk').checked)skipBotConfirm=10;
+  closeM('swipeBotOv');
+  sel.clear();sel.add(swipeBotTarget);
+  openBC();
+}
+
+// ══ CATS ══
+function renderCats(filtered){
+  const strip=document.getElementById('cats');
+  const counts={};
+  filtered.forEach(p=>{counts[p.cat]=(counts[p.cat]||0)+1;});
+  let html=`<div class="chip ${curCat==='all'?'active':''}" onclick="filterCat('all',this)"><strong>${filtered.length}</strong> всі</div>`;
+  Object.entries(counts).forEach(([c,n])=>{
+    html+=`<div class="chip ${curCat===c?'active':''}" onclick="filterCat('${c}',this)"><strong>${n}</strong> ${c}</div>`;
+  });
+  strip.innerHTML=html;
+}
+function filterCat(c,el){curCat=c;document.querySelectorAll('.chip').forEach(x=>x.classList.remove('active'));el.classList.add('active');render();}
+
+// ══ CHECKBOX ══
+function chk(id,el){if(el.checked)sel.add(id);else sel.delete(id);el.closest('.card').classList.toggle('checked',el.checked);updBulk();}
+function toggleAll(){
+  const visible=prods.filter(p=>{
+    if(p.status!==curTab)return false;
+    if(curCat!=='all'&&p.cat!==curCat)return false;
+    if(q&&!p.name.toLowerCase().includes(q)&&!String(p.code).includes(q))return false;
+    return true;
+  }).map(p=>p.id);
+  if(sel.size===visible.length){sel.clear();}else{visible.forEach(id=>sel.add(id));}
+  render();
+}
+function updBulk(){
+  const n=sel.size;
+  const visible=prods.filter(p=>p.status===curTab).length;
+  const chkEl=document.getElementById('allChk'),badge=document.getElementById('selBadge'),panel=document.getElementById('bulk'),lbl=document.getElementById('allLbl');
+  chkEl.checked=n>0&&n===visible;chkEl.indeterminate=n>0&&n<visible;
+  badge.textContent=n+' обрано';badge.classList.toggle('show',n>0);
+  lbl.textContent=n===visible&&n>0?'Скасувати вибір':'Вибрати всі';
+  panel.classList.toggle('open',n>0);
+  // show/hide buttons by tab
+  document.getElementById('baSend').style.display=curTab==='deleted'?'none':'flex';
+  document.getElementById('baAct').style.display=curTab==='active'||curTab==='inactive'?'flex':'none';
+  document.getElementById('baDea').style.display=curTab==='active'||curTab==='inactive'?'flex':'none';
+  document.getElementById('baDel').style.display=curTab!=='deleted'?'flex':'none';
+  document.getElementById('baRestore').style.display=curTab==='deleted'?'flex':'none';
+  document.getElementById('baPermDel').style.display=curTab==='deleted'?'flex':'none';
+}
+function doSearch(){q=document.getElementById('srch').value.toLowerCase().trim();render();}
+
+// ══ ADD / EDIT ══
+function openAdd(){
+  editTarget=null;document.getElementById('modTitle').textContent='Додати товар';
+  ['fn','fsk','fp'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fq').value='1';document.getElementById('fc').value='';document.getElementById('fb').checked=false;
+  document.getElementById('cu').style.display='none';openM('addOv');
+  setTimeout(()=>document.getElementById('fn').focus(),300);
+}
+function openEdit(id){
+  editTarget=id;const p=prods.find(x=>x.id===id);
+  document.getElementById('modTitle').textContent='Редагувати товар';
+  document.getElementById('fn').value=p.name;document.getElementById('fsk').value=p.sku||'';
+  document.getElementById('fp').value=p.price;document.getElementById('fq').value=p.qty;
+  document.getElementById('fc').value=p.cat;
+  document.getElementById('fcd').textContent=p.code;document.getElementById('cu').style.display='block';
+  openM('addOv');
+}
+function saveProd(){
+  const name=document.getElementById('fn').value.trim();
+  if(!name){document.getElementById('fn').focus();return;}
+  const price=parseFloat(document.getElementById('fp').value)||0,qty=parseInt(document.getElementById('fq').value)||0,cat=document.getElementById('fc').value,sku=document.getElementById('fsk').value.trim();
+  if(editTarget){
+    const p=prods.find(x=>x.id===editTarget);
+    if(p)Object.assign(p,{name,price,qty,sku,cat:cat||p.cat});
+    toast('Збережено ✓');
+  } else {
+    const icon=ICONS[Math.floor(Math.random()*ICONS.length)];
+    prods.unshift({id:nid++,code:ncode--,name,sku,price,qty,cat:cat||'Без категорії',status:'active',deletedAt:null,icon});
+    toast('Товар додано ✓');
+  }
+  closeM('addOv');render();
+}
+
+// ══ DELETE ══
+function openDelOne(id){
+  delTarget=id;const p=prods.find(x=>x.id===id);
+  document.getElementById('delTitle').textContent='Видалити товар?';
+  document.getElementById('delMsg').textContent=`«${p.name}» переміститься до кошика і буде видалено через 10 днів.`;
+  openM('delOv');
+}
+function openBulkDel(){
+  delTarget='bulk';
+  document.getElementById('delTitle').textContent=`Видалити ${sel.size} товарів?`;
+  document.getElementById('delMsg').textContent='Товари переміщаються до кошика і будуть автоматично видалені через 10 днів.';
+  openM('delOv');
+}
+function doDel(){
+  if(delTarget==='bulk'){sel.forEach(id=>{const p=prods.find(x=>x.id===id);if(p){p.status='deleted';p.deletedAt=Date.now();}});sel.clear();}
+  else{const p=prods.find(x=>x.id===delTarget);if(p){p.status='deleted';p.deletedAt=Date.now();}}
+  closeM('delOv');render();toast('Переміщено до кошика');
+}
+function openPermDel(id){
+  permDelTarget=id;const p=prods.find(x=>x.id===id);
+  document.getElementById('permDelMsg').textContent=`«${p.name}» зникне назавжди без можливості відновлення.`;
+  openM('permDelOv');
+}
+function openBulkPerm(){
+  permDelTarget='bulk';
+  document.getElementById('permDelMsg').textContent=`${sel.size} товарів буде видалено назавжди.`;
+  openM('permDelOv');
+}
+function doPermDel(){
+  if(permDelTarget==='bulk'){prods=prods.filter(p=>!sel.has(p.id));sel.clear();}
+  else prods=prods.filter(p=>p.id!==permDelTarget);
+  closeM('permDelOv');render();toast('Видалено назавжди');
+}
+function restoreOne(id){
+  const p=prods.find(x=>x.id===id);if(p){p.status='inactive';p.deletedAt=null;}
+  render();toast('Товар відновлено ✓','#059669');
+}
+function bulkAct(v){sel.forEach(id=>{const p=prods.find(x=>x.id===id);if(p)p.status=v?'active':'inactive';});sel.clear();render();toast(v?'Активовано ✓':'Деактивовано');}
+function bulkRestore(){sel.forEach(id=>{const p=prods.find(x=>x.id===id);if(p){p.status='inactive';p.deletedAt=null;}});sel.clear();render();toast('Товари відновлено ✓','#059669');}
+
+// ══ GALLERY ══
+function openGal(id){
+  galId=id;galIdx=0;
+  const p=prods.find(x=>x.id===id);
+  document.getElementById('galName').textContent=p.name;
+  renderGal(p);
+  openM('galOv');
+}
+function renderGal(p){
+  const variants=[p.icon,'✨'+p.icon,'🌟'+p.icon];
+  document.getElementById('galImg').textContent=variants[galIdx%variants.length];
+  const dots=document.getElementById('galDots');
+  dots.innerHTML=variants.map((_,i)=>`<div class="dot ${i===galIdx%variants.length?'active':''}" onclick="galGo(${i})"></div>`).join('');
+}
+function galGo(i){
+  const p=prods.find(x=>x.id===galId);if(!p)return;
+  const variants=[p.icon,'✨'+p.icon,'🌟'+p.icon];
+  i=((i%variants.length)+variants.length)%variants.length;
+  galIdx=i;
+  const img=document.getElementById('galImg');
+  img.style.transform='scale(.9)';img.style.opacity='.5';
+  setTimeout(()=>{img.textContent=variants[i];img.style.transform='';img.style.opacity='';},150);
+  renderGal(p);
+}
+function galSend(){closeM('galOv');sel.clear();sel.add(galId);openBC();}
+function galEdit(){closeM('galOv');openEdit(galId);}
+
+// ══ BROADCAST ══
+function chips(ids){return prods.filter(p=>ids.includes(p.id)).map(p=>`<span class="pchip">${p.icon} ${p.name} <span class="pc">#${p.code}</span></span>`).join('');}
+function showStep(s){['s0','s1','s2','s3'].forEach(x=>document.getElementById(x).classList.toggle('active',x===s));}
+function s1click(id){sel.clear();sel.add(id);render();openBC();}
+function openBC(){
+  const ids=[...sel];if(!ids.length)return;
+  bcAud=null;bcGrp=null;tmpGrps=new Set();
+  if(ids.length<2){
+    document.getElementById('pp0').innerHTML=chips(ids);showStep('s0');
+  } else {
+    document.getElementById('pp1').innerHTML=chips(ids);
+    document.getElementById('aAll').classList.remove('selected');
+    document.getElementById('aGrp').classList.remove('selected');
+    document.getElementById('grpSub').textContent='Ваші сегменти аудиторії';
+    const bn=document.getElementById('bn1');bn.disabled=true;bn.style.opacity='.4';bn.style.cursor='not-allowed';
+    updLim();showStep('s1');
+  }
+  openM('bcOv');
+}
+function selAud(t){
+  bcAud=t;
+  document.getElementById('aAll').classList.toggle('selected',t==='all');
+  document.getElementById('aGrp').classList.toggle('selected',t==='group');
+  if(t==='group'){openGrp();}
+  else{bcGrp=null;unlockNext();}
+}
+function unlockNext(){const bn=document.getElementById('bn1');bn.disabled=false;bn.style.opacity='1';bn.style.cursor='pointer';}
+function goS2(){
+  if(!bcAud)return;
+  const ids=[...sel];document.getElementById('pp2').innerHTML=chips(ids);
+  if(bcAud==='all'){document.getElementById('audSum').textContent='👥 Усі користувачі';document.getElementById('cntSum').textContent='523 підписники отримають повідомлення';}
+  else{document.getElementById('audSum').textContent=`${bcGrp.emoji} ${bcGrp.names.join(', ')}`;document.getElementById('cntSum').textContent=`${bcGrp.total} клієнтів отримають повідомлення`;}
+  showStep('s2');
+}
+function goS1(){showStep('s1');}
+function doSend(){
+  const cnt=bcAud==='all'?523:bcGrp.total;
+  document.getElementById('sucMsg').textContent=`Розсилку з ${[...sel].length} товарів надіслано ${cnt} клієнтам 🚀`;
+  limitUsed=Math.min(limitUsed+[...sel].length,LIMIT);showStep('s3');sel.clear();render();
+}
+function doSingle(){
+  const ids=[...sel],names=ids.map(id=>prods.find(p=>p.id===id)?.name).filter(Boolean).join(', ');
+  document.getElementById('sucMsg').textContent=`«${names}» надіслано в бот ✓`;
+  showStep('s3');sel.clear();render();
+}
+function updLim(){
+  const left=LIMIT-limitUsed,pct=(limitUsed/LIMIT)*100;
+  document.getElementById('lu').textContent=limitUsed;document.getElementById('ll').textContent=Math.max(0,left);
+  document.getElementById('lf').style.width=Math.min(pct,100)+'%';
+  document.getElementById('lf').className='limfill'+(pct>=80?' warn':'');
+}
+
+// ══ GROUP PICKER ══
+function grpTotal(){return[...tmpGrps].reduce((s,id)=>{const g=GROUPS.find(x=>x.id===id);return s+(g?g.c:0);},0);}
+function updGrpBar(){
+  const total=grpTotal(),left=LIMIT-limitUsed,over=total>left;
+  const bar=document.getElementById('gSelBar');
+  const btn=document.getElementById('grpConfBtn');
+  if(tmpGrps.size===0){bar.style.display='none';btn.disabled=true;btn.style.opacity='.4';btn.style.cursor='not-allowed';}
+  else{
+    bar.style.display='flex';
+    document.getElementById('gSelTxt').textContent=`Обрано ${tmpGrps.size} гр. · ${total} клієнтів`;
+    document.getElementById('gSelTxt').className='gseltxt'+(over?' over':'');
+    document.getElementById('gLimWarn').style.display=over?'inline':'none';
+    btn.disabled=over;btn.style.opacity=over?'.4':'1';btn.style.cursor=over?'not-allowed':'pointer';
+  }
+  const pct=(limitUsed/LIMIT)*100,ll=Math.max(0,LIMIT-limitUsed);
+  document.getElementById('glu').textContent=limitUsed;document.getElementById('gll').textContent=ll;
+  document.getElementById('gll').className='gllval'+(ll<=0?' over':'');
+  document.getElementById('glf').style.width=Math.min(pct,100)+'%';
+  document.getElementById('glf').className='limfill'+(pct>=80?' warn':'');
+}
+function openGrp(){
+  tmpGrps=bcGrp?new Set(bcGrp.ids):new Set();
+  document.getElementById('glist').innerHTML=GROUPS.map(g=>`
+    <div class="gitem ${tmpGrps.has(g.id)?'picked':''}" id="gi${g.id}" onclick="pickGrp('${g.id}')">
+      <span class="gemo">${g.e}</span>
+      <div class="ginfo"><div class="gname">${g.n}</div><div class="gcnt">${g.c} клієнтів</div></div>
+      <div class="gpick"><svg class="gpickd" viewBox="0 0 11 9" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-7"/></svg></div>
+    </div>`).join('');
+  updGrpBar();openM('grpOv');
+}
+function pickGrp(id){
+  if(tmpGrps.has(id))tmpGrps.delete(id);else tmpGrps.add(id);
+  document.getElementById('gi'+id).classList.toggle('picked',tmpGrps.has(id));
+  updGrpBar();
+}
+function confirmGrp(){
+  if(tmpGrps.size===0||document.getElementById('grpConfBtn').disabled)return;
+  const picked=GROUPS.filter(g=>tmpGrps.has(g.id));
+  const total=picked.reduce((s,g)=>s+g.c,0);
+  bcGrp={ids:[...tmpGrps],names:picked.map(g=>g.n),total,emoji:picked.length===1?picked[0].e:'🎯'};
+  closeM('grpOv');
+  const sub=picked.length===1?`${picked[0].e} ${picked[0].n} · ${total} клієнтів`:`🎯 ${picked.length} групи · ${total} клієнтів`;
+  document.getElementById('grpSub').textContent=sub;
+  unlockNext();
+}
+
+// ══ TOPUP ══
+function doTopup(n){
+  limitUsed=Math.max(0,limitUsed-n);closeM('tpOv');updLim();updGrpBar();
+  toast(`+${n} повідомлень додано ✓`,'#059669');
+}
+
+// ══ INIT ══
+render();
+</script>
+</body>
+</html>
