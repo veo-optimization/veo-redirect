@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>Умови магазину — Beroo</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap');
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --p:#7C3AED;--p2:#6D28D9;--ps:#F5F3FF;--pb:#EDE9FE;
+  --g:#059669;--gs:#D1FAE5;
+  --r:#DC2626;--rs:#FEE2E2;
+  --a:#D97706;--as:#FEF3C7;
+  --tx:#111827;--sub:#6B7280;--brd:#E5E7EB;--bg:#F8F7FF;--card:#fff;
+  --rad:14px;--sh:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);
+}
+
+html,body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--tx);min-height:100vh}
+
+/* TOPBAR */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.93);backdrop-filter:blur(14px);border-bottom:1px solid var(--brd);display:flex;align-items:center;padding:0 16px;height:56px;gap:10px}
+.tlogo{width:32px;height:32px;background:var(--p);border-radius:8px;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0}
+.ttitle{font-size:17px;font-weight:700;flex:1}
+
+/* PAGE BODY */
+.page{padding:16px 16px 100px}
+
+/* SECTION */
+.section{background:var(--card);border-radius:var(--rad);box-shadow:var(--sh);margin-bottom:16px;overflow:hidden}
+.sec-head{padding:16px 16px 0;display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.sec-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.sec-ico.pay{background:#F0FDF4}
+.sec-ico.ship{background:#EFF6FF}
+.sec-ico.ret{background:#FFF7ED}
+.sec-ico.fis{background:#FDF4FF}
+.sec-title{font-size:16px;font-weight:700}
+.sec-sub{font-size:12px;color:var(--sub);margin-left:46px;margin-bottom:12px;padding:0 16px}
+
+/* DIVIDER */
+.sec-div{height:1px;background:var(--brd);margin:0 16px}
+
+/* BLOCK inside section */
+.blk{padding:14px 16px}
+.blk-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--sub);margin-bottom:10px}
+
+/* OPTION ROW (checkbox / radio) */
+.opt{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--brd);cursor:pointer;user-select:none;position:relative}
+.opt:last-child{border-bottom:none}
+.opt-ctrl{flex-shrink:0;margin-top:1px}
+
+/* custom checkbox */
+.cbx{width:20px;height:20px;border:2px solid var(--brd);border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.cbx svg{display:none;color:#fff}
+input[type=checkbox]:checked+.cbx{background:var(--p);border-color:var(--p)}
+input[type=checkbox]:checked+.cbx svg{display:block}
+input[type=checkbox]{position:absolute;opacity:0;width:0;height:0}
+
+/* custom radio */
+.rdo{width:20px;height:20px;border:2px solid var(--brd);border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.rdo::after{content:'';width:8px;height:8px;border-radius:50%;background:transparent;transition:background .15s}
+input[type=radio]:checked+.rdo{border-color:var(--p)}
+input[type=radio]:checked+.rdo::after{background:var(--p)}
+input[type=radio]{position:absolute;opacity:0;width:0;height:0}
+
+.opt-body{flex:1;min-width:0}
+.opt-lbl{font-size:14px;font-weight:500;line-height:1.35}
+.opt-hint{font-size:12px;color:var(--sub);margin-top:2px}
+
+/* INLINE INPUT inside opt */
+.opt-inline{margin-top:8px;display:none}
+.opt-inline.show{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.ifield{border:1.5px solid var(--brd);border-radius:10px;padding:8px 12px;font-family:inherit;font-size:14px;color:var(--tx);background:var(--bg);outline:none;transition:border-color .15s}
+.ifield:focus{border-color:var(--p)}
+.ifield.sm{width:80px}
+.ifield.md{width:130px}
+.ifield.lg{width:100%}
+.ifield.time{width:80px;font-family:'DM Mono',monospace}
+.iunit{font-size:13px;color:var(--sub);white-space:nowrap}
+
+/* DAYS GRID */
+.days-grid{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.day-btn{border:1.5px solid var(--brd);border-radius:8px;padding:6px 10px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;background:var(--bg);color:var(--sub);transition:all .15s}
+.day-btn.on{border-color:var(--p);background:var(--pb);color:var(--p)}
+
+/* TAG-STYLE multi-select for return conditions */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.tag{display:inline-flex;align-items:center;gap:5px;border:1.5px solid var(--brd);border-radius:20px;padding:5px 12px;font-size:13px;font-weight:500;cursor:pointer;background:var(--bg);color:var(--sub);transition:all .15s;user-select:none}
+.tag input{position:absolute;opacity:0;width:0;height:0}
+.tag.on{border-color:var(--p);background:var(--pb);color:var(--p)}
+.tag-ico{font-size:14px}
+
+/* SAVE BTN */
+.save-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,.95);backdrop-filter:blur(12px);border-top:1px solid var(--brd);padding:12px 16px;z-index:60;display:flex;gap:10px}
+.savebtn{flex:1;background:var(--p);color:#fff;border:none;border-radius:12px;padding:13px;font-family:inherit;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:background .15s}
+.savebtn:active{background:var(--p2)}
+.prevbtn{flex:1;border:1.5px solid var(--brd);background:transparent;border-radius:12px;padding:13px;font-family:inherit;font-size:15px;font-weight:600;color:var(--sub);cursor:pointer}
+
+/* SUCCESS TOAST */
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#111827;color:#fff;padding:10px 22px;border-radius:12px;font-size:14px;font-weight:600;z-index:9999;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity .25s}
+.toast.show{opacity:1}
+
+/* PREVIEW MODAL */
+.pov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);backdrop-filter:blur(4px);z-index:100;align-items:flex-end;justify-content:center}
+.pov.open{display:flex}
+.psheet{background:var(--card);border-radius:22px 22px 0 0;width:100%;max-width:480px;padding:8px 20px 32px;max-height:90vh;overflow-y:auto;animation:shUp .25s cubic-bezier(.32,1,.46,1)}
+@keyframes shUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+.ph{width:40px;height:4px;background:var(--brd);border-radius:2px;margin:8px auto 18px}
+.psh{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.psh h2{font-size:18px;font-weight:700}
+.xbtn{width:32px;height:32px;border:none;background:var(--bg);border-radius:50%;font-size:18px;color:var(--sub);cursor:pointer;display:flex;align-items:center;justify-content:center}
+.ptab{display:flex;gap:4px;background:var(--bg);border-radius:10px;padding:3px;margin-bottom:18px}
+.ptab button{flex:1;border:none;background:transparent;border-radius:8px;padding:8px;font-family:inherit;font-size:13px;font-weight:600;color:var(--sub);cursor:pointer;transition:all .15s}
+.ptab button.active{background:var(--p);color:#fff}
+.prev-content{display:none}.prev-content.active{display:block}
+.prev-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--brd)}
+.prev-row:last-child{border-bottom:none}
+.prev-ico{font-size:18px;flex-shrink:0;margin-top:1px}
+.prev-body .prev-title{font-size:14px;font-weight:600;margin-bottom:2px}
+.prev-body .prev-val{font-size:13px;color:var(--sub);line-height:1.5}
+.empty-prev{text-align:center;padding:32px 0;color:var(--sub);font-size:14px}
+
+/* PROGRESS BAR */
+.progress-bar{display:flex;gap:4px;padding:0 16px 12px}
+.pb-seg{flex:1;height:4px;border-radius:2px;background:var(--brd);transition:background .3s}
+.pb-seg.done{background:var(--p)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tlogo">B</div>
+  <span class="ttitle">Умови магазину</span>
+  <button onclick="openPreview()" style="border:none;background:var(--pb);color:var(--p);border-radius:9px;padding:6px 12px;font-family:inherit;font-size:13px;font-weight:700;cursor:pointer">Перегляд</button>
+</div>
+
+<div class="progress-bar" id="progBar">
+  <div class="pb-seg" id="ps1"></div>
+  <div class="pb-seg" id="ps2"></div>
+  <div class="pb-seg" id="ps3"></div>
+  <div class="pb-seg" id="ps4"></div>
+</div>
+
+<div class="page" id="mainPage">
+
+  <!-- ═══ 1. ОПЛАТА ═══ -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-ico pay">💳</div>
+      <div class="sec-title">Способи оплати</div>
+    </div>
+    <div class="sec-sub">Оберіть усі варіанти, які ви приймаєте</div>
+
+    <div class="blk">
+      <div class="blk-title">Безготівкова оплата</div>
+
+      <label class="opt" onclick="toggle(this)">
+        <input type="checkbox" id="pay_card">
+        <div class="cbx"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-6"/></svg></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Карткою онлайн (еквайринг)</div>
+          <div class="opt-hint">Visa, Mastercard через платіжну форму</div>
+        </div>
+      </label>
+
+      <label class="opt" onclick="toggle(this)">
+        <input type="checkbox" id="pay_iban">
+        <div class="cbx"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-6"/></svg></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Переказ на IBAN</div>
+          <div class="opt-hint">Оплата за реквізитами на рахунок ФОП / юрособи</div>
+        </div>
+      </label>
+
+      <label class="opt" onclick="toggle(this)">
+        <input type="checkbox" id="pay_crypto">
+        <div class="cbx"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-6"/></svg></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Криптовалюта</div>
+          <div class="opt-hint">Вкажіть, яку саме</div>
+          <div class="opt-inline" id="crypto_input">
+            <input class="ifield md" placeholder="USDT, BTC, ETH…" id="crypto_name">
+          </div>
+        </div>
+      </label>
+
+    </div>
+
+    <div class="sec-div"></div>
+    <div class="blk">
+      <div class="blk-title">Готівка та накладений платіж</div>
+
+      <label class="opt" onclick="toggle(this)">
+        <input type="checkbox" id="pay_cash">
+        <div class="cbx"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-6"/></svg></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Готівкою</div>
+          <div class="opt-hint">При самовивозі або особистій зустрічі</div>
+        </div>
+      </label>
+
+      <label class="opt" onclick="toggle(this)">
+        <input type="checkbox" id="pay_cod">
+        <div class="cbx"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-6"/></svg></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Накладений платіж</div>
+          <div class="opt-hint">Оплата при отриманні у відділенні</div>
+          <div class="opt-inline" id="cod_options">
+            <div style="width:100%">
+              <div style="font-size:12px;font-weight:600;color:var(--sub);margin-bottom:8px">Умови передплати:</div>
+              <label class="opt" onclick="toggle(this)" style="border:none;padding:5px 0">
+                <input type="radio" name="cod_type" id="cod_full">
+                <div class="rdo"></div>
+                <div class="opt-body"><div class="opt-lbl">100% накладений (без передплати)</div></div>
+              </label>
+              <label class="opt" onclick="toggle(this)" style="border:none;padding:5px 0">
+                <input type="radio" name="cod_type" id="cod_partial">
+                <div class="rdo"></div>
+                <div class="opt-body">
+                  <div class="opt-lbl">Часткова передплата</div>
+                  <div class="opt-inline show" style="margin-top:6px">
+                    <input class="ifield sm" type="number" min="1" max="99" placeholder="20" id="cod_percent">
+                    <span class="iunit">% передплати</span>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </label>
+
+    </div>
+  </div>
+
+  <!-- ═══ 2. ФІСКАЛЬНИЙ ЧЕК ═══ -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-ico fis">🧾</div>
+      <div class="sec-title">Фіскальний чек</div>
+    </div>
+    <div class="sec-sub">Чи видаєте ви офіційний чек покупцю?</div>
+
+    <div class="blk">
+      <label class="opt" onclick="toggle(this)">
+        <input type="radio" name="fiscal" id="fis_no">
+        <div class="rdo"></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Чек не видається</div>
+        </div>
+      </label>
+
+      <label class="opt" onclick="toggle(this)">
+        <input type="radio" name="fiscal" id="fis_yes">
+        <div class="rdo"></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Видаю фіскальний чек</div>
+          <div class="opt-inline" id="fis_formats">
+            <div style="width:100%">
+              <div style="font-size:12px;font-weight:600;color:var(--sub);margin-bottom:8px">Формат (можна декілька):</div>
+              <label class="opt" onclick="toggle(this)" style="border:none;padding:5px 0">
+                <input type="checkbox" id="fis_email">
+                <div class="cbx"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-6"/></svg></div>
+                <div class="opt-body"><div class="opt-lbl">На електронну пошту</div></div>
+              </label>
+              <label class="opt" onclick="toggle(this)" style="border:none;padding:5px 0">
+                <input type="checkbox" id="fis_msg">
+                <div class="cbx"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-6"/></svg></div>
+                <div class="opt-body"><div class="opt-lbl">У месенджері (Telegram, Viber)</div></div>
+              </label>
+              <label class="opt" onclick="toggle(this)" style="border:none;padding:5px 0">
+                <input type="checkbox" id="fis_paper">
+                <div class="cbx"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-6"/></svg></div>
+                <div class="opt-body"><div class="opt-lbl">Друкований — вкладається у посилку</div></div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </label>
+    </div>
+  </div>
+
+  <!-- ═══ 3. ВІДПРАВКА ═══ -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-ico ship">📦</div>
+      <div class="sec-title">Терміни відправки</div>
+    </div>
+    <div class="sec-sub">Коли покупець може очікувати відправку після оплати?</div>
+
+    <div class="blk">
+      <label class="opt" onclick="shipSelect('same')">
+        <input type="radio" name="ship_time" id="ship_same">
+        <div class="rdo"></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Того ж дня</div>
+          <div class="opt-hint">Якщо оплата надійшла до певного часу</div>
+          <div class="opt-inline" id="ship_same_time">
+            <input class="ifield time" type="time" id="ship_cutoff" value="14:00">
+            <span class="iunit">— крайній час оплати</span>
+          </div>
+        </div>
+      </label>
+
+      <label class="opt" onclick="shipSelect('next')">
+        <input type="radio" name="ship_time" id="ship_next">
+        <div class="rdo"></div>
+        <div class="opt-body">
+          <div class="opt-lbl">На наступний день</div>
+        </div>
+      </label>
+
+      <label class="opt" onclick="shipSelect('1_3')">
+        <input type="radio" name="ship_time" id="ship_1_3">
+        <div class="rdo"></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Впродовж 1–3 робочих днів</div>
+        </div>
+      </label>
+
+      <label class="opt" onclick="shipSelect('defer')">
+        <input type="radio" name="ship_time" id="ship_defer">
+        <div class="rdo"></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Можна відкласти відправку</div>
+          <div class="opt-hint">Покупець сам обирає зручну дату</div>
+          <div class="opt-inline" id="ship_defer_days">
+            <span class="iunit">до</span>
+            <input class="ifield sm" type="number" min="1" max="30" placeholder="7" id="defer_days">
+            <span class="iunit">днів</span>
+          </div>
+        </div>
+      </label>
+
+      <label class="opt" onclick="shipSelect('days')">
+        <input type="radio" name="ship_time" id="ship_days">
+        <div class="rdo"></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Відправляю в обрані дні тижня</div>
+          <div class="opt-inline" id="ship_weekdays">
+            <div class="days-grid" id="daysGrid">
+              <button type="button" class="day-btn" data-day="пн" onclick="toggleDay(this)">Пн</button>
+              <button type="button" class="day-btn" data-day="вт" onclick="toggleDay(this)">Вт</button>
+              <button type="button" class="day-btn" data-day="ср" onclick="toggleDay(this)">Ср</button>
+              <button type="button" class="day-btn" data-day="чт" onclick="toggleDay(this)">Чт</button>
+              <button type="button" class="day-btn" data-day="пт" onclick="toggleDay(this)">Пт</button>
+              <button type="button" class="day-btn" data-day="сб" onclick="toggleDay(this)">Сб</button>
+              <button type="button" class="day-btn" data-day="нд" onclick="toggleDay(this)">Нд</button>
+            </div>
+          </div>
+        </div>
+      </label>
+
+    </div>
+  </div>
+
+  <!-- ═══ 4. ДОСТАВКА ═══ -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-ico ship">🚚</div>
+      <div class="sec-title">Способи доставки</div>
+    </div>
+    <div class="sec-sub">Оберіть усі служби, через які ви відправляєте</div>
+
+    <div class="blk">
+      <div class="blk-title">Кур'єрські служби</div>
+
+      <label class="opt" onclick="toggle(this)">
+        <input type="checkbox" id="del_np">
+        <div class="cbx"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-6"/></svg></div>
+        <div class="opt-body"><div class="opt-lbl">Нова Пошта</div></div>
+      </label>
+
+      <label class="opt" onclick="toggle(this)">
+        <input type="checkbox" id="del_up">
+        <div class="cbx"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-6"/></svg></div>
+        <div class="opt-body"><div class="opt-lbl">Укрпошта</div></div>
+      </label>
+
+      <label class="opt" onclick="toggle(this)">
+        <input type="checkbox" id="del_mist">
+        <div class="cbx"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-6"/></svg></div>
+        <div class="opt-body"><div class="opt-lbl">Міст Експрес</div></div>
+      </label>
+
+      <label class="opt" onclick="toggle(this)">
+        <input type="checkbox" id="del_del">
+        <div class="cbx"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-6"/></svg></div>
+        <div class="opt-body"><div class="opt-lbl">Делівері</div></div>
+      </label>
+
+      <label class="opt" onclick="toggle(this)">
+        <input type="checkbox" id="del_courier">
+        <div class="cbx"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-6"/></svg></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Кур'єром до дверей</div>
+          <div class="opt-hint">Власний кур'єр або через сервіс</div>
+        </div>
+      </label>
+
+    </div>
+
+    <div class="sec-div"></div>
+    <div class="blk">
+      <div class="blk-title">Додаткові опції</div>
+
+      <label class="opt" onclick="toggle(this)">
+        <input type="checkbox" id="del_pickup">
+        <div class="cbx"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-6"/></svg></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Самовивіз</div>
+          <div class="opt-hint">Покупець забирає особисто</div>
+          <div class="opt-inline" id="pickup_addr">
+            <input class="ifield lg" placeholder="Адреса самовивозу" id="pickup_address">
+          </div>
+        </div>
+      </label>
+
+      <label class="opt" onclick="toggle(this)">
+        <input type="checkbox" id="del_intl">
+        <div class="cbx"><svg width="11" height="9" viewBox="0 0 11 9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4.5l3 3 6-6"/></svg></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Міжнародна доставка</div>
+          <div class="opt-hint">Відправляю за кордон</div>
+          <div class="opt-inline" id="intl_countries">
+            <input class="ifield lg" placeholder="Країни: Польща, Германія, ЄС…" id="intl_list">
+          </div>
+        </div>
+      </label>
+
+    </div>
+  </div>
+
+  <!-- ═══ 5. ОБМІН І ПОВЕРНЕННЯ ═══ -->
+  <div class="section">
+    <div class="sec-head">
+      <div class="sec-ico ret">🔄</div>
+      <div class="sec-title">Обмін і повернення</div>
+    </div>
+    <div class="sec-sub">Вкажіть вашу загальну політику, а потім — конкретні умови</div>
+
+    <div class="blk">
+      <div class="blk-title">Загальна політика</div>
+
+      <label class="opt" onclick="retSelect('none')">
+        <input type="radio" name="ret_policy" id="ret_none">
+        <div class="rdo"></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Обмін і повернення не приймаю</div>
+          <div class="opt-hint">Продаж кінцевий, без винятків</div>
+        </div>
+      </label>
+
+      <label class="opt" onclick="retSelect('exchange')">
+        <input type="radio" name="ret_policy" id="ret_exchange">
+        <div class="rdo"></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Тільки обмін</div>
+          <div class="opt-hint">Повернення грошей не передбачено</div>
+        </div>
+      </label>
+
+      <label class="opt" onclick="retSelect('return')">
+        <input type="radio" name="ret_policy" id="ret_return">
+        <div class="rdo"></div>
+        <div class="opt-body">
+          <div class="opt-lbl">Тільки повернення</div>
+          <div class="opt-hint">Обмін не передбачено</div>
+        </div>
+      </label>
+
+      <label class="opt" onclick="retSelect('both')">
+        <input type="radio" name="ret_policy" id="ret_both">
+        <div class="rdo"></div>
+        <div class="opt-body">
+          <div class="opt-lbl">І обмін, і повернення</div>
+          <div class="opt-hint">Приймаю обидва варіанти</div>
+        </div>
+      </label>
+    </div>
+
+    <!-- CONDITIONS (shown when not 'none') -->
+    <div id="ret_conditions" style="display:none">
+      <div class="sec-div"></div>
+      <div class="blk">
+        <div class="blk-title">Умови прийняття (оберіть усі, що підходять)</div>
+        <div class="tags" id="retTags">
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_14">
+            <span class="tag-ico">📅</span> До 14 днів
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_30">
+            <span class="tag-ico">📅</span> До 30 днів
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_np_check">
+            <span class="tag-ico">📮</span> Огляд на пошті
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_defect">
+            <span class="tag-ico">❌</span> Лише при браку
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_tags">
+            <span class="tag-ico">🏷</span> Бірки збережені
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_unworn">
+            <span class="tag-ico">👗</span> Не було у носінні
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_packed">
+            <span class="tag-ico">📦</span> Оригінальна упаковка
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_size">
+            <span class="tag-ico">📐</span> Невідповідність розміру
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_color">
+            <span class="tag-ico">🎨</span> Колір відрізняється від фото
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_receipt">
+            <span class="tag-ico">🧾</span> Наявність чеку
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_photo">
+            <span class="tag-ico">📸</span> Фото дефекту обов'язкове
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_buyer_pay">
+            <span class="tag-ico">💸</span> Доставку оплачує покупець
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_seller_pay">
+            <span class="tag-ico">🎁</span> Доставку оплачую я
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_no_sale">
+            <span class="tag-ico">🚫</span> Не підлягає поверненню (акційний товар)
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_agree">
+            <span class="tag-ico">🤝</span> За попередньою домовленістю
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_no_linen">
+            <span class="tag-ico">🩲</span> Не повертається білизна та купальники
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_no_custom">
+            <span class="tag-ico">✂️</span> Не повертається індивідуальний пошив
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_exchange_only_diff">
+            <span class="tag-ico">🔁</span> Обмін лише на інший розмір
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_credit">
+            <span class="tag-ico">💳</span> Повернення бонусами / кредитом магазину
+          </label>
+
+          <label class="tag" onclick="toggleTag(this)">
+            <input type="checkbox" id="rc_clean">
+            <span class="tag-ico">🧺</span> Товар не був у пранні
+          </label>
+
+        </div>
+
+        <!-- Custom condition -->
+        <div style="margin-top:14px">
+          <div style="font-size:12px;font-weight:600;color:var(--sub);margin-bottom:6px">Власна умова (необов'язково):</div>
+          <input class="ifield lg" placeholder="Наприклад: повернення протягом 7 днів при наявності відео розпакування" id="ret_custom" style="width:100%">
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+
+<!-- SAVE BAR -->
+<div class="save-bar">
+  <button class="prevbtn" onclick="openPreview()">👁 Перегляд</button>
+  <button class="savebtn" onclick="saveSettings()">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
+    Зберегти умови
+  </button>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- PREVIEW MODAL -->
+<div class="pov" id="prevOv" onclick="if(event.target.id==='prevOv')closePrev()">
+  <div class="psheet">
+    <div class="ph"></div>
+    <div class="psh">
+      <h2>Перегляд сторінок</h2>
+      <button class="xbtn" onclick="closePrev()">×</button>
+    </div>
+    <div class="ptab">
+      <button class="active" id="pt1" onclick="switchPrev('pay')">Оплата та доставка</button>
+      <button id="pt2" onclick="switchPrev('ret')">Повернення та обмін</button>
+    </div>
+    <div class="prev-content active" id="prev-pay"></div>
+    <div class="prev-content" id="prev-ret"></div>
+  </div>
+</div>
+
+<script>
+// ─── TOGGLE helpers ───
+function toggle(label){
+  const inp=label.querySelector('input[type=checkbox]');
+  if(!inp)return;
+  const inlines=label.querySelectorAll('.opt-inline');
+  inlines.forEach(el=>{
+    if(inp.checked)el.classList.add('show');
+    else el.classList.remove('show');
+  });
+  updateProgress();
+}
+
+function toggleTag(label){
+  const inp=label.querySelector('input');
+  label.classList.toggle('on',inp.checked);
+  updateProgress();
+}
+
+function toggleDay(btn){
+  btn.classList.toggle('on');
+}
+
+// special radios that show nested content
+function shipSelect(val){
+  setTimeout(()=>{
+    ['same','next','1_3','defer','days'].forEach(v=>{
+      const inlines=document.querySelectorAll(`#ship_${v}_time,#ship_defer_days,#ship_weekdays`);
+    });
+    showIf('ship_same_time', val==='same');
+    showIf('ship_defer_days', val==='defer');
+    showIf('ship_weekdays', val==='days');
+    updateProgress();
+  },10);
+}
+
+function retSelect(val){
+  setTimeout(()=>{
+    const cond=document.getElementById('ret_conditions');
+    cond.style.display=(val==='none')?'none':'block';
+    updateProgress();
+  },10);
+}
+
+function showIf(id,show){
+  const el=document.getElementById(id);
+  if(el)el.classList.toggle('show',show);
+}
+
+// radio inline show for fiscal
+document.addEventListener('change',e=>{
+  if(e.target.name==='fiscal'){
+    const fisFormats=document.getElementById('fis_formats');
+    if(fisFormats)fisFormats.classList.toggle('show',e.target.id==='fis_yes');
+  }
+  if(e.target.name==='cod_type'){
+    // always shown inline
+  }
+  updateProgress();
+});
+
+// watch checkboxes for inline reveal
+document.addEventListener('change',e=>{
+  if(e.target.type==='checkbox'){
+    const label=e.target.closest('.opt');
+    if(label){
+      const inlines=label.querySelectorAll(':scope > .opt-body > .opt-inline');
+      inlines.forEach(el=>el.classList.toggle('show',e.target.checked));
+    }
+  }
+});
+
+// ─── PROGRESS ───
+function updateProgress(){
+  const checks=[
+    ()=>['pay_card','pay_iban','pay_crypto','pay_cash','pay_cod'].some(id=>document.getElementById(id)?.checked),
+    ()=>document.querySelector('input[name=fiscal]:checked')!==null,
+    ()=>document.querySelector('input[name=ship_time]:checked')!==null&&['del_np','del_up','del_mist','del_del','del_courier','del_pickup'].some(id=>document.getElementById(id)?.checked),
+    ()=>document.querySelector('input[name=ret_policy]:checked')!==null,
+  ];
+  checks.forEach((fn,i)=>{
+    document.getElementById('ps'+(i+1))?.classList.toggle('done',fn());
+  });
+}
+
+// ─── PREVIEW ───
+function openPreview(){
+  buildPreview();
+  document.getElementById('prevOv').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closePrev(){
+  document.getElementById('prevOv').classList.remove('open');
+  document.body.style.overflow='';
+}
+function switchPrev(tab){
+  document.getElementById('pt1').classList.toggle('active',tab==='pay');
+  document.getElementById('pt2').classList.toggle('active',tab==='ret');
+  document.getElementById('prev-pay').classList.toggle('active',tab==='pay');
+  document.getElementById('prev-ret').classList.toggle('active',tab==='ret');
+}
+
+function buildPreview(){
+  buildPayPreview();
+  buildRetPreview();
+}
+
+function buildPayPreview(){
+  const rows=[];
+
+  // Payment methods
+  const payMethods=[];
+  if(document.getElementById('pay_card')?.checked) payMethods.push('Карткою онлайн');
+  if(document.getElementById('pay_iban')?.checked) payMethods.push('Переказ на IBAN');
+  if(document.getElementById('pay_cash')?.checked) payMethods.push('Готівкою');
+  if(document.getElementById('pay_crypto')?.checked){
+    const name=document.getElementById('crypto_name')?.value;
+    payMethods.push('Криптовалюта'+(name?` (${name})`:''));
+  }
+  if(document.getElementById('pay_cod')?.checked){
+    const full=document.getElementById('cod_full')?.checked;
+    const pct=document.getElementById('cod_percent')?.value;
+    payMethods.push('Накладений платіж'+(full?' (без передплати)':pct?` (передплата ${pct}%)` :''));
+  }
+  if(payMethods.length)rows.push({ico:'💳',title:'Способи оплати',val:payMethods.join(', ')});
+
+  // Fiscal
+  if(document.getElementById('fis_no')?.checked) rows.push({ico:'🧾',title:'Фіскальний чек',val:'Не видається'});
+  if(document.getElementById('fis_yes')?.checked){
+    const formats=[];
+    if(document.getElementById('fis_email')?.checked) formats.push('на email');
+    if(document.getElementById('fis_msg')?.checked) formats.push('у месенджері');
+    if(document.getElementById('fis_paper')?.checked) formats.push('друкований у посилці');
+    rows.push({ico:'🧾',title:'Фіскальний чек',val:'Видається: '+(formats.join(', ')||'—')});
+  }
+
+  // Shipping time
+  const shipMap={ship_same:'Відправка в день оплати',ship_next:'Відправка наступного дня',ship_1_3:'Впродовж 1–3 робочих днів'};
+  for(const[id,lbl] of Object.entries(shipMap)){
+    if(document.getElementById(id)?.checked){rows.push({ico:'⏱',title:'Терміни відправки',val:lbl});break;}
+  }
+  if(document.getElementById('ship_same')?.checked){
+    const t=document.getElementById('ship_cutoff')?.value;
+    if(t)rows[rows.length-1].val+=` (до ${t})`;
+  }
+  if(document.getElementById('ship_defer')?.checked){
+    const d=document.getElementById('defer_days')?.value;
+    rows.push({ico:'⏱',title:'Терміни відправки',val:`Відправку можна відкласти до ${d||'?'} днів`});
+  }
+  if(document.getElementById('ship_days')?.checked){
+    const days=[...document.querySelectorAll('.day-btn.on')].map(b=>b.dataset.day);
+    rows.push({ico:'⏱',title:'Дні відправки',val:days.length?days.join(', '):'не вибрано'});
+  }
+
+  // Delivery
+  const delMap={del_np:'Нова Пошта',del_up:'Укрпошта',del_mist:'Міст Експрес',del_del:'Делівері',del_courier:"Кур'єром до дверей"};
+  const dels=Object.entries(delMap).filter(([id])=>document.getElementById(id)?.checked).map(([,v])=>v);
+  if(dels.length)rows.push({ico:'🚚',title:'Доставка',val:dels.join(', ')});
+  if(document.getElementById('del_pickup')?.checked){
+    const addr=document.getElementById('pickup_address')?.value;
+    rows.push({ico:'📍',title:'Самовивіз',val:addr||'Адресу не вказано'});
+  }
+  if(document.getElementById('del_intl')?.checked){
+    const countries=document.getElementById('intl_list')?.value;
+    rows.push({ico:'🌍',title:'Міжнародна доставка',val:countries||'Країни не вказано'});
+  }
+
+  const el=document.getElementById('prev-pay');
+  if(!rows.length){el.innerHTML='<div class="empty-prev">Заповніть форму, щоб побачити перегляд</div>';return;}
+  el.innerHTML=rows.map(r=>`<div class="prev-row"><div class="prev-ico">${r.ico}</div><div class="prev-body"><div class="prev-title">${r.title}</div><div class="prev-val">${r.val}</div></div></div>`).join('');
+}
+
+function buildRetPreview(){
+  const el=document.getElementById('prev-ret');
+  const rows=[];
+
+  const pol=document.querySelector('input[name=ret_policy]:checked');
+  if(!pol){el.innerHTML='<div class="empty-prev">Оберіть політику повернення</div>';return;}
+
+  const polMap={ret_none:'Обмін і повернення не приймаються',ret_exchange:'Тільки обмін',ret_return:'Тільки повернення',ret_both:'Обмін і повернення приймаються'};
+  rows.push({ico:'🔄',title:'Загальна політика',val:polMap[pol.id]||'—'});
+
+  if(pol.id!=='ret_none'){
+    const tags=[...document.querySelectorAll('#retTags .tag input:checked')].map(inp=>{
+      return inp.closest('.tag').textContent.trim();
+    });
+    if(tags.length)rows.push({ico:'📋',title:'Умови',val:tags.join('<br>')});
+    const custom=document.getElementById('ret_custom')?.value.trim();
+    if(custom)rows.push({ico:'📝',title:'Додаткова умова',val:custom});
+  }
+
+  el.innerHTML=rows.map(r=>`<div class="prev-row"><div class="prev-ico">${r.ico}</div><div class="prev-body"><div class="prev-title">${r.title}</div><div class="prev-val">${r.val}</div></div></div>`).join('');
+}
+
+// ─── SAVE ───
+function saveSettings(){
+  const t=document.getElementById('toast');
+  t.textContent='✓ Умови магазину збережено';
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+  updateProgress();
+}
+
+// init
+updateProgress();
+</script>
+</body>
+</html>
