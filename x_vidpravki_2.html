@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>Відправки сьогодні</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F5F4F0;
+  --card:#FFFFFF;
+  --tx:#1A1A1A;
+  --sub:#888;
+  --brd:#E8E5DF;
+  --acc:#1A1A1A;
+  --green:#18A558;
+  --green-bg:#EDFAF3;
+  --green-brd:#B2E6CC;
+  --orange:#E86A2E;
+  --orange-bg:#FEF3EE;
+  --orange-brd:#F4C4A8;
+  --blue:#2563EB;
+  --blue-bg:#EEF4FF;
+  --blue-brd:#BFCFFE;
+  --teal:#0D9488;
+  --teal-bg:#F0FDFA;
+  --teal-brd:#99F6E4;
+  --gray:#888;
+  --gray-bg:#F5F4F0;
+  --gray-brd:#E0DDD6;
+  --red:#DC2626;
+  --red-bg:#FEF2F2;
+  --yellow:#B45309;
+  --yellow-bg:#FFFBEB;
+  --yellow-brd:#FDE68A;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:var(--bg);font-family:'DM Sans',sans-serif;color:var(--tx);min-height:100vh}
+body{padding-bottom:60px}
+
+/* ── HEADER ── */
+.header{
+background:#1A1A1A;
+padding:18px 20px 16px;
+display:flex;align-items:center;justify-content:space-between;
+position:sticky;top:0;z-index:50;
+}
+.header-logo{font-family:‘Unbounded’,sans-serif;font-size:13px;font-weight:700;color:#fff;letter-spacing:.05em}
+.header-title{font-size:15px;font-weight:600;color:#fff}
+.header-date{font-size:12px;color:rgba(255,255,255,.5);margin-top:1px;text-align:right}
+
+/* ── STATS ROW ── */
+.stats{
+display:flex;gap:8px;padding:16px 16px 8px;
+overflow-x:auto;scrollbar-width:none;
+}
+.stats::-webkit-scrollbar{display:none}
+.stat{
+flex-shrink:0;background:#fff;border:1px solid var(–brd);
+border-radius:12px;padding:10px 14px;text-align:center;
+min-width:80px;
+}
+.stat-num{font-family:‘Unbounded’,sans-serif;font-size:20px;font-weight:700;line-height:1}
+.stat-lbl{font-size:11px;color:var(–sub);margin-top:3px}
+.stat.urgent .stat-num{color:var(–orange)}
+.stat.done .stat-num{color:var(–green)}
+
+/* ── SEARCH ── */
+.search-row{padding:0 16px 12px;display:flex;gap:8px}
+.search-inp{
+flex:1;background:#fff;border:1.5px solid var(–brd);border-radius:10px;
+padding:10px 14px;font-family:‘DM Sans’,sans-serif;font-size:14px;
+color:var(–tx);outline:none;
+}
+.search-inp:focus{border-color:#1A1A1A}
+.search-inp::placeholder{color:#bbb}
+
+/* ── SECTION LABEL ── */
+.section-lbl{
+padding:0 16px 8px;
+font-size:11px;font-weight:700;text-transform:uppercase;
+letter-spacing:.08em;color:var(–sub);
+display:flex;align-items:center;gap:8px;
+}
+.section-lbl::after{content:’’;flex:1;height:1px;background:var(–brd)}
+
+/* ── CLIENT CARD ── */
+.list{padding:0 12px;display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+
+.ccard{
+background:var(–card);border-radius:16px;
+border:1.5px solid var(–brd);
+overflow:hidden;
+transition:border-color .15s;
+}
+.ccard.status-formed{border-color:var(–blue-brd);background:#fff}
+.ccard.status-sent{border-color:var(–green-brd)}
+.ccard.status-done{border-color:var(–green-brd);opacity:.75}
+
+/* card header */
+.ccard-head{
+padding:14px 16px;
+display:flex;align-items:center;gap:12px;
+cursor:pointer;user-select:none;
+}
+.ccard-head:active{background:#fafafa}
+
+.avatar{
+width:40px;height:40px;border-radius:50%;
+background:#1A1A1A;color:#fff;
+display:flex;align-items:center;justify-content:center;
+font-family:‘Unbounded’,sans-serif;font-size:13px;font-weight:700;
+flex-shrink:0;
+}
+.ccard-info{flex:1;min-width:0}
+.ccard-name{font-size:15px;font-weight:600;margin-bottom:2px}
+.ccard-meta{font-size:12px;color:var(–sub);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.orders-pill{
+background:#f0eeea;border-radius:20px;padding:2px 8px;
+font-size:11px;font-weight:600;color:#555;
+}
+.status-badge{
+display:inline-flex;align-items:center;gap:4px;
+padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;
+border:1.5px solid transparent;
+}
+.sb-new{background:var(–yellow-bg);color:var(–yellow);border-color:var(–yellow-brd)}
+.sb-formed{background:var(–blue-bg);color:var(–blue);border-color:var(–blue-brd)}
+.sb-sent{background:var(–green-bg);color:var(–green);border-color:var(–green-brd)}
+.sb-defer{background:var(–teal-bg);color:var(–teal);border-color:var(–teal-brd)}
+.sb-ignored{background:var(–gray-bg);color:var(–gray);border-color:var(–gray-brd)}
+
+.ccard-chevron{
+color:#bbb;transition:transform .2s;flex-shrink:0;
+}
+.ccard.open .ccard-chevron{transform:rotate(90deg)}
+
+/* pay status strip */
+.pay-strip{
+margin:0 16px 12px;
+padding:8px 12px;border-radius:8px;
+font-size:12px;font-weight:500;
+display:flex;align-items:center;gap:6px;
+}
+.pay-strip.paid{background:var(–green-bg);color:var(–green)}
+.pay-strip.await{background:var(–yellow-bg);color:var(–yellow)}
+.pay-strip.cod{background:var(–blue-bg);color:var(–blue)}
+.pay-strip.unpaid{background:var(–red-bg);color:var(–red)}
+
+/* card body (collapsible) */
+.ccard-body{display:none;border-top:1px solid var(–brd)}
+.ccard.open .ccard-body{display:block}
+
+/* orders */
+.order-block{
+padding:14px 16px;
+border-bottom:1px solid var(–brd);
+}
+.order-block:last-of-type{border-bottom:none}
+.order-head{
+display:flex;align-items:center;justify-content:space-between;
+margin-bottom:8px;
+}
+.order-id{font-family:‘Unbounded’,sans-serif;font-size:12px;font-weight:600}
+.order-sum{font-weight:700;font-size:14px}
+.order-items{display:flex;flex-direction:column;gap:5px;margin-bottom:0}
+.order-item{
+display:flex;align-items:center;gap:10px;
+padding:6px 0;border-bottom:1px dashed var(–brd);
+}
+.order-item:last-child{border-bottom:none}
+.item-icon{font-size:22px;width:32px;text-align:center;flex-shrink:0}
+.item-info{flex:1}
+.item-name{font-size:13px;font-weight:500}
+.item-size{font-size:11px;color:var(–sub)}
+.item-price{font-size:13px;font-weight:700;white-space:nowrap}
+
+/* action buttons */
+.ccard-actions{
+padding:12px 16px;
+display:flex;gap:8px;flex-wrap:wrap;
+border-top:1.5px solid var(–brd);
+background:#fafaf8;
+}
+.btn{
+display:inline-flex;align-items:center;gap:6px;
+padding:10px 16px;border-radius:10px;
+font-family:‘DM Sans’,sans-serif;font-size:13px;font-weight:600;
+cursor:pointer;border:none;transition:all .15s;white-space:nowrap;
+}
+.btn-primary{background:#1A1A1A;color:#fff;flex:2}
+.btn-primary:active{background:#333}
+.btn-outline{background:#fff;color:var(–tx);border:1.5px solid var(–brd);flex:1}
+.btn-outline:active{background:#f5f4f0}
+.btn-green{background:var(–green);color:#fff;flex:1}
+.btn-green:active{opacity:.85}
+.btn-ghost{background:transparent;color:var(–sub);border:1.5px solid var(–brd);flex:1;font-size:12px}
+.btn.full{flex:none;width:100%}
+.btn-primary:disabled,.btn-primary[disabled]{opacity:.4;cursor:not-allowed}
+
+/* TТН display */
+.ttn-display{
+margin:0 16px 12px;
+background:#1A1A1A;color:#fff;
+border-radius:10px;padding:12px 14px;
+display:flex;align-items:center;justify-content:space-between;
+}
+.ttn-label{font-size:11px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
+.ttn-num{font-family:‘Unbounded’,sans-serif;font-size:14px;font-weight:600;letter-spacing:.04em;display:flex;align-items:center;gap:4px}
+.ttn-last{background:#fff;color:#1A1A1A;border-radius:4px;padding:2px 6px;font-size:12px}
+.ttn-copy{background:rgba(255,255,255,.12);border:none;border-radius:6px;padding:6px 10px;color:#fff;font-size:12px;cursor:pointer}
+
+/* delivery cost */
+.del-cost{
+margin:0 16px 10px;
+font-size:12px;color:var(–sub);
+display:flex;align-items:center;justify-content:space-between;
+}
+.del-cost span:last-child{font-weight:700;color:var(–orange)}
+
+/* CONTACT POPUP */
+.popup-overlay{
+display:none;position:fixed;inset:0;
+background:rgba(0,0,0,.4);backdrop-filter:blur(4px);
+z-index:200;align-items:flex-end;justify-content:center;
+}
+.popup-overlay.open{display:flex;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.popup-sheet{
+background:#fff;border-radius:24px 24px 0 0;
+width:100%;max-width:480px;
+padding:8px 20px 32px;
+animation:sheetUp .25s cubic-bezier(.32,1,.46,1);
+}
+@keyframes sheetUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+.popup-handle{width:40px;height:4px;background:#e0ddd6;border-radius:2px;margin:8px auto 18px}
+.popup-name{font-family:‘Unbounded’,sans-serif;font-size:16px;font-weight:700;margin-bottom:4px}
+.popup-id{font-size:12px;color:var(–sub);margin-bottom:16px}
+.contact-btn{
+display:flex;align-items:center;gap:12px;
+padding:13px 0;border-bottom:1px solid var(–brd);
+text-decoration:none;color:var(–tx);
+}
+.contact-btn:last-of-type{border-bottom:none}
+.contact-ico{
+width:38px;height:38px;border-radius:10px;
+display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;
+}
+.contact-txt{flex:1}
+.contact-lbl{font-size:11px;color:var(–sub);margin-bottom:1px}
+.contact-val{font-size:14px;font-weight:600}
+.contact-arrow{color:#bbb;font-size:16px}
+.client-form-section{margin-top:16px;padding-top:16px;border-top:1px solid var(–brd)}
+.cf-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(–sub);margin-bottom:10px}
+.cf-row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px dashed var(–brd);font-size:13px}
+.cf-row:last-child{border-bottom:none}
+.cf-key{color:var(–sub)}
+.cf-val{font-weight:600;max-width:55%;text-align:right}
+.popup-close-btn{width:100%;margin-top:16px;background:#f5f4f0;border:none;border-radius:12px;padding:13px;font-family:‘DM Sans’,sans-serif;font-size:14px;font-weight:600;cursor:pointer;color:var(–tx)}
+
+/* TOAST */
+.toast{
+position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+background:#1A1A1A;color:#fff;padding:11px 20px;border-radius:12px;
+font-size:13px;font-weight:600;z-index:999;white-space:nowrap;
+animation:toastIn .25s ease;pointer-events:none;
+}
+@keyframes toastIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* empty */
+.empty{text-align:center;padding:60px 24px;color:var(–sub)}
+.empty-icon{font-size:48px;margin-bottom:12px}
+</style>
+
+</head>
+<body>
+
+<!-- HEADER -->
+
+<div class="header">
+  <div>
+    <div class="header-logo">BEROO</div>
+  </div>
+  <div>
+    <div class="header-title">📦 Відправки</div>
+    <div class="header-date" id="todayDate"></div>
+  </div>
+</div>
+
+<!-- STATS -->
+
+<div class="stats" id="statsRow"></div>
+
+<!-- SEARCH -->
+
+<div class="search-row">
+  <input class="search-inp" type="text" placeholder="🔍  Пошук клієнта або #замовлення…" id="srch" oninput="render()">
+</div>
+
+<!-- LIST -->
+
+<div id="mainList"></div>
+
+<!-- CONTACT POPUP -->
+
+<div class="popup-overlay" id="contactPopup" onclick="if(event.target===this)closeContact()">
+  <div class="popup-sheet">
+    <div class="popup-handle"></div>
+    <div class="popup-name" id="popupName"></div>
+    <div class="popup-id" id="popupId"></div>
+    <a class="contact-btn" id="popupPhone" href="#">
+      <div class="contact-ico" style="background:#E8F4FF">📞</div>
+      <div class="contact-txt">
+        <div class="contact-lbl">Телефон</div>
+        <div class="contact-val" id="popupPhoneVal"></div>
+      </div>
+      <span class="contact-arrow">›</span>
+    </a>
+    <a class="contact-btn" id="popupTg" href="#" target="_blank">
+      <div class="contact-ico" style="background:#E3F4FC">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#229ED9"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.119 14.06l-2.96-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.957l-.004-.458z"/></svg>
+      </div>
+      <div class="contact-txt">
+        <div class="contact-lbl">Telegram</div>
+        <div class="contact-val" id="popupTgVal"></div>
+      </div>
+      <span class="contact-arrow">›</span>
+    </a>
+    <a class="contact-btn" id="popupViber" href="#" target="_blank">
+      <div class="contact-ico" style="background:#F0EBF8">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="#7360F2"><path d="M11.996 0C5.373 0 0 5.099 0 11.378c0 3.192 1.323 6.063 3.459 8.129v3.244a1.25 1.25 0 001.254 1.25h.01c.316 0 .621-.12.851-.337l2.96-2.802c1.1.232 2.237.356 3.402.356 6.623 0 11.996-5.099 11.996-11.378S18.619 0 11.996 0z"/></svg>
+      </div>
+      <div class="contact-txt">
+        <div class="contact-lbl">Viber</div>
+        <div class="contact-val" id="popupViberVal"></div>
+      </div>
+      <span class="contact-arrow">›</span>
+    </a>
+    <!-- Client form data -->
+    <div class="client-form-section" id="popupForm"></div>
+    <button class="popup-close-btn" onclick="closeContact()">Закрити</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════
+// DATA
+// ══════════════════════════════
+const ITEMS = [
+  {icon:'👗',name:'Сукня вечірня',size:'M',price:340},
+  {icon:'👚',name:'Кофтинка',size:'S',price:100},
+  {icon:'🩱',name:'Спідничка',size:'L',price:290},
+  {icon:'🧣',name:'Топ',size:'XS',price:100},
+  {icon:'🩲',name:'Джинси',size:'32',price:450},
+  {icon:'🧥',name:'Пальто',size:'M',price:1450},
+  {icon:'👟',name:'Кросівки',size:'42',price:1200},
+  {icon:'👜',name:'Сумка',size:'—',price:650},
+  {icon:'👠',name:'Туфлі',size:'38',price:890},
+  {icon:'🎩',name:'Кепка',size:'L',price:150},
+  {icon:'🧤',name:'Рукавички',size:'M',price:190},
+  {icon:'🧦',name:'Шкарпетки',size:'36-40',price:80},
+];
+
+function itm(i,qty=1){return{...ITEMS[i],qty};}
+
+// statuses: 'new' | 'formed' | 'sent' | 'deferred' | 'ignored'
+// payStatus: 'paid' | 'await_prepay' | 'cod' | 'unpaid'
+const SHIPMENTS = [
+  {
+    id:'S1',
+    name:'Іван Петренко',phone:'+380 67 123 4567',
+    telegram:'@ukraine',viber:'+380671234567',
+    form:{Місто:'Київ',Джерело:'TikTok Live',Коментар:'Обережно, крихке'},
+    address:'НП №12, Хрещатик, Київ',
+    status:'new',payStatus:'paid',payMethod:'IBAN',
+    ttn:null,deliveryCost:0,
+    orders:[
+      {id:'#341',items:[itm(0),itm(1,2),itm(9)]},
+      {id:'#367',items:[itm(4)]},
+    ]
+  },
+  {
+    id:'S2',
+    name:'Леся Бондаренко',phone:'+380 50 234 5678',
+    telegram:'@ukraine',viber:'+380502345678',
+    form:{Місто:'Одеса',Джерело:'Telegram чат',Коментар:''},
+    address:'НП №8, Дерибасівська, Одеса',
+    status:'new',payStatus:'await_prepay',payMethod:'IBAN + накладений',
+    prepay:200,prepayRec:0,
+    ttn:null,deliveryCost:0,
+    orders:[
+      {id:'#345',items:[itm(2),itm(3,2)]},
+      {id:'#376',items:[itm(8)]},
+      {id:'#381',items:[itm(10),itm(11,3)]},
+    ]
+  },
+  {
+    id:'S3',
+    name:'Тарас Коваль',phone:'+380 97 345 6789',
+    telegram:'@ukraine',viber:'+380973456789',
+    form:{Місто:'Харків',Джерело:'Сайт каталог'},
+    address:'НП №5, Сумська, Харків',
+    status:'new',payStatus:'await_prepay',payMethod:'IBAN + накладений',
+    prepay:200,prepayRec:200,
+    ttn:null,deliveryCost:0,
+    orders:[
+      {id:'#352',items:[itm(6)]},
+    ]
+  },
+  {
+    id:'S4',
+    name:'Олена Мороз',phone:'+380 66 456 7890',
+    telegram:'@ukraine',viber:'+380664567890',
+    form:{Місто:'Дніпро',Джерело:'TikTok відео'},
+    address:'НП №14, Гагаріна, Дніпро',
+    status:'new',payStatus:'unpaid',payMethod:'IBAN',
+    ttn:null,deliveryCost:0,
+    orders:[
+      {id:'#358',items:[itm(7),itm(3)]},
+    ]
+  },
+  {
+    id:'S5',
+    name:'Марія Савченко',phone:'+380 73 567 8901',
+    telegram:'@ukraine',viber:'+380735678901',
+    form:{Місто:'Вінниця',Джерело:'Instagram'},
+    address:'НП №6, Соборна, Вінниця',
+    status:'new',payStatus:'cod',payMethod:'Накладений платіж',
+    ttn:null,deliveryCost:0,
+    orders:[
+      {id:'#361',items:[itm(0,2),itm(1)]},
+      {id:'#379',items:[itm(5)]},
+    ]
+  },
+  {
+    id:'S6',
+    name:'Андрій Лисенко',phone:'+380 96 678 9012',
+    telegram:'@ukraine',viber:'+380966789012',
+    form:{Місто:'Полтава',Джерело:'Telegram чат'},
+    address:'НП №9, Пушкіна, Полтава',
+    status:'formed',payStatus:'paid',payMethod:'IBAN',
+    ttn:'20451234567890',deliveryCost:120,
+    orders:[
+      {id:'#337',items:[itm(4,2),itm(11,4)]},
+    ]
+  },
+  {
+    id:'S7',
+    name:'Софія Ткач',phone:'+380 68 789 0123',
+    telegram:'@ukraine',viber:'+380687890123',
+    form:{Місто:'Запоріжжя',Джерело:'TikTok Live',Коментар:'Пакет подарунковий'},
+    address:'НП №2, Соборний, Запоріжжя',
+    status:'sent',payStatus:'paid',payMethod:'Картою онлайн',
+    ttn:'20451234567891',deliveryCost:80,
+    orders:[
+      {id:'#329',items:[itm(1,3),itm(3,2)]},
+      {id:'#344',items:[itm(9)]},
+    ]
+  },
+];
+
+// ══════════════════════════════
+// STATUS CONFIG
+// ══════════════════════════════
+const STATUS = {
+  new:     {label:'Нова',       badge:'sb-new',   icon:'📋'},
+  formed:  {label:'ТТН готова', badge:'sb-formed', icon:'📦'},
+  sent:    {label:'Відправлено',badge:'sb-sent',   icon:'✈️'},
+  deferred:{label:'Відкладено', badge:'sb-defer',  icon:'⏱'},
+  ignored: {label:'Архів',      badge:'sb-ignored',icon:'🚫'},
+};
+const PAY = {
+  paid:        {icon:'✅',text:'Оплачено',cls:'paid'},
+  await_prepay:{icon:'⏳',text:'',        cls:'await'},
+  cod:         {icon:'📦',text:'Накладений платіж',cls:'cod'},
+  unpaid:      {icon:'❌',text:'Не оплачено',cls:'unpaid'},
+};
+
+// ══════════════════════════════
+// HELPERS
+// ══════════════════════════════
+function orderTotal(order){return order.items.reduce((s,i)=>s+i.price*i.qty,0);}
+function shipTotal(s){return s.orders.reduce((t,o)=>t+orderTotal(o),0)+(s.deliveryCost||0);}
+function initials(name){return name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();}
+function ttn14(){return '2045'+Math.floor(1e9+Math.random()*9e9);}
+function toast(msg){
+  document.querySelectorAll('.toast').forEach(t=>t.remove());
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  document.body.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transition='opacity .3s';setTimeout(()=>t.remove(),300);},2400);
+}
+
+// ══════════════════════════════
+// RENDER
+// ══════════════════════════════
+function render(){
+  const q=(document.getElementById('srch').value||'').toLowerCase().trim();
+
+  // Stats
+  const newCount=SHIPMENTS.filter(s=>s.status==='new').length;
+  const formedCount=SHIPMENTS.filter(s=>s.status==='formed').length;
+  const sentCount=SHIPMENTS.filter(s=>s.status==='sent').length;
+  document.getElementById('statsRow').innerHTML=`
+    <div class="stat urgent"><div class="stat-num">${newCount}</div><div class="stat-lbl">Нові</div></div>
+    <div class="stat"><div class="stat-num">${formedCount}</div><div class="stat-lbl">ТТН готова</div></div>
+    <div class="stat done"><div class="stat-num">${sentCount}</div><div class="stat-lbl">Відправлено</div></div>
+    <div class="stat"><div class="stat-num">${SHIPMENTS.length}</div><div class="stat-lbl">Всього</div></div>
+  `;
+
+  const groups = {
+    new:      {label:'📋 Нові — потрібна ваша дія', items:[]},
+    formed:   {label:'📦 ТТН готова — везіть на пошту', items:[]},
+    sent:     {label:'✈️ Відправлені — в дорозі', items:[]},
+    deferred: {label:'⏱ Відкладені', items:[]},
+    ignored:  {label:'🚫 Архів', items:[]},
+  };
+
+  SHIPMENTS.forEach(s=>{
+    if(q){
+      const hay=s.name.toLowerCase()+s.orders.map(o=>o.id).join('').toLowerCase();
+      if(!hay.includes(q))return;
+    }
+    groups[s.status]?.items.push(s);
+  });
+
+  const list=document.getElementById('mainList');
+  list.innerHTML='';
+
+  let hasAny=false;
+  Object.entries(groups).forEach(([status,grp])=>{
+    if(!grp.items.length)return;
+    hasAny=true;
+    const sec=document.createElement('div');
+    sec.innerHTML=`<div class="section-lbl">${grp.label}</div>`;
+    const cardsList=document.createElement('div');
+    cardsList.className='list';
+    grp.items.forEach(s=>{
+      cardsList.appendChild(buildCard(s));
+    });
+    sec.appendChild(cardsList);
+    list.appendChild(sec);
+  });
+
+  if(!hasAny){
+    list.innerHTML=`<div class="empty"><div class="empty-icon">🔍</div><p>Нічого не знайдено</p></div>`;
+  }
+}
+
+function buildCard(s){
+  const st=STATUS[s.status];
+  const py=PAY[s.payStatus];
+  const total=shipTotal(s);
+  const totalGoods=s.orders.reduce((t,o)=>t+orderTotal(o),0);
+  const cardId='card-'+s.id;
+
+  // Pay strip text
+  let payText=py.text;
+  if(s.payStatus==='await_prepay'){
+    const rec=s.prepayRec||0,need=s.prepay||200;
+    if(rec>=need) payText=`Передплата ${need} ₴ отримана ✓`;
+    else payText=`Очікує передплату ${need} ₴ на IBAN`;
+  }
+
+  // Buttons
+  let actionBtns='';
+  if(s.status==='new'){
+    const canForm=s.payStatus==='paid'||(s.payStatus==='await_prepay'&&(s.prepayRec||0)>=(s.prepay||200))||s.payStatus==='cod';
+    actionBtns=`
+      <button class="btn btn-primary" onclick="formTTN('${s.id}')" ${canForm?'':'disabled'} style="${canForm?'':'cursor:not-allowed'}" title="${canForm?'':'Спочатку підтвердіть передплату'}">
+        📋 Сформувати ТТН ${canForm?'':'(очікує оплату)'}
+      </button>
+      <button class="btn btn-outline" onclick="openContact('${s.id}')">💬 Написати</button>
+    `;
+    if(s.payStatus==='await_prepay'&&(s.prepayRec||0)<(s.prepay||200)){
+      actionBtns=`
+        <button class="btn btn-outline full" style="color:#B45309;border-color:#FDE68A;background:#FFFBEB" onclick="confirmPrepay('${s.id}')">
+          ✓ Підтвердити отримання ${s.prepay} ₴ на IBAN
+        </button>
+        <button class="btn btn-primary" disabled style="opacity:.35;cursor:not-allowed;flex:2">📋 Сформувати ТТН</button>
+        <button class="btn btn-outline" onclick="openContact('${s.id}')">💬 Написати</button>
+      `;
+    }
+    actionBtns+=`<button class="btn btn-ghost" onclick="deferShip('${s.id}')">⏱ Відкласти</button>`;
+  } else if(s.status==='formed'){
+    actionBtns=`
+      <button class="btn btn-green" onclick="markSent('${s.id}')">✈️ Відправлено на НП</button>
+      <button class="btn btn-outline" onclick="openContact('${s.id}')">💬 Написати</button>
+    `;
+  } else if(s.status==='sent'){
+    actionBtns=`<button class="btn btn-outline" onclick="openContact('${s.id}')">💬 Написати клієнту</button>`;
+  } else {
+    actionBtns=`
+      <button class="btn btn-outline" onclick="restoreShip('${s.id}')">↩️ Відновити</button>
+      <button class="btn btn-outline" onclick="openContact('${s.id}')">💬 Написати</button>
+    `;
+  }
+
+  // TТН block
+  let ttnBlock='';
+  if(s.ttn){
+    ttnBlock=`
+      <div class="ttn-display">
+        <div>
+          <div class="ttn-label">ТТН Нова Пошта</div>
+          <div class="ttn-num">${s.ttn.slice(0,10)}<span class="ttn-last">${s.ttn.slice(10)}</span></div>
+        </div>
+        <button class="ttn-copy" onclick="copyTTN('${s.ttn}')">Копіювати</button>
+      </div>
+      <div class="del-cost"><span>🚚 Вартість доставки</span><span>${s.deliveryCost} ₴</span></div>
+    `;
+  }
+
+  // Orders HTML
+  const ordersHtml=s.orders.map(o=>{
+    const oTotal=orderTotal(o);
+    return `<div class="order-block">
+      <div class="order-head">
+        <div class="order-id">${o.id}</div>
+        <div class="order-sum">${oTotal.toLocaleString()} ₴</div>
+      </div>
+      <div class="order-items">
+        ${o.items.map(it=>`
+          <div class="order-item">
+            <div class="item-icon">${it.icon}</div>
+            <div class="item-info">
+              <div class="item-name">${it.name}${it.qty>1?` × ${it.qty}`:''}</div>
+              <div class="item-size">Розмір: ${it.size}</div>
+            </div>
+            <div class="item-price">${(it.price*it.qty).toLocaleString()} ₴</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+
+  const div=document.createElement('div');
+  div.id=cardId;
+  div.className=`ccard status-${s.status}`;
+  div.innerHTML=`
+    <div class="ccard-head" onclick="toggleCard('${s.id}')">
+      <div class="avatar">${initials(s.name)}</div>
+      <div class="ccard-info">
+        <div class="ccard-name">${s.name}</div>
+        <div class="ccard-meta">
+          <span class="orders-pill">${s.orders.length === 1 ? s.orders[0].id : s.orders.map(o=>o.id).join(', ')}</span>
+          <span class="status-badge ${st.badge}">${st.icon} ${st.label}</span>
+        </div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;margin-left:6px">
+        <div style="font-weight:700;font-size:14px">${total.toLocaleString()} ₴</div>
+        <div style="font-size:11px;color:var(--sub);margin-top:1px">${s.address.split(',')[0]}</div>
+      </div>
+      <svg class="ccard-chevron" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg>
+    </div>
+
+    <div class="ccard-body">
+      <div class="pay-strip ${py.cls}" style="margin-top:12px">
+        <span>${py.icon}</span>
+        <span>${payText} · ${s.payMethod}</span>
+      </div>
+      ${ttnBlock}
+      ${ordersHtml}
+      <div style="padding:10px 16px 4px;font-size:12px;color:var(--sub);display:flex;justify-content:space-between">
+        <span>📍 ${s.address}</span>
+        <span style="font-weight:700;color:var(--tx)">${total.toLocaleString()} ₴</span>
+      </div>
+      <div class="ccard-actions">${actionBtns}</div>
+    </div>
+  `;
+  return div;
+}
+
+// ══════════════════════════════
+// TOGGLE CARD
+// ══════════════════════════════
+function toggleCard(id){
+  const el=document.getElementById('card-'+id);
+  el.classList.toggle('open');
+}
+
+// ══════════════════════════════
+// ACTIONS
+// ══════════════════════════════
+function formTTN(id){
+  const s=SHIPMENTS.find(x=>x.id===id);if(!s)return;
+  s.ttn=ttn14();
+  s.status='formed';
+  s.deliveryCost=[80,120,240][Math.floor(Math.random()*3)];
+  render();
+  // reopen card
+  setTimeout(()=>{
+    const el=document.getElementById('card-'+id);
+    if(el)el.classList.add('open');
+  },50);
+  toast('📦 ТТН сформована! Клієнту надіслано повідомлення в Telegram');
+}
+
+function confirmPrepay(id){
+  const s=SHIPMENTS.find(x=>x.id===id);if(!s)return;
+  s.prepayRec=s.prepay;
+  render();
+  setTimeout(()=>{const el=document.getElementById('card-'+id);if(el)el.classList.add('open');},50);
+  toast(`✅ Передплата ${s.prepay} ₴ підтверджена`);
+}
+
+function markSent(id){
+  const s=SHIPMENTS.find(x=>x.id===id);if(!s)return;
+  s.status='sent';
+  render();
+  toast('✈️ Відправлено! Клієнту надіслано повідомлення');
+}
+
+function deferShip(id){
+  const s=SHIPMENTS.find(x=>x.id===id);if(!s)return;
+  s.status='deferred';
+  render();toast('⏱ Посилку відкладено');
+}
+
+function restoreShip(id){
+  const s=SHIPMENTS.find(x=>x.id===id);if(!s)return;
+  s.status='new';
+  render();toast('↩️ Посилку відновлено');
+}
+
+function copyTTN(ttn){
+  navigator.clipboard&&navigator.clipboard.writeText(ttn).then(()=>toast('Скопійовано: '+ttn));
+}
+
+// ══════════════════════════════
+// CONTACT POPUP
+// ══════════════════════════════
+function openContact(id){
+  const s=SHIPMENTS.find(x=>x.id===id);if(!s)return;
+  document.getElementById('popupName').textContent=s.name;
+  document.getElementById('popupId').textContent=s.address;
+  document.getElementById('popupPhoneVal').textContent=s.phone;
+  document.getElementById('popupPhone').href='tel:'+s.phone;
+  document.getElementById('popupTgVal').textContent=s.telegram;
+  document.getElementById('popupTg').href='https://t.me/'+s.telegram.replace('@','');
+  document.getElementById('popupViberVal').textContent=s.viber;
+  document.getElementById('popupViber').href='viber://chat?number='+s.viber;
+
+  // form data
+  const form=document.getElementById('popupForm');
+  if(s.form&&Object.keys(s.form).length){
+    form.innerHTML=`<div class="cf-title">Анкета клієнта</div>`
+      +Object.entries(s.form).filter(([,v])=>v).map(([k,v])=>
+        `<div class="cf-row"><span class="cf-key">${k}</span><span class="cf-val">${v}</span></div>`
+      ).join('');
+  } else {
+    form.innerHTML='';
+  }
+
+  document.getElementById('contactPopup').classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeContact(){
+  document.getElementById('contactPopup').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ══════════════════════════════
+// INIT
+// ══════════════════════════════
+document.getElementById('todayDate').textContent=new Date().toLocaleDateString('uk-UA',{weekday:'short',day:'numeric',month:'long'});
+render();
+</script>
+
+</body>
+</html>
