@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🐀 Клітка для щура — Інструкція</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Unbounded:wght@400;700;900&display=swap');
+
+  :root {
+    --bg: #0e0e0e;
+    --card: #1a1a1a;
+    --border: #2e2e2e;
+    --accent: #c8f542;
+    --accent2: #f5a623;
+    --text: #e8e8e8;
+    --muted: #666;
+    --done: #3a5a1a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    min-height: 100vh;
+    padding: 20px;
+  }
+
+  header {
+    text-align: center;
+    padding: 40px 20px 30px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 30px;
+  }
+
+  header h1 {
+    font-family: 'Unbounded', sans-serif;
+    font-size: clamp(1.4rem, 4vw, 2.4rem);
+    font-weight: 900;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 0.8rem;
+    margin-top: 8px;
+  }
+
+  .dims {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .dim-tag {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-size: 0.75rem;
+    color: var(--accent2);
+    font-family: 'Unbounded', sans-serif;
+  }
+
+  /* TABS */
+  .tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0;
+  }
+
+  .tab {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    padding: 10px 16px;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .tab:hover { color: var(--text); }
+  .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  /* VISUALIZATION */
+  .viz-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  canvas {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+  }
+
+  .viz-controls {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+
+  .viz-btn {
+    background: var(--border);
+    border: 1px solid #444;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .viz-btn:hover, .viz-btn.active {
+    background: var(--accent);
+    color: #000;
+    border-color: var(--accent);
+  }
+
+  /* MATERIALS */
+  .materials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .material-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .material-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 3px;
+    height: 100%;
+    background: var(--accent);
+  }
+
+  .material-card.secondary::before { background: var(--accent2); }
+  .material-card.hardware::before { background: #7eb8f5; }
+
+  .mat-icon { font-size: 1.6rem; margin-bottom: 8px; }
+  .mat-name {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 4px;
+  }
+  .material-card.secondary .mat-name { color: var(--accent2); }
+  .material-card.hardware .mat-name { color: #7eb8f5; }
+
+  .mat-detail { font-size: 0.72rem; color: var(--muted); line-height: 1.6; }
+  .mat-price {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-top: 10px;
+  }
+  .mat-qty { font-size: 0.7rem; color: var(--muted); }
+
+  .total-bar {
+    background: #1e2a0e;
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .total-bar .label {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .total-bar .amount {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--accent);
+  }
+
+  /* STEPS */
+  .steps-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+
+  .step.done { border-color: var(--done); }
+  .step.done .step-header { background: #1a2a0a; }
+
+  .step-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .step-num {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+
+  .step.done .step-num {
+    background: var(--accent);
+    color: #000;
+  }
+
+  .step-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex: 1;
+  }
+
+  .step-toggle {
+    color: var(--muted);
+    font-size: 1rem;
+    transition: transform 0.2s;
+  }
+
+  .step.open .step-toggle { transform: rotate(180deg); }
+
+  .step-body {
+    display: none;
+    padding: 0 16px 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .step.open .step-body { display: block; }
+
+  .step-desc {
+    font-size: 0.78rem;
+    line-height: 1.8;
+    color: #ccc;
+    margin-top: 14px;
+  }
+
+  .step-tips {
+    margin-top: 12px;
+    background: #111;
+    border-left: 3px solid var(--accent2);
+    padding: 10px 14px;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.72rem;
+    color: var(--accent2);
+    line-height: 1.7;
+  }
+
+  .parts-used {
+    margin-top: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .part-tag {
+    background: #222;
+    border: 1px solid #333;
+    border-radius: 4px;
+    padding: 3px 10px;
+    font-size: 0.68rem;
+    color: var(--muted);
+  }
+
+  .check-btn {
+    margin-top: 14px;
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    padding: 6px 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.15s;
+    width: 100%;
+  }
+
+  .check-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .step.done .check-btn {
+    background: var(--done);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* CUTS TABLE */
+  .cuts-section { margin-bottom: 24px; }
+  .cuts-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.72rem;
+  }
+
+  th {
+    background: #222;
+    color: var(--muted);
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 400;
+    border-bottom: 1px solid var(--border);
+  }
+
+  td {
+    padding: 7px 10px;
+    border-bottom: 1px solid #1e1e1e;
+    vertical-align: top;
+  }
+
+  tr:last-child td { border-bottom: none; }
+
+  .waste-zero { color: var(--accent); font-weight: 700; }
+  .waste-small { color: var(--accent2); }
+
+  .rail-label {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.68rem;
+    white-space: nowrap;
+    display: inline-block;
+  }
+
+  /* PROGRESS */
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 999px;
+    height: 6px;
+    margin: 16px 0 24px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  .progress-text {
+    font-size: 0.7rem;
+    color: var(--muted);
+    text-align: right;
+    margin-top: -20px;
+    margin-bottom: 20px;
+  }
+
+  .section-label {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin: 20px 0 10px;
+  }
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🐀 КЛІТКА ДЛЯ ЩУРА</h1>
+  <p>Покрокова інструкція зі збірки</p>
+  <div class="dims">
+    <span class="dim-tag">Ш: 60 см</span>
+    <span class="dim-tag">Г: 30 см</span>
+    <span class="dim-tag">В: 140 см</span>
+    <span class="dim-tag">Піддон: 15 см</span>
+    <span class="dim-tag">2 дверці</span>
+    <span class="dim-tag">Колеса</span>
+  </div>
+</header>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('viz')">📐 Схема</button>
+  <button class="tab" onclick="showTab('materials')">🛒 Матеріали</button>
+  <button class="tab" onclick="showTab('cuts')">✂️ Розкрій</button>
+  <button class="tab" onclick="showTab('steps')">🔧 Збірка</button>
+</div>
+
+<!-- TAB: VISUALIZATION -->
+<div id="tab-viz" class="tab-content active">
+  <div class="viz-container">
+    <canvas id="cage3d" width="500" height="520"></canvas>
+    <div class="viz-controls">
+      <button class="viz-btn active" onclick="setView('front')">Спереду</button>
+      <button class="viz-btn" onclick="setView('side')">Збоку</button>
+      <button class="viz-btn" onclick="setView('top')">Зверху</button>
+      <button class="viz-btn" onclick="setView('iso')">3D вигляд</button>
+    </div>
+  </div>
+</div>
+
+<!-- TAB: MATERIALS -->
+<div id="tab-materials" class="tab-content">
+  <div class="materials-grid">
+    <div class="material-card">
+      <div class="mat-icon">🕸️</div>
+      <div class="mat-name">Оцинкована сітка</div>
+      <div class="mat-detail">
+        Комірка 1×1 см<br>
+        Ширина рулону: 1 м<br>
+        Відрізна по погонним метрам
+      </div>
+      <div class="mat-price">595 грн</div>
+      <div class="mat-qty">3.5 погонних метри × 170 грн</div>
+    </div>
+
+    <div class="material-card secondary">
+      <div class="mat-icon">📏</div>
+      <div class="mat-name">Монтажна рейка</div>
+      <div class="mat-detail">
+        Перетин: 15×30 мм<br>
+        Довжина: 3000 мм (1 шт)<br>
+        Матеріал: сталь/алюміній
+      </div>
+      <div class="mat-price">560 грн</div>
+      <div class="mat-qty">7 штук × 80 грн</div>
+    </div>
+
+    <div class="material-card hardware">
+      <div class="mat-icon">🔩</div>
+      <div class="mat-name">Саморізи 3.5×25 мм</div>
+      <div class="mat-detail">
+        З пресшайбою або звичайні<br>
+        По дереву / металу<br>
+        Для з'єднання рейок між собою
+      </div>
+      <div class="mat-price">~40 грн</div>
+      <div class="mat-qty">упаковка 50 шт (вистачить з лишком)</div>
+    </div>
+
+    <div class="material-card hardware">
+      <div class="mat-icon">🪝</div>
+      <div class="mat-name">Хомути для сітки</div>
+      <div class="mat-detail">
+        Металеві скоби або пластикові хомути<br>
+        Для кріплення сітки до рейок<br>
+        Крок кріплення: кожні 10–15 см
+      </div>
+      <div class="mat-price">~60 грн</div>
+      <div class="mat-qty">~80–100 шт (пачка)</div>
+    </div>
+
+    <div class="material-card hardware">
+      <div class="mat-icon">🔗</div>
+      <div class="mat-name">Петлі накладні (завіси)</div>
+      <div class="mat-detail">
+        Тип: накладна металева петля<br>
+        Кріпиться з двох сторін саморізами<br>
+        Без врізки, без свердління наскрізь<br>
+        Розмір: 40–50 мм
+      </div>
+      <div class="mat-price">~80 грн</div>
+      <div class="mat-qty">4 шт (по 2 на кожне дверце)</div>
+    </div>
+
+    <div class="material-card hardware">
+      <div class="mat-icon">🔒</div>
+      <div class="mat-name">Засув/защіпка</div>
+      <div class="mat-detail">
+        Накладний шпінгалет або карабін<br>
+        Щури ВІДКРИВАЮТЬ прості клямки!<br>
+        Краще: карабін або защіпка з фіксатором
+      </div>
+      <div class="mat-price">~50 грн</div>
+      <div class="mat-qty">2 шт (по 1 на кожне дверце)</div>
+    </div>
+
+    <div class="material-card hardware">
+      <div class="mat-icon">⚙️</div>
+      <div class="mat-name">Колеса з фіксатором</div>
+      <div class="mat-detail">
+        Діаметр: 40–50 мм<br>
+        З гальмівним механізмом (натискний)<br>
+        Кріплення: платформа + 2 саморізи знизу
+      </div>
+      <div class="mat-price">~120 грн</div>
+      <div class="mat-qty">4 шт × ~30 грн</div>
+    </div>
+
+    <div class="material-card secondary">
+      <div class="mat-icon">🧺</div>
+      <div class="mat-name">Пластикові лотки</div>
+      <div class="mat-detail">
+        Розмір ~28×28 см (або по факту шухляди)<br>
+        Звичайний лоток для зберігання<br>
+        Епіцентр / будь-який госптовар
+      </div>
+      <div class="mat-price">~120 грн</div>
+      <div class="mat-qty">2 шт × ~60 грн</div>
+    </div>
+  </div>
+
+  <div class="total-bar">
+    <div>
+      <div class="label">ЗАГАЛЬНА ВАРТІСТЬ</div>
+      <div style="font-size:0.7rem;color:var(--muted);margin-top:4px;">з урахуванням фурнітури</div>
+    </div>
+    <div class="amount">1 625 грн</div>
+  </div>
+</div>
+
+<!-- TAB: CUTS -->
+<div id="tab-cuts" class="tab-content">
+
+  <div class="cuts-section">
+    <div class="cuts-title">✂️ РОЗКРІЙ РЕЙОК (7 штук по 3000 мм)</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Рейка</th>
+          <th>Що ріжемо</th>
+          <th>Розміри</th>
+          <th>Використано</th>
+          <th>Відходи</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rail-label">Рейка 1</span></td>
+          <td>Вертикальна стійка × 2</td>
+          <td>140 + 140</td>
+          <td>280 см</td>
+          <td class="waste-small">20 см*</td>
+        </tr>
+        <tr>
+          <td><span class="rail-label">Рейка 2</span></td>
+          <td>Вертикальна стійка × 2</td>
+          <td>140 + 140</td>
+          <td>280 см</td>
+          <td class="waste-small">20 см*</td>
+        </tr>
+        <tr>
+          <td><span class="rail-label">Рейка 3</span></td>
+          <td>Середня стійка + горизонталі по ширині</td>
+          <td>140 + 60 + 60 + 40*</td>
+          <td>300 см</td>
+          <td class="waste-zero">0 см ✓</td>
+        </tr>
+        <tr>
+          <td><span class="rail-label">Рейка 4</span></td>
+          <td>Горизонталі по ширині 60 см × 5</td>
+          <td>60×5</td>
+          <td>300 см</td>
+          <td class="waste-zero">0 см ✓</td>
+        </tr>
+        <tr>
+          <td><span class="rail-label">Рейка 5</span></td>
+          <td>Горизонталі по ширині 60 см × 5</td>
+          <td>60×5</td>
+          <td>300 см</td>
+          <td class="waste-zero">0 см ✓</td>
+        </tr>
+        <tr>
+          <td><span class="rail-label">Рейка 6</span></td>
+          <td>Поперечини 30 см × 10</td>
+          <td>30×10</td>
+          <td>300 см</td>
+          <td class="waste-zero">0 см ✓</td>
+        </tr>
+        <tr>
+          <td><span class="rail-label">Рейка 7</span></td>
+          <td>Поперечини 30 см × 8 + ламелі 30 см × 2</td>
+          <td>30×10</td>
+          <td>300 см</td>
+          <td class="waste-zero">0 см ✓</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.68rem;color:var(--muted);margin-top:8px;">* Відходи 20 см з рейок 1 і 2 → використовуються як розпірки або підпірки під колеса</p>
+  </div>
+
+  <div class="cuts-section">
+    <div class="cuts-title">✂️ РОЗКРІЙ СІТКИ (рулон шириною 1 м)</div>
+    <table>
+      <thead>
+        <tr>
+          <th>Відріз</th>
+          <th>Що вирізаємо</th>
+          <th>Довжина</th>
+          <th>Використано з 1 м ширини</th>
+          <th>Залишок по ширині</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="rail-label">Відріз 1</span></td>
+          <td>Передня стінка (60 см) + ліва бокова (30 см)</td>
+          <td>140 см</td>
+          <td>90 см</td>
+          <td class="waste-small">10 см → скрап</td>
+        </tr>
+        <tr>
+          <td><span class="rail-label">Відріз 2</span></td>
+          <td>Задня стінка (60 см) + права бокова (30 см)</td>
+          <td>140 см</td>
+          <td>90 см</td>
+          <td class="waste-small">10 см → скрап</td>
+        </tr>
+        <tr>
+          <td><span class="rail-label">Відріз 3</span></td>
+          <td>Стеля (60×30) + Дно (60×30)</td>
+          <td>30 см</td>
+          <td>60 см</td>
+          <td class="waste-zero">40 см залишок</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:0.68rem;color:var(--muted);margin-top:8px;">Всього: 3.1 м → купуємо 3.5 м з запасом на підгинання країв (гострі кінці сітки)</p>
+  </div>
+
+  <div class="cuts-section">
+    <div class="cuts-title">📐 РОЗМІЩЕННЯ ГОРИЗОНТАЛЬНИХ РЕЙОК (висота від підлоги)</div>
+    <table>
+      <thead>
+        <tr><th>Висота</th><th>Призначення</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>0 см</td><td>Нижня обв'язка (підлога каркасу) + кріплення коліс</td></tr>
+        <tr><td>15 см</td><td>Перекриття над піддоном / підлога житлової зони</td></tr>
+        <tr><td>50 см</td><td>Проміжна горизонталь (жорсткість)</td></tr>
+        <tr><td>90 см</td><td>Проміжна горизонталь (жорсткість)</td></tr>
+        <tr><td>140 см</td><td>Верхня обв'язка (стеля)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- TAB: STEPS -->
+<div id="tab-steps" class="tab-content">
+
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="progress-text" id="progressText">0 / 9 кроків виконано</div>
+
+  <div class="steps-list" id="stepsList">
+
+    <div class="step" id="step1">
+      <div class="step-header" onclick="toggleStep('step1')">
+        <div class="step-num">1</div>
+        <div class="step-title">🛒 Купівля матеріалів</div>
+        <div class="step-toggle">▼</div>
+      </div>
+      <div class="step-body">
+        <div class="step-desc">
+          Купи всі матеріали за списком у вкладці «Матеріали».<br><br>
+          <b>Важливо при купівлі сітки:</b> попроси відрізати рівно 3.5 метра. Перевір що комірка 1×1 см — деякі рулони виглядають однаково але мають комірку 2×2 см, щур може просунути голову.<br><br>
+          <b>Петлі:</b> шукай накладні петлі типу «метелик» або звичайні дверні накладні петлі 40–50 мм. Не купуй врізні — вони вимагають фрезерування.
+        </div>
+        <div class="step-tips">💡 Колеса шукай в розділі «меблева фурнітура» або «ролики» — потрібні з гальмом (натиснув — зафіксував)</div>
+        <div class="parts-used">
+          <span class="part-tag">Сітка 3.5 м</span>
+          <span class="part-tag">Рейка 7 шт</span>
+          <span class="part-tag">Саморізи</span>
+          <span class="part-tag">Петлі 4 шт</span>
+          <span class="part-tag">Засув 2 шт</span>
+          <span class="part-tag">Колеса 4 шт</span>
+          <span class="part-tag">Хомути/скоби 100 шт</span>
+          <span class="part-tag">Лотки 2 шт</span>
+        </div>
+        <button class="check-btn" onclick="markDone('step1')">✓ Виконано</button>
+      </div>
+    </div>
+
+    <div class="step" id="step2">
+      <div class="step-header" onclick="toggleStep('step2')">
+        <div class="step-num">2</div>
+        <div class="step-title">✂️ Розрізання рейок</div>
+        <div class="step-toggle">▼</div>
+      </div>
+      <div class="step-body">
+        <div class="step-desc">
+          Наріж рейки суворо за схемою розкрою (вкладка «Розкрій»).<br><br>
+          <b>Стійки (140 см):</b> 5 штук — 4 кутові + 1 середня для дверцят<br>
+          <b>Горизонталі по ширині (60 см):</b> 10 штук<br>
+          <b>Поперечини по глибині (30 см):</b> 16 штук (включаючи ламелі піддону та напрямні)<br><br>
+          Підпиши кожну групу маркером або розклади купками.
+        </div>
+        <div class="step-tips">💡 Якщо рейка металева — використовуй болгарку або ножівку по металу. Якщо алюміній — звичайна ножівка по металу. Запили торці рівно під 90°</div>
+        <div class="parts-used">
+          <span class="part-tag">Рейки 7 шт</span>
+          <span class="part-tag">Ножівка / болгарка</span>
+          <span class="part-tag">Маркер</span>
+        </div>
+        <button class="check-btn" onclick="markDone('step2')">✓ Виконано</button>
+      </div>
+    </div>
+
+    <div class="step" id="step3">
+      <div class="step-header" onclick="toggleStep('step3')">
+        <div class="step-num">3</div>
+        <div class="step-title">⚙️ Кріплення коліс</div>
+        <div class="step-toggle">▼</div>
+      </div>
+      <div class="step-body">
+        <div class="step-desc">
+          Перший крок збірки — прикрути колеса до нижньої обв'язки.<br><br>
+          <b>Порядок:</b><br>
+          1. Склади 4 нижніх горизонталі в прямокутник 60×30 см<br>
+          2. З'єднай кути саморізами 3.5×25 мм (2 саморізи в кожен кут, під кутом 90°)<br>
+          3. Прикрути колесо до кожного кута знизу — 2 саморізи на колесо<br><br>
+          Свердлити <b>не потрібно</b> — саморізи вкручуються напряму в рейку.
+        </div>
+        <div class="step-tips">💡 Переконайся що всі 4 колеса знаходяться на одному рівні — постав нижню рамку на рівну поверхню і перевір хитання</div>
+        <div class="parts-used">
+          <span class="part-tag">Горизонталі 60 см × 2</span>
+          <span class="part-tag">Поперечини 30 см × 2</span>
+          <span class="part-tag">Колеса 4 шт</span>
+          <span class="part-tag">Саморізи ~16 шт</span>
+        </div>
+        <button class="check-btn" onclick="markDone('step3')">✓ Виконано</button>
+      </div>
+    </div>
+
+    <div class="step" id="step4">
+      <div class="step-header" onclick="toggleStep('step4')">
+        <div class="step-num">4</div>
+        <div class="step-title">🏗️ Збірка основного каркасу</div>
+        <div class="step-toggle">▼</div>
+      </div>
+      <div class="step-body">
+        <div class="step-desc">
+          Збираємо вертикальний каркас — це найважливіший крок.<br><br>
+          <b>Порядок:</b><br>
+          1. Встав 4 кутові стійки (140 см) у кути нижньої рамки — з'єднай саморізами<br>
+          2. Прикрути горизонталі на висоті <b>15 см</b> — по ширині (60 см) і глибині (30 см)<br>
+          3. Прикрути горизонталі на висоті <b>50 см, 90 см</b><br>
+          4. Зроби верхню обв'язку на висоті <b>140 см</b><br>
+          5. Встав середню вертикальну стійку (140 см) посередині передньої стінки — на 30 см від кожної кутової стійки<br><br>
+          На кожне з'єднання: <b>2 саморізи навхрест</b>
+        </div>
+        <div class="step-tips">💡 Спочатку «наживи» всі саморізи не докручуючи до кінця — перевір рівність каркасу кутником, потім докрути остаточно</div>
+        <div class="parts-used">
+          <span class="part-tag">Стійки 140 см × 5</span>
+          <span class="part-tag">Горизонталі 60 см × 8</span>
+          <span class="part-tag">Поперечини 30 см × 8</span>
+          <span class="part-tag">Саморізи ~60 шт</span>
+        </div>
+        <button class="check-btn" onclick="markDone('step4')">✓ Виконано</button>
+      </div>
+    </div>
+
+    <div class="step" id="step5">
+      <div class="step-header" onclick="toggleStep('step5')">
+        <div class="step-num">5</div>
+        <div class="step-title">🧺 Монтаж напрямних і ламелей піддону</div>
+        <div class="step-toggle">▼</div>
+      </div>
+      <div class="step-body">
+        <div class="step-desc">
+          Будуємо «ліжко» для лотків-піддонів у нижньому відсіку (0–15 см).<br><br>
+          <b>Напрямні-салазки (4 шт по 30 см):</b><br>
+          Кріпляться горизонтально вздовж глибини на висоті ~2–3 см від підлоги. Дві зліва, дві справа від центру — між ними лоток ковзає вперед-назад.<br><br>
+          <b>Ламелі (6 шт по 30 см):</b><br>
+          Кріпляться поперек (по ширині) з кроком ~8–10 см. На них лежать лотки зверху, як матрац на ліжку.<br><br>
+          Відстань між двома лотками — по центру прикрути одну розпірну ламель.
+        </div>
+        <div class="step-tips">💡 Перед кріпленням поміряй свої лотки! Відстань між напрямними = ширина лотка + 3–5 мм зазор для легкого ковзання</div>
+        <div class="parts-used">
+          <span class="part-tag">Рейки 30 см × 10</span>
+          <span class="part-tag">Саморізи ~20 шт</span>
+          <span class="part-tag">Лотки (для приміряння)</span>
+        </div>
+        <button class="check-btn" onclick="markDone('step5')">✓ Виконано</button>
+      </div>
+    </div>
+
+    <div class="step" id="step6">
+      <div class="step-header" onclick="toggleStep('step6')">
+        <div class="step-num">6</div>
+        <div class="step-title">🕸️ Кріплення сітки</div>
+        <div class="step-toggle">▼</div>
+      </div>
+      <div class="step-body">
+        <div class="step-desc">
+          Натягуємо сітку на каркас.<br><br>
+          <b>Порядок кріплення:</b><br>
+          1. <b>Дно</b> — спочатку прикрути знизу до нижньої рамки (саморізи через сітку в рейку, крок 10 см)<br>
+          2. <b>Задня стінка</b> — натягни і кріпи хомутами або скобами кожні 10–15 см<br>
+          3. <b>Бокові стінки</b> — ліва і права<br>
+          4. <b>Стеля</b> — кріпи зверху до верхньої обв'язки<br>
+          5. <b>Передня стінка</b> — залиш незакріпленою, вона стане дверцятами<br><br>
+          <b>Важливо:</b> загни всі гострі краї сітки всередину або назад за рейку — щур може порізатися.
+        </div>
+        <div class="step-tips">💡 Хомути-стяжки пластикові — найпростіший варіант. Пропусти через комірку сітки навколо рейки і затягни. Або використовуй металеві скоби (степлер по металу)</div>
+        <div class="parts-used">
+          <span class="part-tag">Сітка (нарізана)</span>
+          <span class="part-tag">Хомути ~80 шт</span>
+          <span class="part-tag">Саморізи ~20 шт (для дна)</span>
+          <span class="part-tag">Плоскогубці (загнути краї)</span>
+        </div>
+        <button class="check-btn" onclick="markDone('step6')">✓ Виконано</button>
+      </div>
+    </div>
+
+    <div class="step" id="step7">
+      <div class="step-header" onclick="toggleStep('step7')">
+        <div class="step-num">7</div>
+        <div class="step-title">🚪 Монтаж дверцят</div>
+        <div class="step-toggle">▼</div>
+      </div>
+      <div class="step-body">
+        <div class="step-desc">
+          Кожне дверце = рамка з рейок 30×140 см + сітка.<br><br>
+          <b>Збірка рамки дверці (×2):</b><br>
+          1. Зроби прямокутну рамку: дві стійки 140 см + дві поперечини 30 см (вже враховані в загальному розкрої)<br>
+          2. Натягни і прикрути сітку до рамки хомутами<br>
+          3. Загни краї сітки назад<br><br>
+          <b>Кріплення петель:</b><br>
+          Ліве дверце: петлі кріпляться до лівої кутової стійки каркасу<br>
+          Праве дверце: петлі кріпляться до правої кутової стійки<br>
+          По 2 петлі на дверце — зверху і знизу (на висоті 30 см від краю)<br>
+          На кожну петлю: 4 саморізи (2 в рамку дверці + 2 в стійку каркасу)
+        </div>
+        <div class="step-tips">💡 Петлі накладні не вимагають свердління! Просто прикладаєш до рейки і вкручуєш саморіз. Перевір що дверці відкриваються вільно до 90°</div>
+        <div class="parts-used">
+          <span class="part-tag">Петлі накладні 4 шт</span>
+          <span class="part-tag">Саморізи ~16 шт</span>
+          <span class="part-tag">Сітка (залишок)</span>
+          <span class="part-tag">Хомути ~20 шт</span>
+        </div>
+        <button class="check-btn" onclick="markDone('step7')">✓ Виконано</button>
+      </div>
+    </div>
+
+    <div class="step" id="step8">
+      <div class="step-header" onclick="toggleStep('step8')">
+        <div class="step-num">8</div>
+        <div class="step-title">🔒 Встановлення засувів</div>
+        <div class="step-toggle">▼</div>
+      </div>
+      <div class="step-body">
+        <div class="step-desc">
+          Засув — найважливіший елемент! Щури дуже розумні і вміють відкривати прості защіпки.<br><br>
+          <b>Рекомендований варіант — карабін:</b><br>
+          Прикрути кільце до рамки дверці, карабін застібається за середню стійку каркасу. Щур не відкриє.<br><br>
+          <b>Або накладний шпінгалет:</b><br>
+          Прикрути до рамки дверці так, щоб засувна частина заходила за середню стійку. Додатково зафіксуй гачком або шплінтом — щур може навчитися тягнути засув носом.<br><br>
+          Кріплення: 2–4 саморізи, без свердління.
+        </div>
+        <div class="step-tips">⚠️ Щури відкривають засуви носом і лапами! Карабін або засув з поворотним фіксатором — найнадійніше рішення</div>
+        <div class="parts-used">
+          <span class="part-tag">Засув/карабін 2 шт</span>
+          <span class="part-tag">Саморізи ~8 шт</span>
+        </div>
+        <button class="check-btn" onclick="markDone('step8')">✓ Виконано</button>
+      </div>
+    </div>
+
+    <div class="step" id="step9">
+      <div class="step-header" onclick="toggleStep('step9')">
+        <div class="step-num">9</div>
+        <div class="step-title">✅ Фінальна перевірка</div>
+        <div class="step-toggle">▼</div>
+      </div>
+      <div class="step-body">
+        <div class="step-desc">
+          Перед заселенням щура перевір все за списком:<br><br>
+          ☐ Всі саморізи докручені, немає стирчачих гострих кінців<br>
+          ☐ Всі краї сітки загнуті або закриті рейкою<br>
+          ☐ Дверці відкриваються і закриваються плавно<br>
+          ☐ Засув надійно тримає і не відкривається при струсі<br>
+          ☐ Колеса крутяться, гальма спрацьовують<br>
+          ☐ Лотки висуваються вільно через відкриті дверці<br>
+          ☐ Немає щілин між стійками більше 1×1 см<br>
+          ☐ Каркас не хитається (перевір на рівній поверхні)<br><br>
+          Помий клітку теплою водою перед заселенням — змий бруд після виробництва.
+        </div>
+        <div class="step-tips">🐀 Вітаємо! Тепер твій щур матиме найкращий дім за розумні гроші</div>
+        <button class="check-btn" onclick="markDone('step9')">🎉 Клітку готово!</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function toggleStep(id) {
+  const step = document.getElementById(id);
+  const isOpen = step.classList.contains('open');
+  document.querySelectorAll('.step.open').forEach(s => s.classList.remove('open'));
+  if (!isOpen) step.classList.add('open');
+}
+
+function markDone(id) {
+  const step = document.getElementById(id);
+  step.classList.toggle('done');
+  step.classList.remove('open');
+  updateProgress();
+}
+
+function updateProgress() {
+  const total = document.querySelectorAll('.step').length;
+  const done = document.querySelectorAll('.step.done').length;
+  const pct = Math.round((done / total) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = done + ' / ' + total + ' кроків виконано';
+}
+
+function setView(view) {
+  document.querySelectorAll('.viz-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  drawCage(view);
+}
+
+function drawCage(view = 'front') {
+  const canvas = document.getElementById('cage3d');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  ctx.clearRect(0, 0, W, H);
+
+  const bg = '#0e0e0e';
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  if (view === 'front') drawFront(ctx, W, H);
+  else if (view === 'side') drawSide(ctx, W, H);
+  else if (view === 'top') drawTop(ctx, W, H);
+  else drawIso(ctx, W, H);
+}
+
+function drawFront(ctx, W, H) {
+  const scale = 2.4;
+  const ox = W/2 - 60*scale/2, oy = 30;
+  const w = 60*scale, h = 140*scale;
+  const piddon = 15*scale;
+
+  // grid background
+  ctx.strokeStyle = '#1a1a1a';
+  ctx.lineWidth = 0.5;
+  for(let x=0;x<W;x+=20){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=20){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  // sítka
+  ctx.strokeStyle = '#2a3a15';
+  ctx.lineWidth = 0.5;
+  const cell = scale;
+  for(let x=ox;x<=ox+w;x+=cell){ctx.beginPath();ctx.moveTo(x,oy);ctx.lineTo(x,oy+h);ctx.stroke();}
+  for(let y=oy;y<=oy+h;y+=cell){ctx.beginPath();ctx.moveTo(ox,y);ctx.lineTo(ox+w,y);ctx.stroke();}
+
+  // frame reyky
+  ctx.strokeStyle = '#c8f542';
+  ctx.lineWidth = 3;
+
+  // vertikalni
+  const stijky = [ox, ox+w/2, ox+w];
+  stijky.forEach(x => {
+    ctx.beginPath(); ctx.moveTo(x, oy); ctx.lineTo(x, oy+h); ctx.stroke();
+  });
+
+  // horizontali
+  const heights = [0, piddon, (50*scale), (90*scale), h];
+  heights.forEach(dh => {
+    ctx.beginPath(); ctx.moveTo(ox, oy+dh); ctx.lineTo(ox+w, oy+dh); ctx.stroke();
+  });
+
+  // dvirtsia highlight
+  ctx.strokeStyle = '#f5a623';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([4,3]);
+  ctx.strokeRect(ox+2, oy+piddon+2, w/2-4, h-piddon-4);
+  ctx.strokeRect(ox+w/2+2, oy+piddon+2, w/2-4, h-piddon-4);
+  ctx.setLineDash([]);
+
+  // petli
+  ctx.fillStyle = '#7eb8f5';
+  [[ox+4, oy+piddon+40*scale/2.4],[ox+4, oy+piddon+90*scale/2.4],
+   [ox+w-4, oy+piddon+40*scale/2.4],[ox+w-4, oy+piddon+90*scale/2.4]].forEach(([x,y])=>{
+    ctx.fillRect(x-5,y-5,10,10);
+  });
+
+  // kolesa
+  ctx.fillStyle = '#888';
+  [[ox, oy+h],[ox+w, oy+h]].forEach(([x,y])=>{
+    ctx.beginPath(); ctx.arc(x,y+10,8,0,Math.PI*2); ctx.fill();
+  });
+
+  // zasiv
+  ctx.fillStyle = '#f5a623';
+  ctx.fillRect(ox+w/2-8, oy+h*0.5-6, 16, 12);
+
+  // labels
+  ctx.fillStyle = '#c8f542';
+  ctx.font = '11px Space Mono, monospace';
+  ctx.fillText('60 см', ox + w/2 - 18, oy - 8);
+  ctx.save();
+  ctx.translate(ox - 22, oy + h/2);
+  ctx.rotate(-Math.PI/2);
+  ctx.fillText('140 см', -18, 0);
+  ctx.restore();
+  ctx.fillStyle = '#f5a623';
+  ctx.font = '10px Space Mono, monospace';
+  ctx.fillText('← дверце →  ← дверце →', ox+4, oy+piddon+20);
+  ctx.fillStyle = '#7eb8f5';
+  ctx.fillText('15 см — піддон', ox+w+8, oy+piddon);
+  ctx.fillText('петлі', ox+w+8, oy+piddon+50);
+
+  ctx.fillStyle = '#555';
+  ctx.font = '10px Space Mono';
+  ctx.fillText('ВИД СПЕРЕДУ', 10, H-10);
+}
+
+function drawSide(ctx, W, H) {
+  const scale = 2.8;
+  const ox = W/2 - 30*scale/2, oy = 30;
+  const w = 30*scale, h = 140*scale;
+  const piddon = 15*scale;
+
+  ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth=0.5;
+  for(let x=0;x<W;x+=20){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=20){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  ctx.strokeStyle = '#2a3a15'; ctx.lineWidth=0.5;
+  const cell=scale;
+  for(let x=ox;x<=ox+w;x+=cell){ctx.beginPath();ctx.moveTo(x,oy);ctx.lineTo(x,oy+h);ctx.stroke();}
+  for(let y=oy;y<=oy+h;y+=cell){ctx.beginPath();ctx.moveTo(ox,y);ctx.lineTo(ox+w,y);ctx.stroke();}
+
+  ctx.strokeStyle='#c8f542'; ctx.lineWidth=3;
+  [ox,ox+w].forEach(x=>{ctx.beginPath();ctx.moveTo(x,oy);ctx.lineTo(x,oy+h);ctx.stroke();});
+  [0,piddon,50*scale,90*scale,h].forEach(dh=>{
+    ctx.beginPath();ctx.moveTo(ox,oy+dh);ctx.lineTo(ox+w,oy+dh);ctx.stroke();
+  });
+
+  // lamelі
+  ctx.strokeStyle='#f5a623'; ctx.lineWidth=2;
+  [5,11,17].forEach(cm=>{
+    const y=oy+h-cm*scale;
+    ctx.beginPath();ctx.moveTo(ox,y);ctx.lineTo(ox+w,y);ctx.stroke();
+  });
+
+  // napriamni
+  ctx.strokeStyle='#7eb8f5'; ctx.lineWidth=3;
+  [ox+5, ox+w-5].forEach(x=>{
+    ctx.beginPath();ctx.moveTo(x,oy+h-piddon+4);ctx.lineTo(x,oy+h);ctx.stroke();
+  });
+
+  // kolesa
+  ctx.fillStyle='#888';
+  [ox,ox+w].forEach(x=>{ctx.beginPath();ctx.arc(x,oy+h+10,8,0,Math.PI*2);ctx.fill();});
+
+  ctx.fillStyle='#c8f542'; ctx.font='11px Space Mono,monospace';
+  ctx.fillText('30 см', ox+w/2-18, oy-8);
+  ctx.save();ctx.translate(ox-22,oy+h/2);ctx.rotate(-Math.PI/2);ctx.fillText('140 см',-18,0);ctx.restore();
+  ctx.fillStyle='#f5a623'; ctx.font='10px Space Mono';
+  ctx.fillText('ламелі', ox+w+8, oy+h-8*scale);
+  ctx.fillStyle='#7eb8f5';
+  ctx.fillText('напрямні', ox+w+8, oy+h-2*scale);
+  ctx.fillStyle='#555'; ctx.font='10px Space Mono';
+  ctx.fillText('ВИД ЗБОКУ', 10, H-10);
+}
+
+function drawTop(ctx, W, H) {
+  const scale = 4.5;
+  const ox = W/2 - 60*scale/2, oy = H/2 - 30*scale/2;
+  const w = 60*scale, d = 30*scale;
+
+  ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=0.5;
+  for(let x=0;x<W;x+=20){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=20){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  ctx.strokeStyle='#2a3a15'; ctx.lineWidth=0.5;
+  for(let x=ox;x<=ox+w;x+=scale){ctx.beginPath();ctx.moveTo(x,oy);ctx.lineTo(x,oy+d);ctx.stroke();}
+  for(let y=oy;y<=oy+d;y+=scale){ctx.beginPath();ctx.moveTo(ox,y);ctx.lineTo(ox+w,y);ctx.stroke();}
+
+  ctx.strokeStyle='#c8f542'; ctx.lineWidth=4;
+  ctx.strokeRect(ox,oy,w,d);
+  ctx.beginPath();ctx.moveTo(ox+w/2,oy);ctx.lineTo(ox+w/2,oy+d);ctx.stroke();
+
+  ctx.strokeStyle='#f5a623'; ctx.lineWidth=2; ctx.setLineDash([4,3]);
+  ctx.strokeRect(ox+2,oy+2,w/2-4,d-4);
+  ctx.strokeRect(ox+w/2+2,oy+2,w/2-4,d-4);
+  ctx.setLineDash([]);
+
+  ctx.fillStyle='#7eb8f5';
+  [[ox,oy],[ox+w,oy],[ox,oy+d],[ox+w,oy+d]].forEach(([x,y])=>{
+    ctx.beginPath();ctx.arc(x,y,7,0,Math.PI*2);ctx.fill();
+  });
+
+  ctx.fillStyle='#c8f542'; ctx.font='12px Space Mono,monospace';
+  ctx.fillText('60 см', ox+w/2-22, oy-10);
+  ctx.save();ctx.translate(ox-15,oy+d/2);ctx.rotate(-Math.PI/2);ctx.fillText('30 см',-18,0);ctx.restore();
+  ctx.fillStyle='#7eb8f5'; ctx.font='10px Space Mono';
+  ctx.fillText('колеса', ox+w+8, oy+8);
+  ctx.fillStyle='#f5a623';
+  ctx.fillText('← дверце →  ← дверце →', ox+4, oy-28);
+  ctx.fillStyle='#555'; ctx.font='10px Space Mono';
+  ctx.fillText('ВИД ЗВЕРХУ', 10, H-10);
+}
+
+function drawIso(ctx, W, H) {
+  const a = Math.PI/6;
+  const sx=1.8, sy=1.8;
+  const W_cm=60, D_cm=30, H_cm=140;
+  const ox=W/2-20, oy=H/2+60;
+
+  function iso(x,y,z){
+    return [
+      ox + (x-y)*Math.cos(a)*sx,
+      oy - z*sy + (x+y)*Math.sin(a)*sy*0.6
+    ];
+  }
+
+  ctx.strokeStyle='#1a1a1a'; ctx.lineWidth=0.5;
+  for(let x=0;x<W;x+=20){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=20){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+
+  function line(p1,p2,col,lw){
+    ctx.strokeStyle=col; ctx.lineWidth=lw||2;
+    ctx.beginPath();
+    const a1=iso(...p1), a2=iso(...p2);
+    ctx.moveTo(a1[0],a1[1]); ctx.lineTo(a2[0],a2[1]); ctx.stroke();
+  }
+
+  // sítka faces
+  const gridC='#1e2e0e';
+  for(let i=0;i<=W_cm;i+=2){
+    line([i,0,0],[i,0,H_cm],gridC,0.4);
+    line([i,D_cm,0],[i,D_cm,H_cm],gridC,0.4);
+  }
+  for(let i=0;i<=H_cm;i+=2){
+    line([0,0,i],[W_cm,0,i],gridC,0.4);
+    line([0,D_cm,i],[W_cm,D_cm,i],gridC,0.4);
+  }
+  for(let i=0;i<=D_cm;i+=2){
+    line([0,i,0],[0,i,H_cm],gridC,0.4);
+    line([W_cm,i,0],[W_cm,i,H_cm],gridC,0.4);
+  }
+  for(let i=0;i<=H_cm;i+=2){
+    line([0,0,i],[0,D_cm,i],gridC,0.4);
+    line([W_cm,0,i],[W_cm,D_cm,i],gridC,0.4);
+  }
+
+  // frame
+  const col='#c8f542';
+  [[0,0],[W_cm,0],[0,D_cm],[W_cm,D_cm]].forEach(([x,y])=>{
+    line([x,y,0],[x,y,H_cm],col,3);
+  });
+  line([W_cm/2,0,0],[W_cm/2,0,H_cm],col,2.5);
+
+  [0,15,50,90,H_cm].forEach(z=>{
+    line([0,0,z],[W_cm,0,z],col,2);
+    line([0,D_cm,z],[W_cm,D_cm,z],col,2);
+    line([0,0,z],[0,D_cm,z],col,2);
+    line([W_cm,0,z],[W_cm,D_cm,z],col,2);
+  });
+
+  // top
+  line([0,0,H_cm],[W_cm,0,H_cm],col,2);
+  line([0,D_cm,H_cm],[W_cm,D_cm,H_cm],col,2);
+
+  // piddon lamelí
+  [4,9,14].forEach(y=>{
+    line([0,y,2],[W_cm,y,2],'#f5a623',2);
+  });
+
+  // kolesa
+  ctx.fillStyle='#888';
+  [[0,0],[W_cm,0],[0,D_cm],[W_cm,D_cm]].forEach(([x,y])=>{
+    const [cx,cy]=iso(x,y,-6);
+    ctx.beginPath();ctx.arc(cx,cy,5,0,Math.PI*2);ctx.fill();
+  });
+
+  // dvirtsia
+  ctx.strokeStyle='#f5a623'; ctx.lineWidth=1.5; ctx.setLineDash([3,2]);
+  const d1=[[0,0,15],[W_cm/2,0,15],[W_cm/2,0,H_cm],[0,0,H_cm]];
+  ctx.beginPath();
+  d1.forEach(([x,y,z],i)=>{const[px,py]=iso(x,y,z);i?ctx.lineTo(px,py):ctx.moveTo(px,py);});
+  ctx.closePath(); ctx.stroke();
+  const d2=[[W_cm/2,0,15],[W_cm,0,15],[W_cm,0,H_cm],[W_cm/2,0,H_cm]];
+  ctx.beginPath();
+  d2.forEach(([x,y,z],i)=>{const[px,py]=iso(x,y,z);i?ctx.lineTo(px,py):ctx.moveTo(px,py);});
+  ctx.closePath(); ctx.stroke();
+  ctx.setLineDash([]);
+
+  ctx.fillStyle='#555'; ctx.font='10px Space Mono';
+  ctx.fillText('3D ВИГЛЯД', 10, H-10);
+}
+
+// init
+drawCage('front');
+</script>
+</body>
+</html>
