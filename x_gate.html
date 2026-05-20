@@ -20,9 +20,10 @@
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  body {
-    background: var(--bg);
-    color: var(--text);
+  html, body {
+    background: #0e0e0e !important;
+    background-color: #0e0e0e !important;
+    color: #e8e8e8 !important;
     font-family: 'Space Mono', monospace;
     min-height: 100vh;
     padding: 20px;
@@ -994,9 +995,9 @@ function drawCage(view = 'front') {
 
 function drawFront(ctx, W, H) {
   const scale = 2.4;
-  const ox = W/2 - 60*scale/2, oy = 30;
+  const ox = W/2 - 60*scale/2, oy = 20;
   const w = 60*scale, h = 140*scale;
-  const piddon = 15*scale;
+  const piddon = 15*scale; // нижній відсік — ЗНИЗУ
 
   // grid background
   ctx.strokeStyle = '#1a1a1a';
@@ -1004,69 +1005,100 @@ function drawFront(ctx, W, H) {
   for(let x=0;x<W;x+=20){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
   for(let y=0;y<H;y+=20){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
 
-  // sítka
+  // піддон знизу — заливка фоном
+  ctx.fillStyle = '#1a1200';
+  ctx.fillRect(ox+1, oy+h-piddon+1, w-2, piddon-2);
+
+  // sítka — тільки в житловій зоні (вище піддону)
   ctx.strokeStyle = '#2a3a15';
   ctx.lineWidth = 0.5;
   const cell = scale;
-  for(let x=ox;x<=ox+w;x+=cell){ctx.beginPath();ctx.moveTo(x,oy);ctx.lineTo(x,oy+h);ctx.stroke();}
-  for(let y=oy;y<=oy+h;y+=cell){ctx.beginPath();ctx.moveTo(ox,y);ctx.lineTo(ox+w,y);ctx.stroke();}
+  for(let x=ox;x<=ox+w;x+=cell){ctx.beginPath();ctx.moveTo(x,oy);ctx.lineTo(x,oy+h-piddon);ctx.stroke();}
+  for(let y=oy;y<=oy+h-piddon;y+=cell){ctx.beginPath();ctx.moveTo(ox,y);ctx.lineTo(ox+w,y);ctx.stroke();}
 
-  // frame reyky
+  // frame reyky — горизонталі знизу вгору: 0(підлога), 15(над піддоном), 50, 90, 140(стеля)
   ctx.strokeStyle = '#c8f542';
   ctx.lineWidth = 3;
 
-  // vertikalni
-  const stijky = [ox, ox+w/2, ox+w];
-  stijky.forEach(x => {
+  // vertikalni стійки
+  [ox, ox+w/2, ox+w].forEach(x => {
     ctx.beginPath(); ctx.moveTo(x, oy); ctx.lineTo(x, oy+h); ctx.stroke();
   });
 
-  // horizontali
-  const heights = [0, piddon, (50*scale), (90*scale), h];
-  heights.forEach(dh => {
-    ctx.beginPath(); ctx.moveTo(ox, oy+dh); ctx.lineTo(ox+w, oy+dh); ctx.stroke();
+  // горизонталі: відраховуємо від НИЗУ (oy+h = підлога)
+  // h-0=підлога, h-15=рівень піддону, h-50, h-90, h-140=стеля
+  [0, piddon, 50*scale, 90*scale, h].forEach(fromBottom => {
+    const y = oy + h - fromBottom;
+    ctx.beginPath(); ctx.moveTo(ox, y); ctx.lineTo(ox+w, y); ctx.stroke();
   });
 
-  // dvirtsia highlight
+  // піддон — лотки знизу (помаранчева зона)
   ctx.strokeStyle = '#f5a623';
-  ctx.lineWidth = 2;
-  ctx.setLineDash([4,3]);
-  ctx.strokeRect(ox+2, oy+piddon+2, w/2-4, h-piddon-4);
-  ctx.strokeRect(ox+w/2+2, oy+piddon+2, w/2-4, h-piddon-4);
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([3,2]);
+  // лотки в нижньому відсіку
+  ctx.strokeRect(ox+4, oy+h-piddon+3, w/2-8, piddon-6);
+  ctx.strokeRect(ox+w/2+4, oy+h-piddon+3, w/2-8, piddon-6);
   ctx.setLineDash([]);
 
-  // petli
+  // ламелі піддону (горизонтальні лінії всередині нижнього відсіку)
+  ctx.strokeStyle = '#f5a623';
+  ctx.lineWidth = 1.5;
+  [5, 10].forEach(cm => {
+    const y = oy + h - cm*scale/2.4;
+    ctx.beginPath(); ctx.moveTo(ox+2, y); ctx.lineTo(ox+w-2, y); ctx.stroke();
+  });
+
+  // dvirtsia highlight — від стелі до рівня піддону (житлова зона)
+  ctx.strokeStyle = '#c8f542';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([4,3]);
+  ctx.strokeRect(ox+2, oy+2, w/2-4, h-piddon-4);
+  ctx.strokeRect(ox+w/2+2, oy+2, w/2-4, h-piddon-4);
+  ctx.setLineDash([]);
+
+  // petli — на вертикальних стійках, у житловій зоні
   ctx.fillStyle = '#7eb8f5';
-  [[ox+4, oy+piddon+40*scale/2.4],[ox+4, oy+piddon+90*scale/2.4],
-   [ox+w-4, oy+piddon+40*scale/2.4],[ox+w-4, oy+piddon+90*scale/2.4]].forEach(([x,y])=>{
+  const doorH = h - piddon;
+  [[ox+4, oy+doorH*0.25],[ox+4, oy+doorH*0.75],
+   [ox+w-4, oy+doorH*0.25],[ox+w-4, oy+doorH*0.75]].forEach(([x,y])=>{
     ctx.fillRect(x-5,y-5,10,10);
   });
 
-  // kolesa
+  // zasiv — посередині на рівні зручного доступу
+  ctx.fillStyle = '#f5a623';
+  ctx.fillRect(ox+w/2-8, oy+doorH*0.5-6, 16, 12);
+
+  // kolesa — під підлогою
   ctx.fillStyle = '#888';
   [[ox, oy+h],[ox+w, oy+h]].forEach(([x,y])=>{
     ctx.beginPath(); ctx.arc(x,y+10,8,0,Math.PI*2); ctx.fill();
   });
-
-  // zasiv
-  ctx.fillStyle = '#f5a623';
-  ctx.fillRect(ox+w/2-8, oy+h*0.5-6, 16, 12);
 
   // labels
   ctx.fillStyle = '#c8f542';
   ctx.font = '11px Space Mono, monospace';
   ctx.fillText('60 см', ox + w/2 - 18, oy - 8);
   ctx.save();
-  ctx.translate(ox - 22, oy + h/2);
+  ctx.translate(ox - 24, oy + h/2);
   ctx.rotate(-Math.PI/2);
   ctx.fillText('140 см', -18, 0);
   ctx.restore();
+
+  // підпис піддону знизу
   ctx.fillStyle = '#f5a623';
   ctx.font = '10px Space Mono, monospace';
-  ctx.fillText('← дверце →  ← дверце →', ox+4, oy+piddon+20);
+  ctx.fillText('лоток  лоток', ox+8, oy+h-5);
+  ctx.fillText('← піддон 15 см →', ox+w+6, oy+h-piddon/2+4);
+
+  // підпис дверцят
+  ctx.fillStyle = '#aaa';
+  ctx.font = '9px Space Mono';
+  ctx.fillText('дверце', ox+8, oy+doorH*0.5);
+  ctx.fillText('дверце', ox+w/2+8, oy+doorH*0.5);
+
   ctx.fillStyle = '#7eb8f5';
-  ctx.fillText('15 см — піддон', ox+w+8, oy+piddon);
-  ctx.fillText('петлі', ox+w+8, oy+piddon+50);
+  ctx.fillText('петлі', ox+w+6, oy+doorH*0.3);
 
   ctx.fillStyle = '#555';
   ctx.font = '10px Space Mono';
@@ -1094,30 +1126,46 @@ function drawSide(ctx, W, H) {
     ctx.beginPath();ctx.moveTo(ox,oy+dh);ctx.lineTo(ox+w,oy+dh);ctx.stroke();
   });
 
-  // lamelі
-  ctx.strokeStyle='#f5a623'; ctx.lineWidth=2;
-  [5,11,17].forEach(cm=>{
-    const y=oy+h-cm*scale;
-    ctx.beginPath();ctx.moveTo(ox,y);ctx.lineTo(ox+w,y);ctx.stroke();
-  });
+  // піддон знизу — заливка
+  ctx.fillStyle = '#1a1200';
+  ctx.fillRect(ox+1, oy+h-piddon+1, w-2, piddon-2);
 
-  // napriamni
+  // напрямні-салазки — дві рейки вздовж глибини в нижньому відсіку
   ctx.strokeStyle='#7eb8f5'; ctx.lineWidth=3;
   [ox+5, ox+w-5].forEach(x=>{
-    ctx.beginPath();ctx.moveTo(x,oy+h-piddon+4);ctx.lineTo(x,oy+h);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(x, oy+h-piddon+3);ctx.lineTo(x, oy+h-2);ctx.stroke();
   });
 
-  // kolesa
+  // ламелі — горизонтальні поперечини в нижньому відсіку (лотки лежать на них)
+  ctx.strokeStyle='#f5a623'; ctx.lineWidth=2;
+  const lamelCount = 3;
+  for(let i=1; i<=lamelCount; i++){
+    const y = oy+h-piddon + (piddon * i/(lamelCount+1));
+    ctx.beginPath();ctx.moveTo(ox+2, y);ctx.lineTo(ox+w-2, y);ctx.stroke();
+  }
+
+  // лоток (прямокутник в нижньому відсіку)
+  ctx.strokeStyle='#f5a623'; ctx.lineWidth=1; ctx.setLineDash([2,2]);
+  ctx.strokeRect(ox+3, oy+h-piddon+4, w-6, piddon-8);
+  ctx.setLineDash([]);
+
+  // kolesa — під підлогою
   ctx.fillStyle='#888';
   [ox,ox+w].forEach(x=>{ctx.beginPath();ctx.arc(x,oy+h+10,8,0,Math.PI*2);ctx.fill();});
 
   ctx.fillStyle='#c8f542'; ctx.font='11px Space Mono,monospace';
   ctx.fillText('30 см', ox+w/2-18, oy-8);
   ctx.save();ctx.translate(ox-22,oy+h/2);ctx.rotate(-Math.PI/2);ctx.fillText('140 см',-18,0);ctx.restore();
+
   ctx.fillStyle='#f5a623'; ctx.font='10px Space Mono';
-  ctx.fillText('ламелі', ox+w+8, oy+h-8*scale);
+  ctx.fillText('← ламелі', ox+w+6, oy+h-piddon/2+4);
+  ctx.fillText('← лоток', ox+w+6, oy+h-4);
   ctx.fillStyle='#7eb8f5';
-  ctx.fillText('напрямні', ox+w+8, oy+h-2*scale);
+  ctx.fillText('напрямні →', ox-80, oy+h-piddon/2+4);
+
+  ctx.fillStyle='#aaa'; ctx.font='9px Space Mono';
+  ctx.fillText('піддон', ox+4, oy+h-3);
+
   ctx.fillStyle='#555'; ctx.font='10px Space Mono';
   ctx.fillText('ВИД ЗБОКУ', 10, H-10);
 }
@@ -1221,10 +1269,15 @@ function drawIso(ctx, W, H) {
   line([0,0,H_cm],[W_cm,0,H_cm],col,2);
   line([0,D_cm,H_cm],[W_cm,D_cm,H_cm],col,2);
 
-  // piddon lamelí
-  [4,9,14].forEach(y=>{
-    line([0,y,2],[W_cm,y,2],'#f5a623',2);
+  // piddon знизу — ламелі на висоті z=2,6,10 (нижні 15 см)
+  [3,7,11].forEach(z=>{
+    line([0,0,z],[W_cm,0,z],'#f5a623',2);
+    line([0,D_cm,z],[W_cm,D_cm,z],'#f5a623',1);
   });
+
+  // napriamni — вздовж глибини внизу
+  line([0,8,0],[0,8,15],'#7eb8f5',2);
+  line([W_cm,8,0],[W_cm,8,15],'#7eb8f5',2);
 
   // kolesa
   ctx.fillStyle='#888';
@@ -1233,8 +1286,8 @@ function drawIso(ctx, W, H) {
     ctx.beginPath();ctx.arc(cx,cy,5,0,Math.PI*2);ctx.fill();
   });
 
-  // dvirtsia
-  ctx.strokeStyle='#f5a623'; ctx.lineWidth=1.5; ctx.setLineDash([3,2]);
+  // dvirtsia — від рівня піддону (z=15) до стелі (z=140)
+  ctx.strokeStyle='#c8f542'; ctx.lineWidth=1.5; ctx.setLineDash([4,3]);
   const d1=[[0,0,15],[W_cm/2,0,15],[W_cm/2,0,H_cm],[0,0,H_cm]];
   ctx.beginPath();
   d1.forEach(([x,y,z],i)=>{const[px,py]=iso(x,y,z);i?ctx.lineTo(px,py):ctx.moveTo(px,py);});
