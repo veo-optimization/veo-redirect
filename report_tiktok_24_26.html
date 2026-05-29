@@ -236,6 +236,58 @@ h2.sec-h{font-size:clamp(1.2rem,2.5vw,1.7rem);font-weight:800;letter-spacing:-.0
 .lpill{display:inline-flex;align-items:center;gap:5px;background:var(--bg2);border:1.5px solid var(--brd);border-radius:40px;padding:4px 12px;font-size:.74rem;font-weight:600;color:var(--tx);text-decoration:none}
 .lpill:hover{background:var(--tx);color:#fff;border-color:var(--tx)}
 
+
+/* ── VEO FORCE MODAL ── */
+.veo-modal-overlay{
+  display:none;position:fixed;inset:0;
+  background:rgba(0,0,0,.55);backdrop-filter:blur(4px);
+  z-index:9999;align-items:center;justify-content:center;padding:20px;
+}
+.veo-modal-overlay.active{display:flex}
+.veo-modal{
+  background:#fff;border-radius:18px;
+  max-width:380px;width:100%;
+  padding:28px 24px 22px;
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+  font-family:'Montserrat',sans-serif;
+  position:relative;animation:modalIn .25s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.veo-modal-close{
+  position:absolute;top:14px;right:16px;
+  background:none;border:none;cursor:pointer;
+  font-size:18px;color:#888;font-family:inherit;
+  line-height:1;padding:2px 6px;border-radius:50%;
+}
+.veo-modal-close:hover{background:#F0F0F0;color:#111}
+.veo-modal-logo{
+  font-size:11px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:#111;margin-bottom:6px;
+}
+.veo-modal h3{font-size:1.05rem;font-weight:900;letter-spacing:-.02em;margin-bottom:10px;color:#111}
+.veo-modal p{font-size:.84rem;color:#444;line-height:1.65;margin-bottom:14px}
+.veo-modal .veo-modal-handle{
+  font-size:.78rem;font-weight:700;color:#888;margin-bottom:18px;
+}
+.veo-modal .veo-modal-handle a{color:#111;text-decoration:none;border-bottom:1px solid #ccc}
+.veo-modal-btns{display:flex;gap:10px}
+.veo-modal-btn{
+  flex:1;padding:11px 14px;border-radius:10px;
+  font-family:inherit;font-size:.82rem;font-weight:700;
+  cursor:pointer;border:none;transition:all .15s;text-align:center;text-decoration:none;
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+}
+.veo-modal-btn.primary{background:#111;color:#fff}
+.veo-modal-btn.primary:hover{background:#333}
+.veo-modal-btn.secondary{background:#F0F0F0;color:#111;border:1.5px solid #ddd}
+.veo-modal-btn.secondary:hover{background:#E0E0E0}
+/* Make VEO FORCE text clickable */
+.veo-trigger{
+  cursor:pointer;border-bottom:1px dotted currentColor;
+  text-decoration:none;color:inherit;
+}
+.veo-trigger:hover{opacity:.75}
+
 /* ── FOOTER ── */
 footer{background:#0A0A0A;color:rgba(255,255,255,.4);text-align:center;padding:28px 20px;font-size:.74rem;line-height:1.7;margin-top:0}
 footer a{color:rgba(255,255,255,.55);text-decoration:none;border-bottom:1px solid rgba(255,255,255,.15)}
@@ -246,12 +298,12 @@ footer a:hover{color:#fff}
 
 <!-- ═══════════ HERO ═══════════ -->
 <div class="hero">
-  <div class="hero-eyebrow">VEO FORCE &middot; @vasil_veo &middot; TikTok Бізнес Аналітика UA</div>
+  <div class="hero-eyebrow"><a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener" style="color:inherit;text-decoration:none">VEO FORCE &middot; <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener" style="color:inherit">@vasil_veo</a></a> &middot; TikTok Бізнес Аналітика UA</div>
   <h1>TikTok для бізнесу:<br><span class="a">2024</span> та <span class="b">2026</span></h1>
   <p class="hero-lead">Що глобальний TikTok вже пройшов &mdash; і що нас чекає. Тренди, правила, реальні стратегії для українського бізнесу: одяг, взуття, косметика, товари для дому.</p>
   <div class="hero-meta">
     <div class="hero-tag">На основі <strong>TikTok What&rsquo;s Next 2024 &amp; 2026</strong></div>
-    <div class="hero-tag">Аналіз <strong>VEO FORCE</strong> для UA ринку</div>
+    <div class="hero-tag">Аналіз <strong><span class="veo-trigger" onclick="openVeoModal()">VEO FORCE</span></strong> для UA ринку</div>
     <div class="hero-tag">Переклад та адаптація <strong>@vasil_veo</strong></div>
   </div>
 </div>
@@ -318,7 +370,7 @@ footer a:hover{color:#fff}
 
 <div class="ua-note">
   <div class="ua-title">&#127482;&#127462; Для України зараз</div>
-  <div class="ua-body">Більшість UA-продавців одягу та косметики досі показують товар як каталог: фото-карусель з ціною. Але за аналізом <strong>VEO FORCE</strong>, аудиторія TikTok в Україні вже переходить до <strong>стрічки відкриттів</strong>: люди знаходять бренди через контент, не через рекламу. Бренди, що перейдуть на <strong>освітній і пізнавальний контент</strong> (&laquo;як обрати розмір&raquo;, &laquo;з чим поєднати&raquo;, &laquo;чому цей матеріал&raquo;), отримають органічне охоплення вже зараз.</div>
+  <div class="ua-body">Більшість UA-продавців одягу та косметики досі показують товар як каталог: фото-карусель з ціною. Але за аналізом <strong><span class="veo-trigger" onclick="openVeoModal()">VEO FORCE</span></strong>, аудиторія TikTok в Україні вже переходить до <strong>стрічки відкриттів</strong>: люди знаходять бренди через контент, не через рекламу. Бренди, що перейдуть на <strong>освітній і пізнавальний контент</strong> (&laquo;як обрати розмір&raquo;, &laquo;з чим поєднати&raquo;, &laquo;чому цей матеріал&raquo;), отримають органічне охоплення вже зараз.</div>
 </div>
 </section>
 
@@ -334,7 +386,7 @@ footer a:hover{color:#fff}
 <div class="signal">
   <div class="signal-eyebrow sig-24">Community-Fueled Storytelling</div>
   <h3>Залучайте аудиторію до створення наративу</h3>
-  <p>Дайте спільноті рівне місце за столом для формування ідентичності та наративу бренду. Відповідайте на коментарі у відео, включайте пропозиції підписників у наступний контент, запускайте дуети та реакції.</p>
+  <p>Дайте спільноті рівне місце за столом для формування ідентичності та наративу бренду. Відповідайте на коментарі у відео, включай пропозиції підписників у наступний контент, запускайте дуети та реакції.</p>
   <div class="tags"><span class="tag tag-cyan">#CommuntiyFueled</span><span class="tag tag-dark">Дует/Реакція</span><span class="tag tag-dark">Comment Reply відео</span></div>
 </div>
 
@@ -346,7 +398,7 @@ footer a:hover{color:#fff}
 
 <section>
 <div class="eyebrow">Тренд 3 &mdash; 2024</div>
-<h2 class="sec-h">Bridging the Trust Gap: завоюйте довіру або програєте</h2>
+<h2 class="sec-h">Bridging the Trust Gap: завойте довіру або програєте</h2>
 
 <div class="stats-row">
   <div class="stat-box"><div class="stat-num">41%</div><div class="stat-lbl">більше довіряють бренду після комерційного відео на TikTok</div></div>
@@ -366,7 +418,7 @@ footer a:hover{color:#fff}
   <strong>VEO FORCE: Україна повторює шлях США 2022&ndash;2024</strong>
   Американські та британські TikTok-продавці одягу та взуття пройшли цю стадію у 2022&ndash;2024: від каталожних відео до &laquo;процесного&raquo; контенту. Зараз саме ця трансформація відбувається на UA ринку. Бренди, що почнуть показувати реальний процес вже сьогодні, займуть позицію лідерів довіри у своїх нішах.
 </div>
-<div class="veo-credit">VEO FORCE &middot; @vasil_veo &middot; TikTok UA Business Analytics</div>
+<div class="veo-credit">VEO FORCE &middot; <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener" style="color:inherit">@vasil_veo</a> &middot; TikTok UA Business Analytics</div>
 </section>
 
 <!-- ═══ РОЗДІЛ 2: РЕПОРТ 2026 ═══ -->
@@ -391,7 +443,7 @@ footer a:hover{color:#fff}
   <div class="force-card c26">
     <div class="force-num">01</div>
     <div class="force-title">Reali-TEA</div>
-    <div class="force-desc">Фантазія зникає. Аудиторія вирівнюється крізь хаос, щоб разом формувати нові реальності. Справжність &mdash; нова розкіш.</div>
+    <div class="force-desc">Фантазія зникає. Аудиторія вирівнюється крізь хаос, щоб разом формувати нові реальності. Справжність &mdash; новий розкіш.</div>
   </div>
   <div class="force-card c26">
     <div class="force-num">02</div>
@@ -412,12 +464,12 @@ footer a:hover{color:#fff}
 
 <div class="stats-row">
   <div class="stat-box"><div class="stat-num">1.5x</div><div class="stat-lbl">міленіали та Gen Z готові спробувати бренд через спільноту</div></div>
-  <div class="stat-box light"><div class="stat-num">1.6x</div><div class="stat-lbl">більше повторних покупок, якщо комерційне відео дозволяє взаємодію</div></div>
+  <div class="stat-box light"><div class="stat-num">1.6x</div><div class="stat-lbl">більше повторних покупок, якщо реклама дозволяє взаємодію</div></div>
 </div>
 
 <div class="signal">
   <div class="signal-eyebrow sig-26">Forced to Lock In / Culture For Me</div>
-  <h3>Аудиторія прагне єдності та справжності</h3>
+  <h3>Аудиторія прагне спільноти та справжності</h3>
   <p><strong>#lockedin, #hygiene, #joblife</strong> &mdash; люди перетворюють буденне на спільні моменти гумору та вразливості. Тікток-аудиторія 2026 хоче бачити бренд, що живе в тій самій реальності, що і вони.</p>
   <p><strong>Для UA брендів одягу:</strong> не показуйте ідеальний образ &mdash; показуйте реальний look дня, помилки з підбором розміру, щире &laquo;нам повернули &mdash; ось чому&raquo;. Саме така відкритість у 2026 стане конкурентною перевагою.</p>
   <div class="tags"><span class="tag tag-red">#RealiTEA</span><span class="tag tag-dark">#LockedIn</span><span class="tag tag-dark">Реальний контент</span></div>
@@ -465,14 +517,14 @@ footer a:hover{color:#fff}
   <div class="tags"><span class="tag tag-red">#EmotionalROI</span><span class="tag tag-dark">#Tastemakers</span><span class="tag tag-dark">Why to buy first</span></div>
 </div>
 
-<div class="veo-credit">VEO FORCE &middot; @vasil_veo &middot; Аналіз TikTok тенденцій для UA ринку</div>
+<div class="veo-credit">VEO FORCE &middot; <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener" style="color:inherit">@vasil_veo</a> &middot; Аналіз TikTok тенденцій для UA ринку</div>
 </section>
 
 <!-- ═══ РОЗДІЛ 3: ПОРІВНЯННЯ ═══ -->
 <div class="report-header" style="border-color:#111111">
   <div class="rh-badge" style="background:#F0F0F0;color:#111;border-color:#999">&#9654; Порівняння та дорожня карта для України</div>
   <h1 class="rh-title">Від 2024 до 2026: що змінилось і що нас чекає</h1>
-  <p class="rh-sub">Глобальна еволюція TikTok та прогноз <strong>VEO FORCE</strong> для українського ринку.</p>
+  <p class="rh-sub">Глобальна еволюція TikTok та прогноз <strong><span class="veo-trigger" onclick="openVeoModal()">VEO FORCE</span></strong> для українського ринку.</p>
 </div>
 
 <section>
@@ -494,7 +546,7 @@ footer a:hover{color:#fff}
         <td><strong>Головна ідея</strong></td>
         <td>Будьте сміливими, автентичним, lo-fi перемагає студійний контент</td>
         <td>Людський інстинкт непідробний, ШІ підсилює, але не замінює</td>
-        <td>Перехід від спаму до автентичного контенту &mdash; зараз</td>
+        <td>Перехід від каталогу до автентичного контенту &mdash; зараз</td>
       </tr>
       <tr>
         <td><strong>Аудиторія</strong></td>
@@ -523,7 +575,7 @@ footer a:hover{color:#fff}
       <tr>
         <td><strong>Пошук</strong></td>
         <td>TikTok як пошуковик починає конкурувати з Google</td>
-        <td>Мільярди пошуків на день, 1 з 4 шукає в перші 30 сек</td>
+        <td>Billions пошуків на день, 1 з 4 шукає в перші 30 сек</td>
         <td>TikTok-пошук в UA активний, недооцінений більшістю брендів</td>
       </tr>
     </tbody>
@@ -684,7 +736,7 @@ footer a:hover{color:#fff}
   <strong>VEO FORCE: Нова реальність алгоритму</strong>
   За аналізом VEO FORCE, TikTok у 2026 році активно посилює відповідальність комерційних акаунтів. Це той самий шлях, що пройшли ринки США та Великобританії у 2022&ndash;2023. Для UA продавців це означає: бренди, що вибудують <strong>прозорий та цінісний контент</strong> сьогодні, автоматично будуть у виграшній позиції коли алгоритмічна фільтрація стане суворішою &mdash; а вона стане.
 </div>
-<div class="veo-credit">VEO FORCE &middot; @vasil_veo &middot; TikTok UA Business Analytics 2026</div>
+<div class="veo-credit">VEO FORCE &middot; <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener" style="color:inherit">@vasil_veo</a> &middot; TikTok UA Business Analytics 2026</div>
 
 <div class="lrow">
   <a href="https://www.tiktok.com/community-guidelines/en-GB" target="_blank" rel="noopener" class="lpill">&#8599; Community Guidelines</a>
@@ -696,10 +748,34 @@ footer a:hover{color:#fff}
 </div><!-- /wrap -->
 
 <footer>
-  <p>Матеріал підготовлено аналітичним центром <strong style="color:rgba(255,255,255,.7)">VEO FORCE</strong> &middot; <a href="#">@vasil_veo</a> на основі офіційних TikTok Trend Reports 2024 та 2026.<br>
+  <p>Матеріал підготовлено аналітичним центром <strong style="color:rgba(255,255,255,.7)"><span class="veo-trigger" onclick="openVeoModal()" style="color:inherit">VEO FORCE</span></strong> &middot; <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener">@vasil_veo</a> на основі офіційних TikTok Trend Reports 2024 та 2026.<br>
   TikTok What&rsquo;s Next 2024 &copy; TikTok Inc. &middot; TikTok Next 2026 &copy; TikTok Inc. &middot; Аналіз, адаптація та коментарі &mdash; VEO FORCE.<br>
   Актуально для українського ринку станом на 2026 р. Прогнози є оцінковими.</p>
 </footer>
-<!-- © VEO FORCE @vasil_veo | TikTok UA Business Analytics | vasil_veo -->
+<!-- © VEO FORCE <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener" style="color:inherit">@vasil_veo</a> | TikTok UA Business Analytics | vasil_veo -->
+
+<!-- VEO FORCE MODAL -->
+<div class="veo-modal-overlay" id="veoModal" onclick="closeVeoModal(event)">
+  <div class="veo-modal" role="dialog" aria-modal="true">
+    <button class="veo-modal-close" onclick="closeVeoModal()" aria-label="Закрити">&times;</button>
+    <div class="veo-modal-logo">&#9679; Аналітичний центр</div>
+    <h3>VEO FORCE</h3>
+    <p>Консалтинговий центр з аналізу ринку TikTok в Україні. Спеціалізація &mdash; стратегія просування для бізнесу в e-commerce: одяг, взуття, косметика, товари для дому.</p>
+    <p>Заснований і керований <strong>Vasil VEO</strong> &mdash; практикуючим TikTok-стратегом для українських продавців.</p>
+    <div class="veo-modal-handle">TikTok: <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener">@vasil_veo</a></div>
+    <div class="veo-modal-btns">
+      <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener" class="veo-modal-btn primary">&#9654; Відкрити TikTok</a>
+      <button onclick="closeVeoModal()" class="veo-modal-btn secondary">Закрити</button>
+    </div>
+  </div>
+</div>
+<script>
+function openVeoModal(){document.getElementById('veoModal').classList.add('active');}
+function closeVeoModal(e){
+  if(!e||e.target===document.getElementById('veoModal'))
+    document.getElementById('veoModal').classList.remove('active');
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeVeoModal({target:document.getElementById('veoModal')});});
+</script>
 </body>
 </html>
