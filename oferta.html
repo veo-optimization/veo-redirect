@@ -7,319 +7,89 @@
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#ffffff;
-  --surface:#f8f9fa;
-  --border:#e2e5e9;
-  --border-mid:#cdd1d8;
-  --text:#1e2228;
-  --text-mid:#4a515c;
-  --text-dim:#8a9099;
-  --accent:#1e2228;
-
-  --crit:#d93025;
-  --crit-bg:#fff5f4;
-  --crit-border:#f5bbb8;
-
-  --imp:#b45a00;
-  --imp-bg:#fffaf3;
-  --imp-border:#f5d9a8;
-
-  --tiktok:#008080;
-  --tiktok-bg:#f2fbfb;
-  --tiktok-border:#99d6d6;
-
-  --std:#3d6b3d;
-  --std-bg:#f5fbf5;
-  --std-border:#b3d9b3;
+  --bg:#ffffff;--surface:#f8f9fa;--border:#e2e5e9;--border-mid:#cdd1d8;
+  --text:#1e2228;--text-mid:#4a515c;--text-dim:#8a9099;
+  --crit:#d93025;--crit-bg:#fff5f4;--crit-border:#f5bbb8;
+  --imp:#b45a00;--imp-bg:#fffaf3;--imp-border:#f5d9a8;
+  --tiktok:#008080;--tiktok-bg:#f2fbfb;--tiktok-border:#99d6d6;
+  --std:#3d6b3d;--std-bg:#f5fbf5;--std-border:#b3d9b3;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
 html{scroll-behavior:smooth;background:#ffffff;}
-body{
-  background:#ffffff !important;
-  color:#1e2228;
-  font-family:'Montserrat',sans-serif;
-  font-size:13px;
-  line-height:1.7;
-  -webkit-font-smoothing:antialiased;
-}
-main{background:#ffffff;padding:24px 16px 72px;}
-
-/* ── HEADER ── */
-.hdr{
-  background:#fff;
-  border-bottom:2px solid var(--text);
-  padding:14px 16px;
-  position:sticky;top:0;z-index:200;
-  display:flex;align-items:center;justify-content:space-between;
-}
-.hdr-logo{
-  font-size:20px;font-weight:700;color:var(--text);
-  letter-spacing:3px;text-transform:uppercase;
-}
-.hdr-sub{
-  font-size:9px;font-weight:500;color:var(--text-dim);
-  letter-spacing:1.5px;margin-top:2px;text-transform:uppercase;
-}
-.hdr-btn{
-  font-family:'Montserrat',sans-serif;
-  font-size:10px;font-weight:600;
-  padding:8px 14px;
-  background:var(--text);color:#fff;
-  border:none;border-radius:5px;cursor:pointer;
-  letter-spacing:1px;text-transform:uppercase;
-  white-space:nowrap;
-  transition:opacity .15s;
-}
+body{background:#ffffff !important;color:#1e2228;font-family:'Montserrat',sans-serif;font-size:13px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+.hdr{background:#fff;border-bottom:2px solid var(--text);padding:14px 16px;position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;}
+.hdr-logo{font-size:20px;font-weight:700;color:var(--text);letter-spacing:3px;text-transform:uppercase;}
+.hdr-sub{font-size:9px;font-weight:500;color:var(--text-dim);letter-spacing:1.5px;margin-top:2px;text-transform:uppercase;}
+.hdr-btn{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;padding:8px 14px;background:var(--text);color:#fff;border:none;border-radius:5px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;transition:opacity .15s;}
 .hdr-btn:hover{opacity:.8;}
-
-/* ── TOC ── */
-.toc{
-  background:#fff;
-  border-bottom:1px solid var(--border);
-  padding:12px 16px;
-}
-.toc-label{
-  font-size:9px;font-weight:600;color:var(--text-dim);
-  letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;
-}
+.toc{background:#fff;border-bottom:1px solid var(--border);padding:12px 16px;}
+.toc-label{font-size:9px;font-weight:600;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
 .toc-grid{display:flex;flex-wrap:wrap;gap:5px;}
-.toc-chip{
-  font-family:'Montserrat',sans-serif;
-  font-size:10px;font-weight:500;
-  padding:4px 10px;
-  background:#f7f8f9;
-  border:1px solid var(--border);
-  border-radius:20px;color:var(--text-mid);
-  cursor:pointer;transition:all .15s;white-space:nowrap;
-}
-.toc-chip:hover{background:var(--surface);border-color:var(--border-mid);color:var(--text);}
+.toc-chip{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:500;padding:4px 10px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:var(--text-mid);cursor:pointer;transition:all .15s;white-space:nowrap;}
+.toc-chip:hover{background:#fff;border-color:var(--border-mid);color:var(--text);}
 .toc-chip.active{background:var(--text);border-color:var(--text);color:#fff;}
-
-/* ── MAIN ── */
-
-.doc-title{
-  font-size:26px;font-weight:700;color:var(--text);
-  line-height:1.2;margin-bottom:6px;letter-spacing:.5px;
-}
-.doc-meta{
-  font-size:10px;font-weight:500;color:var(--text-dim);
-  margin-bottom:28px;line-height:2;letter-spacing:.5px;
-  text-transform:uppercase;
-}
+main{background:#ffffff;padding:24px 16px 72px;}
+.doc-title{font-size:26px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:6px;letter-spacing:.5px;}
+.doc-meta{font-size:10px;font-weight:500;color:var(--text-dim);margin-bottom:28px;line-height:2;letter-spacing:.5px;text-transform:uppercase;}
 .doc-meta b{color:var(--text);font-weight:700;}
-
-/* ── LEGEND ── */
-.legend{
-  display:flex;flex-wrap:wrap;gap:6px;
-  margin-bottom:28px;padding:14px;
-  background:var(--surface);
-  border-radius:8px;border:1px solid var(--border);
-}
-.legend-label{
-  width:100%;font-size:9px;font-weight:600;
-  color:var(--text-dim);letter-spacing:1.5px;
-  text-transform:uppercase;margin-bottom:4px;
-}
-
-/* ── BADGES ── */
-.badge{
-  font-family:'Montserrat',sans-serif;
-  font-size:9px;font-weight:700;
-  padding:3px 8px;border-radius:3px;
-  letter-spacing:.8px;text-transform:uppercase;
-}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:28px;padding:14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);}
+.legend-label{width:100%;font-size:9px;font-weight:600;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
+.badge{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;padding:3px 8px;border-radius:3px;letter-spacing:.8px;text-transform:uppercase;}
 .b-crit{background:var(--crit-bg);color:var(--crit);border:1px solid var(--crit-border);}
 .b-imp{background:var(--imp-bg);color:var(--imp);border:1px solid var(--imp-border);}
 .b-tiktok{background:var(--tiktok-bg);color:var(--tiktok);border:1px solid var(--tiktok-border);}
 .b-std{background:var(--std-bg);color:var(--std);border:1px solid var(--std-border);}
-
-/* ── SECTION ── */
 .sec{margin-bottom:40px;scroll-margin-top:120px;}
 .sec-hdr{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;}
-.sec-num{
-  font-size:10px;font-weight:700;
-  color:var(--text-mid);
-  background:var(--surface);
-  border:1px solid var(--border);
-  padding:3px 8px;border-radius:4px;
-  white-space:nowrap;flex-shrink:0;margin-top:4px;
-  letter-spacing:.5px;
-}
-.sec-title{
-  font-size:16px;font-weight:700;color:var(--text);
-  line-height:1.3;letter-spacing:.3px;
-}
+.sec-num{font-size:10px;font-weight:700;color:var(--text-mid);background:var(--surface);border:1px solid var(--border);padding:3px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:4px;letter-spacing:.5px;}
+.sec-title{font-size:16px;font-weight:700;color:var(--text);line-height:1.3;letter-spacing:.3px;}
 .sec-divider{height:2px;background:var(--border);margin-bottom:14px;}
-
-/* ── CLAUSE ── */
-.cl{
-  border:1px solid var(--border);
-  border-radius:8px;
-  margin-bottom:8px;overflow:hidden;
-  transition:border-color .2s,box-shadow .2s;
-  background:#fff;
-}
+.cl{border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;transition:border-color .2s,box-shadow .2s;background:#fff;}
 .cl:hover{border-color:var(--border-mid);box-shadow:0 1px 4px rgba(0,0,0,.06);}
-
 .cl.crit{border-left:3px solid var(--crit);border-color:var(--crit-border);}
 .cl.crit .cl-id{background:var(--crit-bg);color:var(--crit);border-color:var(--crit-border);}
-
 .cl.imp{border-left:3px solid var(--imp);border-color:var(--imp-border);}
 .cl.imp .cl-id{background:var(--imp-bg);color:var(--imp);border-color:var(--imp-border);}
-
 .cl.tiktok{border-left:3px solid var(--tiktok);border-color:var(--tiktok-border);}
 .cl.tiktok .cl-id{background:var(--tiktok-bg);color:var(--tiktok);border-color:var(--tiktok-border);}
-
 .cl.std{border-left:3px solid var(--std);border-color:var(--std-border);}
 .cl.std .cl-id{background:var(--std-bg);color:var(--std);border-color:var(--std-border);}
-
-.cl-hdr{
-  display:flex;align-items:center;gap:8px;
-  padding:11px 12px;cursor:pointer;user-select:none;
-}
-.cl-id{
-  font-family:'Montserrat',sans-serif;
-  font-size:10px;font-weight:700;
-  background:var(--surface);
-  color:var(--text-mid);
-  border:1px solid var(--border);
-  padding:3px 7px;border-radius:4px;
-  flex-shrink:0;letter-spacing:.3px;
-}
-.cl-prev{
-  font-size:11px;font-weight:400;color:var(--text-dim);
-  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;
-}
-.cl-arr{
-  color:var(--text-dim);font-size:12px;flex-shrink:0;
-  transition:transform .2s;
-}
+.cl-hdr{display:flex;align-items:center;gap:8px;padding:11px 12px;cursor:pointer;user-select:none;}
+.cl-id{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;background:var(--surface);color:var(--text-mid);border:1px solid var(--border);padding:3px 7px;border-radius:4px;flex-shrink:0;letter-spacing:.3px;}
+.cl-prev{font-size:11px;font-weight:400;color:var(--text-dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
+.cl-arr{color:var(--text-dim);font-size:12px;flex-shrink:0;transition:transform .2s;}
 .cl.open .cl-arr{transform:rotate(180deg);}
-
 .cl-body{display:none;padding:0 12px 12px;}
 .cl.open .cl-body{display:block;}
-
-.cl-text{
-  font-family:'Montserrat',sans-serif;
-  font-size:12px;font-weight:400;
-  line-height:1.8;color:var(--text);
-  background:var(--surface);
-  padding:12px;border-radius:6px;
-  border:1px solid var(--border);
-  min-height:50px;white-space:pre-wrap;word-break:break-word;
-  outline:none;
-  transition:border-color .2s,background .2s;
-  -webkit-user-modify:read-write-plaintext-only;
-}
-.cl-text:focus,[contenteditable].cl-text:focus{
-  border-color:var(--text);background:#fff;
-  box-shadow:0 0 0 3px rgba(30,34,40,.06);
-}
-
-.cl-foot{
-  display:flex;justify-content:space-between;
-  align-items:center;margin-top:8px;
-}
-.btn-cp{
-  font-family:'Montserrat',sans-serif;
-  font-size:9px;font-weight:600;
-  padding:4px 10px;
-  background:transparent;
-  border:1px solid var(--border);
-  color:var(--text-dim);
-  border-radius:4px;cursor:pointer;
-  transition:all .15s;
-  text-transform:uppercase;letter-spacing:.5px;
-}
+.cl-text{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:400;line-height:1.8;color:var(--text);background:var(--surface);padding:12px;border-radius:6px;border:1px solid var(--border);min-height:50px;white-space:pre-wrap;word-break:break-word;outline:none;transition:border-color .2s,background .2s;-webkit-user-modify:read-write-plaintext-only;}
+.cl-text:focus{border-color:var(--text);background:#fff;box-shadow:0 0 0 3px rgba(30,34,40,.06);}
+.cl-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;}
+.btn-cp{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:600;padding:4px 10px;background:transparent;border:1px solid var(--border);color:var(--text-dim);border-radius:4px;cursor:pointer;transition:all .15s;text-transform:uppercase;letter-spacing:.5px;}
 .btn-cp:hover{border-color:var(--text);color:var(--text);}
-
-/* ── TOAST ── */
-.toast{
-  position:fixed;bottom:20px;right:16px;left:16px;
-  background:var(--text);color:#fff;
-  font-family:'Montserrat',sans-serif;
-  font-size:11px;font-weight:600;
-  padding:12px 16px;border-radius:7px;
-  text-align:center;opacity:0;
-  transition:opacity .3s;pointer-events:none;z-index:999;
-  letter-spacing:.5px;text-transform:uppercase;
-}
+.toast{position:fixed;bottom:20px;right:16px;left:16px;background:var(--text);color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;padding:12px 16px;border-radius:7px;text-align:center;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;letter-spacing:.5px;text-transform:uppercase;}
 .toast.show{opacity:1;}
-
-/* ── CHANGELOG ── */
-.changelog{
-  margin:40px 16px 20px;
-  border:2px solid var(--text);
-  border-radius:10px;
-  overflow:hidden;
-  background:#fff;
-}
-.cl-hdr-static{
-  background:var(--text);color:#fff;
-  font-family:'Montserrat',sans-serif;
-  font-size:11px;font-weight:700;
-  letter-spacing:1.5px;text-transform:uppercase;
-  padding:14px 16px;
-  display:flex;align-items:center;gap:10px;
-}
-.changelog-icon{font-size:16px;}
-.changelog-list{padding:12px 16px 16px;}
-.changelog-item{
-  display:flex;align-items:flex-start;gap:10px;
-  padding:10px 0;
-  border-bottom:1px solid var(--border);
-  cursor:pointer;
-  transition:background .15s;
-  border-radius:4px;
-  padding-left:4px;
-}
-.changelog-item:last-child{border-bottom:none;}
-.changelog-item:hover{background:var(--surface);}
-.changelog-num{
-  font-family:'Montserrat',sans-serif;
-  font-size:10px;font-weight:700;
-  background:var(--text);color:#fff;
-  padding:3px 8px;border-radius:4px;
-  white-space:nowrap;flex-shrink:0;
-  margin-top:1px;
-}
-.changelog-desc{
-  font-family:'Montserrat',sans-serif;
-  font-size:12px;color:var(--text-mid);
-  line-height:1.5;
-}
-.changelog-desc b{color:var(--text);}
-.changelog-arrow{
-  font-size:14px;color:var(--text-dim);
-  flex-shrink:0;margin-top:1px;
-  margin-left:auto;
-}
 </style>
 </head>
 <body>
-
 <div class="hdr">
   <div>
     <div class="hdr-logo">BEROO</div>
     <div class="hdr-sub">beroo.space · beroo.online</div>
   </div>
-  <button class="hdr-btn" onclick="exportDoc()">↓ .TXT</button>
+  <button class="hdr-btn" onclick="exportDoc()">&#8595; .TXT</button>
 </div>
-
 <div class="toc">
   <div class="toc-label">Розділи документу</div>
   <div class="toc-grid" id="tocGrid"></div>
 </div>
-
 <main>
   <div class="doc-title">Публічна оферта</div>
   <div class="doc-meta">
-    Договір про надання послуг · <b>BEROO</b><br>
-    ФОП Шеремета Василь Анатолійович · ІПН <b>3361708913</b><br>
-    Редакція 1.0 · «___» __________ 2025 р.<br>
-    Платформа: <b>beroo.space</b> · Вітрини: <b>beroo.online</b>
+    Договір про надання послуг &middot; <b>BEROO</b><br>
+    ФОП Шеремета Василь Анатолійович &middot; ІПН <b>3361708913</b><br>
+    Редакція 1.0 &middot; &laquo;___&raquo; __________ 2025 р.<br>
+    Платформа: <b>beroo.space</b> &middot; Вітрини: <b>beroo.online</b>
   </div>
-
   <div class="legend">
     <div class="legend-label">Позначення важливості пунктів</div>
     <span class="badge b-crit">Критично</span>
@@ -327,18 +97,15 @@ main{background:#ffffff;padding:24px 16px 72px;}
     <span class="badge b-tiktok">TikTok-специфіка</span>
     <span class="badge b-std">Стандарт</span>
   </div>
-
   <div id="sectionsContainer"></div>
 </main>
-
-<div class="toast" id="toast">Скопійовано ✓</div>
-
+<div class="toast" id="toast">Скопійовано &#10003;</div>
 <script>
 const DATA = [
   {
     id:"1", title:"ЗАГАЛЬНІ ПОЛОЖЕННЯ",
     clauses:[
-      {id:"1.1",badge:"std",text:"Цей документ є публічною офертою (надалі — «Оферта») Фізичної особи-підприємця Шеремети Василя Анатолійовича (ІПН 3361708913) (надалі — «Виконавець»), яка адресована необмеженому колу осіб і є пропозицією укласти Договір про надання послуг (надалі — «Договір») на умовах, визначених цією Офертою. Оферта публікується та є доступною для ознайомлення на сайті beroo.space/terms."},
+      {id:"1.1",badge:"std",text:"Цей документ є публічною офертою (надалі — Оферта) Фізичної особи-підприємця Шеремети Василя Анатолійовича (ІПН 3361708913) (надалі — Виконавець), яка адресована необмеженому колу осіб і є пропозицією укласти Договір про надання послуг (надалі — Договір) на умовах, визначених цією Офертою. Оферта публікується та є доступною для ознайомлення на сайті beroo.space/terms."},
       {id:"1.2",badge:"std",text:"Відповідно до статей 633, 638, 641 Цивільного кодексу України цей Договір є публічним договором приєднання. Акцепт Оферти означає повне та безумовне прийняття всіх її умов без будь-яких застережень, обмежень або виключень."},
       {id:"1.3",badge:"std",text:"Оферта набуває чинності з моменту її розміщення на beroo.space і діє до її відкликання Виконавцем. Виконавець залишає за собою право вносити зміни до умов Оферти в односторонньому порядку без попереднього повідомлення. Зміни набувають чинності з моменту публікації оновленої редакції."},
       {id:"1.4",badge:"imp",text:"Акцептом Оферти є вчинення Користувачем будь-якої з таких дій: (а) реєстрація облікового запису на beroo.space або app.beroo.space; (б) оплата тарифного пакету або будь-якої послуги Виконавця; (в) фактичне використання будь-яких функцій Платформи. З моменту акцепту Користувач підтверджує, що ознайомився з умовами Оферти в повному обсязі та беззастережно їх приймає."}
@@ -347,14 +114,14 @@ const DATA = [
   {
     id:"2", title:"ТЕРМІНИ ТА ВИЗНАЧЕННЯ",
     clauses:[
-      {id:"2.1",badge:"std",text:"«Виконавець» — Фізична особа-підприємець Шеремета Василь Анатолійович, зареєстрована та діє відповідно до законодавства України (ІПН 3361708913), яка є правовласником та оператором програмного забезпечення BEROO, розміщеного на домені beroo.space та його піддоменах."},
-      {id:"2.2",badge:"std",text:"«Платформа / CRM-система BEROO» — хмарне програмне забезпечення за моделлю SaaS (Software as a Service), розміщене на домені beroo.space та його піддоменах (зокрема app.beroo.space), яке надає Продавцям інструменти для автоматизації бізнес-процесів: управління замовленнями та каталогом товарів, налаштування інтеграцій (платіжні шлюзи, служби доставки), аналітику та генерацію сайтів-каталогів (Вітрин) у доменній зоні beroo.online."},
-      {id:"2.3",badge:"std",text:"«Особистий кабінет» — захищений персональний розділ Платформи (app.beroo.space), доступний Продавцеві після реєстрації та авторизації, через який здійснюється управління Вітриною, тарифами, інтеграціями та іншими налаштуваннями."},
-      {id:"2.4",badge:"imp",text:"«Сайт-каталог (Вітрина)» — публічна веб-сторінка (HTML-каталог), автоматично згенерована Платформою на піддомені у зоні beroo.online (формат: xxxxx.beroo.online, де xxxxx — унікальний ідентифікатор магазину). Вітрина є технічним інструментом демонстрації та продажу товарів кінцевим споживачам (Покупцям) Продавця. Виконавець є виключно технічним оператором інфраструктури, на якій розміщена Вітрина, та не є учасником торговельних відносин між Продавцем і Покупцями."},
-      {id:"2.5",badge:"std",text:"«Продавець (Мерчант, Користувач)» — дієздатна фізична особа, фізична особа-підприємець або юридична особа, яка акцептувала цю Оферту та використовує Платформу для ведення власної торговельної діяльності."},
-      {id:"2.6",badge:"std",text:"«Покупець» — кінцевий споживач, який відвідує Вітрину Продавця на піддомені beroo.online та може здійснювати покупки безпосередньо у Продавця. Покупець не є стороною цього Договору."},
-      {id:"2.7",badge:"std",text:"«Тарифний пакет (Підписка)» — перелік функцій та лімітів Платформи, доступний Продавцеві відповідно до обраного та оплаченого тарифу, перелік яких розміщений на beroo.space/pricing."},
-      {id:"2.8",badge:"imp",text:"«Доменна зона Платформи» — домен beroo.space та всі його піддомени (B2B-простір, адмін-панель, API-інтерфейси). «Доменна зона Вітрин» — домен beroo.online та всі його піддомени (B2C-простір, публічні магазини Продавців). Обидві зони є власністю та виключною інфраструктурою Виконавця."}
+      {id:"2.1",badge:"std",text:"Виконавець — Фізична особа-підприємець Шеремета Василь Анатолійович (ІПН 3361708913), яка є правовласником та оператором програмного забезпечення BEROO, розміщеного на домені beroo.space та його піддоменах."},
+      {id:"2.2",badge:"std",text:"Платформа / CRM-система BEROO — хмарне програмне забезпечення за моделлю SaaS (Software as a Service), розміщене на домені beroo.space та його піддоменах (зокрема app.beroo.space), яке надає Продавцям інструменти для автоматизації бізнес-процесів: управління замовленнями та каталогом товарів, налаштування інтеграцій (платіжні шлюзи, служби доставки), аналітику та генерацію сайтів-каталогів (Вітрин) у доменній зоні beroo.online."},
+      {id:"2.3",badge:"std",text:"Особистий кабінет — захищений персональний розділ Платформи (app.beroo.space), доступний Продавцеві після реєстрації та авторизації, через який здійснюється управління Вітриною, тарифами, інтеграціями та іншими налаштуваннями."},
+      {id:"2.4",badge:"imp",text:"Сайт-каталог (Вітрина) — публічна веб-сторінка (HTML-каталог), автоматично згенерована Платформою на піддомені у зоні beroo.online (формат: xxxxx.beroo.online). Вітрина є технічним інструментом демонстрації та продажу товарів кінцевим споживачам (Покупцям) Продавця. Виконавець є виключно технічним оператором інфраструктури та не є учасником торговельних відносин між Продавцем і Покупцями."},
+      {id:"2.5",badge:"std",text:"Продавець (Мерчант, Користувач) — дієздатна фізична особа, фізична особа-підприємець або юридична особа, яка акцептувала цю Оферту та використовує Платформу для ведення власної торговельної діяльності."},
+      {id:"2.6",badge:"std",text:"Покупець — кінцевий споживач, який відвідує Вітрину Продавця на піддомені beroo.online та може здійснювати покупки безпосередньо у Продавця. Покупець не є стороною цього Договору."},
+      {id:"2.7",badge:"std",text:"Тарифний пакет (Підписка) — перелік функцій та лімітів Платформи, доступний Продавцеві відповідно до обраного та оплаченого тарифу, перелік яких розміщений на beroo.space/pricing."},
+      {id:"2.8",badge:"imp",text:"Доменна зона Платформи — домен beroo.space та всі його піддомени (B2B-простір, адмін-панель, API-інтерфейси). Доменна зона Вітрин — домен beroo.online та всі його піддомени (B2C-простір, публічні магазини Продавців). Обидві зони є власністю та виключною інфраструктурою Виконавця."}
     ]
   },
   {
@@ -362,7 +129,7 @@ const DATA = [
     clauses:[
       {id:"3.1",badge:"std",text:"Предметом цього Договору є надання Виконавцем Продавцеві платного доступу до функціональних можливостей Платформи beroo.space в рамках обраного Тарифного пакету, зокрема: доступу до Особистого кабінету (app.beroo.space); інструментів для створення та управління Вітриною на піддомені beroo.online; інструментів управління каталогом товарів, замовленнями та клієнтами; технічних засобів для налаштування інтеграцій із зовнішніми сервісами; аналітики та інших функцій, передбачених обраним тарифом."},
       {id:"3.2",badge:"crit",text:"Виконавець надає виключно технічний доступ до SaaS-інструментів. Виконавець НЕ є торговим майданчиком, маркетплейсом, посередником, агентом, комісіонером або будь-якою іншою стороною у торговельних відносинах між Продавцем та його Покупцями. Будь-які договори купівлі-продажу товарів укладаються виключно між Продавцем та Покупцем, без участі Виконавця. Виконавець не несе будь-якої відповідальності за якість, безпеку, законність, доставку або будь-які інші характеристики товарів, що реалізуються Продавцем через Вітрину."},
-      {id:"3.3",badge:"crit",text:"Продавець зобов'язаний самостійно розмістити на своїй Вітрині (піддомен beroo.online) власну публічну оферту для кінцевих споживачів, яка відповідає вимогам Закону України «Про електронну комерцію» та іншим актам законодавства. Продавець самостійно та в повному обсязі несе юридичну, фінансову, податкову та будь-яку іншу відповідальність перед Покупцями і контролюючими органами."},
+      {id:"3.3",badge:"crit",text:"Продавець зобов'язаний самостійно розмістити на своїй Вітрині (піддомен beroo.online) власну публічну оферту для кінцевих споживачів, яка відповідає вимогам Закону України Про електронну комерцію та іншим актам законодавства. Продавець самостійно та в повному обсязі несе юридичну, фінансову, податкову та будь-яку іншу відповідальність перед Покупцями і контролюючими органами."},
       {id:"3.4",badge:"crit",text:"Оскільки Продавець самостійно підключає платіжні шлюзи (Monobank, WayForPay тощо) та служби доставки (Нова Пошта тощо) через Особистий кабінет, використовуючи власні API-ключі та облікові дані, Виконавець не несе будь-якої відповідальності за: затримки, відмови або помилки при проведенні платежів; чарджбеки, блокування коштів або претензії з боку платіжних систем та банків; помилки, затримки або втрати при доставці товарів; будь-які збої у роботі зовнішніх сервісів, інтегрованих Продавцем самостійно."}
     ]
   },
@@ -370,21 +137,21 @@ const DATA = [
     id:"4", title:"ВИМОГИ ДО ПРОДАВЦЯ ТА ЙОГО ТОВАРІВ",
     clauses:[
       {id:"4.1",badge:"imp",text:"Для доступу до Платформи та створення Вітрини Продавець зобов'язаний пройти реєстрацію на beroo.space та надати достовірну інформацію про себе та свою діяльність. Продавець гарантує, що досяг 18-річного віку або є належним чином зареєстрованою юридичною особою чи фізичною особою-підприємцем відповідно до законодавства України."},
-      {id:"4.2",badge:"imp",text:"Продавець зобов'язаний мати та підтримувати в актуальному стані всі дозволи, ліцензії, сертифікати та інші документи, необхідні для законної реалізації товарів або послуг, що пропонуються через Вітрину. Продавець гарантує, що його товари та діяльність відповідають вимогам законодавства України, включаючи Закон «Про захист прав споживачів», Закон «Про електронну комерцію» та законодавство про захист персональних даних."},
+      {id:"4.2",badge:"imp",text:"Продавець зобов'язаний мати та підтримувати в актуальному стані всі дозволи, ліцензії, сертифікати та інші документи, необхідні для законної реалізації товарів або послуг, що пропонуються через Вітрину. Продавець гарантує, що його товари та діяльність відповідають вимогам законодавства України, включаючи Закон Про захист прав споживачів, Закон Про електронну комерцію та законодавство про захист персональних даних."},
       {id:"4.3",badge:"tiktok",text:"Продавець, який залучає трафік з TikTok на свою Вітрину, зобов'язаний: (а) дотримуватися Правил спільноти TikTok (TikTok Community Guidelines) та Правил реклами TikTok; (б) у рекламному контенті на TikTok чітко ідентифікувати комерційний характер публікацій (позначати як рекламу); (в) не допускати введення споживачів в оману щодо характеристик, ціни або наявності товарів; (г) не залучати до просування товарів осіб, молодших 18 років."},
-      {id:"4.4",badge:"tiktok",text:"Картки товарів (лістинги) на Вітрині повинні відповідати таким вимогам: (а) назва та опис товару мають точно відображати його реальні характеристики — будь-яке введення в оману Покупців є порушенням цього Договору; (б) ціна має відповідати фактичній ціні реалізації і не містити прихованих платежів; (в) фотографії товарів мають зображувати виключно товар, що продається, і не вводити в оману; (г) для товарів, що потребують ліцензування або сертифікації, Продавець зобов'язаний мати підтверджуючі документи."},
-      {id:"4.5",badge:"tiktok",text:"Продавець зобов'язаний забезпечити Покупцям усю інформацію, що вимагається законодавством України до укладення договору купівлі-продажу, а саме: повне найменування/ім'я продавця та контактні дані; ціну товару з урахуванням усіх зборів; умови та строки доставки; умови повернення та обміну товарів; порядок вирішення спорів. Зазначена інформація має бути розміщена на Вітрині Продавця у зрозумілому вигляді до здійснення Покупцем замовлення."},
-      {id:"4.6",badge:"tiktok",text:"Відгуки покупців на Вітрині Продавця мають бути достовірними. Продавцеві категорично заборонено: публікувати фіктивні відгуки або відгуки, оплачені грошима чи товарами; видаляти або приховувати негативні відгуки; примушувати або заохочувати Покупців змінювати або видаляти відгуки; купувати відгуки у третіх осіб. Порушення цього пункту є підставою для негайного блокування Вітрини."},
-      {id:"4.7",badge:"imp",text:"Продавець несе повну відповідальність за обробку, підтвердження та виконання замовлень, отриманих через Вітрину. Продавець зобов'язаний: вчасно обробляти замовлення та інформувати Покупців про статус відправлення; дотримуватися заявлених строків доставки; самостійно врегульовувати претензії Покупців щодо скасування, повернення та відшкодування вартості замовлень відповідно до Закону України «Про захист прав споживачів»; не залучати Виконавця до вирішення спорів із Покупцями."},
-      {id:"4.8",badge:"imp",text:"Продавець зобов'язаний дотримуватися законодавства України у сфері захисту персональних даних при обробці даних Покупців. Персональні дані Покупців, отримані через Вітрину, можуть використовуватися Продавцем виключно для цілей обробки та виконання замовлень, а також вирішення пов'язаних претензій і спорів. Продавець не має права передавати персональні дані Покупців третім особам або використовувати їх для маркетингових розсилок без окремої згоди Покупця."},
-      {id:"4.9",badge:"crit",text:"Продавець гарантує, що у виробництві або просуванні товарів та послуг, що реалізуються через Вітрину, не використовується дитяча праця — у будь-якій формі, що суперечить Конвенції ООН про права дитини, Конвенції МОП № 138 про мінімальний вік для прийому на роботу, Конвенції МОП № 182 про найгірші форми дитячої праці, а також Кодексу законів про працю України. Залучення осіб, молодших 16 (шістнадцяти) років, до виконання замовлень, пакування, доставки товарів або будь-якої іншої комерційної діяльності, пов'язаної з роботою Вітрини Продавця, є суттєвим порушенням цього Договору та підставою для негайного блокування облікового запису Продавця відповідно до п. 5.3."}
+      {id:"4.4",badge:"tiktok",text:"Картки товарів (лістинги) на Вітрині повинні відповідати таким вимогам: (а) назва та опис товару мають точно відображати його реальні характеристики; (б) ціна має відповідати фактичній ціні реалізації і не містити прихованих платежів; (в) фотографії товарів мають зображувати виключно товар, що продається, і не вводити в оману; (г) для товарів, що потребують ліцензування або сертифікації, Продавець зобов'язаний мати підтверджуючі документи."},
+      {id:"4.5",badge:"tiktok",text:"Продавець зобов'язаний забезпечити Покупцям усю інформацію, що вимагається законодавством України до укладення договору купівлі-продажу: повне найменування та контактні дані продавця; ціну товару з урахуванням усіх зборів; умови та строки доставки; умови повернення та обміну товарів; порядок вирішення спорів. Зазначена інформація має бути розміщена на Вітрині до здійснення Покупцем замовлення."},
+      {id:"4.6",badge:"tiktok",text:"Відгуки покупців на Вітрині Продавця мають бути достовірними. Продавцеві категорично заборонено: публікувати фіктивні відгуки або відгуки, оплачені грошима чи товарами; видаляти або приховувати негативні відгуки; примушувати або заохочувати Покупців змінювати або видаляти відгуки; купувати відгуки у третіх осіб. Порушення цього пункту є підставою для негайного блокування Вітрини відповідно до п. 5.3."},
+      {id:"4.7",badge:"imp",text:"Продавець несе повну відповідальність за обробку, підтвердження та виконання замовлень, отриманих через Вітрину. Продавець зобов'язаний: вчасно обробляти замовлення та інформувати Покупців про статус відправлення; дотримуватися заявлених строків доставки; самостійно врегульовувати претензії Покупців щодо скасування, повернення та відшкодування відповідно до Закону України Про захист прав споживачів; не залучати Виконавця до вирішення спорів із Покупцями."},
+      {id:"4.8",badge:"imp",text:"Продавець зобов'язаний дотримуватися законодавства України у сфері захисту персональних даних при обробці даних Покупців. Персональні дані Покупців, отримані через Вітрину, можуть використовуватися Продавцем виключно для цілей обробки та виконання замовлень. Продавець не має права передавати персональні дані Покупців третім особам або використовувати їх для маркетингових розсилок без окремої згоди Покупця."},
+      {id:"4.9",badge:"crit",text:"Продавець гарантує, що у виробництві або просуванні товарів та послуг, що реалізуються через Вітрину, не використовується дитяча праця — у будь-якій формі, що суперечить Конвенції ООН про права дитини, Конвенціям МОП № 138 та № 182, а також Кодексу законів про працю України. Залучення осіб, молодших 16 років, до виконання замовлень, пакування, доставки товарів або будь-якої іншої комерційної діяльності, пов'язаної з роботою Вітрини Продавця, є суттєвим порушенням цього Договору та підставою для негайного блокування облікового запису відповідно до п. 5.3."}
     ]
   },
   {
     id:"5", title:"ЗАХИСТ ДОМЕНУ BEROO.ONLINE ТА РЕПУТАЦІЙНА БЕЗПЕКА",
     clauses:[
-      {id:"5.1",badge:"crit",text:"Доменна зона beroo.online є спільною технічною інфраструктурою Платформи та перебуває під виключним контролем Виконавця. Репутація домену beroo.online безпосередньо впливає на доступність Вітрин усіх Продавців, у зв'язку з чим її захист є абсолютним пріоритетом. Будь-які дії Продавця, що можуть заподіяти шкоду репутації домену beroo.online, призвести до його блокування, пониження у пошуковій видачі або обмеження посилань з боку соціальних мереж (TikTok, Instagram, Facebook тощо), визнаються суттєвим порушенням цього Договору."},
-      {id:"5.2",badge:"crit",text:"Оскільки Платформа BEROO орієнтована на трафік з TikTok, порушення Продавцем Правил спільноти TikTok (TikTok Community Guidelines) та/або Правил реклами TikTok (TikTok Advertising Policies), внаслідок яких посилання на домен beroo.online або конкретний піддомен Продавця можуть бути приховані, позначені як небезпечні, обмежені або заблоковані в TikTok, вважаються суттєвим порушенням цього Договору та є підставою для негайного блокування Вітрини без повернення коштів."},
+      {id:"5.1",badge:"crit",text:"Доменна зона beroo.online є спільною технічною інфраструктурою Платформи та перебуває під виключним контролем Виконавця. Будь-які дії Продавця, що можуть заподіяти шкоду репутації домену beroo.online, призвести до його блокування або обмеження посилань з боку соціальних мереж (TikTok, Instagram, Facebook тощо), визнаються суттєвим порушенням цього Договору."},
+      {id:"5.2",badge:"crit",text:"Порушення Продавцем Правил спільноти TikTok (TikTok Community Guidelines) та/або Правил реклами TikTok, внаслідок яких посилання на домен beroo.online або піддомен Продавця можуть бути приховані, позначені як небезпечні або заблоковані в TikTok, вважаються суттєвим порушенням цього Договору та є підставою для негайного блокування Вітрини без повернення коштів відповідно до п. 7.3."},
       {id:"5.3",badge:"crit",text:"Виконавець залишає за собою безумовне право в будь-який момент, без попереднього повідомлення, без надання пояснень та БЕЗ ПОВЕРНЕННЯ КОШТІВ за оплачений, але не використаний період: (а) обмежувати, призупиняти, заморожувати або деактивовувати Особистий кабінет Продавця на app.beroo.space; (б) вимикати, перенаправляти або повністю видаляти Вітрину Продавця на beroo.online; (в) самостійно аналізувати контент Вітрини, статистику та аналітику Особистого кабінету з метою моніторингу безпеки та захисту репутації; (г) відмовляти у реєстрації, зміні тарифу або продовженні підписки будь-якому Продавцю без зазначення причин."},
       {id:"5.4",badge:"imp",text:"Продавець зобов'язується не здійснювати будь-яких дій, спрямованих на: масову розсилку спаму з посиланнями на beroo.online; використання накручувань, ботів або інших методів штучного завищення трафіку на Вітрину; розміщення на Вітрині контенту, що порушує авторські права третіх осіб; будь-яку іншу діяльність, яка може негативно вплинути на репутацію або технічну стабільність домену beroo.online."}
     ]
@@ -392,9 +159,9 @@ const DATA = [
   {
     id:"6", title:"АНТИФРОД (ЗАХИСТ ВІД ШАХРАЙСТВА)",
     clauses:[
-      {id:"6.1",badge:"crit",text:"Якщо у Виконавця виникають обґрунтовані підозри (зокрема на підставі скарг Покупців, аналізу контенту або поведінкових паттернів), що Вітрина Продавця на піддомені beroo.online використовується для: фішингу (збору платіжних даних Покупців обманним шляхом); карткового шахрайства або скаму; збору особистих даних Покупців без їхньої згоди; будь-якої іншої незаконної або шахрайської діяльності — Виконавець має право негайно, без попередження заморозити або видалити таку Вітрину."},
-      {id:"6.2",badge:"crit",text:"Продавець зобов'язаний забезпечити, щоб його публічна оферта на Вітрині (beroo.online) містила чітке попередження про заборону переказу коштів за товари на особисті банківські картки або рахунки поза офіційними платіжними методами, інтегрованими у Вітрину. У разі відсутності такого попередження або виявлення практики заохочення Покупців до прямих переказів, Виконавець має право заблокувати Вітрину."},
-      {id:"6.3",badge:"imp",text:"Для відновлення роботи заблокованої Вітрини Виконавець має право висунути Продавцеві обов'язкові вимоги, зокрема: внесення конкретних змін до тексту оферти або контенту Вітрини; публікація звернення до своєї аудиторії в соціальних мережах (TikTok, Instagram тощо) з роз'ясненням ситуації та закликом здійснювати покупки виключно через офіційну Вітрину на піддомені beroo.online. Невиконання висунутих вимог у встановлений термін є підставою для остаточного видалення облікового запису Продавця без будь-якої компенсації."}
+      {id:"6.1",badge:"crit",text:"Якщо у Виконавця виникають обґрунтовані підозри, що Вітрина Продавця використовується для: фішингу (збору платіжних даних Покупців обманним шляхом); карткового шахрайства або скаму; збору особистих даних Покупців без їхньої згоди; будь-якої іншої незаконної або шахрайської діяльності — Виконавець має право негайно, без попередження заморозити або видалити таку Вітрину."},
+      {id:"6.2",badge:"crit",text:"Продавець зобов'язаний забезпечити, щоб його публічна оферта на Вітрині (beroo.online) містила чітке попередження про заборону переказу коштів за товари на особисті банківські картки поза офіційними платіжними методами, інтегрованими у Вітрину. У разі відсутності такого попередження або виявлення практики заохочення Покупців до прямих переказів, Виконавець має право заблокувати Вітрину відповідно до п. 5.3."},
+      {id:"6.3",badge:"imp",text:"Для відновлення роботи заблокованої Вітрини Виконавець має право висунути Продавцеві обов'язкові вимоги, зокрема: внесення конкретних змін до тексту оферти або контенту Вітрини; публікація звернення до своєї аудиторії в соціальних мережах з роз'ясненням ситуації та закликом здійснювати покупки виключно через офіційну Вітрину на піддомені beroo.online. Невиконання вимог у встановлений термін є підставою для остаточного видалення облікового запису без будь-якої компенсації."}
     ]
   },
   {
@@ -402,7 +169,7 @@ const DATA = [
     clauses:[
       {id:"7.1",badge:"std",text:"Оплата послуг Виконавця здійснюється виключно на Платформі beroo.space у порядку попередньої оплати (100% передоплата) шляхом придбання Тарифних пакетів, додаткових лімітів або окремих функцій. Актуальні тарифи розміщені на beroo.space/pricing та можуть змінюватися Виконавцем в односторонньому порядку. Зміна тарифів не впливає на вже оплачений поточний тарифний період Продавця."},
       {id:"7.2",badge:"imp",text:"Якщо Продавець самостійно відмовляється від послуг або ініціює видалення свого облікового запису до закінчення оплаченого тарифного періоду, кошти за невикористаний залишок тарифного періоду НЕ повертаються."},
-      {id:"7.3",badge:"crit",text:"У разі блокування, деактивації або видалення облікового запису Продавця та/або його Вітрини з ініціативи Виконавця з будь-якої з таких підстав: (а) порушення правил Платформи; (б) порушення Правил спільноти TikTok або інших соціальних мереж; (в) підозра або підтверджений факт шахрайства, фішингу або скаму; (г) загроза репутації або технічній стабільності доменів beroo.space і/або beroo.online; (д) будь-яке інше порушення умов цього Договору — кошти за оплачені, але невикористані тарифні пакети, функції або ліміти НЕ ПОВЕРТАЮТЬСЯ та вважаються компенсацією збитків Виконавця."},
+      {id:"7.3",badge:"crit",text:"У разі блокування, деактивації або видалення облікового запису Продавця та/або його Вітрини з ініціативи Виконавця з будь-якої з таких підстав: (а) порушення правил Платформи; (б) порушення Правил спільноти TikTok або інших соціальних мереж; (в) підозра або підтверджений факт шахрайства, фішингу або скаму; (г) загроза репутації або технічній стабільності доменів beroo.space і/або beroo.online; (д) будь-яке інше порушення умов цього Договору — кошти за оплачені, але невикористані тарифні пакети НЕ ПОВЕРТАЮТЬСЯ та вважаються компенсацією збитків Виконавця."},
       {id:"7.4",badge:"crit",text:"Виконавець має право в односторонньому порядку відмовитися від цього Договору (розірвати його) без попереднього повідомлення Продавця та без повернення коштів за невикористаний залишок тарифного періоду. Таке розірвання не є підставою для будь-яких претензій Продавця до Виконавця."},
       {id:"7.5",badge:"std",text:"Повернення коштів можливе виключно у випадку технічної неможливості надання оплаченої послуги з вини Виконавця (підтвердженої технічним збоєм) протягом більш ніж 72 годин поспіль. У такому випадку повернення здійснюється пропорційно невикористаному тарифному періоду на підставі письмового звернення Продавця протягом 10 робочих днів з моменту виникнення збою."}
     ]
@@ -412,32 +179,32 @@ const DATA = [
     clauses:[
       {id:"8.1",badge:"std",text:"Продавець має право: використовувати функції Платформи відповідно до обраного Тарифного пакету; отримувати технічну підтримку від Виконавця у порядку та обсязі, передбаченому обраним тарифом; самостійно налаштовувати зовнішній вигляд та контент своєї Вітрини у межах, що дозволені Платформою; змінювати тарифний пакет або скасовувати підписку відповідно до умов цього Договору."},
       {id:"8.2",badge:"imp",text:"Продавець зобов'язаний: надавати достовірну інформацію при реєстрації та не вводити Виконавця в оману щодо характеру своєї діяльності; самостійно забезпечувати відповідність своєї діяльності та Вітрини вимогам чинного законодавства України; самостійно сплачувати всі податки та збори, пов'язані зі своєю торговельною діяльністю; не передавати облікові дані від Особистого кабінету третім особам; утримуватися від образливих або погрозливих висловлювань на адресу Виконавця."},
-      {id:"8.3",badge:"imp",text:"Продавець зобов'язаний самостійно розмістити на своїй Вітрині (beroo.online) публічну оферту для кінцевих споживачів, яка відповідає вимогам Закону України «Про електронну комерцію», та забезпечити наявність актуальної контактної інформації, умов повернення товарів і порядку вирішення спорів."},
-      {id:"8.4",badge:"std",text:"Продавець зобов'язується захищати конфіденційність своїх облікових даних. Всі дії, вчинені через Особистий кабінет Продавця, вважаються вчиненими ним особисто. Продавець несе повну відповідальність за збереження паролю та запобігання несанкціонованому доступу."}
+      {id:"8.3",badge:"imp",text:"Продавець зобов'язаний самостійно розмістити на своїй Вітрині (beroo.online) публічну оферту для кінцевих споживачів, яка відповідає вимогам Закону України Про електронну комерцію, та забезпечити наявність актуальної контактної інформації, умов повернення товарів і порядку вирішення спорів."},
+      {id:"8.4",badge:"std",text:"Продавець зобов'язується захищати конфіденційність своїх облікових даних. Всі дії, вчинені через Особистий кабінет Продавця, вважаються вчиненими ним особисто. Продавець несе повну відповідальність за збереження паролю та запобігання несанкціонованому доступу до свого облікового запису."}
     ]
   },
   {
     id:"9", title:"ПРАВА ТА ОБОВ'ЯЗКИ ВИКОНАВЦЯ",
     clauses:[
       {id:"9.1",badge:"std",text:"Виконавець зобов'язаний: надавати Продавцеві доступ до функцій Платформи відповідно до обраного та оплаченого Тарифного пакету; забезпечувати технічне функціонування Платформи (beroo.space) та інфраструктури Вітрин (beroo.online) з рівнем доступності не менше 99% часу на місяць (за виключенням планових та аварійних технічних робіт); не розголошувати персональні дані Продавця третім особам, крім випадків, передбачених законодавством."},
-      {id:"9.2",badge:"imp",text:"Виконавець має право: вносити зміни до функціоналу Платформи, інтерфейсу та технічних характеристик; змінювати тарифи на послуги з попереднім повідомленням Продавця не менш ніж за 7 (сім) календарних днів; залучати третіх осіб (субпідрядників) для надання окремих технічних послуг; розміщувати назву магазину Продавця на маркетингових матеріалах Платформи, якщо Продавець не заперечує у письмовій формі."},
+      {id:"9.2",badge:"imp",text:"Виконавець має право: вносити зміни до функціоналу Платформи, інтерфейсу та технічних характеристик; змінювати тарифи на послуги з попереднім повідомленням Продавця не менш ніж за 7 (сім) календарних днів; залучати третіх осіб (субпідрядників) для надання окремих технічних послуг; розміщувати назву магазину Продавця на маркетингових матеріалах Платформи як приклад, якщо Продавець не заперечує проти цього у письмовій формі."},
       {id:"9.3",badge:"crit",text:"Виконавець має право самостійно здійснювати моніторинг контенту Вітрин та активності в Особистих кабінетах Продавців з метою забезпечення безпеки Платформи, захисту репутації доменів beroo.space та beroo.online, виявлення шахрайства та порушень умов цього Договору. Такий моніторинг здійснюється в автоматичному та ручному режимах і не потребує окремого погодження з Продавцем."},
-      {id:"9.4",badge:"imp",text:"Виконавець залишає за собою право в будь-який момент, без попереднього повідомлення Продавця, проводити контрольні закупки на Вітрині Продавця (beroo.online) з метою перевірки: якості обслуговування Покупців; дотримання Продавцем клієнтоорієнтованих стандартів та заявлених умов продажу; відповідності фактичного товару його опису та фотографіям у лістингу (відповідно до п. 4.4); правомірності методів просування та комунікації з покупцями; дотримання вимог Правил спільноти соціальних мереж (зокрема TikTok, Instagram), пов'язаних з діяльністю Вітрини (відповідно до п. 4.3 та п. 5.2); відсутності ознак шахрайських дій або маніпуляцій щодо Покупців (відповідно до п. 6.1); а також будь-яких інших аспектів, що Виконавець вважає ключовими для репутації Платформи та захисту Покупців. Результати контрольної закупки є підставою для застосування заходів відповідно до п. 5.3."}
+      {id:"9.4",badge:"imp",text:"Виконавець залишає за собою право в будь-який момент, без попереднього повідомлення Продавця, проводити контрольні закупки на Вітрині Продавця (beroo.online) з метою перевірки: якості обслуговування Покупців; дотримання Продавцем клієнтоорієнтованих стандартів та заявлених умов продажу; відповідності фактичного товару його опису та фотографіям у лістингу (відповідно до п. 4.4); правомірності методів просування та комунікації з покупцями; дотримання вимог Правил спільноти соціальних мереж (зокрема TikTok, Instagram), пов'язаних з діяльністю Вітрини (відповідно до п. 4.3 та п. 5.2); відсутності ознак шахрайських дій або маніпуляцій щодо Покупців (відповідно до п. 6.1). Результати контрольної закупки є підставою для застосування заходів відповідно до п. 5.3."}
     ]
   },
   {
     id:"10", title:"ЗАБОРОНЕНИЙ КОНТЕНТ (ACCEPTABLE USE POLICY)",
     clauses:[
       {id:"10.1",badge:"crit",text:"Продавцеві суворо заборонено розміщувати на своїй Вітрині або використовувати Платформу для реалізації, просування або рекламування будь-яких товарів, послуг або контенту з наступного переліку: (а) наркотичні засоби, психотропні речовини та прекурсори або пристрої для їх вживання; (б) вогнепальна, холодна або травматична зброя, боєприпаси без наявності відповідних дозволів; (в) порнографічні матеріали або товари сексуального характеру; (г) шахрайські схеми та незаконні фінансові продукти; (д) товари, заборонені до обігу законодавством України; (е) матеріали, що пропагують ненависть, дискримінацію або насильство; (є) піратське ПЗ або цифровий контент з порушенням авторських прав."},
-      {id:"10.2",badge:"tiktok",text:"З урахуванням специфіки трафіку з TikTok, окремо забороняється: розміщення товарів або послуг, реклама яких порушує Правила спільноти TikTok або Правила реклами TikTok; розміщення товарів з переліку заборонених відповідно до TikTok Shop Prohibited Products Policy (з урахуванням адаптації для ринку України); будь-який контент, спрямований на аудиторію молодше 18 років, що має комерційний характер та не відповідає нормам захисту прав неповнолітніх; введення споживачів в оману щодо характеристик, ціни, наявності або умов доставки товарів."},
+      {id:"10.2",badge:"tiktok",text:"З урахуванням специфіки трафіку з TikTok, окремо забороняється: розміщення товарів або послуг, реклама яких порушує Правила спільноти TikTok або Правила реклами TikTok; будь-який контент, спрямований на аудиторію молодше 18 років, що має комерційний характер та не відповідає нормам захисту прав неповнолітніх; введення споживачів в оману щодо характеристик, ціни, наявності або умов доставки товарів."},
       {id:"10.3",badge:"crit",text:"Продавцеві заборонено використовувати Платформу та Вітрину для: фішингу, карткового шахрайства або обманного збору платіжних даних Покупців; масової розсилки спаму або небажаних комерційних повідомлень; накручувань трафіку за допомогою ботів або автоматизованих засобів; розміщення посилань на ресурси, що містять шкідливе програмне забезпечення; будь-якої іншої діяльності, що порушує законодавство України або міжнародне право."},
-      {id:"10.4",badge:"imp",text:"У разі виявлення порушень, зазначених у пунктах 10.1–10.3 цього Договору, Виконавець має право негайно заблокувати Вітрину та/або обліковий запис Продавця без попереднього повідомлення та без повернення коштів. Виконавець також має право передати інформацію про порушення відповідним правоохоронним органам."}
+      {id:"10.4",badge:"imp",text:"У разі виявлення порушень, зазначених у пунктах 10.1–10.3 цього Договору, Виконавець має право негайно заблокувати Вітрину та/або обліковий запис Продавця без попереднього повідомлення та без повернення коштів відповідно до п. 7.3. Виконавець також має право передати інформацію про порушення відповідним правоохоронним органам."}
     ]
   },
   {
     id:"11", title:"ІНТЕЛЕКТУАЛЬНА ВЛАСНІСТЬ",
     clauses:[
-      {id:"11.1",badge:"imp",text:"Платформа BEROO (beroo.space), включаючи програмний код, інтерфейс, бази даних, дизайн та всі складові частини, є об'єктом права інтелектуальної власності Виконавця та захищена відповідно до Закону України «Про авторське право і суміжні права». Продавцеві надається лише обмежена, невиключна, непередавана ліцензія на використання Платформи виключно з метою, передбаченою цим Договором."},
+      {id:"11.1",badge:"imp",text:"Платформа BEROO (beroo.space), включаючи програмний код, інтерфейс, бази даних, дизайн та всі складові частини, є об'єктом права інтелектуальної власності Виконавця та захищена відповідно до Закону України Про авторське право і суміжні права. Продавцеві надається лише обмежена, невиключна, непередавана ліцензія на використання Платформи виключно з метою, передбаченою цим Договором."},
       {id:"11.2",badge:"std",text:"Продавець зберігає всі права на власний контент (фотографії товарів, описи, логотипи), розміщений ним на Вітрині. Розміщуючи контент на Вітрині, Продавець надає Виконавцеві безвідкличну, безоплатну, невиключну ліцензію на використання такого контенту для технічного забезпечення роботи Платформи та маркетингових цілей Виконавця."},
       {id:"11.3",badge:"imp",text:"Продавець гарантує, що контент, розміщений ним на Вітрині, не порушує авторських прав або інших прав інтелектуальної власності третіх осіб. У разі пред'явлення будь-яких претензій або позовів третіх осіб у зв'язку з контентом Продавця, останній зобов'язаний врегулювати такі претензії самостійно та відшкодувати Виконавцеві всі збитки, включаючи судові витрати."}
     ]
@@ -445,14 +212,19 @@ const DATA = [
   {
     id:"12", title:"КОНФІДЕНЦІЙНІСТЬ ТА ПЕРСОНАЛЬНІ ДАНІ",
     clauses:[
-      {id:"12.1",badge:"std",text:"Виконавець обробляє персональні дані Продавця відповідно до Закону України «Про захист персональних даних» та Політики конфіденційності, розміщеної на beroo.space/privacy. Реєструючись на Платформі, Продавець надає свою згоду на обробку персональних даних у цілях, передбачених Політикою конфіденційності."},
-      {id:"12.2",badge:"imp",text:"Продавець несе самостійну відповідальність за дотримання законодавства про захист персональних даних у відносинах зі своїми Покупцями. Виконавець не є оператором персональних даних Покупців Продавця та не несе відповідальності за їх обробку."}
+      {id:"12.1",badge:"std",text:"Виконавець обробляє персональні дані Продавця відповідно до Закону України Про захист персональних даних та Політики конфіденційності BEROO, розміщеної на beroo.space/privacy. Реєструючись на Платформі, Продавець надає свою згоду на обробку персональних даних у цілях, передбачених Політикою конфіденційності."},
+      {id:"12.2",badge:"crit",text:"Виконавець є технічним обробником (процесором) персональних даних Покупців, що проходять через інфраструктуру beroo.online. Продавець є самостійним контролером персональних даних своїх Покупців та несе повну відповідальність за їх обробку відповідно до законодавства. Виконавець не несе відповідальності за порушення Продавцем законодавства про захист персональних даних у відносинах зі своїми Покупцями."},
+      {id:"12.3",badge:"crit",text:"Виконавець має право обробляти персональні дані Продавця без його додаткової згоди у таких випадках: для захисту законних прав та інтересів Виконавця у судовому або досудовому порядку; для виявлення, запобігання або припинення шахрайської чи незаконної діяльності; на законну вимогу правоохоронних або контролюючих органів України; у разі, якщо обробка необхідна для виконання зобов'язань за цим Договором."},
+      {id:"12.4",badge:"crit",text:"Відкликання Продавцем згоди на обробку персональних даних або направлення вимоги про їх видалення не тягне автоматичного припинення дії цього Договору та не звільняє Продавця від зобов'язань, що виникли до моменту відкликання, зокрема від зобов'язань щодо сплати заборгованості та відшкодування збитків. Виконавець зберігає право продовжувати обробляти мінімально необхідний обсяг даних Продавця для виконання юридичних зобов'язань, захисту своїх законних інтересів та вирішення спорів. Детальніше — у п. 9.3 Політики конфіденційності beroo.space/privacy."},
+      {id:"12.5",badge:"std",text:"Персональні дані Продавця зберігаються Виконавцем протягом всього строку дії цього Договору та не менше 3 (трьох) років після його припинення — відповідно до вимог бухгалтерського та податкового законодавства України."},
+      {id:"12.6",badge:"crit",text:"РЕКЛАМНА МОДЕЛЬ ПЛАТФОРМИ. Якщо обраний Продавцем Тарифний пакет не включає опцію відключення реклами від інших магазинів платформи BEROO, Виконавець має право розміщувати рекламні матеріали інших Продавців платформи у всіх каналах магазину Продавця: на Вітрині (beroo.online), у Telegram-боті магазину, на будь-яких інших сторінках та інструментах, технічно пов'язаних із магазином, а також у будь-якому іншому функціоналі платформи, що з'явиться в майбутньому. Покупці Продавця А можуть отримувати рекламні повідомлення від Продавців Б, В та інших у межах екосистеми BEROO. Відключення реклами є платною опцією окремих тарифів. Акцептуючи цю Оферту, Продавець підтверджує свою повну та беззастережну згоду з показом реклами інших магазинів BEROO своїм Покупцям у разі, якщо обраний тариф не виключає цього."},
+      {id:"12.7",badge:"imp",text:"Екосистема BEROO має два окремих правових простори з незалежними документами. BEROO Space (beroo.space) — для Продавців: Публічна оферта beroo.space/terms та Політика конфіденційності beroo.space/privacy. BEROO Online (beroo.online) — для Покупців: окрема Публічна оферта beroo.online/terms та окрема Політика конфіденційності beroo.online/privacy. Цей Договір регулює виключно відносини між Виконавцем та Продавцями. Акцептуючи цю Оферту, Продавець підтверджує ознайомленість з існуванням зазначених документів для Покупців та зобов'язується посилатися на них у своїй Вітрині."}
     ]
   },
   {
     id:"13", title:"ВІДПОВІДАЛЬНІСТЬ СТОРІН ТА ОБМЕЖЕННЯ",
     clauses:[
-      {id:"13.1",badge:"crit",text:"Платформа надається за принципом «як є» (AS IS). Виконавець не надає жодних гарантій того, що Платформа відповідатиме конкретним очікуванням Продавця, буде абсолютно безперебійною або безпомилковою. Виконавець докладає розумних зусиль для забезпечення стабільної роботи, але не гарантує абсолютного результату."},
+      {id:"13.1",badge:"crit",text:"Платформа надається за принципом як є (AS IS). Виконавець не надає жодних гарантій того, що Платформа відповідатиме конкретним очікуванням Продавця, буде абсолютно безперебійною або безпомилковою. Виконавець докладає розумних зусиль для забезпечення стабільної роботи, але не гарантує абсолютного результату."},
       {id:"13.2",badge:"crit",text:"Сукупна відповідальність Виконавця за будь-якими вимогами Продавця, що виникають з цього Договору, не може перевищувати суму, сплачену Продавцем за один (1) останній тарифний місяць використання Платформи. Виконавець у жодному разі не несе відповідальності за непрямі, побічні, спеціальні або наслідкові збитки, включаючи втрату прибутку, клієнтів або ділової репутації."},
       {id:"13.3",badge:"imp",text:"Продавець зобов'язується захищати та відшкодовувати збитки Виконавцю, його посадовим особам та партнерам у разі будь-яких претензій, позовів або витрат (включаючи судові), що виникли внаслідок: порушення Продавцем умов цього Договору; незаконної або шахрайської діяльності Продавця через Платформу; претензій третіх осіб (Покупців або правовласників) щодо діяльності Продавця."},
       {id:"13.4",badge:"crit",text:"Виконавець не несе жодної відповідальності за будь-які обмеження, блокування, пониження охоплення, позначення контенту як небезпечного, відмову у верифікації або інші заходи впливу, які платформи соціальних мереж (TikTok, Instagram, Facebook та інші) застосовують до облікового запису Продавця або до посилань на його Вітрину. Продавець самостійно несе відповідальність за зміст та формат публікацій, вибір рекламних інструментів, ціноутворення, назви та категорії товарів, а також за будь-які інші рішення щодо ведення своєї сторінки в соціальних мережах. Виконавець не є стороною відносин між Продавцем та платформами соціальних мереж і не може впливати на їхні рішення щодо Продавця."}
@@ -484,189 +256,107 @@ const DATA = [
     clauses:[
       {id:"17.1",badge:"std",text:"Якщо будь-яке положення цього Договору визнається судом недійсним або таким, що не підлягає виконанню, решта положень залишається чинною та виконуваною у повному обсязі."},
       {id:"17.2",badge:"std",text:"Продовження Продавцем використання Платформи після публікації змін до Оферти вважається повним акцептом таких змін."},
-      {id:"17.3",badge:"std",text:"Цей Договір складено відповідно до вимог Цивільного кодексу України, Закону України «Про електронну комерцію», Закону України «Про захист прав споживачів», Закону України «Про авторське право і суміжні права», Закону України «Про захист персональних даних» та інших актів законодавства України."}
+      {id:"17.3",badge:"std",text:"Цей Договір складено відповідно до вимог Цивільного кодексу України, Закону України Про електронну комерцію, Закону України Про захист прав споживачів, Закону України Про авторське право і суміжні права, Закону України Про захист персональних даних та інших актів законодавства України."}
     ]
   },
   {
     id:"18", title:"РЕКВІЗИТИ ВИКОНАВЦЯ",
     clauses:[
-      {id:"18.1",badge:"std",text:"Повна назва: Фізична особа-підприємець Шеремета Василь Анатолійович\nІПН (ЄДРПОУ): 3361708913\nФорма власності: Фізична особа-підприємець (ФОП)\nКраїна реєстрації: Україна"},
-      {id:"18.2",badge:"std",text:"Банківські реквізити для оплати послуг:\nОтримувач: ФОП Шеремета Василь Анатолійович\nIBAN: UA273220010000026009330077981\nБанк: Акціонерне товариство «УНІВЕРСАЛ БАНК»\nМФО: 322001\nЄДРПОУ банку: 21133352"},
+      {id:"18.1",badge:"std",text:"Повна назва: ФОП Шеремета Василь Анатолійович\nІПН: 3361708913\nФорма: ФОП, Єдиний податок 3-ї групи, ставка 5%\nКВЕД: 63.12 Веб-портали\nДата реєстрації: 11.03.2023\nАдреса: Україна, 03115, м. Київ, вул. Верховинна, буд. 34, кв. 64\nТелефон: +380682211617\nСтан: Зареєстровано"},
+      {id:"18.2",badge:"std",text:"Банківські реквізити:\nОтримувач: ФОП Шеремета Василь Анатолійович\nIBAN: UA273220010000026009330077981\nБанк: АТ УНІВЕРСАЛ БАНК\nМФО: 322001\nЄДРПОУ банку: 21133352\nПризначення: оплата послуг платформи BEROO, ІПН 3361708913"},
       {id:"18.3",badge:"imp",text:"Платформа BEROO: beroo.space\nПанель управління: app.beroo.space\nВітрини продавців: beroo.online\nОферта: beroo.space/terms\nПолітика конфіденційності: beroo.space/privacy\nТарифи: beroo.space/pricing"}
     ]
   }
 ];
 
-function bc(b){return b==='crit'?'b-crit':b==='imp'?'b-imp':b==='tiktok'?'b-tiktok':'b-std';}
-function bl(b){return b==='crit'?'Критично':b==='imp'?'Важливо':b==='tiktok'?'TikTok':'Стандарт';}
-function cc(b){return b==='crit'?'crit':b==='imp'?'imp':b==='tiktok'?'tiktok':'std';}
+function bc(b){return b==="crit"?"b-crit":b==="imp"?"b-imp":b==="tiktok"?"b-tiktok":"b-std";}
+function bl(b){return b==="crit"?"Критично":b==="imp"?"Важливо":b==="tiktok"?"TikTok":"Стандарт";}
+function cc(b){return b==="crit"?"crit":b==="imp"?"imp":b==="tiktok"?"tiktok":"std";}
 
 function buildTOC(){
-  const g=document.getElementById('tocGrid');
-  DATA.forEach(s=>{
-    const c=document.createElement('div');
-    c.className='toc-chip';
-    c.textContent=s.id+'. '+s.title;
-    c.onclick=()=>{
-      document.getElementById('sec'+s.id)?.scrollIntoView({behavior:'smooth',block:'start'});
-      document.querySelectorAll('.toc-chip').forEach(x=>x.classList.remove('active'));
-      c.classList.add('active');
+  var g=document.getElementById("tocGrid");
+  DATA.forEach(function(s){
+    var c=document.createElement("div");
+    c.className="toc-chip";
+    c.textContent=s.id+". "+s.title;
+    c.onclick=function(){
+      var el=document.getElementById("sec"+s.id);
+      if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
+      document.querySelectorAll(".toc-chip").forEach(function(x){x.classList.remove("active");});
+      c.classList.add("active");
     };
     g.appendChild(c);
   });
 }
 
 function buildSections(){
-  const cont=document.getElementById('sectionsContainer');
-  DATA.forEach(sec=>{
-    const sd=document.createElement('div');
-    sd.className='sec'; sd.id='sec'+sec.id;
-    sd.innerHTML=`<div class="sec-hdr"><span class="sec-num">${sec.id}</span><h2 class="sec-title">${sec.title}</h2></div><div class="sec-divider"></div>`;
-    sec.clauses.forEach((cl,ci)=>{
-      const cd=document.createElement('div');
-      cd.className='cl '+cc(cl.badge);
-      cd.innerHTML=`
-        <div class="cl-hdr" onclick="toggle(this.parentElement)">
-          <span class="cl-id">${cl.id}</span>
-          <span class="cl-prev">${cl.text.slice(0,70)}…</span>
-          <span class="cl-arr">▾</span>
-        </div>
-        <div class="cl-body">
-          <div class="cl-text" contenteditable="true" spellcheck="true"
-            oninput="sync(this,'${sec.id}',${ci})">${cl.text}</div>
-          <div class="cl-foot">
-            <span class="badge ${bc(cl.badge)}">${bl(cl.badge)}</span>
-            <button class="btn-cp" onclick="copyClause('${cl.id}')">Копіювати</button>
-          </div>
-        </div>`;
+  var cont=document.getElementById("sectionsContainer");
+  DATA.forEach(function(sec){
+    var sd=document.createElement("div");
+    sd.className="sec";
+    sd.id="sec"+sec.id;
+    sd.innerHTML="<div class=\"sec-hdr\"><span class=\"sec-num\">"+sec.id+"</span><h2 class=\"sec-title\">"+sec.title+"</h2></div><div class=\"sec-divider\"></div>";
+    sec.clauses.forEach(function(cl,ci){
+      var cd=document.createElement("div");
+      cd.className="cl "+cc(cl.badge);
+      var prev=cl.text.substring(0,70)+"...";
+      cd.innerHTML="<div class=\"cl-hdr\" onclick=\"toggle(this.parentElement)\"><span class=\"cl-id\">"+cl.id+"</span><span class=\"cl-prev\">"+prev+"</span><span class=\"cl-arr\">&#9662;</span></div><div class=\"cl-body\"><div class=\"cl-text\" contenteditable=\"true\" spellcheck=\"true\" oninput=\"sync(this,'"+sec.id+"',"+ci+")\">"+cl.text+"</div><div class=\"cl-foot\"><span class=\"badge "+bc(cl.badge)+"\">"+bl(cl.badge)+"</span><button class=\"btn-cp\" onclick=\"copyClause('"+cl.id+"')\">Копіювати</button></div></div>";
       sd.appendChild(cd);
     });
     cont.appendChild(sd);
   });
 }
 
-function toggle(el){el.classList.toggle('open');}
+function toggle(el){el.classList.toggle("open");}
 
 function sync(el,sid,ci){
-  const s=DATA.find(x=>x.id===sid);
+  var s=DATA.find(function(x){return x.id===sid;});
   if(s)s.clauses[ci].text=el.innerText;
-  el.closest('.cl').querySelector('.cl-prev').textContent=el.innerText.slice(0,70)+'…';
+  el.closest(".cl").querySelector(".cl-prev").textContent=el.innerText.substring(0,70)+"...";
 }
 
 function copyClause(id){
-  const el=document.querySelector('#cl-'+id+' .cl-text')||
-    [...document.querySelectorAll('.cl')].find(c=>c.querySelector('.cl-id')?.textContent===id)?.querySelector('.cl-text');
-  if(!el)return;
-  navigator.clipboard.writeText(id+'. '+el.innerText).then(showToast);
+  var all=document.querySelectorAll(".cl");
+  var found=null;
+  all.forEach(function(c){if(c.querySelector(".cl-id")&&c.querySelector(".cl-id").textContent.trim()===id)found=c;});
+  if(!found)return;
+  navigator.clipboard.writeText(id+". "+found.querySelector(".cl-text").innerText).then(showToast);
 }
 
 function showToast(){
-  const t=document.getElementById('toast');
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2000);
+  var t=document.getElementById("toast");
+  t.classList.add("show");
+  setTimeout(function(){t.classList.remove("show");},2000);
 }
 
 function exportDoc(){
-  let txt='ПУБЛІЧНА ОФЕРТА (ДОГОВІР ПРО НАДАННЯ ПОСЛУГ)\nВиконавець: ФОП Шеремета Василь Анатолійович (ІПН 3361708913)\nПлатформа BEROO · beroo.space / beroo.online\n\n';
-  DATA.forEach(s=>{
-    txt+=`\n${s.id}. ${s.title}\n${'─'.repeat(50)}\n`;
-    s.clauses.forEach(c=>{txt+=`\n${c.id}. ${c.text}\n`;});
+  var txt="ПУБЛІЧНА ОФЕРТА (ДОГОВІР ПРО НАДАННЯ ПОСЛУГ)\nВиконавець: ФОП Шеремета Василь Анатолійович (ІПН 3361708913)\nПлатформа BEROO · beroo.space / beroo.online\n\n";
+  DATA.forEach(function(s){
+    txt+="\n"+s.id+". "+s.title+"\n"+"─".repeat(50)+"\n";
+    s.clauses.forEach(function(c){txt+="\n"+c.id+". "+c.text+"\n";});
   });
-  const a=document.createElement('a');
-  a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain;charset=utf-8'}));
-  a.download='beroo-oferta.txt';a.click();
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([txt],{type:"text/plain;charset=utf-8"}));
+  a.download="beroo-oferta.txt";
+  a.click();
 }
 
 function initScroll(){
-  const chips=[...document.querySelectorAll('.toc-chip')];
-  const obs=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{
+  var chips=Array.from(document.querySelectorAll(".toc-chip"));
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
       if(e.isIntersecting){
-        const id=e.target.id.replace('sec','');
-        chips.forEach((c,i)=>c.classList.toggle('active',DATA[i]?.id===id));
+        var id=e.target.id.replace("sec","");
+        chips.forEach(function(c,i){c.classList.toggle("active",DATA[i]&&DATA[i].id===id);});
       }
     });
-  },{threshold:.1,rootMargin:'-110px 0px -80% 0px'});
-  document.querySelectorAll('.sec').forEach(s=>obs.observe(s));
+  },{threshold:0.1,rootMargin:"-110px 0px -80% 0px"});
+  document.querySelectorAll(".sec").forEach(function(s){obs.observe(s);});
 }
 
 buildTOC();
 buildSections();
 initScroll();
 </script>
-
-<div class="changelog" id="changelog">
-  <div class="cl-hdr-static">
-    <span class="changelog-icon">↓</span>
-    ЗМІНИ У ЦІЙ РЕДАКЦІЇ — натисніть для переходу до пункту
-  </div>
-  <div class="changelog-list" id="changelogList"></div>
-</div>
-
-<script>
-const CHANGES = [
-  {
-    id: "4.9",
-    badge: "crit",
-    title: "Новий п. 4.9 — Захист дитячої праці",
-    desc: "Продавець гарантує відсутність дитячої праці у виробництві та просуванні товарів. Посилання на Конвенції ООН, МОП № 138 та № 182, КЗпП України."
-  },
-  {
-    id: "9.4",
-    badge: "imp",
-    title: "Новий п. 9.4 — Контрольна закупка",
-    desc: "Виконавець має право проводити контрольні закупки без попередження для перевірки якості сервісу, відповідності товару, дотримання правил соцмереж та відсутності шахрайства."
-  },
-  {
-    id: "10.1",
-    badge: "crit",
-    title: "Зміна п. 10.1 — Видалено підпункт про контрафакт",
-    desc: "З переліку забороненого контенту видалено підпункт (в) про контрафактні (підроблені) товари та репліки. Літери підпунктів перенумеровано."
-  },
-  {
-    id: "13.4",
-    badge: "crit",
-    title: "Новий п. 13.4 — Соціальні мережі: відмежування відповідальності",
-    desc: "Виконавець не несе відповідальності за обмеження, блокування або зниження охоплення, що соціальні мережі (TikTok, Instagram тощо) застосовують до Продавця."
-  }
-];
-
-function buildChangelog(){
-  const list = document.getElementById('changelogList');
-  CHANGES.forEach(ch => {
-    const item = document.createElement('div');
-    item.className = 'changelog-item';
-    item.innerHTML = `
-      <span class="changelog-num">${ch.id}</span>
-      <div class="changelog-desc">
-        <b>${ch.title}</b><br>${ch.desc}
-      </div>
-      <span class="changelog-arrow">→</span>
-    `;
-    item.onclick = () => {
-      const secId = ch.id.split('.')[0];
-      const secEl = document.getElementById('sec' + secId);
-      if(secEl){
-        secEl.scrollIntoView({behavior:'smooth', block:'start'});
-        // open the specific clause
-        setTimeout(()=>{
-          const clauses = secEl.querySelectorAll('.cl');
-          clauses.forEach(cl => {
-            const idEl = cl.querySelector('.cl-id');
-            if(idEl && idEl.textContent.trim() === ch.id){
-              cl.classList.add('open');
-              cl.scrollIntoView({behavior:'smooth', block:'center'});
-            }
-          });
-        }, 400);
-      }
-    };
-    list.appendChild(item);
-  });
-}
-
-buildChangelog();
-</script>
-
 </body>
 </html>
