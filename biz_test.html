@@ -239,7 +239,7 @@ body{min-height:100vh;padding-bottom:60px}
 <div class="hero">
   <div class="hero-label">Самооцінка ризиків</div>
   <h1>Чи готовий ваш бізнес до верифікації <span>TikTok Business</span>?</h1>
-  <p class="hero-sub">30 запитань · Система балів ризику · Миттєвий результат</p>
+  <p class="hero-sub">37 запитань · Система балів ризику · Миттєвий результат</p>
   <div class="hero-author">
     Розроблено <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener">@vasil_veo</a> · Vasil VEO<br>
     <span>На основі практичного досвіду роботи з акаунтами українського бізнесу в TikTok</span>
@@ -277,6 +277,9 @@ body{min-height:100vh;padding-bottom:60px}
       <div class="factor-item">Резервні акаунти</div>
       <div class="factor-item">Використання VPN</div>
       <div class="factor-item">Спосіб діяльності</div>
+      <div class="factor-item">Відповідність документів</div>
+      <div class="factor-item">Резидентність власника</div>
+      <div class="factor-item">Платне просування</div>
     </div>
     <p>Цей тест створено <strong>виключно для первинної самооцінки ризиків</strong>. Він не є рекомендацією, гарантією або дозволом до верифікації.</p>
     <div style="margin-top:16px;padding-top:14px;border-top:1px solid #F0D88A;display:flex;align-items:center;gap:10px;font-size:.78rem;color:#7A4500">
@@ -464,6 +467,97 @@ body{min-height:100vh;padding-bottom:60px}
       <div class="options">
         <button class="opt-btn" data-q="14" data-score="0" onclick="pick(this)">Ні</button>
         <button class="opt-btn" data-q="14" data-score="60" onclick="pick(this)">Так</button>
+      </div>
+    </div>
+
+
+    <!-- BLOCK 3b: ДОКУМЕНТИ ТА ВІДПОВІДНІСТЬ -->
+    <div class="block-header">
+      <div class="block-num">3b</div>
+      <div class="block-title">Документи, реєстрація та відповідність даних</div>
+    </div>
+
+    <div class="q-card" id="q31">
+      <div class="q-num">Питання 31</div>
+      <div class="q-text">Чи є монетизований акаунт серед акаунтів бізнесу — і чи є власник резидентом тієї країни, під яку він монетизований?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="31" data-score="0" onclick="pick(this)">Монетизації немає</button>
+        <button class="opt-btn" data-q="31" data-score="0" onclick="pick(this)">Є монетизований акаунт — власник резидент тієї країни</button>
+        <button class="opt-btn" data-q="31" data-score="30" onclick="pick(this)">Є монетизований акаунт — власник НЕ є резидентом тієї країни</button>
+        <button class="opt-btn" data-q="31" data-score="45" onclick="pick(this)">Є монетизований акаунт — на іншу особу, яка є резидентом</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q32">
+      <div class="q-num">Питання 32</div>
+      <div class="q-text">На кого зареєстрований TikTok-акаунт, що буде використовуватись для верифікації бізнесу?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="32" data-score="0" onclick="pick(this)">На власника бізнесу / ФОП — дані повністю збігаються</button>
+        <button class="opt-btn" data-q="32" data-score="10" onclick="pick(this)">На співробітника або менеджера бізнесу</button>
+        <button class="opt-btn" data-q="32" data-score="25" onclick="pick(this)">На третю особу, яка не пов'язана з бізнесом офіційно</button>
+        <button class="opt-btn" data-q="32" data-score="50" onclick="pick(this)">На іншу особу з іншої країни або іноземними документами</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q33">
+      <div class="q-num">Питання 33</div>
+      <div class="q-text">Чи збігаються дані реєстрації бізнесу (ФОП / юрособа) з даними акаунту та особи, яка верифікується?</div>
+      <div class="multi-hint">TikTok вимагає збіг юридичної назви, адреси та власника в усіх документах</div>
+      <div class="options">
+        <button class="opt-btn" data-q="33" data-score="0" onclick="pick(this)">Повний збіг — один ФОП, одна особа, один акаунт</button>
+        <button class="opt-btn" data-q="33" data-score="15" onclick="pick(this)">Часткова невідповідність — наприклад, різні адреси або написання імені</button>
+        <button class="opt-btn" data-q="33" data-score="35" onclick="pick(this)">Документи бізнесу на одну особу, акаунт на іншу</button>
+        <button class="opt-btn" data-q="33" data-score="55" onclick="pick(this)">Документи, дані в акаунті та дані в описі / відео — різні особи або юрособи</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q34">
+      <div class="q-num">Питання 34</div>
+      <div class="q-text">Чи з'являлися в кадрі або в описі профілю реквізити, ім'я або логотип, що відрізняються від офіційних даних бізнесу?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="34" data-score="0" onclick="pick(this)">Ніколи — все відповідає офіційним документам</button>
+        <button class="opt-btn" data-q="34" data-score="10" onclick="pick(this)">Іноді — невеликі розбіжності (скорочення, нікнейм)</button>
+        <button class="opt-btn" data-q="34" data-score="25" onclick="pick(this)">Регулярно — різні назви, реквізити різних ФОП або осіб</button>
+        <button class="opt-btn" data-q="34" data-score="40" onclick="pick(this)">Систематично — кілька різних брендів або ФОП в одному акаунті</button>
+      </div>
+    </div>
+
+    <!-- BLOCK 3c: ПЛАТНЕ ПРОСУВАННЯ -->
+    <div class="block-header">
+      <div class="block-num">3c</div>
+      <div class="block-title">Платне просування та реакція алгоритму</div>
+    </div>
+
+    <div class="q-card" id="q35">
+      <div class="q-num">Питання 35</div>
+      <div class="q-text">Чи була практика використання платного просування (Promote) для відео або прямих ефірів?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="35" data-score="0" onclick="pick(this)">Ніколи не використовували</button>
+        <button class="opt-btn" data-q="35" data-score="0" onclick="pick(this)">Використовували — без проблем, відео проходили модерацію</button>
+        <button class="opt-btn" data-q="35" data-score="15" onclick="pick(this)">Іноді отримували відмову на просування окремих відео</button>
+        <button class="opt-btn" data-q="35" data-score="30" onclick="pick(this)">Регулярно отримували відмови — більшість спроб відхиляється</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q36">
+      <div class="q-num">Питання 36</div>
+      <div class="q-text">Чи спостерігали різке падіння охоплень одразу після завершення платного просування?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="36" data-score="0" onclick="pick(this)">Ні — охоплення залишалися стабільними після Promote</button>
+        <button class="opt-btn" data-q="36" data-score="10" onclick="pick(this)">Іноді — невелике падіння після закінчення просування</button>
+        <button class="opt-btn" data-q="36" data-score="25" onclick="pick(this)">Так — після Promote охоплення різко падали нижче за початкові</button>
+        <button class="opt-btn" data-q="36" data-score="40" onclick="pick(this)">Постійно — платне просування фактично «вбиває» органічне охоплення</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q37">
+      <div class="q-num">Питання 37</div>
+      <div class="q-text">Чи проходив контент перевірку як комерційний (тобто TikTok Ads позначав відео як рекламу), але при цьому воно мало порушення правил спільноти?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="37" data-score="0" onclick="pick(this)">Ні — такого не було</button>
+        <button class="opt-btn" data-q="37" data-score="15" onclick="pick(this)">Можливо — були підозри, але точно не відомо</button>
+        <button class="opt-btn" data-q="37" data-score="30" onclick="pick(this)">Так — відео проходило як реклама, але пізніше було видалено або обмежено</button>
+        <button class="opt-btn" data-q="37" data-score="45" onclick="pick(this)">Регулярно — просування і видалення відбувалися паралельно</button>
       </div>
     </div>
 
@@ -678,7 +772,7 @@ body{min-height:100vh;padding-bottom:60px}
 <script>
 const scores = {};
 const multiScores = {};
-const TOTAL_Q = 30;
+const TOTAL_Q = 37;
 const MULTI_Q = [7, 15];
 
 function updateProgress(){
