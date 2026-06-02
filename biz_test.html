@@ -239,7 +239,7 @@ body{min-height:100vh;padding-bottom:60px}
 <div class="hero">
   <div class="hero-label">Самооцінка ризиків</div>
   <h1>Чи готовий ваш бізнес до верифікації <span>TikTok Business</span>?</h1>
-  <p class="hero-sub">37 запитань · Система балів ризику · Миттєвий результат</p>
+  <p class="hero-sub">41 запитань · Система балів ризику · Миттєвий результат</p>
   <div class="hero-author">
     Розроблено <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener">@vasil_veo</a> · Vasil VEO<br>
     <span>На основі практичного досвіду роботи з акаунтами українського бізнесу в TikTok</span>
@@ -352,6 +352,61 @@ body{min-height:100vh;padding-bottom:60px}
         <button class="opt-btn" data-q="5" data-score="8" onclick="pick(this)">Один раз</button>
         <button class="opt-btn" data-q="5" data-score="18" onclick="pick(this)">Декілька разів</button>
         <button class="opt-btn" data-q="5" data-score="30" onclick="pick(this)">Регулярно</button>
+      </div>
+    </div>
+
+
+    <div class="q-card" id="q41">
+      <div class="q-num">Питання 41</div>
+      <div class="q-text">Коли було останнє блокування акаунту або функції (ефіри, повідомлення, посилання) — до моменту верифікації?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="41" data-score="0" onclick="pick(this)">Блокувань не було взагалі</button>
+        <button class="opt-btn" data-q="41" data-score="60" onclick="pick(this)">Менше 30 днів тому</button>
+        <button class="opt-btn" data-q="41" data-score="40" onclick="pick(this)">Від 30 до 90 днів тому</button>
+        <button class="opt-btn" data-q="41" data-score="20" onclick="pick(this)">Від 90 до 180 днів тому</button>
+        <button class="opt-btn" data-q="41" data-score="10" onclick="pick(this)">Від 180 днів до 1 року тому</button>
+        <button class="opt-btn" data-q="41" data-score="3" onclick="pick(this)">Більше ніж 1 рік тому</button>
+      </div>
+    </div>
+
+
+    <!-- BLOCK 1b: АПЕЛЯЦІЇ -->
+    <div class="block-header">
+      <div class="block-num">1b</div>
+      <div class="block-title">Апеляції на заблоковані акаунти</div>
+    </div>
+
+    <div class="q-card" id="q38">
+      <div class="q-num">Питання 38</div>
+      <div class="q-text">Чи подавалися апеляції на постійно заблоковані акаунти?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="38" data-score="0" onclick="pick(this)">Акаунти не блокувалися — апеляцій не було</button>
+        <button class="opt-btn" data-q="38" data-score="5" onclick="pick(this)">Блокування були, апеляції не подавалися</button>
+        <button class="opt-btn" data-q="38" data-score="8" onclick="pick(this)">Подавали апеляції — всі отримали відповідь «не підлягає відновленню»</button>
+        <button class="opt-btn" data-q="38" data-score="10" onclick="pick(this)">Подавали апеляції — частина акаунтів була відновлена</button>
+        <button class="opt-btn" data-q="38" data-score="5" onclick="pick(this)">Подавали апеляції — всі акаунти були відновлені</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q39">
+      <div class="q-num">Питання 39</div>
+      <div class="q-text">Якщо акаунт був відновлений після апеляції — чи були на ньому повторні порушення?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="39" data-score="0" onclick="pick(this)">Акаунти не відновлювалися / не застосовується</button>
+        <button class="opt-btn" data-q="39" data-score="0" onclick="pick(this)">Відновлювалися — порушень після цього не було</button>
+        <button class="opt-btn" data-q="39" data-score="20" onclick="pick(this)">Відновлювалися — були поодинокі повторні порушення</button>
+        <button class="opt-btn" data-q="39" data-score="40" onclick="pick(this)">Відновлювалися — порушення повторювалися систематично</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q40">
+      <div class="q-num">Питання 40</div>
+      <div class="q-text">Якщо після відновлення акаунту подавалася повторна апеляція — до чого вона призвела?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="40" data-score="0" onclick="pick(this)">Повторних апеляцій не було</button>
+        <button class="opt-btn" data-q="40" data-score="10" onclick="pick(this)">Повторна апеляція — акаунт знову відновили</button>
+        <button class="opt-btn" data-q="40" data-score="35" onclick="pick(this)">Повторна апеляція — отримали відмову, акаунт видалено назавжди</button>
+        <button class="opt-btn" data-q="40" data-score="50" onclick="pick(this)">Кілька циклів: відновлення → порушення → апеляція → відмова</button>
       </div>
     </div>
 
@@ -772,7 +827,7 @@ body{min-height:100vh;padding-bottom:60px}
 <script>
 const scores = {};
 const multiScores = {};
-const TOTAL_Q = 37;
+const TOTAL_Q = 41;
 const MULTI_Q = [7, 15];
 
 function updateProgress(){
