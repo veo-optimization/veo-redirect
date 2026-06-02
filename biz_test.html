@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Чи готовий ваш бізнес до верифікації TikTok Business?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F7F6F2;
+  --card:#FFFFFF;
+  --tx:#0D0D0D;
+  --sub:#555;
+  --brd:#E0DDD6;
+  --acc:#FF0050;
+  --acc2:#111;
+  --green:#1A7A3C;
+  --yellow:#C97B00;
+  --orange:#C45000;
+  --red:#C0001A;
+  --green-bg:#F0FFF5;
+  --yellow-bg:#FFFBEE;
+  --orange-bg:#FFF5EE;
+  --red-bg:#FFF0F2;
+  --font-head:'Unbounded',sans-serif;
+  --font:'Montserrat',sans-serif;
+  --radius:16px;
+  --shadow:0 2px 20px rgba(0,0,0,.07);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg);font-family:var(--font);color:var(--tx);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-anchor:none}
+body{min-height:100vh;padding-bottom:60px}
+
+/* ── HERO ── */
+.hero{
+  background:#0D0D0D;
+  padding:56px 20px 48px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 60% at 50% 110%,rgba(255,0,80,.15),transparent 70%);
+  pointer-events:none;
+}
+.hero-label{
+  display:inline-block;
+  background:rgba(255,0,80,.15);border:1px solid rgba(255,0,80,.3);
+  border-radius:40px;padding:4px 16px;
+  font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:#FF6688;margin-bottom:20px;font-family:var(--font);
+}
+.hero h1{
+  font-family:var(--font-head);
+  font-size:clamp(1.4rem,4.5vw,2.6rem);
+  font-weight:900;letter-spacing:-.04em;line-height:1.1;
+  color:#fff;margin-bottom:12px;
+  max-width:680px;margin-left:auto;margin-right:auto;
+}
+.hero h1 span{color:var(--acc)}
+.hero-sub{font-size:.9rem;color:rgba(255,255,255,.5);max-width:480px;margin:0 auto;font-weight:400}
+.hero-author{
+  margin-top:20px;
+  display:inline-block;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;padding:10px 18px;
+  font-size:.78rem;color:rgba(255,255,255,.6);line-height:1.6;
+}
+.hero-author a{color:#FF6688;font-weight:700;text-decoration:none;border-bottom:1px solid rgba(255,102,136,.3)}
+.hero-author a:hover{color:#fff}
+.hero-author span{font-size:.73rem;color:rgba(255,255,255,.4)}
+
+/* ── PROGRESS ── */
+.progress-bar-wrap{
+  position:sticky;top:0;z-index:100;
+  background:rgba(247,246,242,.95);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--brd);
+  padding:12px 20px;
+}
+.progress-meta{display:flex;justify-content:space-between;align-items:center;max-width:700px;margin:0 auto 8px;font-size:.76rem;font-weight:600;color:var(--sub)}
+.progress-track{max-width:700px;margin:0 auto;height:6px;background:var(--brd);border-radius:99px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--acc),#FF6040);border-radius:99px;transition:width .4s ease;width:0%}
+
+/* ── WRAP ── */
+.wrap{max-width:700px;margin:0 auto;padding:0 16px}
+
+/* ── WARNING BLOCK ── */
+.warning-block{
+  background:var(--card);border:2px solid #F0C050;
+  border-radius:var(--radius);padding:28px 24px;margin:28px 0;
+  box-shadow:var(--shadow);
+}
+.warning-block .wb-head{
+  display:flex;align-items:center;gap:12px;margin-bottom:16px;
+}
+.wb-icon{font-size:26px;flex-shrink:0}
+.wb-title{font-family:var(--font-head);font-size:.95rem;font-weight:800;letter-spacing:-.02em;color:#7A4500}
+.warning-block p{font-size:.86rem;color:#555;line-height:1.7;margin-bottom:10px}
+.warning-block p:last-child{margin-bottom:0}
+.warning-block strong{color:var(--tx)}
+.factor-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
+  gap:6px;margin:14px 0;
+}
+.factor-item{
+  background:#FFF9EE;border:1px solid #F0D88A;
+  border-radius:8px;padding:6px 10px;
+  font-size:.76rem;color:#7A4500;font-weight:600;
+  display:flex;align-items:center;gap:5px;
+}
+.factor-item::before{content:'·';font-size:1.2rem;color:#F0A020}
+
+/* ── BLOCKS ── */
+.block-header{
+  display:flex;align-items:center;gap:12px;
+  padding:32px 0 16px;
+}
+.block-num{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--acc2);color:#fff;
+  font-family:var(--font-head);font-size:.75rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.block-title{font-family:var(--font-head);font-size:.9rem;font-weight:800;letter-spacing:-.02em;color:var(--tx)}
+
+/* ── QUESTION CARDS ── */
+.q-card{
+  background:var(--card);border:1.5px solid var(--brd);
+  border-radius:var(--radius);padding:22px 20px;margin-bottom:14px;
+  box-shadow:var(--shadow);transition:border-color .2s;
+}
+.q-card.answered{border-color:#A0A0A0}
+.q-num{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--sub);margin-bottom:8px;font-family:var(--font)}
+.q-text{font-size:.95rem;font-weight:600;color:var(--tx);margin-bottom:16px;line-height:1.45}
+.options{display:flex;flex-direction:column;gap:8px}
+.opt-btn{
+  width:100%;text-align:left;
+  background:var(--bg);border:1.5px solid var(--brd);border-radius:10px;
+  padding:11px 14px;font-family:var(--font);font-size:.84rem;font-weight:500;color:var(--tx);
+  cursor:pointer;transition:all .15s;line-height:1.4;
+}
+.opt-btn:hover{background:#EDECE8;border-color:#BBBAB3}
+.opt-btn.selected{background:var(--acc2);color:#fff;border-color:var(--acc2)}
+/* multi-select */
+.opt-btn.multi.selected{background:#1A1A1A;color:#fff;border-color:#1A1A1A}
+.opt-btn.multi{padding-left:40px;position:relative}
+.opt-btn.multi::before{
+  content:'';position:absolute;left:14px;top:50%;transform:translateY(-50%);
+  width:16px;height:16px;border-radius:4px;border:2px solid var(--brd);background:#fff;transition:all .15s;
+}
+.opt-btn.multi.selected::before{background:#fff;border-color:#fff;background-image:url("data:image/svg+xml,%3Csvg width='10' height='8' viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4L3.5 6.5L9 1' stroke='%231A1A1A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center}
+.multi-hint{font-size:.72rem;color:var(--sub);margin-bottom:10px;font-style:italic}
+
+/* ── SUBMIT ── */
+.submit-area{text-align:center;padding:28px 0}
+.btn-submit{
+  background:var(--acc2);color:#fff;
+  border:none;border-radius:14px;padding:16px 48px;
+  font-family:var(--font-head);font-size:.85rem;font-weight:800;letter-spacing:-.01em;
+  cursor:pointer;transition:all .2s;box-shadow:0 4px 20px rgba(0,0,0,.2);
+}
+.btn-submit:hover{background:#333;transform:translateY(-1px)}
+.btn-submit:disabled{opacity:.4;cursor:not-allowed;transform:none}
+
+/* ── RESULT ── */
+.result-section{display:none;animation:fadeUp .5s ease both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.result-card{
+  border-radius:20px;padding:32px 24px;margin:24px 0;
+  border:2px solid transparent;
+}
+.result-card.green{background:var(--green-bg);border-color:var(--green)}
+.result-card.yellow{background:var(--yellow-bg);border-color:#D4A000}
+.result-card.orange{background:var(--orange-bg);border-color:var(--orange)}
+.result-card.red{background:var(--red-bg);border-color:var(--red)}
+.result-zone{font-family:var(--font-head);font-size:2.8rem;font-weight:900;letter-spacing:-.05em;line-height:1;margin-bottom:6px}
+.result-card.green .result-zone{color:var(--green)}
+.result-card.yellow .result-zone{color:var(--yellow)}
+.result-card.orange .result-zone{color:var(--orange)}
+.result-card.red .result-zone{color:var(--red)}
+.result-score{font-size:.8rem;font-weight:700;color:var(--sub);margin-bottom:16px;text-transform:uppercase;letter-spacing:.08em}
+.result-title{font-family:var(--font-head);font-size:1.1rem;font-weight:800;margin-bottom:12px;letter-spacing:-.02em}
+.result-desc{font-size:.88rem;color:var(--sub);line-height:1.7;margin-bottom:14px}
+.result-desc p{margin-bottom:8px}.result-desc p:last-child{margin-bottom:0}
+.result-desc strong{color:var(--tx)}
+.result-disclaimer{
+  background:rgba(0,0,0,.04);border-radius:10px;padding:14px 16px;
+  font-size:.8rem;color:var(--sub);line-height:1.6;margin-top:16px;
+  border-left:3px solid var(--acc2);
+}
+.result-disclaimer strong{color:var(--tx);display:block;margin-bottom:4px}
+.btn-restart{
+  background:#fff;color:var(--tx);border:2px solid var(--brd);
+  border-radius:12px;padding:12px 32px;
+  font-family:var(--font);font-size:.84rem;font-weight:700;
+  cursor:pointer;margin-top:20px;transition:all .15s;display:inline-block;
+}
+.btn-restart:hover{border-color:var(--acc2);background:var(--acc2);color:#fff}
+
+/* ── SCORE VISUAL ── */
+.score-gauge{text-align:center;margin:20px 0}
+.gauge-ring{
+  width:120px;height:120px;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  margin:0 auto 12px;border:6px solid;
+}
+.green .gauge-ring{border-color:var(--green);background:rgba(26,122,60,.08)}
+.yellow .gauge-ring{border-color:#D4A000;background:rgba(212,160,0,.08)}
+.orange .gauge-ring{border-color:var(--orange);background:rgba(196,80,0,.08)}
+.red .gauge-ring{border-color:var(--red);background:rgba(192,0,26,.08)}
+.gauge-num{font-family:var(--font-head);font-size:2.2rem;font-weight:900;letter-spacing:-.06em;line-height:1}
+.gauge-lbl{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--sub)}
+
+/* ── RISK BARS ── */
+.risk-scale{display:flex;gap:3px;margin:16px 0;border-radius:99px;overflow:hidden;height:10px}
+.rs-seg{flex:1;background:var(--brd)}
+.rs-seg.active-green{background:var(--green)}
+.rs-seg.active-yellow{background:#D4A000}
+.rs-seg.active-orange{background:var(--orange)}
+.rs-seg.active-red{background:var(--red)}
+.rs-labels{display:flex;justify-content:space-between;font-size:.65rem;color:var(--sub);font-weight:600;margin-top:4px}
+
+/* MOBILE */
+@media(max-width:480px){
+  .hero{padding:40px 16px 36px}
+  .hero h1{font-size:1.4rem}
+  .q-card{padding:18px 14px}
+  .factor-grid{grid-template-columns:1fr 1fr}
+  .result-zone{font-size:2rem}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-label">Самооцінка ризиків</div>
+  <h1>Чи готовий ваш бізнес до верифікації <span>TikTok Business</span>?</h1>
+  <p class="hero-sub">30 запитань · Система балів ризику · Миттєвий результат</p>
+  <div class="hero-author">
+    Розроблено <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener">@vasil_veo</a> · Vasil VEO<br>
+    <span>На основі практичного досвіду роботи з акаунтами українського бізнесу в TikTok</span>
+  </div>
+</div>
+
+<div class="progress-bar-wrap">
+  <div class="progress-meta">
+    <span id="prog-text">Питання 0 / 30</span>
+    <span id="prog-pct">0%</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="prog-fill"></div></div>
+</div>
+
+<div class="wrap">
+
+  <!-- WARNING -->
+  <div class="warning-block">
+    <div class="wb-head">
+      <span class="wb-icon">⚕️</span>
+      <span class="wb-title">Перш ніж розпочати — важлива інформація</span>
+    </div>
+    <p>Верифікація бізнесу в TikTok — <strong>індивідуальний процес</strong>. Як і в медицині, самолікування може нашкодити: один і той самий підхід може бути безпечним для одного бізнесу та <strong>критично небезпечним для іншого</strong>.</p>
+    <p>На результат верифікації впливають десятки факторів:</p>
+    <div class="factor-grid">
+      <div class="factor-item">Ніша та товар</div>
+      <div class="factor-item">Історія акаунта</div>
+      <div class="factor-item">Попередні порушення</div>
+      <div class="factor-item">Спосіб замовлень</div>
+      <div class="factor-item">Якість контенту</div>
+      <div class="factor-item">Структура бізнесу</div>
+      <div class="factor-item">Наявність сайту</div>
+      <div class="factor-item">Каталоги</div>
+      <div class="factor-item">Прямі трансляції</div>
+      <div class="factor-item">Резервні акаунти</div>
+      <div class="factor-item">Використання VPN</div>
+      <div class="factor-item">Спосіб діяльності</div>
+    </div>
+    <p>Цей тест створено <strong>виключно для первинної самооцінки ризиків</strong>. Він не є рекомендацією, гарантією або дозволом до верифікації.</p>
+    <div style="margin-top:16px;padding-top:14px;border-top:1px solid #F0D88A;display:flex;align-items:center;gap:10px;font-size:.78rem;color:#7A4500">
+      <span style="font-size:18px">✍️</span>
+      <span>Тест розроблено <strong><a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener" style="color:#7A4500;font-weight:700">@vasil_veo</a> · Vasil VEO</strong> — на основі практичного досвіду роботи із акаунтами українського бізнесу в TikTok.</span>
+    </div>
+  </div>
+
+  <!-- TEST FORM -->
+  <div id="test-form">
+
+    <!-- BLOCK 1 -->
+    <div class="block-header">
+      <div class="block-num">1</div>
+      <div class="block-title">Історія акаунтів</div>
+    </div>
+
+    <div class="q-card" id="q1">
+      <div class="q-num">Питання 1</div>
+      <div class="q-text">Скільки TikTok-акаунтів було заблоковано за весь час?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="1" data-score="0" onclick="pick(this)">Жодного</button>
+        <button class="opt-btn" data-q="1" data-score="5" onclick="pick(this)">1–3</button>
+        <button class="opt-btn" data-q="1" data-score="15" onclick="pick(this)">4–10</button>
+        <button class="opt-btn" data-q="1" data-score="30" onclick="pick(this)">11–50</button>
+        <button class="opt-btn" data-q="1" data-score="50" onclick="pick(this)">51–100</button>
+        <button class="opt-btn" data-q="1" data-score="80" onclick="pick(this)">Понад 100</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q2">
+      <div class="q-num">Питання 2</div>
+      <div class="q-text">Чи отримували ви обмеження на проведення прямих ефірів?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="2" data-score="0" onclick="pick(this)">Ніколи</button>
+        <button class="opt-btn" data-q="2" data-score="5" onclick="pick(this)">До 3 разів</button>
+        <button class="opt-btn" data-q="2" data-score="15" onclick="pick(this)">До 10 разів</button>
+        <button class="opt-btn" data-q="2" data-score="25" onclick="pick(this)">До 30 разів</button>
+        <button class="opt-btn" data-q="2" data-score="40" onclick="pick(this)">Понад 30 разів</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q3">
+      <div class="q-num">Питання 3</div>
+      <div class="q-text">Яка максимальна тривалість блокування прямих ефірів?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="3" data-score="0" onclick="pick(this)">Не було</button>
+        <button class="opt-btn" data-q="3" data-score="3" onclick="pick(this)">До 24 годин</button>
+        <button class="opt-btn" data-q="3" data-score="10" onclick="pick(this)">До 7 днів</button>
+        <button class="opt-btn" data-q="3" data-score="20" onclick="pick(this)">До 30 днів</button>
+        <button class="opt-btn" data-q="3" data-score="35" onclick="pick(this)">Понад 30 днів</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q4">
+      <div class="q-num">Питання 4</div>
+      <div class="q-text">Чи блокував TikTok функцію особистих повідомлень?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="4" data-score="0" onclick="pick(this)">Ніколи</button>
+        <button class="opt-btn" data-q="4" data-score="8" onclick="pick(this)">1–2 рази</button>
+        <button class="opt-btn" data-q="4" data-score="20" onclick="pick(this)">Багаторазово</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q5">
+      <div class="q-num">Питання 5</div>
+      <div class="q-text">Чи були випадки, коли TikTok не дозволяв додати посилання в шапку профілю?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="5" data-score="0" onclick="pick(this)">Ніколи</button>
+        <button class="opt-btn" data-q="5" data-score="8" onclick="pick(this)">Один раз</button>
+        <button class="opt-btn" data-q="5" data-score="18" onclick="pick(this)">Декілька разів</button>
+        <button class="opt-btn" data-q="5" data-score="30" onclick="pick(this)">Регулярно</button>
+      </div>
+    </div>
+
+    <!-- BLOCK 2 -->
+    <div class="block-header">
+      <div class="block-num">2</div>
+      <div class="block-title">Порушення правил спільноти</div>
+    </div>
+
+    <div class="q-card" id="q6">
+      <div class="q-num">Питання 6</div>
+      <div class="q-text">Скільки видалень відео або попереджень було за останні 6 місяців?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="6" data-score="0" onclick="pick(this)">0</button>
+        <button class="opt-btn" data-q="6" data-score="5" onclick="pick(this)">1–5</button>
+        <button class="opt-btn" data-q="6" data-score="15" onclick="pick(this)">6–10</button>
+        <button class="opt-btn" data-q="6" data-score="30" onclick="pick(this)">11–30</button>
+        <button class="opt-btn" data-q="6" data-score="55" onclick="pick(this)">Понад 30</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q7">
+      <div class="q-num">Питання 7</div>
+      <div class="q-text">За якими категоріями були попередження?</div>
+      <div class="multi-hint">Можна обрати кілька варіантів</div>
+      <div class="options">
+        <button class="opt-btn multi" data-q="7" data-score="10" onclick="multiPick(this)">Нерегламентовані товари</button>
+        <button class="opt-btn multi" data-q="7" data-score="8" onclick="multiPick(this)">Спам</button>
+        <button class="opt-btn multi" data-q="7" data-score="20" onclick="multiPick(this)">Сексуалізований контент</button>
+        <button class="opt-btn multi" data-q="7" data-score="25" onclick="multiPick(this)">Маніпуляція активністю</button>
+        <button class="opt-btn multi" data-q="7" data-score="15" onclick="multiPick(this)">Небезпечна діяльність</button>
+        <button class="opt-btn multi" data-q="7" data-score="15" onclick="multiPick(this)">Дезінформація</button>
+        <button class="opt-btn multi" data-q="7" data-score="18" onclick="multiPick(this)">Цькування</button>
+        <button class="opt-btn multi" data-q="7" data-score="5" onclick="multiPick(this)">Інше / Не було</button>
+      </div>
+    </div>
+
+    <!-- BLOCK 3 -->
+    <div class="block-header">
+      <div class="block-num">3</div>
+      <div class="block-title">Резервні акаунти</div>
+    </div>
+
+    <div class="q-card" id="q8">
+      <div class="q-num">Питання 8</div>
+      <div class="q-text">Чи створювалися резервні акаунти після блокування основних?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="8" data-score="0" onclick="pick(this)">Ніколи</button>
+        <button class="opt-btn" data-q="8" data-score="10" onclick="pick(this)">1–3</button>
+        <button class="opt-btn" data-q="8" data-score="25" onclick="pick(this)">4–10</button>
+        <button class="opt-btn" data-q="8" data-score="45" onclick="pick(this)">Понад 10</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q9">
+      <div class="q-num">Питання 9</div>
+      <div class="q-text">Чи використовуються одночасно декілька акаунтів одного бізнесу?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="9" data-score="0" onclick="pick(this)">Ні</button>
+        <button class="opt-btn" data-q="9" data-score="5" onclick="pick(this)">2–3</button>
+        <button class="opt-btn" data-q="9" data-score="15" onclick="pick(this)">4–10</button>
+        <button class="opt-btn" data-q="9" data-score="30" onclick="pick(this)">Понад 10</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q10">
+      <div class="q-num">Питання 10</div>
+      <div class="q-text">Чи проводилися ефіри з інших акаунтів після блокування основного?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="10" data-score="0" onclick="pick(this)">Ніколи</button>
+        <button class="opt-btn" data-q="10" data-score="15" onclick="pick(this)">Іноді</button>
+        <button class="opt-btn" data-q="10" data-score="35" onclick="pick(this)">Регулярно</button>
+      </div>
+    </div>
+
+    <!-- BLOCK 4 -->
+    <div class="block-header">
+      <div class="block-num">4</div>
+      <div class="block-title">VPN та юрисдикції</div>
+    </div>
+
+    <div class="q-card" id="q11">
+      <div class="q-num">Питання 11</div>
+      <div class="q-text">Чи використовувалися VPN для роботи з TikTok?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="11" data-score="0" onclick="pick(this)">Ніколи</button>
+        <button class="opt-btn" data-q="11" data-score="15" onclick="pick(this)">Іноді</button>
+        <button class="opt-btn" data-q="11" data-score="35" onclick="pick(this)">Регулярно</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q12">
+      <div class="q-num">Питання 12</div>
+      <div class="q-text">Чи є акаунти, створені під інші країни?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="12" data-score="0" onclick="pick(this)">Ні</button>
+        <button class="opt-btn" data-q="12" data-score="25" onclick="pick(this)">Так</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q13">
+      <div class="q-num">Питання 13</div>
+      <div class="q-text">Чи використовуються акаунти з іноземною монетизацією?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="13" data-score="0" onclick="pick(this)">Ні</button>
+        <button class="opt-btn" data-q="13" data-score="20" onclick="pick(this)">Так</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q14">
+      <div class="q-num">Питання 14</div>
+      <div class="q-text">Чи використовувалися документи інших осіб?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="14" data-score="0" onclick="pick(this)">Ні</button>
+        <button class="opt-btn" data-q="14" data-score="60" onclick="pick(this)">Так</button>
+      </div>
+    </div>
+
+    <!-- BLOCK 5 -->
+    <div class="block-header">
+      <div class="block-num">5</div>
+      <div class="block-title">Продажі</div>
+    </div>
+
+    <div class="q-card" id="q15">
+      <div class="q-num">Питання 15</div>
+      <div class="q-text">Як приймаються замовлення?</div>
+      <div class="multi-hint">Можна обрати кілька варіантів</div>
+      <div class="options">
+        <button class="opt-btn multi" data-q="15" data-score="0" onclick="multiPick(this)">Через сайт</button>
+        <button class="opt-btn multi" data-q="15" data-score="0" onclick="multiPick(this)">Через каталог</button>
+        <button class="opt-btn multi" data-q="15" data-score="5" onclick="multiPick(this)">Telegram</button>
+        <button class="opt-btn multi" data-q="15" data-score="5" onclick="multiPick(this)">Viber</button>
+        <button class="opt-btn multi" data-q="15" data-score="15" onclick="multiPick(this)">Особисті повідомлення TikTok</button>
+        <button class="opt-btn multi" data-q="15" data-score="25" onclick="multiPick(this)">Через скріншоти з ефірів</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q16">
+      <div class="q-num">Питання 16</div>
+      <div class="q-text">Чи вказаний номер телефону в шапці профілю?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="16" data-score="0" onclick="pick(this)">Так</button>
+        <button class="opt-btn" data-q="16" data-score="5" onclick="pick(this)">Ні</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q17">
+      <div class="q-num">Питання 17</div>
+      <div class="q-text">Чи є міні-сайт або сайт?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="17" data-score="0" onclick="pick(this)">Так</button>
+        <button class="opt-btn" data-q="17" data-score="10" onclick="pick(this)">Ні</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q18">
+      <div class="q-num">Питання 18</div>
+      <div class="q-text">Чи розміщені реквізити ФОП?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="18" data-score="0" onclick="pick(this)">Так</button>
+        <button class="opt-btn" data-q="18" data-score="10" onclick="pick(this)">Ні</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q19">
+      <div class="q-num">Питання 19</div>
+      <div class="q-text">Чи є публічна оферта?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="19" data-score="0" onclick="pick(this)">Так</button>
+        <button class="opt-btn" data-q="19" data-score="8" onclick="pick(this)">Ні</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q20">
+      <div class="q-num">Питання 20</div>
+      <div class="q-text">Чи є політика конфіденційності?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="20" data-score="0" onclick="pick(this)">Так</button>
+        <button class="opt-btn" data-q="20" data-score="8" onclick="pick(this)">Ні</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q21">
+      <div class="q-num">Питання 21</div>
+      <div class="q-text">Чи є умови повернення та обміну?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="21" data-score="0" onclick="pick(this)">Так</button>
+        <button class="opt-btn" data-q="21" data-score="8" onclick="pick(this)">Ні</button>
+      </div>
+    </div>
+
+    <!-- BLOCK 6 -->
+    <div class="block-header">
+      <div class="block-num">6</div>
+      <div class="block-title">Контент</div>
+    </div>
+
+    <div class="q-card" id="q22">
+      <div class="q-num">Питання 22</div>
+      <div class="q-text">Скільки відео публікується щотижня?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="22" data-score="15" onclick="pick(this)">0</button>
+        <button class="opt-btn" data-q="22" data-score="8" onclick="pick(this)">1–3</button>
+        <button class="opt-btn" data-q="22" data-score="0" onclick="pick(this)">4–10</button>
+        <button class="opt-btn" data-q="22" data-score="3" onclick="pick(this)">11–30</button>
+        <button class="opt-btn" data-q="22" data-score="8" onclick="pick(this)">Понад 30</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q23">
+      <div class="q-num">Питання 23</div>
+      <div class="q-text">Який основний тип контенту?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="23" data-score="0" onclick="pick(this)">Експертний</button>
+        <button class="opt-btn" data-q="23" data-score="0" onclick="pick(this)">Оглядовий</button>
+        <button class="opt-btn" data-q="23" data-score="3" onclick="pick(this)">Розважальний</button>
+        <button class="opt-btn" data-q="23" data-score="15" onclick="pick(this)">Лише продажі</button>
+        <button class="opt-btn" data-q="23" data-score="10" onclick="pick(this)">Лише ефіри</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q24">
+      <div class="q-num">Питання 24</div>
+      <div class="q-text">Чи є контент-план?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="24" data-score="0" onclick="pick(this)">Так</button>
+        <button class="opt-btn" data-q="24" data-score="5" onclick="pick(this)">Частково</button>
+        <button class="opt-btn" data-q="24" data-score="10" onclick="pick(this)">Ні</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q25">
+      <div class="q-num">Питання 25</div>
+      <div class="q-text">Чи готовий бізнес перейти від продажів через скріншоти до каталогу?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="25" data-score="0" onclick="pick(this)">Так</button>
+        <button class="opt-btn" data-q="25" data-score="5" onclick="pick(this)">Частково</button>
+        <button class="opt-btn" data-q="25" data-score="15" onclick="pick(this)">Ні</button>
+      </div>
+    </div>
+
+    <!-- BLOCK 7 -->
+    <div class="block-header">
+      <div class="block-num">7</div>
+      <div class="block-title">Готовність до TikTok Shop</div>
+    </div>
+
+    <div class="q-card" id="q26">
+      <div class="q-num">Питання 26</div>
+      <div class="q-text">Чи є CRM-система?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="26" data-score="0" onclick="pick(this)">Так</button>
+        <button class="opt-btn" data-q="26" data-score="8" onclick="pick(this)">Ні</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q27">
+      <div class="q-num">Питання 27</div>
+      <div class="q-text">Чи є каталог товарів?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="27" data-score="0" onclick="pick(this)">Так</button>
+        <button class="opt-btn" data-q="27" data-score="10" onclick="pick(this)">Ні</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q28">
+      <div class="q-num">Питання 28</div>
+      <div class="q-text">Чи є відповідальна людина за контент?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="28" data-score="0" onclick="pick(this)">Так</button>
+        <button class="opt-btn" data-q="28" data-score="5" onclick="pick(this)">Ні</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q29">
+      <div class="q-num">Питання 29</div>
+      <div class="q-text">Чи є відповідальна людина за технічну частину?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="29" data-score="0" onclick="pick(this)">Так</button>
+        <button class="opt-btn" data-q="29" data-score="5" onclick="pick(this)">Ні</button>
+      </div>
+    </div>
+
+    <div class="q-card" id="q30">
+      <div class="q-num">Питання 30</div>
+      <div class="q-text">Чи готовий бізнес перебудовувати процеси під TikTok Shop?</div>
+      <div class="options">
+        <button class="opt-btn" data-q="30" data-score="0" onclick="pick(this)">Так</button>
+        <button class="opt-btn" data-q="30" data-score="8" onclick="pick(this)">Частково</button>
+        <button class="opt-btn" data-q="30" data-score="18" onclick="pick(this)">Ні</button>
+      </div>
+    </div>
+
+    <div class="submit-area">
+      <button class="btn-submit" id="btn-submit" onclick="submitTest()" disabled>
+        Отримати результат →
+      </button>
+    </div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result-section" class="result-section">
+    <div id="result-card" class="result-card">
+      <div class="score-gauge">
+        <div class="gauge-ring" id="gauge-ring">
+          <span class="gauge-num" id="gauge-num">0</span>
+          <span class="gauge-lbl">балів</span>
+        </div>
+      </div>
+      <div class="risk-scale" id="risk-scale"></div>
+      <div class="rs-labels"><span>0</span><span>20</span><span>50</span><span>90</span><span>150+</span></div>
+      <div class="result-zone" id="result-zone"></div>
+      <div class="result-score" id="result-score"></div>
+      <div class="result-title" id="result-title"></div>
+      <div class="result-desc" id="result-desc"></div>
+      <div class="result-disclaimer">
+        <strong>Важливе попередження</strong>
+        Даний тест не є рекомендацією до верифікації або відмови від неї. Для повноцінного аналізу необхідний індивідуальний аудит бізнесу, його історії, контенту, команди та процесів.<br><br>Автор тесту: <strong><a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener" style="color:inherit;font-weight:700">@vasil_veo · Vasil VEO</a></strong> — практичний досвід роботи із TikTok-акаунтами українського бізнесу.
+      </div>
+      <button class="btn-restart" onclick="restartTest()">← Пройти ще раз</button>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<script>
+const scores = {};
+const multiScores = {};
+const TOTAL_Q = 30;
+const MULTI_Q = [7, 15];
+
+function updateProgress(){
+  const answered = Object.keys(scores).length + Object.keys(multiScores).length;
+  const pct = Math.round(answered / TOTAL_Q * 100);
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = `Питання ${answered} / ${TOTAL_Q}`;
+  document.getElementById('prog-pct').textContent = pct + '%';
+  const btn = document.getElementById('btn-submit');
+  btn.disabled = answered < TOTAL_Q;
+}
+
+function pick(btn){
+  const q = btn.dataset.q;
+  // deselect siblings
+  btn.closest('.options').querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  scores[q] = parseInt(btn.dataset.score);
+  btn.closest('.q-card').classList.add('answered');
+  updateProgress();
+}
+
+function multiPick(btn){
+  const q = btn.dataset.q;
+  btn.classList.toggle('selected');
+  // recalculate sum for this question
+  const sel = btn.closest('.options').querySelectorAll('.opt-btn.selected');
+  let sum = 0;
+  sel.forEach(b => { sum += parseInt(b.dataset.score); });
+  if(sel.length > 0){
+    multiScores[q] = sum;
+    btn.closest('.q-card').classList.add('answered');
+  } else {
+    delete multiScores[q];
+    btn.closest('.q-card').classList.remove('answered');
+  }
+  updateProgress();
+}
+
+function calcTotal(){
+  let t = 0;
+  Object.values(scores).forEach(v => t += v);
+  Object.values(multiScores).forEach(v => t += v);
+  return t;
+}
+
+function submitTest(){
+  const total = calcTotal();
+  let zone, color, emoji, title, desc;
+
+  if(total <= 20){
+    zone='🟢 Зелена зона'; color='green'; emoji='🟢';
+    title='Низький рівень ризику';
+    desc=`<p>Ваш бізнес демонструє <strong>мінімальну кількість сигналів ризику</strong>. Історія акаунтів відносно чиста, процеси продажів структуровані, а підхід до контенту відповідає вимогам платформи.</p>
+<p>Це не означає, що верифікація пройде автоматично — вона все одно є індивідуальним процесом, але <strong>базова підготовленість на достатньому рівні</strong>.</p>
+<p><strong>Рекомендації:</strong> Переконайтесь, що всі юридичні документи (оферта, політика конфіденційності, умови повернення) актуальні та доступні. Продовжуйте вести облік і систематизувати процеси.</p>`;
+  } else if(total <= 50){
+    zone='🟡 Жовта зона'; color='yellow'; emoji='🟡';
+    title='Помірний рівень ризику';
+    desc=`<p>Є <strong>певні фактори, які можуть ускладнити верифікацію</strong> або призвести до додаткових питань з боку TikTok. Це не критично, але потребує уваги.</p>
+<p>Найімовірніше є прогалини в юридичному оформленні, структурі продажів або контентній стратегії, які варто усунути <strong>до початку процесу верифікації</strong>.</p>
+<p><strong>Рекомендації:</strong> Проведіть внутрішній аудит за слабкими місцями. Зверніть увагу на документацію, каталог товарів та відповідальних осіб у команді. Перехід на структуровані канали продажів знизить ризики.</p>`;
+  } else if(total <= 90){
+    zone='🟠 Помаранчева зона'; color='orange'; emoji='🟠';
+    title='Підвищений рівень ризику';
+    desc=`<p>Тест виявив <strong>декілька серйозних факторів ризику</strong>, які можуть стати перешкодою для верифікації або збільшити ймовірність відмови чи обмежень.</p>
+<p>Це може бути пов'язано з <strong>історією блокувань, використанням VPN, резервними акаунтами або порушеннями правил</strong>. TikTok уважно аналізує цифровий слід бізнесу.</p>
+<p><strong>Рекомендації:</strong> Перед спробою верифікації необхідна серйозна підготовча робота: очищення цифрового сліду, виправлення процесів, юридичне оформлення. Настійливо рекомендується <strong>індивідуальний аудит</strong> із фахівцем.</p>`;
+  } else {
+    zone='🔴 Червона зона'; color='red'; emoji='🔴';
+    title='Критичний рівень ризику';
+    desc=`<p>Тест зафіксував <strong>критичний рівень ризикових факторів</strong>. Спроба верифікації без попередньої підготовки може призвести не лише до відмови, але й до <strong>постійного блокування акаунтів</strong> або неможливості верифікації в майбутньому.</p>
+<p>Серед виявлених сигналів, найімовірніше, є: масові блокування, використання чужих документів, VPN, нерегламентовані товари або хаотична структура продажів.</p>
+<p><strong>Рекомендації:</strong> Наразі спроба верифікації є <strong>передчасною і потенційно шкідливою</strong>. Потрібен повноцінний аудит, стратегія відновлення цифрової репутації та структурна перебудова бізнесу. Без роботи з фахівцем — не рекомендується.</p>`;
+  }
+
+  // Build risk scale
+  const segs = 20;
+  const maxScore = 200;
+  const activeSeg = Math.min(segs, Math.round(total / maxScore * segs));
+  let scaleHTML = '';
+  for(let i=0;i<segs;i++){
+    let cls = '';
+    if(i < activeSeg){
+      if(i < 2) cls='active-green';
+      else if(i < 6) cls='active-yellow';
+      else if(i < 12) cls='active-orange';
+      else cls='active-red';
+    }
+    scaleHTML += `<div class="rs-seg ${cls}"></div>`;
+  }
+
+  const card = document.getElementById('result-card');
+  card.className = 'result-card ' + color;
+  document.getElementById('gauge-ring').className = 'gauge-ring';
+  document.getElementById('result-zone').textContent = zone;
+  document.getElementById('result-score').textContent = `Загальний бал ризику: ${total}`;
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-desc').innerHTML = desc;
+  document.getElementById('gauge-num').textContent = total;
+  document.getElementById('risk-scale').innerHTML = scaleHTML;
+
+  document.getElementById('test-form').style.display = 'none';
+  const rs = document.getElementById('result-section');
+  rs.style.display = 'block';
+  rs.scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function restartTest(){
+  // reset state
+  Object.keys(scores).forEach(k => delete scores[k]);
+  Object.keys(multiScores).forEach(k => delete multiScores[k]);
+  document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.q-card').forEach(c => c.classList.remove('answered'));
+  document.getElementById('result-section').style.display = 'none';
+  document.getElementById('test-form').style.display = 'block';
+  updateProgress();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+updateProgress();
+</script>
+</body>
+</html>
