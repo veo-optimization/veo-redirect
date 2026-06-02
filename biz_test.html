@@ -534,12 +534,13 @@ body{min-height:100vh;padding-bottom:60px}
 
     <div class="q-card" id="q31">
       <div class="q-num">Питання 19</div>
-      <div class="q-text">Чи є монетизований акаунт серед акаунтів бізнесу — і чи є власник резидентом тієї країни, під яку він монетизований?</div>
+      <div class="q-text">Якщо серед акаунтів бізнесу є монетизований — чи отримано цей акаунт або зареєстровано під іншу країну (не Україну)? Мова про українського підприємця або автора, який веде ефіри чи знімає контент, але акаунт зареєстровано або монетизовано під іноземну юрисдикцію.</div>
       <div class="options">
-        <button class="opt-btn" data-q="19" data-score="0" onclick="pick(this)">Монетизації немає</button>
-        <button class="opt-btn" data-q="19" data-score="0" onclick="pick(this)">Є монетизований акаунт — власник резидент тієї країни</button>
-        <button class="opt-btn" data-q="19" data-score="30" onclick="pick(this)">Є монетизований акаунт — власник НЕ є резидентом тієї країни</button>
-        <button class="opt-btn" data-q="19" data-score="45" onclick="pick(this)">Є монетизований акаунт — на іншу особу, яка є резидентом</button>
+        <button class="opt-btn" data-q="19" data-score="0" onclick="pick(this)">Монетизованих акаунтів немає — не застосовується</button>
+        <button class="opt-btn" data-q="19" data-score="0" onclick="pick(this)">Акаунт українського бізнесу, монетизований під Україну — все збігається</button>
+        <button class="opt-btn" data-q="19" data-score="25" onclick="pick(this)">Акаунт зареєстровано під іноземну країну, але веду бізнес в Україні</button>
+        <button class="opt-btn" data-q="19" data-score="40" onclick="pick(this)">Акаунт отримано «з-за кордону» або куплено — монетизація під іншу юрисдикцію</button>
+        <button class="opt-btn" data-q="19" data-score="50" onclick="pick(this)">Монетизований акаунт оформлено на іншу особу, яка є резидентом іншої країни</button>
       </div>
     </div>
 
@@ -710,13 +711,18 @@ body{min-height:100vh;padding-bottom:60px}
 
     <div class="q-card" id="q23">
       <div class="q-num">Питання 34</div>
-      <div class="q-text">Який основний тип контенту?</div>
+      <div class="q-text">Які типи контенту ви використовуєте?</div>
+      <div class="multi-hint">Можна обрати кілька варіантів</div>
       <div class="options">
-        <button class="opt-btn" data-q="34" data-score="0" onclick="pick(this)">Експертний</button>
-        <button class="opt-btn" data-q="34" data-score="0" onclick="pick(this)">Оглядовий</button>
-        <button class="opt-btn" data-q="34" data-score="3" onclick="pick(this)">Розважальний</button>
-        <button class="opt-btn" data-q="34" data-score="15" onclick="pick(this)">Лише продажі</button>
-        <button class="opt-btn" data-q="34" data-score="10" onclick="pick(this)">Лише ефіри</button>
+        <button class="opt-btn multi" data-q="34" data-score="0" onclick="multiPick(this)">Експертний — розбори, поради, відповіді на запитання</button>
+        <button class="opt-btn multi" data-q="34" data-score="0" onclick="multiPick(this)">Пізнавальний — цікаві факти, «як це працює», корисні знання</button>
+        <button class="opt-btn multi" data-q="34" data-score="0" onclick="multiPick(this)">Оглядовий — огляди товарів, порівняння, розпакування</button>
+        <button class="opt-btn multi" data-q="34" data-score="0" onclick="multiPick(this)">За лаштунками (BTS) — виробництво, процес, команда</button>
+        <button class="opt-btn multi" data-q="34" data-score="0" onclick="multiPick(this)">Розважальний — тренди, челенджі, гумор, дуети</button>
+        <button class="opt-btn multi" data-q="34" data-score="0" onclick="multiPick(this)">UGC / відгуки клієнтів — реальні покупці в кадрі</button>
+        <button class="opt-btn multi" data-q="34" data-score="5" onclick="multiPick(this)">Продажний контент — демонстрація з ціною та закликом купити</button>
+        <button class="opt-btn multi" data-q="34" data-score="10" onclick="multiPick(this)">Виключно ефіри — відео майже не публікуються</button>
+        <button class="opt-btn multi" data-q="34" data-score="20" onclick="multiPick(this)">Лише продажі без будь-якого іншого контенту</button>
       </div>
     </div>
 
@@ -886,7 +892,7 @@ body{min-height:100vh;padding-bottom:60px}
 const scores = {};
 const multiScores = {};
 const TOTAL_Q = 45;
-const MULTI_Q = [7, 15];
+const MULTI_Q = [7, 15, 34];
 
 function updateProgress(){
   const answered = Object.keys(scores).length + Object.keys(multiScores).length;
