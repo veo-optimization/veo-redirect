@@ -352,6 +352,11 @@ footer a{color:rgba(255,255,255,.55);text-decoration:none;border-bottom:1px soli
 footer a:hover{color:#fff}
 .footer-brand{font-family:var(--head);font-size:.82rem;font-weight:800;color:rgba(255,255,255,.7)}
 
+/* ─── VIDEO PREVIEW CARDS ─── */
+@media(max-width:560px){
+  [style*="flex:0 0 48%"]{flex:0 0 100% !important;min-height:140px !important}
+  [style*="display:flex;min-height:160px"]{flex-direction:column !important}
+}
 /* ─── ANIMATIONS ─── */
 @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 .hero-inner > *{animation:fadeUp .6s ease both}
@@ -516,11 +521,33 @@ footer a:hover{color:#fff}
       </div>
     </div>
     <div class="tl-item">
-      <div class="tl-left"><div class="tl-dot">UA</div></div>
+      <div class="tl-left"><div class="tl-dot" style="background:var(--acc)">UA</div></div>
       <div class="tl-body">
-        <div class="tl-period">Найближчі 1–2 роки · Україна</div>
-        <div class="tl-title">Наша черга</div>
-        <div class="tl-desc">За аналізом VEO FORCE, Україна зараз на стадії, яку UK і USA пройшли у 2022–2023. Тобто вікно підготовки — відкрите. Але воно закриється.</div>
+        <div class="tl-period" style="color:var(--acc)">Найближчім часом · Україна</div>
+        <div class="tl-title">Наша черга — і все на це вказує</div>
+        <div class="tl-desc">
+          За аналізом <strong>VEO FORCE</strong>, все відбувається саме так, як і має відбуватися перед запуском: масові зміни алгоритму, нові вимоги до контенту, до авторів, до акаунтів — масові чистки та посилення модерації. Це не просто оновлення правил. Це підготовча інфраструктура.<br><br>
+          TikTok не буде вічно «дотувати» Україну безкоштовним охопленням. Зараз українські продавці ще не бачать жорстких комерційних вимог — але це тимчасово. Логіка проста: TikTok Shop заробляє на комісіях з продажів. Запуск у країні — це монетизація аудиторії. Підготовчі кроки вже зроблені.<br><br>
+          <strong>Можливо, це станеться у 2026. Можливо — у 2027. Можливо, трохи пізніше.</strong> Але швидкість розгортання подій і насиченість змін говорять про одне: вікно підготовки відкрите — але воно не вічне.
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item" style="padding-bottom:0">
+      <div class="tl-left"><div class="tl-dot" style="background:#F0C050;color:#0A0A0A;font-size:.6rem">⚡</div></div>
+      <div class="tl-body">
+        <div class="tl-period" style="color:#C8A84B">Прямо зараз</div>
+        <div class="tl-title">Підготовчі сигнали, які не можна ігнорувати</div>
+        <div class="tl-desc">
+          <div style="display:flex;flex-direction:column;gap:6px;margin-top:6px">
+            <div style="font-size:.82rem;color:var(--sub);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--acc);font-weight:800;flex-shrink:0">→</span>Нові алгоритмічні формули підбору та фільтрації контенту</div>
+            <div style="font-size:.82rem;color:var(--sub);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--acc);font-weight:800;flex-shrink:0">→</span>Масові вимоги до верифікації акаунтів і документів</div>
+            <div style="font-size:.82rem;color:var(--sub);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--acc);font-weight:800;flex-shrink:0">→</span>Посилення вимог до комерційного маркування контенту</div>
+            <div style="font-size:.82rem;color:var(--sub);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--acc);font-weight:800;flex-shrink:0">→</span>Масові чистки акаунтів, що порушують нові правила</div>
+            <div style="font-size:.82rem;color:var(--sub);display:flex;gap:8px;align-items:flex-start"><span style="color:var(--acc);font-weight:800;flex-shrink:0">→</span>Зростання вимог до якості та структури бізнес-акаунтів</div>
+            <div style="font-size:.84rem;font-weight:600;color:var(--tx);display:flex;gap:8px;align-items:flex-start;margin-top:4px;padding:10px 12px;background:#FFF5EE;border-left:3px solid var(--acc);border-radius:0 8px 8px 0"><span>Все це — класична передстартова підготовка платформи. І це не думка. Це спостереження.</span></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -612,24 +639,84 @@ footer a:hover{color:#fff}
     </div>
   </div>
 
-  <!-- VIDEO PLACEHOLDER SECTION -->
-  <h3 class="sub-h" style="margin-top:32px">Приклади відео для натхнення</h3>
-  <div class="video-grid">
-    <div class="video-ph">
-      <div class="video-ph-tag"><span class="tag tag-red">Демонстрація товару</span></div>
-      <div class="video-ph-icon">▶</div>
-      <div class="video-ph-text">Вставте відео-приклад</div>
+  <h3 class="sub-h" style="margin-top:36px;margin-bottom:6px">Реальні приклади: скільки можна заробити на одному відео</h3>
+  <p style="font-size:.84rem;color:var(--sub);margin-bottom:20px">Афіліатні продажі в TikTok Shop — це коли один ролик може принести десятки тисяч доларів комісійних. Три реальних кейси нижче.</p>
+
+  <div style="display:flex;flex-direction:column;gap:16px">
+
+    <!-- CARD 1: Auto vacuum -->
+    <div style="background:var(--card);border:1.5px solid var(--brd);border-radius:16px;overflow:hidden;display:flex;min-height:160px">
+      <a href="https://vt.tiktok.com/ZSQFYhtRK/"
+         style="flex:0 0 48%;background:#0A0A0A;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-decoration:none;position:relative;overflow:hidden;min-height:160px" target="_blank" rel="noopener noreferrer">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1A0A0A,#0A1A0A);"></div>
+        <div style="position:relative;z-index:1;text-align:center">
+          <div style="font-size:2.8rem;margin-bottom:6px">🚗</div>
+          <div style="color:rgba(255,255,255,.9);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Автомобільний</div>
+          <div style="color:rgba(255,255,255,.9);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase">міні-пилосос</div>
+          <div style="margin-top:10px;background:rgba(255,0,80,.2);border:1px solid rgba(255,0,80,.4);border-radius:20px;padding:4px 12px;color:#FF6688;font-size:.7rem;font-weight:700">↗ Дивитись відео</div>
+        </div>
+      </a>
+      <div style="flex:1;padding:18px 18px;display:flex;flex-direction:column;justify-content:center;gap:8px">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="background:rgba(255,0,80,.1);color:var(--acc);border:1px solid rgba(255,0,80,.2);border-radius:20px;padding:3px 10px;font-size:.68rem;font-weight:700">57 млн переглядів</span>
+          <span class="tag tag-dark">Афілят</span>
+        </div>
+        <div style="font-size:.9rem;font-weight:700;color:var(--tx);line-height:1.3">Одне відео = один автомобільний пилосос</div>
+        <p style="font-size:.8rem;color:var(--sub);line-height:1.55;margin:0">При середній ціні товару ~$30 і комісії 10–15% — навіть конверсія 0.1% від 57 млн переглядів дає <strong style="color:var(--tx)">орієнтовно $17 000–25 000+</strong> афіліатного доходу з одного ролика.</p>
+        <div style="font-size:.72rem;color:var(--light);font-style:italic">* Розрахунок орієнтовний. Реальні цифри залежать від конверсії та ставки комісії.</div>
+      </div>
     </div>
-    <div class="video-ph">
-      <div class="video-ph-tag"><span class="tag tag-cyan">Відгук клієнта</span></div>
-      <div class="video-ph-icon">▶</div>
-      <div class="video-ph-text">Вставте відео-приклад</div>
+
+    <!-- CARD 2: Hair removal spray -->
+    <div style="background:var(--card);border:1.5px solid var(--brd);border-radius:16px;overflow:hidden;display:flex;min-height:160px">
+      <a href="https://vt.tiktok.com/ZSQFYh8BC/"
+         style="flex:0 0 48%;background:#0A0A0A;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-decoration:none;position:relative;overflow:hidden;min-height:160px" target="_blank" rel="noopener noreferrer">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0A0A1A,#1A0A14);"></div>
+        <div style="position:relative;z-index:1;text-align:center">
+          <div style="font-size:2.8rem;margin-bottom:6px">✨</div>
+          <div style="color:rgba(255,255,255,.9);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Спрей для видалення</div>
+          <div style="color:rgba(255,255,255,.9);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase">пушку з обличчя</div>
+          <div style="margin-top:10px;background:rgba(0,194,255,.15);border:1px solid rgba(0,194,255,.3);border-radius:20px;padding:4px 12px;color:#00C2FF;font-size:.7rem;font-weight:700">↗ Дивитись відео</div>
+        </div>
+      </a>
+      <div style="flex:1;padding:18px 18px;display:flex;flex-direction:column;justify-content:center;gap:8px">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="background:rgba(0,194,255,.1);color:#0088BB;border:1px solid rgba(0,194,255,.2);border-radius:20px;padding:3px 10px;font-size:.68rem;font-weight:700">70 млн переглядів</span>
+          <span class="tag tag-dark">Beauty / Краса</span>
+        </div>
+        <div style="font-size:.9rem;font-weight:700;color:var(--tx);line-height:1.3">Пшик — і пушок зник. Один ролик-демонстрація</div>
+        <p style="font-size:.8rem;color:var(--sub);line-height:1.55;margin:0">Продукт beauty-категорії з вираженим «до/після» ефектом. При комісії 10–20% і 70 млн переглядів — орієнтовний афіліатний заробіток <strong style="color:var(--tx)">$21 000–42 000+</strong>. Beauty — одна з найвищих конверсій у TikTok Shop.</p>
+        <div style="font-size:.72rem;color:var(--light);font-style:italic">* Розрахунок орієнтовний. Реальні цифри залежать від конверсії та ставки комісії.</div>
+      </div>
     </div>
-    <div class="video-ph">
-      <div class="video-ph-tag"><span class="tag tag-gold">Сторітелінг бренду</span></div>
-      <div class="video-ph-icon">▶</div>
-      <div class="video-ph-text">Вставте відео-приклад</div>
+
+    <!-- CARD 3: Leggings -->
+    <div style="background:var(--card);border:1.5px solid var(--brd);border-radius:16px;overflow:hidden;display:flex;min-height:160px">
+      <a href="https://vt.tiktok.com/ZSQFYayJS/"
+         style="flex:0 0 48%;background:#0A0A0A;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-decoration:none;position:relative;overflow:hidden;min-height:160px" target="_blank" rel="noopener noreferrer">
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#0A1A0A,#1A1A0A);"></div>
+        <div style="position:relative;z-index:1;text-align:center">
+          <div style="font-size:2.8rem;margin-bottom:6px">👗</div>
+          <div style="color:rgba(255,255,255,.9);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Колготи-легінси</div>
+          <div style="color:rgba(255,255,255,.9);font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase">Fashion / Одяг</div>
+          <div style="margin-top:10px;background:rgba(200,168,75,.15);border:1px solid rgba(200,168,75,.3);border-radius:20px;padding:4px 12px;color:#C8A84B;font-size:.7rem;font-weight:700">↗ Дивитись відео</div>
+        </div>
+      </a>
+      <div style="flex:1;padding:18px 18px;display:flex;flex-direction:column;justify-content:center;gap:8px">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+          <span style="background:rgba(200,168,75,.12);color:#8B6B1A;border:1px solid rgba(200,168,75,.25);border-radius:20px;padding:3px 10px;font-size:.68rem;font-weight:700">26 млн переглядів</span>
+          <span class="tag tag-dark">Fashion / Одяг</span>
+        </div>
+        <div style="font-size:.9rem;font-weight:700;color:var(--tx);line-height:1.3">Один примірочний ролик → мільйони переглядів</div>
+        <p style="font-size:.8rem;color:var(--sub);line-height:1.55;margin:0">Одяг — висока конкуренція, але і висока конверсія при правильному контенті. Орієнтовний афіліатний заробіток при комісії 5–12% і 26 млн переглядів — <strong style="color:var(--tx)">$3 900–9 300+</strong> з одного відео.</p>
+        <div style="font-size:.72rem;color:var(--light);font-style:italic">* Розрахунок орієнтовний. Реальні цифри залежать від конверсії та ставки комісії.</div>
+      </div>
     </div>
+
+  </div>
+
+  <div style="background:#F0EFF9;border:1.5px solid #C8C0E8;border-radius:12px;padding:14px 16px;margin-top:14px;font-size:.82rem;color:#443388;line-height:1.6">
+    <strong>Головний висновок з цих кейсів:</strong> Жодне з цих відео не потребувало студії, команди або великого бюджету. Потрібні були розуміння аудиторії, правильний гачок і щира демонстрація товару.
   </div>
 </div>
 </section>
@@ -893,12 +980,7 @@ footer a:hover{color:#fff}
       <p>100 відео зараз — це 100 уроків. Після запуску TikTok Shop ви вже будете вмілим.</p>
     </div>
   </div>
-  <!-- VIDEO PLACEHOLDER -->
-  <div class="video-ph" style="margin-top:24px;max-width:560px">
-    <div class="video-ph-tag"><span class="tag tag-red">Відеокейс</span></div>
-    <div class="video-ph-icon">▶</div>
-    <div class="video-ph-text">Вставте YouTube або TikTok відео-кейс</div>
-  </div>
+
 </div>
 </section>
 
@@ -958,8 +1040,8 @@ footer a:hover{color:#fff}
       <div style="background:rgba(255,255,255,.04);border:2px dashed rgba(255,255,255,.15);border-radius:12px;padding:28px;text-align:center;margin-bottom:14px">
         <div style="font-size:2.5rem;margin-bottom:10px;opacity:.4">▶</div>
         <div style="font-size:.78rem;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.08em;font-weight:700;margin-bottom:8px">Відео для вставки</div>
-        <a href="https://vt.tiktok.com/ZSQFNNTag/" target="_blank" rel="noopener"
-           style="display:inline-block;background:rgba(255,0,80,.15);color:#FF6688;border:1px solid rgba(255,0,80,.3);border-radius:8px;padding:8px 18px;font-size:.8rem;font-weight:700;text-decoration:none;margin-bottom:10px">
+        <a href="https://vt.tiktok.com/ZSQFNNTag/"
+           style="display:inline-block;background:rgba(255,0,80,.15);color:#FF6688;border:1px solid rgba(255,0,80,.3);border-radius:8px;padding:8px 18px;font-size:.8rem;font-weight:700;text-decoration:none;margin-bottom:10px" target="_blank" rel="noopener noreferrer">
           ↗ Відкрити відео на TikTok
         </a>
         <!-- YouTube embed placeholder -->
@@ -1280,7 +1362,7 @@ footer a:hover{color:#fff}
         <li>Індивідуальний план запуску</li>
         <li>Рекомендації по ризиках</li>
       </ul>
-      <a href="https://www.tiktok.com/@vasil_veo" target="_blank" class="price-cta">Написати</a>
+      <a href="https://www.tiktok.com/@vasil_veo" class="price-cta" target="_blank" rel="noopener noreferrer">Написати</a>
     </div>
     <div class="price-card">
       <div class="price-name">Бізнес</div>
@@ -1293,7 +1375,7 @@ footer a:hover{color:#fff}
         <li>Рекомендації по CRM</li>
         <li>Аналіз конкурентів</li>
       </ul>
-      <a href="https://www.tiktok.com/@vasil_veo" target="_blank" class="price-cta">Написати</a>
+      <a href="https://www.tiktok.com/@vasil_veo" class="price-cta" target="_blank" rel="noopener noreferrer">Написати</a>
     </div>
     <div class="price-card featured">
       <div class="price-name">Профі</div>
@@ -1306,7 +1388,7 @@ footer a:hover{color:#fff}
         <li>Навчання команди</li>
         <li>Технічні рекомендації</li>
       </ul>
-      <a href="https://www.tiktok.com/@vasil_veo" target="_blank" class="price-cta">Написати</a>
+      <a href="https://www.tiktok.com/@vasil_veo" class="price-cta" target="_blank" rel="noopener noreferrer">Написати</a>
     </div>
     <div class="price-card">
       <div class="price-name">Під ключ</div>
@@ -1319,7 +1401,7 @@ footer a:hover{color:#fff}
         <li>Супровід команди</li>
         <li>Запуск TikTok Shop</li>
       </ul>
-      <a href="https://www.tiktok.com/@vasil_veo" target="_blank" class="price-cta">Написати</a>
+      <a href="https://www.tiktok.com/@vasil_veo" class="price-cta" target="_blank" rel="noopener noreferrer">Написати</a>
     </div>
     <div class="price-card" style="grid-column:span 1">
       <div class="price-name">Контракт</div>
@@ -1332,13 +1414,13 @@ footer a:hover{color:#fff}
         <li>Регулярні консультації</li>
         <li>Довгостроковий супровід</li>
       </ul>
-      <a href="https://www.tiktok.com/@vasil_veo" target="_blank" class="price-cta">Обговорити умови</a>
+      <a href="https://www.tiktok.com/@vasil_veo" class="price-cta" target="_blank" rel="noopener noreferrer">Обговорити умови</a>
     </div>
   </div>
   <div class="cta-block">
     <h3>Готові почати підготовку?</h3>
     <p>Напишіть Vasil VEO в TikTok — обговоримо ваш бізнес і оберемо формат, який підходить саме вам.</p>
-    <a href="https://www.tiktok.com/@vasil_veo" target="_blank" class="cta-btn">&#9654; Написати @vasil_veo</a>
+    <a href="https://www.tiktok.com/@vasil_veo" class="cta-btn" target="_blank" rel="noopener noreferrer">&#9654; Написати @vasil_veo</a>
   </div>
 </div>
 </section>
@@ -1358,7 +1440,7 @@ footer a:hover{color:#fff}
   <div class="sec-eyebrow" style="justify-content:center;color:rgba(255,255,255,.35)">Ваше головне завдання зараз</div>
   <h2 class="sec-h" style="color:#fff;text-align:center;font-size:clamp(1.6rem,4vw,2.8rem)">Не чекайте запуску<br>TikTok Shop</h2>
   <p style="font-size:1rem;color:rgba(255,255,255,.5);max-width:520px;margin:0 auto 32px;line-height:1.7">Починайте накопичувати досвід створення контенту вже сьогодні. Саме контент стане головною валютою після запуску.</p>
-  <a href="https://www.tiktok.com/@vasil_veo" target="_blank" class="cta-btn" style="font-size:.95rem;padding:16px 44px">Розпочати підготовку з VEO FORCE</a>
+  <a href="https://www.tiktok.com/@vasil_veo" class="cta-btn" style="font-size:.95rem;padding:16px 44px" target="_blank" rel="noopener noreferrer">Розпочати підготовку з VEO FORCE</a>
   <div class="cta-btn-ghost" style="display:inline-block;margin-top:12px;margin-left:0" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ До початку дорожньої карти</div>
 </div>
 </section>
@@ -1368,12 +1450,12 @@ footer a:hover{color:#fff}
     <div>
       <div class="footer-brand">VEO FORCE</div>
       <div style="margin-top:4px">Консалтинговий центр з TikTok-стратегії для українського бізнесу</div>
-      <div>Автор: <a href="https://www.tiktok.com/@vasil_veo" target="_blank">@vasil_veo</a> · Vasil VEO</div>
+      <div>Автор: <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener noreferrer">@vasil_veo</a> · Vasil VEO</div>
     </div>
     <div style="text-align:right">
       <div>Матеріал є освітнім і не є публічною офертою</div>
       <div>TikTok Shop ще не запущений офіційно в Україні</div>
-      <div style="margin-top:4px"><a href="https://www.tiktok.com/@vasil_veo" target="_blank">tiktok.com/@vasil_veo</a></div>
+      <div style="margin-top:4px"><a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener noreferrer">tiktok.com/@vasil_veo</a></div>
     </div>
   </div>
 </footer>
@@ -1471,7 +1553,7 @@ function showCalcResult(){
   document.getElementById('calcZone').textContent=zone;
   document.getElementById('calcZone').style.color=color;
   document.getElementById('calcDesc').textContent=desc;
-  document.getElementById('calcCTA').innerHTML=`<a href="https://www.tiktok.com/@vasil_veo" target="_blank" class="cta-btn" style="font-size:.82rem;padding:12px 28px">Обговорити результат з VEO FORCE</a>`;
+  document.getElementById('calcCTA').innerHTML=`<a href="https://www.tiktok.com/@vasil_veo" class="cta-btn" style="font-size:.82rem;padding:12px 28px" target="_blank" rel="noopener noreferrer">Обговорити результат з VEO FORCE</a>`;
 }
 
 function restartCalc(){
@@ -1530,5 +1612,6 @@ window.addEventListener('scroll',()=>{
   document.getElementById('backToTop').classList.toggle('visible', window.scrollY>400);
 },{passive:true});
 </script>
+
 </body>
 </html>
