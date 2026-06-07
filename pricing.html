@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Формати співпраці · VEO FORCE · TikTok-консалтинг</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#FFFFFF;color:#0A0A0A;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.6;color-scheme:light only;overflow-x:hidden;max-width:100vw}
+
+.hero{background:#0A0A0A;padding:52px 20px 44px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 50% at 50% 110%,rgba(255,0,80,.15),transparent 65%);pointer-events:none}
+.hero-inner{max-width:900px;margin:0 auto;position:relative;z-index:1}
+.hero-tag{display:inline-block;border:1px solid rgba(255,255,255,.14);border-radius:40px;padding:4px 14px;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:16px}
+.hero h1{font-family:'Unbounded',sans-serif;font-size:clamp(1.4rem,4vw,2.4rem);font-weight:900;letter-spacing:-.05em;line-height:1.1;color:#fff;margin-bottom:14px}
+.hero h1 span{color:#FF0050}
+.hero-lead{font-size:.88rem;color:rgba(255,255,255,.5);max-width:600px;line-height:1.7;margin-bottom:18px}
+.hero-pills{display:flex;flex-wrap:wrap;gap:7px}
+.hero-pill{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:6px;padding:6px 11px;font-size:.72rem;color:rgba(255,255,255,.55);line-height:1.45}
+.hero-pill strong{color:rgba(255,255,255,.85);display:block;font-size:.7rem}
+
+.b2b-bar{background:#FF0050;padding:9px 20px;text-align:center;font-size:.75rem;font-weight:700;color:#fff;letter-spacing:.03em}
+
+.disclaimer-top{background:#FFFFFF;border-bottom:1.5px solid #EBEBEB;border-left:4px solid #FF0050;padding:13px 20px}
+.disclaimer-top-inner{max-width:900px;margin:0 auto;font-size:.78rem;color:#555555;line-height:1.6}
+.disclaimer-top-inner strong{color:#0A0A0A}
+
+.wrap{max-width:900px;margin:0 auto;padding:0 16px;overflow:hidden}
+
+.section-label{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#888;padding:26px 0 10px;display:flex;align-items:center;gap:10px}
+.section-label::after{content:'';flex:1;height:1px;background:#EBEBEB}
+
+.card{background:#FFFFFF;border:1.5px solid #E8E5DE;border-radius:16px;padding:20px 18px;display:flex;flex-direction:column;transition:border-color .15s,box-shadow .15s}
+.card:hover{border-color:#CCCCCC;box-shadow:0 5px 24px rgba(0,0,0,.07)}
+
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:14px}
+.card-name{font-family:'Unbounded',sans-serif;font-size:.8rem;font-weight:800;color:#0A0A0A;margin-bottom:4px;letter-spacing:-.01em}
+.card-tagline{font-size:.76rem;color:#666;line-height:1.45}
+.price-col{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;min-width:0}
+.price-num{font-family:'Unbounded',sans-serif;font-size:1.35rem;font-weight:900;letter-spacing:-.04em;color:#0A0A0A;white-space:nowrap;line-height:1}
+.price-uah{font-size:.66rem;color:#888;white-space:nowrap}
+.dur-badge{display:inline-flex;align-items:center;background:#F0EFE9;border:1px solid #E0DDD6;border-radius:20px;padding:3px 9px;font-size:.63rem;font-weight:700;color:#555;white-space:nowrap;line-height:1.4}
+
+/* LIST BLOCKS */
+.list-block{margin-top:12px}
+.list-block:first-child{margin-top:0}
+.lb-title{font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;display:flex;align-items:center;gap:7px}
+.lb-title::after{content:'';flex:1;height:1px;background:#F0EFE9}
+.lb-prev{color:#AAAAAA} /* included from previous */
+.lb-new{color:#FF0050}  /* new in this package */
+ul.li-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:4px}
+ul.li-list li{font-size:.79rem;display:flex;align-items:flex-start;gap:7px;line-height:1.5}
+ul.li-list.prev-list li{color:#888888}
+ul.li-list.prev-list li::before{content:'·';color:#CCCCCC;font-size:1.1rem;line-height:1;margin-top:0;flex-shrink:0}
+ul.li-list.new-list li{color:#222222}
+ul.li-list.new-list li::before{content:'✓';color:#FF0050;font-weight:800;font-size:.7rem;margin-top:2px;flex-shrink:0}
+
+/* THREE BLOCK */
+.three-block{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin:10px 0}
+.block-item{background:#FAFAF8;border-radius:9px;padding:9px 11px}
+.block-item-title{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:#FF0050;margin-bottom:4px}
+.block-item-text{font-size:.72rem;color:#555;line-height:1.5}
+
+/* TIKTOK-CONSULTANT HIGHLIGHT IN PACKAGES */
+.tc-highlight{background:#FFF5F7;border:1.5px solid rgba(255,0,80,.22);border-radius:10px;padding:10px 13px;margin-top:12px;display:flex;align-items:flex-start;gap:9px}
+.tc-dot{width:8px;height:8px;border-radius:50%;background:#FF0050;flex-shrink:0;margin-top:3px}
+.tc-text{font-size:.77rem;color:#880030;line-height:1.5}
+.tc-text strong{color:#CC0040;font-weight:700}
+
+/* HDIVIDER */
+.hdivider{height:1px;background:#F0EFE9;margin:12px 0}
+
+.cta{display:block;background:#0A0A0A;color:#fff;border:none;border-radius:10px;padding:11px 16px;font-family:'Manrope',sans-serif;font-size:.8rem;font-weight:700;text-decoration:none;text-align:center;margin-top:16px;transition:background .15s;cursor:pointer}
+.cta:hover{background:#333}
+.cta.red{background:linear-gradient(135deg,#FF0050,#CC003A);box-shadow:0 4px 14px rgba(255,0,80,.28)}
+.cta.red:hover{background:linear-gradient(135deg,#FF1A60,#E0003A)}
+
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.merchant-wrap{position:relative}
+.m-badge{position:absolute;top:0;left:50%;transform:translateX(-50%);font-size:.58rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:3px 12px;border-radius:0 0 8px 8px;color:#fff;white-space:nowrap;z-index:2}
+.merchant-card{padding-top:28px !important}
+
+.enterprise-row{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.enterprise-row .card-left{flex:1;min-width:160px}
+.enterprise-row .price-col{align-items:flex-start}
+
+.services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:7px}
+.svc-item{background:#FAFAF8;border:1.5px solid #E8E5DE;border-radius:10px;padding:10px 13px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.svc-item span:first-child{font-size:.78rem;color:#0A0A0A;font-weight:500;flex:1;line-height:1.4}
+.svc-price{font-size:.76rem;font-weight:700;color:#FF0050;white-space:nowrap;flex-shrink:0}
+
+.disclaimer-bottom{background:#F9F5FF;border:1.5px solid rgba(168,85,247,.18);border-radius:12px;padding:15px 17px;font-size:.78rem;color:#444;line-height:1.7;margin:22px 0}
+.disclaimer-bottom strong{color:#0A0A0A}
+
+/* TC CARD (bottom) */
+.tc-card{background:#FFFFFF;border:2px solid rgba(255,0,80,.3);border-radius:16px;padding:20px 18px;display:flex;flex-direction:column}
+
+.footer-cta{background:#0A0A0A;padding:48px 20px;text-align:center;position:relative;overflow:hidden;margin-top:36px}
+.footer-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 100%,rgba(255,0,80,.14),transparent 65%);pointer-events:none}
+.footer-cta h2{font-family:'Unbounded',sans-serif;font-size:clamp(1.15rem,3vw,1.75rem);font-weight:900;color:#fff;letter-spacing:-.04em;margin-bottom:10px;position:relative;z-index:1}
+.footer-cta p{font-size:.84rem;color:rgba(255,255,255,.45);margin-bottom:22px;position:relative;z-index:1}
+.footer-cta a{display:inline-block;background:linear-gradient(135deg,#FF0050,#CC003A);color:#fff;border-radius:12px;padding:13px 34px;font-family:'Manrope',sans-serif;font-size:.86rem;font-weight:700;text-decoration:none;box-shadow:0 4px 18px rgba(255,0,80,.35);position:relative;z-index:1;transition:all .2s}
+.footer-cta a:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(255,0,80,.45)}
+footer{background:#0A0A0A;border-top:1px solid rgba(255,255,255,.08);padding:13px 20px;text-align:center;font-size:.7rem;color:rgba(255,255,255,.25);line-height:1.7}
+footer a{color:rgba(255,255,255,.38);text-decoration:none}
+
+@media(max-width:680px){
+  .grid-3{grid-template-columns:1fr}
+  .three-block{grid-template-columns:1fr}
+  .enterprise-row{flex-direction:column;align-items:flex-start;gap:10px}
+  .enterprise-row .cta{width:100%}
+}
+@media(max-width:520px){
+  .hero h1{font-size:1.35rem}
+  .card{padding:15px 13px}
+  .card-top{gap:10px}
+  .price-num{font-size:1.15rem}
+  .dur-badge{font-size:.61rem}
+  .merchant-card{padding:26px 13px 15px !important}
+  .footer-cta a{padding:12px 22px;font-size:.8rem}
+}
+@media(max-width:360px){
+  .price-num{font-size:1rem}
+  .card{padding:13px 11px}
+}
+</style>
+</head>
+<body>
+
+<div class="b2b-bar">B2B · Консалтинг у сфері TikTok-діяльності · Формат співпраці бізнес до бізнесу</div>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">VEO FORCE · @vasil_veo · TikTok-консалтинг</div>
+    <h1>Формати <span>співпраці</span></h1>
+    <p class="hero-lead">Не про кнопки. Про розуміння того, куди рухається платформа — і як підготувати бізнес до змін раніше за конкурентів.</p>
+    <div class="hero-pills">
+      <div class="hero-pill"><strong>Довгострокова робота</strong>Аналіз сигналів на 3, 6, 12&nbsp;місяців вперед</div>
+      <div class="hero-pill"><strong>Прогнозована стратегія</strong>Не реакція на зміни, а підготовка до них</div>
+      <div class="hero-pill"><strong>Причини, не наслідки</strong>Виявляємо проблеми до їх виникнення</div>
+      <div class="hero-pill"><strong>Досвід зрілих ринків</strong>США, Великобританія, Європа, Азія</div>
+    </div>
+  </div>
+</div>
+
+<div class="disclaimer-top">
+  <div class="disclaimer-top-inner">
+    <strong>Важлива інформація.</strong> Всі рекомендації мають консультативний характер та застосовуються на розсуд клієнта. VEO FORCE не несе відповідальності за зміни в алгоритмах TikTok, технічні збої платформи, зміни правил або регуляторного середовища після надання консультації.
+  </div>
+</div>
+
+<div style="padding-bottom:56px">
+<div class="wrap">
+
+  <!-- ── КОНСУЛЬТАЦІЇ ── -->
+  <div class="section-label">Консультації · Разові формати</div>
+  <div class="grid-3" style="gap:12px">
+
+    <!-- ЕКСПРЕС -->
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-name">Експрес</div>
+          <div class="card-tagline">Стисла відповідь на конкретне запитання</div>
+        </div>
+        <div class="price-col">
+          <div class="price-num">7&thinsp;000</div>
+          <div class="price-uah">грн</div>
+          <div class="dur-badge">30&nbsp;хв</div>
+        </div>
+      </div>
+      <div class="list-block">
+        <div class="lb-title lb-new">Підходить якщо</div>
+        <ul class="li-list new-list">
+          <li>Потрібен другий погляд на конкретну ситуацію</li>
+          <li>Треба перевірити власну гіпотезу</li>
+          <li>Треба уточнити ризики рішення</li>
+          <li>Потрібно зрозуміти напрямок руху</li>
+        </ul>
+      </div>
+      <div class="list-block">
+        <div class="lb-title lb-new">Формат відповіді</div>
+        <ul class="li-list new-list">
+          <li>Запитання — змістовна стисла відповідь: так або ні</li>
+          <li>Пояснення до 1–2 речень без глибинного занурення</li>
+          <li>Без розробки стратегії — лише оцінка поточної ситуації</li>
+        </ul>
+      </div>
+      <div style="font-size:.72rem;color:#999;margin-top:10px;line-height:1.5">Підходить для тих, хто вже має базове розуміння TikTok</div>
+      <a href="https://t.me/veoforce_support" class="cta" target="_blank" rel="noopener">Записатись</a>
+    </div>
+
+    <!-- СТАРТОВА -->
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-name">Стартова</div>
+          <div class="card-tagline">Початковий аудит та визначення напрямку</div>
+        </div>
+        <div class="price-col">
+          <div class="price-num">12&thinsp;000</div>
+          <div class="price-uah">грн</div>
+          <div class="dur-badge">1&nbsp;год</div>
+        </div>
+      </div>
+      <div class="list-block">
+        <div class="lb-title lb-new">Аналіз під час сесії</div>
+        <ul class="li-list new-list">
+          <li>Аналіз ніші та моделі продажів</li>
+          <li>Аналіз поточного контенту</li>
+          <li>Аналіз ролі TikTok у бізнесі</li>
+          <li>Аналіз ризиків</li>
+          <li>Аналіз сильних та слабких сторін автора</li>
+        </ul>
+      </div>
+      <div class="list-block">
+        <div class="lb-title lb-new">Рекомендації</div>
+        <ul class="li-list new-list">
+          <li>Визначення головних помилок</li>
+          <li>Оцінка перспективності ніші</li>
+          <li>Готовність до майбутніх змін TikTok</li>
+          <li>Рекомендації щодо ролей акаунтів</li>
+          <li>Рекомендації щодо контентного напрямку</li>
+        </ul>
+      </div>
+      <div class="list-block">
+        <div class="lb-title lb-new">Через 7&nbsp;днів</div>
+        <ul class="li-list new-list">
+          <li>Короткий моніторинг виконання рекомендацій</li>
+          <li>Виявлення нових помилок</li>
+          <li>Вказання сильних сторін</li>
+          <li>Рекомендації щодо коригування напрямку</li>
+        </ul>
+      </div>
+      <a href="https://t.me/veoforce_support" class="cta" target="_blank" rel="noopener">Записатись</a>
+    </div>
+
+    <!-- СТРАТЕГІЧНА СЕСІЯ -->
+    <div class="card">
+      <div class="card-top">
+        <div>
+          <div class="card-name">Стратегічна сесія</div>
+          <div class="card-tagline">Глибокий системний розбір платформи</div>
+        </div>
+        <div class="price-col">
+          <div class="price-num">30&thinsp;000</div>
+          <div class="price-uah">грн</div>
+          <div class="dur-badge">4&nbsp;год</div>
+        </div>
+      </div>
+      <div class="list-block">
+        <div class="lb-title lb-new">Розбір під час сесії</div>
+        <ul class="li-list new-list">
+          <li>Алгоритми TikTok та їх вплив на бізнес</li>
+          <li>Бізнес-модель TikTok та монетизація</li>
+          <li>Ризики майбутніх змін платформи</li>
+          <li>Аналіз команди та її ролей</li>
+          <li>Аналіз ніші та конкурентного середовища</li>
+          <li>Перспективи TikTok Shop</li>
+          <li>Перспективи монетизації</li>
+          <li>Сильні та слабкі сторони автора</li>
+          <li>Визначення ролей акаунтів</li>
+          <li>Який тип контенту буде ефективним саме у вашому випадку</li>
+          <li>Які формати краще не використовувати</li>
+          <li>Які рішення можуть зашкодити в майбутньому</li>
+          <li>Які сигнали зараз варто відслідковувати</li>
+        </ul>
+      </div>
+      <div class="list-block">
+        <div class="lb-title lb-new">Додатково</div>
+        <ul class="li-list new-list">
+          <li>Матеріали для самостійного вивчення</li>
+        </ul>
+      </div>
+      <div class="tc-highlight">
+        <div class="tc-dot"></div>
+        <div class="tc-text"><strong>TikTok-консультант — 1&nbsp;місяць (4&nbsp;тижні)</strong> включено в пакет</div>
+      </div>
+      <a href="https://t.me/veoforce_support" class="cta" target="_blank" rel="noopener">Записатись</a>
+    </div>
+
+  </div>
+
+  <!-- ── СТРАТЕГІЧНИЙ ПАКЕТ ── -->
+  <div class="section-label">Пакет · Місячний супровід</div>
+  <div class="card">
+    <div class="card-top">
+      <div>
+        <div class="card-name">Стратегічний пакет</div>
+        <div class="card-tagline">Системне занурення. Три великих блоки роботи за один місяць.</div>
+      </div>
+      <div class="price-col">
+        <div class="price-num">58&thinsp;000</div>
+        <div class="price-uah">грн</div>
+        <div class="dur-badge">1&nbsp;місяць</div>
+      </div>
+    </div>
+    <div class="three-block">
+      <div class="block-item">
+        <div class="block-item-title">Алгоритмічний</div>
+        <div class="block-item-text">Бізнес-модель TikTok · правила спільноти · комерційний контент · ризики · майбутні зміни · підготовка до TikTok Shop</div>
+      </div>
+      <div class="block-item">
+        <div class="block-item-title">Творчий</div>
+        <div class="block-item-text">Позиціонування · ролі акаунтів · архітектура контенту · формати відео · особистий бренд · бренд компанії</div>
+      </div>
+      <div class="block-item">
+        <div class="block-item-title">Технічний</div>
+        <div class="block-item-text">CRM · каталоги · мінісайти · платіжні шлюзи · автоматизація · Telegram-інструменти</div>
+      </div>
+    </div>
+    <div class="list-block">
+      <div class="lb-title lb-new">Додатково включено</div>
+      <ul class="li-list new-list">
+        <li>Створення Link-in-Bio сторінки</li>
+        <li>Допомога з запуском каталогу товарів</li>
+        <li>Базове пакування бізнесу під TikTok</li>
+      </ul>
+    </div>
+    <div class="tc-highlight">
+      <div class="tc-dot"></div>
+      <div class="tc-text"><strong>TikTok-консультант — 1&nbsp;місяць (4&nbsp;тижні)</strong> включено в пакет</div>
+    </div>
+    <a href="https://t.me/veoforce_support" class="cta" target="_blank" rel="noopener">Написати</a>
+  </div>
+
+  <!-- ── MERCHANT ── -->
+  <div class="section-label">Merchant · Пакети для команд</div>
+  <div class="grid-3" style="gap:12px">
+
+    <!-- MERCHANT S -->
+    <div class="merchant-wrap">
+      <div class="m-badge" style="background:#FF0050">ДО 5&nbsp;ОСІБ</div>
+      <div class="card merchant-card">
+        <div class="card-top">
+          <div>
+            <div class="card-name">Merchant S</div>
+            <div class="card-tagline" style="color:#888;font-size:.69rem">≈&thinsp;50&thinsp;000&nbsp;грн/міс</div>
+          </div>
+          <div class="price-col">
+            <div class="price-num">100&thinsp;000</div>
+            <div class="price-uah">грн</div>
+            <div class="dur-badge">2&nbsp;місяці</div>
+          </div>
+        </div>
+
+        <div class="list-block">
+          <div class="lb-title lb-prev">З попередніх пакетів</div>
+          <ul class="li-list prev-list">
+            <li>Алгоритми, бізнес-модель TikTok, ризики та майбутні зміни</li>
+            <li>Позиціонування, ролі акаунтів, архітектура контенту</li>
+            <li>CRM, каталоги, мінісайти, платіжні шлюзи, автоматизація</li>
+            <li>Link-in-Bio, запуск каталогу, базове пакування бізнесу</li>
+          </ul>
+        </div>
+        <div class="list-block">
+          <div class="lb-title lb-new">Нове в Merchant S</div>
+          <ul class="li-list new-list">
+            <li>Побудова контент-системи для команди</li>
+            <li>Навчання команди створенню контенту</li>
+            <li>Розподіл ролей акаунтів між членами команди</li>
+            <li>Створення контент-плану</li>
+            <li>Аудит контенту та аналіз ефективності</li>
+            <li>Моніторинг ризиків та прогнозування змін платформи</li>
+            <li>Підготовка до TikTok Shop</li>
+            <li>Регулярні консультації протягом 2&nbsp;місяців</li>
+            <li>Інтеграція Нової Пошти</li>
+          </ul>
+        </div>
+        <div class="tc-highlight">
+          <div class="tc-dot"></div>
+          <div class="tc-text"><strong>TikTok-консультант — 2&nbsp;місяці (8&nbsp;тижнів)</strong> включено в пакет</div>
+        </div>
+        <a href="https://t.me/veoforce_support" class="cta" target="_blank" rel="noopener">Написати</a>
+      </div>
+    </div>
+
+    <!-- MERCHANT M -->
+    <div class="merchant-wrap">
+      <div class="m-badge" style="background:#0A0A0A">ПОПУЛЯРНИЙ</div>
+      <div class="card merchant-card" style="border-color:#FF0050">
+        <div class="card-top">
+          <div>
+            <div class="card-name">Merchant M</div>
+            <div class="card-tagline" style="color:#888;font-size:.69rem">≈&thinsp;57&thinsp;000&nbsp;грн/міс</div>
+          </div>
+          <div class="price-col">
+            <div class="price-num">170&thinsp;000</div>
+            <div class="price-uah">грн</div>
+            <div class="dur-badge">3&nbsp;місяці</div>
+          </div>
+        </div>
+
+        <div class="list-block">
+          <div class="lb-title lb-prev">З попередніх пакетів</div>
+          <ul class="li-list prev-list">
+            <li>Алгоритми, бізнес-модель TikTok, ризики та майбутні зміни</li>
+            <li>Позиціонування, ролі акаунтів, архітектура контенту</li>
+            <li>CRM, каталоги, мінісайти, платіжні шлюзи, автоматизація</li>
+            <li>Link-in-Bio, запуск каталогу, базове пакування бізнесу</li>
+            <li>Побудова контент-системи, навчання команди, контент-план</li>
+            <li>Аудит контенту, моніторинг ризиків, підготовка до TikTok Shop</li>
+            <li>Інтеграція Нової Пошти, регулярні консультації</li>
+            <li>Платіжні системи і ПРРО</li>
+          </ul>
+        </div>
+        <div class="list-block">
+          <div class="lb-title lb-new">Нове в Merchant M</div>
+          <ul class="li-list new-list">
+            <li>Побудова медіасистеми бізнесу</li>
+            <li>Запуск мережі авторів контенту</li>
+            <li>Побудова структури акаунтів</li>
+            <li>Особистий бренд власника</li>
+            <li>Бренд компанії</li>
+            <li>Розробка сценарних моделей для контенту</li>
+            <li>Підготовка до Affiliate-моделі</li>
+            <li>Підготовка до роботи з блогерами</li>
+            <li>Створення системи залучення клієнтів</li>
+            <li>Контроль виконання завдань командою</li>
+            <li>Аудит роботи команди та виявлення слабких місць</li>
+            <li>Коригування стратегії в процесі роботи</li>
+          </ul>
+        </div>
+        <div class="tc-highlight">
+          <div class="tc-dot"></div>
+          <div class="tc-text"><strong>TikTok-консультант — 3&nbsp;місяці (12&nbsp;тижнів)</strong> включено в пакет</div>
+        </div>
+        <a href="https://t.me/veoforce_support" class="cta red" target="_blank" rel="noopener">Написати</a>
+      </div>
+    </div>
+
+    <!-- MERCHANT L -->
+    <div class="merchant-wrap">
+      <div class="m-badge" style="background:#C8A84B">ЕКОСИСТЕМА</div>
+      <div class="card merchant-card">
+        <div class="card-top">
+          <div>
+            <div class="card-name">Merchant L</div>
+            <div class="card-tagline" style="color:#888;font-size:.69rem">≈&thinsp;43&thinsp;000&nbsp;грн/міс</div>
+          </div>
+          <div class="price-col">
+            <div class="price-num">260&thinsp;000</div>
+            <div class="price-uah">грн</div>
+            <div class="dur-badge">6&nbsp;місяців</div>
+          </div>
+        </div>
+
+        <div class="list-block">
+          <div class="lb-title lb-prev">З попередніх пакетів</div>
+          <ul class="li-list prev-list">
+            <li>Алгоритми, бізнес-модель TikTok, ризики та майбутні зміни</li>
+            <li>Позиціонування, ролі акаунтів, архітектура контенту</li>
+            <li>CRM, каталоги, мінісайти, платіжні шлюзи, автоматизація</li>
+            <li>Link-in-Bio, запуск каталогу, базове пакування бізнесу</li>
+            <li>Побудова контент-системи, навчання команди, контент-план</li>
+            <li>Аудит контенту, моніторинг ризиків, підготовка до TikTok Shop</li>
+            <li>Медіасистема, мережа авторів, особистий бренд, бренд компанії</li>
+            <li>Affiliate-модель, робота з блогерами, система залучення клієнтів</li>
+            <li>Контроль команди, аудит роботи, коригування стратегії</li>
+          </ul>
+        </div>
+        <div class="list-block">
+          <div class="lb-title lb-new">Нове в Merchant L</div>
+          <ul class="li-list new-list">
+            <li>Довгострокова стратегія розвитку TikTok-присутності</li>
+            <li>Побудова внутрішньої команди контент-виробництва</li>
+            <li>Масштабування контенту</li>
+            <li>Розробка структури каталогів для масштабування</li>
+            <li>Підготовка до міжнародних продажів</li>
+            <li>Відслідковування змін ринку та раннє виявлення нових можливостей</li>
+            <li>Адаптація бізнесу до майбутніх змін платформи</li>
+            <li>Впровадження систем автоматизації для масштабування</li>
+            <li>Регулярний стратегічний супровід</li>
+          </ul>
+        </div>
+        <div class="tc-highlight">
+          <div class="tc-dot"></div>
+          <div class="tc-text"><strong>TikTok-консультант — 6&nbsp;місяців (24&nbsp;тижні)</strong> включено в пакет</div>
+        </div>
+        <a href="https://t.me/veoforce_support" class="cta" target="_blank" rel="noopener">Написати</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── ENTERPRISE ── -->
+  <div class="section-label">Enterprise · Індивідуальні умови</div>
+  <div class="card" style="margin-bottom:10px">
+    <div class="enterprise-row">
+      <div class="card-left">
+        <div class="card-name">Індивідуальний пакет</div>
+        <div class="card-tagline" style="margin-top:5px">Для великих компаній, мереж магазинів, виробників, маркетингових агентств та команд із великою кількістю співробітників. Умови — після аудиту.</div>
+      </div>
+      <div class="price-col">
+        <div class="price-num" style="font-size:1.1rem">від&nbsp;320&thinsp;000</div>
+        <div class="price-uah">грн · умови індивідуально</div>
+        <div class="dur-badge">від&nbsp;6&nbsp;місяців</div>
+      </div>
+      <a href="https://t.me/veoforce_support" class="cta" style="white-space:nowrap;padding:11px 18px;margin-top:0;flex-shrink:0" target="_blank" rel="noopener">Обговорити</a>
+    </div>
+  </div>
+
+  <!-- ── ОКРЕМІ ПОСЛУГИ ── -->
+  <div class="section-label">Окремі послуги</div>
+  <div class="services-grid">
+    <div class="svc-item"><span>Link-in-Bio сторінка</span><span class="svc-price">від&nbsp;7&thinsp;000</span></div>
+    <div class="svc-item"><span>Каталог товарів</span><span class="svc-price">від&nbsp;10&thinsp;000</span></div>
+    <div class="svc-item"><span>Інтернет-магазин</span><span class="svc-price">від&nbsp;15&thinsp;000</span></div>
+    <div class="svc-item"><span>Аудит TikTok-акаунта</span><span class="svc-price">від&nbsp;8&thinsp;000</span></div>
+    <div class="svc-item"><span>Аудит команди та контент-системи</span><span class="svc-price">від&nbsp;15&thinsp;000</span></div>
+    <div class="svc-item"><span>Розробка ролей акаунтів</span><span class="svc-price">від&nbsp;12&thinsp;000</span></div>
+    <div class="svc-item"><span>Підготовка до верифікації</span><span class="svc-price">від&nbsp;15&thinsp;000</span></div>
+  </div>
+
+  <!-- ── TIKTOK-CONSULTANT ── -->
+  <div class="section-label">TikTok-консультант · Оперативна підтримка</div>
+  <div class="tc-card">
+    <div class="card-top">
+      <div>
+        <div class="card-name" style="color:#CC0040">TikTok-консультант</div>
+        <div class="card-tagline">Підтримка у форматі особистого TikTok-аналітика протягом тижня</div>
+      </div>
+      <div class="price-col">
+        <div class="price-num">5&thinsp;000</div>
+        <div class="price-uah">грн</div>
+        <div class="dur-badge" style="background:rgba(255,0,80,.08);border-color:rgba(255,0,80,.2);color:#CC0040">1&nbsp;тиждень</div>
+      </div>
+    </div>
+    <p style="font-size:.8rem;color:#444;line-height:1.65;margin-bottom:12px">Ініціатива виходить від бізнесу. Клієнт звертається з питаннями, ситуаціями або матеріалами протягом тижня — відповідь надається без попереднього запису, в міру звільнення часу, якнайшвидше.</p>
+    <div class="list-block">
+      <div class="lb-title lb-new">Що входить</div>
+      <ul class="li-list new-list">
+        <li>Підтримка у Telegram протягом 7&nbsp;днів</li>
+        <li>Відповіді у форматі тексту або голосових повідомлень</li>
+        <li>Аналіз скріншотів, відео, аналітики, повідомлень платформи</li>
+        <li>Коментарі до поточних рішень та контентних ідей</li>
+        <li>Відповіді на питання без планування та попереднього запису — в міру звільнення</li>
+        <li>Рекомендації щодо поточних ситуацій без глибинної стратегічної роботи</li>
+      </ul>
+    </div>
+    <div class="hdivider"></div>
+    <p style="font-size:.74rem;color:#888;line-height:1.55"><strong style="color:#0A0A0A">Примітка.</strong> Цей формат включено в усі пакети, де зазначено підтримку N&nbsp;місяців — це N&nbsp;×&nbsp;4&nbsp;тижні у форматі TikTok-консультанта. Також доступний окремо на будь-який тиждень.</p>
+    <a href="https://t.me/veoforce_support" class="cta" style="background:linear-gradient(135deg,#FF0050,#CC003A);box-shadow:0 4px 14px rgba(255,0,80,.25)" target="_blank" rel="noopener">Написати @veoforce_support</a>
+  </div>
+
+  <!-- ── DISCLAIMER ── -->
+  <div class="disclaimer-bottom">
+    <strong>Важливо.</strong> Я не продаю «секрети алгоритмів» і не гарантую вірусність відео. Я допомагаю бізнесу побачити сигнали, які більшість помічає занадто пізно — і підготуватися до змін TikTok раніше за конкурентів. Усі рекомендації мають консультативний характер. VEO FORCE не несе відповідальності за зміни алгоритмів платформи, технічні збої та зміни правил TikTok.
+  </div>
+
+</div>
+</div>
+
+<div class="footer-cta">
+  <h2>Готові обговорити?</h2>
+  <p>Напишіть у Telegram — підберемо формат, який підходить саме вам</p>
+  <a href="https://t.me/veoforce_support" target="_blank" rel="noopener">&#9654;&nbsp;Написати @veoforce_support</a>
+</div>
+<footer>
+  VEO FORCE &nbsp;·&nbsp;
+  <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener">@vasil_veo</a>
+  &nbsp;·&nbsp;
+  <a href="https://t.me/veoforce_support" target="_blank" rel="noopener">Telegram @veoforce_support</a>
+  &nbsp;·&nbsp; B2B · Матеріал є інформаційним і не є публічною офертою
+</footer>
+</body>
+</html>
