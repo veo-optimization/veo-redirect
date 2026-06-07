@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>BEROO TikTok Prompt Generator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F9F9F7;--card:#FFFFFF;--tx:#0D0D0D;--sub:#555;--light:#888;
+  --brd:#E4E2DC;--brd2:#EEECE7;
+  --acc:#FF0050;--acc2:#00C2FF;--acc3:#A855F7;
+  --dark:#0D0D0D;
+  --shadow:0 2px 16px rgba(0,0,0,.07);
+  --r:14px;
+  --head:'Syne',sans-serif;
+  --body:'Inter',sans-serif;
+}
+[data-theme="dark"]{
+  --bg:#0D0D0D;--card:#161616;--tx:#F5F5F3;--sub:#A0A09A;--light:#666;
+  --brd:#2A2A28;--brd2:#1E1E1C;
+  --shadow:0 2px 20px rgba(0,0,0,.4);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:15px;scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:var(--body);background:var(--bg);color:var(--tx);line-height:1.6;-webkit-font-smoothing:antialiased;transition:background .25s,color .25s;min-height:100vh}
+
+/* ── HEADER ── */
+.header{
+  position:sticky;top:0;z-index:100;
+  background:var(--card);border-bottom:1px solid var(--brd);
+  padding:0 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  height:58px;
+}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-mark{
+  width:34px;height:34px;border-radius:9px;
+  background:linear-gradient(135deg,#FF0050,#A855F7);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--head);font-size:.78rem;font-weight:800;color:#fff;
+  letter-spacing:-.02em;flex-shrink:0;
+}
+.logo-name{font-family:var(--head);font-size:.88rem;font-weight:700;color:var(--tx);letter-spacing:-.02em}
+.logo-name span{color:#FF0050}
+.header-right{display:flex;align-items:center;gap:10px}
+.badge{background:rgba(168,85,247,.1);color:#A855F7;border:1px solid rgba(168,85,247,.2);border-radius:20px;padding:3px 10px;font-size:.68rem;font-weight:600;letter-spacing:.04em}
+
+/* ── THEME TOGGLE ── */
+.theme-btn{
+  width:36px;height:36px;border-radius:50%;border:1.5px solid var(--brd);
+  background:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;transition:all .2s;flex-shrink:0;
+}
+.theme-btn:hover{background:var(--brd);transform:scale(1.05)}
+
+/* ── MODE SELECTOR ── */
+.mode-bar{background:var(--card);border-bottom:1px solid var(--brd);padding:12px 20px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.mode-label{font-size:.72rem;font-weight:600;color:var(--light);text-transform:uppercase;letter-spacing:.08em;margin-right:4px}
+.mode-btn{
+  padding:6px 16px;border-radius:20px;border:1.5px solid var(--brd);
+  background:var(--card);font-family:var(--body);font-size:.78rem;font-weight:600;
+  color:var(--sub);cursor:pointer;transition:all .15s;
+}
+.mode-btn.active{background:var(--dark);color:#fff;border-color:var(--dark)}
+[data-theme="dark"] .mode-btn.active{background:#fff;color:#0D0D0D;border-color:#fff}
+.mode-btn:hover:not(.active){border-color:var(--acc);color:var(--acc)}
+
+/* ── MAIN ── */
+.main{max-width:860px;margin:0 auto;padding:28px 16px 80px}
+
+/* ── STEP BLOCKS ── */
+.step{
+  background:var(--card);border:1.5px solid var(--brd);border-radius:var(--r);
+  margin-bottom:16px;overflow:hidden;
+  box-shadow:var(--shadow);
+  transition:border-color .2s;
+}
+.step:focus-within{border-color:rgba(255,0,80,.3)}
+.step-head{
+  display:flex;align-items:center;gap:12px;padding:16px 18px;
+  border-bottom:1px solid var(--brd2);
+}
+.step-num{
+  width:30px;height:30px;border-radius:50%;
+  background:var(--dark);color:#fff;
+  font-family:var(--head);font-size:.72rem;font-weight:800;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+[data-theme="dark"] .step-num{background:#fff;color:#0D0D0D}
+.step-title{font-family:var(--head);font-size:.9rem;font-weight:700;letter-spacing:-.02em;color:var(--tx)}
+.step-body{padding:18px}
+
+/* ── FORM FIELDS ── */
+.field{margin-bottom:14px}
+.field:last-child{margin-bottom:0}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+@media(max-width:560px){.field-row{grid-template-columns:1fr}}
+label{display:block;font-size:.74rem;font-weight:600;color:var(--sub);margin-bottom:5px;letter-spacing:.03em;text-transform:uppercase}
+.hint{font-size:.68rem;color:var(--light);margin-top:3px;font-style:italic}
+input[type="text"],input[type="number"],textarea,select{
+  width:100%;background:var(--bg);border:1.5px solid var(--brd);border-radius:9px;
+  padding:10px 13px;font-family:var(--body);font-size:16px;color:var(--tx);
+  transition:border-color .15s,box-shadow .15s;outline:none;resize:none;
+  appearance:none;-webkit-appearance:none;
+  touch-action:manipulation;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--acc);box-shadow:0 0 0 3px rgba(255,0,80,.08)}
+textarea{min-height:70px}
+
+/* ── RADIO / SELECT GRID ── */
+.opt-grid{display:flex;flex-wrap:wrap;gap:7px}
+.opt-pill{
+  padding:7px 14px;border-radius:20px;border:1.5px solid var(--brd);
+  background:var(--card);font-size:.78rem;font-weight:500;color:var(--sub);
+  cursor:pointer;transition:all .15s;user-select:none;
+}
+.opt-pill:hover{border-color:var(--acc);color:var(--acc)}
+.opt-pill.selected{background:var(--dark);color:#fff;border-color:var(--dark)}
+[data-theme="dark"] .opt-pill.selected{background:#fff;color:#0D0D0D;border-color:#fff}
+
+/* ── CHECKBOX GRID ── */
+.chk-grid{display:flex;flex-wrap:wrap;gap:7px}
+.chk-item{
+  display:flex;align-items:center;gap:7px;
+  padding:7px 13px;border-radius:20px;border:1.5px solid var(--brd);
+  background:var(--card);cursor:pointer;transition:all .15s;user-select:none;
+}
+.chk-item.checked{background:linear-gradient(135deg,rgba(255,0,80,.1),rgba(168,85,247,.1));border-color:rgba(255,0,80,.4);color:var(--acc)}
+.chk-item input{display:none}
+.chk-item-label{font-size:.78rem;font-weight:500;color:var(--sub)}
+.chk-item.checked .chk-item-label{color:var(--tx);font-weight:600}
+.chk-dot{width:7px;height:7px;border-radius:50%;background:var(--brd);transition:background .15s;flex-shrink:0}
+.chk-item.checked .chk-dot{background:var(--acc)}
+
+/* ── TOGGLE ROW ── */
+.toggle-grid{display:flex;flex-direction:column;gap:8px}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg);border:1.5px solid var(--brd);border-radius:9px;cursor:pointer;transition:border-color .15s}
+.toggle-row:hover{border-color:var(--acc)}
+.toggle-row.on{border-color:rgba(0,194,255,.4);background:rgba(0,194,255,.04)}
+.toggle-name{font-size:.84rem;font-weight:500;color:var(--tx)}
+.toggle-switch{width:40px;height:22px;border-radius:11px;background:var(--brd);position:relative;transition:background .2s;flex-shrink:0}
+.toggle-row.on .toggle-switch{background:var(--acc2)}
+.toggle-knob{position:absolute;top:3px;left:3px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.toggle-row.on .toggle-knob{transform:translateX(18px)}
+
+/* ── HOOK TIME SELECTOR ── */
+.hook-time{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.ht-btn{
+  padding:8px 16px;border-radius:9px;border:1.5px solid var(--brd);
+  background:var(--card);font-size:.8rem;font-weight:600;color:var(--sub);
+  cursor:pointer;transition:all .15s;
+}
+.ht-btn.active{background:#FF0050;color:#fff;border-color:#FF0050}
+
+/* ── GENERATE BUTTON ── */
+.gen-wrap{text-align:center;padding:20px 0 8px}
+.btn-gen{
+  background:linear-gradient(135deg,#FF0050,#A855F7);
+  color:#fff;border:none;border-radius:12px;
+  padding:16px 40px;
+  font-family:var(--head);font-size:.9rem;font-weight:700;letter-spacing:-.01em;
+  cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 20px rgba(255,0,80,.3);
+}
+.btn-gen:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(255,0,80,.4)}
+.btn-gen:active{transform:translateY(0)}
+
+/* ── RESULT BLOCK ── */
+.result-block{
+  background:var(--card);border:2px solid rgba(168,85,247,.25);border-radius:var(--r);
+  margin-top:20px;overflow:hidden;display:none;
+  box-shadow:0 4px 24px rgba(168,85,247,.1);
+}
+.result-block.show{display:block;animation:slideUp .4s ease both}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+.result-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 18px;border-bottom:1px solid var(--brd2);gap:10px;flex-wrap:wrap;
+}
+.result-title{font-family:var(--head);font-size:.88rem;font-weight:700;color:var(--tx)}
+.result-actions{display:flex;gap:7px;flex-wrap:wrap}
+.act-btn{
+  padding:7px 13px;border-radius:8px;border:1.5px solid var(--brd);
+  background:var(--card);font-family:var(--body);font-size:.76rem;font-weight:600;color:var(--sub);
+  cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;
+}
+.act-btn:hover{border-color:var(--acc);color:var(--acc)}
+.act-btn.copy-ok{background:#D4EDDA;border-color:#1A7A3C;color:#1A7A3C}
+.result-body{padding:18px}
+.result-counter{font-size:.72rem;color:var(--light);margin-top:10px;text-align:right}
+#promptOutput{
+  width:100%;min-height:320px;background:var(--bg);border:1.5px solid var(--brd);
+  border-radius:9px;padding:14px;font-family:var(--body);font-size:16px;color:var(--tx);
+  line-height:1.7;resize:vertical;outline:none;
+}
+#promptOutput:focus{border-color:rgba(168,85,247,.4)}
+
+/* ── DIVIDER ── */
+.field-divider{height:1px;background:var(--brd2);margin:14px 0}
+
+/* ── REQUIRED MARK ── */
+.req{color:#FF0050;font-size:.8rem}
+
+/* ── SECTION HINT BOX ── */
+.info-box{background:rgba(0,194,255,.07);border:1px solid rgba(0,194,255,.2);border-radius:9px;padding:10px 13px;font-size:.78rem;color:var(--sub);line-height:1.55;margin-bottom:14px}
+.info-box strong{color:var(--tx)}
+
+/* ── SCROLLBAR ── */
+/* ── PERSISTENT RED SCROLLBAR on prompt output ── */
+#promptOutput{
+  scrollbar-width:auto;
+  scrollbar-color:#FF0050 #F0E8EA;
+  overflow-y:scroll;
+}
+#promptOutput::-webkit-scrollbar{
+  width:16px;
+  display:block !important;
+  opacity:1 !important;
+}
+#promptOutput::-webkit-scrollbar-track{
+  background:#F0E8EA;
+  border-radius:8px;
+  display:block !important;
+}
+#promptOutput::-webkit-scrollbar-thumb{
+  background:#FF0050;
+  border-radius:8px;
+  border:2px solid #F0E8EA;
+  min-height:40px;
+}
+#promptOutput::-webkit-scrollbar-thumb:hover{background:#CC003A}
+[data-theme="dark"] #promptOutput::-webkit-scrollbar-track{background:#2A1A1E}
+[data-theme="dark"] #promptOutput::-webkit-scrollbar-thumb{background:#FF0050;border-color:#2A1A1E}
+/* General page scrollbar — subtle */
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(0,0,0,.18);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.32)}
+
+/* ── RESULT BOTTOM ACTIONS ── */
+.result-actions-bottom{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+.act-btn-copy{
+  width:100%;padding:15px 24px;
+  background:linear-gradient(135deg,#FF0050,#CC003A);
+  color:#fff;border:none;border-radius:12px;
+  font-family:var(--head);font-size:.95rem;font-weight:700;letter-spacing:-.01em;
+  cursor:pointer;transition:all .2s;
+  box-shadow:0 4px 18px rgba(255,0,80,.35);
+  display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.act-btn-copy:hover{background:linear-gradient(135deg,#FF1A60,#E0003A);transform:translateY(-1px);box-shadow:0 6px 24px rgba(255,0,80,.45)}
+.act-btn-copy:active{transform:translateY(0)}
+.act-btn-copy.copy-ok{background:linear-gradient(135deg,#1A7A3C,#145A2C);box-shadow:0 4px 18px rgba(26,122,60,.35)}
+.act-btn-clear{width:100%;justify-content:center}
+
+/* ── EMPTY PROMPT STATE ── */
+.prompt-empty{text-align:center;padding:36px 20px;color:var(--light);font-size:.84rem}
+.prompt-empty div{font-size:2rem;margin-bottom:8px}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="logo">
+    <div class="logo-mark">BR</div>
+    <div class="logo-name"><span>BEROO</span> Prompt Generator</div>
+  </div>
+  <div class="header-right">
+    <span class="badge">TikTok AI</span>
+    <button class="theme-btn" id="themeBtn" title="Змінити тему" onclick="toggleTheme()">🌙</button>
+  </div>
+</header>
+
+<div class="mode-bar">
+  <span class="mode-label">Режим:</span>
+  <button class="mode-btn active" data-mode="basic" onclick="setMode('basic')">Базовий</button>
+  <button class="mode-btn" data-mode="advanced" onclick="setMode('advanced')">Просунутий</button>
+  <button class="mode-btn" data-mode="pro" onclick="setMode('pro')">Професійний ⚡</button>
+</div>
+
+<div class="main">
+
+  <!-- BLOCK 1: Shop data -->
+  <div class="step">
+    <div class="step-head">
+      <div class="step-num">1</div>
+      <div class="step-title">Дані магазину та товару</div>
+    </div>
+    <div class="step-body">
+      <div class="field-row">
+        <div class="field">
+          <label>Назва магазину <span class="req">*</span></label>
+          <input type="text" id="shopName" placeholder="Наприклад: VEO Shop UA">
+        </div>
+        <div class="field">
+          <label>Код магазину BEROO <span class="req">*</span></label>
+          <input type="number" id="shopCode" placeholder="10115">
+          <div class="hint">Магазин: <span id="shopCodePreview">10115</span>.beroo.online</div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Основний код товару</label>
+          <input type="text" id="productCode" placeholder="Код, артикул або SKU">
+        </div>
+        <div class="field">
+          <label>Категорія товару <span class="req">*</span></label>
+          <input type="text" id="productCategory" placeholder="Одяг, косметика, електроніка...">
+        </div>
+      </div>
+      <div class="field">
+        <label>Опис товару <span class="req">*</span></label>
+        <textarea id="productDesc" placeholder="Коротко опишіть товар: що це, як використовується, особливості..."></textarea>
+      </div>
+      <div class="field">
+        <label>Основні переваги товару</label>
+        <textarea id="productBenefits" placeholder="Перерахуйте ключові переваги через кому або з нового рядка..."></textarea>
+      </div>
+      <div class="field">
+        <label>Основні заперечення клієнтів</label>
+        <textarea id="productObjections" placeholder="Що зазвичай зупиняє покупців? Ціна, якість, доставка..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 2: Audience -->
+  <div class="step">
+    <div class="step-head">
+      <div class="step-num">2</div>
+      <div class="step-title">Цільова аудиторія</div>
+    </div>
+    <div class="step-body">
+      <div class="field">
+        <label>Вікова група</label>
+        <div class="opt-grid" id="ageGroup">
+          <div class="opt-pill" data-val="Молодь 16-25" onclick="selectOne(this,'ageGroup')">Молодь 16–25</div>
+          <div class="opt-pill" data-val="Молоді дорослі 25-35" onclick="selectOne(this,'ageGroup')">Молоді дорослі 25–35</div>
+          <div class="opt-pill" data-val="Дорослі 35-50" onclick="selectOne(this,'ageGroup')">Дорослі 35–50</div>
+          <div class="opt-pill" data-val="50+" onclick="selectOne(this,'ageGroup')">50+</div>
+          <div class="opt-pill selected" data-val="Змішана аудиторія" onclick="selectOne(this,'ageGroup')">Змішана</div>
+        </div>
+      </div>
+      <div class="field-divider"></div>
+      <div class="field">
+        <label>Рівень цифрової грамотності</label>
+        <div class="info-box"><strong>Важливо:</strong> цей параметр впливає на заклики до дії у сценаріях</div>
+        <div class="opt-grid" id="digitalLevel">
+          <div class="opt-pill" data-val="Добре розуміється на технологіях" onclick="selectOne(this,'digitalLevel')">Добре в технологіях</div>
+          <div class="opt-pill" data-val="Користується маркетплейсами" onclick="selectOne(this,'digitalLevel')">Маркетплейси</div>
+          <div class="opt-pill selected" data-val="Іноді купує онлайн" onclick="selectOne(this,'digitalLevel')">Іноді онлайн</div>
+          <div class="opt-pill" data-val="Замовляє переважно по телефону" onclick="selectOne(this,'digitalLevel')">По телефону</div>
+          <div class="opt-pill" data-val="Замовляє переважно через Viber" onclick="selectOne(this,'digitalLevel')">Через Viber</div>
+          <div class="opt-pill" data-val="Слабо розуміється на цифрових сервісах" onclick="selectOne(this,'digitalLevel')">Слабо цифровий</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 3: Content style -->
+  <div class="step">
+    <div class="step-head">
+      <div class="step-num">3</div>
+      <div class="step-title">Стиль контенту</div>
+    </div>
+    <div class="step-body">
+      <div class="chk-grid" id="contentStyle">
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Обличчя продавця</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Без обличчя</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Закадровий голос</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Тільки товар</span></div>
+        <div class="chk-item checked" onclick="toggleChk(this)"><input type="checkbox" checked><div class="chk-dot"></div><span class="chk-item-label">Розмовний стиль</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Експертний</span></div>
+        <div class="chk-item checked" onclick="toggleChk(this)"><input type="checkbox" checked><div class="chk-dot"></div><span class="chk-item-label">Дружній</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Огляд</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Особистий досвід</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Тестування</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Порівняння</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Розвінчання міфів</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Історії клієнтів</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 4: Shooting format -->
+  <div class="step">
+    <div class="step-head">
+      <div class="step-num">4</div>
+      <div class="step-title">Формат зйомки</div>
+    </div>
+    <div class="step-body">
+      <div class="info-box">При виборі <strong>коротких уривків</strong> ШІ розробить сценарій з акцентом на швидкий монтаж та динамічні переходи</div>
+      <div class="opt-grid" id="shootFormat">
+        <div class="opt-pill" data-val="Короткі уривки 1-3 секунди (швидкий монтаж)" onclick="selectOne(this,'shootFormat')">🎬 Короткі уривки 1–3 с</div>
+        <div class="opt-pill selected" data-val="Один безперервний кадр" onclick="selectOne(this,'shootFormat')">📹 Один безперервний кадр</div>
+        <div class="opt-pill" data-val="Комбінований формат" onclick="selectOne(this,'shootFormat')">🔀 Комбінований</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 5: Strategy -->
+  <div class="step">
+    <div class="step-head">
+      <div class="step-num">5</div>
+      <div class="step-title">Стратегія контенту</div>
+    </div>
+    <div class="step-body">
+      <div class="toggle-grid" id="strategy">
+        <div class="toggle-row on" onclick="toggleRow(this)" data-val="Створення довіри та авторитету продавця">
+          <span class="toggle-name">Створення довіри</span>
+          <div class="toggle-switch"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="toggle-row on" onclick="toggleRow(this)" data-val="Продаж товару та конверсія">
+          <span class="toggle-name">Продаж</span>
+          <div class="toggle-switch"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="toggle-row" onclick="toggleRow(this)" data-val="Залучення нової аудиторії">
+          <span class="toggle-name">Залучення аудиторії</span>
+          <div class="toggle-switch"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="toggle-row" onclick="toggleRow(this)" data-val="Підготовка акаунту до TikTok Shop">
+          <span class="toggle-name">Підготовка до TikTok Shop</span>
+          <div class="toggle-switch"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="toggle-row" onclick="toggleRow(this)" data-val="Розвиток особистого бренду продавця">
+          <span class="toggle-name">Особистий бренд продавця</span>
+          <div class="toggle-switch"><div class="toggle-knob"></div></div>
+        </div>
+        <div class="toggle-row" onclick="toggleRow(this)" data-val="Розвиток магазину та масштабування">
+          <span class="toggle-name">Розвиток магазину</span>
+          <div class="toggle-switch"><div class="toggle-knob"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 6: Hooks -->
+  <div class="step">
+    <div class="step-head">
+      <div class="step-num">6</div>
+      <div class="step-title">Гачки (хуки)</div>
+    </div>
+    <div class="step-body">
+      <div class="field">
+        <label>Час захоплення уваги</label>
+        <div class="hook-time" id="hookTime">
+          <button class="ht-btn" data-val="0.5 секунди" onclick="setHookTime(this)">0.5 с</button>
+          <button class="ht-btn active" data-val="1 секунда" onclick="setHookTime(this)">1 с</button>
+          <button class="ht-btn" data-val="1.5 секунди" onclick="setHookTime(this)">1.5 с</button>
+          <button class="ht-btn" data-val="максимум 2 секунди" onclick="setHookTime(this)">2 с макс</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Типи гачків</label>
+        <div class="chk-grid" id="hookTypes">
+          <div class="chk-item checked" onclick="toggleChk(this)"><input type="checkbox" checked><div class="chk-dot"></div><span class="chk-item-label">Емоційні</span></div>
+          <div class="chk-item checked" onclick="toggleChk(this)"><input type="checkbox" checked><div class="chk-dot"></div><span class="chk-item-label">Проблемні</span></div>
+          <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Провокаційні</span></div>
+          <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Через цікавість</span></div>
+          <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Через помилки</span></div>
+          <div class="chk-item checked" onclick="toggleChk(this)"><input type="checkbox" checked><div class="chk-dot"></div><span class="chk-item-label">Через результат</span></div>
+          <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Через порівняння</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 7: Content types -->
+  <div class="step">
+    <div class="step-head">
+      <div class="step-num">7</div>
+      <div class="step-title">Типи контенту</div>
+    </div>
+    <div class="step-body">
+      <div class="chk-grid" id="contentTypes">
+        <div class="chk-item checked" onclick="toggleChk(this)"><input type="checkbox" checked><div class="chk-dot"></div><span class="chk-item-label">Огляд</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Тест</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Порівняння</span></div>
+        <div class="chk-item checked" onclick="toggleChk(this)"><input type="checkbox" checked><div class="chk-dot"></div><span class="chk-item-label">Історія</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Кейс</span></div>
+        <div class="chk-item checked" onclick="toggleChk(this)"><input type="checkbox" checked><div class="chk-dot"></div><span class="chk-item-label">Відгук</span></div>
+        <div class="chk-item checked" onclick="toggleChk(this)"><input type="checkbox" checked><div class="chk-dot"></div><span class="chk-item-label">Проблема → рішення</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Поширена помилка</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">До-після</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Міфи</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Лайфхак</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Закулісся</span></div>
+        <div class="chk-item" onclick="toggleChk(this)"><input type="checkbox"><div class="chk-dot"></div><span class="chk-item-label">Процес виробництва</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BLOCK 8: Count -->
+  <div class="step">
+    <div class="step-head">
+      <div class="step-num">8</div>
+      <div class="step-title">Кількість сценаріїв</div>
+    </div>
+    <div class="step-body">
+      <div class="opt-grid" id="scenarioCount">
+        <div class="opt-pill" data-val="10" onclick="selectOne(this,'scenarioCount')">10 сценаріїв</div>
+        <div class="opt-pill selected" data-val="20" onclick="selectOne(this,'scenarioCount')">20 сценаріїв</div>
+        <div class="opt-pill" data-val="30" onclick="selectOne(this,'scenarioCount')">30 сценаріїв</div>
+        <div class="opt-pill" data-val="50" onclick="selectOne(this,'scenarioCount')">50 сценаріїв</div>
+        <div class="opt-pill" data-val="100" onclick="selectOne(this,'scenarioCount')">100 сценаріїв</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GENERATE -->
+  <div class="gen-wrap">
+    <button class="btn-gen" onclick="generatePrompt()">✦ Згенерувати професійний промпт</button>
+  </div>
+
+  <!-- RESULT -->
+  <div class="result-block" id="resultBlock">
+    <div class="result-head">
+      <div class="result-title">✦ Готовий промпт для ШІ</div>
+    </div>
+    <div class="result-body">
+      <textarea id="promptOutput" readonly></textarea>
+      <div class="result-counter" id="charCounter">0 символів</div>
+      <div class="result-actions-bottom">
+        <button class="act-btn-copy" id="copyBtn" onclick="copyPrompt()">📋 Скопіювати промпт</button>
+        <button class="act-btn act-btn-clear" onclick="clearPrompt()">🗑 Очистити</button>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+// ── Theme ──
+function toggleTheme(){
+  var t = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+}
+
+// ── Mode ──
+var currentMode = 'basic';
+function setMode(m){
+  currentMode = m;
+  document.querySelectorAll('.mode-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.mode === m); });
+}
+
+// ── Single select ──
+function selectOne(el, groupId){
+  document.querySelectorAll('#'+groupId+' .opt-pill').forEach(function(p){ p.classList.remove('selected'); });
+  el.classList.add('selected');
+}
+
+// ── Checkbox toggle ──
+function toggleChk(el){
+  el.classList.toggle('checked');
+  var inp = el.querySelector('input');
+  if(inp) inp.checked = el.classList.contains('checked');
+}
+
+// ── Toggle row ──
+function toggleRow(el){
+  el.classList.toggle('on');
+}
+
+// ── Hook time ──
+function setHookTime(el){
+  document.querySelectorAll('#hookTime .ht-btn').forEach(function(b){ b.classList.remove('active'); });
+  el.classList.add('active');
+}
+
+// ── Shop code preview ──
+document.getElementById('shopCode').addEventListener('input', function(){
+  document.getElementById('shopCodePreview').textContent = this.value || '10115';
+});
+
+// ── Collect values ──
+function getSelected(groupId){
+  var sel = document.querySelector('#'+groupId+' .opt-pill.selected');
+  return sel ? sel.dataset.val : '';
+}
+function getChecked(groupId){
+  var arr = [];
+  document.querySelectorAll('#'+groupId+' .chk-item.checked .chk-item-label').forEach(function(l){ arr.push(l.textContent.trim()); });
+  return arr;
+}
+function getToggledOn(groupId){
+  var arr = [];
+  document.querySelectorAll('#'+groupId+' .toggle-row.on').forEach(function(r){ arr.push(r.dataset.val); });
+  return arr;
+}
+function getHookTime(){
+  var btn = document.querySelector('#hookTime .ht-btn.active');
+  return btn ? btn.dataset.val : '1 секунда';
+}
+
+// ── Generate ──
+function generatePrompt(){
+  var shopName     = document.getElementById('shopName').value.trim() || 'Мій магазин';
+  var shopCode     = document.getElementById('shopCode').value.trim() || '10115';
+  var productCode  = document.getElementById('productCode').value.trim();
+  var category     = document.getElementById('productCategory').value.trim() || 'товар';
+  var productDesc  = document.getElementById('productDesc').value.trim();
+  var benefits     = document.getElementById('productBenefits').value.trim();
+  var objections   = document.getElementById('productObjections').value.trim();
+
+  var ageGroup     = getSelected('ageGroup');
+  var digitalLevel = getSelected('digitalLevel');
+  var shootFormat  = getSelected('shootFormat');
+  var scenarioCount= getSelected('scenarioCount') || '20';
+
+  var contentStyle = getChecked('contentStyle');
+  var hookTypes    = getChecked('hookTypes');
+  var contentTypes = getChecked('contentTypes');
+  var strategy     = getToggledOn('strategy');
+  var hookTime     = getHookTime();
+
+  if(!productDesc){ alert('Будь ласка, заповніть опис товару'); return; }
+
+  var prompt = '';
+
+  if(currentMode === 'basic'){
+    prompt = buildBasic(shopName, shopCode, productCode, category, productDesc, benefits, objections, ageGroup, digitalLevel, shootFormat, contentStyle, hookTypes, contentTypes, strategy, hookTime, scenarioCount);
+  } else if(currentMode === 'advanced'){
+    prompt = buildAdvanced(shopName, shopCode, productCode, category, productDesc, benefits, objections, ageGroup, digitalLevel, shootFormat, contentStyle, hookTypes, contentTypes, strategy, hookTime, scenarioCount);
+  } else {
+    prompt = buildPro(shopName, shopCode, productCode, category, productDesc, benefits, objections, ageGroup, digitalLevel, shootFormat, contentStyle, hookTypes, contentTypes, strategy, hookTime, scenarioCount);
+  }
+
+  document.getElementById('promptOutput').value = prompt;
+  document.getElementById('charCounter').textContent = prompt.length + ' символів';
+  var block = document.getElementById('resultBlock');
+  block.classList.add('show');
+  setTimeout(function(){ block.scrollIntoView({behavior:'smooth', block:'start'}); }, 100);
+}
+
+var MASTER_ROLE = `
+╔══════════════════════════════════════════════════╗
+║        СИСТЕМНА РОЛЬ — ЧИТАЙ УВАЖНО             ║
+╚══════════════════════════════════════════════════╝
+
+Ти — не просто сценарист TikTok.
+
+Ти одночасно:
+  • маркетолог прямого відгуку
+  • спеціаліст з поведінкової психології покупців
+  • експерт з алгоритмів TikTok і утримання уваги
+  • консультант із побудови довіри через відеоконтент
+  • фахівець з українського споживчого ринку
+  • стратег соціальної комерції (social commerce)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ВАЖЛИВИЙ КОНТЕКСТ: ЧОМУ ЦЕ СЕРЙОЗНО
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+У розвинених ринках — Китай, США, Великобританія, Корея —
+над TikTok-контентом для бізнесу працюють:
+  • штатні сценаристи
+  • оператори та монтажери
+  • спеціалісти з поведінкового аналізу
+  • стратеги e-commerce
+
+Це не «зняти на телефон і виставити». Це — повноцінна
+комерційна дисципліна з власними законами.
+
+Більшість відео, які зараз знімають українські продавці:
+  ✗ Танці під музику — не продають, псують позиціонування
+  ✗ Відео «під тренд» без зв'язку з товаром — втрата часу
+  ✗ Агресивні заклики «купуй зараз» — відлякують довіру
+  ✗ Постановочна акторська гра — викликає «іспанський сором»
+  ✗ Хаотичний монтаж без структури — аудиторія не розуміє
+  ✗ Відео «для охоплення» без мети — не конвертують у продажі
+
+Такий контент не просто не продає.
+Він активно руйнує репутацію бізнесу і довіру аудиторії.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ГОЛОВНА ЦІЛЬ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Не «продати товар».
+Не «написати рекламу».
+
+Ціль: створити ДОВІРУ між продавцем і аудиторією.
+
+Якщо після перегляду людина думає «мені щось продавали» — це провал.
+Якщо після перегляду людина думає «цікаво, це корисно» — це успіх.
+
+Порядок побудови:
+  1. Спочатку — користь
+  2. Потім — довіра
+  3. Потім — зацікавлення
+  4. Лише після цього — м'яка пропозиція
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ПРИНЦИПИ КОНТЕНТУ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Кожен сценарій повинен:
+  ✓ навчати або пояснювати щось корисне
+  ✓ показувати реальне використання товару
+  ✓ демонструвати компетентність продавця
+  ✓ виглядати як особистий досвід, а не реклама
+  ✓ бути готовим до зйомки без додаткових репетицій
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+АБСОЛЮТНІ ЗАБОРОНИ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  ✗ Танці, хореографія, рухи під музику
+  ✗ Штучна акторська гра і перегравання
+  ✗ Крінжовий або нерелевантний гумор
+  ✗ Агресивний тиск: «купуй зараз», «залишилось 2»
+  ✗ Штучний дефіцит і маніпулятивні тригери
+  ✗ Кліше: «найкращий товар», «неймовірна якість»
+  ✗ Вступи довші за 2 секунди без гачка
+  ✗ Постановочні сцени що виглядають знятими
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+МЕХАНІКА УВАГИ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Гачок: перші 0.5–1.5 секунди.
+Максимум 2 секунди — лише при справді унікальній ситуації.
+Застарілі 3-секундні вступи більше не працюють.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ПСИХОЛОГІЯ УКРАЇНСЬКОГО ПОКУПЦЯ
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  • Більшість не читає довгі тексти і не переходить за складними посиланнями
+  • Багато людей не знають що таке «шапка профілю» або «біо»
+  • Велика частина приймає рішення емоційно, обґрунтовує раціонально
+  • Аудиторія невеликих міст і сіл має інші очікування ніж Київ
+  • Покупці через Viber і телефон — окремий сегмент з особливою логікою
+
+М'які заклики до дії (використовуй саме такі формулювання):
+  ✓ "Якщо цікаво — код товару [КОД]."
+  ✓ "Знайти можна по коду [КОД]."
+  ✓ "Каталог є в профілі."
+  ✓ "Напиши 'хочу' в коментарях — я відповім."
+  ✗ Ніколи: "Перейди за посиланням у шапці профілю"
+
+`;
+
+function getBottom(count, cat, age){
+  return [
+    '',
+    '══════════════════════════════════════════════════',
+    'ОБОВ\'ЯЗКОВИЙ ДОДАТКОВИЙ БЛОК — ПІСЛЯ ВСІХ СЦЕНАРІЇВ',
+    '══════════════════════════════════════════════════',
+    '',
+    'Після ' + count + ' сценаріїв ОБОВ\'ЯЗКОВО створи ці чотири блоки:',
+    '',
+    '🪝 30 ДОДАТКОВИХ ХУКІВ',
+    '   Нові варіанти першої секунди відео по ніші «' + cat + '".',
+    '   Різні типи: емоційний, проблемний, цікавість, результат.',
+    '   Формат: пронумерований список.',
+    '',
+    '❓ 30 ТИПОВИХ ЗАПИТАНЬ КЛІЄНТІВ',
+    '   Реальні питання аудиторії «' + (age||'змішана') + '" — у коментарях та DM.',
+    '   Для кожного — коротка природна відповідь продавця (1-2 речення).',
+    '',
+    '⚠ 30 ЗАПЕРЕЧЕНЬ КЛІЄНТІВ',
+    '   Реальні сумніви перед покупкою.',
+    '   Для кожного — природна відповідь без тиску і маніпуляцій.',
+    '',
+    '💡 30 ІДЕЙ ДЛЯ НАСТУПНИХ РОЛИКІВ',
+    '   Конкретні теми з коротким описом формату (1 рядок).',
+    '   Різноманітні: навчальний, емоційний, порівняльний, особистий.',
+    '',
+    'Усі матеріали — готові до зйомки без додаткових пояснень.',
+  ].join('\n');
+}
+
+function buildBasic(sN,sC,pC,cat,desc,ben,obj,age,dig,fmt,styles,hooks,types,strat,hTime,count){
+  var cta = {
+    'Добре розуміється на технологіях':'Посилання в описі → «Перейди і замов»',
+    'Користується маркетплейсами':'Каталог BEROO → «Обери в каталозі — посилання в описі»',
+    'Іноді купує онлайн':'«Просто натисни посилання в описі — там все зрозуміло»',
+    'Замовляє переважно по телефону':'«Напиши мені — разом оформимо замовлення»',
+    'Замовляє переважно через Viber':'«Пиши у Viber або коментар — відповім»',
+    'Слабо розуміється на цифрових сервісах':'«Напиши «хочу» в коментарях — я сам зв\'яжусь»'
+  }[dig] || ('Посилання: https://' + sC + '.beroo.online');
+
+  return [
+    MASTER_ROLE,
+    '══════════════════════════════════════════════════',
+    'ДАНІ ДЛЯ СЦЕНАРІЇВ',
+    '══════════════════════════════════════════════════',
+    '',
+    'Магазин: ' + sN,
+    'Каталог: https://' + sC + '.beroo.online',
+    (pC ? 'Код товару: ' + pC : ''),
+    'Категорія: ' + cat,
+    'Товар: ' + desc,
+    (ben ? 'Переваги: ' + ben : ''),
+    (obj ? 'Заперечення клієнтів: ' + obj : ''),
+    '',
+    'Аудиторія: ' + (age||'змішана') + ' · ' + (dig||'середній рівень'),
+    'Адаптований CTA: ' + cta,
+    'Формат зйомки: ' + (fmt||'один кадр'),
+    'Стиль: ' + (styles.length ? styles.join(', ') : 'природний, розмовний'),
+    '',
+    '══════════════════════════════════════════════════',
+    'ЗАВДАННЯ: ' + count + ' СЦЕНАРІЇВ',
+    '══════════════════════════════════════════════════',
+    '',
+    'Типи контенту: ' + (types.length ? types.join(', ') : 'огляд, проблема-рішення'),
+    'Гачки (перші ' + hTime + '): ' + (hooks.length ? hooks.join(', ') : 'емоційні, проблемні'),
+    (strat.length ? 'Стратегія: ' + strat.join(' · ') : ''),
+    '',
+    'Структура кожного сценарію:',
+    '  1. Гачок (перші ' + hTime + ')',
+    '  2. Покадровий план',
+    '  3. Текст продавця',
+    '  4. М\'який CTA: ' + (pC ? '"Код товару ' + pC + '"' : '"Каталог є в профілі"'),
+    '',
+    'Почни одразу зі СЦЕНАРІЙ 1.',
+    getBottom(count, cat, age),
+  ].filter(Boolean).join('\n');
+}
+
+function buildAdvanced(sN,sC,pC,cat,desc,ben,obj,age,dig,fmt,styles,hooks,types,strat,hTime,count){
+  var ctaMap = {
+    'Добре розуміється на технологіях':'Посилання в описі, кнопка «Перейти в каталог»',
+    'Користується маркетплейсами':'Каталог BEROO — посилання в описі, обери і замов',
+    'Іноді купує онлайн':'«Натисни посилання в описі — там просто обрати і замовити»',
+    'Замовляє переважно по телефону':'«Напиши мені — я допоможу оформити»',
+    'Замовляє переважно через Viber':'«Пиши у Viber або просто напиши «хочу» в коментарях»',
+    'Слабо розуміється на цифрових сервісах':'«Напиши «хочу» в коментарях — я сам зв\'яжусь і все розповім»'
+  };
+  var cta = ctaMap[dig] || ('https://' + sC + '.beroo.online');
+
+  return [
+    MASTER_ROLE,
+    '══════════════════════════════════════════════════',
+    'BEROO TIKTOK СЦЕНАРІЇ — ПРОСУНУТИЙ РЕЖИМ',
+    '══════════════════════════════════════════════════',
+    '',
+    '━━━ МАГАЗИН ТА ТОВАР ━━━',
+    'Магазин: ' + sN,
+    'Каталог BEROO: https://' + sC + '.beroo.online',
+    (pC ? 'Код товару: ' + pC : ''),
+    'Категорія: ' + cat,
+    '',
+    'Товар:',
+    desc,
+    '',
+    (ben ? 'Ключові переваги:\n' + ben.split('\n').map(function(l){return '  • ' + l.trim();}).join('\n') : ''),
+    (obj ? '\nЗаперечення які треба закрити в контенті:\n' + obj.split('\n').map(function(l){return '  ⚠ ' + l.trim();}).join('\n') : ''),
+    '',
+    '━━━ АУДИТОРІЯ ━━━',
+    'Вік: ' + (age||'змішана') + '  |  Грамотність: ' + (dig||'середній рівень'),
+    '',
+    'CTA для цієї аудиторії: ' + cta,
+    '',
+    '⚠ ВАЖЛИВО: рівень цифрової грамотності визначає складність заклику до дії.',
+    'Чим нижчий рівень — тим простіші інструкції. Ніяких «шапок профілю»,',
+    'якщо аудиторія не розуміє що це. Простота = конверсія.',
+    '',
+    '━━━ ВИРОБНИЦТВО ━━━',
+    'Формат: ' + (fmt||'один безперервний кадр'),
+    (fmt && fmt.indexOf('Короткі') > -1 ? '→ Акцент на швидкому монтажі: кожен уривок 1-3 с, динамічні переходи' : ''),
+    'Стиль: ' + (styles.length ? styles.join(', ') : 'природний, розмовний'),
+    '',
+    '━━━ КОНТЕНТ-СТРАТЕГІЯ ━━━',
+    strat.length ? strat.map(function(s,i){return (i+1)+'. '+s;}).join('\n') : '1. Довіра  2. Продаж',
+    '',
+    '━━━ МЕХАНІКА ГАЧКІВ ━━━',
+    'Час захоплення уваги: ПЕРШІ ' + hTime.toUpperCase(),
+    'Типи: ' + (hooks.length ? hooks.join(', ') : 'емоційні, проблемні'),
+    '',
+    '━━━ ТИПИ КОНТЕНТУ ━━━',
+    types.length ? types.map(function(t){return '  → ' + t;}).join('\n') : '  → Огляд  → Проблема-рішення',
+    '',
+    '══════════════════════════════════════════════════',
+    'СТРУКТУРА КОЖНОГО СЦЕНАРІЮ (' + count + ' штук)',
+    '══════════════════════════════════════════════════',
+    '',
+    '─── СЦЕНАРІЙ №N: [Назва / Тип] ───────────',
+    '',
+    '🪝 ГАЧОк — перші ' + hTime + ':',
+    '   [Конкретна фраза або дія що миттєво зупиняє скрол]',
+    '',
+    '🎬 ПОКАДРОВИЙ ПЛАН:',
+    '   Кадр 1 (0:00–0:0X): [опис]',
+    '   Кадр 2 (0:0X–0:XX): [опис]',
+    '   ...',
+    '',
+    '🎙 ТЕКСТ ПРОДАВЦЯ (дослівно):',
+    '   «[Що говорить продавець — природно, без штампів]»',
+    '',
+    '📲 М\'ЯКИЙ ЗАКЛИК:',
+    '   ' + (pC ? '"Якщо цікаво — код товару ' + pC + '. Каталог у профілі."' : '"Каталог є в профілі — посилання в описі."'),
+    '──────────────────────────────────────────',
+    '',
+    'Почни одразу зі СЦЕНАРІЙ 1. Без вступних слів.',
+    getBottom(count, cat, age),
+  ].filter(function(l){return l!==null&&l!==undefined;}).join('\n');
+}
+
+function buildPro(sN,sC,pC,cat,desc,ben,obj,age,dig,fmt,styles,hooks,types,strat,hTime,count){
+  var ctaByDig = {
+    'Добре розуміється на технологіях':'Посилання в описі + QR. CTA: «Перейди в каталог за посиланням»',
+    'Користується маркетплейсами':'Каталог BEROO. CTA: «Обери в каталозі — посилання в описі»',
+    'Іноді купує онлайн':'Просте посилання + пояснення. «Натисни посилання — там просто обрати і замовити»',
+    'Замовляє переважно по телефону':'«Напиши мені або зателефонуй — все оформимо разом»',
+    'Замовляє переважно через Viber':'«Пиши у Viber або напиши "хочу" в коментарях»',
+    'Слабо розуміється на цифрових сервісах':'«Просто напиши "хочу" в коментарях — я сам зв\'яжусь і поясню»'
+  };
+  var cta = ctaByDig[dig] || ('Каталог: https://' + sC + '.beroo.online');
+
+  return [
+    MASTER_ROLE,
+    '╔══════════════════════════════════════════════════╗',
+    '║       BEROO TIKTOK СЦЕНАРІЇ — PRO MODE          ║',
+    '╚══════════════════════════════════════════════════╝',
+    '',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    'КОМЕРЦІЙНА БАЗА',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    '',
+    'Магазин: ' + sN,
+    'Каталог: https://' + sC + '.beroo.online',
+    (pC ? 'Код товару для CTA: ' + pC : ''),
+    'Ніша / категорія: ' + cat,
+    '',
+    'Товар:',
+    desc,
+    '',
+    (ben ? 'Переваги (використай у сценаріях):\n' + ben.split('\n').map(function(l){return '  ✓ '+l.trim();}).join('\n') : ''),
+    (obj ? '\nЗаперечення (закрий їх через контент, не через тиск):\n' + obj.split('\n').map(function(l){return '  ⚠ '+l.trim();}).join('\n') : ''),
+    '',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    'ПРОФІЛЬ АУДИТОРІЇ',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    '',
+    'Вікова група: ' + (age||'змішана'),
+    'Цифрова грамотність: ' + (dig||'середня'),
+    '',
+    'Стратегія CTA (адаптована під аудиторію):',
+    '  → ' + cta,
+    '',
+    '📌 ПРИНЦИП: що нижчий рівень цифрової грамотності —',
+    '   тим простіше формулювання CTA. Без слів «шапка профілю»,',
+    '   «посилання в біо», «свайп ап». Тільки прості дії.',
+    '',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    'ВИРОБНИЧІ ПАРАМЕТРИ',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    '',
+    'Формат зйомки: ' + (fmt||'один безперервний кадр'),
+    (fmt && fmt.indexOf('Короткі') > -1 ?
+      '\nМОНТАЖ:\n  • Кожен уривок 1–3 секунди\n  • Кожен кадр — одне повідомлення\n  • Динаміка підтримує ритм уваги' : ''),
+    '',
+    'Стиль подачі: ' + (styles.length ? styles.join(', ') : 'природний, розмовний'),
+    '',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    'КОНТЕНТ-СТРАТЕГІЯ',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    '',
+    strat.length ? strat.map(function(s,i){return '  '+(i+1)+'. '+s;}).join('\n') : '  1. Довіра\n  2. Продаж',
+    '',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    'МЕХАНІКА ГАЧКІВ',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    '',
+    'Час захоплення: ПЕРШІ ' + hTime.toUpperCase(),
+    'Активні типи: ' + (hooks.length ? hooks.join(', ') : 'емоційні, проблемні'),
+    '',
+    'Психологічна логіка:',
+    '  • Емоційні → лімбічна система, миттєвий відгук без аналізу',
+    '  • Проблемні → «це про мене» — максимальна ідентифікація',
+    '  • Через результат → бажання + соціальне доведення',
+    '  • Через цікавість → незакрита петля, неможливо не дивитись',
+    '  • Через помилки → страх втрати сильніший за бажання виграти',
+    '',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    'ТИПИ КОНТЕНТУ (' + count + ' сценаріїв)',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    '',
+    types.length ? types.map(function(t){return '  ▸ '+t;}).join('\n') : '  ▸ Огляд\n  ▸ Проблема-рішення\n  ▸ Відгук',
+    '',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    'ФОРМАТ КОЖНОГО СЦЕНАРІЮ',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    '',
+    '╔─ СЦЕНАРІЙ №N ─ ТИП: [тип] ─ МЕТА: [ціль] ──────',
+    '│',
+    '│ 🪝 ГАЧОк — ПЕРШІ ' + hTime.toUpperCase() + ':',
+    '│    Текст/дія: [конкретний гачок]',
+    '│    Тип: [емоційний / проблемний / результат / ...]',
+    '│',
+    '│ 🎬 ПОКАДРОВИЙ ПЛАН:',
+    '│    Кадр 1 [0:00–0:0X]: [що в кадрі, як знімати]',
+    '│    Кадр 2 [0:0X–0:XX]: [що в кадрі, як знімати]',
+    '│    ...',
+    '│',
+    '│ 🎙 ТЕКСТ ПРОДАВЦЯ (дослівно):',
+    '│    «[Природна мова, без штампів і кліше]»',
+    '│',
+    '│ 🎭 ЕМОЦІЇ ТА АТМОСФЕРА:',
+    '│    [Яка емоція у продавця, яка у глядача]',
+    '│',
+    '│ 📲 М\'ЯКИЙ ЗАКЛИК:',
+    '│    ' + (pC ? '"Якщо цікаво — код товару ' + pC + '. Каталог у профілі."' : '"Каталог є в профілі."'),
+    '│',
+    '│ 💡 ЧОМУ ЦЕ МАЄ СПРАЦЮВАТИ:',
+    '│    [1-2 речення про психологічний механізм сценарію]',
+    '╚──────────────────────────────────────────────────',
+    '',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    'TIKTOK SHOP — ОРІЄНТАЦІЯ НА МАЙБУТНЄ',
+    '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+    '',
+    'Контент готуємо до переходу на TikTok Shop:',
+    '  • Товар у кадрі → чіткий зв\'язок з потребою глядача',
+    '  • Каталог BEROO зараз — TikTok Shop у майбутньому',
+    '  • Формат Live Shopping: контент легко адаптується під ефіри',
+    '  • Кожне відео = актив, який працює незалежно від алгоритму',
+    '',
+    'Почни одразу зі СЦЕНАРІЙ 1. Без вступних слів.',
+    getBottom(count, cat, age),
+  ].filter(function(l){return l!==null&&l!==undefined;}).join('\n');
+}
+
+// ── Copy ──
+function copyPrompt(){
+  var ta = document.getElementById('promptOutput');
+  if(!ta.value) return;
+  var btn = document.getElementById('copyBtn');
+  navigator.clipboard.writeText(ta.value).then(function(){
+    btn.innerHTML = '✓ Скопійовано!';
+    btn.classList.add('copy-ok');
+    setTimeout(function(){
+      btn.innerHTML = '📋 Скопіювати промпт';
+      btn.classList.remove('copy-ok');
+    }, 2500);
+  }).catch(function(){
+    ta.select();
+    document.execCommand('copy');
+    btn.innerHTML = '✓ Скопійовано!';
+    btn.classList.add('copy-ok');
+    setTimeout(function(){
+      btn.innerHTML = '📋 Скопіювати промпт';
+      btn.classList.remove('copy-ok');
+    }, 2500);
+  });
+}
+
+// ── Download ──
+function downloadPrompt(){
+  var text = document.getElementById('promptOutput').value;
+  if(!text) return;
+  var blob = new Blob([text], {type:'text/plain;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'beroo-tiktok-prompt.txt';
+  a.click();
+}
+
+// ── Clear ──
+function clearPrompt(){
+  document.getElementById('promptOutput').value = '';
+  document.getElementById('charCounter').textContent = '0 символів';
+  document.getElementById('resultBlock').classList.remove('show');
+}
+</script>
+</body>
+</html>
