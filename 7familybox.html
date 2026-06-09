@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="color-scheme" content="light only">
+<title>7FamilyBox · Операційна система бренду · Внутрішнє операційне керівництво</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#FAFAF8;color:#0A0A0A;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.6;overflow-x:hidden;max-width:100vw;color-scheme:light only}
+
+/* ── TOKENS ── */
+:root{
+  --bg:#FAFAF8;
+  --card:#FFFFFF;
+  --tx:#0A0A0A;
+  --sub:#555;
+  --light:#888;
+  --brd:#E8E5DE;
+  --acc:#FF0050;        /* 7FB red */
+  --acc2:#1A1A2E;       /* deep navy */
+  --acc3:#F4C542;       /* gold accent */
+  --mono:'JetBrains Mono',monospace;
+  --head:'Unbounded',sans-serif;
+  --body:'Manrope',sans-serif;
+  --r:12px;
+  --sh:0 2px 16px rgba(0,0,0,.06);
+}
+
+/* ── TOP BAR ── */
+.topbar{background:var(--acc2);padding:0 20px;height:44px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:300}
+.tb-left{display:flex;align-items:center;gap:12px}
+.tb-logo{font-family:var(--head);font-size:.78rem;font-weight:900;color:#fff;letter-spacing:-.02em}
+.tb-logo span{color:var(--acc3)}
+.tb-tag{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:2px 8px;font-family:var(--mono);font-size:.6rem;color:rgba(255,255,255,.5);letter-spacing:.04em}
+.tb-status{display:flex;align-items:center;gap:6px;font-size:.68rem;color:rgba(255,255,255,.4)}
+.tb-dot{width:6px;height:6px;border-radius:50%;background:#4ADE80;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ── HERO ── */
+.hero{background:var(--acc2);padding:52px 20px 44px;position:relative;overflow:hidden}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:40px 40px;pointer-events:none}
+.hero-inner{max-width:1000px;margin:0 auto;position:relative;z-index:1}
+.hero-eyebrow{display:flex;align-items:center;gap:10px;margin-bottom:20px;flex-wrap:wrap}
+.hero-badge{background:rgba(244,197,66,.12);border:1px solid rgba(244,197,66,.25);border-radius:4px;padding:3px 10px;font-family:var(--mono);font-size:.62rem;color:var(--acc3);letter-spacing:.06em;text-transform:uppercase}
+.hero-version{font-family:var(--mono);font-size:.62rem;color:rgba(255,255,255,.25);letter-spacing:.04em}
+.hero h1{font-family:var(--head);font-size:clamp(1.6rem,5vw,3rem);font-weight:900;letter-spacing:-.05em;line-height:1.05;color:#fff;margin-bottom:16px}
+.hero h1 em{font-style:normal;color:var(--acc3)}
+.hero-sub{font-size:.9rem;color:rgba(255,255,255,.45);max-width:560px;line-height:1.7;margin-bottom:28px}
+.hero-stats{display:flex;gap:0;border:1px solid rgba(255,255,255,.08);border-radius:10px;overflow:hidden;max-width:500px}
+.hs{flex:1;padding:14px 12px;text-align:center;border-right:1px solid rgba(255,255,255,.06)}
+.hs:last-child{border-right:none}
+.hs-num{font-family:var(--head);font-size:1.4rem;font-weight:900;color:#fff;letter-spacing:-.04em;display:block;line-height:1}
+.hs-lbl{font-size:.6rem;color:rgba(255,255,255,.35);text-transform:uppercase;letter-spacing:.08em;margin-top:3px;display:block}
+
+/* ── MAIN LAYOUT ── */
+.main{max-width:1000px;margin:0 auto;padding:28px 16px 80px}
+
+/* ── BLOCK CARD ── */
+.block-card{background:var(--card);border:1.5px solid var(--brd);border-radius:16px;margin-bottom:16px;overflow:hidden;box-shadow:var(--sh)}
+
+.block-header{display:flex;align-items:center;justify-content:space-between;padding:20px 22px;cursor:pointer;user-select:none;transition:background .15s;gap:12px}
+.block-header:hover{background:#FAFAF8}
+.block-header.open{background:#0A0A0A}
+.bh-left{display:flex;align-items:center;gap:14px;flex:1;min-width:0}
+.bh-num{font-family:var(--mono);font-size:.68rem;font-weight:700;color:var(--acc);background:rgba(255,0,80,.08);border:1px solid rgba(255,0,80,.15);border-radius:4px;padding:3px 8px;flex-shrink:0;white-space:nowrap}
+.block-header.open .bh-num{background:rgba(255,0,80,.2);border-color:rgba(255,0,80,.35);color:#FF6688}
+.bh-title{font-family:var(--head);font-size:.9rem;font-weight:800;letter-spacing:-.02em;color:var(--tx)}
+.block-header.open .bh-title{color:#fff}
+.bh-tag{background:#F0EFE9;border:1px solid var(--brd);border-radius:4px;padding:2px 8px;font-family:var(--mono);font-size:.58rem;color:var(--light);letter-spacing:.04em;white-space:nowrap}
+.block-header.open .bh-tag{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12);color:rgba(255,255,255,.4)}
+.bh-chev{font-size:12px;color:var(--light);transition:transform .3s;flex-shrink:0}
+.block-header.open .bh-chev{transform:rotate(180deg);color:rgba(255,255,255,.5)}
+
+/* ── ACCORDION BODY ── */
+.block-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease}
+.block-body.open{grid-template-rows:1fr}
+.block-body-inner{overflow:hidden}
+
+/* ── SECTIONS INSIDE BLOCK ── */
+.sections-wrap{padding:0 22px 22px}
+
+/* ── SECTION ITEM ── */
+.sec-item{border:1px solid var(--brd);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.sec-item:last-child{margin-bottom:0}
+
+.sec-header{display:flex;align-items:center;justify-content:space-between;padding:13px 16px;cursor:pointer;background:var(--card);transition:background .15s;gap:10px}
+.sec-header:hover{background:#F5F4F0}
+.sec-header.open{background:#F5F4F0;border-bottom:1px solid var(--brd)}
+.sh-left{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.sh-num{font-family:var(--mono);font-size:.62rem;color:var(--light);flex-shrink:0;width:20px}
+.sh-title{font-size:.85rem;font-weight:700;color:var(--tx);line-height:1.3}
+.sh-chev{font-size:11px;color:var(--light);transition:transform .25s;flex-shrink:0}
+.sec-header.open .sh-chev{transform:rotate(180deg)}
+
+.sec-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .25s ease}
+.sec-body.open{grid-template-rows:1fr}
+.sec-body-inner{overflow:hidden;padding:0 16px}
+.sec-body.open .sec-body-inner{padding:14px 16px}
+
+/* ── CONTENT ELEMENTS ── */
+.content-block{margin-bottom:14px}
+.content-block:last-child{margin-bottom:0}
+
+.cb-title{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--light);margin-bottom:8px;display:flex;align-items:center;gap:8px}
+.cb-title::after{content:'';flex:1;height:1px;background:var(--brd)}
+
+ul.cb-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:5px}
+ul.cb-list li{font-size:.82rem;color:var(--sub);display:flex;align-items:flex-start;gap:8px;line-height:1.5}
+ul.cb-list li::before{content:'→';color:var(--acc);font-weight:700;flex-shrink:0;font-size:.72rem;margin-top:2px}
+
+/* ── CODE / MONO BLOCKS ── */
+.code-block{background:#0A0A0A;border-radius:9px;padding:14px 16px;margin:8px 0;font-family:var(--mono);font-size:.78rem;color:#E8E5DE;line-height:1.7;white-space:pre;overflow-x:auto}
+.code-block .c-label{color:rgba(244,197,66,.6);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:6px;border-bottom:1px solid rgba(255,255,255,.06);padding-bottom:6px}
+.code-block .c-key{color:var(--acc3)}
+.code-block .c-val{color:#A8E6CF}
+.code-block .c-com{color:rgba(255,255,255,.25)}
+
+/* ── INFO BOXES ── */
+.info-box{border-radius:9px;padding:12px 14px;margin:8px 0;font-size:.8rem;line-height:1.6}
+.info-box.warn{background:#FFF8E6;border:1px solid #E8D080;color:#7A5A00}
+.info-box.info{background:#EEF4FF;border:1px solid #C0D0F0;color:#2A4080}
+.info-box.danger{background:#FFF0F0;border:1px solid #F0C0C0;color:#800020}
+.info-box.success{background:#EFFFEF;border:1px solid #C0E8C0;color:#1A5A20}
+.info-box strong{font-weight:700}
+
+/* ── ROLE CARDS ── */
+.role-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:9px;margin:8px 0}
+.role-card{background:var(--bg);border:1.5px solid var(--brd);border-radius:9px;padding:12px 14px}
+.rc-role{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--acc);margin-bottom:4px}
+.rc-name{font-size:.84rem;font-weight:700;color:var(--tx);margin-bottom:4px}
+.rc-desc{font-size:.75rem;color:var(--sub);line-height:1.5}
+
+/* ── STAT ROW ── */
+.stat-row{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.stat-pill{background:var(--bg);border:1.5px solid var(--brd);border-radius:8px;padding:8px 13px;display:flex;flex-direction:column;gap:2px;flex-shrink:0}
+.sp-num{font-family:var(--head);font-size:1.1rem;font-weight:900;color:var(--tx);letter-spacing:-.03em;line-height:1;white-space:nowrap}
+.sp-lbl{font-size:.65rem;color:var(--light);text-transform:uppercase;letter-spacing:.06em}
+
+/* ── FLOW DIAGRAM ── */
+.flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;margin:10px 0;row-gap:8px}
+.flow-step{background:var(--bg);border:1.5px solid var(--brd);border-radius:8px;padding:8px 12px;font-size:.77rem;font-weight:600;color:var(--tx);white-space:nowrap}
+.flow-step.accent{background:rgba(255,0,80,.06);border-color:rgba(255,0,80,.25);color:var(--acc)}
+.flow-arrow{color:var(--light);font-size:.9rem;padding:0 6px;flex-shrink:0}
+
+/* ── TABLE ── */
+.data-table{width:100%;border-collapse:collapse;font-size:.79rem;margin:8px 0}
+.data-table th{background:#F5F4F0;padding:8px 12px;text-align:left;font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--light);border-bottom:1.5px solid var(--brd)}
+.data-table td{padding:9px 12px;border-bottom:1px solid #F0EFE9;color:var(--sub);vertical-align:top;line-height:1.45}
+.data-table tr:last-child td{border-bottom:none}
+.data-table td:first-child{font-weight:600;color:var(--tx)}
+.td-mono{font-family:var(--mono);font-size:.72rem;color:var(--acc)}
+
+/* ── TEMPLATE BLOCK ── */
+.template-box{background:#0A0A0A;border-radius:10px;padding:16px 18px;margin:8px 0}
+.tmpl-label{font-family:var(--mono);font-size:.6rem;color:rgba(244,197,66,.6);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.tmpl-line{font-family:var(--mono);font-size:.8rem;color:#E8E5DE;line-height:1.8;display:block}
+.tmpl-line .var{color:var(--acc3)}
+.tmpl-line .fix{color:rgba(255,255,255,.5)}
+
+/* ── SCORING TABLE ── */
+.score-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #F0EFE9;font-size:.8rem}
+.score-row:last-child{border-bottom:none}
+.score-label{flex:1;color:var(--sub)}
+.score-bar{flex:2;height:5px;background:var(--brd);border-radius:3px;overflow:hidden}
+.score-fill{height:100%;border-radius:3px}
+.score-val{width:36px;text-align:right;font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--tx)}
+
+/* ── RESPONSIVE ── */
+@media(max-width:700px){
+  #roleNavGrid{grid-template-columns:1fr 1fr !important}
+}
+@media(max-width:420px){
+  #roleNavGrid{grid-template-columns:1fr !important}
+}
+@media(max-width:640px){
+  .hero-stats{flex-wrap:wrap}
+  .hs{min-width:45%}
+  .bh-tag{display:none}
+  .role-grid{grid-template-columns:1fr 1fr}
+  .three-block{grid-template-columns:1fr}
+}
+@media(max-width:440px){
+  .hero h1{font-size:1.4rem}
+  .role-grid{grid-template-columns:1fr}
+  .stat-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="tb-left">
+    <div class="tb-logo"><span>7</span>FamilyBox</div>
+    <div class="tb-tag">ОПЕРАЦІЙНА СИСТЕМА v1.0</div>
+  </div>
+  <div class="tb-status"><div class="tb-dot"></div>Внутрішній · Конфіденційно</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-inner">
+    <div class="hero-eyebrow">
+      <span class="hero-badge">Внутрішнє операційне керівництво</span>
+      <span class="hero-version">ДОК-2026 · Конфіденційно</span>
+    </div>
+    <h1>7FamilyBox<br><em>Операційна система бренду</em></h1>
+    <p class="hero-sub">Внутрішнє операційне керівництво компанії. Мережа акаунтів, міні-сайти, контент-система — єдина архітектура керованого зростання.</p>
+    <div class="hero-stats">
+      <div class="hs"><span class="hs-num">11</span><span class="hs-lbl">акаунтів</span></div>
+      <div class="hs"><span class="hs-num">11</span><span class="hs-lbl">міні-сайтів</span></div>
+      <div class="hs"><span class="hs-num">2</span><span class="hs-lbl">команди</span></div>
+      <div class="hs"><span class="hs-num">1</span><span class="hs-lbl">BOSS</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ НАВІГАЦІЯ ДЛЯ КОЖНОГО ═══ -->
+<div style="background:#FFFFFF;border-bottom:1.5px solid #E8E5DE">
+<div style="max-width:1000px;margin:0 auto;padding:24px 16px 28px">
+
+  <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#888888;margin-bottom:14px;display:flex;align-items:center;gap:10px">
+    Для кого цей документ
+    <span style="flex:1;height:1px;background:#EBEBEB;display:block"></span>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px" id="roleNavGrid">
+
+    <!-- РОМАН -->
+    <div class="role-nav-card" data-id="rn-roman" style="background:#FFFFFF;border:1.5px solid #E8E5DE;border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color .15s" onclick="toggleRoleNav('rn-roman',this)">
+      <div style="background:#1A1A2E;padding:14px 16px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,197,66,.6);margin-bottom:4px">Власник</div>
+        <div style="font-family:'Unbounded',sans-serif;font-size:.84rem;font-weight:900;color:#ffffff;letter-spacing:-.02em">Роман</div>
+        <div style="font-size:.72rem;color:rgba(255,255,255,.4);margin-top:3px">Стратегія · Бачення</div>
+      </div>
+      <div style="padding:11px 14px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.72rem;color:#888888">Відкрити</span>
+        <span class="rn-chev" style="font-size:11px;color:#CCCCCC;transition:transform .25s">▼</span>
+      </div>
+      <div class="rn-body" id="rn-roman" style="display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease;border-top:1px solid #EBEBEB">
+        <div style="overflow:hidden">
+          <div style="padding:14px 16px 6px">
+            <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:8px">Ваша роль</div>
+            <p style="font-size:.8rem;color:#333333;line-height:1.65;margin-bottom:10px">Романе, ваше завдання — <strong>бачити далі за всіх</strong>. Ви не займаєтесь паролями й акаунтами. Ви будуєте медіакомпанію.</p>
+            <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#FF0050;margin-bottom:6px">Що ви зараз насправді створюєте</div>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:5px;margin-bottom:12px">
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#FF0050;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">→</span>Команду з навичками, яких немає в жодного конкурента в Україні</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#FF0050;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">→</span>Виробничу базу для власного медіапродукту</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#FF0050;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">→</span>Репутацію лідера українського TikTok-бізнесу через рух #БізнесТокери</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#FF0050;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">→</span>Вхідний квиток до ексклюзивного дистрибуторства брендів в Україні та Європі</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#FF0050;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">→</span>Власну продакшн-компанію — коли навички команди дозрівають у медіабізнес</li>
+            </ul>
+            <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:6px">Головне розуміння</div>
+            <div style="background:#FFF5F7;border:1px solid rgba(255,0,80,.2);border-radius:8px;padding:11px 13px;font-size:.8rem;color:#440015;line-height:1.6;margin-bottom:12px">
+              <strong>Медіакомпанія — це головне.</strong> Все інше — продажі, TikTok Shop, логістика — є похідним від того, наскільки сильним стане медіапродукт команди. Хто контролює увагу аудиторії — контролює ринок.
+            </div>
+            <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:6px">Горизонт розвитку</div>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:4px;margin-bottom:14px">
+              <li style="font-size:.78rem;color:#555;display:flex;gap:7px;align-items:flex-start"><span style="color:#F4C542;font-weight:700;flex-shrink:0">1.</span>Зараз: команда вчиться знімати, продавати через відео, будувати аудиторію</li>
+              <li style="font-size:.78rem;color:#555;display:flex;gap:7px;align-items:flex-start"><span style="color:#F4C542;font-weight:700;flex-shrink:0">2.</span>Незабаром: TikTok Shop — прямі продажі без посередників</li>
+              <li style="font-size:.78rem;color:#555;display:flex;gap:7px;align-items:flex-start"><span style="color:#F4C542;font-weight:700;flex-shrink:0">3.</span>Далі: ексклюзивний вихід брендів на ринок України через 7FamilyBox</li>
+              <li style="font-size:.78rem;color:#555;display:flex;gap:7px;align-items:flex-start"><span style="color:#F4C542;font-weight:700;flex-shrink:0">4.</span>Мета: власна продакшн-студія та медіакомпанія з готовою командою</li>
+            </ul>
+            <button onclick="copyRoleText('roman-text')" style="width:100%;background:#1A1A2E;color:#fff;border:none;border-radius:9px;padding:10px;font-family:'Manrope',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;margin-bottom:14px">📋 Скопіювати</button>
+            <div id="roman-text" style="display:none">7FamilyBox — це не просто TikTok-канали. Це медіакомпанія, яка будується зараз. Ми формуємо команду з унікальними навичками: знімати відео що продають, будувати аудиторію, розуміти алгоритми. Ця компетенція відкриє нам ексклюзивний доступ до дистрибуції брендів в Україні та Європі. Головне зараз — медіапродукт. Все інше — похідне.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ІРИНА -->
+    <div class="role-nav-card" data-id="rn-iryna" style="background:#FFFFFF;border:1.5px solid #E8E5DE;border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color .15s" onclick="toggleRoleNav('rn-iryna',this)">
+      <div style="background:#0A2A1A;padding:14px 16px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(100,220,150,.6);margin-bottom:4px">Керівництво</div>
+        <div style="font-family:'Unbounded',sans-serif;font-size:.84rem;font-weight:900;color:#ffffff;letter-spacing:-.02em">Ірина</div>
+        <div style="font-size:.72rem;color:rgba(255,255,255,.4);margin-top:3px">Операції · Безпека</div>
+      </div>
+      <div style="padding:11px 14px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.72rem;color:#888888">Відкрити</span>
+        <span class="rn-chev" style="font-size:11px;color:#CCCCCC;transition:transform .25s">▼</span>
+      </div>
+      <div class="rn-body" id="rn-iryna" style="display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease;border-top:1px solid #EBEBEB">
+        <div style="overflow:hidden">
+          <div style="padding:14px 16px 6px">
+            <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:8px">Ваша роль</div>
+            <p style="font-size:.8rem;color:#333;line-height:1.65;margin-bottom:10px">Ірино, ви — <strong>операційний хребет проєкту</strong>. Роман бачить стратегію, ви забезпечуєте, що вона реалізується технічно і безпечно.</p>
+            <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#1A7A3C;margin-bottom:6px">Зона відповідальності</div>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:5px;margin-bottom:12px">
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#1A7A3C;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">✓</span>Створення та реєстрація 11 корпоративних акаунтів (поступово, 2–3 дні)</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#1A7A3C;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">✓</span>Зберігання паролів та кодів двофакторної авторизації — централізовано</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#1A7A3C;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">✓</span>Верифікація акаунтів на ФОП — збір і подача документів</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#1A7A3C;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">✓</span>Зв'язок між Романом і командою — передача завдань, зворотній зв'язок</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#1A7A3C;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">✓</span>Контроль за дотриманням технічних стандартів (назви, описи, посилання)</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#1A7A3C;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">✓</span>Координація міні-сайтів Beacons AI — стандарти, оновлення, посилання</li>
+            </ul>
+            <div style="background:#EFFFEF;border:1px solid #C0E8C0;border-radius:8px;padding:10px 13px;font-size:.78rem;color:#1A5A20;line-height:1.6;margin-bottom:12px"><strong>Ключовий принцип:</strong> Жоден менеджер не має доступу до відновлення акаунту. Усі паролі та коди авторизації — тільки у тебе і Романа.</div>
+            <button onclick="copyRoleText('iryna-text')" style="width:100%;background:#0A2A1A;color:#fff;border:none;border-radius:9px;padding:10px;font-family:'Manrope',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;margin-bottom:14px">📋 Скопіювати</button>
+            <div id="iryna-text" style="display:none">Ірина відповідає за технічну і операційну частину 7FamilyBox: реєстрація акаунтів, зберігання паролів, верифікація, зв'язок з командою. Усі дані безпеки — централізовано у керівництва.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- КОМАНДА -->
+    <div class="role-nav-card" data-id="rn-team" style="background:#FFFFFF;border:1.5px solid #E8E5DE;border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color .15s" onclick="toggleRoleNav('rn-team',this)">
+      <div style="background:#1A0A2E;padding:14px 16px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(180,120,255,.6);margin-bottom:4px">Команда</div>
+        <div style="font-family:'Unbounded',sans-serif;font-size:.84rem;font-weight:900;color:#ffffff;letter-spacing:-.02em">7FamilyBox</div>
+        <div style="font-size:.72rem;color:rgba(255,255,255,.4);margin-top:3px">Менеджери · Продавці</div>
+      </div>
+      <div style="padding:11px 14px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.72rem;color:#888888">Відкрити</span>
+        <span class="rn-chev" style="font-size:11px;color:#CCCCCC;transition:transform .25s">▼</span>
+      </div>
+      <div class="rn-body" id="rn-team" style="display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease;border-top:1px solid #EBEBEB">
+        <div style="overflow:hidden">
+          <div style="padding:14px 16px 6px">
+            <p style="font-size:.82rem;color:#333;line-height:1.65;margin-bottom:12px">Команда 7FamilyBox розростається — і це не випадково. Ми будуємо щось більше, ніж просто продажі в TikTok.</p>
+            <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#7744AA;margin-bottom:6px">Що ми будуємо разом</div>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:5px;margin-bottom:12px">
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#FF0050;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">→</span>Медіакоманду, яка вміє знімати відео що продають — це рідкість в Україні</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#FF0050;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">→</span>Навичку, яка буде потрібна після запуску TikTok Shop в Україні</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#FF0050;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">→</span>Власні ролі та ніші — кожен стає впізнаваним обличчям свого напряму</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#FF0050;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">→</span>Серіальний формат — ми не просто продаємо, ми створюємо шоу</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#FF0050;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">→</span>Частину руху #БізнесТокери — і це відкриває двері до нових можливостей</li>
+            </ul>
+            <div style="background:#F9F5FF;border:1px solid rgba(168,85,247,.2);border-radius:8px;padding:11px 13px;font-size:.8rem;color:#330055;line-height:1.6;margin-bottom:12px">Хто навчиться знімати правильно зараз — той матиме перевагу, коли ринок зміниться. А він змінюється вже зараз.</div>
+            <button onclick="copyRoleText('team-text')" style="width:100%;background:#1A0A2E;color:#fff;border:none;border-radius:9px;padding:10px;font-family:'Manrope',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;margin-bottom:14px">📋 Скопіювати для команди</button>
+            <div id="team-text" style="display:none">Команда 7FamilyBox — це не просто продавці в TikTok. Ми будуємо медіакоманду з унікальними навичками. Кожен з нас отримує власну роль, товарну нішу і формат подачі. Ми знімаємо не просто відео — ми створюємо шоу, яке продає. Навички, які ви набуваєте зараз, будуть на вагу золота після запуску TikTok Shop в Україні. Це серйозний напрям з великим потенціалом. Дякуємо що ви з нами — 7FamilyBox розростається.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- БІЗНЕС-ТОКЕРИ -->
+    <div class="role-nav-card" data-id="rn-bt" style="background:#FFFFFF;border:1.5px solid #E8E5DE;border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color .15s" onclick="toggleRoleNav('rn-bt',this)">
+      <div style="background:#2A1A00;padding:14px 16px">
+        <div style="font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(244,197,66,.7);margin-bottom:4px">#БізнесТокери</div>
+        <div style="font-family:'Unbounded',sans-serif;font-size:.84rem;font-weight:900;color:#ffffff;letter-spacing:-.02em">Партнери</div>
+        <div style="font-size:.72rem;color:rgba(255,255,255,.4);margin-top:3px">Спільнота · Рух</div>
+      </div>
+      <div style="padding:11px 14px;display:flex;justify-content:space-between;align-items:center">
+        <span style="font-size:.72rem;color:#888888">Відкрити</span>
+        <span class="rn-chev" style="font-size:11px;color:#CCCCCC;transition:transform .25s">▼</span>
+      </div>
+      <div class="rn-body" id="rn-bt" style="display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease;border-top:1px solid #EBEBEB">
+        <div style="overflow:hidden">
+          <div style="padding:14px 16px 6px">
+            <p style="font-size:.82rem;color:#333;line-height:1.65;margin-bottom:12px">Ви — частина чогось важливого для українського бізнесу. <strong>#БізнесТокери</strong> — це рух підприємців, які розуміють: майбутнє продажів — у відео.</p>
+            <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#C8A000;margin-bottom:6px">Про що цей рух</div>
+            <ul style="list-style:none;padding:0;display:flex;flex-direction:column;gap:5px;margin-bottom:12px">
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#C8A000;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">→</span>Правильний формат відеоконтенту, що зберігає позиціонування та обличчя бізнесу</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#C8A000;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">→</span>Ефективні продажі через відео без агресії та маніпуляцій</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#C8A000;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">→</span>Підготовка до майбутніх змін платформи — разом сильніше</li>
+              <li style="font-size:.79rem;color:#333;display:flex;gap:7px;align-items:flex-start;line-height:1.5"><span style="color:#C8A000;font-weight:800;flex-shrink:0;font-size:.7rem;margin-top:2px">→</span>Стратегічне мислення, аналітика та клієнтоорієнтованість — основа руху</li>
+            </ul>
+            <div style="background:rgba(244,197,66,.08);border:1px solid rgba(244,197,66,.25);border-radius:8px;padding:11px 13px;font-size:.8rem;color:#5A4000;line-height:1.6;margin-bottom:12px">Засновник руху — людина, яка щиро дбає про український бізнес. Не задля хайпу — задля того, щоб українські підприємці будували бізнес правильно, з головою і серцем.</div>
+            <button onclick="copyRoleText('bt-text')" style="width:100%;background:#2A1A00;color:#fff;border:none;border-radius:9px;padding:10px;font-family:'Manrope',sans-serif;font-size:.78rem;font-weight:700;cursor:pointer;margin-bottom:14px">📋 Скопіювати для партнерів</button>
+            <div id="bt-text" style="display:none">#БізнесТокери — це рух українських підприємців і продавців, які розуміють: майбутнє продажів у відео. Ми будуємо спільноту, де бізнес знімає правильно, зберігає своє обличчя і готується до TikTok Shop. Разом ми сильніші. Приєднуйтесь — #БізнесТокери.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<div class="main">
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- BLOCK 1: NETWORK -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="block-card">
+  <div class="block-header" onclick="toggleBlock(this)">
+    <div class="bh-left">
+      <span class="bh-num">01</span>
+      <span class="bh-title">Мережа акаунтів</span>
+      <span class="bh-tag">Система мережі акаунтів</span>
+    </div>
+    <span class="bh-chev">▼</span>
+  </div>
+  <div class="block-body">
+    <div class="block-body-inner">
+    <div class="sections-wrap">
+
+      <!-- 1.1 Корпоративна інфраструктура -->
+      <div style="height:12px"></div>
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">1.1</span><span class="sh-title">Корпоративна інфраструктура</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="stat-row">
+              <div class="stat-pill"><span class="sp-num">11</span><span class="sp-lbl">email-акаунтів</span></div>
+              <div class="stat-pill"><span class="sp-num">2–3</span><span class="sp-lbl">дні реєстрації</span></div>
+              <div class="stat-pill"><span class="sp-num">11</span><span class="sp-lbl">унікальних IP</span></div>
+            </div>
+            <div class="content-block">
+              <div class="cb-title">Формат email-акаунтів</div>
+              <div class="code-block"><span class="c-label">Naming Convention</span><span class="c-key">manager1</span><span class="c-val">@7familybox.com</span>
+<span class="c-key">manager2</span><span class="c-val">@7familybox.com</span>
+<span class="c-com">... (manager1 → manager11)</span></div>
+            </div>
+            <div class="content-block">
+              <div class="cb-title">Технічні вимоги</div>
+              <ul class="cb-list">
+                <li>Унікальний пароль для кожного акаунта — збережений у захищеному менеджері паролів</li>
+                <li>Різні IP-адреси та пристрої при створенні — мінімізація кореляцій</li>
+                <li>Реєстрація розтягнута на 2–3 дні — не більше 4 акаунтів на добу</li>
+                <li>Кожен акаунт — окремий пристрій або браузерний профіль без перетину</li>
+              </ul>
+            </div>
+            <div class="info-box warn"><strong>Важливо.</strong> Масова реєстрація в один день може спричинити флаг з боку платформи. Дотримуватися темпу реєстрації.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.2 Безпека -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">1.2</span><span class="sh-title">Безпека та 2FA</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="content-block">
+              <div class="cb-title">Протокол безпеки</div>
+              <ul class="cb-list">
+                <li>2FA через Google Authenticator на кожному акаунті — обов'язково</li>
+                <li>QR-коди та резервні коди 2FA зберігаються власником бізнесу</li>
+                <li>Повний контроль власника — менеджери не мають доступу до відновлення</li>
+                <li>Паролі зберігаються централізовано (Bitwarden / 1Password) — доступ тільки у власника</li>
+              </ul>
+            </div>
+            <div class="info-box danger"><strong>Критично.</strong> Жоден менеджер не повинен мати резервні коди 2FA. Усі токени відновлення — виключно у власника.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.3 Верифікація -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">1.3</span><span class="sh-title">Верифікація акаунтів</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="content-block">
+              <div class="cb-title">Юридична структура</div>
+              <ul class="cb-list">
+                <li>Всі акаунти верифіковані на ФОП або ТОВ — єдина юридична особа</li>
+                <li>ГОЛОВНИЙ акаунт — головний, верифікований першим</li>
+                <li>Усі 11 акаунтів прив'язані до однієї юридичної структури</li>
+                <li>Документи верифікації зберігаються централізовано</li>
+              </ul>
+            </div>
+            <div class="info-box info"><strong>Примітка.</strong> Верифікація на ФОП/ТОВ дає доступ до TikTok Business Center та знижує ризики блокувань за комерційний контент.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.4 Структура акаунтів -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">1.4</span><span class="sh-title">Структура акаунтів</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="role-grid">
+              <div class="role-card">
+                <div class="rc-role" style="color:#F4C542">BOSS</div>
+                <div class="rc-name">@7FamilyBox</div>
+                <div class="rc-desc">Головний акаунт. Стратегія, позиціонування, репутація, організатор.</div>
+              </div>
+              <div class="role-card">
+                <div class="rc-role">СКЛАД</div>
+                <div class="rc-name">7FamilyBox | Дрогобич</div>
+                <div class="rc-desc">Управління командою, behind-the-scenes контент.</div>
+              </div>
+              <div class="role-card">
+                <div class="rc-role">СКЛАД</div>
+                <div class="rc-name">7FamilyBox | Меденичі</div>
+                <div class="rc-desc">Управління командою, behind-the-scenes контент.</div>
+              </div>
+              <div class="role-card">
+                <div class="rc-role">МЕНЕДЖЕР ×8</div>
+                <div class="rc-name">7FamilyBox | Ім'я</div>
+                <div class="rc-desc">Виробництво контенту, огляди товарів, взаємодія з аудиторією.</div>
+              </div>
+            </div>
+            <div class="content-block" style="margin-top:12px">
+              <div class="cb-title">Інтеграція існуючих акаунтів</div>
+              <ul class="cb-list">
+                <li>Великі існуючі акаунти команди інтегруються в загальну систему</li>
+                <li>Перейменування у відповідності до naming convention</li>
+                <li>Оновлення описів та посилань до єдиного стандарту</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.5 Naming Convention -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">1.5</span><span class="sh-title">Naming Convention</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <table class="data-table">
+              <thead><tr><th>Тип акаунта</th><th>Формат назви</th><th>Приклад</th></tr></thead>
+              <tbody>
+                <tr><td>BOSS</td><td class="td-mono">@7FamilyBox</td><td class="td-mono">@7FamilyBox</td></tr>
+                <tr><td>Менеджер</td><td class="td-mono">7FamilyBox | Ім'я</td><td class="td-mono">7FamilyBox | Олена</td></tr>
+                <tr><td>Склад Дрогобич</td><td class="td-mono">7FamilyBox | Дрогобич</td><td class="td-mono">7FamilyBox | Дрогобич</td></tr>
+                <tr><td>Склад Меденичі</td><td class="td-mono">7FamilyBox | Меденичі</td><td class="td-mono">7FamilyBox | Меденичі</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.6 Шаблон опису -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">1.6</span><span class="sh-title">Шаблон опису профілю TikTok</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="template-box">
+              <div class="tmpl-label">Шаблон · Менеджерський акаунт</div>
+              <span class="tmpl-line"><span class="fix">Офіційний представник </span><span class="var">@7FamilyBox</span></span>
+              <span class="tmpl-line"><span class="fix">Моя команда — </span><span class="var">@7FamilyBox [Локація]</span></span>
+              <span class="tmpl-line"><span class="fix">Корисні та цікаві огляди товарів</span></span>
+              <span class="tmpl-line"><span class="fix">Доставка по Україні та Європі</span></span>
+              <span class="tmpl-line"><span class="fix">👇 Переглянути асортимент 👇</span></span>
+            </div>
+            <div class="content-block">
+              <div class="cb-title">Правила опису</div>
+              <ul class="cb-list">
+                <li>Ніяких особистих слоганів — тільки єдиний шаблон бренду</li>
+                <li>Посилання у Опис профілю — виключно власний міні-сайт Beacons AI</li>
+                <li>Згадка локації — обов'язково для складських акаунтів</li>
+                <li>Зміни шаблону — тільки через ГОЛОВНИЙ акаунт</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1.7 Аналітика -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">1.7</span><span class="sh-title">Аналітика та UTM-трекінг</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="content-block">
+              <div class="cb-title">Структура UTM-міток</div>
+              <div class="code-block"><span class="c-label">UTM Pattern · Менеджер</span><span class="c-com">?utm_source=tiktok</span>
+<span class="c-com">&utm_medium=organic</span>
+<span class="c-key">&utm_campaign=</span><span class="c-val">7fb_manager</span>
+<span class="c-key">&utm_content=</span><span class="c-val">manager_name</span>
+<span class="c-key">&utm_term=</span><span class="c-val">video_id</span></div>
+            </div>
+            <div class="content-block">
+              <div class="cb-title">Завдання для розробника</div>
+              <ul class="cb-list">
+                <li>Генератор унікальних UTM-міток для кожного менеджера</li>
+                <li>Автоматична підстановка UTM при додаванні товару на міні-сайт</li>
+                <li>Панель аналітики відстеження ефективності по кожному акаунту</li>
+                <li>UTM-мітки для кожного продавця з власним міні-сайтом Beacons AI</li>
+              </ul>
+            </div>
+            <div class="info-box info"><strong>Відповідальний:</strong> Програміст. UTM-система потребує технічної реалізації до старту.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- BLOCK 2: MINI-SITES -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="block-card">
+  <div class="block-header" onclick="toggleBlock(this)">
+    <div class="bh-left">
+      <span class="bh-num">02</span>
+      <span class="bh-title">Міні-сайти</span>
+      <span class="bh-tag">Система конверсії через міні-сайти</span>
+    </div>
+    <span class="bh-chev">▼</span>
+  </div>
+  <div class="block-body">
+    <div class="block-body-inner">
+    <div class="sections-wrap">
+      <div style="height:12px"></div>
+
+      <!-- 2.1 Структура -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">2.1</span><span class="sh-title">Структура міні-сайтів</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="role-grid">
+              <div class="role-card">
+                <div class="rc-role" style="color:#F4C542">CENTRAL · BOSS</div>
+                <div class="rc-name">1 центральний сайт</div>
+                <div class="rc-desc">Головна точка входу. Загальний каталог, акції, бренд.</div>
+              </div>
+              <div class="role-card">
+                <div class="rc-role">СКЛАДИ ×2</div>
+                <div class="rc-name">2 складські сайти</div>
+                <div class="rc-desc">Дрогобич та Меденичі. Локальний асортимент.</div>
+              </div>
+              <div class="role-card">
+                <div class="rc-role">МЕНЕДЖЕРИ ×8</div>
+                <div class="rc-name">8 менеджерських сайтів</div>
+                <div class="rc-desc">Персональні сторінки. Динамічне наповнення під відео.</div>
+              </div>
+            </div>
+            <div class="stat-row" style="margin-top:12px">
+              <div class="stat-pill"><span class="sp-num">11</span><span class="sp-lbl">сайтів всього</span></div>
+              <div class="stat-pill"><span class="sp-num">Beacons</span><span class="sp-lbl">платформа</span></div>
+              <div class="stat-pill"><span class="sp-num">UTM</span><span class="sp-lbl">на кожному</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.2 Логіка роботи -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">2.2</span><span class="sh-title">Логіка конверсійного шляху</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="flow">
+              <div class="flow-step">TikTok відео</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step accent">Зацікавленість</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">Клік у Опис профілю</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step accent">Міні-сайт менеджера</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step">Товар / Добірка</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-step accent">Замовлення</div>
+            </div>
+            <div class="content-block" style="margin-top:12px">
+              <div class="cb-title">Принципи конверсії</div>
+              <ul class="cb-list">
+                <li>Мінімальна кількість кліків від відео до товару — не більше 2</li>
+                <li>Ніяких зайвих сторінок між відео і товаром</li>
+                <li>Міні-сайт оновлюється під поточне відео — актуальний товар завжди вгорі</li>
+                <li>Добірки тематичних товарів — для менеджерів без прив'язки до одного відео</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.3 Функціонал менеджера -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">2.3</span><span class="sh-title">Щоденний функціонал менеджера</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="content-block">
+              <div class="cb-title">Робочий процес</div>
+              <ul class="cb-list">
+                <li>Менеджер публікує відео-огляд товару в TikTok</li>
+                <li>Відео набирає обертів → відстежується в аналітиці</li>
+                <li>Знаходить товар на офіційному сайті постачальника</li>
+                <li>Додає посилання на товар у власний міні-сайт Beacons AI</li>
+                <li>Підставляє персональну UTM-мітку в посилання</li>
+                <li>Активує елемент — він з'являється вгорі міні-сайту</li>
+                <li>Відео → Опис профілю → міні-сайт → товар → замовлення</li>
+              </ul>
+            </div>
+            <div class="info-box success"><strong>Ціль:</strong> Максимально скоротити втрати трафіку між відео та замовленням. Кожне популярне відео — активний конверсійний елемент.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2.4 Аналітика міні-сайтів -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">2.4</span><span class="sh-title">Аналітика та конверсії</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="content-block">
+              <div class="cb-title">Що відстежується</div>
+              <ul class="cb-list">
+                <li>Трафік по кожному UTM → розуміємо який менеджер генерує продажі</li>
+                <li>Конверсія по менеджерах — ефективність контенту в грошах</li>
+                <li>Топ товарів по кожному акаунту — фокус на тому, що продає</li>
+                <li>клікабельність з відео на міні-сайт — якість гачка та опису відео</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- BLOCK 3: CONTENT SYSTEM -->
+<!-- ═══════════════════════════════════════════ -->
+<div class="block-card">
+  <div class="block-header" onclick="toggleBlock(this)">
+    <div class="bh-left">
+      <span class="bh-num">03</span>
+      <span class="bh-title">Контент-система</span>
+      <span class="bh-tag">Система виробництва контенту</span>
+    </div>
+    <span class="bh-chev">▼</span>
+  </div>
+  <div class="block-body">
+    <div class="block-body-inner">
+    <div class="sections-wrap">
+      <div style="height:12px"></div>
+
+      <!-- 3.1 КАСТИНГ ТА РОЛІ -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">3.1</span><span class="sh-title">Відбір та формування ролей</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="info-box info"><strong>Принцип.</strong> Система адаптує контент під людину, а не навпаки. Кожен учасник отримує роль, нішу та формат під свою природну «резонансність» з аудиторією.</div>
+            <div class="content-block">
+              <div class="cb-title">Етапи перед запуском</div>
+              <ul class="cb-list">
+                <li>Індивідуальна консультація — виявлення сильних сторін, рівня комфорту перед камерою</li>
+                <li>Групова консультація команди — динаміка, ролі, взаємодія</li>
+                <li>Тестування навичок — пробні відео, оцінка природності подачі</li>
+                <li>Узгодження з керівництвом — фінальний розподіл ролей та ніш</li>
+              </ul>
+            </div>
+            <div class="content-block">
+              <div class="cb-title">1. Товарна ніша — зона спеціалізації</div>
+              <div class="role-grid">
+                <div class="role-card"><div class="rc-role">НІША</div><div class="rc-name">Технічні товари</div><div class="rc-desc">Електроніка, інструменти, гаджети. Потрібна технічна впевненість.</div></div>
+                <div class="role-card"><div class="rc-role">НІША</div><div class="rc-name">Beauty / Косметика</div><div class="rc-desc">Засоби догляду, краса, до/після. Потрібна природна щирість.</div></div>
+                <div class="role-card"><div class="rc-role">НІША</div><div class="rc-name">Товари для дому</div><div class="rc-desc">Органайзери, декор, побут. Потрібне відчуття «ведення дому».</div></div>
+                <div class="role-card"><div class="rc-role">НІША</div><div class="rc-name">Хімія / Побутова</div><div class="rc-desc">Засоби прибирання, ефект «до/після». Потрібен «вау-момент».</div></div>
+              </div>
+            </div>
+            <div class="content-block">
+              <div class="cb-title">2. Контент-амплуа — стиль подачі</div>
+              <div style="display:flex;flex-direction:column;gap:7px">
+                <div style="background:#FAFAF8;border:1.5px solid var(--brd);border-radius:9px;padding:11px 13px">
+                  <div style="font-size:.76rem;font-weight:700;color:var(--tx);margin-bottom:3px">Технічний оглядач</div>
+                  <div style="font-size:.74rem;color:var(--sub)">Спокійний, детальний, фактичний · Впевнений у темі, комфортний перед камерою</div>
+                </div>
+                <div style="background:#FAFAF8;border:1.5px solid var(--brd);border-radius:9px;padding:11px 13px">
+                  <div style="font-size:.76rem;font-weight:700;color:var(--tx);margin-bottom:3px">Емоційний продавець</div>
+                  <div style="font-size:.74rem;color:var(--sub)">Жвавий, щирий, реакційний · Відкритість, природна емоційність</div>
+                </div>
+                <div style="background:#FAFAF8;border:1.5px solid var(--brd);border-radius:9px;padding:11px 13px">
+                  <div style="font-size:.76rem;font-weight:700;color:var(--tx);margin-bottom:3px">Демонстратор «3 сек»</div>
+                  <div style="font-size:.74rem;color:var(--sub)">Миттєвий ефект, без слів · Підходить сором'язливим — акцент на руках і товарі</div>
+                </div>
+                <div style="background:#FAFAF8;border:1.5px solid var(--brd);border-radius:9px;padding:11px 13px">
+                  <div style="font-size:.76rem;font-weight:700;color:var(--tx);margin-bottom:3px">Розмовний формат</div>
+                  <div style="font-size:.74rem;color:var(--sub)">Довгий, пояснювальний · Здатність до тривалого природного монологу</div>
+                </div>
+                <div style="background:#FAFAF8;border:1.5px solid var(--brd);border-radius:9px;padding:11px 13px">
+                  <div style="font-size:.76rem;font-weight:700;color:var(--tx);margin-bottom:3px">Спокійний експерт</div>
+                  <div style="font-size:.74rem;color:var(--sub)">Стриманий, авторитетний · Природна серйозність і глибина</div>
+                </div>
+                <div style="background:#FAFAF8;border:1.5px solid var(--brd);border-radius:9px;padding:11px 13px">
+                  <div style="font-size:.76rem;font-weight:700;color:var(--tx);margin-bottom:3px">Динамічний творець</div>
+                  <div style="font-size:.74rem;color:var(--sub)">Швидкий монтаж, енергія · Мобільність, навик монтажу</div>
+                </div>
+              </div>
+            </div>
+            <div class="content-block">
+              <div class="cb-title">3. Формат зйомки — індивідуально</div>
+              <ul class="cb-list">
+                <li><strong>Обличчям до камери</strong> — класичний огляд з обличчям, максимальна довіра</li>
+                <li><strong>Без обличчя</strong> — для сором'язливих, акцент на товарі та руках</li>
+                <li><strong>Демонстрація рук / товару</strong> — показ використання без присутності автора</li>
+                <li><strong>Один кадр / довгі дублі</strong> — природна, невідредагована атмосфера</li>
+                <li><strong>Короткі гачок-відео (3–7 сек)</strong> — тільки вау-момент, решта в описі</li>
+                <li><strong>Динамічні нарізки</strong> — швидкий монтаж для утримання уваги</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.2 РОЗПОДІЛ ТОВАРІВ -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">3.2</span><span class="sh-title">Система розподілу товарів</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="content-block">
+              <div class="cb-title">Принцип відбору товарів для менеджера</div>
+              <ul class="cb-list">
+                <li>Весь асортимент компанії розбитий на контент-ніші — кожен менеджер отримує свій список</li>
+                <li>«Резонансні продукти» — товари, до яких менеджер має особистий досвід або інтерес</li>
+                <li>Товари з потенціалом віральності — незвичні властивості, «вау-ефект», побутові тригери</li>
+                <li>Регулярне поповнення списку — щотижня 2–3 нових товари в ротацію</li>
+              </ul>
+            </div>
+            <div class="content-block">
+              <div class="cb-title">Моделі гачків для товарів</div>
+              <div class="code-block"><span class="c-label">Бібліотека гачків · 7FamilyBox</span><span class="c-com"># Емоція-здивування</span>
+<span class="c-key">"Я не очікував, що це взагалі працює..."</span>
+<span class="c-key">"Чому про це ніхто не говорить?"</span>
+<span class="c-key">"Я думав, це маркетинг — але..."</span>
+
+<span class="c-com"># Вирішення проблеми</span>
+<span class="c-key">"Це вирішило проблему за 10 секунд"</span>
+<span class="c-key">"Цей товар змінює побут"</span>
+<span class="c-key">"Витрачав гроші марно до цього"</span>
+
+<span class="c-com"># Провокація / Curiosity</span>
+<span class="c-key">"Не купуй це, поки не подивишся"</span>
+<span class="c-key">"Моя мама просить купити ще одне"</span>
+<span class="c-key">"Тест, який я не очікував провалити"</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.3 ПСИХОЛОГІЯ КОМАНДИ -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">3.3</span><span class="sh-title">Психологія команди та природність подачі</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+              <div style="background:#FAFAF8;border:1.5px solid var(--brd);border-radius:9px;padding:12px 14px">
+                <div style="font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--light);margin-bottom:7px">Більш сором'язливі</div>
+                <ul class="cb-list">
+                  <li>Формат без обличчя — акцент на товарі</li>
+                  <li>Демонстрація рук / результату</li>
+                  <li>Короткі гачок-відео без монологу</li>
+                  <li>Поступовий вихід до камери</li>
+                </ul>
+              </div>
+              <div style="background:#FAFAF8;border:1.5px solid var(--brd);border-radius:9px;padding:12px 14px">
+                <div style="font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--light);margin-bottom:7px">Більш відкриті</div>
+                <ul class="cb-list">
+                  <li>Обличчям до камери з монологом</li>
+                  <li>Розмовний або емоційний стиль</li>
+                  <li>Серіальні сюжети та колаби</li>
+                  <li>Живі реакції та імпровізація</li>
+                </ul>
+              </div>
+            </div>
+            <div class="info-box success"><strong>Принцип.</strong> Максимальна природність важливіша за «правильний формат». Хороший контент — це коли менеджер забуває, що знімає.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.4 80/20 ПОГЛИБЛЕНА -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">3.4</span><span class="sh-title">Контент-модель 80/20 · Поглиблена</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+              <div style="background:#FFF5F7;border:1.5px solid rgba(255,0,80,.2);border-radius:10px;padding:13px 14px">
+                <div style="font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--acc);margin-bottom:8px">80% · Продажний контент</div>
+                <ul class="cb-list">
+                  <li>TikTok Shop огляди товарів</li>
+                  <li>Демонстрація + вау-момент</li>
+                  <li>Прямі тригери покупки</li>
+                  <li>Алгоритмічна оптимізація (гачок, утримання, CTA)</li>
+                  <li>Моделі гачків з бібліотеки</li>
+                </ul>
+              </div>
+              <div style="background:#F0F8FF;border:1.5px solid rgba(0,100,200,.15);border-radius:10px;padding:13px 14px">
+                <div style="font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#0060A0;margin-bottom:8px">20% · Сімейний всесвіт</div>
+                <ul class="cb-list">
+                  <li>Лайфстайл та «за кулісами»</li>
+                  <li>Взаємодія між менеджерами</li>
+                  <li>М'який інтелектуальний гумор</li>
+                  <li>Серіальні сюжети (конкуренція команд)</li>
+                  <li>Гостьові зйомки #БізнесТокери</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.5 ДВІ СІМ'Ї -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">3.5</span><span class="sh-title">Дві команди — дві «сім'ї»</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">
+              <div style="background:#FAFAF8;border:2px solid var(--brd);border-radius:10px;padding:14px;text-align:center">
+                <div style="font-family:var(--head);font-size:.82rem;font-weight:900;color:var(--tx);margin-bottom:5px">Команда Дрогобич</div>
+                <div style="font-size:.74rem;color:var(--sub)">Акаунт складу + менеджери локації</div>
+              </div>
+              <div style="background:#FAFAF8;border:2px solid var(--brd);border-radius:10px;padding:14px;text-align:center">
+                <div style="font-family:var(--head);font-size:.82rem;font-weight:900;color:var(--tx);margin-bottom:5px">Команда Меденичі</div>
+                <div style="font-size:.74rem;color:var(--sub)">Акаунт складу + менеджери локації</div>
+              </div>
+            </div>
+            <div class="content-block">
+              <div class="cb-title">Серіальні формати взаємодії</div>
+              <ul class="cb-list">
+                <li>Міні-серіалізація — регулярні «серії» між командами</li>
+                <li>Внутрішні жарти та повторювані жарти — впізнаваність для постійних глядачів</li>
+                <li>Обговорення дій іншої команди — «вони знову нас обійшли»</li>
+                <li>Реакції на відео один одного — дуети, Зшивка, коментарі</li>
+                <li>Рейтинг команд тижня — конкуренція як контент</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.6 COLLABORATION -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">3.6</span><span class="sh-title">Спільний контент · Крос-зйомки</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="content-block">
+              <div class="cb-title">Формати внутрішніх колабів</div>
+              <ul class="cb-list">
+                <li>Спільні виїзди — одна команда їде до іншої, знімають разом</li>
+                <li>Крос-відео між командами — один починає сюжет, інший завершує</li>
+                <li>Діалоги «команда vs команда» — дебати, порівняння товарів</li>
+                <li>Спільні огляди — два менеджери, два погляди на один товар</li>
+              </ul>
+            </div>
+            <div class="content-block">
+              <div class="cb-title">Механіка крос-аудиторії</div>
+              <ul class="cb-list">
+                <li>Менеджер А згадує Менеджера Б → частина аудиторії А підписується на Б</li>
+                <li>Дует: аудиторія бачить обох авторів і може підписатися на обох</li>
+                <li>Тег @7FamilyBoxLokatsiya у відео → трафік на складський акаунт</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.7 БІЗНЕС-ТОКЕРИ -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)" style="border-left:3px solid var(--acc3)">
+          <div class="sh-left"><span class="sh-num" style="color:var(--acc3)">#</span><span class="sh-title" style="color:#0A0A0A">БізнесТокери · Зовнішня мережа</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="info-box" style="background:rgba(244,197,66,.08);border-color:rgba(244,197,66,.3);color:#7A5A00">
+              <strong>Концепція.</strong> Власник 7FamilyBox є організатором руху <strong>#БізнесТокери</strong> в Україні — спільноти підприємців, продавців та авторів TikTok, які обмінюються досвідом, організовують спільні зйомки та взаємно підсилюють одне одного.
+            </div>
+
+            <div class="content-block">
+              <div class="cb-title">Що таке #БізнесТокери</div>
+              <ul class="cb-list">
+                <li>Відкрита мережа підприємців, продавців та TikTok-авторів в Україні</li>
+                <li>Об'єднуючий хештег: <span style="font-family:var(--mono);font-size:.78rem;color:var(--acc)">#БізнесТокери</span></li>
+                <li>Власник 7FamilyBox — організатор та натхненник руху</li>
+                <li>Регулярні з'їзди, зустрічі, масові заходи між учасниками</li>
+                <li>Учасники їздять один до одного — знімають відео, публікують</li>
+              </ul>
+            </div>
+
+            <div class="content-block">
+              <div class="cb-title">Моделі участі команди 7FamilyBox</div>
+              <table class="data-table">
+                <thead><tr><th>Модель</th><th>Хто</th><th>Формат</th></tr></thead>
+                <tbody>
+                  <tr><td>Гість приїжджає до менеджера</td><td>Зовнішній #БізнесТокер</td><td>Знімають спільне відео на локації менеджера, публікують обидва</td></tr>
+                  <tr><td>Менеджер їде до гостя</td><td>Менеджер 7FB</td><td>Огляд товару або послуги партнера, публікація на акаунті менеджера</td></tr>
+                  <tr><td>ГОЛОВНИЙ акаунт + колаб</td><td>Власник / BOSS</td><td>Організатор з'їздів, стратегічні колаби з ключовими учасниками руху</td></tr>
+                  <tr><td>Команда на заході</td><td>Вся команда або частина</td><td>Масовий захід → контент від кількох акаунтів одночасно</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="content-block">
+              <div class="cb-title">Правила колабу #БізнесТокери</div>
+              <ul class="cb-list">
+                <li>Взаємне теґування: <span style="font-family:var(--mono);font-size:.78rem;color:var(--acc)">@7FamilyBox</span> та акаунт партнера в кожному колаб-відео</li>
+                <li>Хештег <span style="font-family:var(--mono);font-size:.78rem;color:var(--acc)">#БізнесТокери</span> — обов'язково у всіх публікаціях руху</li>
+                <li>Тема відео — природна, пов'язана з бізнесом або товаром, без примусу</li>
+                <li>Менеджер не промотує конкурентів 7FamilyBox в рамках колабу</li>
+                <li>Узгодження зовнішніх колабів — через ГОЛОВНИЙ акаунт або складський акаунт</li>
+              </ul>
+            </div>
+
+            <div class="content-block">
+              <div class="cb-title">Контентний потенціал #БізнесТокери</div>
+              <div class="flow">
+                <div class="flow-step accent">#БізнесТокери захід</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">8+ відео від менеджерів</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step accent">Взаємний трафік</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step">Нова аудиторія кожного</div>
+                <div class="flow-arrow">→</div>
+                <div class="flow-step accent">Ріст мережі</div>
+              </div>
+              <ul class="cb-list" style="margin-top:10px">
+                <li>Один захід = від 8 до 20+ відео одночасно з різних акаунтів</li>
+                <li>Кожен учасник руху приносить свою аудиторію — крос-охоплення</li>
+                <li>7FamilyBox позиціонується як центр і організатор — репутаційний актив</li>
+                <li>ГОЛОВНИЙ акаунт формує образ лідера бізнес-спільноти, а не лише продавця</li>
+              </ul>
+            </div>
+
+            <div class="info-box warn"><strong>Стратегічна цінність.</strong> #БізнесТокери — це не просто контент. Це позиціонування власника як лідера галузі. Кожен захід підсилює авторитет бренду 7FamilyBox серед українського бізнес-TikTok-ком'юніті.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.8 КОНТЕНТ-ПЛАН -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">3.8</span><span class="sh-title">Контент-план та управління</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="content-block">
+              <div class="cb-title">Структура тижневого контент-плану</div>
+              <table class="data-table">
+                <thead><tr><th>Тип</th><th>Частота</th><th>Хто</th></tr></thead>
+                <tbody>
+                  <tr><td>Продажний огляд</td><td class="td-mono">80% від всіх відео</td><td>Менеджери ×8</td></tr>
+                  <tr><td>Шоу / Сімейний всесвіт</td><td class="td-mono">20% від всіх відео</td><td>Вся команда</td></tr>
+                  <tr><td>Серіальний сюжет</td><td class="td-mono">1–2 на тиждень</td><td>Обидві команди</td></tr>
+                  <tr><td>Колаб #БізнесТокери</td><td class="td-mono">За планом заходів</td><td>Менеджери + гості</td></tr>
+                  <tr><td>BOSS стратегічний контент</td><td class="td-mono">2–3 на тиждень</td><td>ГОЛОВНИЙ акаунт</td></tr>
+                  <tr><td>Складські «за кулісами»</td><td class="td-mono">1–2 на тиждень</td><td>Склади ×2</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="content-block">
+              <div class="cb-title">Стандарти якості та контроль</div>
+              <ul class="cb-list">
+                <li>Брендбук — єдині стандарти подачі, заборонений контент, стиль спілкування</li>
+                <li>Перевірка перед публікацією — складський керівник або BOSS</li>
+                <li>Заборонено: агресивний продаж, танці без зв'язку з товаром, крінж</li>
+                <li>Штрафна система за порушення репутаційних стандартів</li>
+                <li>Бонус кращому менеджеру тижня / місяця — на основі UTM-аналітики</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3.9 ГОЛОВНА ІДЕЯ -->
+      <div class="sec-item">
+        <div class="sec-header" onclick="toggleSec(this)">
+          <div class="sh-left"><span class="sh-num">3.9</span><span class="sh-title">Головна ідея · ДНК бренду</span></div>
+          <span class="sh-chev">▼</span>
+        </div>
+        <div class="sec-body">
+          <div class="sec-body-inner">
+            <div class="code-block"><span class="c-label">7FamilyBox · Content System DNA</span>
+<span class="c-key">Система ролей</span>       <span class="c-val">→ кожен в своєму амплуа</span>
+<span class="c-key">Система ніш</span>        <span class="c-val">→ максимальна резонансність</span>
+<span class="c-key">Система психотипів</span> <span class="c-val">→ контент під людину</span>
+<span class="c-key">Система сторітелінгу</span><span class="c-val">→ дві сім'ї, один бренд</span>
+<span class="c-key">#БізнесТокери</span>     <span class="c-val">→ лідерство у спільноті</span>
+<span class="c-key">80/20 модель</span>       <span class="c-val">→ продажі + шоу = екосистема</span></div>
+            <div class="info-box success" style="margin-top:10px">Це не просто TikTok-контент. Це система ролей, психологічних профілів, товарних ніш і серіального сторітелінгу — де два «сімейних» бізнес-клани створюють шоу і продажі одночасно, а власник будує репутацію лідера українського бізнес-TikTok через рух #БізнесТокери.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER NOTE -->
+<div style="margin-top:28px;padding:16px 20px;background:#FFFFFF;border:1.5px solid var(--brd);border-radius:12px;font-size:.76rem;color:var(--light);line-height:1.7;text-align:center">
+  <strong style="color:var(--tx)">7FamilyBox Операційна система бренду</strong> · Внутрішній документ · Конфіденційно · v1.0 · 2026<br>
+  Не підлягає розповсюдженню за межами компанії
+</div>
+
+</div><!-- /main -->
+
+<script>
+function toggleRoleNav(id, card){
+  var body = document.getElementById(id);
+  var chev = card.querySelector('.rn-chev');
+  var isOpen = body.style.gridTemplateRows === '1fr';
+  // close all
+  document.querySelectorAll('.rn-body').forEach(function(b){ b.style.gridTemplateRows='0fr'; });
+  document.querySelectorAll('.rn-chev').forEach(function(c){ c.style.transform=''; });
+  document.querySelectorAll('.role-nav-card').forEach(function(c){ c.style.borderColor='#E8E5DE'; });
+  if(!isOpen){
+    body.style.gridTemplateRows='1fr';
+    if(chev) chev.style.transform='rotate(180deg)';
+    card.style.borderColor='#FF0050';
+  }
+}
+function copyRoleText(id){
+  var el = document.getElementById(id);
+  if(!el) return;
+  var text = el.textContent.trim();
+  navigator.clipboard.writeText(text).then(function(){
+    // find the button before this hidden div
+    var btn = el.previousElementSibling;
+    if(btn && btn.tagName==='BUTTON'){
+      var orig = btn.textContent;
+      btn.textContent = '✓ Скопійовано!';
+      btn.style.background = '#1A7A3C';
+      setTimeout(function(){ btn.textContent=orig; btn.style.background=''; btn.style.background=btn.getAttribute('data-bg')||''; }, 2000);
+    }
+  }).catch(function(){ el.style.display='block'; el.select && el.select(); document.execCommand('copy'); });
+}
+function toggleBlock(header){
+  header.classList.toggle('open');
+  var body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+function toggleSec(header){
+  var item = header.parentElement;
+  var zeroY = header.getBoundingClientRect().top;
+  // close others in same parent
+  var siblings = item.parentElement.querySelectorAll('.sec-item');
+  siblings.forEach(function(s){
+    if(s !== item){
+      s.querySelector('.sec-header').classList.remove('open');
+      s.querySelector('.sec-body').classList.remove('open');
+    }
+  });
+  header.classList.toggle('open');
+  var body = header.nextElementSibling;
+  body.classList.toggle('open');
+  // Zero-point scroll compensation
+  setTimeout(function(){
+    var newY = header.getBoundingClientRect().top;
+    var delta = newY - zeroY;
+    if(Math.abs(delta) > 0.5) window.scrollBy(0, delta);
+  }, 10);
+}
+</script>
+
+</body>
+</html>
