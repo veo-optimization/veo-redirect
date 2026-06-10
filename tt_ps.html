@@ -198,6 +198,43 @@ footer a{color:rgba(255,255,255,.35);text-decoration:none}
   .brain-visual{flex-direction:column}
   .formula-row{gap:5px;font-size:.62rem}
 }
+
+
+/* ── GLOSSARY FAB ── */
+.gloss-fab{position:fixed;bottom:22px;right:18px;z-index:900;display:flex;align-items:center;gap:6px;background:#0A0A0A;color:#fff;border:none;border-radius:24px;padding:9px 16px 9px 10px;font-family:'Manrope',sans-serif;font-size:.74rem;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.25);transition:all .2s;white-space:nowrap}
+.gloss-fab:hover{background:#FF0050;box-shadow:0 6px 24px rgba(255,0,80,.35)}
+.gloss-fab-i{width:20px;height:20px;border-radius:50%;background:#FF0050;color:#fff;font-size:.7rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
+.gloss-fab:hover .gloss-fab-i{background:#fff;color:#FF0050}
+
+/* ── GLOSSARY MODAL ── */
+.gloss-overlay{display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.5);overflow-y:auto;padding:16px}
+.gloss-overlay.show{display:flex;justify-content:center;align-items:flex-start;padding:16px 16px 80px}
+.gloss-modal{background:#FFFFFF;border-radius:16px;width:100%;max-width:700px;margin:auto;overflow:hidden;animation:glossIn .25s ease}
+@keyframes glossIn{from{transform:translateY(30px);opacity:0}to{transform:translateY(0);opacity:1}}
+.gloss-top{background:#0A0A0A;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:2}
+.gloss-top-left{display:flex;align-items:center;gap:10px}
+.gloss-top-i{width:24px;height:24px;border-radius:50%;background:#FF0050;color:#fff;font-size:.72rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.gloss-top-title{font-family:'Unbounded',sans-serif;font-size:.75rem;font-weight:900;color:#fff;letter-spacing:-.01em}
+.gloss-top-sub{font-size:.65rem;color:rgba(255,255,255,.4)}
+.gloss-x{width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.1);border:none;color:#fff;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+.gloss-x:hover{background:rgba(255,255,255,.2)}
+.gloss-body{padding:16px 18px 0}
+.gloss-section{margin-bottom:20px;border:1.5px solid #E8E5DE;border-radius:12px;overflow:hidden}
+.gloss-section-head{background:#FAFAF8;padding:11px 14px;font-family:'Unbounded',sans-serif;font-size:.68rem;font-weight:900;color:#0A0A0A;letter-spacing:-.01em;border-bottom:1px solid #E8E5DE}
+.gloss-section-head span{color:#FF0050;margin-right:6px}
+.gloss-entry{padding:12px 14px;border-bottom:1px solid #F0EFE9}
+.gloss-entry:last-child{border-bottom:none}
+.gloss-term{font-family:'Unbounded',sans-serif;font-size:.67rem;font-weight:800;color:#0A0A0A;margin-bottom:5px;letter-spacing:-.01em;display:flex;align-items:center;gap:7px}
+.gloss-formula{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#FF0050;background:rgba(255,0,80,.06);border:1px solid rgba(255,0,80,.12);border-radius:4px;padding:1px 6px;margin-left:4px}
+.gloss-def{font-size:.79rem;color:#444;line-height:1.65}
+.gloss-def p+p{margin-top:7px}
+.gloss-def strong{color:#0A0A0A}
+.gloss-sub-list{margin-top:7px;display:flex;flex-direction:column;gap:4px}
+.gloss-sub{font-size:.75rem;color:#666;display:flex;gap:8px;align-items:flex-start;line-height:1.5}
+.gloss-sub::before{content:"→";color:#FF0050;font-weight:700;flex-shrink:0;font-size:.68rem;margin-top:2px}
+.gloss-footer{padding:14px 18px 18px;border-top:1px solid #EBEBEB}
+.gloss-close-btn{width:100%;background:#0A0A0A;color:#fff;border:none;border-radius:10px;padding:12px;font-family:'Manrope',sans-serif;font-size:.82rem;font-weight:700;cursor:pointer;transition:background .15s}
+.gloss-close-btn:hover{background:#333}
 </style>
 </head>
 <body>
@@ -283,32 +320,27 @@ footer a{color:rgba(255,255,255,.35);text-decoration:none}
   <h3 class="sub">П'ять нейрохімічних систем, якими керує коротке відео</h3>
   <div class="hormone-grid">
     <div class="h-card h-card-dop">
-      <span class="h-icon">⚡</span>
-      <div class="h-name">Дофамін</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px"><div class="h-name">Дофамін</div></div>
       <div class="h-emotion">Цікавість · Передчуття</div>
       <div class="h-desc">Активується невизначеністю. Кожен скрол — ставка на те, що наступне відео буде кращим. Алгоритм TikTok навмисно підтримує цей стан.</div>
     </div>
     <div class="h-card h-card-cor">
-      <span class="h-icon">⚠️</span>
-      <div class="h-name">Кортизол</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px"><div class="h-name">Кортизол</div></div>
       <div class="h-emotion">Страх помилки · Ризик втрати</div>
       <div class="h-desc">Контент, що сигналізує про загрозу або втрачену можливість, утримує увагу довше. FOMO — це кортизоловий феномен.</div>
     </div>
     <div class="h-card h-card-oxy">
-      <span class="h-icon">🤝</span>
-      <div class="h-name">Окситоцин</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px"><div class="h-name">Окситоцин</div></div>
       <div class="h-emotion">Довіра · Близькість</div>
       <div class="h-desc">Природна, щира подача формує відчуття «я знаю цю людину». Саме тому вилизаний рекламний контент відштовхує — він не активує окситоцин.</div>
     </div>
     <div class="h-card h-card-ser">
-      <span class="h-icon">👑</span>
-      <div class="h-name">Серотонін</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px"><div class="h-name">Серотонін</div></div>
       <div class="h-emotion">Статус · Впевненість</div>
       <div class="h-desc">Контент, що дає відчуття належності до «тих, хто знає» або «тих, хто може собі дозволити», активує серотонінову систему.</div>
     </div>
     <div class="h-card h-card-end">
-      <span class="h-icon">😄</span>
-      <div class="h-name">Ендорфіни</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px"><div class="h-name">Ендорфіни</div></div>
       <div class="h-emotion">Здивування · Полегшення</div>
       <div class="h-desc">Гумор, несподіваний результат, момент «а ось і розв'язка» — фізичне задоволення, яке закріплює контент у пам'яті.</div>
     </div>
@@ -956,42 +988,7 @@ footer a{color:rgba(255,255,255,.35);text-decoration:none}
 
 
 
-  <!-- TikTok Shop key stats -->
-  <h3 class="sub">TikTok Shop 2025–2026: ключові показники</h3>
-  <div class="stat-row">
-    <div class="stat-box">
-      <span class="stat-num">$64,3 млрд</span>
-      <span class="stat-lbl">GMV TikTok Shop у 2025 р. — майже подвоєння за рік (+94%)</span>
-      <span class="stat-src">TikTok Shop Global Report, 2025</span>
-    </div>
-    <div class="stat-box">
-      <span class="stat-num">15 млн+</span>
-      <span class="stat-lbl">продавців у TikTok Shop. У США — 475 000+ активних магазинів</span>
-      <span class="stat-src">TikTok Shop Seller Report, 2026</span>
-    </div>
-    <div class="stat-box">
-      <span class="stat-num">92%</span>
-      <span class="stat-lbl">користувачів виконують дію після перегляду товару: пошук, збереження або покупку</span>
-      <span class="stat-src">TikTok Commerce Insights, 2025</span>
-    </div>
-  </div>
-  <div class="stat-row">
-    <div class="stat-box">
-      <span class="stat-num">61%</span>
-      <span class="stat-lbl">відкривають нові бренди саме через TikTok — вище, ніж через Google або Instagram</span>
-      <span class="stat-src">TikTok for Business, 2025</span>
-    </div>
-    <div class="stat-box">
-      <span class="stat-num">27/сек</span>
-      <span class="stat-lbl">товарів продавалося щосекунди у Британії під час Black Friday 2025</span>
-      <span class="stat-src">TikTok UK Black Friday Report, 2025</span>
-    </div>
-    <div class="stat-box">
-      <span class="stat-num">10–25%</span>
-      <span class="stat-lbl">виручки DTC-бренд може отримувати через TikTok Shop вже через 90 днів системного запуску</span>
-      <span class="stat-src">Аналіз early-adopter брендів, 2024–2025</span>
-    </div>
-  </div>
+  
 
   <!-- Crossover forecast -->
   <h3 class="sub">Точки перетину: коли TikTok обійде конкурентів</h3>
@@ -1053,6 +1050,373 @@ footer a{color:rgba(255,255,255,.35);text-decoration:none}
   VEO FORCE · <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener">@vasil_veo</a> · Аналітичний матеріал · 2026<br>
   Матеріал є авторським і освітнім. Статистика наводиться з посиланням на першоджерела.
 </footer>
+
+
+
+
+<script>
+var tooltips = {
+  'dopamine-bio': {
+    title: 'Дофамін (Dopamine, C₈H₁₁NO₂)',
+    body: '<p>Катехоламін, що синтезується з амінокислоти L-тирозину через L-DOPA. Діє як нейромедіатор у мезолімбічному і мезокортикальному шляхах мозку (система винагороди). Ключова роль: <strong>не задоволення, а прогнозування і пошук</strong> (Schultz, 1997).</p><p><strong>Концентрація:</strong> у нормі — 2–4 нг/мл у плазмі. При очікуванні непередбачуваної винагороди — зростає на 150–200% (Berridge, 1998).</p><p><strong>Вплив на увагу:</strong> підвищує фокус на цільовому подразнику, знижує здатність ігнорувати стимули. Саме тому людина не може "не подивитися" на сповіщення.</p><p><strong>Стресостійкість:</strong> хронічна дофамінова стимуляція (нескінченний скрол) виснажує рецептори D2 і знижує базовий рівень мотивації — потрібна більша стимуляція для того ж ефекту (толерантність).</p>',
+    terms: [{term: 'Мезолімбічний шлях', def: 'Основний "шлях винагороди" мозку: від вентральної тегментальної ділянки до nucleus accumbens. Активується при очікуванні будь-якої винагороди.'},{term: 'L-тирозин', def: 'Амінокислота-попередник дофаміну. Міститься в м’ясі, сирі, горіхах.'}]
+  },
+  'cortisol-bio': {
+    title: 'Кортизол (Cortisol, C₂₁H₃₀O₅)',
+    body: '<p>Стероїдний гормон, що виробляється корою надниркових залоз у відповідь на стрес або невизначеність. Регулюється через вісь ГГН: гіпоталамус → гіпофіз → надниркові залози.</p><p><strong>Концентрація:</strong> вранці — 100–200 нмоль/л (пік), ввечері — 50–100 нмоль/л. При гострому стресі зростає до 500–700 нмоль/л протягом 15–30 хвилин.</p><p><strong>Вплив на увагу:</strong> загострює увагу на загрозі (звужує фокус), пришвидшує реакцію, знижує раціональне мислення. У маркетингу: контент, що сигналізує про ризик або втрачену можливість, утримує увагу довше.</p><p><strong>Стресостійкість:</strong> хронічно підвищений кортизол руйнує нейрони гіпокампу, погіршує пам’ять і збільшує тривожність. FOMO — типова кортизолова пастка.</p>',
+    terms: [{term: 'Вісь ГГН', def: 'Гіпоталамо-гіпофізарно-надниркова вісь. Основна система регуляції стресової відповіді організму.'},{term: 'FOMO', def: 'Fear Of Missing Out — страх пропустити щось важливе. Кортизоловий феномен, описаний Przybylski et al., 2013.'}]
+  },
+  'oxytocin-bio': {
+    title: 'Окситоцин (Oxytocin, C‴₄H‵₄N₇O₁₂S₂)',
+    body: '<p>Нейропептид, що виробляється в гіпоталамусі і виділяється через гіпофіз. Відомий як "гормон прихильності", але точніша роль — <strong>зниження соціального страху і підвищення довіри до конкретних людей</strong>.</p><p><strong>Концентрація:</strong> базовий рівень у плазмі — 1–5 пмоль/л. При зоровому контакті, щирому діалозі або тактильному контакті — зростає на 30–60%.</p><p><strong>Вплив на довіру:</strong> знижує активність мигдалини (центру страху), підвищує щедрість і готовність до співпраці (Kosfeld et al., Science, 2005). Саме тому автор, якому "довіряєш", продає ефективніше за рекламу.</p><p><strong>У TikTok-контексті:</strong> природна, нерепетирована подача активує окситоцин у глядача. Вилизаний постановочний контент — ні, бо мозок зчитує відсутність справжньої людини.</p>',
+    terms: [{term: 'Мигдалина (Amygdala)', def: 'Частина лімбічної системи, відповідальна за страх і соціальну оцінку. Окситоцин знижує її активність.'},{term: 'Косфелд і ін. (2005)', def: 'Класичне дослідження: учасники гри довіри, які отримали окситоцин назально, вдвічі частіше довіряли незнайомцям.'}]
+  },
+  'serotonin-bio': {
+    title: 'Серотонін (Serotonin, 5-HT, C₁₀H₁₂N₂O)',
+    body: '<p>Моноамін, що синтезується з триптофану. 95% серотоніну виробляється в кишечнику, лише 5% — в мозку. Відомий як "гормон щастя", але точніша функція — <strong>відчуття соціальної значущості і свого місця в ієрархії</strong>.</p><p><strong>Концентрація:</strong> у плазмі — 0,55–2,0 мкмоль/л. Знижується при соціальному відкиданні або відчутті низького статусу.</p><p><strong>Вплив на увагу:</strong> регулює імпульсивність і самоконтроль. Низький серотонін → підвищена імпульсивність, тривожність, агресія. Стабільний рівень → впевненість, терпіння, стійкість до маніпуляцій.</p><p><strong>Instagram і серотонін:</strong> демонстрація статусу → відчуття ієрархічного підтвердження → серотонін у того, хто демонструє. Але для глядача, який порівнює себе, — навпаки: серотонін знижується.</p>',
+    terms: [{term: '5-HT рецептори', def: '14 підтипів рецепторів серотоніну. 5-HT1A пов’язаний із тривожністю, 5-HT2A — із галюцинаціями і творчим мисленням.'},{term: 'Триптофан', def: 'Незамінна амінокислота-попередник серотоніну. Міститься в індичці, бананах, горіхах.'}]
+  },
+  'endorphins-bio': {
+    title: 'Ендорфіни (Endorphins, β-Endorphin)',
+    body: '<p>Ендогенні опіоїдні пептиди, що виробляються гіпофізом і гіпоталамусом. Назва: endo (внутрішній) + morphine (морфін) — буквально "внутрішній морфін". Зв’язуються з μ-опіоїдними рецепторами.</p><p><strong>Концентрація:</strong> у стані спокою — близько 10–40 пмоль/мл. При сильному сміхі, фізичному навантаженні або моменті "вау" — зростає в 2–5 разів протягом хвилин.</p><p><strong>Вплив на пам’ять:</strong> ендорфіни підсилюють консолідацію пам’яті — контент, що викликає фізичне задоволення (сміх, здивування, полегшення), запам’ятовується краще і зберігається довше.</p><p><strong>У контексті відео:</strong> несподіваний результат, гумор, момент "а ось і розв’язка" — все це ендорфінові тригери. Саме тому відео з "вау-фіналом" мають вищий показник повторних переглядів.</p>',
+    terms: [{term: 'μ-опіоїдні рецептори', def: 'Основний тип рецепторів для ендорфінів і опіатів. Активація викликає знеболення, ейфорію і відчуття задоволення.'},{term: 'Ефект Зейгарнік', def: 'Незавершені дії запам’ятовуються краще. Саме тому відео з незакінченим сюжетом ("залишайтесь до кінця") утримує увагу.'}]
+  },
+
+  'dopamine': {
+    title: 'Дофамін',
+    body: 'Нейромедіатор, який відповідає за передбачення винагороди — а не за саму винагороду. Активується, коли ми очікуємо щось приємне, але ще не отримали. Саме тому людина не може зупинити скрол: мозок очікує, що наступне відео буде кращим.',
+    terms: []
+  },
+  'serotonin': {
+    title: 'Серотонін',
+    body: 'Нейромедіатор, пов’язаний із відчуттям соціальної значущості, статусу і свого місця в групі. Активується, коли ми демонструємо або підтверджуємо свій статус. Instagram будувався саме на цьому механізмі.',
+    terms: []
+  },
+  'cortisol': {
+    title: 'Кортизол',
+    body: 'Гормон стресу і невизначеності. Активується, коли ми відчуваємо ризик або загрозу втрати. У контексті контенту: фрази "більшість роблять цю помилку" або "ви можете втрачати гроші" запускають кортизолову реакцію і утримують увагу.',
+    terms: []
+  },
+  'oxytocin': {
+    title: 'Окситоцин',
+    body: 'Гормон довіри і близькості. Виробляється, коли ми відчуваємо щирий людський контакт. Саме тому природна, нерепетирована подача викликає більше довіри, ніж ідеально вилизана реклама.',
+    terms: []
+  },
+  'endorphins': {
+    title: 'Ендорфіни',
+    body: 'Нейрохімічні речовини, що виробляються при позитивних емоціях: гуморі, здивуванні, полегшенні. Закріплюють контент у пам’яті — відeo, що викликає сміх або "вау", запам’ятовується краще.',
+    terms: []
+  },
+  'tiktok-algo': {
+    title: 'Алгоритм TikTok',
+    body: 'Система рекомендацій, яка підбирає відео індивідуально для кожного користувача на основі поведінки: скільки дивились, лайкали, коментували, зберігали. Не підписки — поведінка.',
+    terms: [
+      {term: 'Hook Rate', def: 'Відсоток людей, які додивились перші 3 секунди відео. Якщо нижче 65–70% — алгоритм перестає просувати відео.'},
+      {term: 'FYP (For You Page)', def: 'Головна стрічка TikTok — персоналізована добірка відео, не обов\u2019язково від підписок.'}
+    ]
+  },
+  'hook-rate': {
+    title: 'Hook Rate (Гачок-показник)',
+    body: 'Відсоток глядачів, які додивились перші 3 секунди відео. Ключова метрика для алгоритму TikTok: якщо нижче 65–70% — відео не просувається.',
+    terms: []
+  },
+  'fomo': {
+    title: 'FOMO — Fear Of Missing Out',
+    body: 'Страх пропустити щось важливе. Психологічний феномен, описаний Przybylski et al. (2013). У контексті продажів: контент, що показує "всі вже купили" або "пропозиція закінчується", активує кортизол і прискорює рішення про покупку.',
+    terms: []
+  },
+  'banner-blindness': {
+    title: 'Банерна сліпота',
+    body: 'Психологічний ефект, коли мозок автоматично ігнорує контент, що візуально схожий на рекламу. Описано Benway & Lane (1998). Студійне освітлення, акторська посмішка, логотип у кутку — всі ці ознаки "вмикають" ігнорування.',
+    terms: []
+  },
+  'cagr': {
+    title: 'CAGR — Compound Annual Growth Rate',
+    body: 'Середньорічний темп зростання за певний період. Показує, з якою швидкістю зростав показник щорічно, якби ріст був рівномірним. TikTok: CAGR реклами 58,2% означає, що рекламні доходи в середньому подвоювалися кожні ~1,5 роки.',
+    terms: []
+  },
+  'arpu': {
+    title: 'Ad ARPU — Advertising Average Revenue Per User',
+    body: 'Середній рекламний дохід платформи з одного активного користувача за рік. Формула: загальний рекламний дохід ÷ кількість активних користувачів. Не те, скільки платить користувач — а скільки рекламодавці платять платформі за доступ до уваги однієї людини.',
+    terms: []
+  },
+  'gmv': {
+    title: 'GMV — Gross Merchandise Value',
+    body: 'Загальний обсяг товарів, проданих через платформу за певний період. Включає всі транзакції, навіть якщо частина була повернена. Не дохід платформи — а обсяг товарообігу.',
+    terms: []
+  },
+  'affiliate': {
+    title: 'Афіліат / Affiliate-модель',
+    body: 'Автор контенту, який просуває чужі товари і отримує комісію (5–20%) з кожного продажу через своє посилання. Не має власного складу, не займається логістикою і відправками. Монетизація — виключно через контент і довіру аудиторії.',
+    terms: [
+      {term: 'Мерчант', def: 'Продавець з власним товаром, каталогом і логістикою. 15 млн+ у TikTok Shop.'},
+      {term: 'Комісія', def: 'Відсоток від продажу, який отримує афіліат. В TikTok Shop: 5–30% залежно від категорії.'}
+    ]
+  },
+  'mere-exposure': {
+    title: 'Mere Exposure Effect (Ефект простого знайомства)',
+    body: 'Психологічний феномен, описаний Robert Zajonc у 1968 році: чим частіше людина бачить обличчя або ім\u2019я, тим вищий рівень симпатії та довіри до нього — навіть без будь-якої взаємодії. Саме тому регулярність публікацій важливіша за перфекціонізм.',
+    terms: []
+  },
+  'dtc': {
+    title: 'DTC — Direct-to-Consumer',
+    body: 'Модель продажів, де виробник або бренд продає товар напряму споживачу, без посередників (магазинів, дистриб\u2019юторів). TikTok Shop є одним із найефективніших DTC-каналів через вбудовану конверсію.',
+    terms: []
+  },
+  'tiktok-shop': {
+    title: 'TikTok Shop',
+    body: 'Вбудована торгова екосистема TikTok, що дозволяє продавати товари безпосередньо в додатку: від перегляду відео до оплати без переходу на зовнішні сайти. GMV у 2025 році — $64,3 млрд (+94% за рік).',
+    terms: [
+      {term: 'GMV', def: 'Gross Merchandise Value — загальний обсяг товарів, проданих через платформу.'},
+      {term: 'Конверсія', def: 'Відсоток переглядів, що завершились покупкою. TikTok Shop: 4,2–8%.'}
+    ]
+  },
+  'social-commerce': {
+    title: 'Соціальна комерція (Social Commerce)',
+    body: 'Продаж товарів безпосередньо через соціальні мережі, без переходу на зовнішні сайти. TikTok Shop — найбільш розвинута реалізація цієї моделі: вся воронка від перегляду до оплати відбувається в одному додатку.',
+    terms: []
+  }
+};
+
+function showTooltip(key){
+  var t = tooltips[key];
+  if(!t) return;
+  document.getElementById('ttTitle').textContent = t.title;
+  document.getElementById('ttBody').innerHTML = t.body;
+  var termsEl = document.getElementById('ttTerms');
+  termsEl.innerHTML = '';
+  if(t.terms && t.terms.length){
+    t.terms.forEach(function(tr){
+      var div = document.createElement('div');
+      div.className = 'tt-row';
+      div.innerHTML = '<div class="tt-term">'+tr.term+'</div><div class="tt-def">'+tr.def+'</div>';
+      termsEl.appendChild(div);
+    });
+  }
+  document.getElementById('ttOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeTooltip(e){
+  if(e && e.target !== document.getElementById('ttOverlay')) return;
+  document.getElementById('ttOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+}
+</script>
+
+<!-- GLOSSARY FAB -->
+<button class="gloss-fab" onclick="openGloss()">
+  <span class="gloss-fab-i">і</span>
+  Термінологія
+</button>
+
+<!-- GLOSSARY MODAL -->
+<div class="gloss-overlay" id="glossOverlay" onclick="bgCloseGloss(event)">
+<div class="gloss-modal">
+  <div class="gloss-top">
+    <div class="gloss-top-left">
+      <div class="gloss-top-i">і</div>
+      <div>
+        <div class="gloss-top-title">Термінологія</div>
+        <div class="gloss-top-sub">Повний глосарій матеріалу</div>
+      </div>
+    </div>
+    <button class="gloss-x" onclick="closeGloss()">✕</button>
+  </div>
+  <div class="gloss-body">
+
+    <!-- НЕЙРОХІМІЯ -->
+    <div class="gloss-section">
+      <div class="gloss-section-head"><span>01</span>Нейрохімія і гормони</div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">Дофамін <span class="gloss-formula">C₈H₁₁NO₂</span></div>
+        <div class="gloss-def">
+          <p>Катехоламін, що синтезується з амінокислоти L-тирозину через L-DOPA. Діє як нейромедіатор у мезолімбічному і мезокортикальному шляхах мозку (система винагороди). Ключова роль: <strong>не задоволення, а прогнозування і пошук</strong> (Schultz, 1997).</p>
+          <p><strong>Концентрація:</strong> у нормі — 2–4 нг/мл у плазмі. При очікуванні непередбачуваної винагороди — зростає на 150–200% (Berridge, 1998).</p>
+          <p><strong>Вплив на увагу:</strong> підвищує фокус на цільовому подразнику, знижує здатність ігнорувати стимули. Саме тому людина не може «не подивитися» на сповіщення.</p>
+          <p><strong>Стресостійкість:</strong> хронічна дофамінова стимуляція (нескінченний скрол) виснажує рецептори D2 і знижує базовий рівень мотивації — потрібна більша стимуляція для того ж ефекту (толерантність).</p>
+          <div class="gloss-sub-list">
+            <div class="gloss-sub">Мезолімбічний шлях — основний «шлях винагороди»: від вентральної тегментальної ділянки до nucleus accumbens. Активується при очікуванні будь-якої винагороди.</div>
+            <div class="gloss-sub">L-тирозин — амінокислота-попередник дофаміну. Міститься в м'ясі, сирі, горіхах.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">Кортизол <span class="gloss-formula">C₂₁H₃₀O₅</span></div>
+        <div class="gloss-def">
+          <p>Стероїдний гормон, що виробляється корою надниркових залоз у відповідь на стрес або невизначеність. Регулюється через вісь ГГН: гіпоталамус → гіпофіз → надниркові залози.</p>
+          <p><strong>Концентрація:</strong> вранці — 100–200 нмоль/л (пік), ввечері — 50–100 нмоль/л. При гострому стресі зростає до 500–700 нмоль/л протягом 15–30 хвилин.</p>
+          <p><strong>Вплив на увагу:</strong> загострює увагу на загрозі (звужує фокус), пришвидшує реакцію, знижує раціональне мислення. Контент, що сигналізує про ризик або втрачену можливість, утримує увагу довше.</p>
+          <p><strong>Стресостійкість:</strong> хронічно підвищений кортизол руйнує нейрони гіпокампу, погіршує пам'ять і збільшує тривожність. FOMO — типова кортизолова пастка.</p>
+          <div class="gloss-sub-list">
+            <div class="gloss-sub">Вісь ГГН — гіпоталамо-гіпофізарно-надниркова вісь. Основна система регуляції стресової відповіді організму.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">Окситоцин <span class="gloss-formula">C₄₃H₆₆N₁₂O₁₂S₂</span></div>
+        <div class="gloss-def">
+          <p>Нейропептид, що виробляється в гіпоталамусі і виділяється через гіпофіз. Відомий як «гормон прихильності», але точніша роль — <strong>зниження соціального страху і підвищення довіри до конкретних людей</strong>.</p>
+          <p><strong>Концентрація:</strong> базовий рівень у плазмі — 1–5 пмоль/л. При щирому діалозі або тактильному контакті — зростає на 30–60%.</p>
+          <p><strong>Вплив на довіру:</strong> знижує активність мигдалини (центру страху), підвищує готовність до співпраці (Kosfeld et al., Science, 2005). Саме тому автор, якому «довіряєш», продає ефективніше за рекламу.</p>
+          <p><strong>У TikTok-контексті:</strong> природна, нерепетирована подача активує окситоцин у глядача. Вилизаний постановочний контент — ні, бо мозок зчитує відсутність справжньої людини.</p>
+          <div class="gloss-sub-list">
+            <div class="gloss-sub">Мигдалина (Amygdala) — частина лімбічної системи, відповідальна за страх і соціальну оцінку. Окситоцин знижує її активність.</div>
+            <div class="gloss-sub">Kosfeld et al. (2005, Science) — учасники гри довіри, які отримали окситоцин назально, вдвічі частіше довіряли незнайомцям.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">Серотонін <span class="gloss-formula">5-HT · C₁₀H₁₂N₂O</span></div>
+        <div class="gloss-def">
+          <p>Моноамін, що синтезується з триптофану. 95% серотоніну виробляється в кишечнику, лише 5% — в мозку. Відомий як «гормон щастя», але точніша функція — <strong>відчуття соціальної значущості і свого місця в ієрархії</strong>.</p>
+          <p><strong>Концентрація:</strong> у плазмі — 0,55–2,0 мкмоль/л. Знижується при соціальному відкиданні або відчутті низького статусу.</p>
+          <p><strong>Вплив на увагу:</strong> регулює імпульсивність і самоконтроль. Низький серотонін → підвищена імпульсивність, тривожність, агресія. Стабільний рівень → впевненість, терпіння, стійкість до маніпуляцій.</p>
+          <p><strong>Instagram і серотонін:</strong> демонстрація статусу → серотонін у того, хто демонструє. Але для глядача, який порівнює себе, — навпаки: серотонін знижується.</p>
+          <div class="gloss-sub-list">
+            <div class="gloss-sub">5-HT рецептори — 14 підтипів. 5-HT1A пов'язаний із тривожністю, 5-HT2A — із творчим мисленням.</div>
+            <div class="gloss-sub">Триптофан — незамінна амінокислота-попередник серотоніну. Міститься в індичці, бананах, горіхах.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">Ендорфіни <span class="gloss-formula">β-Endorphin</span></div>
+        <div class="gloss-def">
+          <p>Ендогенні опіоїдні пептиди, що виробляються гіпофізом і гіпоталамусом. Назва: endo (внутрішній) + morphine (морфін) — буквально «внутрішній морфін». Зв'язуються з μ-опіоїдними рецепторами.</p>
+          <p><strong>Концентрація:</strong> у стані спокою — близько 10–40 пмоль/мл. При сильному сміхі або моменті «вау» — зростає в 2–5 разів протягом хвилин.</p>
+          <p><strong>Вплив на пам'ять:</strong> ендорфіни підсилюють консолідацію пам'яті — контент, що викликає фізичне задоволення (сміх, здивування, полегшення), запам'ятовується краще і зберігається довше.</p>
+          <p><strong>У контексті відео:</strong> несподіваний результат, гумор, момент «а ось і розв'язка» — ендорфінові тригери. Саме тому відео з «вау-фіналом» мають вищий показник повторних переглядів.</p>
+          <div class="gloss-sub-list">
+            <div class="gloss-sub">μ-опіоїдні рецептори — активація викликає знеболення, ейфорію і відчуття задоволення.</div>
+            <div class="gloss-sub">Ефект Зейгарнік — незавершені дії запам'ятовуються краще. Саме тому «залишайтесь до кінця» утримує увагу.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /нейрохімія -->
+
+    <!-- ПЛАТФОРМА І АЛГОРИТМИ -->
+    <div class="gloss-section">
+      <div class="gloss-section-head"><span>02</span>Платформа і алгоритми</div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">Алгоритм TikTok / FYP</div>
+        <div class="gloss-def">
+          <p>Система рекомендацій, яка підбирає відео індивідуально для кожного користувача на основі поведінки: скільки дивились, лайкали, коментували, зберігали. Не підписки — поведінка.</p>
+          <div class="gloss-sub-list">
+            <div class="gloss-sub">FYP (For You Page) — головна стрічка TikTok. Персоналізована добірка відео, що формується алгоритмом, а не підписками.</div>
+            <div class="gloss-sub">Hook Rate — відсоток глядачів, які додивились перші 3 секунди відео. Якщо нижче 65–70% — алгоритм перестає просувати відео.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">TikTok Shop</div>
+        <div class="gloss-def">
+          <p>Вбудована торгова екосистема TikTok. Дозволяє продавати товари безпосередньо в додатку: від перегляду відео до оплати без переходу на зовнішні сайти. GMV у 2025 році — $64,3 млрд (+94% за рік).</p>
+          <div class="gloss-sub-list">
+            <div class="gloss-sub">GMV (Gross Merchandise Value) — загальний обсяг товарів, проданих через платформу. Не дохід платформи, а товарообіг.</div>
+            <div class="gloss-sub">Конверсія — відсоток переглядів, що завершились покупкою. TikTok Shop: 4,2–8% проти 2,1% в Instagram.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">Мерчант vs Афіліат</div>
+        <div class="gloss-def">
+          <p><strong>Мерчант (Seller)</strong> — продавець з власним товаром, каталогом і логістикою. Відповідає за склад, відправки, повернення. 15 млн+ у TikTok Shop.</p>
+          <p><strong>Афіліат (Creator)}</strong> — автор контенту, який просуває чужі товари і отримує комісію (5–20%) з кожного продажу. Немає складу, не займається логістикою. Лише контент і довіра аудиторії. ~851 000 активних у 2026.</p>
+        </div>
+      </div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">Social Commerce (Соціальна комерція)</div>
+        <div class="gloss-def">Продаж товарів безпосередньо через соціальні мережі без переходу на зовнішні сайти. TikTok Shop — найбільш розвинута реалізація: вся воронка від перегляду до оплати в одному додатку.</div>
+      </div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">DTC — Direct-to-Consumer</div>
+        <div class="gloss-def">Модель продажів, де виробник або бренд продає товар напряму споживачу без посередників. TikTok Shop є одним із найефективніших DTC-каналів через вбудовану конверсію.</div>
+      </div>
+
+    </div><!-- /платформа -->
+
+    <!-- АНАЛІТИКА І МЕТРИКИ -->
+    <div class="gloss-section">
+      <div class="gloss-section-head"><span>03</span>Аналітика і метрики</div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">CAGR <span class="gloss-formula">Compound Annual Growth Rate</span></div>
+        <div class="gloss-def">Середньорічний темп зростання за певний період. Показує, з якою швидкістю зростав показник щорічно, якби ріст був рівномірним. TikTok: CAGR реклами 58,2% — доходи в середньому подвоювалися кожні ~1,5 роки.</div>
+      </div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">Ad ARPU <span class="gloss-formula">Advertising Average Revenue Per User</span></div>
+        <div class="gloss-def">Середній рекламний дохід платформи з одного активного користувача за рік. Формула: загальний рекламний дохід ÷ кількість активних користувачів. Не те, скільки платить користувач — а скільки рекламодавці платять платформі за доступ до уваги однієї людини.</div>
+      </div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">MAU <span class="gloss-formula">Monthly Active Users</span></div>
+        <div class="gloss-def">Кількість унікальних користувачів, які були активні на платформі хоча б раз протягом місяця. Основна метрика масштабу платформи.</div>
+      </div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">GMV <span class="gloss-formula">Gross Merchandise Value</span></div>
+        <div class="gloss-def">Загальний обсяг товарів, проданих через платформу за певний період. Включає всі транзакції, навіть якщо частина була повернена. Не дохід платформи — а обсяг товарообігу.</div>
+      </div>
+
+    </div><!-- /аналітика -->
+
+    <!-- ПСИХОЛОГІЯ І ЕФЕКТИ -->
+    <div class="gloss-section">
+      <div class="gloss-section-head"><span>04</span>Психологія і поведінкові ефекти</div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">FOMO <span class="gloss-formula">Fear Of Missing Out</span></div>
+        <div class="gloss-def">Страх пропустити щось важливе. Психологічний феномен, описаний Przybylski et al. (2013, Computers in Human Behavior). У контексті продажів: «всі вже купили» або «пропозиція закінчується» — кортизоловий тригер, що прискорює рішення.</div>
+      </div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">Банерна сліпота</div>
+        <div class="gloss-def">Психологічний ефект автоматичного ігнорування контенту, що візуально схожий на рекламу. Описано Benway & Lane (1998). Студійне освітлення, акторська посмішка, логотип у кутку — мозок «вимикає» увагу автоматично.</div>
+      </div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">Mere Exposure Effect (Ефект простого знайомства)</div>
+        <div class="gloss-def">Феномен, описаний Robert Zajonc (1968): чим частіше людина бачить обличчя або ім'я, тим вищий рівень симпатії та довіри — навіть без взаємодії. Основа стратегії: регулярність публікацій важливіша за перфекціонізм.</div>
+      </div>
+
+      <div class="gloss-entry">
+        <div class="gloss-term">Когнітивне перевантаження</div>
+        <div class="gloss-def">Стан, коли обсяг вхідної інформації перевищує здатність мозку її обробляти. Firth et al. (2019, World Psychiatry): постійне перемикання між потоками знижує здатність до глибокого зосередження і підвищує імпульсивність.</div>
+      </div>
+
+    </div><!-- /психологія -->
+
+  </div><!-- /gloss-body -->
+  <div class="gloss-footer">
+    <button class="gloss-close-btn" onclick="closeGloss()">Закрити</button>
+  </div>
+</div>
+</div>
+
+<script>
+function openGloss(){
+  document.getElementById('glossOverlay').classList.add('show');
+  document.body.style.overflow='hidden';
+}
+function closeGloss(){
+  document.getElementById('glossOverlay').classList.remove('show');
+  document.body.style.overflow='';
+}
+function bgCloseGloss(e){
+  if(e.target===document.getElementById('glossOverlay')) closeGloss();
+}
+</script>
 
 </body>
 </html>
