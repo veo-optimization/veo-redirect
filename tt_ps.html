@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Психологія TikTok · VEO FORCE · @vasil_veo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#FFFFFF;color:#0A0A0A;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.65;overflow-x:hidden;color-scheme:light only}
+
+/* ── TOKENS ── */
+:root{
+  --acc:#FF0050;
+  --acc2:#00C2FF;
+  --gold:#F4C542;
+  --dark:#0A0A0A;
+  --brd:#E8E5DE;
+  --sub:#444444;
+  --light:#777777;
+  --head:'Unbounded',sans-serif;
+  --serif:'Playfair Display',serif;
+  --body:'Manrope',sans-serif;
+}
+
+/* ── TOP BAR ── */
+.topbar{background:#0A0A0A;padding:8px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.tb-brand{font-family:var(--head);font-size:.72rem;font-weight:900;color:#fff;letter-spacing:-.01em}
+.tb-brand span{color:#FF0050}
+.tb-meta{font-size:.68rem;color:rgba(255,255,255,.4);letter-spacing:.04em}
+
+/* ── HERO ── */
+.hero{background:#0A0A0A;padding:60px 20px 52px;position:relative;overflow:hidden}
+.hero-noise{position:absolute;inset:0;opacity:.03;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");pointer-events:none}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 60% 55% at 80% 50%,rgba(255,0,80,.14),transparent 60%),radial-gradient(ellipse 40% 40% at 10% 80%,rgba(0,194,255,.09),transparent 55%);pointer-events:none}
+.hero-inner{max-width:920px;margin:0 auto;position:relative;z-index:1}
+.hero-kicker{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.12);border-radius:4px;padding:4px 12px;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:22px}
+.hero-kicker::before{content:'';width:6px;height:6px;border-radius:50%;background:#FF0050;flex-shrink:0}
+.hero h1{font-family:var(--head);font-size:clamp(1.6rem,5.5vw,3.4rem);font-weight:900;letter-spacing:-.06em;line-height:1.04;color:#fff;margin-bottom:18px;max-width:820px}
+.hero h1 em{font-style:normal;color:#FF0050}
+.hero-deck{font-size:.95rem;color:rgba(255,255,255,.5);max-width:600px;line-height:1.7;margin-bottom:28px}
+.hero-author{display:flex;align-items:center;gap:10px;font-size:.76rem;color:rgba(255,255,255,.4)}
+.hero-author strong{color:rgba(255,255,255,.75);font-weight:700}
+.hero-author-dot{width:3px;height:3px;border-radius:50%;background:rgba(255,255,255,.25)}
+
+/* ── PULL QUOTE HERO ── */
+.hero-pull{font-family:var(--serif);font-size:clamp(1rem,2.5vw,1.45rem);font-style:italic;color:rgba(255,255,255,.35);max-width:640px;line-height:1.5;border-left:2px solid rgba(255,0,80,.4);padding-left:16px;margin-top:28px}
+
+/* ── WRAP ── */
+.wrap{max-width:920px;margin:0 auto;padding:0 18px}
+.wrap-narrow{max-width:700px;margin:0 auto;padding:0 18px}
+
+/* ── SECTION LABELS ── */
+.sec-eye{font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--light);display:flex;align-items:center;gap:9px;margin-bottom:12px}
+.sec-eye::before{content:'';width:20px;height:1.5px;background:#FF0050;flex-shrink:0}
+.sec-eye.cyan::before{background:#00C2FF}
+.sec-eye.gold::before{background:#F4C542}
+
+/* ── CHAPTER HEADINGS ── */
+.ch-wrap{padding:56px 0 0}
+.ch-num{font-family:'Manrope',sans-serif;font-size:.65rem;font-weight:800;color:rgba(255,0,80,.35);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px}
+h2.ch{font-family:var(--head);font-size:clamp(1.3rem,3.5vw,2rem);font-weight:900;letter-spacing:-.04em;line-height:1.12;color:#0A0A0A;margin-bottom:14px}
+h3.sub{font-family:var(--head);font-size:.95rem;font-weight:800;letter-spacing:-.02em;color:#0A0A0A;margin:24px 0 10px}
+.ch-lead{font-size:.95rem;color:var(--sub);line-height:1.75;margin-bottom:20px;max-width:680px}
+
+/* ── BODY TEXT ── */
+.body-text{font-size:.88rem;color:#333333;line-height:1.8;margin-bottom:16px}
+.body-text+.body-text{margin-top:-4px}
+.body-text strong{color:#0A0A0A;font-weight:700}
+.body-text em{font-style:italic;color:var(--sub)}
+
+/* ── HORMONE CARDS ── */
+.hormone-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin:24px 0}
+.h-card{border-radius:14px;padding:20px 18px;position:relative;overflow:hidden}
+.h-card-dop{background:#FFF5F7;border:1.5px solid rgba(255,0,80,.18)}
+.h-card-cor{background:#FFF8F0;border:1.5px solid rgba(255,140,0,.2)}
+.h-card-oxy{background:#F0FFF8;border:1.5px solid rgba(0,180,100,.18)}
+.h-card-ser{background:#F5F0FF;border:1.5px solid rgba(120,60,220,.18)}
+.h-card-end{background:#FFFFF0;border:1.5px solid rgba(180,160,0,.18)}
+.h-icon{font-size:1.6rem;margin-bottom:8px;display:block}
+.h-name{font-family:var(--head);font-size:.72rem;font-weight:900;letter-spacing:.04em;text-transform:uppercase;margin-bottom:4px}
+.h-card-dop .h-name{color:#CC0040}
+.h-card-cor .h-name{color:#C06000}
+.h-card-oxy .h-name{color:#007840}
+.h-card-ser .h-name{color:#6030AA}
+.h-card-end .h-name{color:#807000}
+.h-emotion{font-size:.78rem;font-weight:700;color:#0A0A0A;margin-bottom:6px}
+.h-desc{font-size:.78rem;color:var(--sub);line-height:1.6}
+
+/* ── STAT BOXES ── */
+.stat-row{display:flex;flex-wrap:wrap;gap:12px;margin:20px 0}
+.stat-box{background:#0A0A0A;border-radius:12px;padding:16px 18px;flex:1;min-width:140px}
+.stat-num{font-family:var(--head);font-size:1.8rem;font-weight:900;color:#FF0050;letter-spacing:-.05em;line-height:1;display:block}
+.stat-lbl{font-size:.72rem;color:rgba(255,255,255,.55);line-height:1.4;margin-top:4px;display:block}
+.stat-src{font-size:.62rem;color:rgba(255,255,255,.25);margin-top:6px;display:block;font-style:italic}
+
+/* ── CITATION BLOCKS ── */
+.cite{background:#F5F4F0;border-radius:10px;padding:14px 16px;margin:14px 0;font-size:.8rem;color:var(--sub);line-height:1.65;border-left:3px solid #E8E5DE}
+.cite strong{color:#0A0A0A;font-weight:700}
+.cite-ref{font-size:.7rem;color:var(--light);font-style:italic;margin-top:5px;display:block}
+
+/* ── VS COMPARE ── */
+.vs-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
+@media(max-width:500px){.vs-grid{grid-template-columns:1fr}}
+.vs-bad{background:#FFF0F0;border:1.5px solid #F0CCCC;border-radius:10px;padding:13px 14px}
+.vs-good{background:#F0FFF5;border:1.5px solid #C0E8CC;border-radius:10px;padding:13px 14px}
+.vs-label{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:7px}
+.vs-bad .vs-label{color:#C00030}
+.vs-good .vs-label{color:#1A7A3C}
+.vs-text{font-size:.82rem;color:#222;line-height:1.55}
+
+/* ── FORMULA ── */
+.formula-box{background:#0A0A0A;border-radius:14px;padding:22px 20px;margin:20px 0;text-align:center}
+.formula-title{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:14px}
+.formula-row{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px;font-family:var(--head);font-size:.72rem;font-weight:900;letter-spacing:-.01em}
+.f-token{padding:7px 12px;border-radius:8px;white-space:nowrap}
+.f-cor{background:rgba(255,140,0,.15);color:#FF9000;border:1px solid rgba(255,140,0,.25)}
+.f-dop{background:rgba(255,0,80,.12);color:#FF0050;border:1px solid rgba(255,0,80,.2)}
+.f-oxy{background:rgba(0,180,100,.12);color:#00AA60;border:1px solid rgba(0,180,100,.2)}
+.f-ser{background:rgba(120,60,220,.12);color:#8040DD;border:1px solid rgba(120,60,220,.2)}
+.f-end{background:rgba(200,180,0,.12);color:#B8A000;border:1px solid rgba(200,180,0,.2)}
+.f-arrow{color:rgba(255,255,255,.25);font-size:1rem}
+.formula-sub{font-size:.74rem;color:rgba(255,255,255,.35);margin-top:10px}
+
+/* ── BRAIN DIAGRAM ── */
+.brain-visual{background:linear-gradient(135deg,#0A0A0A,#1A0A1A);border-radius:16px;padding:28px 20px;margin:20px 0;display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.brain-text{flex:1;min-width:200px}
+.brain-text h4{font-family:var(--head);font-size:.8rem;font-weight:900;color:#fff;margin-bottom:10px;letter-spacing:-.01em}
+.brain-text p{font-size:.8rem;color:rgba(255,255,255,.5);line-height:1.65}
+.brain-metrics{display:flex;flex-direction:column;gap:8px;flex-shrink:0;min-width:160px}
+.bm-row{display:flex;align-items:center;gap:8px}
+.bm-label{font-size:.68rem;color:rgba(255,255,255,.4);width:80px;flex-shrink:0}
+.bm-bar-wrap{flex:1;height:5px;background:rgba(255,255,255,.08);border-radius:3px;overflow:hidden}
+.bm-fill{height:100%;border-radius:3px}
+.bm-val{font-size:.65rem;font-weight:700;color:rgba(255,255,255,.6);width:30px;text-align:right;flex-shrink:0}
+
+/* ── PULL QUOTE ── */
+.pull{font-family:var(--serif);font-size:clamp(.95rem,2.5vw,1.3rem);font-style:italic;color:#0A0A0A;line-height:1.55;border-left:3px solid #FF0050;padding:10px 0 10px 18px;margin:24px 0}
+
+/* ── PHENOMENON CARDS ── */
+.phen-list{display:flex;flex-direction:column;gap:12px;margin:20px 0}
+.phen-card{border:1.5px solid #E8E5DE;border-radius:12px;padding:18px 16px;display:flex;gap:14px;align-items:flex-start}
+.phen-icon{font-size:1.4rem;flex-shrink:0;margin-top:2px}
+.phen-title{font-family:var(--head);font-size:.78rem;font-weight:800;color:#0A0A0A;margin-bottom:5px;letter-spacing:-.01em}
+.phen-desc{font-size:.8rem;color:var(--sub);line-height:1.6}
+.phen-cite{font-size:.7rem;color:var(--light);font-style:italic;margin-top:5px}
+
+/* ── HOOK TABLE ── */
+.hook-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:14px 0;overflow:hidden;border-radius:10px;overflow:hidden}
+.hook-table th{background:#0A0A0A;color:#fff;padding:9px 12px;text-align:left;font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.hook-table td{padding:10px 12px;border-bottom:1px solid #F0EFE9;color:#333;vertical-align:top;line-height:1.45}
+.hook-table tr:last-child td{border-bottom:none}
+.hook-table td:first-child{font-weight:600;color:#0A0A0A;white-space:nowrap}
+.hook-table .bad{color:#C00030;font-size:.76rem}
+.hook-table .good{color:#1A7A3C;font-size:.76rem}
+.hook-table tr:nth-child(even) td{background:#FAFAF8}
+
+/* ── ROADMAP STEPS ── */
+.roadmap{display:flex;flex-direction:column;gap:0;margin:20px 0}
+.rm-step{display:flex;gap:16px;padding-bottom:24px;position:relative}
+.rm-step:last-child{padding-bottom:0}
+.rm-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0;width:36px}
+.rm-circle{width:36px;height:36px;border-radius:50%;background:#0A0A0A;color:#fff;font-family:var(--head);font-size:.62rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;z-index:1}
+.rm-circle.red{background:#FF0050}
+.rm-line{flex:1;width:2px;background:#E8E5DE;margin:3px 0}
+.rm-step:last-child .rm-line{display:none}
+.rm-body{flex:1;padding-top:6px}
+.rm-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#FF0050;margin-bottom:3px}
+.rm-title{font-family:var(--head);font-size:.82rem;font-weight:800;color:#0A0A0A;margin-bottom:6px;letter-spacing:-.01em}
+.rm-text{font-size:.8rem;color:var(--sub);line-height:1.6}
+
+/* ── DIVIDER ── */
+.hdivider{height:1px;background:#F0EFE9;margin:32px 0}
+.ch-divider{height:2px;background:linear-gradient(90deg,#FF0050,transparent);margin:48px 0 0;border:none}
+
+/* ── CTA SECTION ── */
+.cta-section{background:#0A0A0A;padding:52px 20px;margin-top:60px;position:relative;overflow:hidden}
+.cta-section::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 55% at 50% 110%,rgba(255,0,80,.15),transparent 65%);pointer-events:none}
+.cta-inner{max-width:640px;margin:0 auto;text-align:center;position:relative;z-index:1}
+.cta-inner h2{font-family:var(--head);font-size:clamp(1.1rem,3vw,1.7rem);font-weight:900;color:#fff;letter-spacing:-.04em;margin-bottom:10px}
+.cta-inner p{font-size:.86rem;color:rgba(255,255,255,.45);margin-bottom:22px;line-height:1.65}
+.cta-link{display:inline-block;background:#FF0050;color:#fff;border-radius:10px;padding:13px 30px;font-family:'Manrope',sans-serif;font-size:.84rem;font-weight:700;text-decoration:none;transition:background .15s}
+.cta-link:hover{background:#CC003A}
+
+footer{background:#0A0A0A;border-top:1px solid rgba(255,255,255,.07);padding:16px 20px;text-align:center;font-size:.7rem;color:rgba(255,255,255,.22);line-height:1.7}
+footer a{color:rgba(255,255,255,.35);text-decoration:none}
+
+@media(max-width:600px){
+  .hormone-grid{grid-template-columns:1fr}
+  .stat-row{flex-direction:column}
+  .brain-visual{flex-direction:column}
+  .formula-row{gap:5px;font-size:.62rem}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-brand"><span>VEO</span> FORCE · @vasil_veo</div>
+  <div class="tb-meta">Аналітичний матеріал · 2026</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-noise"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-kicker">Психологія платформи · Нейромаркетинг · TikTok Shop</div>
+    <h1>Чому мозок<br>не може зупинитися.<br><em>І як це продає.</em></h1>
+    <p class="hero-deck">Від дофаміну до дистрибуції. Науково-практичний аналіз того, як влаштована увага у 2026 році — і чому той, хто розуміє це, отримує перевагу ще до запуску TikTok Shop.</p>
+    <div class="hero-author">
+      <strong>Vasil VEO</strong>
+      <div class="hero-author-dot"></div>
+      <span>VEO FORCE · TikTok-стратегія для бізнесу</span>
+    </div>
+    <div class="hero-pull">«Увага стала валютою. Але більшість бізнесів досі платять за рекламу, а не заробляють на довірі.»</div>
+  </div>
+</div>
+
+<!-- ─────────────────────────────── -->
+<!-- CHAPTER 1: DOPAMINE MACHINE     -->
+<!-- ─────────────────────────────── -->
+<div style="padding-bottom:60px;background:#FFFFFF">
+<div class="wrap">
+  <div class="ch-wrap">
+    <div class="ch-num">Розділ 01</div>
+    <h2 class="ch">Дофамінова машина.<br>Як TikTok зламав петлю уваги</h2>
+    <p class="ch-lead">У 2022 році середньостатистичний дорослий перевіряв смартфон 96 разів на день — кожні 10 хвилин (Asurion Research, 2022). Але це вже застаріла статистика. TikTok змінив не частоту — він змінив механіку.</p>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-box">
+      <span class="stat-num">95</span>
+      <span class="stat-lbl">хвилин на день проводить середній користувач TikTok у 2024</span>
+      <span class="stat-src">Data.ai Mobile Report, 2024</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">1,7 млрд</span>
+      <span class="stat-lbl">активних користувачів щомісяця у 2025</span>
+      <span class="stat-src">Statista, Q1 2025</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">34%</span>
+      <span class="stat-lbl">користувачів відкривають TikTok одразу після пробудження</span>
+      <span class="stat-src">Morning Consult, 2023</span>
+    </div>
+  </div>
+
+  <p class="body-text">Дофамін — це не «гормон задоволення». Це гормон <strong>очікування</strong> задоволення. Точніше — гормон передбачення непередбачуваної винагороди. Саме це відкрив нейробіолог <strong>Wolfram Schultz</strong> у серії досліджень 1997–2001 років (Schultz W., «A Neural Substrate of Prediction and Reward», Science, 1997): дофамінові нейрони активуються не тоді, коли людина отримує нагороду — а тоді, коли вона <em>не знає, чи отримає її взагалі</em>.</p>
+
+  <div class="cite">
+    <strong>Schultz W. (1997):</strong> «Дофамінові нейрони кодують різницю між очікуваною і фактичною винагородою. Невизначеність — найсильніший з відомих активаторів системи.»
+    <span class="cite-ref">Science, Vol. 275, Issue 5306, pp. 1593–1599</span>
+  </div>
+
+  <p class="body-text">TikTok побудований точно на цьому принципі. Кожне нове відео — це непередбачуваний результат. Буде цікаво? Смішно? Важливо? Мозок не знає — і саме тому <strong>не може зупинитися</strong>. Це та сама механіка, що утримує людей за ігровими автоматами. Різниця — у масштабі та доступності.</p>
+
+  <div class="brain-visual">
+    <div class="brain-text">
+      <h4>Петля непередбачуваної винагороди</h4>
+      <p>Кожен скрол — це «тягнути важіль». Алгоритм TikTok навчається на поведінці кожного конкретного користувача і підбирає контент так, щоб максимізувати час у додатку — не задоволення, а <em>передчуття</em> наступного задоволення.</p>
+    </div>
+    <div class="brain-metrics">
+      <div class="bm-row"><span class="bm-label">Дофамін</span><div class="bm-bar-wrap"><div class="bm-fill" style="width:92%;background:#FF0050"></div></div><span class="bm-val">92%</span></div>
+      <div class="bm-row"><span class="bm-label">Кортизол</span><div class="bm-bar-wrap"><div class="bm-fill" style="width:75%;background:#FF8000"></div></div><span class="bm-val">75%</span></div>
+      <div class="bm-row"><span class="bm-label">Окситоцин</span><div class="bm-bar-wrap"><div class="bm-fill" style="width:58%;background:#00AA60"></div></div><span class="bm-val">58%</span></div>
+      <div class="bm-row"><span class="bm-label">Серотонін</span><div class="bm-bar-wrap"><div class="bm-fill" style="width:45%;background:#8040DD"></div></div><span class="bm-val">45%</span></div>
+      <div class="bm-row"><span class="bm-label">Ендорфін</span><div class="bm-bar-wrap"><div class="bm-fill" style="width:38%;background:#B8A000"></div></div><span class="bm-val">38%</span></div>
+    </div>
+  </div>
+
+  <p class="body-text"><em>Відносна інтенсивність нейрохімічних реакцій під час перегляду TikTok-стрічки. Джерело: зведена оцінка на основі Robinson T.E. & Berridge K.C. (2003), «Incentive-salience theory of addiction», Addiction, 98(s1).</em></p>
+
+  <div class="pull">«Мозок не "зависає" у TikTok через слабку волю. Він робить саме те, для чого еволюція його розробила: шукає інформацію, яка може мати значення для виживання. Алгоритм просто використовує цей механізм.»</div>
+
+  <h3 class="sub">П'ять нейрохімічних систем, якими керує коротке відео</h3>
+  <div class="hormone-grid">
+    <div class="h-card h-card-dop">
+      <span class="h-icon">⚡</span>
+      <div class="h-name">Дофамін</div>
+      <div class="h-emotion">Цікавість · Передчуття</div>
+      <div class="h-desc">Активується невизначеністю. Кожен скрол — ставка на те, що наступне відео буде кращим. Алгоритм TikTok навмисно підтримує цей стан.</div>
+    </div>
+    <div class="h-card h-card-cor">
+      <span class="h-icon">⚠️</span>
+      <div class="h-name">Кортизол</div>
+      <div class="h-emotion">Страх помилки · Ризик втрати</div>
+      <div class="h-desc">Контент, що сигналізує про загрозу або втрачену можливість, утримує увагу довше. FOMO — це кортизоловий феномен.</div>
+    </div>
+    <div class="h-card h-card-oxy">
+      <span class="h-icon">🤝</span>
+      <div class="h-name">Окситоцин</div>
+      <div class="h-emotion">Довіра · Близькість</div>
+      <div class="h-desc">Природна, щира подача формує відчуття «я знаю цю людину». Саме тому вилизаний рекламний контент відштовхує — він не активує окситоцин.</div>
+    </div>
+    <div class="h-card h-card-ser">
+      <span class="h-icon">👑</span>
+      <div class="h-name">Серотонін</div>
+      <div class="h-emotion">Статус · Впевненість</div>
+      <div class="h-desc">Контент, що дає відчуття належності до «тих, хто знає» або «тих, хто може собі дозволити», активує серотонінову систему.</div>
+    </div>
+    <div class="h-card h-card-end">
+      <span class="h-icon">😄</span>
+      <div class="h-name">Ендорфіни</div>
+      <div class="h-emotion">Здивування · Полегшення</div>
+      <div class="h-desc">Гумор, несподіваний результат, момент «а ось і розв'язка» — фізичне задоволення, яке закріплює контент у пам'яті.</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="ch-divider">
+
+<!-- ─────────────────────────────── -->
+<!-- CHAPTER 2: PHENOMENA             -->
+<!-- ─────────────────────────────── -->
+<div style="background:#FFFFFF;padding-bottom:60px">
+<div class="wrap">
+  <div class="ch-wrap">
+    <div class="ch-num">Розділ 02</div>
+    <h2 class="ch">Феномени уваги.<br>Чому класична реклама мертва</h2>
+    <p class="ch-lead">Сучасний споживач щодня стикається з понад 6 000–10 000 рекламних повідомлень (Yankelovich Research, 2007 — і цифра лише зросла). Мозок виробив захист. Ці захисні механізми — і є новий контекст, у якому доводиться продавати.</p>
+  </div>
+
+  <div class="phen-list">
+    <div class="phen-card">
+      <span class="phen-icon">🙈</span>
+      <div>
+        <div class="phen-title">Банерна сліпота</div>
+        <div class="phen-desc">Людина буквально перестає «бачити» контент, що візуально схожий на рекламу. Перше дослідження провели Benway & Lane (1998), але ефект у 2020-х набагато сильніший — мозок навчився ігнорувати весь «рекламний» патерн: рівні краї, студійне освітлення, акторська посмішка, логотип у кутку.</div>
+        <span class="phen-cite">Benway J.P., Lane D.M. (1998). «Banner blindness: Web searchers often miss obvious links.» Internetworking, 1(3).</span>
+      </div>
+    </div>
+    <div class="phen-card">
+      <span class="phen-icon">😤</span>
+      <div>
+        <div class="phen-title">Скіпабельність і антипатія до переривання</div>
+        <div class="phen-desc">76% користувачів пропускають рекламу одразу, як з'являється кнопка «Пропустити» (HubSpot, 2022). Примусове переривання контенту викликає кортизолову реакцію — роздратування — і прив'язує негативні емоції до бренду, а не до платформи.</div>
+        <span class="phen-cite">HubSpot State of Marketing Report, 2022.</span>
+      </div>
+    </div>
+    <div class="phen-card">
+      <span class="phen-icon">📉</span>
+      <div>
+        <div class="phen-title">Інформаційний шум і когнітивне перевантаження</div>
+        <div class="phen-desc">Дослідження Firth et al. (2019) у журналі World Psychiatry показало: постійне перемикання між інформаційними потоками знижує здатність до глибокого зосередження і підвищує імпульсивність. Парадокс: людина хоче більше контенту, але сприймає менше. Виграє той, хто говорить просто і чітко.</div>
+        <span class="phen-cite">Firth J. et al. (2019). «The online brain: how the internet may be changing our cognition.» World Psychiatry, 18(2), 119–129.</span>
+      </div>
+    </div>
+    <div class="phen-card">
+      <span class="phen-icon">😰</span>
+      <div>
+        <div class="phen-title">FOMO — Fear Of Missing Out</div>
+        <div class="phen-desc">Przybylski et al. (2013) першими формалізували концепцію FOMO: страх пропустити щось важливе, підсилений соціальними мережами. У контексті TikTok-продажів це означає: контент що показує «всі вже купили» або «поки ви читаєте, хтось користується» — активує кортизол і прискорює рішення.</div>
+        <span class="phen-cite">Przybylski A.K. et al. (2013). «Motivational, emotional, and behavioral correlates of fear of missing out.» Computers in Human Behavior, 29(4).</span>
+      </div>
+    </div>
+    <div class="phen-card">
+      <span class="phen-icon">💬</span>
+      <div>
+        <div class="phen-title">Феномен коментарів: чужа думка як контент</div>
+        <div class="phen-desc">У 2023 році TikTok офіційно підтвердив: коментарі самі по собі є причиною повторного перегляду відео для 41% аудиторії. Люди повертаються не за відео — за реакцією інших. Це фундаментально міняє логіку вірусності: думки під відео стають частиною самого продукту.</div>
+        <span class="phen-cite">TikTok for Business Insights Report, Q3 2023.</span>
+      </div>
+    </div>
+    <div class="phen-card">
+      <span class="phen-icon">🤮</span>
+      <div>
+        <div class="phen-title">Відторгнення «вилизаного» контенту</div>
+        <div class="phen-desc">Дослідження Nielsen (2021) показало: 92% споживачів більше довіряють органічному контенту від реальних людей, ніж будь-якій формі корпоративної реклами. Причина нейробіологічна: перфектний, постановочний контент не активує окситоцин — бо мозок зчитує «це не реальна людина». Хейт «пластикового» контенту — це захисний механізм довіри.</div>
+        <span class="phen-cite">Nielsen Consumer Trust Index, 2021.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="pull">«Парадокс сучасного маркетингу: чим більше грошей витрачено на продакшн, тим менше йому довіряють. Найдорожча реклама — це та, яку ніхто не помічає.»</div>
+</div>
+</div>
+
+<hr class="ch-divider">
+
+<!-- ─────────────────────────────── -->
+<!-- CHAPTER 3: HOOKS & EMOTIONS     -->
+<!-- ─────────────────────────────── -->
+<div style="background:#FFFFFF;padding-bottom:60px">
+<div class="wrap">
+  <div class="ch-wrap">
+    <div class="ch-num">Розділ 03</div>
+    <h2 class="ch">Мова гормонів.<br>Як говорити, щоб зупинити скрол</h2>
+    <p class="ch-lead">Перші 1–2 секунди відео визначають все. TikTok вимірює «hook rate» — відсоток людей, які досмотрять перші 3 секунди. Якщо нижче 65–70% — алгоритм перестає просувати відео. Кожна перша фраза — це нейрохімічна ставка.</p>
+  </div>
+
+  <table class="hook-table">
+    <thead>
+      <tr><th>Гормон</th><th>Емоція</th><th>❌ Не так</th><th>✅ Так</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Дофамін</td><td>Цікавість</td>
+        <td class="bad">Крем для обличчя з гіалуроновою кислотою</td>
+        <td class="good">Я не повірив результату через 7 днів</td>
+      </tr>
+      <tr>
+        <td>Дофамін</td><td>Передчуття</td>
+        <td class="bad">Просто хороший пилосос</td>
+        <td class="good">Зараз покажу тест, який проходять не всі</td>
+      </tr>
+      <tr>
+        <td>Кортизол</td><td>Страх помилки</td>
+        <td class="bad">Стильні лосини</td>
+        <td class="good">Саме через цей шов лосини виглядають дешево</td>
+      </tr>
+      <tr>
+        <td>Кортизол</td><td>Ризик втрати</td>
+        <td class="bad">Сильне всмоктування</td>
+        <td class="good">Ви можете втрачати гроші на електроенергії непомітно</td>
+      </tr>
+      <tr>
+        <td>Окситоцин</td><td>Довіра</td>
+        <td class="bad">Наш крем найкращий</td>
+        <td class="good">Я сама користуюсь ним 8 місяців і зараз покажу чому</td>
+      </tr>
+      <tr>
+        <td>Серотонін</td><td>Статус</td>
+        <td class="bad">Якісний крем</td>
+        <td class="good">Саме такі текстури зараз вибирають дорогі салони</td>
+      </tr>
+      <tr>
+        <td>Ендорфін</td><td>Здивування</td>
+        <td class="bad">Добре прибирає</td>
+        <td class="good">Те, що він зараз витягне з килима, трохи шокує</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="formula-box">
+    <div class="formula-title">Формула сильного TikTok Shop відео 2026</div>
+    <div class="formula-row">
+      <span class="f-token f-cor">Проблема</span>
+      <span class="f-arrow">→</span>
+      <span class="f-token f-dop">Цікавість</span>
+      <span class="f-arrow">→</span>
+      <span class="f-token f-oxy">Довіра</span>
+      <span class="f-arrow">→</span>
+      <span class="f-token f-ser">Бажаний результат</span>
+      <span class="f-arrow">→</span>
+      <span class="f-token f-end">Задоволення</span>
+    </div>
+    <div class="formula-sub">Кортизол → Дофамін → Окситоцин → Серотонін → Ендорфін</div>
+  </div>
+
+  <p class="body-text">Ця послідовність не випадкова. Вона відповідає природній траєкторії прийняття рішення про покупку: <strong>усвідомлення проблеми → зацікавленість рішенням → довіра до джерела → уявлення результату → задоволення від отримання</strong>. Відео, яке проходить всі п'ять етапів за 30–60 секунд, не просто набирає перегляди — воно продає.</p>
+</div>
+</div>
+
+<hr class="ch-divider">
+
+<!-- ─────────────────────────────── -->
+<!-- CHAPTER 4: PERSONAL BRAND       -->
+<!-- ─────────────────────────────── -->
+<div style="background:#FFFFFF;padding-bottom:60px">
+<div class="wrap">
+  <div class="ch-wrap">
+    <div class="ch-num">Розділ 04</div>
+    <h2 class="ch">Особистий бренд<br>як нейрохімічний актив</h2>
+    <p class="ch-lead">Дослідження Edelman Trust Barometer (2023) показало: 63% споживачів починають довіряти бренду через людину, а не навпаки. Обличчя — це не «подача». Це нейробіологічна необхідність.</p>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-box">
+      <span class="stat-num">63%</span>
+      <span class="stat-lbl">починають довіряти бренду через людину-автора, а не через бренд напряму</span>
+      <span class="stat-src">Edelman Trust Barometer, 2023</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">7×</span>
+      <span class="stat-lbl">вищий engagement у відео з обличчям людини порівняно з відео тільки товару</span>
+      <span class="stat-src">TikTok Business Creative Center, 2023</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">22 днів</span>
+      <span class="stat-lbl">потрібно для формування початкового рівня довіри до нового автора в TikTok</span>
+      <span class="stat-src">Оцінка: VEO FORCE на основі аналізу акаунтів 2023–2024</span>
+    </div>
+  </div>
+
+  <p class="body-text">Зив Кармон і Дан Аріелі у класичному дослідженні «Focusing on the Forgone» (2000, Journal of Consumer Research) показали: люди платять більше за те, з чим у них є <strong>суб'єктивний зв'язок</strong>. Особистий бренд у TikTok — це систематичне будування такого зв'язку через щоденний контент.</p>
+
+  <div class="cite">
+    <strong>Zajonc R.B. (1968)</strong> — «Mere Exposure Effect»: чим частіше людина бачить обличчя або ім'я, тим вищий рівень симпатії та довіри до нього — навіть без будь-якого взаємодії. Саме тому регулярність публікацій важливіша за перфекціонізм.
+    <span class="cite-ref">Zajonc R.B. «Attitudinal effects of mere exposure.» Journal of Personality and Social Psychology, 9(2), 1968.</span>
+  </div>
+
+  <h3 class="sub">Дорожня карта побудови особистого бренду в TikTok</h3>
+  <div class="roadmap">
+    <div class="rm-step">
+      <div class="rm-left"><div class="rm-circle red">1</div><div class="rm-line"></div></div>
+      <div class="rm-body">
+        <div class="rm-label">Дні 1–7</div>
+        <div class="rm-title">Визначення ролі та ніші</div>
+        <div class="rm-text">Хто ви в TikTok? Технічний оглядач, емоційний продавець, спокійний експерт? Ніша + амплуа + комфортний формат — без цього будь-яка послідовність не дасть результату. Алгоритм навчається на поведінці, але спочатку <em>ви</em> повинні вирішити, кого він буде навчати.</div>
+      </div>
+    </div>
+    <div class="rm-step">
+      <div class="rm-left"><div class="rm-circle">2</div><div class="rm-line"></div></div>
+      <div class="rm-body">
+        <div class="rm-label">Дні 7–30</div>
+        <div class="rm-title">55 відео — калібрування алгоритму</div>
+        <div class="rm-text">Перші 55 відео — це навчання. Алгоритм TikTok визначає «хто ваша аудиторія» на основі того, <em>хто досмотрює і реагує</em>. Чим більше різноманітних гачків ви спробуєте — тим точніше він вас відкалібрує. Це не про якість — це про кількість сигналів.</div>
+      </div>
+    </div>
+    <div class="rm-step">
+      <div class="rm-left"><div class="rm-circle">3</div><div class="rm-line"></div></div>
+      <div class="rm-body">
+        <div class="rm-label">Місяць 2–3</div>
+        <div class="rm-title">Системний контент 80/20</div>
+        <div class="rm-text">80% — продажний контент через нейрохімічні гачки. 20% — людський контент: за кулісами, власна думка, момент, що викликає окситоцин. Без 20% немає довіри. Без 80% немає продажів.</div>
+      </div>
+    </div>
+    <div class="rm-step">
+      <div class="rm-left"><div class="rm-circle">4</div><div class="rm-line"></div></div>
+      <div class="rm-body">
+        <div class="rm-label">Місяць 3+</div>
+        <div class="rm-title">TikTok Shop: конверсія без бар'єрів</div>
+        <div class="rm-text">Коли довіра сформована, TikTok Shop знімає останній бар'єр між увагою і покупкою. Відео → товар → оплата — без виходу з додатку. Аудиторія, яку ви будували місяцями, стає покупцями без додаткових зусиль. Саме тому починати треба зараз, а не після запуску.</div>
+      </div>
+    </div>
+    <div class="rm-step">
+      <div class="rm-left"><div class="rm-circle red">5</div></div>
+      <div class="rm-body">
+        <div class="rm-label">Паралельно</div>
+        <div class="rm-title">Affiliate-модель: продавати без власного товару</div>
+        <div class="rm-text">TikTok Shop передбачає Affiliate-програму: будь-який автор може просувати чужі товари і отримувати відсоток з продажів. Ніякого складу. Ніякої логістики. Тільки контент і довіра аудиторії. Саме для таких авторів і будується ринок зараз — поки ніша не заповнена.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<hr class="ch-divider">
+
+<!-- ─────────────────────────────── -->
+<!-- CHAPTER 5: WINDOW OF OPPORTUNITY -->
+<!-- ─────────────────────────────── -->
+<div style="background:#FFFFFF;padding-bottom:60px">
+<div class="wrap">
+  <div class="ch-wrap">
+    <div class="ch-num">Розділ 05</div>
+    <h2 class="ch">Вікно можливостей.<br>Ринок змінюється — і це не вперше</h2>
+    <p class="ch-lead">Кожна технологічна зміна в медіа створювала вузьке вікно, в якому ті, хто діяв першим, займали позиції, що потім коштували мільярди. Закономірність повторюється з точністю годинника.</p>
+  </div>
+
+  <div class="phen-list">
+    <div class="phen-card">
+      <span class="phen-icon">📰</span>
+      <div>
+        <div class="phen-title">1990-ті: Інтернет знищив паперові видання</div>
+        <div class="phen-desc">Видавничі компанії, які не перейшли в онлайн до 2000 року, втратили від 40 до 90% ринкової частки протягом 10 років. Ті, хто переїхав першими (NYT, Guardian), домінують досі.</div>
+      </div>
+    </div>
+    <div class="phen-card">
+      <span class="phen-icon">📺</span>
+      <div>
+        <div class="phen-title">2005–2010: YouTube створив перших медіа-мільйонерів без студій</div>
+        <div class="phen-desc">Перші YouTuber'и, що прийшли у 2006–2008, будували аудиторію в умовах нульової конкуренції. До 2015 той самий шлях коштував у 10–50 разів більше часу і ресурсів.</div>
+      </div>
+    </div>
+    <div class="phen-card">
+      <span class="phen-icon">📸</span>
+      <div>
+        <div class="phen-title">2012–2015: Instagram переписав правила торгівлі</div>
+        <div class="phen-desc">Бренди, що зайшли в Instagram у 2012–2013, отримували органічне охоплення 20–40%. У 2020-му — вже менше 2%. Вікно зачинилось.</div>
+      </div>
+    </div>
+    <div class="phen-card">
+      <span class="phen-icon">🎵</span>
+      <div>
+        <div class="phen-title">2019–2022: TikTok — нова хвиля першопроходців</div>
+        <div class="phen-desc">Автори, що зайшли у TikTok у 2019–2021, будували аудиторію в мільйон підписників за 3–6 місяців органічно. Сьогодні той самий результат вимагає вдвічі більше часу і системного підходу.</div>
+      </div>
+    </div>
+    <div class="phen-card" style="border-color:rgba(255,0,80,.3);background:#FFF5F7">
+      <span class="phen-icon">🛒</span>
+      <div>
+        <div class="phen-title" style="color:#FF0050">2025–2026: TikTok Shop — наступне вікно відкрите прямо зараз</div>
+        <div class="phen-desc">TikTok Shop вже запущений у Великобританії, США, Індонезії, Таїланді, В'єтнамі. Польща — 15 червня 2026. Україна — наступна черга. Ті, хто будують аудиторію <em>зараз</em>, займуть позиції до того, як прийдуть усі інші. Це не прогноз — це те, що вже відбулося на попередніх ринках.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat-box">
+      <span class="stat-num">$33 млрд</span>
+      <span class="stat-lbl">обсяг продажів через TikTok Shop у 2024 році</span>
+      <span class="stat-src">TikTok / Bloomberg, 2024</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">×4</span>
+      <span class="stat-lbl">зріст TikTok Shop за 2023–2024 роки</span>
+      <span class="stat-src">Business of Apps, 2024</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-num">36%</span>
+      <span class="stat-lbl">користувачів TikTok вже купували товар, побачений у стрічці</span>
+      <span class="stat-src">GlobalWebIndex / GWI, 2024</span>
+    </div>
+  </div>
+
+  <div class="pull">«Ринок не чекає. Але він і не поспішає — він просто рухається. Питання не в тому, "чи буде TikTok Shop в Україні". Питання в тому, чи будете ви готові, коли він прийде.»<br><br><em>— Vasil VEO</em></div>
+</div>
+</div>
+
+<!-- ─────────────────────────────── -->
+<!-- CTA                             -->
+<!-- ─────────────────────────────── -->
+<div class="cta-section">
+  <div class="cta-inner">
+    <h2>Хочете зрозуміти це<br>стосовно свого бізнесу?</h2>
+    <p>VEO FORCE допомагає підприємцям і командам підготуватися до TikTok Shop: стратегія, контент-система, команда, позиціонування. Від розуміння — до результату.</p>
+    <a href="https://t.me/veoforce_support" class="cta-link" target="_blank" rel="noopener">&#9654; Написати @veoforce_support</a>
+  </div>
+</div>
+
+<footer>
+  VEO FORCE · <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener">@vasil_veo</a> · Аналітичний матеріал · 2026<br>
+  Матеріал є авторським і освітнім. Статистика наводиться з посиланням на першоджерела.
+</footer>
+
+</body>
+</html>
