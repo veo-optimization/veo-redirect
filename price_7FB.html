@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="color-scheme" content="light only">
+<title>Комерційна пропозиція · 7FamilyBox · VEO FORCE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#FFFFFF;color:#0A0A0A;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.6;overflow-x:hidden;color-scheme:light only}
+:root{
+  --head:'Unbounded',sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --acc:#FF0050;
+  --gold:#C8A84B;
+  --dark:#0A0A0A;
+  --brd:#E8E5DE;
+  --sub:#555555;
+  --light:#888888;
+  --bg:#FAFAF8;
+}
+
+/* ── TOP ── */
+.doc-top{background:#0A0A0A;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.doc-top-brand{font-family:'Unbounded',sans-serif;font-size:.72rem;font-weight:900;color:#fff;letter-spacing:-.01em}
+.doc-top-brand span{color:#FF0050}
+.doc-top-meta{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.5);letter-spacing:.04em}
+
+/* ── HERO ── */
+.hero{background:#0A0A0A;padding:52px 20px 44px;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 55% 55% at 15% 100%,rgba(255,0,80,.12),transparent 60%);pointer-events:none}
+.hero-inner{max-width:860px;margin:0 auto;position:relative;z-index:1}
+.hero-kmu{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.2);border-radius:4px;padding:4px 12px;font-family:'JetBrains Mono',monospace;font-size:.6rem;color:rgba(255,255,255,.55);letter-spacing:.06em;margin-bottom:20px}
+.hero-kmu::before{content:'';width:6px;height:6px;border-radius:50%;background:#FF0050}
+.hero h1{font-family:'Unbounded',sans-serif;font-size:clamp(1.5rem,4.5vw,2.8rem);font-weight:900;letter-spacing:-.05em;line-height:1.08;color:#fff;margin-bottom:10px}
+.hero h1 em{font-style:normal;color:#FF0050}
+.hero-to{font-size:.84rem;color:rgba(255,255,255,.65);margin-bottom:6px}
+.hero-to strong{color:rgba(255,255,255,.75)}
+.hero-date{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:rgba(255,255,255,.45);margin-top:16px}
+
+/* ── WRAP ── */
+.wrap{max-width:860px;margin:0 auto;padding:0 16px}
+
+/* ── SECTION LABEL ── */
+.sec-label{font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#888888;padding:28px 0 10px;display:flex;align-items:center;gap:10px}
+.sec-label::after{content:'';flex:1;height:1px;background:#E8E5DE}
+.sec-label.red{color:#FF0050}
+.sec-label.red::before{content:'';width:6px;height:6px;border-radius:50%;background:#FF0050;flex-shrink:0}
+
+/* ── INTRO BLOCK ── */
+.intro-card{background:#FFFFFF;border:1.5px solid #E8E5DE;border-radius:14px;padding:22px 20px;margin-bottom:8px}
+.intro-card p{font-size:.86rem;color:#555555;line-height:1.75}
+.intro-card p+p{margin-top:10px}
+.intro-card strong{color:#0A0A0A}
+
+/* ── FORMAT TOGGLE ── */
+.fmt-tabs{display:flex;gap:0;border:2px solid #FF0050;border-radius:12px;overflow:hidden;margin-bottom:20px}
+.fmt-tab{flex:1;padding:18px 16px;font-family:'Manrope',sans-serif;font-size:.82rem;color:#FF0050;background:#FFFFFF;border:none;cursor:pointer;transition:all .2s;text-align:left;line-height:1.4}
+.fmt-tab.active{background:#FF0050;color:#fff}
+.fmt-tab:not(:last-child){border-right:2px solid #FF0050}
+.fmt-tab-title{font-family:'Unbounded',sans-serif;font-size:.72rem;font-weight:900;letter-spacing:-.01em;margin-bottom:2px}
+.fmt-tab-sub{font-size:.72rem;font-weight:700;margin-bottom:8px;opacity:.8}
+.fmt-tab-desc{font-size:.76rem;font-weight:400;line-height:1.55;opacity:.75}
+.fmt-tab.active .fmt-tab-desc{opacity:.85}
+.fmt-tab.active .fmt-tab-title{color:#fff}
+.fmt-tab.active .fmt-tab-sub{color:rgba(255,255,255,.85)}
+
+/* ── DURATION SELECTOR ── */
+.dur-btn{background:#FFFFFF;border:2px solid #E8E5DE;border-radius:12px;padding:12px 10px;cursor:pointer;text-align:center;transition:all .15s;font-family:'Manrope',sans-serif}
+.dur-btn:hover{border-color:#FF0050}
+.dur-btn.active{border-color:#FF0050;background:rgba(255,0,80,.04)}
+.dur-label{font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#888888;margin-bottom:4px}
+.dur-months{font-family:'Unbounded',sans-serif;font-size:.82rem;font-weight:900;color:#0A0A0A;letter-spacing:-.03em;margin-bottom:3px}
+.dur-total{font-size:.75rem;font-weight:700;color:#FF0050;white-space:nowrap;margin-bottom:6px}
+.dur-badge-wrap{min-height:18px}
+.dur-badge{display:inline-block;font-size:.58rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 7px;border-radius:20px}
+.dur-badge.red{background:rgba(255,0,80,.1);color:#FF0050;border:1px solid rgba(255,0,80,.2)}
+.dur-badge.grey{background:#F0EFE9;color:#888888;border:1px solid #E8E5DE}
+.dur-plan{display:block}
+
+/* ── FORMAT PANELS ── */
+.fmt-panel{display:none}
+.fmt-panel.show{display:block}
+
+/* ── MONTHLY: CARD STACK ── */
+.m-card{background:#FFFFFF;border:1.5px solid #E8E5DE;border-radius:14px;padding:18px 16px;margin-bottom:12px}
+.m-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+.m-badge{width:36px;height:36px;border-radius:50%;background:#0A0A0A;color:#fff;font-family:'Unbounded',sans-serif;font-size:.6rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.m-period{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#FF0050;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.m-title{font-family:'Unbounded',sans-serif;font-size:.8rem;font-weight:800;color:#0A0A0A;letter-spacing:-.02em;line-height:1.3}
+.m-list{list-style:none;padding:0;display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.m-list li{font-size:.82rem;color:#333333;display:flex;gap:8px;align-items:flex-start;line-height:1.55}
+.m-list li::before{content:'→';color:#FF0050;font-weight:700;flex-shrink:0;font-size:.72rem;margin-top:2px}
+.m-foot{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;padding:10px 14px;background:#F5F5F5;border-radius:9px}
+.m-hours{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:#666666}
+.m-price{font-family:'Unbounded',sans-serif;font-size:1.15rem;font-weight:900;color:#0A0A0A;letter-spacing:-.04em;white-space:nowrap}
+.m-uah{font-size:.62rem;color:#888888;font-family:'Manrope',sans-serif;font-weight:400;margin-left:3px}
+
+/* ── BLOCKS FORMAT ── */
+.block-grid{display:grid;grid-template-columns:1fr;gap:10px}
+.b-card{background:#FFFFFF;border:1.5px solid #E8E5DE;border-radius:14px;overflow:hidden;transition:border-color .15s}
+.b-card:hover{border-color:#CCCCCC}
+.b-head{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;gap:12px;border-bottom:1px solid #E8E5DE}
+.b-num{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:#FF0050;background:rgba(255,0,80,.06);border:1px solid rgba(255,0,80,.15);border-radius:4px;padding:2px 7px;flex-shrink:0}
+.b-name{font-family:'Unbounded',sans-serif;font-size:.78rem;font-weight:800;letter-spacing:-.01em;color:#0A0A0A;flex:1}
+.b-price-wrap{display:flex;flex-direction:column;align-items:flex-end;flex-shrink:0;gap:2px}
+.b-price{font-family:'Unbounded',sans-serif;font-size:1.05rem;font-weight:900;color:#0A0A0A;letter-spacing:-.03em;white-space:nowrap;line-height:1}
+.b-price-old{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#888888;text-decoration:line-through;white-space:nowrap}
+.b-price-note{font-size:.62rem;color:#1A7A3C;font-weight:700}
+.b-body{padding:12px 16px}
+.b-items{list-style:none;padding:0;display:flex;flex-direction:column;gap:4px;margin-bottom:0}
+.b-items li{font-size:.79rem;color:#333333;display:flex;gap:8px;align-items:flex-start;line-height:1.5}
+.b-items li::before{content:'✓';color:#FF0050;font-weight:800;font-size:.7rem;flex-shrink:0;margin-top:2px}
+.b-hours{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:#888888;margin-top:8px}
+.b-dur{display:inline-flex;align-items:center;background:#F0EFE9;border:1px solid #E8E5DE;border-radius:20px;padding:2px 8px;font-size:.62rem;font-weight:700;color:#555555;white-space:nowrap;margin-left:6px}
+
+.blocks-total{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:18px 20px;background:#FFFFFF;border:2px solid #E8E5DE;border-radius:14px;margin-top:4px}
+.bt-label{font-size:.78rem;color:#555555}
+.bt-label strong{color:#0A0A0A;display:block;font-size:.84rem}
+.bt-savings{font-size:.76rem;color:#1A7A3C;font-weight:700}
+.bt-price{font-family:'Unbounded',sans-serif;font-size:1.6rem;font-weight:900;letter-spacing:-.05em;color:#0A0A0A;white-space:nowrap}
+
+/* ── CTA SECTION ── */
+
+
+
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr !important}
+
+  .month-dot-wrap{padding-top:14px}
+  .month-dot{width:32px;height:32px;font-size:.55rem}
+  .month-connector{display:none}
+  .monthly-total{flex-direction:column;gap:6px}
+  .offer-sign{grid-template-columns:1fr}
+  .b-head{flex-wrap:wrap}
+}
+@media(max-width:440px){
+  .hero h1{font-size:1.35rem}
+  .fmt-tab{font-size:.6rem;padding:10px 6px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="doc-top">
+  <div class="doc-top-brand"><span>VEO</span> FORCE · @vasil_veo</div>
+  <div class="doc-top-meta">КП-7FB-001 · КОНФІДЕНЦІЙНО · 2026</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-kmu">КОМЕРЦІЙНА ПРОПОЗИЦІЯ</div>
+    <h1>TikTok-екосистема<br>для <em>7FamilyBox</em></h1>
+    <p class="hero-to">Підготовлено для: <strong>Лаврів Роман Михайлович · Власник 7FamilyBox</strong></p>
+    <p class="hero-to">Від: <strong>Vasil VEO · VEO FORCE · @vasil_veo</strong></p>
+    <p class="hero-date">Дата: 10.06.2026 · Дійсна 30 днів</p>
+  </div>
+</div>
+
+<div style="padding-bottom:20px;background:#FFFFFF">
+<div class="wrap">
+
+  <!-- INTRO -->
+  <div class="sec-label">Про цю пропозицію</div>
+  <div class="intro-card">
+    <p>Романе, ця пропозиція підготовлена <strong>індивідуально для Вашого проєкту 7FamilyBox</strong>. Вона враховує масштаб задуму: 11 акаунтів, дві команди, міні-сайти, рух #БізнесТокери та довгострокову мету — побудову медіакомпанії.</p>
+    <p>Нижче — <strong>два формати співпраці</strong>. Обидва ведуть до однієї мети, але різними шляхами. Перший — помісячно з чітким планом на кожен місяць. Другий — блочно, де Ви самі визначаєте темп і послідовність.</p>
+    <p>Я особисто зацікавлений у тому, щоб цей проєкт запрацював — не лише як консультант, але і як людина, якій цікаво бачити, як такі системи будуються в Україні з нуля. Це для мене не просто робота. Це спільний інтерес.</p>
+  </div>
+
+  <!-- FORMAT TABS -->
+  <div class="sec-label">Оберіть формат співпраці</div>
+  <p style="font-size:.84rem;color:#444444;line-height:1.7;margin-bottom:16px">Обидва формати охоплюють однаковий обсяг роботи. Різниця — в тому, як організована оплата і хто визначає темп.</p>
+  <div class="fmt-tabs">
+    <button class="fmt-tab active" onclick="showFmt('monthly', this)">
+      <div class="fmt-tab-title">Формат А</div>
+      <div class="fmt-tab-sub">Помісячний супровід</div>
+      <div class="fmt-tab-desc">Ви обираєте темп — 2, 3,5 або 5 місяців. Оплата 50/50: передплата на початку + друга половина в середині терміну. Чим швидше — тим коротший шлях до результату.</div>
+    </button>
+    <button class="fmt-tab" onclick="showFmt('blocks', this)">
+      <div class="fmt-tab-title">Формат Б</div>
+      <div class="fmt-tab-sub">Поблочна оплата</div>
+      <div class="fmt-tab-desc">7 незалежних блоків із фіксованою вартістю. Оплата 50/50: передплата перед стартом + друга половина в середині строку блоку. </div>
+    </button>
+  </div>
+
+  <!-- ══ ФОРМАТ А: ПОМІСЯЧНИЙ ══ -->
+  <div class="fmt-panel show" id="fmt-monthly">
+    <div class="intro-card" style="margin-bottom:12px;background:#FFF5F7;border-color:rgba(255,0,80,.2)">
+      <p style="font-size:.82rem;color:#440015;line-height:1.7"><strong>Логіка формату А.</strong> Весь обсяг роботи від А до Я — але темп обираєте Ви. Чим інтенсивніше працюємо — тим більше зроблено за місяць, тим вища вартість місяця. </p>
+      <div style="margin-top:10px;display:flex;flex-direction:column;gap:5px">
+        <div style="display:flex;gap:8px;align-items:flex-start;font-size:.78rem;color:#440015;line-height:1.5"><span style="font-weight:800;flex-shrink:0;color:#FF0050">50%</span>Передплата на початку кожного місяця — фіксує старт і бронює час консультанта</div>
+        <div style="display:flex;gap:8px;align-items:flex-start;font-size:.78rem;color:#440015;line-height:1.5"><span style="font-weight:800;flex-shrink:0;color:#FF0050">50%</span>Залишок після підписання акту виконаних робіт із переліком виконаних завдань</div>
+      </div>
+    </div>
+    <div class="intro-card" style="margin-bottom:20px;background:#F0F8FF;border-color:rgba(0,120,200,.15)">
+      <p style="font-size:.81rem;color:#0A2A50;line-height:1.7"><strong>Паралельна підготовка до TikTok Shop.</strong> Весь контент, всі ролі, вся архітектура знімається з урахуванням вимог платформи вже сьогодні. Це не окремий проєкт — це стратегічна логіка кожного відео.</p>
+      <p style="font-size:.78rem;color:#336;line-height:1.6;margin-top:8px"><strong>Додатково</strong> (окрема домовленість): каталоги, міні-сайти, інтеграції, CRM — виконуються командою програмістів. Консультант надає технічне завдання і стандарти.</p>
+    </div>
+
+    <!-- DURATION SELECTOR -->
+    <div style="margin-bottom:20px">
+      <div style="font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#888888;margin-bottom:10px">Оберіть тривалість співпраці</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px" id="durGrid">
+        <button class="dur-btn active" onclick="setDur('fast',this)">
+          <div class="dur-label">Інтенсив</div>
+          <div class="dur-months">2 місяці</div>
+          <div class="dur-total">210&thinsp;000 грн</div>
+          <div class="dur-badge-wrap"><span class="dur-badge red">Найшвидше</span></div>
+        </button>
+        <button class="dur-btn" onclick="setDur('mid',this)">
+          <div class="dur-label">Збалансований</div>
+          <div class="dur-months">3,5 місяці</div>
+          <div class="dur-total">120&thinsp;000 грн</div>
+          <div class="dur-badge-wrap"><span class="dur-badge grey">Оптимально</span></div>
+        </button>
+        <button class="dur-btn" onclick="setDur('slow',this)">
+          <div class="dur-label">Плавний</div>
+          <div class="dur-months">5 місяців</div>
+          <div class="dur-total">112&thinsp;000 грн</div>
+          <div class="dur-badge-wrap"><span class="dur-badge grey">Повільно</span></div>
+        </button>
+      </div>
+      <!-- soft note -->
+      <div style="margin-top:10px;padding:10px 14px;background:#FAFAFA;border-radius:8px;border:1px solid #EBEBEB;font-size:.76rem;color:#666666;line-height:1.6">
+        Час — це єдиний ресурс, який не повертається. Ринок TikTok в Україні змінюється прямо зараз. Команди, які почнуть системно сьогодні — займуть позиції до приходу TikTok Shop. Ті, хто чекатимуть — наздоганятимуть.
+      </div>
+    </div>
+
+    <!-- ══ РЕЖИМ: ІНТЕНСИВ (2 місяці) ══ -->
+    <div id="plan-fast" class="dur-plan">
+      <div style="background:#FF0050;border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+        <div style="font-family:'Unbounded',sans-serif;font-size:.72rem;font-weight:900;color:#fff">Інтенсив · 2 місяці</div>
+        <div style="font-size:.75rem;color:rgba(255,255,255,.8)">~40 год · по 20 год на місяць</div>
+      </div>
+      <div class="m-card">
+        <div class="m-header">
+          <div class="m-badge" style="background:#FF0050">М1</div>
+          <div><div class="m-period">Місяць 1</div><div class="m-title">Інфраструктура + Команда + Контент-старт</div></div>
+        </div>
+        <ul class="m-list">
+          <li>Реєстрація 11 акаунтів, 2FA, описи, naming convention</li>
+          <li>Індивідуальний відбір ролей для 8 менеджерів — ніша, амплуа, формат</li>
+          <li>Навчання команди: перші відео, гачки, структура огляду</li>
+          <li>Бібліотека гачків під кожну нішу</li>
+          <li>Контент-план на 2 місяці (80/20)</li>
+          <li>Фіксація базових показників, перша аналітика</li>
+        </ul>
+        <div class="m-foot">
+          <span class="m-hours">~20&thinsp;год консультанта</span>
+          <span class="m-price">105&thinsp;000 <span class="m-uah">грн</span></span>
+        </div>
+      </div>
+      <div class="m-card" style="border-color:#FF0050">
+        <div class="m-header">
+          <div class="m-badge" style="background:#FF0050">М2</div>
+          <div><div class="m-period">Місяць 2</div><div class="m-title">Серіал + Аналітика + #БізнесТокери + Стратегія масштабування</div></div>
+        </div>
+        <ul class="m-list">
+          <li>Запуск серіального контенту між командами</li>
+          <li>Перша аналітика охоплень і залученості — корекція слабких</li>
+          <li>Позиціонування Романа як організатора #БізнесТокери</li>
+          <li>Особистий бренд Романа — BOSS-акаунт, стиль, частота</li>
+          <li>Довгострокова дорожня карта на 12 місяців вперед</li>
+          <li>Фінальна сесія з Романом</li>
+        </ul>
+        <div class="m-foot">
+          <span class="m-hours">~20&thinsp;год консультанта</span>
+          <span class="m-price">105&thinsp;000 <span class="m-uah">грн</span></span>
+        </div>
+      </div>
+      <div style="background:#0A0A0A;border-radius:12px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:4px">
+        <div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:.7rem;font-weight:900;color:#fff;margin-bottom:3px">Разом · Інтенсив 2&nbsp;місяці</div>
+          <div style="font-size:.72rem;color:rgba(255,255,255,.5)">~40 год · максимальна щільність</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'Unbounded',sans-serif;font-size:1.6rem;font-weight:900;color:#FF0050;letter-spacing:-.05em;white-space:nowrap">210&thinsp;000</div>
+          <div style="font-size:.62rem;color:rgba(255,255,255,.4)">грн</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ РЕЖИМ: ЗБАЛАНСОВАНИЙ (3.5 місяці) ══ -->
+    <div id="plan-mid" class="dur-plan" style="display:none">
+      <div style="background:#0A0A0A;border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+        <div style="font-family:'Unbounded',sans-serif;font-size:.72rem;font-weight:900;color:#fff">Збалансований · 3,5 місяці</div>
+        <div style="font-size:.75rem;color:rgba(255,255,255,.6)">~70 год · ~20 год на місяць</div>
+      </div>
+      <div class="m-card">
+        <div class="m-header">
+          <div class="m-badge">М1</div>
+          <div><div class="m-period">Місяць 1</div><div class="m-title">Фундамент і запуск інфраструктури</div></div>
+        </div>
+        <ul class="m-list">
+          <li>Реєстрація 11 акаунтів, 2FA, паролі, описи профілів</li>
+          <li>Аналіз наявних відеоматеріалів — що залишити, що перезнімати</li>
+          <li>Фіксація базових показників, індивідуальні зустрічі з менеджерами</li>
+        </ul>
+        <div class="m-foot">
+          <span class="m-hours">~12&thinsp;год консультанта</span>
+          <span class="m-price">30&thinsp;000 <span class="m-uah">грн</span></span>
+        </div>
+      </div>
+      <div class="m-card">
+        <div class="m-header">
+          <div class="m-badge">М2</div>
+          <div><div class="m-period">Місяць 2</div><div class="m-title">Команда, ролі, відбір і контент-старт</div></div>
+        </div>
+        <ul class="m-list">
+          <li>Індивідуальний відбір ролей для 8 менеджерів — ніша, амплуа, формат</li>
+          <li>Навчання: перші відео, гачки, структура огляду</li>
+          <li>Контент-план (80/20), бібліотека гачків, перша аналітика</li>
+        </ul>
+        <div class="m-foot">
+          <span class="m-hours">~16&thinsp;год консультанта</span>
+          <span class="m-price">35&thinsp;000 <span class="m-uah">грн</span></span>
+        </div>
+      </div>
+      <div class="m-card">
+        <div class="m-header">
+          <div class="m-badge">М3</div>
+          <div><div class="m-period">Місяць 3</div><div class="m-title">Серіал, аналітика і конкуренція команд</div></div>
+        </div>
+        <ul class="m-list">
+          <li>Запуск серіального контенту між командами</li>
+          <li>Аналітика охоплень — корекція слабких акаунтів</li>
+          <li>Рейтинг команд, оптимізація форматів</li>
+        </ul>
+        <div class="m-foot">
+          <span class="m-hours">~14&thinsp;год консультанта</span>
+          <span class="m-price">29&thinsp;000 <span class="m-uah">грн</span></span>
+        </div>
+      </div>
+      <div class="m-card" style="border-color:#FF0050">
+        <div class="m-header">
+          <div class="m-badge" style="background:#FF0050">М3.5</div>
+          <div><div class="m-period">Місяць 3,5 · Фінальний</div><div class="m-title">#БізнесТокери, особистий бренд і стратегія масштабування</div></div>
+        </div>
+        <ul class="m-list">
+          <li>Позиціонування Романа як організатора #БізнесТокери</li>
+          <li>Підготовка першого заходу або спільної зйомки з партнерами</li>
+          <li>Особистий бренд Романа — BOSS-акаунт</li>
+          <li>Довгострокова дорожня карта на 12 місяців</li>
+          <li>Фінальна сесія з Романом</li>
+        </ul>
+        <div class="m-foot">
+          <span class="m-hours">~12&thinsp;год консультанта</span>
+          <span class="m-price">26&thinsp;000 <span class="m-uah">грн</span></span>
+        </div>
+      </div>
+      <div style="background:#0A0A0A;border-radius:12px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:4px">
+        <div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:.7rem;font-weight:900;color:#fff;margin-bottom:3px">Разом · Збалансований 3,5&nbsp;місяці</div>
+          <div style="font-size:.72rem;color:rgba(255,255,255,.5)">~54 год · рівномірний темп</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'Unbounded',sans-serif;font-size:1.6rem;font-weight:900;color:#fff;letter-spacing:-.05em;white-space:nowrap">120&thinsp;000</div>
+          <div style="font-size:.62rem;color:rgba(255,255,255,.4)">грн</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ РЕЖИМ: ПЛАВНИЙ (5 місяців) ══ -->
+    <div id="plan-slow" class="dur-plan" style="display:none">
+      <div style="background:#555555;border-radius:10px;padding:10px 14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px">
+        <div style="font-family:'Unbounded',sans-serif;font-size:.72rem;font-weight:900;color:#fff">Плавний · 5 місяців</div>
+        <div style="font-size:.75rem;color:rgba(255,255,255,.6)">~50 год · ~10 год на місяць</div>
+      </div>
+      <div class="m-card">
+        <div class="m-header">
+          <div class="m-badge" style="background:#888">М1</div>
+          <div><div class="m-period">Місяць 1</div><div class="m-title">Реєстрація і перша зустріч з командою</div></div>
+        </div>
+        <ul class="m-list">
+          <li>Реєстрація акаунтів, безпека, описи профілів</li>
+          <li>Перший аналіз команди та відеоматеріалів</li>
+        </ul>
+        <div class="m-foot">
+          <span class="m-hours">~8&thinsp;год консультанта</span>
+          <span class="m-price">23&thinsp;000 <span class="m-uah">грн</span></span>
+        </div>
+      </div>
+      <div class="m-card">
+        <div class="m-header">
+          <div class="m-badge" style="background:#888">М2</div>
+          <div><div class="m-period">Місяць 2</div><div class="m-title">Відбір ролей і перші відео</div></div>
+        </div>
+        <ul class="m-list">
+          <li>Індивідуальний відбір ролей для менеджерів</li>
+          <li>Навчання: гачки, структура огляду</li>
+          <li>Перший контент-план</li>
+        </ul>
+        <div class="m-foot">
+          <span class="m-hours">~10&thinsp;год консультанта</span>
+          <span class="m-price">25&thinsp;000 <span class="m-uah">грн</span></span>
+        </div>
+      </div>
+      <div class="m-card">
+        <div class="m-header">
+          <div class="m-badge" style="background:#888">М3</div>
+          <div><div class="m-period">Місяць 3</div><div class="m-title">Аналітика і корекція</div></div>
+        </div>
+        <ul class="m-list">
+          <li>Перша аналітика охоплень і залученості</li>
+          <li>Корекція слабких акаунтів і форматів</li>
+          <li>Серіальний контент між командами</li>
+        </ul>
+        <div class="m-foot">
+          <span class="m-hours">~10&thinsp;год консультанта</span>
+          <span class="m-price">24&thinsp;000 <span class="m-uah">грн</span></span>
+        </div>
+      </div>
+      <div class="m-card">
+        <div class="m-header">
+          <div class="m-badge" style="background:#888">М4</div>
+          <div><div class="m-period">Місяць 4</div><div class="m-title">#БізнесТокери і особистий бренд</div></div>
+        </div>
+        <ul class="m-list">
+          <li>Позиціонування Романа як організатора #БізнесТокери</li>
+          <li>Особистий бренд Романа — BOSS-акаунт</li>
+          <li>Перший захід або спільна зйомка з партнерами</li>
+        </ul>
+        <div class="m-foot">
+          <span class="m-hours">~10&thinsp;год консультанта</span>
+          <span class="m-price">21&thinsp;000 <span class="m-uah">грн</span></span>
+        </div>
+      </div>
+      <div class="m-card" style="border-color:#888">
+        <div class="m-header">
+          <div class="m-badge" style="background:#888">М5</div>
+          <div><div class="m-period">Місяць 5 · Фінальний</div><div class="m-title">Масштабування і дорожня карта</div></div>
+        </div>
+        <ul class="m-list">
+          <li>Аудит системи — що збудовано за 5 місяців</li>
+          <li>Довгострокова дорожня карта на 12 місяців</li>
+          <li>Фінальна сесія з Романом</li>
+        </ul>
+        <div class="m-foot">
+          <span class="m-hours">~10&thinsp;год консультанта</span>
+          <span class="m-price">19&thinsp;000 <span class="m-uah">грн</span></span>
+        </div>
+      </div>
+      <div style="background:#0A0A0A;border-radius:12px;padding:16px 18px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:4px">
+        <div>
+          <div style="font-family:'Unbounded',sans-serif;font-size:.7rem;font-weight:900;color:#fff;margin-bottom:3px">Разом · Плавний 5&nbsp;місяців</div>
+          <div style="font-size:.72rem;color:rgba(255,255,255,.5)">~48 год · мінімальна щільність</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'Unbounded',sans-serif;font-size:1.6rem;font-weight:900;color:#888888;letter-spacing:-.05em;white-space:nowrap">112&thinsp;000</div>
+          <div style="font-size:.62rem;color:rgba(255,255,255,.4)">грн</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /fmt-monthly -->
+
+
+
+
+  <!-- ══ ФОРМАТ Б: БЛОЧНИЙ ══ -->
+  <div class="fmt-panel" id="fmt-blocks">
+
+    <div class="intro-card" style="margin-bottom:16px;background:#F0F8FF;border-color:rgba(0,100,200,.12)">
+      <p style="font-size:.8rem;color:#1A3060"><strong>Логіка формату Б.</strong> Кожен блок — окреме завдання з фіксованою вартістю. Ви самі визначаєте що і коли запускати. Оплата — після виконання кожного блоку. Можна починати з одного, додавати наступні у зручному темпі.</p>
+    </div>
+
+    <div style="background:#FFFFFF;border:1.5px solid #E8E5DE;border-radius:12px;padding:16px 18px;margin-bottom:16px">
+      <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#555555;margin-bottom:12px">Як це працює — для кожного блоку</div>
+      <div style="display:flex;flex-direction:column;gap:9px">
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:22px;height:22px;border-radius:50%;background:#0A0A0A;color:#fff;font-family:'Unbounded',sans-serif;font-size:.6rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">1</div>
+          <div style="font-size:.8rem;color:#333333;line-height:1.55"><strong>Домовленість і передплата 50%</strong> — фіксується перелік задач блоку, строки, відповідальні</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:22px;height:22px;border-radius:50%;background:#0A0A0A;color:#fff;font-family:'Unbounded',sans-serif;font-size:.6rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">2</div>
+          <div style="font-size:.8rem;color:#333333;line-height:1.55"><strong>Виконання блоку</strong> — всі задачі фіксуються у спільному проспекті. Прогрес видимий обом сторонам.</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:22px;height:22px;border-radius:50%;background:#0A0A0A;color:#fff;font-family:'Unbounded',sans-serif;font-size:.6rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">3</div>
+          <div style="font-size:.8rem;color:#333333;line-height:1.55"><strong>Зріз результативності</strong> — між блоками фіксуємо що спрацювало, що потребує корекції. Наступний блок адаптується за потреби.</div>
+        </div>
+        <div style="display:flex;gap:12px;align-items:flex-start">
+          <div style="width:22px;height:22px;border-radius:50%;background:#FF0050;color:#fff;font-family:'Unbounded',sans-serif;font-size:.6rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0">4</div>
+          <div style="font-size:.8rem;color:#333333;line-height:1.55"><strong>Акт виконаних робіт + залишок 50%</strong> — чекліст виконаних задач підписується обома сторонами. Після підписання — оплата залишку.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block-grid">
+
+      <!-- БЛОК 1 -->
+      <div class="b-card">
+        <div class="b-head">
+          <span class="b-num">Б-01</span>
+          <span class="b-name">Стратегічна сесія і план запуску</span>
+          <div class="b-price-wrap">
+            <div class="b-price">26&thinsp;000</div>
+            <div style="font-size:.62rem;color:#888888">грн</div>
+          </div>
+        </div>
+        <div class="b-body">
+          <ul class="b-items">
+            <li>4-годинна сесія з Романом — стратегія, структура, пріоритети</li>
+            <li>Технічний план для Ірини — порядок реєстрації акаунтів</li>
+            <li>Naming convention та шаблони описів профілів</li>
+            <li>Рекомендації щодо ФОП/ТОВ верифікації</li>
+            <li>+1 місяць підтримки у форматі TikTok-консультанта</li>
+          </ul>
+          <div class="b-hours">~8 год консультанта <span class="b-dur">разово</span></div>
+        </div>
+      </div>
+
+      <!-- БЛОК 2 -->
+      <div class="b-card">
+        <div class="b-head">
+          <span class="b-num">Б-02</span>
+          <span class="b-name">Запуск 11 міні-сайтів<span class="b-dur">Beacons AI</span></span>
+          <div class="b-price-wrap">
+            <div class="b-price">42&thinsp;000</div>
+            <div class="b-price-old">75&thinsp;000</div>
+            <div class="b-price-note">↓ Знижка 7&thinsp;000</div>
+          </div>
+        </div>
+        <div class="b-body">
+          <ul class="b-items">
+            <li>1 центральний сайт BOSS + 2 складські + 8 менеджерських</li>
+            <li>Стандартизований дизайн під бренд 7FamilyBox</li>
+            <li>Перший каталог товарів на кожному сайті</li>
+            <li>Налаштування UTM-посилань для кожного менеджера</li>
+            <li>Інструктаж команди: як оновлювати, додавати товари</li>
+          </ul>
+          <div class="b-hours">Ринкова ціна: 5&thinsp;000 грн/сайт × 11 = 75&thinsp;000 грн · Гуртова знижка включена · Реалізація — окремо</div>
+        </div>
+      </div>
+
+      <!-- БЛОК 3 -->
+      <div class="b-card">
+        <div class="b-head">
+          <span class="b-num">Б-03</span>
+          <span class="b-name">Кастинг і навчання команди</span>
+          <div class="b-price-wrap">
+            <div class="b-price">30&thinsp;000</div>
+            <div style="font-size:.62rem;color:#888888">грн</div>
+          </div>
+        </div>
+        <div class="b-body">
+          <ul class="b-items">
+            <li>Індивідуальний відбір ролей для 8 менеджерів (ніша, амплуа, формат)</li>
+            <li>Групове навчання: структура відео, гачки, CTA</li>
+            <li>Бібліотека гачків під кожну товарну нішу</li>
+            <li>Перший контент-план (80/20)</li>
+            <li>Аналіз перших відео з коментарями</li>
+          </ul>
+          <div class="b-hours">~10 год консультанта <span class="b-dur">1–2 тижні</span></div>
+        </div>
+      </div>
+
+      <!-- БЛОК 4 -->
+      <div class="b-card">
+        <div class="b-head">
+          <span class="b-num">Б-04</span>
+          <span class="b-name">UTM-аналітика та система трекінгу</span>
+          <div class="b-price-wrap">
+            <div class="b-price">14&thinsp;000</div>
+            <div style="font-size:.62rem;color:#888888">грн</div>
+          </div>
+        </div>
+        <div class="b-body">
+          <ul class="b-items">
+            <li>Повна UTM-архітектура для 11 акаунтів</li>
+            <li>Технічне завдання для програміста (генератор UTM)</li>
+            <li>Налаштування панелі аналітики</li>
+            <li>Інструктаж Ірини по роботі з аналітикою</li>
+          </ul>
+          <div class="b-hours">~6 год консультанта <span class="b-dur">разово</span></div>
+        </div>
+      </div>
+
+      <!-- БЛОК 5 -->
+      <div class="b-card">
+        <div class="b-head">
+          <span class="b-num">Б-05</span>
+          <span class="b-name">Серіальний формат і конкуренція команд</span>
+          <div class="b-price-wrap">
+            <div class="b-price">18&thinsp;000</div>
+            <div style="font-size:.62rem;color:#888888">грн</div>
+          </div>
+        </div>
+        <div class="b-body">
+          <ul class="b-items">
+            <li>Сценарна модель серіального контенту між командами</li>
+            <li>Перші сюжетні лінії Дрогобич vs Меденичі</li>
+            <li>Система рейтингу та мотивації команд</li>
+            <li>Шаблони дуетів, реакцій і спільних сюжетів</li>
+          </ul>
+          <div class="b-hours">~8 год консультанта <span class="b-dur">2–3 тижні</span></div>
+        </div>
+      </div>
+
+      <!-- БЛОК 6 -->
+      <div class="b-card">
+        <div class="b-head">
+          <span class="b-num">Б-06</span>
+          <span class="b-name">#БізнесТокери — стратегія і перший захід</span>
+          <div class="b-price-wrap">
+            <div class="b-price">22&thinsp;000</div>
+            <div style="font-size:.62rem;color:#888888">грн</div>
+          </div>
+        </div>
+        <div class="b-body">
+          <ul class="b-items">
+            <li>Позиціонування Романа як організатора руху</li>
+            <li>Стратегія BOSS-акаунту: стиль, теми, частота</li>
+            <li>Правила колабів для партнерів #БізнесТокери</li>
+            <li>Підготовка першого заходу або спільної зйомки</li>
+            <li>Шаблони запрошень, анонсів і звітів після подій</li>
+          </ul>
+          <div class="b-hours">~8 год консультанта <span class="b-dur">1 місяць</span></div>
+        </div>
+      </div>
+
+      <!-- БЛОК 7 -->
+      <div class="b-card">
+        <div class="b-head">
+          <span class="b-num">Б-07</span>
+          <span class="b-name">CRM, автоматизація і підготовка до TikTok Shop</span>
+          <div class="b-price-wrap">
+            <div class="b-price">26&thinsp;000</div>
+            <div style="font-size:.62rem;color:#888888">грн</div>
+          </div>
+        </div>
+        <div class="b-body">
+          <ul class="b-items">
+            <li>Стратегія підготовки контент-системи до вимог TikTok Shop</li>
+            <li>Підготовка до Affiliate-моделі — відбір і стандарти партнерів</li>
+            <li>Дорожня карта на 12 місяців з урахуванням приходу TikTok Shop</li>
+            <li>Технічне завдання для програмістів: каталоги, інтеграції, стандарти</li>
+          </ul>
+          <div style="font-size:.73rem;color:#1A5A20;margin-top:8px;font-style:italic">* Технічна реалізація — окремо командою програмістів</div>
+          <div class="b-hours">~10 год консультанта <span class="b-dur">2–4 тижні</span></div>
+        </div>
+      </div>
+
+    </div><!-- /block-grid -->
+
+    <!-- BLOCKS TOTAL -->
+    <div class="blocks-total">
+      <div>
+        <div class="bt-label"><strong>Формат Б · Усі 7 блоків</strong>~70 год консультанта · повний обсяг</div>
+        <div class="bt-savings">Економія на міні-сайтах: 7&thinsp;000 грн вже включена</div>
+      </div>
+      <div>
+        <div class="bt-price">112&thinsp;000 <span style="font-size:.7rem;color:#888888;font-family:'Manrope',sans-serif;font-weight:400">грн</span></div>
+        <div style="font-size:.65rem;color:#888888;text-align:right;margin-top:2px">або по блоках, у зручному темпі</div>
+      </div>
+    </div>
+
+  </div><!-- /fmt-blocks -->
+
+
+
+</div>
+</div>
+
+<!-- ══ РЕКВІЗИТИ ══ -->
+<div style="background:#FFFFFF;border-top:1.5px solid #E8E5DE;padding:32px 20px 48px">
+<div style="max-width:860px;margin:0 auto">
+
+  <div style="font-size:.64rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#888888;margin-bottom:16px;display:flex;align-items:center;gap:10px">Реквізити сторін<span style="flex:1;height:1px;background:#EBEBEB;display:block"></span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px">
+    <div style="background:#FAFAFA;border:1.5px solid #E8E5DE;border-radius:12px;padding:16px 18px">
+      <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#FF0050;margin-bottom:10px">Виконавець</div>
+      <div style="font-size:.8rem;font-weight:700;color:#0A0A0A;margin-bottom:8px;line-height:1.4">ФОП Шеремета Василь Анатолійович</div>
+      <div style="font-size:.76rem;color:#555555;line-height:1.8">
+        ІПН: 3361708913<br>
+        IBAN: UA27&nbsp;3220&nbsp;0100&nbsp;0002&nbsp;6009&nbsp;3300&nbsp;7798&nbsp;1<br>
+        Банк: АТ «УНІВЕРСАЛ БАНК»<br>
+        МФО: 322001<br>
+        ЄДРПОУ банку: 21133352<br>
+        TikTok: @vasil_veo
+      </div>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid #E8E5DE;font-size:.72rem;color:#888888;font-family:'JetBrains Mono',monospace">Підпис: ___________________</div>
+    </div>
+    <div style="background:#FAFAFA;border:1.5px solid #E8E5DE;border-radius:12px;padding:16px 18px">
+      <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#888888;margin-bottom:10px">Замовник</div>
+      <div style="font-size:.8rem;font-weight:700;color:#0A0A0A;margin-bottom:8px;line-height:1.4">Лаврів Роман Михайлович</div>
+      <div style="font-size:.76rem;color:#555555;line-height:1.8">
+        ФОП або ТОВ 7FamilyBox<br>
+        РНОКПП: ___________<br>
+        IBAN: ___________<br>
+        Банк: ___________<br>
+        МФО: ___________<br>
+        Контакт: ___________
+      </div>
+      <div style="margin-top:12px;padding-top:10px;border-top:1px solid #E8E5DE;font-size:.72rem;color:#888888;font-family:'JetBrains Mono',monospace">Підпис: ___________________</div>
+    </div>
+  </div>
+
+  <div style="background:#F5F5F5;border-radius:10px;padding:14px 16px;font-size:.78rem;color:#555555;line-height:1.7">
+    Для початку роботи — залежно від обраного формату — буде підготовлений <strong style="color:#0A0A0A">договір про надання консультаційних послуг</strong> із переліком задач, строками та порядком оплати 50/50. Договір підписується обома сторонами до старту.
+  </div>
+
+</div>
+</div>
+
+<div style="background:#0A0A0A;padding:12px 20px;text-align:center;font-size:.7rem;color:rgba(255,255,255,.25);line-height:1.7">
+  VEO FORCE · @vasil_veo · КП-7FB-001 · Конфіденційно · 2026
+</div>
+<!-- ══ РЕКВІЗИТИ ══ -->
+<div style="background:#FAFAFA;border-top:1.5px solid #E8E5DE;padding:32px 20px 48px">
+<div style="max-width:860px;margin:0 auto">
+
+  <div style="font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#888888;margin-bottom:16px;display:flex;align-items:center;gap:10px">Порядок оплати та початок роботи<span style="flex:1;height:1px;background:#E8E5DE;display:block"></span></div>
+
+  <!-- Payment logic -->
+  <div style="background:#FFFFFF;border:1.5px solid #E8E5DE;border-radius:12px;padding:18px;margin-bottom:16px">
+    <div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#555;margin-bottom:12px">Логіка оплати 50 / 50</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="background:#FF0050;color:#fff;font-family:'Unbounded',sans-serif;font-size:.6rem;font-weight:900;border-radius:4px;padding:2px 7px;flex-shrink:0;margin-top:1px">50%</div>
+        <div style="font-size:.8rem;color:#333;line-height:1.55">Передплата на початку кожного місяця або блоку — підтверджує старт і бронює час консультанта</div>
+      </div>
+      <div style="display:flex;gap:10px;align-items:flex-start">
+        <div style="background:#0A0A0A;color:#fff;font-family:'Unbounded',sans-serif;font-size:.6rem;font-weight:900;border-radius:4px;padding:2px 7px;flex-shrink:0;margin-top:1px">50%</div>
+        <div style="font-size:.8rem;color:#333;line-height:1.55">Оплата другої половини в день, коли пройшла половина терміну — робота йде без пауз</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;padding-top:10px;border-top:1px solid #F0EFE9;font-size:.76rem;color:#666;line-height:1.6">
+      В кінці терміну — акт виконаних робіт. За бажанням Замовника — після кожного місяця або блоку. Продовження — за взаємною домовленістю.
+    </div>
+  </div>
+
+  <!-- Contract note -->
+  <div style="background:#F0F8FF;border:1.5px solid rgba(0,100,200,.12);border-radius:12px;padding:14px 18px;margin-bottom:20px;font-size:.79rem;color:#1A3060;line-height:1.65">
+    <strong>Для початку роботи</strong> — залежно від обраного формату буде підготовлений договір про надання консультаційних послуг із переліком задач, строками та умовами оплати.
+  </div>
+
+  <!-- Requisites -->
+  <div style="font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#888888;margin-bottom:14px;display:flex;align-items:center;gap:10px">Реквізити сторін<span style="flex:1;height:1px;background:#E8E5DE;display:block"></span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+
+    <div style="background:#FFFFFF;border:1.5px solid #E8E5DE;border-radius:12px;padding:16px">
+      <div style="font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#FF0050;margin-bottom:10px">Виконавець</div>
+      <div style="font-size:.79rem;color:#0A0A0A;font-weight:700;margin-bottom:6px">ФОП Шеремета Василь Анатолійович</div>
+      <div style="display:flex;flex-direction:column;gap:4px;font-size:.74rem;color:#555555;line-height:1.6">
+        <div><span style="color:#888;min-width:80px;display:inline-block">ІПН:</span> 3361708913</div>
+        <div><span style="color:#888;min-width:80px;display:inline-block">IBAN:</span> UA27 3220 0100 0002 6009 3300 7798 1</div>
+        <div><span style="color:#888;min-width:80px;display:inline-block">Банк:</span> АТ «УНІВЕРСАЛ БАНК»</div>
+        <div><span style="color:#888;min-width:80px;display:inline-block">МФО:</span> 322001</div>
+        <div><span style="color:#888;min-width:80px;display:inline-block">ЄДРПОУ:</span> 21133352</div>
+        <div><span style="color:#888;min-width:80px;display:inline-block">TikTok:</span> @vasil_veo</div>
+      </div>
+      <div style="margin-top:12px;border-top:1px solid #F0EFE9;padding-top:10px;font-size:.7rem;color:#AAAAAA;font-family:'JetBrains Mono',monospace">Підпис: ___________________</div>
+    </div>
+
+    <div style="background:#FFFFFF;border:1.5px solid #E8E5DE;border-radius:12px;padding:16px">
+      <div style="font-size:.64rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#0A0A0A;margin-bottom:10px">Замовник</div>
+      <div style="font-size:.79rem;color:#0A0A0A;font-weight:700;margin-bottom:6px">Лаврів Роман Михайлович</div>
+      <div style="display:flex;flex-direction:column;gap:4px;font-size:.74rem;color:#555555;line-height:1.6">
+        <div><span style="color:#888;min-width:80px;display:inline-block">Компанія:</span> 7FamilyBox</div>
+        <div><span style="color:#888;min-width:80px;display:inline-block">ФОП/ТОВ:</span> за рішенням сторін</div>
+        <div><span style="color:#888;min-width:80px;display:inline-block">ІПН:</span> ___________________</div>
+        <div><span style="color:#888;min-width:80px;display:inline-block">IBAN:</span> ___________________</div>
+        <div><span style="color:#888;min-width:80px;display:inline-block">Банк:</span> ___________________</div>
+        <div><span style="color:#888;min-width:80px;display:inline-block">Контакт:</span> ___________________</div>
+      </div>
+      <div style="margin-top:12px;border-top:1px solid #F0EFE9;padding-top:10px;font-size:.7rem;color:#AAAAAA;font-family:'JetBrains Mono',monospace">Підпис: ___________________</div>
+    </div>
+
+  </div>
+
+</div>
+</div>
+
+<div style="background:#0A0A0A;padding:12px 20px;text-align:center;font-size:.7rem;color:rgba(255,255,255,.25)">
+  VEO FORCE · @vasil_veo · КП-7FB-001 · Конфіденційно · 2026
+</div>
+
+
+<script>
+function showFmt(id, btn){
+  document.querySelectorAll('.fmt-panel').forEach(function(p){ p.classList.remove('show'); });
+  document.querySelectorAll('.fmt-tab').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('fmt-'+id).classList.add('show');
+  btn.classList.add('active');
+}
+function setDur(id, btn){
+  document.querySelectorAll('.dur-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  document.querySelectorAll('.dur-plan').forEach(function(p){ p.style.display='none'; });
+  document.getElementById('plan-'+id).style.display='block';
+}
+</script>
+</body>
+</html>
