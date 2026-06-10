@@ -148,13 +148,18 @@ h3.sub{font-family:var(--head);font-size:.95rem;font-weight:800;letter-spacing:-
 .phen-cite{font-size:.7rem;color:var(--light);font-style:italic;margin-top:5px}
 
 /* ── HOOK TABLE ── */
-.hook-table{width:100%;border-collapse:collapse;font-size:.8rem;margin:14px 0;overflow:hidden;border-radius:10px;overflow:hidden}
-.hook-table th{background:#0A0A0A;color:#fff;padding:9px 12px;text-align:left;font-size:.65rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-.hook-table td{padding:10px 12px;border-bottom:1px solid #F0EFE9;color:#333;vertical-align:top;line-height:1.45}
+.hook-table-wrap{border-radius:10px;border:1.5px solid #E8E5DE;margin:14px 0;overflow:hidden}
+.hook-table{width:100%;border-collapse:collapse;font-size:.8rem}
+.hook-table th{background:#0A0A0A;color:#fff;padding:7px 8px;text-align:left;font-size:.58rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.hook-table th:nth-child(1),.hook-table td:nth-child(1){width:10%;white-space:nowrap}
+.hook-table th:nth-child(2),.hook-table td:nth-child(2){width:11%;white-space:nowrap}
+.hook-table th:nth-child(3),.hook-table td:nth-child(3){width:39%}
+.hook-table th:nth-child(4),.hook-table td:nth-child(4){width:40%}
+.hook-table td{padding:8px;border-bottom:1px solid #F0EFE9;color:#333;vertical-align:top;line-height:1.45;font-size:.73rem}
 .hook-table tr:last-child td{border-bottom:none}
-.hook-table td:first-child{font-weight:600;color:#0A0A0A;white-space:nowrap}
-.hook-table .bad{color:#C00030;font-size:.76rem}
-.hook-table .good{color:#1A7A3C;font-size:.76rem}
+.hook-table td:first-child{font-weight:600;color:#0A0A0A;white-space:normal;font-size:.68rem}
+.hook-table .bad{color:#C00030;font-size:.71rem}
+.hook-table .good{color:#1A7A3C;font-size:.71rem}
 .hook-table tr:nth-child(even) td{background:#FAFAF8}
 
 /* ── ROADMAP STEPS ── */
@@ -392,7 +397,7 @@ footer a{color:rgba(255,255,255,.35);text-decoration:none}
     <p class="ch-lead">Перші 1–2 секунди відео визначають все. TikTok вимірює «hook rate» — відсоток людей, які досмотрять перші 3 секунди. Якщо нижче 65–70% — алгоритм перестає просувати відео. Кожна перша фраза — це нейрохімічна ставка.</p>
   </div>
 
-  <table class="hook-table">
+  <div class="hook-table-wrap"><table class="hook-table">
     <thead>
       <tr><th>Гормон</th><th>Емоція</th><th>❌ Не так</th><th>✅ Так</th></tr>
     </thead>
@@ -433,7 +438,7 @@ footer a{color:rgba(255,255,255,.35);text-decoration:none}
         <td class="good">Те, що він зараз витягне з килима, трохи шокує</td>
       </tr>
     </tbody>
-  </table>
+  </table></div>
 
   <div class="formula-box">
     <div class="formula-title">Формула сильного TikTok Shop відео 2026</div>
