@@ -1209,6 +1209,281 @@ details[open].gloss-summary-biz .gloss-summary{background:#440015;color:#fff}
   <div class="pull">«Бізнеси, які зараз впроваджують системний контент і готують команди, отримують першість на ринку, що лише формується. Найдорожча помилка — чекати, поки ринок стане очевидним для всіх.»<br><br><em>— Vasil VEO</em></div>
 </div>
 </div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- CALCULATOR SECTION                          -->
+<!-- ═══════════════════════════════════════════ -->
+<div style="background:#F5F4F0;padding:56px 0 64px">
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div style="text-align:center;margin-bottom:36px">
+    <div style="display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,0,80,.25);border-radius:40px;padding:4px 14px;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#FF0050;margin-bottom:16px">
+      <span style="width:6px;height:6px;border-radius:50%;background:#FF0050;display:inline-block"></span>
+      Інтерактивний інструмент
+    </div>
+    <h2 style="font-family:'Unbounded',sans-serif;font-size:clamp(1.2rem,3.5vw,2rem);font-weight:900;color:#0A0A0A;letter-spacing:-.04em;line-height:1.15;margin-bottom:12px">Калькулятор готовності до нової епохи TikTok</h2>
+    <p style="font-size:.88rem;color:#555;max-width:560px;margin:0 auto;line-height:1.7">15 запитань — і Ви дізнаєтеся свій індекс стратегічної та психологічної готовності до алгоритмів нового покоління та TikTok Shop.</p>
+  </div>
+
+  <!-- PROGRESS BAR -->
+  <div style="background:#E8E5DE;border-radius:4px;height:4px;margin-bottom:28px;overflow:hidden">
+    <div id="quizProgress" style="height:100%;background:linear-gradient(90deg,#FF0050,#FF6688);border-radius:4px;width:0%;transition:width .4s ease"></div>
+  </div>
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:-22px;margin-bottom:24px">
+    <div id="progressLabel" style="font-size:.68rem;color:#888;font-family:'JetBrains Mono',monospace">0 / 15 запитань</div>
+    <div id="progressScore" style="font-size:.68rem;color:#888;font-family:'JetBrains Mono',monospace">0 балів</div>
+  </div>
+
+  <!-- QUESTIONS -->
+  <div id="quizForm" style="display:flex;flex-direction:column;gap:12px">
+  </div>
+
+  <!-- SUBMIT -->
+  <div style="margin-top:28px;text-align:center">
+    <button id="calcBtn" onclick="calcResult()" style="background:#0A0A0A;color:#fff;border:none;border-radius:12px;padding:15px 40px;font-family:'Manrope',sans-serif;font-size:.88rem;font-weight:700;cursor:pointer;transition:all .2s;box-shadow:0 4px 16px rgba(0,0,0,.15)">
+      Розрахувати індекс готовності →
+    </button>
+  </div>
+
+  <!-- RESULT -->
+  <div id="quizResult" style="display:none;margin-top:32px"></div>
+
+</div>
+</div>
+
+<script>
+var questions = [
+  {
+    q: 'Ваші перші 1–2 секунди відео містять чіткий «гачок» — фразу або образ, що зупиняє скрол?',
+    tip: 'Hook Rate нижче 65–70% — алгоритм вимикає просування'
+  },
+  {
+    q: 'Ваш контент будується навколо інтриги і невідомого результату, а не демонстрації продукту «в лоб»?',
+    tip: 'Дофамінова модель: «Що буде далі?» — сильніший тригер ніж «Дивіться який товар»'
+  },
+  {
+    q: 'Ви знімаєте відео «по-людськи» — без постановочної ідеальності, з живою подачею і щирими емоціями?',
+    tip: 'Окситоцин активується лише при відчутті справжньої людини в кадрі'
+  },
+  {
+    q: 'Ваш контент дає глядачу відчуття «тепер я знаю те, чого не знають інші»?',
+    tip: 'Серотонін підвищується коли людина відчуває зростання власного статусу через знання'
+  },
+  {
+    q: 'Кожне Ваше відео має емоційну «розрядку» в кінці — несподіваний фінал, гумор або «вау-момент»?',
+    tip: 'Ендорфіни закріплюють контент у пам\u2019яті і підвищують Retention Rate'
+  },
+  {
+    q: 'Ви відстежуєте поширення (Shares) і збереження (Saves) як головні метрики, а не лише лайки?',
+    tip: 'Shares і Saves — найсильніші сигнали для алгоритму. Лайки — найслабші'
+  },
+  {
+    q: 'Коли охоплення падають — Ви аналізуєте закономірності в даних, а не панікуєте і не змінюєте стратегію хаотично?',
+    tip: 'Кортизолова реакція на кризу — найчастіша причина руйнування каналів'
+  },
+  {
+    q: 'Ви розумієте різницю між мерчантом (свій товар і логістика) та афіліатом (комісія без складу) і знаєте яка роль підходить Вам?',
+    tip: '15 млн+ мерчантів і лише 851 000 активних афіліатів — ніша майже порожня'
+  },
+  {
+    q: 'Ви вже зараз будуєте аудиторію і довіру, не чекаючи офіційного запуску TikTok Shop в Україні?',
+    tip: 'Вікно першопроходця — найцінніший ресурс. Польща, Австрія, Бельгія, Нідерланди — 15 червня 2026'
+  },
+  {
+    q: 'Ваша контент-стратегія містить 80% продажного і 20% «людського» контенту (бекстейдж, думки, щирі моменти)?',
+    tip: 'Без 20% — немає довіри. Без 80% — немає продажів. Баланс критичний'
+  },
+  {
+    q: 'Ви знімаєте не для алгоритму, а для конкретної людини з конкретним болем або бажанням?',
+    tip: 'Алгоритм навчається на реакціях аудиторії — якщо цільова людина реагує, просування йде само'
+  },
+  {
+    q: 'Ви усвідомлюєте, що відсутність коментарів — це не провал, а нормальна поведінка 99,85% глядачів?',
+    tip: '0,15% переглядів → коментар. 50–60% читають мовчки. Найкращий глядач ніколи не коментує'
+  },
+  {
+    q: 'Ви знаєте, що CAGR реклами TikTok — 58,2% на рік, і розумієте що це означає для Вашого бізнесу в перспективі 2–3 років?',
+    tip: 'TikTok обійде YouTube за рекламними бюджетами у 2027 і наздожене Instagram у 2029'
+  },
+  {
+    q: 'Ваш контент показує процес і відкриття — а не «у нас великий склад» або «дивіться скільки товару»?',
+    tip: 'Instagram-логіка (демонстрація статусу) в TikTok не працює — тут виграє дофамінова модель «пошуку»'
+  },
+  {
+    q: 'Ви готові публікувати регулярно — навіть коли немає «настрою» і «натхнення», бо розумієте Mere Exposure Effect?',
+    tip: 'Zajonc (1968): довіра будується через частоту. Регулярність важливіша за перфекціонізм'
+  }
+];
+
+var scores = new Array(questions.length).fill(-1);
+
+function renderQuestions(){
+  var form = document.getElementById('quizForm');
+  form.innerHTML = '';
+  questions.forEach(function(q, i){
+    var card = document.createElement('div');
+    card.id = 'q'+i;
+    card.style.cssText = 'background:#FFFFFF;border:1.5px solid #E8E5DE;border-radius:14px;padding:18px 16px;transition:border-color .2s';
+    card.innerHTML = '<div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:12px">'
+      + '<div style="font-family:JetBrains Mono,monospace;font-size:.62rem;font-weight:700;color:#FF0050;background:rgba(255,0,80,.07);border:1px solid rgba(255,0,80,.15);border-radius:4px;padding:2px 7px;flex-shrink:0;margin-top:1px">'+(i+1)+'</div>'
+      + '<div>'
+      + '<div style="font-size:.84rem;font-weight:600;color:#0A0A0A;line-height:1.5;margin-bottom:5px">'+q.q+'</div>'
+      + '<div style="font-size:.7rem;color:#888;line-height:1.45;font-style:italic">'+q.tip+'</div>'
+      + '</div></div>'
+      + '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">'
+      + makeOption(i, 2, '✓ Так, повністю', '#1A7A3C', 'rgba(0,180,100,.08)', 'rgba(0,180,100,.2)')
+      + makeOption(i, 1, '↔ Частково', '#CC7700', 'rgba(200,130,0,.07)', 'rgba(200,130,0,.2)')
+      + makeOption(i, 0, '✗ Ні / не думав', '#CC0030', 'rgba(255,0,50,.06)', 'rgba(255,0,50,.18)')
+      + '</div>';
+    form.appendChild(card);
+  });
+}
+
+function makeOption(qi, val, label, textColor, bg, borderColor){
+  return '<button onclick="setScore('+qi+','+val+',this)" data-val="'+val+'" '
+    + 'style="border:1.5px solid #E8E5DE;border-radius:9px;padding:9px 6px;font-family:Manrope,sans-serif;font-size:.72rem;font-weight:600;color:#555;background:#FAFAF8;cursor:pointer;transition:all .15s;line-height:1.3;text-align:center">'
+    + label + '</button>';
+}
+
+function setScore(qi, val, btn){
+  scores[qi] = val;
+  var card = document.getElementById('q'+qi);
+  // Reset all buttons in card
+  card.querySelectorAll('button').forEach(function(b){ 
+    b.style.background='#FAFAF8';
+    b.style.borderColor='#E8E5DE';
+    b.style.color='#555';
+    b.style.fontWeight='600';
+  });
+  // Highlight selected
+  var colors = {2:['rgba(0,180,100,.12)','rgba(0,180,100,.35)','#007840'],
+                1:['rgba(200,130,0,.1)','rgba(200,130,0,.35)','#996600'],
+                0:['rgba(255,0,50,.08)','rgba(255,0,50,.3)','#BB0025']};
+  var col = colors[val];
+  btn.style.background = col[0];
+  btn.style.borderColor = col[1];
+  btn.style.color = col[2];
+  btn.style.fontWeight = '700';
+  card.style.borderColor = col[1];
+  updateProgress();
+}
+
+function updateProgress(){
+  var answered = scores.filter(function(s){ return s >= 0; }).length;
+  var total = scores.reduce(function(a,b){ return a + (b >= 0 ? b : 0); }, 0);
+  document.getElementById('quizProgress').style.width = (answered/questions.length*100)+'%';
+  document.getElementById('progressLabel').textContent = answered+' / '+questions.length+' запитань';
+  document.getElementById('progressScore').textContent = total+' балів';
+}
+
+function calcResult(){
+  var answered = scores.filter(function(s){ return s >= 0; }).length;
+  if(answered < questions.length){
+    var unanswered = scores.map(function(s,i){ return s < 0 ? i : -1; }).filter(function(i){ return i >= 0; });
+    // Highlight unanswered
+    unanswered.forEach(function(i){
+      var card = document.getElementById('q'+i);
+      card.style.borderColor = '#FF0050';
+      card.style.background = 'rgba(255,0,80,.03)';
+    });
+    alert('Будь ласка, дайте відповідь на всі ' + questions.length + ' запитань.');
+    document.getElementById('q'+unanswered[0]).scrollIntoView({behavior:'smooth',block:'center'});
+    return;
+  }
+  var total = scores.reduce(function(a,b){ return a+b; }, 0);
+  showResult(total);
+}
+
+function showResult(total){
+  var pct = Math.round(total/30*100);
+  var res;
+  if(total <= 10){
+    res = {
+      level: 'Традиційний спостерігач',
+      zone: 'Зона ризику',
+      color: '#CC0030',
+      bg: '#FFF0F3',
+      border: 'rgba(200,0,50,.2)',
+      icon: '⚠️',
+      desc: 'Ваша модель контенту ще живе за логікою Instagram 2018 — демонстрація товару, ставка на лайки, хаотична реакція на зміни охоплень. Це серотонінова пастка у дофаміновому середовищі. Глядач TikTok шукає «що буде далі» — а отримує «дивіться який склад». Без перебудови на гачки, живу подачу і системну аналітику — TikTok Shop залишиться недосяжним. <strong>Починайте з малого: один сильний гачок у кожному відео. Потім решта.</strong>',
+      actions: ['Вивчити структуру дофамінового гачка', 'Переглянути 5 відео конкурентів із >100K переглядів: що спільного в перших 2 секундах?', 'Запустити 55 відео за 1 тиждень — навчання алгоритму']
+    };
+  } else if(total <= 21){
+    res = {
+      level: 'Прагматичний адаптант',
+      zone: 'Середній рівень',
+      color: '#CC7700',
+      bg: '#FFFBF0',
+      border: 'rgba(200,130,0,.25)',
+      icon: '📈',
+      desc: 'Ви розумієте базові механіки — живу подачу, важливість гачка, відмінність TikTok від Instagram. Але система ще не вибудована до кінця: Ви відстежуєте лайки більше ніж поширення, реагуєте на падіння охоплень емоційно, і ще не повністю усвідомили потенціал афіліатної моделі. <strong>У Вас є все необхідне для сильного старту з TikTok Shop — бракує системності й фокусу на правильних метриках.</strong>',
+      actions: ['Перейти на відстеження Shares і Saves як головних KPI', 'Вибудувати контент-план 80/20 на місяць вперед', 'Визначити свою роль: мерчант чи афіліат — і запустити пілот']
+    };
+  } else {
+    res = {
+      level: 'TikTok-Стратег нового покоління',
+      zone: 'Максимальна готовність',
+      color: '#007840',
+      bg: '#F0FFF8',
+      border: 'rgba(0,180,100,.25)',
+      icon: '🚀',
+      desc: 'Ви повністю розумієте дофамінову природу платформи, балансуєте між 5 нейрохімічними системами у своєму контенті і керуєтеся даними, а не емоціями. Ви вже в тій меншості авторів, які знімають для <em>конкретної людини</em>, а не для алгоритму. <strong>Вітаємо — Ви входите в топ-категорію, яка знімає вершки з ринку після запуску TikTok Shop в Україні.</strong>',
+      actions: ['Масштабувати бюджет і частоту публікацій', 'Будувати афіліатну мережу навколо свого продукту', 'Готувати інфраструктуру до TikTok Shop до його офіційного запуску в Україні']
+    };
+  }
+
+  var html = '<div style="background:'+res.bg+';border:2px solid '+res.border+';border-radius:18px;padding:28px 22px;position:relative;overflow:hidden">'
+    // Decorative circle
+    + '<div style="position:absolute;top:-30px;right:-30px;width:120px;height:120px;border-radius:50%;background:'+res.border+';opacity:.3"></div>'
+    // Score gauge
+    + '<div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">'
+    + '<div style="flex-shrink:0;width:72px;height:72px;border-radius:50%;border:3px solid '+res.color+';display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff">'
+    + '<div style="font-family:Unbounded,sans-serif;font-size:1.2rem;font-weight:900;color:'+res.color+';line-height:1">'+total+'</div>'
+    + '<div style="font-size:.55rem;color:#888;font-weight:600;letter-spacing:.05em">з 30</div>'
+    + '</div>'
+    + '<div>'
+    + '<div style="font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:'+res.color+';margin-bottom:3px">'+res.zone+'</div>'
+    + '<div style="font-family:Unbounded,sans-serif;font-size:.88rem;font-weight:900;color:#0A0A0A;letter-spacing:-.02em;line-height:1.2">'+res.icon+' '+res.level+'</div>'
+    + '</div></div>'
+    // Progress bar
+    + '<div style="background:rgba(0,0,0,.08);border-radius:4px;height:7px;margin-bottom:5px;overflow:hidden">'
+    + '<div style="width:'+pct+'%;height:100%;background:'+res.color+';border-radius:4px;transition:width 1s ease"></div></div>'
+    + '<div style="font-size:.68rem;color:#888;text-align:right;margin-bottom:16px">'+pct+'% готовності</div>'
+    // Description
+    + '<p style="font-size:.83rem;color:#333;line-height:1.7;margin-bottom:16px">'+res.desc+'</p>'
+    // Next steps
+    + '<div style="background:rgba(255,255,255,.7);border-radius:10px;padding:14px 16px">'
+    + '<div style="font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#555;margin-bottom:10px">Наступні кроки</div>'
+    + '<div style="display:flex;flex-direction:column;gap:6px">'
+    + res.actions.map(function(a,i){
+        return '<div style="display:flex;gap:8px;align-items:flex-start;font-size:.8rem;color:#333;line-height:1.5">'
+          + '<span style="background:'+res.color+';color:#fff;font-family:Unbounded,sans-serif;font-size:.55rem;font-weight:900;border-radius:4px;padding:2px 5px;flex-shrink:0;margin-top:2px">'+(i+1)+'</span>'
+          + a + '</div>';
+      }).join('')
+    + '</div></div>'
+    // Retry
+    + '<button onclick="retryQuiz()" style="margin-top:16px;width:100%;background:#0A0A0A;color:#fff;border:none;border-radius:10px;padding:12px;font-family:Manrope,sans-serif;font-size:.8rem;font-weight:700;cursor:pointer;transition:background .15s">Пройти тест ще раз</button>'
+    + '</div>';
+
+  var resultEl = document.getElementById('quizResult');
+  resultEl.innerHTML = html;
+  resultEl.style.display = 'block';
+  setTimeout(function(){ resultEl.scrollIntoView({behavior:'smooth',block:'start'}); }, 100);
+}
+
+function retryQuiz(){
+  scores = new Array(questions.length).fill(-1);
+  document.getElementById('quizResult').style.display='none';
+  renderQuestions();
+  updateProgress();
+  document.getElementById('quizForm').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+renderQuestions();
+updateProgress();
+</script>
+
 <div class="cta-section">
   <div class="cta-inner">
     <h2>Хочете зрозуміти це<br>стосовно свого бізнесу?</h2>
