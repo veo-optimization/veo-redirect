@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="color-scheme" content="light only">
+<title>Контент-план · VEO FORCE Constructor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#FFFFFF;color:#0A0A0A;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.65;overflow-x:hidden;color-scheme:light only}
+.topbar{background:#0A0A0A;padding:8px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.tb-brand{font-family:'Unbounded',sans-serif;font-size:.72rem;font-weight:900;color:#fff;letter-spacing:-.01em}
+.tb-brand span{color:#FF0050}
+.tb-meta{font-size:.68rem;color:rgba(255,255,255,.4);letter-spacing:.04em}
+.hero{background:#0A0A0A;padding:40px 20px 36px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 55% 50% at 75% 40%,rgba(255,0,80,.14),transparent 60%),radial-gradient(ellipse 40% 40% at 10% 90%,rgba(244,197,66,.08),transparent 55%);pointer-events:none}
+.hero-inner{max-width:880px;margin:0 auto;position:relative;z-index:1}
+.hero-kicker{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.12);border-radius:40px;padding:4px 14px;font-size:.64rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:16px}
+.hero-kicker::before{content:'';width:6px;height:6px;border-radius:50%;background:#FF0050}
+.hero h1{font-family:'Unbounded',sans-serif;font-size:clamp(1.3rem,4vw,2.2rem);font-weight:900;letter-spacing:-.05em;line-height:1.1;color:#fff;margin-bottom:8px}
+.hero h1 em{font-style:normal;color:#FF0050}
+.hero-deck{font-size:.86rem;color:rgba(255,255,255,.45);max-width:560px;line-height:1.6}
+.wrap{max-width:880px;margin:0 auto;padding:0 16px}
+/* FILTERS */
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin:24px 0 18px;position:sticky;top:0;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);padding:12px 0;z-index:50}
+.filter-btn{border:1.5px solid #E8E5DE;background:#fff;border-radius:30px;padding:6px 14px;font-family:'Manrope',sans-serif;font-size:.74rem;font-weight:600;color:#555;cursor:pointer;transition:all .15s;white-space:nowrap}
+.filter-btn:hover{border-color:#0A0A0A}
+.filter-btn.active{background:#0A0A0A;color:#fff;border-color:#0A0A0A}
+.status-filters{display:flex;gap:6px;flex-wrap:wrap;padding-top:8px}
+.sf-btn{border:1.5px solid #E8E5DE;background:#fff;border-radius:24px;padding:5px 12px;font-family:'Manrope',sans-serif;font-size:.7rem;font-weight:600;color:#666;cursor:pointer;transition:all .15s;white-space:nowrap}
+.sf-btn:hover{border-color:#999}
+.sf-btn.sf-done.active{background:#00A878;color:#fff;border-color:#00A878}
+.sf-btn.sf-skip.active{background:#888;color:#fff;border-color:#888}
+.sf-btn.sf-analyze.active{background:#7B2FF7;color:#fff;border-color:#7B2FF7}
+.sf-btn.sf-all.active{background:#0A0A0A;color:#fff;border-color:#0A0A0A}
+/* DAY CARDS */
+.days{display:flex;flex-direction:column;gap:12px;padding-bottom:40px}
+.day-card{border:1.5px solid #E8E5DE;border-radius:16px;overflow:hidden;transition:all .2s;background:#fff}
+.day-card:hover{border-color:#CCC;box-shadow:0 4px 20px rgba(0,0,0,.05)}
+.day-head{display:flex;align-items:center;gap:12px;padding:14px 16px;cursor:pointer;user-select:none}
+.day-num{width:42px;height:42px;border-radius:11px;background:#0A0A0A;color:#fff;font-family:'Unbounded',sans-serif;font-weight:900;font-size:.78rem;display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;line-height:1}
+.day-num span{font-size:.5rem;font-weight:600;opacity:.5;margin-top:1px}
+.day-head-mid{flex:1;min-width:0}
+.day-title{font-size:.86rem;font-weight:700;color:#0A0A0A;line-height:1.35;margin-bottom:4px}
+.day-tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.tag{font-size:.6rem;font-weight:700;border-radius:20px;padding:2px 8px;white-space:nowrap}
+.tag-niche{background:#F0EFE9;color:#666}
+.tag-h-oxy{background:rgba(180,160,0,.1);color:#857000}
+.tag-h-dop{background:rgba(0,120,80,.1);color:#007050}
+.tag-h-ser{background:rgba(48,96,160,.1);color:#3060A0}
+.tag-h-end{background:rgba(200,80,128,.13);color:#C05080}
+.tag-h-cor{background:rgba(255,140,0,.12);color:#C06000}
+.day-chev{font-size:11px;color:#CCC;transition:transform .25s;flex-shrink:0}
+.day-card.open .day-chev{transform:rotate(180deg)}
+.day-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease;border-top:1px solid transparent}
+.day-card.open .day-body{grid-template-rows:1fr;border-top-color:#F0EFE9}
+.day-body-inner{overflow:hidden}
+.day-content{padding:16px}
+.block{margin-bottom:14px}
+.block:last-child{margin-bottom:0}
+.block-label{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.block-hook{background:#FFF5F7;border:1px solid rgba(255,0,80,.15);border-radius:9px;padding:11px 13px}
+.block-hook .hook-text{font-size:.86rem;color:#0A0A0A;font-weight:600;line-height:1.5;font-style:italic}
+.script-step{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start}
+.script-step:last-child{margin-bottom:0}
+.step-badge{font-family:'JetBrains Mono',monospace;font-size:.55rem;font-weight:700;color:#fff;border-radius:5px;padding:3px 6px;flex-shrink:0;margin-top:1px;white-space:nowrap;min-width:20px;text-align:center}
+.sb-c{background:#C06000}
+.sb-d{background:#007050}
+.sb-m{background:#B04000}
+.sb-o{background:#857000}
+.sb-s{background:#3060A0}
+.sb-e{background:#C05080}
+.step-text{font-size:.8rem;color:#333;line-height:1.55}
+.step-text strong{color:#0A0A0A}
+.block-cta{background:#F5F4F0;border-radius:9px;padding:10px 13px;font-size:.8rem;color:#333;line-height:1.5}
+.tip-row{display:flex;gap:8px;align-items:flex-start;font-size:.76rem;color:#666;line-height:1.55;background:#FAFAF8;border-left:2px solid #E8E5DE;padding:8px 12px;border-radius:0 8px 8px 0;margin-top:8px}
+.tip-row::before{content:'💡';flex-shrink:0}
+.nlp-block{background:linear-gradient(135deg,#FDFAFF 0%,#F7F3FF 100%);border:1px solid rgba(123,47,247,.15);border-radius:10px;padding:12px 14px;margin-bottom:14px}
+.nlp-label{font-size:.58rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#9060C0;margin-bottom:7px}
+.nlp-text{font-size:.84rem;color:#333;line-height:1.65}
+/* STATUS */
+.status-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid #F0EFE9}
+.status-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1.5px solid #E8E5DE;font-family:'Manrope',sans-serif;font-size:.72rem;font-weight:600;cursor:pointer;background:#fff;transition:all .18s;user-select:none}
+.status-btn:hover{border-color:#999}
+.status-btn.s-done.sel{background:#00A878;color:#fff;border-color:#00A878}
+.status-btn.s-skip.sel{background:#888;color:#fff;border-color:#888}
+.status-btn.s-analyze.sel{background:#7B2FF7;color:#fff;border-color:#7B2FF7}
+.day-card[data-status~="done"]{border-color:#00A878 !important}
+.day-card[data-status~="analyze"]{background:#FDFAFF}
+.day-card[data-status="done analyze"]{border-color:#00A878 !important;background:#F5FFF8}
+.day-card[data-status="analyze done"]{border-color:#00A878 !important;background:#F5FFF8}
+.day-card[data-status="skip"]{opacity:.55}
+.analyze-badge{display:none;width:26px;height:26px;border-radius:7px;background:#7B2FF7;color:#fff;font-family:'Unbounded',sans-serif;font-size:.65rem;font-weight:900;align-items:center;justify-content:center;flex-shrink:0;margin-right:2px;letter-spacing:-.01em;box-shadow:0 2px 8px rgba(123,47,247,.35)}
+.day-card[data-status~="analyze"] .analyze-badge{display:flex}
+/* ANALYTICS */
+.analytics-block{background:#FDFAFF;border:1.5px solid rgba(123,47,247,.35);border-radius:12px;padding:14px;margin-top:12px;display:none}
+body.sf-analyze .day-card[data-status~="analyze"] .analytics-block{display:block}
+.analytics-title{font-size:.62rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#7B2FF7;margin-bottom:10px}
+.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.analytics-field{display:flex;flex-direction:column;gap:3px}
+.analytics-field label{font-size:.58rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.06em}
+.analytics-field input{border:1.5px solid #E0D8F5;border-radius:7px;padding:6px 9px;font-family:'Manrope',sans-serif;font-size:1rem;color:#0A0A0A;background:#fff;outline:none;transition:border-color .15s;width:100%}
+.analytics-field input:focus{border-color:#7B2FF7}
+.analytics-wide{grid-column:1/-1;display:flex;flex-direction:column;gap:3px}
+.analytics-wide label{font-size:.58rem;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.06em}
+.analytics-wide textarea{border:1.5px solid #E0D8F5;border-radius:7px;padding:8px 10px;font-family:'Manrope',sans-serif;font-size:1rem;color:#0A0A0A;background:#fff;outline:none;transition:border-color .15s;width:100%;resize:vertical;min-height:56px}
+.analytics-wide textarea:focus{border-color:#7B2FF7}
+.time-field{display:flex;gap:6px;align-items:stretch}
+.time-field input{flex:1;min-width:0}
+.time-toggle{display:flex;flex-direction:column;gap:3px;flex-shrink:0}
+.tt-btn{border:1.5px solid #E0D8F5;background:#fff;border-radius:5px;padding:3px 8px;font-family:'Manrope',sans-serif;font-size:.62rem;font-weight:700;color:#9060C0;cursor:pointer;transition:all .15s;white-space:nowrap}
+.tt-btn:hover{border-color:#7B2FF7}
+.tt-btn.active{background:#7B2FF7;color:#fff;border-color:#7B2FF7}
+/* REPORT */
+.report-section{background:#0A0A0A;border-radius:16px;padding:20px;margin:20px 0 8px;display:none}
+.report-section.visible{display:block}
+.report-header{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px;flex-wrap:wrap}
+.report-title{font-family:'Unbounded',sans-serif;font-size:.8rem;font-weight:900;color:#9B6EFF;letter-spacing:-.02em}
+.report-subtitle{font-size:.65rem;color:rgba(255,255,255,.3);margin-top:3px}
+.report-copy-btn{border:1.5px solid rgba(123,47,247,.5);background:transparent;border-radius:8px;padding:7px 16px;font-family:'Manrope',sans-serif;font-size:.74rem;font-weight:700;color:#9B6EFF;cursor:pointer;transition:all .18s;white-space:nowrap;flex-shrink:0}
+.report-copy-btn:hover{background:rgba(123,47,247,.15)}
+.report-copy-btn.copied{color:#00C878;border-color:#00C878}
+.report-text{font-family:'JetBrains Mono',monospace;font-size:.7rem;color:rgba(255,255,255,.75);line-height:1.85;white-space:pre-wrap;word-break:break-word;background:rgba(255,255,255,.04);border-radius:8px;padding:14px;max-height:500px;overflow-y:auto}
+.report-prompt{background:rgba(123,47,247,.08);border:1px solid rgba(123,47,247,.2);border-radius:10px;padding:14px;margin-bottom:14px}
+.report-prompt-title{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#9B6EFF;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.report-prompt-title::before{content:'\2728';font-size:.8rem}
+.report-prompt-text{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:rgba(255,255,255,.55);line-height:1.75;white-space:pre-wrap;word-break:break-word}
+.report-metrics-btn{display:block;width:100%;margin-top:12px;border:1.5px solid rgba(0,200,120,.4);background:transparent;border-radius:8px;padding:9px 16px;font-family:'Manrope',sans-serif;font-size:.74rem;font-weight:700;color:#00C878;cursor:pointer;transition:all .18s;text-align:center}
+.report-metrics-btn:hover{background:rgba(0,200,120,.1)}
+.report-metrics-btn.copied{color:#fff;background:#00A878;border-color:#00A878}
+footer{background:#0A0A0A;padding:18px 20px;text-align:center;font-size:.7rem;color:rgba(255,255,255,.25);line-height:1.7}
+footer a{color:rgba(255,255,255,.4);text-decoration:none}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-brand"><span>VEO</span> FORCE · @vasil_veo</div>
+  <div class="tb-meta" id="tb-meta-info">Контент-план</div>
+</div>
+
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-kicker" id="hero-kicker">Контент-стратегія · Нейромаркетинг</div>
+    <h1 id="hero-title">Контент-план</h1>
+    <p class="hero-deck" id="hero-deck"></p>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-niche="all" id="filter-all">Усі</button>
+    <!-- нішеві фільтри генеруються JS -->
+    <div class="status-filters">
+      <button class="sf-btn sf-all active" data-sf="all">Всі</button>
+      <button class="sf-btn sf-done" data-sf="done">✓ Виконано</button>
+      <button class="sf-btn sf-skip" data-sf="skip">✗ Не хочу</button>
+      <button class="sf-btn sf-analyze" data-sf="analyze">📊 На аналіз</button>
+    </div>
+  </div>
+
+  <div class="days" id="daysContainer"></div>
+
+  <div class="report-section" id="reportSection">
+    <div class="report-header">
+      <div>
+        <div class="report-title">Аналіз відібраних відео</div>
+        <div class="report-subtitle">Промт + дані — готово для будь-якого ШІ</div>
+      </div>
+      <button class="report-copy-btn" id="copyBtn">Копіювати все</button>
+    </div>
+    <div class="report-prompt" id="reportPrompt" style="display:none">
+      <div class="report-prompt-title">ПРОМТ ДЛЯ ШІ — вставте в будь-який AI</div>
+      <div class="report-prompt-text" id="promptText"></div>
+    </div>
+    <div class="report-text" id="reportText"></div>
+    <button class="report-metrics-btn" id="copyMetricsBtn">Копіювати лише показники</button>
+  </div>
+</div>
+
+<footer>
+  VEO FORCE · <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener">@vasil_veo</a><br>
+  <span id="footer-note">Кожне відео — окрема нейрохімічна архітектура залученості</span>
+</footer>
+
+
+<!-- ============================================================
+     ██████╗  █████╗ ████████╗ █████╗     ██████╗ ██╗      ██████╗  ██████╗██╗  ██╗
+     ██╔══██╗██╔══██╗╚══██╔══╝██╔══██╗    ██╔══██╗██║     ██╔═══██╗██╔════╝██║ ██╔╝
+     ██║  ██║███████║   ██║   ███████║    ██████╔╝██║     ██║   ██║██║     █████╔╝
+     ██║  ██║██╔══██║   ██║   ██╔══██║    ██╔══██╗██║     ██║   ██║██║     ██╔═██╗
+     ██████╔╝██║  ██║   ██║   ██║  ██║    ██████╔╝███████╗╚██████╔╝╚██████╗██║  ██╗
+     ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝   ╚═════╝ ╚══════╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝
+
+  ЯК КОРИСТУВАТИСЬ:
+  1. Знайди об'єкт PLAN_CONFIG нижче
+  2. Заміни client, niche, topics і videos — більше нічого не чіпай
+  3. Зберіг файл — відкрив у браузері — готово
+
+  СТРУКТУРА ОДНОГО ВІДЕО (об'єкт у масиві videos[]):
+  {
+    id: 1,                          // унікальний номер (будь-який)
+    title: 'Назва відео',           // заголовок картки
+    topic: 'Назва теми',            // має збігатись з одним із topics[]
+    hormone: 'Окситоцин',           // Окситоцин | Дофамін | Серотонін | Ендорфін | Кортизол
+    nlp: 'Відкривачі-наратив...',   // блок "Відкривачі"
+    hook: 'Текст гачка...',         // рядок гачка 0–2 сек
+    steps: [                        // масив кроків сценарію
+      { badge: 'c', text: '...' },  // c=кортизол d=дофамін m=мікрокоманда o=окситоцин s=серотонін e=ендорфін
+      { badge: 'd', text: '...' },
+      { badge: 'm', text: '<strong>Мікрокоманда:</strong> ...' },
+      { badge: 'o', text: '...' },
+      { badge: 's', text: '...' },
+      { badge: 'e', text: '...' }
+    ],
+    cta: 'Текст заклику до дії',
+    tip: 'Підказка внизу картки'
+  }
+============================================================ -->
+
+<script>
+/* ============================================================
+   ▼▼▼  ЄДИНИЙ БЛОК ДЛЯ РЕДАГУВАННЯ  ▼▼▼
+   ============================================================ */
+var PLAN_CONFIG = {
+
+  /* --- ЗАГАЛЬНІ НАЛАШТУВАННЯ ПЛАНУ --- */
+  client:   'Косметика · @vasil_veo',       // показується в topbar і hero
+  kicker:   'Контент-стратегія · Нейромаркетинг',  // рядок над заголовком
+  title:    'Контент-план на <em>30 днів</em>',     // заголовок hero (можна HTML)
+  deck:     'Спокійний, теплий, клієнтоорієнтований стиль. Кожне відео побудоване за моделлю уваги TikTok 2026.',
+  storageKey: 'vf_plan_kosmetika_30',  // ключ localStorage — зміни для кожного клієнта!
+
+  /* --- ТЕМИ (категорії фільтрів) --- */
+  topics: ['Косметика', 'Продукти', 'Психологія', 'TikTok Shop', 'Особисте'],
+
+  /* --- МАСИВ ВІДЕО --- */
+  /* Підставляй сюди згенерований ШІ масив.
+     Кожен об'єкт = одна картка в контент-плані.             */
+  videos: [
+    {
+      id: 1,
+      title: 'Чесний огляд: крем, який не виправдав очікувань',
+      topic: 'Косметика',
+      hormone: 'Окситоцин',
+      nlp: 'Ви колись тримали в руках гарну баночку й думали: ось воно. А потім місяць — і нічого. Я теж. Саме тоді зрозуміла: ми платимо за обгортку, а не за склад. Сьогодні покажу, що всередині, — і ви самі вирішите.',
+      hook: 'А вам теж траплялося, що дорогий крем працює гірше за бюджетний?',
+      steps: [
+        { badge: 'c', text: 'М\'яке впізнавання болю: «Скільки разів ми платили більше, сподіваючись на диво...»' },
+        { badge: 'd', text: 'Інтрига: «Покажу чесно — що вийшло після місяця використання»' },
+        { badge: 'm', text: '<strong>Мікрокоманда:</strong> Подивись на етикетку свого крему прямо зараз. Просто порівняй.' },
+        { badge: 'o', text: 'Особисте зізнання: «Я теж купилася на красиву банку. Ось що зрозуміла»' },
+        { badge: 's', text: 'Цінність: як читати склад, а не маркетинг на упаковці' },
+        { badge: 'e', text: 'Тепле: «Дорого — не завжди про якість. І це звільняє»' }
+      ],
+      cta: 'Поділіться засобом, який вас розчарував — обговоримо разом.',
+      tip: 'Розчарування — сильний окситоциновий тригер: глядач відчуває, що ви на його боці, а не продаєте.'
+    },
+    {
+      id: 2,
+      title: '3 ознаки, що шкірі не вистачає зволоження',
+      topic: 'Косметика',
+      hormone: 'Серотонін',
+      nlp: 'Є симптоми, які шкіра подає тихо, — і ми звикаємо їх не чути. Не тому що не дбаємо, а тому що не знаємо. Три ознаки, про які майже ніхто не говорить. Одна з них, мабуть, є у вас прямо зараз.',
+      hook: 'Сухість — це лише одна ознака. А є ще три, які пропускають майже всі.',
+      steps: [
+        { badge: 'c', text: 'Застереження: «Можна зволожувати шкіру роками — і робити це неправильно»' },
+        { badge: 'd', text: 'Обіцянка списку: «Три ознаки, які варто перевірити сьогодні»' },
+        { badge: 'm', text: '<strong>Мікрокоманда:</strong> Перевір свою шкіру сьогодні ввечері. Ось три ознаки.' },
+        { badge: 'o', text: 'Особисте: «Я сама довго плутала зневоднення з сухістю»' },
+        { badge: 's', text: 'Чіткі 3 ознаки — глядач одразу перевіряє себе і почувається обізнаним' },
+        { badge: 'e', text: 'Підтримка: «Шкіра не вимагає ідеальності — лише трохи уваги»' }
+      ],
+      cta: 'Збережіть, щоб перевірити свою шкіру ввечері.',
+      tip: 'Формат «3 ознаки» дає Saves — найсильніший сигнал алгоритму. Числа в гачку підвищують додивляння.'
+    },
+    {
+      id: 3,
+      title: 'Продукт тижня: корисний перекус для зайнятих днів',
+      topic: 'Продукти',
+      hormone: 'Дофамін',
+      nlp: 'Є один продукт, який у мене завжди є вдома — навіть коли холодильник порожній. Не тому що планую, а тому що він рятує. Покажу, що це, — і чому він кращий за те, що ми зазвичай хапаємо поспіхом.',
+      hook: 'Цей продукт рятує мене в дні, коли зовсім немає часу на готування.',
+      steps: [
+        { badge: 'c', text: 'Впізнаваність: «Знайомо? День розписаний, а поїсти нормально немає коли»' },
+        { badge: 'd', text: 'Інтрига: «Покажу що завжди тримаю під рукою»' },
+        { badge: 'm', text: '<strong>Мікрокоманда:</strong> Згадай, що ти зазвичай береш поспіхом. Порівняй із цим.' },
+        { badge: 'o', text: 'Особисте: «Я не нутриціолог — просто ділюся тим, що працює для мене»' },
+        { badge: 's', text: 'Користь: чому саме цей перекус тримає ситість довше' },
+        { badge: 'e', text: 'Легке: «Турбота про себе буває простою»' }
+      ],
+      cta: 'Напишіть, що у вас завжди є вдома на такий випадок.',
+      tip: '«Рятує мене» — окситоцин у гачку. Глядач відчуває живу людину, а не рекламу продукту.'
+    },
+    {
+      id: 4,
+      title: 'Питання підписниці: чому важко відпочивати без почуття провини',
+      topic: 'Психологія',
+      hormone: 'Окситоцин',
+      nlp: 'Ви лягаєте відпочити — і одразу думаєте про те, що ще не зробили. Це не лінощі і не характер. Це конкретний механізм, який вмикається автоматично. Як тільки ви його побачите — він втрачає силу.',
+      hook: 'Ви відпочиваєте — але всередині все одно щось гризе?',
+      steps: [
+        { badge: 'c', text: 'Точне називання болю: «Наче маєш право на паузу — а спокою немає»' },
+        { badge: 'd', text: 'Обіцянка пояснення: «Зараз розберемо, звідки це береться»' },
+        { badge: 'm', text: '<strong>Мікрокоманда:</strong> Пригадай останній раз, коли відпочивав без відчуття провини.' },
+        { badge: 'o', text: 'Глибока емпатія: «Я теж довго не вміла відпочивати без провини»' },
+        { badge: 's', text: 'Психологічне пояснення механізму + одна проста дія' },
+        { badge: 'e', text: 'Дозвіл: «Відпочинок — не нагорода за продуктивність. Це потреба»' }
+      ],
+      cta: 'Напишіть у коментарях — знайоме вам це відчуття?',
+      tip: 'Питання-у-гачку про прихований біль дає найвищий watch time у психології. Валідація = окситоцин.'
+    },
+    {
+      id: 5,
+      title: 'Шлях афіліата: що таке TikTok Shop простими словами',
+      topic: 'TikTok Shop',
+      hormone: 'Серотонін',
+      nlp: 'Більшість уявляють афіліата як блогера з мільйонами. Але я подивилась на реальні цифри — і картина інша. TikTok Shop — це не про масштаб. Це про те, кому аудиторія вже довіряє.',
+      hook: 'Багато хто думає, що це складно і не для них. Насправді — навпаки.',
+      steps: [
+        { badge: 'c', text: 'Зняття страху: «Слово афіліат лякає. А по суті — все просто»' },
+        { badge: 'd', text: 'Обіцянка ясності: «За 40 секунд поясню так, щоб стало зрозуміло»' },
+        { badge: 'm', text: '<strong>Мікрокоманда:</strong> Порівняй зі своєю ситуацією: у тебе є аудиторія, якій ти довіряєш?' },
+        { badge: 'o', text: 'Особисте: «Я сама колись не розуміла нічого — і це нормально»' },
+        { badge: 's', text: 'Проста аналогія: афіліат = ви радите товар, отримуєте відсоток, без складу' },
+        { badge: 'e', text: 'Підбадьорення: «Це доступніше, ніж здається. Справді»' }
+      ],
+      cta: 'Поставте «+», якщо хочете більше про TikTok Shop простою мовою.',
+      tip: 'Зняття складності = серотонін. Уникайте жаргону — він вмикає кортизол страху.'
+    }
+    /* ← сюди додавай наступні відео через кому */
+  ]
+
+};
+/* ============================================================
+   ▲▲▲  КІНЕЦЬ БЛОКУ ДЛЯ РЕДАГУВАННЯ  ▲▲▲
+   ============================================================ */
+
+
+
+
+/* ============================================================
+   ДВИЖОК — не змінюй нижче
+   ============================================================ */
+(function(){
+
+  var HORMONE_TAG = {
+    'Окситоцин': 'tag-h-oxy',
+    'Дофамін':   'tag-h-dop',
+    'Серотонін': 'tag-h-ser',
+    'Ендорфін':  'tag-h-end',
+    'Кортизол':  'tag-h-cor'
+  };
+
+  var BADGE_CSS = { c:'sb-c', d:'sb-d', m:'sb-m', o:'sb-o', s:'sb-s', e:'sb-e' };
+
+  /* --- Заповнити шапку --- */
+  document.getElementById('tb-meta-info').textContent = PLAN_CONFIG.client;
+  document.getElementById('hero-kicker').textContent  = PLAN_CONFIG.kicker;
+  document.getElementById('hero-title').innerHTML     = PLAN_CONFIG.title;
+  document.getElementById('hero-deck').textContent    = PLAN_CONFIG.deck;
+  document.getElementById('filter-all').textContent   = 'Усі ' + PLAN_CONFIG.videos.length;
+
+  /* --- Фільтри по темах --- */
+  var filtersEl = document.getElementById('filters');
+  var statusFiltersEl = filtersEl.querySelector('.status-filters');
+  PLAN_CONFIG.topics.forEach(function(t){
+    var b = document.createElement('button');
+    b.className = 'filter-btn';
+    b.setAttribute('data-niche', t);
+    b.textContent = t;
+    filtersEl.insertBefore(b, statusFiltersEl);
+  });
+
+  /* --- Аналітичні поля --- */
+  function makeAnalyticsBlock(id) {
+    var metrics = [
+      ['time','Час після публікації','time-field'],
+      ['views','Перегляди',''],['comments','Коментарі',''],
+      ['shares','Поширення',''],['likes','Лайки',''],
+      ['saves','Збереження',''],['duration','Тривалість, сек',''],
+      ['avgwatch','Сер. час перегл., сек',''],
+      ['completion','Переглянуто повн., %',''],
+      ['newfollowers','Підписників з відео','']
+    ];
+    var html = '<div class="analytics-block" data-id="'+id+'">'
+      + '<div class="analytics-title">Аналітика відео</div>'
+      + '<div class="analytics-grid">';
+    metrics.forEach(function(m){
+      if(m[2]==='time-field'){
+        html += '<div class="analytics-field"><label>'+m[1]+'</label>'
+          + '<div class="time-field">'
+          + '<input type="number" min="0" placeholder="0" data-metric="time" data-id="'+id+'">'
+          + '<div class="time-toggle">'
+          + '<button class="tt-btn active" data-id="'+id+'" data-unit="h">Год</button>'
+          + '<button class="tt-btn" data-id="'+id+'" data-unit="d">Дні</button>'
+          + '</div></div></div>';
+      } else if(m[0]==='completion'){
+        html += '<div class="analytics-field"><label>'+m[1]+'</label>'
+          + '<input type="number" min="0" max="100" placeholder="0" data-metric="'+m[0]+'" data-id="'+id+'"></div>';
+      } else {
+        html += '<div class="analytics-field"><label>'+m[1]+'</label>'
+          + '<input type="number" min="0" placeholder="0" data-metric="'+m[0]+'" data-id="'+id+'"></div>';
+      }
+    });
+    html += '<div class="analytics-wide"><label>Дослівний текст та/або кадр</label>'
+      + '<textarea placeholder="Вставте дослівний текст або опис ключового кадру..." data-metric="verbatim" data-id="'+id+'"></textarea></div>'
+      + '</div></div>';
+    return html;
+  }
+
+  /* --- Побудова карток --- */
+  var container = document.getElementById('daysContainer');
+  PLAN_CONFIG.videos.forEach(function(v, idx){
+    var tagClass = HORMONE_TAG[v.hormone] || 'tag-h-oxy';
+    var stepsHtml = v.steps.map(function(s){
+      var css = BADGE_CSS[s.badge] || 'sb-c';
+      return '<div class="script-step"><span class="step-badge '+css+'">'+s.badge+'</span>'
+        + '<span class="step-text">'+s.text+'</span></div>';
+    }).join('');
+
+    var card = document.createElement('div');
+    card.className = 'day-card';
+    card.setAttribute('data-status','');
+    card.setAttribute('data-niche', v.topic);
+    card.setAttribute('data-id', v.id);
+    card.innerHTML =
+      '<div class="day-head">'
+      +  '<div class="day-num">'+(idx+1)+'<span>відео</span></div>'
+      +  '<div class="day-head-mid">'
+      +    '<div class="day-title">'+v.title+'</div>'
+      +    '<div class="day-tags">'
+      +      '<span class="tag tag-niche">'+v.topic+'</span>'
+      +      '<span class="tag '+tagClass+'">'+v.hormone+'</span>'
+      +    '</div>'
+      +  '</div>'
+      +  '<div class="analyze-badge">A</div>'
+      +  '<div class="day-chev">▼</div>'
+      + '</div>'
+      + '<div class="day-body"><div class="day-body-inner"><div class="day-content">'
+      +  '<div class="nlp-block"><div class="nlp-label">Відкривачі — завуальований наратив</div>'
+      +  '<div class="nlp-text">'+v.nlp+'</div></div>'
+      +  '<div class="block"><div class="block-label">🎯 Гачок (0–2 сек)</div>'
+      +  '<div class="block-hook"><div class="hook-text">'+v.hook+'</div></div></div>'
+      +  '<div class="block"><div class="block-label">🎦 Сценарій за гормонами</div>'
+      +  stepsHtml+'</div>'
+      +  '<div class="block"><div class="block-label">💬 Заклик до дії</div>'
+      +  '<div class="block-cta">'+v.cta+'</div></div>'
+      +  '<div class="tip-row">'+v.tip+'</div>'
+      +  makeAnalyticsBlock(v.id)
+      +  '<div class="status-row">'
+      +    '<button class="status-btn s-done" data-id="'+v.id+'" data-st="done">✓ Виконано</button>'
+      +    '<button class="status-btn s-skip" data-id="'+v.id+'" data-st="skip">✗ Не хочу</button>'
+      +    '<button class="status-btn s-analyze" data-id="'+v.id+'" data-st="analyze">📊 На аналіз</button>'
+      +  '</div>'
+      + '</div></div></div>';
+    container.appendChild(card);
+  });
+
+  /* --- Стан --- */
+  var cardStatus = {};
+  var timeUnit = {};
+  var SK = PLAN_CONFIG.storageKey;
+  try { var s = localStorage.getItem(SK+'_st'); if(s) cardStatus=JSON.parse(s); } catch(e){}
+  try { var u = localStorage.getItem(SK+'_u');  if(u) timeUnit=JSON.parse(u);   } catch(e){}
+
+  function saveSt(){ try{ localStorage.setItem(SK+'_st', JSON.stringify(cardStatus)); }catch(e){} }
+  function saveU(){  try{ localStorage.setItem(SK+'_u',  JSON.stringify(timeUnit));  }catch(e){} }
+
+  function getCard(id){
+    return document.querySelector('.day-card[data-id="'+id+'"]');
+  }
+
+  function buildAttr(st){
+    if(!st) return '';
+    if(st.skip) return 'skip';
+    var p=[];
+    if(st.done) p.push('done');
+    if(st.analyze) p.push('analyze');
+    return p.join(' ');
+  }
+
+  function applyStatus(id){
+    var card = getCard(id);
+    if(!card) return;
+    var st = cardStatus[id]||{};
+    card.setAttribute('data-status', buildAttr(st));
+    card.querySelectorAll('.status-btn').forEach(function(b){
+      var bst = b.getAttribute('data-st');
+      var on = bst==='done'?!!st.done:bst==='analyze'?!!st.analyze:!!st.skip;
+      b.classList.toggle('sel', on);
+    });
+  }
+
+  /* Відновити стан */
+  PLAN_CONFIG.videos.forEach(function(v){ applyStatus(v.id); });
+  Object.keys(timeUnit).forEach(function(id){
+    var unit = timeUnit[id];
+    var card = getCard(parseInt(id));
+    if(!card) return;
+    card.querySelectorAll('.tt-btn').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-unit')===unit);
+    });
+  });
+
+  /* --- Кліки --- */
+  container.addEventListener('click', function(e){
+    /* статус */
+    var btn = e.target.closest('.status-btn');
+    if(btn){
+      var id = parseInt(btn.getAttribute('data-id'));
+      var bst = btn.getAttribute('data-st');
+      if(!cardStatus[id]) cardStatus[id]={};
+      var st = cardStatus[id];
+      if(bst==='done'){st.done=!st.done;if(st.done)st.skip=false;}
+      else if(bst==='analyze'){st.analyze=!st.analyze;if(st.analyze)st.skip=false;}
+      else{st.skip=!st.skip;if(st.skip){st.done=false;st.analyze=false;}}
+      saveSt(); applyStatus(id); updateReport(); applyFilters();
+      return;
+    }
+    /* час */
+    var ttBtn = e.target.closest('.tt-btn');
+    if(ttBtn){
+      var id = parseInt(ttBtn.getAttribute('data-id'));
+      var unit = ttBtn.getAttribute('data-unit');
+      timeUnit[id]=unit; saveU();
+      var card = getCard(id);
+      if(card) card.querySelectorAll('.tt-btn[data-id="'+id+'"]').forEach(function(b){
+        b.classList.toggle('active', b.getAttribute('data-unit')===unit);
+      });
+      updateReport(); return;
+    }
+    /* акордеон */
+    var head = e.target.closest('.day-head');
+    if(head && !e.target.closest('.status-row') && !e.target.closest('.analytics-block')){
+      head.parentElement.classList.toggle('open');
+    }
+  });
+
+  container.addEventListener('input', function(e){
+    if(e.target.closest('.analytics-block')) updateReport();
+  });
+
+  /* --- Фільтри --- */
+  var curNF='all', curSF='all';
+
+  document.getElementById('filters').addEventListener('click', function(e){
+    var btn = e.target.closest('.filter-btn');
+    if(!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    curNF = btn.getAttribute('data-niche');
+    applyFilters();
+  });
+
+  document.querySelectorAll('.sf-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.sf-btn').forEach(function(b){b.classList.remove('active');});
+      btn.classList.add('active');
+      curSF = btn.getAttribute('data-sf');
+      applyFilters();
+    });
+  });
+
+  function applyFilters(){
+    document.body.classList.toggle('sf-analyze', curSF==='analyze');
+    document.querySelectorAll('.day-card').forEach(function(card){
+      var id = parseInt(card.getAttribute('data-id'));
+      var niche = card.getAttribute('data-niche')||'';
+      var st = cardStatus[id]||{};
+      var mn = (curNF==='all'||niche===curNF);
+      var ms = true;
+      if(curSF==='done')    ms=!!st.done;
+      else if(curSF==='analyze') ms=!!st.analyze;
+      else if(curSF==='skip')    ms=!!st.skip;
+      card.style.display=(mn&&ms)?'block':'none';
+    });
+  }
+
+  applyFilters();
+
+  /* --- Звіт --- */
+  function updateReport(){
+    var cards=[];
+    document.querySelectorAll('.day-card').forEach(function(card){
+      var id=parseInt(card.getAttribute('data-id'));
+      if((cardStatus[id]||{}).analyze) cards.push(card);
+    });
+    var rs=document.getElementById('reportSection');
+    if(cards.length===0){rs.classList.remove('visible');document.getElementById('reportPrompt').style.display='none';return;}
+    rs.classList.add('visible');
+    document.getElementById('reportPrompt').style.display='';
+    var count=cards.length;
+    var prompt='Ти — досвідчений аналітик TikTok-контенту та нейромаркетолог.\nНижче наведено дані про '+count+' відео з акаунту '+PLAN_CONFIG.client+'.\n\nЗроби детальний аналіз по кожному відео окремо. Відповідай українською мовою.\n\nСТРУКТУРА АНАЛІЗУ ДЛЯ КОЖНОГО ВІДЕО:\n1. Загальна оцінка результативності (1-10) з обґрунтуванням\n2. Що спрацювало найкраще — по структурі і гормонах\n3. Слабкі місця — де аудиторія могла вийти\n4. Аналіз гачка\n5. Аналіз показників\n6. Гормональна ефективність\n7. Рекомендації (3-5 пунктів)\n\nВ кінці — загальний висновок: кращі ніші, кращі гормональні стратегії, топ-3 дії.\n\nДані нижче:';
+    document.getElementById('promptText').textContent=prompt;
+    var lines=['==============================','ДАНІ · '+PLAN_CONFIG.client,'Відео на аналізі: '+count,'==============================',''];
+    cards.forEach(function(card,idx){
+      var id=parseInt(card.getAttribute('data-id'));
+      var v=PLAN_CONFIG.videos.find(function(x){return x.id===id;});
+      if(!v) return;
+      var unit=(timeUnit[id]==='d')?'днів':'годин';
+      lines.push('------------------------------');
+      lines.push('ВІДЕО '+(idx+1)+' · ID '+v.id);
+      lines.push('------------------------------');
+      lines.push('Назва: '+v.title);
+      lines.push('Тема: '+v.topic);
+      lines.push('Гормон: '+v.hormone);
+      lines.push('');
+      lines.push('ГАЧОК:');
+      lines.push(v.hook);
+      lines.push('');
+      lines.push('НАРАТИВ:');
+      lines.push(v.nlp);
+      lines.push('');
+      lines.push('CTA:');
+      lines.push(v.cta);
+      lines.push('');
+      var ab=card.querySelector('.analytics-block');
+      if(ab){
+        function gv(m){var el=ab.querySelector('[data-metric="'+m+'"]');return el&&el.value?el.value:'—';}
+        lines.push('ПОКАЗНИКИ:');
+        lines.push('  '+unit+' після публікації: '+gv('time'));
+        lines.push('  Перегляди: '+gv('views'));
+        lines.push('  Коментарі: '+gv('comments'));
+        lines.push('  Поширення: '+gv('shares'));
+        lines.push('  Лайки: '+gv('likes'));
+        lines.push('  Збереження: '+gv('saves'));
+        lines.push('  Тривалість, сек: '+gv('duration'));
+        lines.push('  Сер. час, сек: '+gv('avgwatch'));
+        lines.push('  Доглянуто повн., %: '+gv('completion'));
+        lines.push('  Підписників з відео: '+gv('newfollowers'));
+        lines.push('');
+        lines.push('ТЕКСТ / КАДР:');
+        lines.push(gv('verbatim'));
+      }
+      lines.push('');
+    });
+    lines.push('==============================');
+    lines.push('Кінець звіту · VEO FORCE');
+    lines.push('==============================');
+    var str=lines.join('\n');
+    document.getElementById('reportText').textContent=str;
+    window._reportStr=str;
+    window._promptStr=prompt;
+  }
+
+  document.getElementById('copyBtn').addEventListener('click',function(){
+    var txt=(window._promptStr||'')+'\n\n'+(window._reportStr||'');
+    if(navigator.clipboard&&txt.trim()){
+      navigator.clipboard.writeText(txt).then(function(){
+        var b=document.getElementById('copyBtn');
+        b.textContent='Скопійовано!';b.classList.add('copied');
+        setTimeout(function(){b.textContent='Копіювати все';b.classList.remove('copied');},2000);
+      });
+    }
+  });
+
+  document.getElementById('copyMetricsBtn').addEventListener('click',function(){
+    var txt=window._reportStr||'';
+    if(navigator.clipboard&&txt.trim()){
+      navigator.clipboard.writeText(txt).then(function(){
+        var b=document.getElementById('copyMetricsBtn');
+        b.textContent='Скопійовано!';b.classList.add('copied');
+        setTimeout(function(){b.textContent='Копіювати лише показники';b.classList.remove('copied');},2000);
+      });
+    }
+  });
+
+  updateReport();
+
+})();
+</script>
+
+</body>
+</html>
