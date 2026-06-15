@@ -1,19 +1,23 @@
-<!DOCTYPE html>
+
+  <!DOCTYPE html>
 <html lang="uk">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="color-scheme" content="light only">
-<title>Контент-план 30 днів · VEO FORCE</title>
+<title>Стуктура ТТШ-відео · VEO FORCE</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{background:#FFFFFF;color:#0A0A0A;font-family:'Manrope',sans-serif;-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.65;overflow-x:hidden;color-scheme:light only}
+
 .topbar{background:#0A0A0A;padding:8px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
 .tb-brand{font-family:'Unbounded',sans-serif;font-size:.72rem;font-weight:900;color:#fff;letter-spacing:-.01em}
 .tb-brand span{color:#FF0050}
 .tb-meta{font-size:.68rem;color:rgba(255,255,255,.4);letter-spacing:.04em}
+
+/* HERO */
 .hero{background:#0A0A0A;padding:54px 20px 46px;position:relative;overflow:hidden}
 .hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 55% 50% at 75% 40%,rgba(255,0,80,.14),transparent 60%),radial-gradient(ellipse 40% 40% at 10% 90%,rgba(244,197,66,.08),transparent 55%);pointer-events:none}
 .hero-inner{max-width:880px;margin:0 auto;position:relative;z-index:1}
@@ -22,40 +26,51 @@ html,body{background:#FFFFFF;color:#0A0A0A;font-family:'Manrope',sans-serif;-web
 .hero h1{font-family:'Unbounded',sans-serif;font-size:clamp(1.5rem,5vw,2.8rem);font-weight:900;letter-spacing:-.05em;line-height:1.08;color:#fff;margin-bottom:14px}
 .hero h1 em{font-style:normal;color:#FF0050}
 .hero-deck{font-size:.92rem;color:rgba(255,255,255,.5);max-width:560px;line-height:1.7}
+
 .wrap{max-width:880px;margin:0 auto;padding:0 16px}
+
+/* HORMONE LEGEND */
 .legend-wrap{background:#F5F4F0;padding:32px 0}
 .legend-title{font-size:.64rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#888;margin-bottom:14px;display:flex;align-items:center;gap:9px}
 .legend-title::before{content:'';width:20px;height:1.5px;background:#FF0050}
 .legend-intro{font-size:.86rem;color:#444;line-height:1.7;margin-bottom:20px;max-width:640px}
-.legend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:10px}
+.legend-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(165px,1fr));gap:10px}
 .leg-card{border-radius:12px;padding:13px 14px;border:1.5px solid}
-.leg-dop{background:#FFF5F7;border-color:rgba(255,0,80,.2)}
+.leg-dop{background:#F0FFF0;border-color:rgba(0,120,80,.2)}
 .leg-cor{background:#FFF8F0;border-color:rgba(255,140,0,.25)}
-.leg-oxy{background:#F0FFF8;border-color:rgba(0,180,100,.2)}
-.leg-ser{background:#F5F0FF;border-color:rgba(120,60,220,.2)}
-.leg-end{background:#FFFFF0;border-color:rgba(180,160,0,.25)}
+.leg-oxy-vis{background:#FFFFF0;border-color:rgba(180,160,0,.25)}
+.leg-oxy-verb{background:#FFFFF0;border-color:rgba(180,160,0,.25)}
+.leg-ser{background:#F0F8FF;border-color:rgba(48,96,160,.2)}
+.leg-end{background:#FFF0F5;border-color:rgba(200,80,128,.2)}
 .leg-num{font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:700;margin-bottom:4px;opacity:.7}
 .leg-name{font-family:'Unbounded',sans-serif;font-size:.72rem;font-weight:900;letter-spacing:-.01em;margin-bottom:4px}
-.leg-dop .leg-name,.leg-dop .leg-num{color:#CC0040}
+.leg-dop .leg-name,.leg-dop .leg-num{color:#007050}
 .leg-cor .leg-name,.leg-cor .leg-num{color:#C06000}
-.leg-oxy .leg-name,.leg-oxy .leg-num{color:#007840}
-.leg-ser .leg-name,.leg-ser .leg-num{color:#6030AA}
-.leg-end .leg-name,.leg-end .leg-num{color:#807000}
+.leg-oxy-vis .leg-name,.leg-oxy-vis .leg-num{color:#857000}
+.leg-oxy-verb .leg-name,.leg-oxy-verb .leg-num{color:#857000}
+.leg-ser .leg-name,.leg-ser .leg-num{color:#3060A0}
+.leg-end .leg-name,.leg-end .leg-num{color:#C05080}
 .leg-role{font-size:.72rem;color:#444;line-height:1.5}
+
+/* FORMULA */
 .formula{background:#0A0A0A;border-radius:14px;padding:18px;margin:20px 0 0;text-align:center}
 .formula-label{font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:12px}
 .formula-row{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px}
 .ft{padding:6px 10px;border-radius:7px;font-family:'Unbounded',sans-serif;font-size:.62rem;font-weight:800;white-space:nowrap}
 .ft-c{background:rgba(255,140,0,.15);color:#FF9000}
-.ft-d{background:rgba(255,0,80,.13);color:#FF0050}
-.ft-o{background:rgba(0,180,100,.13);color:#00AA60}
-.ft-s{background:rgba(120,60,220,.13);color:#9060E0}
-.ft-e{background:rgba(200,180,0,.13);color:#C8B400}
+.ft-d{background:rgba(0,120,80,.13);color:#007050}
+.ft-o{background:rgba(180,160,0,.13);color:#C8B400}
+.ft-s{background:rgba(48,96,160,.13);color:#3060A0}
+.ft-e{background:rgba(200,80,128,.13);color:#C05080}
 .fa{color:rgba(255,255,255,.25);font-size:.9rem}
+
+/* FILTERS */
 .filters{display:flex;gap:7px;flex-wrap:wrap;margin:24px 0 18px;position:sticky;top:0;background:rgba(255,255,255,.95);backdrop-filter:blur(8px);padding:12px 0;z-index:50}
 .filter-btn{border:1.5px solid #E8E5DE;background:#fff;border-radius:30px;padding:6px 14px;font-family:'Manrope',sans-serif;font-size:.74rem;font-weight:600;color:#555;cursor:pointer;transition:all .15s;white-space:nowrap}
 .filter-btn:hover{border-color:#0A0A0A}
 .filter-btn.active{background:#0A0A0A;color:#fff;border-color:#0A0A0A}
+
+/* DAY CARDS */
 .days{display:flex;flex-direction:column;gap:12px;padding-bottom:40px}
 .day-card{border:1.5px solid #E8E5DE;border-radius:16px;overflow:hidden;transition:all .2s;background:#fff}
 .day-card:hover{border-color:#CCC;box-shadow:0 4px 20px rgba(0,0,0,.05)}
@@ -67,17 +82,18 @@ html,body{background:#FFFFFF;color:#0A0A0A;font-family:'Manrope',sans-serif;-web
 .day-tags{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
 .tag{font-size:.6rem;font-weight:700;border-radius:20px;padding:2px 8px;white-space:nowrap}
 .tag-niche{background:#F0EFE9;color:#666}
-.tag-h-dop{background:rgba(255,0,80,.1);color:#CC0040}
+.tag-h-dop{background:rgba(0,120,80,.1);color:#007050}
 .tag-h-cor{background:rgba(255,140,0,.12);color:#C06000}
-.tag-h-oxy{background:rgba(0,180,100,.1);color:#007840}
-.tag-h-ser{background:rgba(120,60,220,.1);color:#6030AA}
-.tag-h-end{background:rgba(200,180,0,.13);color:#857000}
+.tag-h-oxy{background:rgba(180,160,0,.1);color:#857000}
+.tag-h-ser{background:rgba(48,96,160,.1);color:#3060A0}
+.tag-h-end{background:rgba(200,80,128,.13);color:#C05080}
 .day-chev{font-size:11px;color:#CCC;transition:transform .25s;flex-shrink:0}
 .day-card.open .day-chev{transform:rotate(180deg)}
 .day-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s ease;border-top:1px solid transparent}
 .day-card.open .day-body{grid-template-rows:1fr;border-top-color:#F0EFE9}
 .day-body-inner{overflow:hidden}
 .day-content{padding:16px}
+
 .block{margin-bottom:14px}
 .block:last-child{margin-bottom:0}
 .block-label{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#888;margin-bottom:6px;display:flex;align-items:center;gap:6px}
@@ -86,21 +102,29 @@ html,body{background:#FFFFFF;color:#0A0A0A;font-family:'Manrope',sans-serif;-web
 .script-step{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start}
 .script-step:last-child{margin-bottom:0}
 .step-badge{font-family:'JetBrains Mono',monospace;font-size:.55rem;font-weight:700;color:#fff;border-radius:5px;padding:3px 6px;flex-shrink:0;margin-top:1px;white-space:nowrap}
-.sb-c{background:#FF9000}
-.sb-d{background:#FF0050}
-.sb-o{background:#00AA60}
-.sb-s{background:#9060E0}
-.sb-e{background:#C8B400}
+.sb-c{background:#C06000}
+.sb-d{background:#007050}
 .sb-m{background:#B04000}
+.sb-o-vis{background:#C8B400;color:#333}
+.sb-o-verb{background:#C8B400;color:#333}
+.sb-s{background:#3060A0}
+.sb-e{background:#C05080}
 .step-text{font-size:.8rem;color:#333;line-height:1.55}
 .step-text strong{color:#0A0A0A}
 .block-cta{background:#F5F4F0;border-radius:9px;padding:10px 13px;font-size:.8rem;color:#333;line-height:1.5}
 .block-cta strong{color:#0A0A0A}
 .tip-row{display:flex;gap:8px;align-items:flex-start;font-size:.76rem;color:#666;line-height:1.55;background:#FAFAF8;border-left:2px solid #E8E5DE;padding:8px 12px;border-radius:0 8px 8px 0;margin-top:8px}
 .tip-row::before{content:'💡';flex-shrink:0}
+
 footer{background:#0A0A0A;padding:18px 20px;text-align:center;font-size:.7rem;color:rgba(255,255,255,.25);line-height:1.7}
 footer a{color:rgba(255,255,255,.4);text-decoration:none}
-@media(max-width:560px){.legend-grid{grid-template-columns:1fr 1fr}.formula-row{gap:4px}.ft{font-size:.55rem;padding:5px 7px}}
+
+@media(max-width:560px){
+  .legend-grid{grid-template-columns:1fr 1fr}
+  .formula-row{gap:4px}
+  .ft{font-size:.55rem;padding:5px 7px}
+}
+
 .status-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;padding-top:12px;border-top:1px solid #F0EFE9}
 .status-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;border:1.5px solid #E8E5DE;font-family:'Manrope',sans-serif;font-size:.72rem;font-weight:600;cursor:pointer;background:#fff;transition:all .18s;user-select:none}
 .status-btn:hover{border-color:#999}
@@ -156,6 +180,9 @@ body.sf-analyze .day-card[data-status~="analyze"] .analytics-block{display:block
 .report-prompt-title{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:#9B6EFF;margin-bottom:8px;display:flex;align-items:center;gap:6px}
 .report-prompt-title::before{content:'\2728';font-size:.8rem}
 .report-prompt-text{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:rgba(255,255,255,.55);line-height:1.75;white-space:pre-wrap;word-break:break-word}
+.report-prompt-copy{display:inline-flex;align-items:center;gap:5px;margin-top:8px;border:1px solid rgba(123,47,247,.4);background:transparent;border-radius:6px;padding:5px 12px;font-family:'Manrope',sans-serif;font-size:.68rem;font-weight:700;color:#9B6EFF;cursor:pointer;transition:all .15s}
+.report-prompt-copy:hover{background:rgba(123,47,247,.15)}
+.report-prompt-copy.copied{color:#00C878;border-color:#00C878}
 .analyze-badge{display:none;width:26px;height:26px;border-radius:7px;background:#7B2FF7;color:#fff;font-family:'Unbounded',sans-serif;font-size:.65rem;font-weight:900;align-items:center;justify-content:center;flex-shrink:0;margin-right:2px;letter-spacing:-.01em;box-shadow:0 2px 8px rgba(123,47,247,.35)}
 .day-card[data-status~="analyze"] .analyze-badge{display:flex}
 .report-metrics-btn{display:block;width:100%;margin-top:12px;border:1.5px solid rgba(0,200,120,.4);background:transparent;border-radius:8px;padding:9px 16px;font-family:'Manrope',sans-serif;font-size:.74rem;font-weight:700;color:#00C878;cursor:pointer;transition:all .18s;text-align:center}
@@ -163,87 +190,129 @@ body.sf-analyze .day-card[data-status~="analyze"] .analytics-block{display:block
 .report-metrics-btn.copied{color:#fff;background:#00A878;border-color:#00A878}
 .legend-intro strong{color:#0A0A0A;font-weight:700}
 .leg-role strong{color:#0A0A0A;font-weight:700;display:block;margin-bottom:2px}
+
+/* highlight for the new phrase */
+.highlight-phrase{background:linear-gradient(135deg,#F0E6FF 0%,#E6D9FF 100%);border-left:4px solid #9B6EFF;padding:10px 16px;border-radius:12px;font-weight:600;color:#3A2A6A;margin-top:14px;font-size:.85rem;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.highlight-phrase::before{content:'✨';font-size:1rem}
 </style>
 </head>
 <body>
 
 <div class="topbar">
   <div class="tb-brand"><span>VEO</span> FORCE · @vasil_veo</div>
-  <div class="tb-meta">Контент-план · 30 днів</div>
+  <div class="tb-meta">
+    <a href="https://www.tiktok.com/@vasil_veo" target="_blank" style="color:rgba(255,255,255,.6);text-decoration:none;margin-right:12px">📱 @vasil_veo</a>
+    <a href="https://t.me/veoforce_support" target="_blank" style="color:rgba(255,255,255,.6);text-decoration:none">💬 @veoforce_support</a>
+  </div>
 </div>
 
 <div class="hero">
   <div class="hero-glow"></div>
   <div class="hero-inner">
-    <div class="hero-kicker">Контент-стратегія · Нейромаркетинг</div>
-    <h1>Контент-план<br>на <em>30 днів</em></h1>
-    <p class="hero-deck">Спокійний, теплий, клієнтоорієнтований стиль. Косметика, продукти, психологія та підготовка до TikTok Shop. Кожне відео побудоване за моделлю уваги TikTok 2026: <em style="color:rgba(255,255,255,.65);font-style:normal">Переривання → Очікування → Довіра → Статус → Дофаміновий цикл.</em></p>
+    <div class="hero-kicker">КОНТЕНТ-СТРАТЕГІЯ · НЕЙРОМАРКЕТИНГ</div>
+    <h1>Структура:<br><em>НЕЙРОХІМІЧНА ФОРМУЛА</em><br>ТТШ-ВІДЕО</h1>
+<p class="hero-deck">
+  <strong>ТТШ-відео = ПРОДАЖІ</strong><br>
+    Формула "Зупинити-Показати-Продати"<br>
+    Модель уваги 2026 <br>
+    8 кроків:
+</p>
+<div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:12px; font-size:.75rem; font-weight:600">
+  <span style="background:#FF0050; color:#fff; padding:4px 10px; border-radius:20px">1. Зупинка</span>
+  <span style="color:#FF0050"><strong>+</strong></span>
+  <span style="background:#FFD700; color:#333; padding:4px 10px; border-radius:20px">2. Довіра-1</span>
+  <span style="color:#FF0050">→</span>
+  <span style="background:#FF9000; color:#fff; padding:4px 10px; border-radius:20px">3. Хочу знати</span>
+  <span style="color:#FF0050">→</span>
+  <span style="background:#FFD700; color:#333; padding:4px 10px; border-radius:20px">4. Довіра-2</span>
+  <span style="color:#FF0050">→</span>
+  <span style="background:#00A878; color:#fff; padding:4px 10px; border-radius:20px">5. Команда (CTA)</span>
+  <span style="color:#FF0050">→</span>
+  <span style="background:#3060A0; color:#fff; padding:4px 10px; border-radius:20px">6. Статус</span>
+  <span style="color:#FF0050">→</span>
+  <span style="background:#C05080; color:#fff; padding:4px 10px; border-radius:20px">7. Задоволення</span>
+  <span style="color:#FF0050">→</span>
+  <span style="background:#9B6EFF; color:#fff; padding:4px 10px; border-radius:20px">8. Новий дофамін</span>
+</div>
   </div>
 </div>
 
+
+
+
+
+
+
+
+<!-- LEGEND -->
 <div class="legend-wrap">
 <div class="wrap">
   <div class="legend-title">Нейрохімічна модель уваги TikTok</div>
-  <p class="legend-intro">Жорсткої нейрохімічної послідовності не існує — це <strong>маркетингова модель уваги</strong>, яка точно описує поведінку глядача. В основі — <strong>дофамінове очікування винагороди</strong>: TikTok будує цикл «цікаво&thinsp;→&thinsp;ще цікавіше», де кожен крок підживлює наступний. Між дофаміном і окситоцином з'являється <strong>мікрокоманда</strong> — коротка фраза залучення («Перевір себе», «Згадай»), яка не є гіпнозом, а когнітивним прийомом: мозок економить енергію і сприймає короткі команди швидше. Останній крок — не ендорфін, а <strong>новий дофамін</strong>: коментар або наступне відео.</p>
+  <p class="legend-intro">Примітка: єдиної стандартизованої нейрохімічної послідовності не існує — це <strong>маркетингова модель уваги</strong>, яка описує найбільш розповсюджений формат поведінки глядача. В основі — <strong>дофамінове очікування винагороди</strong>: Стрічка TikTok вибудовується індивідуально під кожного по принципу «цікаво → ще цікавіше», де кожен крок підживлює наступний. Це "затягує" і викликає дофамінову залежність.</p>
   <div class="legend-grid">
-    <div class="leg-card leg-cor">
-      <div class="leg-num">01 · 0–2 сек</div>
-      <div class="leg-name">Кортизол</div>
-      <div class="leg-role"><strong>Переривання шаблону.</strong> «Стоп. Це про мене.» Проблема подається м'яко — як впізнавання, а не страх.</div>
+    <!-- ОБ'ЄДНАНИЙ БЛОК: ОКСИТОЦИН (ВІЗУАЛЬНИЙ/АУДІАЛЬНИЙ) + КОРТИЗОЛ -->
+    <div class="leg-card" style="background:linear-gradient(135deg,#FFFFF0 0%,#FFF8F0 100%);border:1.5px solid rgba(180,140,0,.4);grid-column:1/-1;">
+      <div class="leg-num" style="color:#B07000">01 · Окситоцин + Кортизол</div>
+      <div class="leg-name" style="color:#B07000">🟡 Окситоцин-1 (все відео)</div>
+      <div class="leg-role"><strong>Візуальний та аудіальний:</strong> Приємна подача — теплий голос, спокійна міміка, відкритий погляд. Глядач відчуває безпеку з перших секунд відео.</div>
+      <div class="leg-role" style="margin-top:8px;padding-top:6px;border-top:1px dashed rgba(200,80,0,.2)"><strong style="color:#C06000">🔴 Кортизол (0–2 сек):</strong> Переривання шаблону глядача: «Стоп. Це ж про мене.» Проблема подається м'яко — як впізнавання, а не страх.</div>
     </div>
     <div class="leg-card leg-dop">
-      <div class="leg-num">02 · 2–5 сек</div>
+      <div class="leg-num">02 · 2–8 сек</div>
       <div class="leg-name">Дофамін</div>
-      <div class="leg-role"><strong>Обіцянка, не рішення.</strong> «Зараз покажу як виправити.» Мозок хоче відповідь — і тепер він слухає.</div>
+      <div class="leg-role"><strong>Очікування рішення.</strong> «Зараз покажу як виправити.» Мозок хоче відповідь — і тепер він слухає.</div>
     </div>
-    <div class="leg-card" style="background:#FFF8F5;border:1.5px solid rgba(200,80,0,.2)">
-      <div class="leg-num" style="color:#B04000">03 · 0,5 сек</div>
-      <div class="leg-name" style="color:#B04000">Мікрокоманда</div>
-      <div class="leg-role"><strong>Залучення уваги.</strong> «Дивись уважно. Перевір себе. Згадай.» Вставляється після дофаміну — коли мозок вже хоче відповідь.</div>
+    <div class="leg-card leg-oxy-verb">
+      <div class="leg-num">03 · 8–12 сек</div>
+      <div class="leg-name">Окситоцин-2 (слова)</div>
+      <div class="leg-role"><strong>Глядач розуміє:</strong> «Я такий самий», «Я теж так робила», «Мені це знайоме». Тут формується довіра через спільний досвід.</div>
     </div>
-    <div class="leg-card leg-oxy">
-      <div class="leg-num">04 · 5–15 сек</div>
-      <div class="leg-name">Окситоцин</div>
-      <div class="leg-role"><strong>«Я такий самий.»</strong> Особистий досвід, щирість. Тут формується довіра — без неї наступні кроки не працюють.</div>
+    <div class="leg-card" style="background:#FFF5F7;border:1.5px solid rgba(200,80,128,.2)">
+      <div class="leg-num" style="color:#C05080">04 · Інтеграція</div>
+      <div class="leg-name" style="color:#C05080">Легкий CTA</div>
+      <div class="leg-role"><strong>Натяк до дії:</strong> «Гляньте в профілі, кому цікаво», «В каталозі є, до речі». На цьому етапі можна завуалювати ціну: «За 400 грн ви вирішуєте проблему».</div>
     </div>
     <div class="leg-card leg-ser">
-      <div class="leg-num">05 · 15–25 сек</div>
+      <div class="leg-num">05</div>
       <div class="leg-name">Серотонін</div>
-      <div class="leg-role"><strong>Підняття статусу.</strong> «Тепер я знаю більше.» Не просто факт — факт, який робить глядача розумнішим за інших.</div>
+      <div class="leg-role"><strong>Підняття статусу.</strong> «Тепер я знаю більше.» Факт, який робить глядача розумнішим за інших.</div>
     </div>
     <div class="leg-card leg-end">
-      <div class="leg-num">06 · 25–30 сек</div>
+      <div class="leg-num">06</div>
       <div class="leg-name">Ендорфін</div>
-      <div class="leg-role"><strong>Закриття напруги.</strong> «Ага, тепер зрозуміло.» Мозок отримує завершення циклу.</div>
+      <div class="leg-role"><strong>Закриття напруги.</strong> «Ага, тепер зрозуміло.» Мозок отримує завершення циклу.</div><br>
+      <div class="leg-role"><strong>Чіткий CTA.</strong> На цьому етапі закликаємо до купівлі: «Якщо зацікавились, рекомендую придбати. Код товару в каталозі 001. Посилання на каталог є в профілі.»</div>
     </div>
     <div class="leg-card" style="background:#F5F0FF;border:1.5px solid rgba(120,60,220,.2)">
       <div class="leg-num" style="color:#6030AA">07 · фінал</div>
       <div class="leg-name" style="color:#6030AA">Когнітивний конфлікт</div>
-      <div class="leg-role"><strong>Тригер коментаря.</strong> «А ти згоден чи ні?» Не заклик — запрошення висловитись. Запускає новий дофаміновий цикл.</div>
+      <div class="leg-role"><strong>Коментарі.</strong> «А що думають інші?» Бажання дізнатись реакцію спільноти . Запускає новий дофаміновий цикл.</div><br>
+      <div class="leg-role"><strong>Цікаво:</strong> 70–80% користувачів автоматично відкривають коментарі під час перегляду, щоб одразу дізнатися контекст.</div>
     </div>
   </div>
+
   <div class="formula">
-    <div class="formula-label">Формула вірусного відео 2026</div>
+    <div class="formula-label">ФОРМУЛА ПРОДАЮЧОГО ВІДЕО 2026</div>
     <div class="formula-row">
-      <span class="ft ft-c">Стоп</span>
+      <span class="ft" style="background:rgba(200,80,0,.13);color:#C06000">Зупинка скролу + довіра автору</span>
       <span class="fa">→</span>
       <span class="ft ft-d">Хочу знати</span>
-      <span class="fa">→</span>
-      <span class="ft" style="background:rgba(200,80,0,.13);color:#B04000">Слухаю</span>
       <span class="fa">→</span>
       <span class="ft ft-o">Довіряю</span>
       <span class="fa">→</span>
       <span class="ft ft-s">Розумнішаю</span>
       <span class="fa">→</span>
-      <span class="ft ft-e">Отримав</span>
+      <span class="ft ft-e">Насолоджуюсь</span>
       <span class="fa">→</span>
-      <span class="ft ft-d">Пишу коментар ↺</span>
+      <span class="ft ft-d">Дію ↺</span>
     </div>
-    <div style="margin-top:14px;padding:10px 14px;background:rgba(0,0,0,.03);border-left:2px solid #E0DDD6;border-radius:0 8px 8px 0;font-size:.78rem;color:#555;line-height:1.6"><strong style="color:#333">Когнітивні механізми в основі:</strong> Cognitive Ease, Processing Fluency, Automaticity, Priming. Короткі фрази сприймаються швидше не тому що гіпноз — а тому що мозок економить енергію.</div>
+  
+  <div style="margin-top:16px;padding:12px 16px;background:linear-gradient(135deg,#F0F7FF 0%,#E8F0FE 100%);border-left:4px solid #3060A0;border-radius:8px;font-size:.82rem;color:#1A3A6A;line-height:1.6">
+    <strong>Когнітивні механізми в основі:</strong> Cognitive Ease, Processing Fluency, Automaticity, Priming.<br>
+    🔥 <strong>Короткі фрази сприймаються швидше - так мозок економить енергію.</strong>
   </div>
 </div>
 </div>
-
 <div class="wrap">
   <div class="filters" id="filters">
     <button class="filter-btn active" data-niche="all">Усі 30</button>
