@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дзеркало — BEROO</title>
+<style>
+  :root{
+    --purple:#7b2ff7;
+    --purple-soft:#f1e8ff;
+    --bg:#f7f7fb;
+    --card:#ffffff;
+    --text:#1a1a2e;
+    --muted:#7a7a8c;
+    --border:#ececf3;
+    --green:#1fb978;
+    --green-soft:#eafaf2;
+    --orange:#ff9f43;
+    --orange-soft:#fff4e5;
+    --red:#ff5c5c;
+    --red-soft:#ffeaea;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:480px; margin:0 auto; padding:0 0 40px;}
+
+  .topbar{
+    display:flex; align-items:center; gap:12px;
+    padding:18px 20px;
+    background:var(--card);
+    border-bottom:1px solid var(--border);
+    position:sticky; top:0; z-index:5;
+  }
+  .logo-badge{
+    width:36px; height:36px; border-radius:10px;
+    background:var(--purple); color:#fff; font-weight:700; font-size:16px;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .topbar h1{font-size:18px; font-weight:700; flex:1;}
+
+  .module-head{padding:24px 20px 0;}
+  .title-row{display:flex; align-items:center; gap:10px; margin-bottom:6px;}
+  .module-head h2{font-size:26px; font-weight:800; letter-spacing:-0.02em;}
+  .badge-beta{
+    background:var(--purple-soft); color:var(--purple);
+    font-size:11px; font-weight:700; padding:4px 9px; border-radius:20px;
+    text-transform:uppercase; letter-spacing:0.04em;
+  }
+  .module-head .sub{color:var(--muted); font-size:13px;}
+
+  .section-title{
+    margin:24px 20px 10px;
+    font-size:13px; font-weight:700;
+    text-transform:uppercase; letter-spacing:0.04em;
+    color:var(--muted);
+  }
+
+  /* profile card */
+  .profile-card{
+    margin:0 20px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px 20px;
+  }
+  .profile-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 0;
+    border-bottom:1px solid var(--border);
+    font-size:13.5px;
+  }
+  .profile-row:last-child{border-bottom:none;}
+  .profile-row .k{color:var(--muted);}
+  .profile-row .v{font-weight:600; text-align:right;}
+  .profile-edit{
+    display:block; text-align:center;
+    margin-top:14px;
+    font-size:13px; font-weight:700; color:var(--purple);
+    background:var(--purple-soft);
+    padding:11px; border-radius:12px;
+    cursor:pointer;
+  }
+
+  /* stat blocks */
+  .stat-block{
+    margin:0 20px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px 20px;
+  }
+  .stat-block + .stat-block{margin-top:12px;}
+  .stat-block-head{display:flex; align-items:center; gap:10px; margin-bottom:14px;}
+  .stat-icon{
+    width:32px; height:32px; border-radius:9px;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .stat-icon svg{width:17px; height:17px;}
+  .stat-icon.out{background:var(--purple-soft);}
+  .stat-icon.out svg{stroke:var(--purple);}
+  .stat-icon.in{background:var(--green-soft);}
+  .stat-icon.in svg{stroke:var(--green);}
+  .stat-block-head h3{font-size:14.5px; font-weight:700;}
+  .stat-block-head .h-sub{font-size:11.5px; color:var(--muted); margin-top:1px;}
+  .stat-pair{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .stat-cell{background:var(--bg); border-radius:12px; padding:12px 14px;}
+  .stat-cell .val{font-size:21px; font-weight:800; letter-spacing:-0.01em;}
+  .stat-cell .lbl{font-size:11.5px; color:var(--muted); margin-top:2px; line-height:1.4;}
+  .stat-cell .hint{font-size:10.5px; color:var(--purple); margin-top:4px; font-weight:600;}
+
+  .btn{
+    width:100%; padding:15px 18px; border-radius:14px; border:none;
+    font-size:14.5px; font-weight:700; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    transition:transform .15s ease, opacity .15s ease;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:var(--purple); color:#fff;}
+  .btn-secondary{background:var(--purple-soft); color:var(--purple);}
+  .btn-ghost{background:var(--card); color:var(--text); border:1px solid var(--border);}
+  .btn[disabled]{opacity:0.55; cursor:not-allowed;}
+  .btn .tag{
+    font-size:10px; font-weight:700; text-transform:uppercase;
+    padding:2px 7px; border-radius:8px; background:rgba(255,255,255,0.25);
+  }
+  .btn-secondary .tag, .btn-ghost .tag{background:var(--purple-soft); color:var(--purple);}
+  .btn-row{margin:0 20px; margin-top:12px;}
+
+  /* bonus balance */
+  .balance-card{
+    margin:0 20px;
+    background:linear-gradient(135deg, #1a1a2e, #2d2d4a);
+    border-radius:18px;
+    padding:20px;
+    color:#fff;
+  }
+  .balance-top{font-size:12.5px; color:rgba(255,255,255,0.6); margin-bottom:6px;}
+  .balance-amount{
+    font-size:30px; font-weight:800; letter-spacing:-0.02em; margin-bottom:14px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .balance-amount .star{color:#ffd166; font-size:24px;}
+  .balance-meta{
+    display:flex; justify-content:space-between;
+    font-size:12px; color:rgba(255,255,255,0.7);
+    padding-top:14px; border-top:1px solid rgba(255,255,255,0.12);
+    margin-bottom:14px;
+  }
+  .balance-meta b{color:#fff; font-weight:700;}
+  .btn-balance{
+    width:100%; padding:13px; border-radius:12px; border:none;
+    background:rgba(255,255,255,0.12); color:#fff;
+    font-size:13.5px; font-weight:700; cursor:not-allowed;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn-balance .tag{
+    font-size:9.5px; font-weight:700; text-transform:uppercase;
+    background:rgba(255,255,255,0.18); padding:2px 7px; border-radius:8px;
+  }
+  .balance-disclaimer{
+    margin:0 20px; margin-top:10px;
+    font-size:11.5px; color:var(--muted); line-height:1.55;
+    padding:0 2px;
+  }
+
+  /* requests */
+  .req-card{
+    margin:0 20px;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:6px 0;
+    overflow:hidden;
+  }
+  .req-item{
+    display:flex; align-items:center; gap:12px;
+    padding:13px 20px;
+    border-bottom:1px solid var(--border);
+  }
+  .req-item:last-child{border-bottom:none;}
+  .req-icon{
+    width:38px; height:38px; border-radius:10px;
+    background:var(--purple-soft); color:var(--purple);
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; position:relative;
+  }
+  .req-icon svg{width:18px; height:18px; stroke:var(--purple);}
+  .req-icon .badge-mini{
+    position:absolute; bottom:-3px; right:-3px;
+    width:16px; height:16px; border-radius:5px;
+    background:var(--purple); border:2px solid var(--card);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .req-icon .badge-mini svg{width:9px; height:9px; stroke:#fff;}
+  .req-body{flex:1; min-width:0;}
+  .req-name{font-size:13.5px; font-weight:700;}
+  .req-sub{font-size:12px; color:var(--muted); margin-top:1px;}
+  .req-bonus{
+    font-size:11.5px; font-weight:700; color:var(--purple);
+    margin-top:4px; display:flex; align-items:center; gap:4px;
+  }
+  .req-right{display:flex; flex-direction:column; align-items:flex-end; gap:6px;}
+  .req-status{
+    font-size:11px; font-weight:700; padding:5px 10px; border-radius:20px;
+    white-space:nowrap;
+  }
+  .req-status.pending{background:var(--orange-soft); color:var(--orange);}
+  .req-status.active{background:var(--green-soft); color:var(--green);}
+  .req-more-btn{
+    font-size:11px; font-weight:700; color:var(--purple);
+    background:none; border:none; cursor:pointer; padding:0;
+  }
+  .req-manage{padding:14px 20px 10px;}
+  .req-manage .btn{padding:13px 18px; font-size:13.5px;}
+
+  .footer-note{
+    margin:20px 20px 0; text-align:center;
+    font-size:12px; color:var(--muted); line-height:1.6;
+  }
+
+  /* dev banner (moved to bottom) */
+  .dev-banner{
+    margin:0 20px;
+    background:linear-gradient(135deg, var(--purple), #a855f7);
+    border-radius:18px;
+    padding:18px 20px;
+    color:#fff;
+  }
+  .dev-banner .row{display:flex; align-items:center; justify-content:space-between;}
+  .dev-banner .label{font-size:13.5px; font-weight:700;}
+
+  .advice-card{
+    margin:14px 20px 0;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px 20px;
+    font-size:13px; line-height:1.65; color:#3a3a4a;
+  }
+  .advice-card b{color:var(--text);}
+
+  /* voting */
+  .vote-card{
+    margin:14px 20px 0;
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px 20px;
+  }
+  .vote-card h3{font-size:14px; font-weight:700; margin-bottom:3px;}
+  .vote-card .vsub{font-size:12px; color:var(--muted); margin-bottom:14px;}
+  .vote-buttons{display:flex; flex-direction:column; gap:9px;}
+  .vote-btn{
+    width:100%; padding:13px; border-radius:12px; border:1.5px solid var(--border);
+    background:var(--card); font-size:13.5px; font-weight:700; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:8px;
+    transition:transform .15s ease;
+  }
+  .vote-btn:active{transform:scale(0.98);}
+  .vote-btn.neg{color:var(--red); border-color:var(--red-soft); background:var(--red-soft);}
+  .vote-btn.neu{color:var(--text); border-color:var(--border); background:var(--bg);}
+  .vote-btn.pos{color:#fff; background:var(--green); border-color:var(--green);}
+  .vote-buttons.voted .vote-btn{opacity:0.4; cursor:not-allowed; pointer-events:none;}
+  .vote-buttons.voted .vote-btn.selected{opacity:1;}
+  .vote-result{
+    margin-top:12px; padding:13px 14px; border-radius:12px;
+    font-size:12.5px; line-height:1.55; display:none;
+  }
+  .vote-result.show{display:block;}
+  .vote-result.neg{background:var(--red-soft); color:#c23b3b;}
+  .vote-result.neu{background:var(--bg); color:#3a3a4a;}
+  .vote-result.pos{background:var(--green-soft); color:#178a5b;}
+
+  .copyright{margin-top:28px; padding:0 20px; font-size:12px; color:var(--muted);}
+  .footer-links{
+    display:flex; gap:18px; flex-wrap:wrap; padding:14px 20px 0;
+    font-size:13px; color:var(--purple); font-weight:600;
+  }
+
+  /* modal */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(20,20,30,0.55);
+    display:none; align-items:flex-end; justify-content:center; z-index:50;
+  }
+  .modal-overlay.active{display:flex;}
+  .modal-panel{
+    width:100%; max-width:480px; background:var(--card);
+    border-radius:22px 22px 0 0; padding:22px 20px 28px;
+    animation:slideUp .2s ease;
+  }
+  @keyframes slideUp{from{transform:translateY(20px); opacity:0;} to{transform:translateY(0); opacity:1;}}
+  .modal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;}
+  .modal-head h3{font-size:17px; font-weight:800;}
+  .modal-close{
+    width:30px; height:30px; border-radius:50%; background:var(--bg);
+    border:none; display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .modal-close svg{width:14px; height:14px; stroke:var(--muted);}
+  .modal-type{
+    display:inline-block; background:var(--purple-soft); color:var(--purple);
+    font-size:11px; font-weight:700; padding:4px 10px; border-radius:20px; margin-bottom:14px;
+  }
+  .modal-row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:11px 0; border-bottom:1px solid var(--border); font-size:13.5px;
+  }
+  .modal-row:last-child{border-bottom:none;}
+  .modal-row .k{color:var(--muted);}
+  .modal-row .v{font-weight:700; text-align:right;}
+  .modal-action-btn{margin-top:18px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="logo-badge">В</div>
+    <h1>BEROO</h1>
+  </div>
+
+  <div class="module-head">
+    <div class="title-row">
+      <h2>Дзеркало</h2>
+      <span class="badge-beta">Beta module</span>
+    </div>
+    <div class="sub">Ваш профіль партнерської мережі</div>
+  </div>
+
+  <div class="section-title">Анкета</div>
+  <div class="profile-card">
+    <div class="profile-row"><span class="k">ПІП ФОП</span><span class="v">Іваненко Василь Петрович</span></div>
+    <div class="profile-row"><span class="k">Назва магазину</span><span class="v">VEO Store</span></div>
+    <div class="profile-row"><span class="k">ЄДРПОУ</span><span class="v">12345678</span></div>
+    <div class="profile-row"><span class="k">IBAN</span><span class="v">UA00 0000 0000 0000</span></div>
+    <div class="profile-row"><span class="k">Instagram</span><span class="v">@veo_store</span></div>
+    <div class="profile-row"><span class="k">Telegram</span><span class="v">@veo_store</span></div>
+    <div class="profile-row"><span class="k">TikTok</span><span class="v">@veo_store</span></div>
+    <div class="profile-edit">Редагувати дані компанії</div>
+  </div>
+
+  <div class="section-title">Мережа дзеркал</div>
+
+  <div class="stat-block">
+    <div class="stat-block-head">
+      <div class="stat-icon out">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H8M17 7v9"/></svg>
+      </div>
+      <div>
+        <h3>Я віддзеркалюю</h3>
+        <div class="h-sub">Товари інших магазинів на моєму сайті</div>
+      </div>
+    </div>
+    <div class="stat-pair">
+      <div class="stat-cell">
+        <div class="val">6</div>
+        <div class="lbl">Магазинів, які я віддзеркалюю</div>
+      </div>
+      <div class="stat-cell">
+        <div class="val">214</div>
+        <div class="lbl">Товарів сумарно на моєму сайті</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-block">
+    <div class="stat-block-head">
+      <div class="stat-icon in">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 7L7 17M7 17h9M7 17V8"/></svg>
+      </div>
+      <div>
+        <h3>Мене віддзеркалюють</h3>
+        <div class="h-sub">Мій товар на чужих сайтах</div>
+      </div>
+    </div>
+    <div class="stat-pair">
+      <div class="stat-cell">
+        <div class="val">37</div>
+        <div class="lbl">Сайтів, що віддзеркалюють мій магазин</div>
+      </div>
+      <div class="stat-cell">
+        <div class="val">1 280</div>
+        <div class="lbl">Товарних показів сумарно</div>
+        <div class="hint">1 товар × 37 сайтів = 37 показів</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary" type="button">Керувати мережею</button>
+  </div>
+
+  <div class="section-title">Бонусний баланс</div>
+  <div class="balance-card">
+    <div class="balance-top">Нараховано за спрацювання дзеркал</div>
+    <div class="balance-amount"><span class="star">★</span>1 240 бонусів</div>
+    <div class="balance-meta">
+      <span>Винагорода від партнера</span>
+      <b>визначає продавець</b>
+    </div>
+    <button class="btn-balance" disabled>
+      Переглянути історію нарахувань
+      <span class="tag">Скоро</span>
+    </button>
+  </div>
+  <div class="balance-disclaimer">
+    Бонуси нараховуються автоматично: вартість товару × відсоток, призначений партнеру, × кількість продажів через дзеркало. Наприклад, пара взуття за 2 500 грн зі ставкою 5% і 58 продажами принесе партнеру 7 250 бонусів.
+  </div>
+
+  <div class="section-title">Запити на співпрацю</div>
+  <div class="req-card" id="reqList">
+    <div class="req-item" data-name="@marina_style" data-joined="14.01.2026" data-type="blogger" data-category="" data-instagram="instagram.com/marina_style" data-tiktok="tiktok.com/@marina_style" data-shops="3" data-stars="3851">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"/></svg>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@marina_style</div>
+        <div class="req-sub">Хоче віддзеркалити: весь асортимент</div>
+        <div class="req-bonus">★ 3,9 тис бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@oleh_shop" data-joined="03.02.2026" data-type="business" data-category="Взуття" data-instagram="instagram.com/oleh_shop" data-tiktok="tiktok.com/@oleh_shop" data-shops="0" data-stars="0">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1-4h14l1 4"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M9 19v-6h6v6"/></svg>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@oleh_shop</div>
+        <div class="req-sub">Хоче віддзеркалити: категорія «Взуття»</div>
+        <div class="req-bonus">★ 0 бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@katya_tt" data-joined="21.02.2026" data-type="blogger" data-category="" data-instagram="instagram.com/katya_tt" data-tiktok="tiktok.com/@katya_tt" data-shops="1" data-stars="583">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"/></svg>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@katya_tt</div>
+        <div class="req-sub">Хоче віддзеркалити: 1 товар</div>
+        <div class="req-bonus">★ 583 бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@denys_kicks" data-joined="09.11.2025" data-type="both" data-category="Аксесуари" data-instagram="instagram.com/denys_kicks" data-tiktok="tiktok.com/@denys_kicks" data-shops="5" data-stars="27600">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"/></svg>
+        <div class="badge-mini"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1-4h14l1 4M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/></svg></div>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@denys_kicks</div>
+        <div class="req-sub">Хоче віддзеркалити: категорія «Аксесуари»</div>
+        <div class="req-bonus">★ 27,6 тис бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@vika_glow" data-joined="17.03.2026" data-type="blogger" data-category="" data-instagram="instagram.com/vika_glow" data-tiktok="tiktok.com/@vika_glow" data-shops="2" data-stars="9140">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"/></svg>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@vika_glow</div>
+        <div class="req-sub">Хоче віддзеркалити: весь асортимент</div>
+        <div class="req-bonus">★ 9,1 тис бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@maxshop.ua" data-joined="28.05.2026" data-type="business" data-category="Електроніка" data-instagram="instagram.com/maxshop.ua" data-tiktok="tiktok.com/@maxshop.ua" data-shops="0" data-stars="0">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1-4h14l1 4"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M9 19v-6h6v6"/></svg>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@maxshop.ua</div>
+        <div class="req-sub">Хоче віддзеркалити: категорія «Електроніка»</div>
+        <div class="req-bonus">★ 0 бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@julia_trend" data-joined="02.09.2025" data-type="both" data-category="Одяг" data-instagram="instagram.com/julia_trend" data-tiktok="tiktok.com/@julia_trend" data-shops="8" data-stars="41250">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"/></svg>
+        <div class="badge-mini"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1-4h14l1 4M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/></svg></div>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@julia_trend</div>
+        <div class="req-sub">Хоче віддзеркалити: категорія «Одяг»</div>
+        <div class="req-bonus">★ 41,2 тис бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@romanstore" data-joined="19.06.2026" data-type="business" data-category="Спорттовари" data-instagram="instagram.com/romanstore" data-tiktok="tiktok.com/@romanstore" data-shops="0" data-stars="0">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1-4h14l1 4"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M9 19v-6h6v6"/></svg>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@romanstore</div>
+        <div class="req-sub">Хоче віддзеркалити: категорія «Спорттовари»</div>
+        <div class="req-bonus">★ 0 бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@stas_unbox" data-joined="11.08.2025" data-type="blogger" data-category="" data-instagram="instagram.com/stas_unbox" data-tiktok="tiktok.com/@stas_unbox" data-shops="12" data-stars="180000">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"/></svg>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@stas_unbox</div>
+        <div class="req-sub">Хоче віддзеркалити: весь асортимент</div>
+        <div class="req-bonus">★ 180 тис бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@lera_reviews" data-joined="04.12.2025" data-type="blogger" data-category="" data-instagram="instagram.com/lera_reviews" data-tiktok="tiktok.com/@lera_reviews" data-shops="9" data-stars="52000">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"/></svg>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@lera_reviews</div>
+        <div class="req-sub">Хоче віддзеркалити: категорія «Гаджети»</div>
+        <div class="req-bonus">★ 52 тис бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@pavlo_tech" data-joined="23.01.2026" data-type="both" data-category="Електроніка" data-instagram="instagram.com/pavlo_tech" data-tiktok="tiktok.com/@pavlo_tech" data-shops="15" data-stars="49500">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"/></svg>
+        <div class="badge-mini"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1-4h14l1 4M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/></svg></div>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@pavlo_tech</div>
+        <div class="req-sub">Хоче віддзеркалити: категорія «Електроніка»</div>
+        <div class="req-bonus">★ 49,5 тис бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@nasty_fit" data-joined="30.04.2026" data-type="blogger" data-category="" data-instagram="instagram.com/nasty_fit" data-tiktok="tiktok.com/@nasty_fit" data-shops="4" data-stars="1500">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"/></svg>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@nasty_fit</div>
+        <div class="req-sub">Хоче віддзеркалити: 1 товар</div>
+        <div class="req-bonus">★ 1,5 тис бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@shop_artel" data-joined="15.02.2026" data-type="business" data-category="Меблі" data-instagram="instagram.com/shop_artel" data-tiktok="tiktok.com/@shop_artel" data-shops="0" data-stars="0">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1-4h14l1 4"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M9 19v-6h6v6"/></svg>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@shop_artel</div>
+        <div class="req-sub">Хоче віддзеркалити: категорія «Меблі»</div>
+        <div class="req-bonus">★ 0 бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@ira_kids" data-joined="07.10.2025" data-type="blogger" data-category="" data-instagram="instagram.com/ira_kids" data-tiktok="tiktok.com/@ira_kids" data-shops="6" data-stars="6200">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"/></svg>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@ira_kids</div>
+        <div class="req-sub">Хоче віддзеркалити: весь асортимент</div>
+        <div class="req-bonus">★ 6,2 тис бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@tt_partner_07" data-joined="22.06.2026" data-type="business" data-category="Косметика" data-instagram="instagram.com/tt_partner_07" data-tiktok="tiktok.com/@tt_partner_07" data-shops="0" data-stars="0">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1-4h14l1 4"/><path d="M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/><path d="M9 19v-6h6v6"/></svg>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@tt_partner_07</div>
+        <div class="req-sub">Хоче віддзеркалити: категорія «Косметика»</div>
+        <div class="req-bonus">★ 0 бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@denys_auto" data-joined="19.03.2026" data-type="both" data-category="Автотовари" data-instagram="instagram.com/denys_auto" data-tiktok="tiktok.com/@denys_auto" data-shops="3" data-stars="2100">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"/></svg>
+        <div class="badge-mini"><svg viewBox="0 0 24 24" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1-4h14l1 4M5 9v9a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9"/></svg></div>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@denys_auto</div>
+        <div class="req-sub">Хоче віддзеркалити: категорія «Автотовари»</div>
+        <div class="req-bonus">★ 2,1 тис бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+    <div class="req-item" data-name="@olya_home" data-joined="26.05.2026" data-type="blogger" data-category="" data-instagram="instagram.com/olya_home" data-tiktok="tiktok.com/@olya_home" data-shops="1" data-stars="740">
+      <div class="req-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-3.6 3.1-6.5 7-6.5s7 2.9 7 6.5"/></svg>
+      </div>
+      <div class="req-body">
+        <div class="req-name">@olya_home</div>
+        <div class="req-sub">Хоче віддзеркалити: 1 товар</div>
+        <div class="req-bonus">★ 740 бонусів</div>
+      </div>
+      <div class="req-right">
+        <span class="req-status pending">Очікує</span>
+        <button class="req-more-btn" type="button">Детальніше</button>
+      </div>
+    </div>
+
+    <div class="req-manage">
+      <button class="btn btn-ghost" type="button">Керувати запитами</button>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Систему розраховано так, щоб фіксувати кожне спрацювання дзеркала автоматично. Умови співпраці узгоджують продавець і партнер самостійно.
+  </div>
+
+  <div class="section-title">Статус функції</div>
+  <div class="dev-banner">
+    <div class="row">
+      <span class="label">Функціонал у розробці</span>
+    </div>
+  </div>
+
+  <div class="advice-card">
+    Поки функція готується, радимо вже зараз: запакувати товар, зняти відео, почати продавати через систему та налаштувати автоматизацію відправок через <b>Нову пошту</b> й <b>платіжні шлюзи</b>. Так ви будете готові до різкого зростання продажів у момент, коли підключите блогерів — одне вірусне відео може створити велике навантаження. Тренуйтесь і вивчайте функціонал заздалегідь.
+  </div>
+
+  <div class="vote-card">
+    <h3>Наскільки вам актуальна ця функція?</h3>
+    <div class="vsub">Ваш голос допомагає нам визначати пріоритети розробки</div>
+    <div class="vote-buttons" id="voteButtons">
+      <button class="vote-btn neg" type="button" data-vote="negative">Нецікаво</button>
+      <button class="vote-btn neu" type="button" data-vote="neutral">Нейтрально</button>
+      <button class="vote-btn pos" type="button" data-vote="positive">Дуже круто, чекаю</button>
+    </div>
+    <div class="vote-result" id="voteResult"></div>
+  </div>
+
+  <div class="copyright">© 2026 BEROO</div>
+  <div class="footer-links">
+    <span>Політика</span>
+    <span>Про нас</span>
+    <span>Допомога</span>
+    <span>Контакти</span>
+  </div>
+
+</div>
+
+<div class="modal-overlay" id="reqModal">
+  <div class="modal-panel">
+    <div class="modal-head">
+      <h3 id="modalName">—</h3>
+      <button class="modal-close" type="button" data-modal-close>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <span class="modal-type" id="modalType">—</span>
+    <div class="modal-row" id="modalCategoryRow">
+      <span class="k">Категорія товару</span>
+      <span class="v" id="modalCategory">—</span>
+    </div>
+    <div class="modal-row">
+      <span class="k">Instagram</span>
+      <span class="v" id="modalInstagram">—</span>
+    </div>
+    <div class="modal-row">
+      <span class="k">TikTok</span>
+      <span class="v" id="modalTiktok">—</span>
+    </div>
+    <div class="modal-row">
+      <span class="k">Віддзеркалено магазинів</span>
+      <span class="v" id="modalShops">—</span>
+    </div>
+    <div class="modal-row">
+      <span class="k">Бонусів за всю історію</span>
+      <span class="v" id="modalStars">—</span>
+    </div>
+    <div class="modal-row">
+      <span class="k">В системі BEROO з</span>
+      <span class="v" id="modalJoined">—</span>
+    </div>
+    <button class="btn btn-primary modal-action-btn" type="button">Налаштувати це дзеркало</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  document.addEventListener('click', function(e){
+    var voteBtn = e.target.closest('.vote-btn');
+    if(voteBtn){ handleVote(voteBtn); return; }
+
+    var moreBtn = e.target.closest('.req-more-btn');
+    if(moreBtn){ openModal(moreBtn); return; }
+
+    var closeEl = e.target.closest('[data-modal-close]');
+    if(closeEl){ closeModal(); return; }
+
+    if(e.target.id === 'reqModal'){ closeModal(); return; }
+  });
+
+  function handleVote(btn){
+    var group = document.getElementById('voteButtons');
+    if(group.classList.contains('voted')) return;
+    group.classList.add('voted');
+    btn.classList.add('selected');
+
+    var type = btn.getAttribute('data-vote');
+    var box = document.getElementById('voteResult');
+    var text, cls;
+    if(type === 'negative'){
+      text = '\u0428\u043a\u043e\u0434\u0430, \u0449\u043e \u0456\u0434\u0435\u044f \u043f\u043e\u043a\u0438 \u043d\u0435 \u0432\u0456\u0434\u0433\u0443\u043a\u043d\u0443\u043b\u0430\u0441\u044c. \u0414\u044f\u043a\u0443\u0454\u043c\u043e \u0437\u0430 \u0447\u0435\u0441\u043d\u0456\u0441\u0442\u044c \u2014 \u0446\u0435 \u0442\u0435\u0436 \u0446\u0456\u043d\u043d\u0430 \u0456\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0456\u044f \u0434\u043b\u044f \u043d\u0430\u0441.';
+      cls = 'neg';
+    } else if(type === 'neutral'){
+      text = '\u0414\u044f\u043a\u0443\u0454\u043c\u043e \u0437\u0430 \u0432\u0456\u0434\u0433\u0443\u043a! \u0411\u0443\u0434\u0435\u043c\u043e \u0440\u0430\u0434\u0456 \u0437\u0434\u0438\u0432\u0443\u0432\u0430\u0442\u0438 \u0432\u0430\u0441, \u043a\u043e\u043b\u0438 \u0444\u0443\u043d\u043a\u0446\u0456\u044f \u0437\u0430\u043f\u0440\u0430\u0446\u044e\u0454.';
+      cls = 'neu';
+    } else {
+      text = '\u0426\u0435 \u0434\u0443\u0436\u0435 \u0434\u043e\u043f\u043e\u043c\u0430\u0433\u0430\u0454 \u043d\u0430\u043c! \u041d\u0430\u0448\u0430 \u043a\u043e\u043c\u0430\u043d\u0434\u0430 \u0431\u0430\u0447\u0438\u0442\u044c \u0446\u0456\u043d\u043d\u0456\u0441\u0442\u044c \u0443 \u0432\u0430\u0448\u043e\u043c\u0443 \u043e\u0447\u0456\u043a\u0443\u0432\u0430\u043d\u043d\u0456 \u0456 \u043d\u0430\u043c\u0430\u0433\u0430\u0442\u0438\u043c\u0435\u0442\u044c\u0441\u044f \u043f\u0440\u0438\u0448\u0432\u0438\u0434\u0448\u0438\u0442\u0438 \u0437\u0430\u043f\u0443\u0441\u043a.';
+      cls = 'pos';
+    }
+    box.textContent = text;
+    box.className = 'vote-result show ' + cls;
+  }
+
+  function pluralizeUA(n, forms){
+    var mod100 = Math.abs(n) % 100;
+    var mod10 = mod100 % 10;
+    if(mod100 > 10 && mod100 < 20) return forms[2];
+    if(mod10 === 1) return forms[0];
+    if(mod10 >= 2 && mod10 <= 4) return forms[1];
+    return forms[2];
+  }
+
+  function formatShort(n){
+    n = parseInt(n, 10);
+    if(n < 1000) return String(n);
+    var val = Math.round(n / 100) / 10;
+    var str = (val % 1 === 0) ? String(Math.round(val)) : String(val).replace('.', ',');
+    return str + ' \u0442\u0438\u0441';
+  }
+
+  function openModal(btn){
+    var item = btn.closest('.req-item');
+    var d = item.dataset;
+
+    document.getElementById('modalName').textContent = d.name;
+
+    var typeLabel = d.type === 'blogger' ? '\u0411\u043b\u043e\u0433\u0435\u0440'
+      : d.type === 'business' ? '\u0411\u0456\u0437\u043d\u0435\u0441'
+      : '\u0411\u043b\u043e\u0433\u0435\u0440 \u0456 \u0431\u0456\u0437\u043d\u0435\u0441';
+    document.getElementById('modalType').textContent = typeLabel;
+
+    var catRow = document.getElementById('modalCategoryRow');
+    if(d.type === 'blogger'){
+      catRow.style.display = 'none';
+    } else {
+      catRow.style.display = 'flex';
+      document.getElementById('modalCategory').textContent = d.category;
+    }
+
+    document.getElementById('modalInstagram').textContent = d.instagram;
+    document.getElementById('modalTiktok').textContent = d.tiktok;
+    var shopsCount = parseInt(d.shops, 10);
+    if(shopsCount === 0){
+      document.getElementById('modalShops').textContent = '\u043f\u043e\u043a\u0438 0';
+    } else {
+      var shopWord = pluralizeUA(shopsCount, ['\u043c\u0430\u0433\u0430\u0437\u0438\u043d', '\u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0438', '\u043c\u0430\u0433\u0430\u0437\u0438\u043d\u0456\u0432']);
+      document.getElementById('modalShops').textContent = shopsCount + ' ' + shopWord;
+    }
+    document.getElementById('modalStars').textContent = '\u2605 ' + formatShort(d.stars);
+    document.getElementById('modalJoined').textContent = d.joined;
+
+    document.getElementById('reqModal').classList.add('active');
+  }
+
+  function closeModal(){
+    document.getElementById('reqModal').classList.remove('active');
+  }
+})();
+</script>
+</body>
+</html>
