@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дзеркало — логіка системи</title>
+<style>
+  :root{
+    --purple:#7b2ff7;
+    --purple-dark:#5b1fc7;
+    --purple-soft:#f1e8ff;
+    --bg:#f7f7fb;
+    --card:#ffffff;
+    --text:#1a1a2e;
+    --muted:#7a7a8c;
+    --border:#ececf3;
+    --green:#1fb978;
+    --green-soft:#eafaf2;
+    --orange:#ff9f43;
+    --orange-soft:#fff4e5;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    line-height:1.6;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:0 0 60px;}
+
+  .hero{
+    background:linear-gradient(135deg, var(--purple), #a855f7);
+    color:#fff;
+    padding:48px 28px 40px;
+  }
+  .hero .eyebrow{
+    font-size:12.5px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase;
+    opacity:0.85; margin-bottom:10px;
+  }
+  .hero h1{font-size:32px; font-weight:800; letter-spacing:-0.02em; margin-bottom:12px;}
+  .hero p{font-size:15px; max-width:520px; opacity:0.95;}
+
+  .opportunity{
+    margin:24px 28px 0;
+    background:#fff0ec;
+    border:1px solid #ffc9b8;
+    border-radius:18px;
+    padding:20px 22px;
+  }
+  .opp-eyebrow{
+    display:inline-block; font-size:12px; font-weight:700;
+    color:#c23b1f; background:#ffdcd0; padding:5px 12px; border-radius:20px;
+    margin-bottom:12px;
+  }
+  .opportunity p{font-size:13.5px; color:#5a2c1e; margin-bottom:10px;}
+  .opportunity p:last-child{margin-bottom:0;}
+
+  .flow{
+    margin:24px 28px 0;
+    background:var(--card);
+    border-radius:20px;
+    box-shadow:0 12px 30px rgba(20,10,50,0.12);
+    padding:26px 22px;
+    position:relative;
+    z-index:2;
+  }
+  .flow-title{font-size:13px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); margin-bottom:18px; text-align:center;}
+  .flow-steps{
+    display:grid;
+    grid-template-columns:repeat(4, 1fr);
+    gap:10px;
+  }
+  .flow-step{
+    text-align:center;
+    padding:14px 8px;
+    border-radius:14px;
+    background:var(--bg);
+    position:relative;
+  }
+  .flow-step .num{
+    width:30px; height:30px; border-radius:50%;
+    background:var(--purple); color:#fff;
+    font-weight:800; font-size:13px;
+    display:flex; align-items:center; justify-content:center;
+    margin:0 auto 10px;
+  }
+  .flow-step .ico{font-size:22px; margin-bottom:8px;}
+  .flow-step .lbl{font-size:11.5px; font-weight:700; line-height:1.35;}
+  @media (max-width:620px){
+    .flow-steps{grid-template-columns:1fr; gap:0;}
+    .flow-step{display:flex; align-items:center; gap:14px; text-align:left; padding:14px 16px;}
+    .flow-step .num{margin:0; flex-shrink:0;}
+    .flow-step .ico{margin:0; font-size:20px;}
+    .flow-step:not(:last-child){
+      border-bottom:2px dashed var(--border);
+      border-radius:14px 14px 0 0;
+    }
+  }
+
+  .section{padding:36px 28px 0;}
+  .section-eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12px; font-weight:700; color:var(--purple);
+    background:var(--purple-soft); padding:5px 12px; border-radius:20px;
+    margin-bottom:12px;
+  }
+  .section h2{font-size:21px; font-weight:800; letter-spacing:-0.01em; margin-bottom:14px;}
+  .section .lead{font-size:14.5px; color:#3a3a4a; margin-bottom:16px;}
+
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:20px 22px;
+  }
+  .card + .card{margin-top:12px;}
+  .card h3{font-size:14.5px; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:8px;}
+  .card h3 .dot{width:7px; height:7px; border-radius:50%; background:var(--purple); flex-shrink:0;}
+  .card p{font-size:13.5px; color:#3a3a4a;}
+  .card ul{margin:10px 0 0 0; padding-left:18px;}
+  .card li{font-size:13.5px; color:#3a3a4a; margin-bottom:6px;}
+  .card li:last-child{margin-bottom:0;}
+
+  .metric-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:14px;
+  }
+  .metric{
+    background:var(--purple-soft);
+    border-radius:12px;
+    padding:12px 14px;
+  }
+  .metric .m-ico{font-size:17px; margin-bottom:6px;}
+  .metric .m-lbl{font-size:12px; font-weight:700; color:var(--purple-dark); line-height:1.35;}
+
+  .mini-flow{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-top:16px; gap:6px; flex-wrap:wrap;
+  }
+  .mini-node{
+    flex:1; min-width:90px;
+    background:var(--orange-soft); color:#b5651d;
+    border-radius:12px; padding:12px 10px; text-align:center;
+    font-size:12px; font-weight:700;
+  }
+  .mini-node.alt{background:var(--green-soft); color:#178a5b;}
+  .mini-sep{color:var(--muted); font-size:16px; font-weight:700; flex-shrink:0;}
+
+  .callout{
+    margin-top:36px; margin-left:28px; margin-right:28px;
+    background:#1a1a2e; color:#fff;
+    border-radius:20px;
+    padding:26px 24px;
+  }
+  .callout .c-eyebrow{
+    font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em;
+    color:#c9a8ff; margin-bottom:10px;
+  }
+  .callout p{font-size:14.5px; line-height:1.7; color:rgba(255,255,255,0.92);}
+  .callout b{color:#fff;}
+
+  .footer-note{
+    margin:40px 28px 0; text-align:center;
+    font-size:12px; color:var(--muted);
+  }
+
+  /* cart demo */
+  .cart-demo{
+    margin-top:14px; background:var(--card); border:1px solid var(--border);
+    border-radius:18px; padding:18px 20px;
+  }
+  .cart-warning{
+    background:var(--orange-soft); color:#b5651d;
+    font-size:13px; font-weight:700; line-height:1.5;
+    padding:12px 14px; border-radius:12px; margin-bottom:14px;
+  }
+  .cart-shop{padding:12px 0; border-top:1px solid var(--border);}
+  .cart-shop:first-of-type{border-top:none;}
+  .cart-shop-head{display:flex; justify-content:space-between; align-items:center; font-size:13.5px; font-weight:700; margin-bottom:4px;}
+  .cart-pay-tag{
+    font-size:10.5px; font-weight:700; color:var(--purple);
+    background:var(--purple-soft); padding:3px 9px; border-radius:20px;
+  }
+  .cart-shop-items{font-size:12.5px; color:var(--muted);}
+
+  /* requirement pills */
+  .req-pair{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px;}
+  .req-pill{
+    background:var(--purple-soft); color:var(--purple-dark);
+    border-radius:14px; padding:18px 14px; text-align:center;
+    font-size:13px; font-weight:700; line-height:1.5;
+  }
+  .req-pill span{display:block; font-size:11px; font-weight:600; color:var(--muted); margin-top:6px;}
+
+  /* toggle demo */
+  .toggle-demo{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px;}
+  .toggle-card{
+    background:var(--card); border:1.5px solid var(--border);
+    border-radius:16px; padding:16px;
+  }
+  .toggle-card.off{border-color:var(--green); background:var(--green-soft);}
+  .toggle-card.on{border-color:var(--orange); background:var(--orange-soft);}
+  .toggle-pill{
+    font-size:10.5px; font-weight:700; padding:4px 10px; border-radius:20px;
+    text-transform:uppercase; letter-spacing:0.03em;
+  }
+  .toggle-pill.off{background:var(--green); color:#fff;}
+  .toggle-pill.on{background:var(--orange); color:#fff;}
+  .toggle-card h3{font-size:13.5px; font-weight:800;}
+  .toggle-card p{font-size:12px; color:#3a3a4a; margin-top:6px;}
+  @media (max-width:560px){
+    .toggle-demo, .req-pair{grid-template-columns:1fr;}
+  }
+
+  /* code demo */
+  .code-demo{
+    display:flex; align-items:center; justify-content:center; gap:14px;
+    margin-top:16px; flex-wrap:wrap;
+  }
+  .code-box{
+    background:var(--purple-soft); border-radius:16px;
+    padding:16px 20px; text-align:center; min-width:130px;
+  }
+  .code-box.alt{background:var(--green-soft);}
+  .code-num{font-size:22px; font-weight:800; color:var(--purple-dark); letter-spacing:0.02em;}
+  .code-box.alt .code-num{color:#178a5b;}
+  .code-lbl{font-size:11px; color:var(--muted); font-weight:700; margin-top:4px;}
+  .code-arrow{font-size:12px; font-weight:700; color:var(--muted); text-align:center;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow">BEROO · Дзеркало</div>
+    <h1>Як працює система зсередини</h1>
+    <p>Опис логіки модуля для команди розробки: реєстрація, пошук партнерів, мережа дзеркал, аналітика та скарги — простими словами, без техжаргону.</p>
+  </div>
+
+  <div class="opportunity">
+    <div class="opp-eyebrow">Чому це критично важливо саме зараз</div>
+    <p>
+      TikTok в Україні масово приховує комерційні акаунти — алгоритм просуває лише емоційний, нетоварний
+      контент. Продавці, які раніше продавали наживо, як на базарі, зараз отримують по 30-50 переглядів і не
+      вміють знімати вірусний контент — це просто не їхня компетенція. У них два шляхи: піти з ринку, забравши
+      з собою Telegram- та Viber-спільноти по 10-20 тисяч лояльних покупців кожна, або отримати спосіб
+      продавати через людей, яким довіряє їхня ж аудиторія. Якщо це не запропонуємо ми найближчим часом —
+      вони підуть до того, хто запропонує раніше.
+    </p>
+    <p>
+      Вікно не буде відкритим вічно: рано чи пізно TikTok сам запустить офіційний Shop в Україні, і перевага
+      першого ходу зникне. Показавши вже зараз, що «Дзеркало» в розробці, ми змусимо продавців напаковувати
+      товар і вчити інтерфейс заздалегідь — так само, як раніше вони готувалися заради функціоналу прийому
+      замовлень за кодом ТТН. Паралельно це дає соціальний ефект: багато людей, зокрема чоловіків, через
+      воєнні обставини зараз вдома і шукають дистанційний заробіток — огляди товару дають їм такий шанс і
+      розширюють нашу базу партнерів далеко за межі звичних блогерів.
+    </p>
+  </div>
+
+  <div class="flow">
+    <div class="flow-title">Основний цикл системи</div>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="num">1</div>
+        <div class="ico">📦</div>
+        <div class="lbl">Продавець пакує і розміщує товар</div>
+      </div>
+      <div class="flow-step">
+        <div class="num">2</div>
+        <div class="ico">🔁</div>
+        <div class="lbl">Блогер віддзеркалює товар на своєму сайті</div>
+      </div>
+      <div class="flow-step">
+        <div class="num">3</div>
+        <div class="ico">🛒</div>
+        <div class="lbl">Покупець купує через сайт блогера</div>
+      </div>
+      <div class="flow-step">
+        <div class="num">4</div>
+        <div class="ico">⭐</div>
+        <div class="lbl">Система нараховує бонуси за відсотковою ставкою</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="section-eyebrow">Загальна суть</span>
+    <h2>Аналог TikTok Shop із відкритою партнерською мережею</h2>
+    <p class="lead">
+      Продавець розміщує товар у системі. Будь-яка людина — блогер, інфлюенсер чи звичайний користувач —
+      створює власний сайт і «віддзеркалює» на ньому чужий товар, не маючи його фізично. Покупець купує
+      через цей сайт, продавець обробляє замовлення, а власник сайту отримує бонуси за кожен спрацьований
+      продаж. Один блогер може одночасно співпрацювати з сотнями різних магазинів — це нормальний сценарій,
+      систему треба будувати саме під такі масштаби.
+    </p>
+  </div>
+
+  <div class="section">
+    <span class="section-eyebrow">Старт</span>
+    <h2>Реєстрація і перші кроки</h2>
+    <div class="card">
+      <h3><span class="dot"></span>Створення сайту</h3>
+      <p>Будь-який учасник реєструється і за лічені хвилини отримує згенерований сайт. Одразу може почати додавати товари, якщо є що продавати.</p>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>Якщо товарів немає — меню «Дзеркало»</h3>
+      <p>Система підтягує анкетні дані з розділу «Контакти і реквізити» — реквізити ФОПа (якщо людина теж продавець) або контактні дані блогера. Якщо ще немає підключених магазинів, видно нуль і кнопку пошуку партнерів.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="section-eyebrow">Пошук партнерів</span>
+    <h2>База магазинів і фільтри</h2>
+    <p class="lead">Система веде базу всіх магазинів і дає по ній зручний пошук.</p>
+    <div class="card">
+      <ul>
+        <li>За ідентифікатором магазину — короткий код (наприклад, 5 цифр) для прямого пошуку</li>
+        <li>За категорією товару</li>
+        <li>За рейтингом магазину</li>
+        <li>За кількістю товарів, розміщених у магазині</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="section-eyebrow">Картка магазину</span>
+    <h2>Перегляд перед запитом на співпрацю</h2>
+    <div class="card">
+      <p>Відкривши картку магазину, людина бачить асортимент, умови оплати, рейтинг і відгуки. Доступні дві дії: <b>«Подати запит на співпрацю»</b> і <b>«Поскаржитися на продавця»</b>.</p>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>Якщо співпраця вже діє</h3>
+      <p>Видно баланс по конкретному продавцю: скільки бонусів нараховано, скільки списано, історію змін. Якщо продавець вносить корективи (наприклад, після взаєморозрахунку), блогер заходить і підтверджує, що зміна внесена правильно — це двостороннє підтвердження.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="section-eyebrow">Меню «Дзеркало»</span>
+    <h2>Три основні функції</h2>
+    <div class="card">
+      <h3><span class="dot"></span>Моя мережа</h3>
+      <p>Хто віддзеркалює мої товари (для продавця) або які магазини я віддзеркалюю (для блогера). Видно, що саме дозволено: окрема категорія, кілька категорій, окремі товари чи весь асортимент, а також відсоткова ставка.</p>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>Історія змін</h3>
+      <p>Журнал змін бонусів і ставок, окремо по кожному магазину — прямо в кабінеті блогера, який його віддзеркалює.</p>
+    </div>
+    <div class="card">
+      <h3><span class="dot"></span>Партнерські магазини</h3>
+      <p>Розділ, що з'являється, коли людина починає щось віддзеркалювати. Показує всім — і самому блогеру, і відвідувачам його сайту — з якими магазинами та категоріями він працює.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="section-eyebrow">Найважливіше</span>
+    <h2>Аналітика для продавця і блогера</h2>
+    <p class="lead">
+      Уявімо: блогер створив сайт, власних товарів не має, співпрацює з п'ятьма магазинами. Кожен із цих п'яти
+      магазинів повинен бачити таку аналітику по сайту блогера:
+    </p>
+    <div class="metric-grid">
+      <div class="metric"><div class="m-ico">👁️</div><div class="m-lbl">Скільки разів відкрився сайт</div></div>
+      <div class="metric"><div class="m-ico">📲</div><div class="m-lbl">Джерело трафіку: Instagram, TikTok, Telegram</div></div>
+      <div class="metric"><div class="m-ico">⏱️</div><div class="m-lbl">Середній час на сайті (по кожному джерелу)</div></div>
+      <div class="metric"><div class="m-ico">🖱️</div><div class="m-lbl">Глибина перегляду — кількість кліків</div></div>
+      <div class="metric"><div class="m-ico">🛍️</div><div class="m-lbl">Товарів додано в кошик</div></div>
+      <div class="metric"><div class="m-ico">🚫</div><div class="m-lbl">Кошиків покинуто незавершеними</div></div>
+      <div class="metric"><div class="m-ico">💰</div><div class="m-lbl">Продано і на яку суму за період</div></div>
+      <div class="metric"><div class="m-ico">🧾</div><div class="m-lbl">Середній чек</div></div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <p>Мета блоку — щоб бізнес повністю зосередився на пакуванні й відправці товару, не знімаючи власний контент: просування і трафік забезпечують партнери.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="section-eyebrow">Якість співпраці</span>
+    <h2>Скарги покупців</h2>
+    <p class="lead">Покупець, незадоволений товаром чи продавцем, повинен мати простий спосіб повідомити про це блогеру.</p>
+    <div class="mini-flow">
+      <div class="mini-node">Покупець подає скаргу блогеру</div>
+      <div class="mini-sep">→</div>
+      <div class="mini-node">Скарга автоматично дублюється продавцю</div>
+      <div class="mini-sep">→</div>
+      <div class="mini-node alt">Система фіксує причину і накопичує статистику</div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <p>Це потрібно, щоб продавець був спокійний за репутацію партнерів, а ми могли оцінювати якість роботи кожного блогера: скільки скарг, по яких товарах, у кого найчастіше.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="section-eyebrow">Довіра до блогера</span>
+    <h2>Статистика повернень і обмінів</h2>
+    <div class="card">
+      <p>
+        Окремо потрібна статистика повернень і обмінів товару, проданого через конкретного блогера. Це показник
+        того, наскільки чесно й точно блогер презентує товар. Якщо блогер сильно хвалить товар, а по його продажах
+        багато повернень — це сигнал, що людина вводить аудиторію в оману або погано доносить інформацію.
+        Метрика має бути видимою як частина загальної ефективності блогера.
+      </p>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="section-eyebrow">Оформлення замовлення</span>
+    <h2>Кошик при покупках через сайт блогера</h2>
+    <p class="lead">
+      Коли відвідувач сайту блогера набирає товари з різних магазинів, кошик показує це так само, як робить
+      TikTok Shop: товари групуються за магазином-відправником, і людині одразу видно, що замовлення піде
+      окремими відправленнями.
+    </p>
+    <div class="cart-demo">
+      <div class="cart-warning">⚠️ Ваше замовлення буде відправлено 3 різними посилками від 3 різних продавців</div>
+      <div class="cart-shop">
+        <div class="cart-shop-head"><span>📦 VEO Store</span><span class="cart-pay-tag">Оплата окремо</span></div>
+        <div class="cart-shop-items">2 товари · 1 240 ₴</div>
+      </div>
+      <div class="cart-shop">
+        <div class="cart-shop-head"><span>📦 Oleh Shop</span><span class="cart-pay-tag">Оплата окремо</span></div>
+        <div class="cart-shop-items">1 товар · 890 ₴</div>
+      </div>
+      <div class="cart-shop">
+        <div class="cart-shop-head"><span>📦 Julia Trend</span><span class="cart-pay-tag">Оплата окремо</span></div>
+        <div class="cart-shop-items">3 товари · 2 150 ₴</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <p>Кошик показує всю картину одразу — для зручності й прозорості. Але сам розрахунок завжди іде окремо по кожному магазину: об'єднати все в один платіж не можна, кожне замовлення оплачується самостійно.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="section-eyebrow">Обов'язкові умови</span>
+    <h2>Що потрібно підключити продавцю</h2>
+    <p class="lead">Функція «Дзеркало» доступна тільки тим продавцям, які підключили обидві речі одночасно.</p>
+    <div class="req-pair">
+      <div class="req-pill">💳<br>Платіжний шлюз<br><span>WayForPay, Monobank Acquiring тощо</span></div>
+      <div class="req-pill">📮<br>Нова пошта<br><span>Інтеграція для відправок</span></div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <p>Без виконання обох умов магазин не бере участі в системі віддзеркалення — блогери просто не зможуть підключити його товари.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="section-eyebrow">Захист роботи блогера</span>
+    <h2>Перемикач «Продаж напряму»</h2>
+    <p class="lead">
+      Відома з закордонного досвіду партнерських систем проблема: людина бачить товар на сайті блогера, додає
+      в кошик, бачить назву магазину — і йде купувати напряму на сайт продавця, обходячи блогера. У результаті
+      блогер, який привів покупця, не отримує винагороди за свою роботу.
+    </p>
+    <div class="toggle-demo">
+      <div class="toggle-card off">
+        <div class="toggle-row"><span class="toggle-pill off">Вимкнено</span></div>
+        <h3 style="margin-top:10px;">Продає тільки через партнерів</h3>
+        <p>Продавець не продає напряму відвідувачам, які прийшли на його сайт самостійно. Купити товар можна лише через мережу дзеркал — блогер гарантовано отримує винагороду.</p>
+      </div>
+      <div class="toggle-card on">
+        <div class="toggle-row"><span class="toggle-pill on">Увімкнено</span></div>
+        <h3 style="margin-top:10px;">Продає самостійно і через партнерів</h3>
+        <p>Продавець дозволяє собі продавати товар і напряму, паралельно з продажами через блогерів.</p>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <p>Цей статус обов'язково видно в картці кожного магазину у вигляді бейджа, а також доступний як окремий фільтр у пошуку — щоб блогери могли свідомо обирати магазини, які гарантовано не конкуруватимуть з ними напряму.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="section-eyebrow">Технічна основа</span>
+    <h2>Унікальні коди магазинів і товарів</h2>
+    <p class="lead">
+      Кожен створений сайт (магазин) одразу отримує унікальний 5-значний код — ідентифікатор магазину в системі,
+      як своєрідний «юзернейм». Кожен товар теж отримує власний код, прив'язаний до конкретного магазину:
+      нумерація завжди починається зі 100 — перший товар у будь-якому новому магазині отримує код 100, другий — 101, і так далі.
+    </p>
+    <div class="code-demo">
+      <div class="code-box">
+        <div class="code-num">12345</div>
+        <div class="code-lbl">Магазин-партнер</div>
+      </div>
+      <div class="code-arrow">→ запит на товар №155 →</div>
+      <div class="code-box alt">
+        <div class="code-num">54321</div>
+        <div class="code-lbl">Магазин-власник товару</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <p>Після підтвердження запиту товар 155 з'являється на сайті магазину 12345. Уся подальша логіка — фіксація замовлень, кошик, бонуси, аналітика, статус «Продаж напряму» — прив'язується саме до пари «код товару + код магазину-власника + код магазину-партнера». Це дозволяє однозначно вести облік, навіть коли один товар одночасно віддзеркалюється сотнями різних магазинів.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <div class="c-eyebrow">Головна ідея одним реченням</div>
+    <p>
+      Продавець пакує товар і відправляє замовлення — і більше нічого не повинен робити для просування.
+      Просування, трафік і відеоконтент забезпечує мережа партнерів-блогерів, кожен з яких може одночасно
+      працювати з великою кількістю різних магазинів. Уся система побудована навколо <b>прозорого обліку</b>:
+      хто що віддзеркалює, скільки за це нараховано, наскільки ефективно і чесно це працює.
+    </p>
+  </div>
+
+  <div class="footer-note">BEROO · Дзеркало — внутрішній документ для команди розробки</div>
+
+</div>
+</body>
+</html>
