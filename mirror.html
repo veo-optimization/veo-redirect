@@ -15,60 +15,84 @@
     --border:#ececf3;
   }
   *{box-sizing:border-box; margin:0; padding:0;}
+  html, body{height:100%;}
   body{
     font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
     background:var(--bg);
     color:var(--text);
     -webkit-font-smoothing:antialiased;
   }
-  .wrap{max-width:480px; margin:0 auto; min-height:100vh; display:flex; flex-direction:column;}
+  .wrap{max-width:480px; margin:0 auto; height:100vh; display:flex; flex-direction:column; overflow:hidden;}
 
   .topbar{
-    display:flex; align-items:center; gap:12px;
-    padding:18px 20px;
+    display:flex; align-items:center; gap:9px;
+    padding:10px 16px;
     background:var(--card);
     border-bottom:1px solid var(--border);
+    flex-shrink:0;
   }
   .logo-badge{
-    width:36px; height:36px; border-radius:10px;
-    background:var(--purple); color:#fff; font-weight:700; font-size:16px;
+    width:28px; height:28px; border-radius:8px;
+    background:var(--purple); color:#fff; font-weight:700; font-size:13px;
     display:flex; align-items:center; justify-content:center; flex-shrink:0;
   }
-  .topbar h1{font-size:18px; font-weight:700;}
+  .topbar h1{font-size:14.5px; font-weight:700;}
 
-  .page-title{padding:20px 20px 0; font-size:22px; font-weight:800;}
+  .page-title{padding:10px 16px 0; font-size:16px; font-weight:800; flex-shrink:0;}
 
-  .content{flex:1; display:flex; align-items:flex-start; justify-content:center; padding:18px 20px;}
+  .content{flex:1; display:flex; align-items:center; justify-content:center; padding:8px 16px; min-height:0;}
   .stub-card{
     width:100%;
     background:var(--card);
     border:1px solid var(--border);
-    border-radius:20px;
-    padding:40px 28px 36px;
+    border-radius:16px;
+    padding:16px 18px 14px;
     text-align:center;
   }
   .stub-icon{
-    width:84px; height:84px; border-radius:18px;
+    width:42px; height:42px; border-radius:11px;
     background:var(--purple-soft);
     display:flex; align-items:center; justify-content:center;
-    margin:0 auto 24px;
+    margin:0 auto 8px;
   }
-  .stub-icon svg{width:38px; height:38px; stroke:var(--purple);}
-  .stub-card h2{font-size:26px; font-weight:800; margin-bottom:18px;}
-  .stub-card p{font-size:15.5px; line-height:1.55; color:#4a4a5a; max-width:380px; margin:0 auto;}
+  .stub-icon svg{width:19px; height:19px; stroke:var(--purple);}
+  .stub-card h2{font-size:17px; font-weight:800; margin-bottom:6px;}
+  .stub-card p{font-size:11.5px; line-height:1.4; color:#4a4a5a; max-width:360px; margin:0 auto;}
   .stub-pill{
-    display:inline-block; margin-top:24px;
+    display:inline-block; margin-top:10px;
     background:var(--purple-soft); color:var(--purple);
-    font-size:14px; font-weight:700;
-    padding:13px 22px; border-radius:14px;
+    font-size:11.5px; font-weight:700;
+    padding:8px 14px; border-radius:11px;
   }
   .stub-note{
-    margin-top:22px; font-size:13.5px; color:var(--muted); line-height:1.6;
+    margin-top:7px; font-size:10.5px; color:var(--muted); line-height:1.4;
   }
 
-  .footer{padding:18px 20px 24px;}
-  .copyright{font-size:12px; color:var(--muted); margin-bottom:10px;}
-  .footer-links{display:flex; gap:18px; flex-wrap:wrap; font-size:13px; color:var(--purple); font-weight:600;}
+  .footer{padding:6px 16px 10px; flex-shrink:0;}
+  .copyright{font-size:10px; color:var(--muted); margin-bottom:4px;}
+  .footer-links{display:flex; gap:13px; flex-wrap:wrap; font-size:10.5px; color:var(--purple); font-weight:600;}
+
+  /* voting */
+  .vote-block{margin-top:11px; padding-top:10px; border-top:1px solid var(--border);}
+  .vote-question{font-size:11.5px; font-weight:700; margin-bottom:7px;}
+  .vote-row{display:flex; gap:6px;}
+  .vote-btn{
+    border:none; border-radius:10px; padding:9px 4px;
+    font-size:10.5px; font-weight:700; cursor:pointer;
+    transition:transform .15s ease, opacity .15s ease;
+  }
+  .vote-btn:active{transform:scale(0.97);}
+  .vote-btn.neg{flex:0 0 25%; background:#ffe2d1; color:#c2541f;}
+  .vote-btn.neu{flex:0 0 25%; background:#eceef2; color:#5a5a6a;}
+  .vote-btn.pos{flex:1 1 50%; background:#1fb978; color:#fff;}
+  .vote-row.voted .vote-btn{opacity:0.4; cursor:not-allowed; pointer-events:none;}
+  .vote-row.voted .vote-btn.selected{opacity:1;}
+  .vote-toast{
+    margin-top:8px; font-size:10.5px; font-weight:600; color:#178a5b;
+    background:#eafaf2; border-radius:10px; padding:8px 10px;
+    display:none;
+  }
+  .vote-toast.show{display:block;}
 </style>
 </head>
 <body>
@@ -88,12 +112,21 @@
       </div>
       <h2>Дзеркало</h2>
       <p>
-        Продавайте, не переживаючи, чи залетить відео і чи не заблокує TikTok. Дзеркало дозволяє вашим
-        клієнтам, блогерам та UGC-контентмейкерам продавати ваш товар на своїх сайтах — щирим, нативним
-        оглядом. Це саме та модель, на якій зростає TikTok Shop.
+        Продавайте, не переживаючи за відео й блокування TikTok. Дзеркало дозволяє клієнтам, блогерам та
+        UGC-контентмейкерам продавати ваш товар нативним оглядом — модель, на якій зростає TikTok Shop.
       </p>
       <div class="stub-pill">Функціонал у розробці, очікуйте</div>
       <div class="stub-note">Слідкуйте за оновленнями — скоро тут з'явиться більше можливостей.</div>
+
+      <div class="vote-block">
+        <div class="vote-question">Наскільки вам критична ця функція?</div>
+        <div class="vote-row" id="voteRow">
+          <button class="vote-btn neg" type="button" data-vote="negative">Не цікавить</button>
+          <button class="vote-btn neu" type="button" data-vote="neutral">Нейтрально</button>
+          <button class="vote-btn pos" type="button" data-vote="positive">Дуже хочу</button>
+        </div>
+        <div class="vote-toast" id="voteToast">Дякуємо за ваш голос. Ми враховуємо його при розробці.</div>
+      </div>
     </div>
   </div>
 
@@ -108,5 +141,27 @@
   </div>
 
 </div>
+
+<script>
+(function(){
+  var row = document.getElementById('voteRow');
+  var toast = document.getElementById('voteToast');
+
+  row.addEventListener('click', function(e){
+    var btn = e.target.closest('.vote-btn');
+    if(!btn || row.classList.contains('voted')) return;
+
+    row.classList.add('voted');
+    btn.classList.add('selected');
+
+    var voteValue = btn.getAttribute('data-vote');
+    try{
+      console.log('feature_vote', { feature: 'dzerkalo', value: voteValue, ts: Date.now() });
+    } catch(err){}
+
+    toast.classList.add('show');
+  });
+})();
+</script>
 </body>
 </html>
