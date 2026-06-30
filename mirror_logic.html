@@ -229,6 +229,23 @@
   .code-box.alt .code-num{color:#178a5b;}
   .code-lbl{font-size:11px; color:var(--muted); font-weight:700; margin-top:4px;}
   .code-arrow{font-size:12px; font-weight:700; color:var(--muted); text-align:center;}
+
+  /* self-mirror alternative flow */
+  .self-mirror-flow{
+    display:flex; align-items:center; gap:8px; margin-top:16px; flex-wrap:wrap;
+  }
+  .sm-step{
+    flex:1; min-width:130px; background:var(--card); border:1.5px solid var(--border);
+    border-radius:14px; padding:14px 12px; text-align:center;
+  }
+  .sm-step.alt{background:var(--purple-soft); border-color:var(--purple);}
+  .sm-ico{font-size:22px; margin-bottom:6px;}
+  .sm-lbl{font-size:11.5px; font-weight:700; line-height:1.4;}
+  .sm-arrow{font-size:16px; font-weight:700; color:var(--muted); flex-shrink:0;}
+  @media (max-width:620px){
+    .self-mirror-flow{flex-direction:column;}
+    .sm-arrow{transform:rotate(90deg);}
+  }
 </style>
 </head>
 <body>
@@ -468,6 +485,38 @@
     </div>
     <div class="card" style="margin-top:14px;">
       <p>Цей статус обов'язково видно в картці кожного магазину у вигляді бейджа, а також доступний як окремий фільтр у пошуку — щоб блогери могли свідомо обирати магазини, які гарантовано не конкуруватимуть з ними напряму.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <span class="section-eyebrow">На обговорення з командою</span>
+    <h2>Альтернативний варіант: примусова модель самодзеркала</h2>
+    <p class="lead">
+      Ідея для обговорення з командою розробників і партнерами, поки не фінальне рішення — варіант поряд із
+      простим перемикачем вище. Активація участі в мережі дзеркал примусово вимикає кошик на оригінальному
+      сайті продавця: товар можна тільки переглянути, купити — лише через дзеркала партнерів.
+    </p>
+    <div class="self-mirror-flow">
+      <div class="sm-step">
+        <div class="sm-ico">🏪</div>
+        <div class="sm-lbl">Продавець активує дзеркало</div>
+      </div>
+      <div class="sm-arrow">→</div>
+      <div class="sm-step">
+        <div class="sm-ico">🚫</div>
+        <div class="sm-lbl">Кошик на основному сайті вимикається</div>
+      </div>
+      <div class="sm-arrow">→</div>
+      <div class="sm-step alt">
+        <div class="sm-ico">✨</div>
+        <div class="sm-lbl">Система пропонує створити окреме «самодзеркало» з новим кодом</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <p>Самодзеркало автоматично відображає весь асортимент продавця і ставить його в ті самі умови, що й будь-якого іншого блогера. У кошику показується назва магазину, але без ідентифікатора — щоб ускладнити ручний пошук оригіналу.</p>
+    </div>
+    <div class="card" style="margin-top:10px;">
+      <p>Варіант не закриває проблему повністю: продавець технічно може вписати свій код у опис товару. Тому передбачено реагування — побачивши код у описі, блогер може самостійно розірвати співпрацю і подати скаргу на продавця.</p>
     </div>
   </div>
 
