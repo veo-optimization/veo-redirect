@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEROO · Дзеркало — демо режимів</title>
+<style>
+  :root{
+    --purple:#7b2ff7; --purple-dark:#5b1fc7; --purple-soft:#f1e8ff;
+    --bg:#f7f7fb; --card:#ffffff; --text:#1a1a2e; --muted:#7a7a8c; --border:#ececf3;
+    --green:#1fb978; --green-soft:#eafaf2; --orange:#ff9f43; --orange-soft:#fff4e5;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px; margin:0 auto; padding:0 0 60px;}
+
+  /* top switcher */
+  .switch-bar{
+    position:sticky; top:0; z-index:20;
+    background:var(--card); border-bottom:1px solid var(--border);
+    padding:16px 20px;
+  }
+  .switch-top{display:flex; align-items:center; gap:10px; margin-bottom:12px;}
+  .logo-badge{width:32px; height:32px; border-radius:9px; background:var(--purple); color:#fff; font-weight:800; font-size:14px; display:flex; align-items:center; justify-content:center;}
+  .switch-top h1{font-size:16px; font-weight:800;}
+  .switch-top .sub{font-size:11.5px; color:var(--muted); margin-left:auto;}
+  .switcher{
+    display:grid; grid-template-columns:1fr 1fr;
+    background:var(--bg); border-radius:14px; padding:5px; gap:5px;
+  }
+  .switch-btn{
+    border:none; background:transparent; border-radius:10px;
+    padding:12px; font-size:14px; font-weight:700; color:var(--muted);
+    cursor:pointer; display:flex; align-items:center; justify-content:center; gap:8px;
+    transition:background .15s ease, color .15s ease;
+  }
+  .switch-btn.active{background:var(--purple); color:#fff; box-shadow:0 4px 14px rgba(123,47,247,0.3);}
+  .switch-btn .ico{font-size:16px;}
+
+  .view{display:none;}
+  .view.active{display:block;}
+
+  /* generic section / card system reused across both modes */
+  .section{padding:28px 20px 0;}
+  .section-eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:11.5px; font-weight:700; color:var(--purple);
+    background:var(--purple-soft); padding:5px 12px; border-radius:20px; margin-bottom:10px;
+  }
+  .section h2{font-size:19px; font-weight:800; letter-spacing:-0.01em; margin-bottom:6px;}
+  .section .lead{font-size:13.5px; color:var(--muted); margin-bottom:14px;}
+
+  .card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:18px 20px;}
+  .card + .card{margin-top:10px;}
+  .card h3{font-size:13.5px; font-weight:700; margin-bottom:8px;}
+  .card p{font-size:13px; color:#3a3a4a;}
+
+  .row-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  @media (max-width:560px){ .row-grid{grid-template-columns:1fr;} }
+
+  /* identity header card */
+  .id-card{
+    display:flex; align-items:center; gap:14px;
+    background:linear-gradient(135deg, var(--purple), #a855f7);
+    border-radius:18px; padding:20px; color:#fff; margin:20px 20px 0;
+  }
+  .id-avatar{
+    width:56px; height:56px; border-radius:14px; background:rgba(255,255,255,0.18);
+    display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;
+  }
+  .id-body{flex:1; min-width:0;}
+  .id-name{font-size:17px; font-weight:800;}
+  .id-meta{font-size:12px; opacity:0.85; margin-top:2px;}
+  .id-code{
+    background:rgba(255,255,255,0.18); border-radius:10px; padding:6px 10px;
+    font-size:12px; font-weight:700; text-align:center; flex-shrink:0;
+  }
+  .id-code small{display:block; font-size:9px; font-weight:600; opacity:0.8; text-transform:uppercase;}
+
+  /* profile rows */
+  .profile-row{display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-bottom:1px solid var(--border); font-size:13px;}
+  .profile-row:last-child{border-bottom:none;}
+  .profile-row .k{color:var(--muted);}
+  .profile-row .v{font-weight:600; text-align:right;}
+  .avatar-upload{
+    display:flex; align-items:center; gap:12px; margin-bottom:12px;
+  }
+  .avatar-circle{width:48px; height:48px; border-radius:50%; background:var(--purple-soft); color:var(--purple); display:flex; align-items:center; justify-content:center; font-size:20px;}
+  .avatar-btn{font-size:12px; font-weight:700; color:var(--purple); background:var(--purple-soft); padding:8px 14px; border-radius:10px; cursor:pointer;}
+
+  /* oferta expandable */
+  details.oferta{margin-top:10px;}
+  details.oferta summary{
+    cursor:pointer; font-size:13px; font-weight:700; color:var(--purple);
+    list-style:none; display:flex; align-items:center; gap:6px;
+  }
+  details.oferta summary::-webkit-details-marker{display:none;}
+  details.oferta summary::before{content:"▸"; transition:transform .15s;}
+  details.oferta[open] summary::before{transform:rotate(90deg);}
+  details.oferta .oferta-body{font-size:12.5px; color:#3a3a4a; margin-top:10px; line-height:1.6;}
+
+  /* product cards */
+  .product-grid{display:grid; grid-template-columns:repeat(3, 1fr); gap:10px; margin-top:4px;}
+  @media (max-width:560px){ .product-grid{grid-template-columns:repeat(2, 1fr);} }
+  .product-card{background:var(--card); border:1px solid var(--border); border-radius:14px; overflow:hidden;}
+  .product-thumb{
+    height:72px; background:var(--purple-soft); display:flex; align-items:center; justify-content:center; font-size:24px;
+  }
+  .product-info{padding:10px;}
+  .product-code{font-size:10px; font-weight:700; color:var(--purple); margin-bottom:3px;}
+  .product-name{font-size:12px; font-weight:700; line-height:1.3;}
+  .product-price{font-size:12.5px; font-weight:800; margin-top:4px;}
+  .add-product-card{
+    border:1.5px dashed var(--border); border-radius:14px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    color:var(--muted); font-size:11.5px; font-weight:700; gap:6px; min-height:118px; cursor:pointer;
+  }
+  .add-product-card .plus{font-size:22px; color:var(--purple);}
+
+  /* toggle direct sale demo (compact) */
+  .toggle-row-demo{
+    display:flex; align-items:center; justify-content:space-between;
+    background:var(--bg); border-radius:12px; padding:12px 14px; margin-top:10px;
+  }
+  .toggle-row-demo .label{font-size:13px; font-weight:700;}
+  .toggle-row-demo .desc{font-size:11.5px; color:var(--muted); margin-top:2px;}
+  .switch-pill{
+    width:46px; height:26px; border-radius:20px; background:var(--border);
+    position:relative; cursor:pointer; flex-shrink:0;
+  }
+  .switch-pill::after{
+    content:""; position:absolute; top:3px; left:3px; width:20px; height:20px;
+    border-radius:50%; background:#fff; transition:transform .15s ease; box-shadow:0 1px 3px rgba(0,0,0,0.2);
+  }
+  .switch-pill.on{background:var(--green);}
+  .switch-pill.on::after{transform:translateX(20px);}
+
+  /* stat blocks */
+  .stat-block{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:16px 18px;}
+  .stat-block + .stat-block{margin-top:10px;}
+  .stat-block-head{display:flex; align-items:center; gap:9px; margin-bottom:12px;}
+  .stat-icon{width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:15px;}
+  .stat-icon.out{background:var(--purple-soft);}
+  .stat-icon.in{background:var(--green-soft);}
+  .stat-block-head h3{font-size:13.5px; font-weight:700;}
+  .stat-pair{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .stat-cell{background:var(--bg); border-radius:10px; padding:10px 12px;}
+  .stat-cell .val{font-size:19px; font-weight:800;}
+  .stat-cell .lbl{font-size:11px; color:var(--muted); margin-top:2px; line-height:1.35;}
+
+  /* balance */
+  .balance-card{background:linear-gradient(135deg, #1a1a2e, #2d2d4a); border-radius:16px; padding:18px; color:#fff;}
+  .balance-top{font-size:11.5px; color:rgba(255,255,255,0.6); margin-bottom:5px;}
+  .balance-amount{font-size:25px; font-weight:800; display:flex; align-items:center; gap:6px;}
+  .balance-amount .star{color:#ffd166;}
+
+  /* requests / mirror list */
+  .list-card{background:var(--card); border:1px solid var(--border); border-radius:16px; overflow:hidden;}
+  .list-item{display:flex; align-items:center; gap:11px; padding:12px 16px; border-bottom:1px solid var(--border);}
+  .list-item:last-child{border-bottom:none;}
+  .list-avatar{width:34px; height:34px; border-radius:9px; background:var(--purple-soft); color:var(--purple); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; flex-shrink:0;}
+  .list-body{flex:1; min-width:0;}
+  .list-name{font-size:13px; font-weight:700;}
+  .list-sub{font-size:11.5px; color:var(--muted); margin-top:1px;}
+  .list-right{font-size:11.5px; font-weight:700; color:var(--purple); text-align:right; flex-shrink:0;}
+  .pill{font-size:10.5px; font-weight:700; padding:4px 9px; border-radius:20px; white-space:nowrap;}
+  .pill.pending{background:var(--orange-soft); color:var(--orange);}
+  .pill.active{background:var(--green-soft); color:var(--green);}
+
+  /* analytics */
+  .metric-grid{display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:4px;}
+  .metric{background:var(--purple-soft); border-radius:11px; padding:11px 13px;}
+  .metric .m-ico{font-size:15px; margin-bottom:5px;}
+  .metric .m-val{font-size:16px; font-weight:800; color:var(--purple-dark);}
+  .metric .m-lbl{font-size:10.5px; font-weight:700; color:var(--purple-dark); opacity:0.8; margin-top:2px;}
+
+  /* mini flow (complaints) */
+  .mini-flow{display:flex; gap:6px; flex-wrap:wrap; margin-top:10px;}
+  .mini-node{flex:1; min-width:90px; background:var(--orange-soft); color:#b5651d; border-radius:10px; padding:10px; text-align:center; font-size:11px; font-weight:700;}
+  .mini-node.alt{background:var(--green-soft); color:#178a5b;}
+  .mini-sep{display:flex; align-items:center; color:var(--muted); font-weight:700;}
+
+  /* code badge */
+  .code-pill{background:var(--purple-soft); color:var(--purple-dark); font-size:11px; font-weight:800; padding:4px 10px; border-radius:8px; display:inline-block;}
+
+  .search-bar{display:flex; gap:8px; margin-top:4px;}
+  .search-bar input{
+    flex:1; border:1px solid var(--border); border-radius:11px; padding:11px 14px; font-size:13px;
+  }
+  .search-bar button{border:none; background:var(--purple); color:#fff; border-radius:11px; padding:0 16px; font-weight:700; font-size:13px; cursor:pointer;}
+  .filter-chips{display:flex; gap:7px; flex-wrap:wrap; margin-top:10px;}
+  .chip{font-size:11.5px; font-weight:700; padding:7px 12px; border-radius:20px; background:var(--bg); border:1px solid var(--border); color:#3a3a4a; cursor:pointer;}
+  .chip.active{background:var(--purple); color:#fff; border-color:var(--purple);}
+
+  .btn{width:100%; padding:13px 16px; border-radius:12px; border:none; font-size:13.5px; font-weight:700; cursor:pointer;}
+  .btn-primary{background:var(--purple); color:#fff;}
+  .btn-secondary{background:var(--purple-soft); color:var(--purple);}
+  .btn-ghost{background:var(--card); color:var(--text); border:1px solid var(--border);}
+
+  .footer-note{margin:30px 20px 0; text-align:center; font-size:11.5px; color:var(--muted);}
+</style>
+</head>
+<body>
+
+  <div class="switch-bar">
+    <div class="switch-top">
+      <div class="logo-badge">В</div>
+      <h1>BEROO · Дзеркало</h1>
+      <span class="sub">Демо режимів</span>
+    </div>
+    <div class="switcher">
+      <button class="switch-btn active" data-view="magazin"><span class="ico">🏪</span>Магазин</button>
+      <button class="switch-btn" data-view="bloger"><span class="ico">🎥</span>Блогер</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <!-- ============== MAGAZIN VIEW ============== -->
+    <div class="view active" id="view-magazin">
+
+      <div class="id-card">
+        <div class="id-avatar">🏪</div>
+        <div class="id-body">
+          <div class="id-name">VEO Store</div>
+          <div class="id-meta">Взуття та аксесуари · ★ 4.8 · працює з 09.2025</div>
+        </div>
+        <div class="id-code">12345<small>код магазину</small></div>
+      </div>
+
+      <div class="section">
+        <span class="section-eyebrow">Анкета</span>
+        <h2>Реквізити та умови</h2>
+        <div class="card">
+          <div class="profile-row"><span class="k">ПІП ФОП</span><span class="v">Іваненко Василь Петрович</span></div>
+          <div class="profile-row"><span class="k">ЄДРПОУ</span><span class="v">12345678</span></div>
+          <div class="profile-row"><span class="k">IBAN</span><span class="v">UA00 0000 0000 0000</span></div>
+          <div class="profile-row"><span class="k">Платіжний шлюз</span><span class="v">WayForPay ✓ підключено</span></div>
+          <div class="profile-row"><span class="k">Доставка</span><span class="v">Нова пошта ✓ підключено</span></div>
+          <div class="profile-row"><span class="k">Термін повернення</span><span class="v">14 днів</span></div>
+          <details class="oferta">
+            <summary>Прочитати умови оферти</summary>
+            <div class="oferta-body">
+              Продавець гарантує відповідність товару опису картки. Повернення приймається протягом 14 днів
+              за умови збереження товарного вигляду. Доставка здійснюється Новою поштою коштом, узгодженим
+              у картці товару. Оплата — через підключений платіжний шлюз; готівкою при отриманні умови
+              визначає продавець окремо.
+            </div>
+          </details>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-eyebrow">Товари</span>
+        <h2>Картка асортименту</h2>
+        <div class="product-grid">
+          <div class="product-card">
+            <div class="product-thumb">👟</div>
+            <div class="product-info">
+              <div class="product-code">Код 100</div>
+              <div class="product-name">Кросівки Urban</div>
+              <div class="product-price">2 500 ₴</div>
+            </div>
+          </div>
+          <div class="product-card">
+            <div class="product-thumb">👜</div>
+            <div class="product-info">
+              <div class="product-code">Код 101</div>
+              <div class="product-name">Сумка крос-боді</div>
+              <div class="product-price">980 ₴</div>
+            </div>
+          </div>
+          <div class="product-card">
+            <div class="product-thumb">🧢</div>
+            <div class="product-info">
+              <div class="product-code">Код 102</div>
+              <div class="product-name">Кепка Classic</div>
+              <div class="product-price">450 ₴</div>
+            </div>
+          </div>
+          <div class="add-product-card">
+            <span class="plus">+</span>
+            Додати товар
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-eyebrow">Налаштування продажу</span>
+        <h2>Перемикач «Продаж напряму»</h2>
+        <div class="card">
+          <div class="toggle-row-demo">
+            <div>
+              <div class="label">Продавати самостійно відвідувачам сайту</div>
+              <div class="desc">Вимкнено — товар купують лише через дзеркала партнерів</div>
+            </div>
+            <div class="switch-pill" id="directSaleToggle"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-eyebrow">Мережа дзеркал</span>
+        <h2>Хто і кого віддзеркалює</h2>
+        <div class="stat-block">
+          <div class="stat-block-head">
+            <div class="stat-icon in">📥</div>
+            <h3>Мене віддзеркалюють</h3>
+          </div>
+          <div class="stat-pair">
+            <div class="stat-cell"><div class="val">37</div><div class="lbl">сайтів-партнерів</div></div>
+            <div class="stat-cell"><div class="val">1 280</div><div class="lbl">товарних показів сумарно</div></div>
+          </div>
+        </div>
+        <div class="stat-block">
+          <div class="stat-block-head">
+            <div class="stat-icon out">📤</div>
+            <h3>Я віддзеркалюю</h3>
+          </div>
+          <div class="stat-pair">
+            <div class="stat-cell"><div class="val">2</div><div class="lbl">чужих магазини на своєму сайті</div></div>
+            <div class="stat-cell"><div class="val">14</div><div class="lbl">товарів сумарно</div></div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:10px;"><button class="btn btn-secondary">Керувати мережею</button></div>
+      </div>
+
+      <div class="section">
+        <span class="section-eyebrow">Запити на співпрацю</span>
+        <h2>Вхідні запити від блогерів</h2>
+        <div class="list-card">
+          <div class="list-item">
+            <div class="list-avatar">М</div>
+            <div class="list-body"><div class="list-name">@marina_style</div><div class="list-sub">Весь асортимент · ★ 3,9 тис бонусів</div></div>
+            <span class="pill pending">Очікує</span>
+          </div>
+          <div class="list-item">
+            <div class="list-avatar">К</div>
+            <div class="list-body"><div class="list-name">@katya_tt</div><div class="list-sub">1 товар · ★ 583 бонуси</div></div>
+            <span class="pill pending">Очікує</span>
+          </div>
+          <div class="list-item">
+            <div class="list-avatar">Д</div>
+            <div class="list-body"><div class="list-name">@denys_kicks</div><div class="list-sub">Категорія «Аксесуари» · ★ 27,6 тис бонусів</div></div>
+            <span class="pill pending">Очікує</span>
+          </div>
+        </div>
+        <div class="card" style="margin-top:10px;"><button class="btn btn-ghost">Керувати запитами</button></div>
+      </div>
+
+      <div class="section">
+        <span class="section-eyebrow">Бонуси</span>
+        <h2>Баланс по мережі</h2>
+        <div class="balance-card">
+          <div class="balance-top">Нараховано партнерам за спрацювання дзеркал</div>
+          <div class="balance-amount"><span class="star">★</span>18 400 бонусів</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-eyebrow">Аналітика</span>
+        <h2>Ефективність по партнерах</h2>
+        <p class="lead">Дані по сайту блогера @marina_style, який віддзеркалює ваш магазин.</p>
+        <div class="metric-grid">
+          <div class="metric"><div class="m-ico">👁️</div><div class="m-val">4 280</div><div class="m-lbl">відкриттів сайту</div></div>
+          <div class="metric"><div class="m-ico">📲</div><div class="m-val">62%</div><div class="m-lbl">трафік з TikTok</div></div>
+          <div class="metric"><div class="m-ico">⏱️</div><div class="m-val">48с</div><div class="m-lbl">середній час на сайті</div></div>
+          <div class="metric"><div class="m-ico">🛍️</div><div class="m-val">312</div><div class="m-lbl">додано в кошик</div></div>
+          <div class="metric"><div class="m-ico">🚫</div><div class="m-val">198</div><div class="m-lbl">кошиків покинуто</div></div>
+          <div class="metric"><div class="m-ico">💰</div><div class="m-val">54 600 ₴</div><div class="m-lbl">продано за місяць</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-eyebrow">Якість співпраці</span>
+        <h2>Скарги і повернення</h2>
+        <div class="mini-flow">
+          <div class="mini-node">2 скарги цього місяця</div>
+          <div class="mini-sep">→</div>
+          <div class="mini-node alt">Причина: затримка доставки</div>
+        </div>
+        <div class="card" style="margin-top:10px;">
+          <p>Повернень по товарах, проданих через @marina_style: <b>3%</b> — нижче середнього по мережі (7%).</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============== BLOGER VIEW ============== -->
+    <div class="view" id="view-bloger">
+
+      <div class="id-card">
+        <div class="id-avatar">🎥</div>
+        <div class="id-body">
+          <div class="id-name">@marina_style</div>
+          <div class="id-meta">Власних товарів: 0 · працює з 5 магазинами</div>
+        </div>
+        <div class="id-code">73291<small>код сайту</small></div>
+      </div>
+
+      <div class="section">
+        <span class="section-eyebrow">Анкета</span>
+        <h2>Профіль блогера</h2>
+        <div class="card">
+          <div class="avatar-upload">
+            <div class="avatar-circle">🙂</div>
+            <div class="avatar-btn">Завантажити фото</div>
+          </div>
+          <div class="profile-row"><span class="k">ПІБ</span><span class="v">Марина Ковальчук</span></div>
+          <div class="profile-row"><span class="k">Телефон</span><span class="v">+380 ХХ ХХХ ХХ ХХ</span></div>
+          <div class="profile-row"><span class="k">Viber / Telegram</span><span class="v">@marina_style</span></div>
+          <div class="profile-row"><span class="k">Instagram</span><span class="v">instagram.com/marina_style</span></div>
+          <div class="profile-row"><span class="k">TikTok</span><span class="v">tiktok.com/@marina_style</span></div>
+          <div class="profile-row"><span class="k">YouTube</span><span class="v">—</span></div>
+          <div class="profile-row"><span class="k">Спільноти</span><span class="v">Telegram-канал, 12 тис підписників</span></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-eyebrow">Пошук партнерів</span>
+        <h2>Знайти магазин</h2>
+        <div class="card">
+          <div class="search-bar">
+            <input type="text" placeholder="Код магазину, напр. 12345">
+            <button>Знайти</button>
+          </div>
+          <div class="filter-chips">
+            <span class="chip active">Усі категорії</span>
+            <span class="chip">За рейтингом</span>
+            <span class="chip">К-сть товарів</span>
+            <span class="chip">Тільки через партнерів</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-eyebrow">Моя мережа</span>
+        <h2>Партнерські магазини</h2>
+        <div class="list-card">
+          <div class="list-item">
+            <div class="list-avatar">🏪</div>
+            <div class="list-body"><div class="list-name">VEO Store · 12345</div><div class="list-sub">Весь асортимент · ставка 5%</div></div>
+            <span class="pill active">Активно</span>
+          </div>
+          <div class="list-item">
+            <div class="list-avatar">🏪</div>
+            <div class="list-body"><div class="list-name">Oleh Shop · 54321</div><div class="list-sub">Категорія «Взуття» · ставка 7%</div></div>
+            <span class="pill active">Активно</span>
+          </div>
+          <div class="list-item">
+            <div class="list-avatar">🏪</div>
+            <div class="list-body"><div class="list-name">Julia Trend · 90210</div><div class="list-sub">Категорія «Одяг» · ставка 6%</div></div>
+            <span class="pill pending">Очікує підтвердження</span>
+          </div>
+        </div>
+        <div class="card" style="margin-top:10px;"><button class="btn btn-secondary">Переглянути всі 5 магазинів</button></div>
+      </div>
+
+      <div class="section">
+        <span class="section-eyebrow">Історія</span>
+        <h2>Зміни ставок і бонусів</h2>
+        <div class="list-card">
+          <div class="list-item">
+            <div class="list-avatar">🏪</div>
+            <div class="list-body"><div class="list-name">VEO Store</div><div class="list-sub">Ставку змінено з 4% на 5%</div></div>
+            <div class="list-right">21.06.2026</div>
+          </div>
+          <div class="list-item">
+            <div class="list-avatar">🏪</div>
+            <div class="list-body"><div class="list-name">Oleh Shop</div><div class="list-sub">Нараховано 1 250 бонусів</div></div>
+            <div class="list-right">18.06.2026</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-eyebrow">Бонуси</span>
+        <h2>Мій баланс</h2>
+        <div class="balance-card">
+          <div class="balance-top">Нараховано за всю історію співпраці</div>
+          <div class="balance-amount"><span class="star">★</span>9 140 бонусів</div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-eyebrow">Аналітика</span>
+        <h2>Мій сайт</h2>
+        <p class="lead">Власних товарів немає — увесь трафік працює на партнерські магазини.</p>
+        <div class="metric-grid">
+          <div class="metric"><div class="m-ico">👁️</div><div class="m-val">4 280</div><div class="m-lbl">відкриттів сайту</div></div>
+          <div class="metric"><div class="m-ico">📲</div><div class="m-val">62% / 28% / 10%</div><div class="m-lbl">TikTok / Instagram / Telegram</div></div>
+          <div class="metric"><div class="m-ico">⏱️</div><div class="m-val">48с</div><div class="m-lbl">середній час на сайті</div></div>
+          <div class="metric"><div class="m-ico">🖱️</div><div class="m-val">3,2</div><div class="m-lbl">кліків на відвідувача</div></div>
+          <div class="metric"><div class="m-ico">🛍️</div><div class="m-val">312</div><div class="m-lbl">додано в кошик</div></div>
+          <div class="metric"><div class="m-ico">🚫</div><div class="m-val">198</div><div class="m-lbl">кошиків покинуто</div></div>
+          <div class="metric"><div class="m-ico">💰</div><div class="m-val">54 600 ₴</div><div class="m-lbl">продано за місяць</div></div>
+          <div class="metric"><div class="m-ico">🧾</div><div class="m-val">730 ₴</div><div class="m-lbl">середній чек</div></div>
+        </div>
+      </div>
+
+      <div class="section">
+        <span class="section-eyebrow">Якість роботи</span>
+        <h2>Скарги та повернення</h2>
+        <div class="mini-flow">
+          <div class="mini-node">Глядач подав скаргу</div>
+          <div class="mini-sep">→</div>
+          <div class="mini-node alt">Автоматично видно продавцю VEO Store</div>
+        </div>
+        <div class="card" style="margin-top:10px;"><button class="btn btn-ghost">Повідомити про проблему із замовленням</button></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer-note">BEROO · Дзеркало — демонстрація обох режимів інтерфейсу</div>
+
+<script>
+(function(){
+  var buttons = document.querySelectorAll('.switch-btn');
+  buttons.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      buttons.forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+      document.getElementById('view-' + btn.getAttribute('data-view')).classList.add('active');
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  var toggle = document.getElementById('directSaleToggle');
+  toggle.addEventListener('click', function(){
+    toggle.classList.toggle('on');
+    var desc = toggle.parentElement.querySelector('.desc');
+    if(toggle.classList.contains('on')){
+      desc.textContent = '\u0423\u0432\u0456\u043c\u043a\u043d\u0435\u043d\u043e \u2014 \u0442\u043e\u0432\u0430\u0440 \u043c\u043e\u0436\u043d\u0430 \u043a\u0443\u043f\u0438\u0442\u0438 \u0456 \u043d\u0430\u043f\u0440\u044f\u043c\u0443, \u0456 \u0447\u0435\u0440\u0435\u0437 \u0434\u0437\u0435\u0440\u043a\u0430\u043b\u0430';
+    } else {
+      desc.textContent = '\u0412\u0438\u043c\u043a\u043d\u0435\u043d\u043e \u2014 \u0442\u043e\u0432\u0430\u0440 \u043a\u0443\u043f\u0443\u044e\u0442\u044c \u043b\u0438\u0448\u0435 \u0447\u0435\u0440\u0435\u0437 \u0434\u0437\u0435\u0440\u043a\u0430\u043b\u0430 \u043f\u0430\u0440\u0442\u043d\u0435\u0440\u0456\u0432';
+    }
+  });
+})();
+</script>
+</body>
+</html>
