@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="color-scheme" content="light only">
+<title>Комерційний контент у TikTok — Правила та обмеження</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#FFFFFF;color:#0A0A0A;font-family:"Manrope",sans-serif;-webkit-font-smoothing:antialiased;font-size:15px;line-height:1.65;overflow-x:hidden;color-scheme:light only}
+
+.topbar{background:#0A0A0A;padding:8px 20px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.tb-brand{font-family:"Unbounded",sans-serif;font-size:.72rem;font-weight:900;color:#fff;letter-spacing:-.01em}
+.tb-brand em{color:#FF0050;font-style:normal}
+.tb-meta{font-size:.65rem;color:rgba(255,255,255,.35);letter-spacing:.04em}
+
+.hero{background:#0A0A0A;padding:48px 20px 40px;position:relative;overflow:hidden}
+.hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse 60% 55% at 80% 30%,rgba(255,0,80,.13),transparent 60%),radial-gradient(ellipse 40% 40% at 5% 85%,rgba(255,107,0,.08),transparent 55%);pointer-events:none}
+.hero-inner{max-width:900px;margin:0 auto;position:relative;z-index:1}
+.hero-kicker{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(255,255,255,.1);border-radius:40px;padding:4px 14px;font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45);margin-bottom:18px}
+.hero-kicker::before{content:"";width:6px;height:6px;border-radius:50%;background:#FF0050}
+.hero h1{font-family:"Unbounded",sans-serif;font-size:clamp(1.4rem,5vw,2.6rem);font-weight:900;letter-spacing:-.05em;line-height:1.08;color:#fff;margin-bottom:12px}
+.hero h1 em{font-style:normal;color:#FF0050}
+.hero-sub{font-size:.88rem;color:rgba(255,255,255,.45);max-width:600px;line-height:1.75;margin-bottom:24px}
+.hero-stats{display:flex;gap:24px;flex-wrap:wrap}
+.hs{display:flex;flex-direction:column;gap:2px}
+.hs-num{font-family:"Unbounded",sans-serif;font-size:1.5rem;font-weight:900;color:#fff;letter-spacing:-.04em}
+.hs-lbl{font-size:.62rem;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.08em}
+
+.wrap{max-width:900px;margin:0 auto;padding:0 16px}
+.section{padding:40px 0;border-bottom:1px solid #F0EFE9}
+.section:last-of-type{border-bottom:none}
+
+.sec-num{font-family:"JetBrains Mono",monospace;font-size:.58rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#FF0050;margin-bottom:6px}
+.sec-title{font-family:"Unbounded",sans-serif;font-size:clamp(1rem,3.5vw,1.4rem);font-weight:700;letter-spacing:-.03em;line-height:1.2;margin-bottom:12px}
+.sec-intro{font-size:.86rem;color:#555;max-width:680px;line-height:1.8;margin-bottom:28px}
+
+p{font-size:.86rem;color:#333;line-height:1.8;margin-bottom:12px}
+
+/* RULE CARD */
+.rule-card{background:#F5F4F0;border-radius:14px;padding:22px 20px;margin:20px 0;border-left:4px solid}
+.rule-card-header{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}
+.rule-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.9rem;flex-shrink:0}
+.rule-title{font-family:"Unbounded",sans-serif;font-size:.82rem;font-weight:700;letter-spacing:-.02em;line-height:1.3;margin-bottom:2px}
+.rule-source{font-family:"JetBrains Mono",monospace;font-size:.56rem;letter-spacing:.06em;color:#999}
+.rule-body{font-size:.83rem;color:#444;line-height:1.78}
+.rule-body strong{font-weight:700;color:#0A0A0A}
+
+.rc-ok{border-color:#00A878} .rc-ok .rule-icon{background:rgba(0,168,120,.12);color:#00A878} .rc-ok .rule-title{color:#006040}
+.rc-warn{border-color:#FF6B00} .rc-warn .rule-icon{background:rgba(255,107,0,.12);color:#FF6B00} .rc-warn .rule-title{color:#B04A00}
+.rc-ban{border-color:#FF0050} .rc-ban .rule-icon{background:rgba(255,0,80,.1);color:#CC0040} .rc-ban .rule-title{color:#990030}
+
+/* QUOTE BLOCK */
+.quote-block{background:#0A0A0A;border-radius:12px;padding:18px 20px;margin:20px 0;position:relative;overflow:hidden}
+.quote-block::before{content:"\201C";position:absolute;top:-8px;left:14px;font-family:"Unbounded",sans-serif;font-size:4rem;color:rgba(255,0,80,.15);line-height:1;pointer-events:none}
+.qb-source{font-family:"JetBrains Mono",monospace;font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.3);margin-bottom:10px}
+.qb-text{font-size:.86rem;color:rgba(255,255,255,.8);line-height:1.75;font-style:italic;position:relative;z-index:1}
+.qb-text strong{font-style:normal;color:#FF0050;font-weight:700}
+.qb-note{font-size:.74rem;color:rgba(255,255,255,.4);margin-top:10px;line-height:1.6;font-style:normal;border-top:1px solid rgba(255,255,255,.08);padding-top:10px}
+
+/* TWO-COL COMPARE */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.cmp-col{border-radius:11px;padding:16px}
+.cmp-col-ok{background:rgba(0,168,120,.07);border:1.5px solid rgba(0,168,120,.2)}
+.cmp-col-ban{background:rgba(255,0,80,.06);border:1.5px solid rgba(255,0,80,.18)}
+.cmp-head{font-family:"JetBrains Mono",monospace;font-size:.6rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.cmp-head-ok{color:#007850}
+.cmp-head-ban{color:#CC0040}
+.cmp-item{font-size:.8rem;color:#333;line-height:1.6;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.06)}
+.cmp-item:last-child{border-bottom:none}
+.cmp-item-ok::before{content:"✓ ";color:#00A878;font-weight:700}
+.cmp-item-ban::before{content:"✕ ";color:#FF0050;font-weight:700}
+
+/* STEP LIST */
+.steps{display:flex;flex-direction:column;gap:0;margin:18px 0}
+.step{display:grid;grid-template-columns:40px 1fr;gap:14px;padding:14px 0;border-bottom:1px solid #F0EFE9}
+.step:last-child{border-bottom:none}
+.step-num{font-family:"Unbounded",sans-serif;font-size:.8rem;font-weight:900;color:#FF0050;padding-top:2px}
+.step-title{font-size:.86rem;font-weight:700;color:#0A0A0A;margin-bottom:3px}
+.step-desc{font-size:.8rem;color:#555;line-height:1.65}
+
+/* CALLOUT */
+.callout{border-radius:11px;padding:14px 16px;margin:18px 0;border-left:3px solid;display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:start}
+.callout-icon{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0}
+.callout-label{font-family:"JetBrains Mono",monospace;font-size:.56rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.callout-text{font-size:.8rem;color:#444;line-height:1.7}
+.callout-text strong{font-weight:700;color:#0A0A0A}
+.co-ok{background:rgba(0,168,120,.06);border-color:#00A878} .co-ok .callout-icon{background:rgba(0,168,120,.12);color:#00A878} .co-ok .callout-label{color:#006040}
+.co-warn{background:rgba(255,107,0,.06);border-color:#FF6B00} .co-warn .callout-icon{background:rgba(255,107,0,.12);color:#FF6B00} .co-warn .callout-label{color:#A03000}
+.co-info{background:rgba(46,109,164,.06);border-color:#2E6DA4} .co-info .callout-icon{background:rgba(46,109,164,.12);color:#2E6DA4} .co-info .callout-label{color:#1A4F80}
+
+/* TAG BADGE */
+.tag-row{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.tag{font-family:"JetBrains Mono",monospace;font-size:.6rem;font-weight:700;letter-spacing:.06em;padding:3px 10px;border-radius:4px}
+.tag-ok{background:rgba(0,168,120,.1);color:#006040}
+.tag-warn{background:rgba(255,107,0,.1);color:#A03000}
+.tag-ban{background:rgba(255,0,80,.09);color:#990030}
+.tag-info{background:rgba(46,109,164,.1);color:#1A4F80}
+
+/* WORD BADGES */
+.word-row{display:flex;flex-wrap:wrap;gap:7px;margin:12px 0}
+.wr-word{padding:5px 11px;border-radius:6px;font-size:.76rem;font-weight:500;background:#F0EFE9;color:#555;border:1px solid #E5E2DA}
+.wr-warn{background:rgba(255,107,0,.08);color:#A03000;border-color:rgba(255,107,0,.2);font-weight:600}
+
+/* ADAPTIVE SCENARIO CARDS */
+.scenario-cards{display:flex;flex-direction:column;gap:12px;margin:20px 0}
+.sc-card{background:#F5F4F0;border-radius:12px;padding:16px;border:1px solid #E5E2DA;display:flex;flex-direction:column;gap:10px}
+.sc-header{display:flex;align-items:start;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.sc-title{font-size:.88rem;font-weight:700;color:#0A0A0A;line-height:1.4}
+.sc-badges{display:flex;gap:6px;flex-wrap:wrap}
+.sc-badge{font-family:"JetBrains Mono",monospace;font-size:.58rem;font-weight:700;letter-spacing:.04em;padding:3px 8px;border-radius:4px;text-transform:uppercase}
+.sc-bg-acc{background:#0A0A0A;color:#FFF}
+.sc-bg-ok{background:rgba(0,168,120,.12);color:#006040}
+.sc-bg-ban{background:rgba(255,0,80,.1);color:#CC0040}
+.sc-bg-neu{background:#E5E2DA;color:#555}
+.sc-footer{border-top:1px dashed #E5E2DA;padding-top:10px;display:flex;align-items:center;justify-content:space-between}
+.sc-label{font-family:"JetBrains Mono",monospace;font-size:.56rem;color:#888;text-transform:uppercase}
+.sc-status{font-family:"Unbounded",sans-serif;font-size:.72rem;font-weight:700;display:inline-flex;align-items:center;gap:4px}
+.sc-stat-ok{color:#00A878}
+.sc-stat-warn{color:#FF6B00}
+.sc-stat-ban{color:#FF0050}
+
+footer{background:#0A0A0A;padding:24px 20px;text-align:center}
+footer p{font-size:.68rem;color:rgba(255,255,255,.22);line-height:1.9}
+footer strong{color:rgba(255,255,255,.4);font-weight:600}
+
+@media(max-width:580px){
+  .compare{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="tb-brand"><em>VEO</em> FORCE · @vasil_veo</div>
+  <div class="tb-meta">TikTok Community Guidelines · Комерційний контент · 2026</div>
+</div>
+
+<div class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-inner">
+    <div class="hero-kicker">Правила TikTok · Комерція · Compliance</div>
+    <h1>Комерційний контент<br>у <em>TikTok</em> — правила</h1>
+    <p class="hero-sub">Детальний розбір офіційних правил TikTok щодо комерційної діяльності: що дозволено, що блокується і чому слова «ціна» та «купити» самі по собі не є табу — але контекст вирішує все.</p>
+    <div class="hero-stats">
+      <div class="hs"><span class="hs-num">3</span><span class="hs-lbl">типи порушень</span></div>
+      <div class="hs"><span class="hs-num">2</span><span class="hs-lbl">причини пессимізації</span></div>
+      <div class="hs"><span class="hs-num">5</span><span class="hs-lbl">сценаріїв розбору</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- UKRAINE REGIONAL NOTICE -->
+<div style="background:#FFF8E6;border-bottom:2px solid #FFB800;padding:14px 0">
+  <div class="wrap">
+    <div style="display:flex;align-items:flex-start;gap:12px">
+      <span style="font-size:1.1rem;flex-shrink:0;margin-top:1px">&#127482;&#127462;</span>
+      <div>
+        <div style="font-family:'Unbounded',sans-serif;font-size:.72rem;font-weight:900;color:#7A5000;letter-spacing:-.01em;margin-bottom:4px">TikTok Shop в Україні ще не запущений</div>
+        <div style="font-size:.8rem;color:#6A4400;line-height:1.7">Де на цій сторінці згадується <strong>TikTok Shop</strong> — це важливо для розуміння <em>майбутньої</em> логіки роботи платформи. Зараз в Україні функціонал готується до запуску, точних дат офіційно не оголошено, але всі технічні ознаки вказують на те, що це відбудеться відносно скоро. Краще розуміти ці правила заздалегідь.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 01. ГОЛОВНИЙ ПРИНЦИП ══ -->
+<div class="section">
+<div class="wrap">
+  <div class="sec-num">Розділ 01</div>
+  <h2 class="sec-title">Головний принцип: слова не табу — контекст вирішує</h2>
+  <p class="sec-intro">Перш ніж розбирати конкретні правила — найважливіший факт, який більшість продавців не знає: TikTok не забороняє слова «ціна», «купити» або «замовити». Заборонений — <strong>прихований комерційний намір без маркування</strong>.</p>
+
+  <div class="quote-block">
+    <div class="qb-source">TikTok Community Guidelines · Розділ «Integrity and Authenticity»</div>
+    <div class="qb-text">«We <strong>do not allow</strong> content that uses deceptive tactics to erode users' trust, such as artificially inflating content metrics or buying followers, misrepresenting the purpose of a page, using misleading content to drive traffic, or operating fake accounts.»</div>
+    <div class="qb-note">Переклад: забороняються <em>оманливі тактики</em> — приховування комерційного наміру, маніпулятивні заклики до дії. Сам факт комерції — не порушення.</div>
+  </div>
+
+  <div class="callout co-info">
+    <div class="callout-icon">&#128218;</div>
+    <div class="callout-body">
+      <div class="callout-label">Офіційне джерело</div>
+      <div class="callout-text"><strong>TikTok Support: «Promoting a brand, product, or service»</strong> — центральний документ, що регулює всі форми комерційного контенту. Вимагає активації перемикача «Commercial Content Disclosure» для будь-якого контенту з маркетинговим наміром.</div>
+    </div>
+  </div>
+
+  <p>Алгоритм TikTok розпізнає <strong>маркетинговий намір (marketing intent)</strong> автоматично — через комбінацію сигналів: назву товару, ціну в кадрі, заклики до дії, посилання. Якщо намір є, але маркування відсутнє — система інтерпретує це як приховану рекламу.</p>
+</div>
+</div>
+
+<!-- ══ 02. DISCLOSURE SWITCH ══ -->
+<div class="section">
+<div class="wrap">
+  <div class="sec-num">Розділ 02</div>
+  <h2 class="sec-title">Перемикач «Commercial Content Disclosure» — ключ до легального продажу</h2>
+  <p class="sec-intro">Без цього перемикача навіть найчесніший огляд товару може отримати обмеження охоплень. З ним — слова «ціна», «купити», «замовити» стають абсолютно легальними.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-body">
+        <div class="step-title">Де знаходиться перемикач</div>
+        <div class="step-desc">При завантаженні відео → розділ «More options» → «Disclose video content» → перемикач «Promote a brand, product, or service». Доступний для всіх акаунтів.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-body">
+        <div class="step-title">Що відбувається після активації</div>
+        <div class="step-desc">Відео автоматично отримує плашку <em>«Promotional content»</em> або <em>«Paid partnership»</em>. Алгоритм знімає обмеження на комерційну лексику.</div>
+      </div>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-body">
+        <div class="step-title">Чи впливає плашка на охоплення</div>
+        <div class="step-desc">Так — маркований контент може суворіше оцінюватися для потрапляння у загальний FYP, але він повністю захищений від жорсткого штрафу за приховану рекламу.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ 03. СЛОВА І СИГНАЛИ ══ -->
+<div class="section">
+<div class="wrap">
+  <div class="sec-num">Розділ 03</div>
+  <h2 class="sec-title">Слова і сигнали, що активують алгоритм маркетингового наміру</h2>
+  <p class="sec-intro">TikTok не веде публічний список «заборонених слів» — але є категорії сигналів, за якими алгоритм ідентифікує комерційний контент.</p>
+
+  <div class="compare">
+    <div class="cmp-col cmp-col-ok">
+      <div class="cmp-head cmp-head-ok">✓ З маркуванням — дозволено</div>
+      <div class="cmp-item cmp-item-ok">«Ціна — 450 грн, посилання в профілі»</div>
+      <div class="cmp-item cmp-item-ok">«Замовити можна за лінком у біо»</div>
+      <div class="cmp-item cmp-item-ok">«Промокод ROSSO дає знижку 15%»</div>
+      <div class="cmp-item cmp-item-ok">«Переходьте на сайт за посиланням»</div>
+    </div>
+    <div class="cmp-col cmp-col-ban">
+      <div class="cmp-head cmp-head-ban">✕ Без маркування — ризик</div>
+      <div class="cmp-item cmp-item-ban">Ті самі фрази без перемикача Disclosure</div>
+      <div class="cmp-item cmp-item-ban">«Пишіть у Telegram/Instagram для замовлення»</div>
+      <div class="cmp-item cmp-item-ban">QR-код на сторонній сайт у кадрі</div>
+      <div class="cmp-item cmp-item-ban">«Пишіть «ціна» у коментарях» (для обходу)</div>
+    </div>
+  </div>
+
+  <p>Ключові комерційні сигнали для нейромережі:</p>
+  <div class="word-row">
+    <span class="wr-word wr-warn">ціна</span>
+    <span class="wr-word wr-warn">купити</span>
+    <span class="wr-word wr-warn">замовити</span>
+    <span class="wr-word wr-warn">промокод</span>
+    <span class="wr-word wr-warn">знижка</span>
+    <span class="wr-word wr-warn">лінк у біо</span>
+    <span class="wr-word wr-warn">каталог</span>
+  </div>
+</div>
+</div>
+
+<!-- ══ 04. ПРАВИЛА TIKTOK SHOP ══ -->
+<div class="section">
+<div class="wrap">
+  <div class="sec-num">Розділ 04</div>
+  <h2 class="sec-title">Специфічні правила для e-commerce та бізнес-акаунтів</h2>
+
+  <div class="rule-card rc-ok">
+    <div class="rule-card-header">
+      <div class="rule-icon">✓</div>
+      <div class="rule-title-block">
+        <div class="rule-title">Прозорість ціноутворення (Stay Transparent With Pricing)</div>
+        <div class="rule-source">TikTok Shop Academy · Your Content Success Guide</div>
+      </div>
+    </div>
+    <div class="rule-body">
+      Правила <strong>дозволяють і заохочують</strong> вказувати ціну у відео та ефірах — але з однією умовою: ціна у відео <strong>повинна точно збігатися</strong> з ціною на цільовій сторінці сайту (або кошика).
+    </div>
+  </div>
+
+  <div class="rule-card rc-ban">
+    <div class="rule-card-header">
+      <div class="rule-icon">&#128683;</div>
+      <div class="rule-title-block">
+        <div class="rule-title">Виведення трафіку за межі TikTok (Off-platform Redirection)</div>
+        <div class="rule-source">TikTok Business Terms of Service · Section 6.3</div>
+      </div>
+    </div>
+    <div class="rule-body">
+      Для бізнес-профілів це <strong>критичне порушення</strong>. Заборонено закликати перейти в сторонні месенджери чи інші соцмережі, показувати номери телефонів або QR-коди у відео для оформлення замовлень в обхід офіційного клікабельного лінка у профілі.
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ 05. П'ЯТЬ СЦЕНАРІЇВ (ADAPTIVE BLOCK) ══ -->
+<div class="section">
+<div class="wrap">
+  <div class="sec-num">Розділ 05</div>
+  <h2 class="sec-title">Аналіз 5 реальних сценаріїв</h2>
+  <p class="sec-intro">Як алгоритми модерації оцінюють різні типи публікацій. Спрощено та адаптовано під будь-який екран:</p>
+
+  <div class="scenario-cards">
+    
+    <!-- Сценарій 1 -->
+    <div class="sc-card">
+      <div class="sc-header">
+        <div class="sc-title">Огляд товару з ціною та фразою «купити за лінком у біо»</div>
+        <div class="sc-badges">
+          <span class="sc-badge sc-bg-acc">Особистий</span>
+          <span class="sc-badge sc-bg-ok">Disclosure ON</span>
+        </div>
+      </div>
+      <div class="sc-footer">
+        <span class="sc-label">Статус модерації</span>
+        <span class="sc-status sc-stat-ok">✓ Дозволено</span>
+      </div>
+    </div>
+
+    <!-- Сценарій 2 -->
+    <div class="sc-card">
+      <div class="sc-header">
+        <div class="sc-title">Той самий огляд товару з комерційними закликами, але без маркування</div>
+        <div class="sc-badges">
+          <span class="sc-badge sc-bg-acc">Особистий</span>
+          <span class="sc-badge sc-bg-ban">Без маркування</span>
+        </div>
+      </div>
+      <div class="sc-footer">
+        <span class="sc-label">Статус модерації</span>
+        <span class="sc-status sc-stat-warn">⚠ Обмеження FYP</span>
+      </div>
+    </div>
+
+    <!-- Сценарій 3 -->
+    <div class="sc-card">
+      <div class="sc-header">
+        <div class="sc-title">Заклик «Напишіть нам у Telegram для замовлення» + ціна в кадрі</div>
+        <div class="sc-badges">
+          <span class="sc-badge sc-bg-acc">Будь-який</span>
+          <span class="sc-badge sc-bg-neu">Позаплатформний лінк</span>
+        </div>
+      </div>
+      <div class="sc-footer">
+        <span class="sc-label">Статус модерації</span>
+        <span class="sc-status sc-stat-ban">✕ Блокування відео</span>
+      </div>
+    </div>
+
+    <!-- Сценарій 4 -->
+    <div class="sc-card">
+      <div class="sc-header">
+        <div class="sc-title">Ціна, озвучена у відео чи на стрімі, нижча за реальну ціну при оплаті</div>
+        <div class="sc-badges">
+          <span class="sc-badge sc-bg-acc">Бізнес / Shop</span>
+          <span class="sc-badge sc-bg-ok">Disclosure ON</span>
+        </div>
+      </div>
+      <div class="sc-footer">
+        <span class="sc-label">Статус модерації</span>
+        <span class="sc-status sc-stat-ban">✕ Видалення (Клікбейт)</span>
+      </div>
+    </div>
+
+    <!-- Сценарій 5 -->
+    <div class="sc-card">
+      <div class="sc-header">
+        <div class="sc-title">Афіліат-криейтор показує продукт і веде на партнерський лінк</div>
+        <div class="sc-badges">
+          <span class="sc-badge sc-bg-acc">Особистий</span>
+          <span class="sc-badge sc-bg-ok">Paid Partnership</span>
+        </div>
+      </div>
+      <div class="sc-footer">
+        <span class="sc-label">Статус модерації</span>
+        <span class="sc-status sc-stat-ok">✓ Дозволено</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="callout co-warn">
+    <div class="callout-icon">⚠</div>
+    <div class="callout-body">
+      <div class="callout-label">Важливо про ліміти розповсюдження</div>
+      <div class="callout-text">TikTok офіційно використовує термін <strong>«content distribution restrictions»</strong> замість міфічного «тіньового бану». Якщо система виявляє немаркований комерційний намір, відео просто перестає просуватися на холодну аудиторію (у стрічку «Рекомендації»).</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<footer>
+  <p><strong>VEO FORCE · @vasil_veo · TikTok Compliance Guide</strong><br>
+  Джерела: TikTok Community Guidelines · TikTok Support: Promoting a brand, product, or service<br>
+  TikTok Ads Manager Help Center · TikTok Shop Academy · TikTok Business Terms of Service</p>
+</footer>
+
+</body>
+</html>
