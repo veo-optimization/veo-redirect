@@ -1,0 +1,1855 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дзеркало — прототип модуля BEROO CRM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --purple-900:#2E1065;
+  --purple-700:#5B21B6;
+  --purple-600:#6D28D9;
+  --purple-500:#7B2FF7;
+  --purple-400:#9D5CF9;
+  --purple-100:#F1EAFE;
+  --purple-50:#F7F5FD;
+  --gold-500:#E3A419;
+  --gold-100:#FDF1DA;
+  --ink-900:#181120;
+  --ink-700:#3A3348;
+  --ink-500:#6B647C;
+  --ink-300:#A69FB5;
+  --line:#E8E3F5;
+  --bg:#F6F4FB;
+  --card:#FFFFFF;
+  --green:#16A34A;
+  --green-100:#E6F7EC;
+  --red:#DC2626;
+  --red-100:#FDEAEA;
+  --amber:#D97706;
+  --radius:16px;
+  --radius-sm:10px;
+  --shadow-card: 0 1px 2px rgba(24,17,32,0.04), 0 8px 24px -12px rgba(46,16,101,0.10);
+  --shadow-pop: 0 20px 60px -12px rgba(46,16,101,0.35);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Inter',sans-serif;
+  background:var(--bg);
+  color:var(--ink-900);
+  -webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+h1,h2,h3,h4,.font-display{font-family:'Manrope',sans-serif;}
+button{font-family:inherit;cursor:pointer;}
+a{color:inherit;text-decoration:none;}
+::selection{background:var(--purple-100);}
+
+/* ---------- Star glyph ---------- */
+.star{color:var(--gold-500);}
+
+/* ---------- App shell (mobile-first: single column by default) ---------- */
+.app{display:flex;flex-direction:column;min-height:100vh;}
+@media (min-width:900px){
+  .app{flex-direction:row;}
+}
+
+/* ---------- Sidebar (hidden on mobile — topbar nav takes over) ---------- */
+.sidebar{display:none;}
+@media (min-width:900px){
+  .sidebar{
+    width:248px;
+    flex-shrink:0;
+    background:linear-gradient(180deg,var(--purple-900) 0%, #1E0B47 100%);
+    color:#fff;
+    display:flex;
+    flex-direction:column;
+    padding:22px 14px;
+    position:sticky;
+    top:0;
+    height:100vh;
+  }
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:6px 10px 22px 10px;
+}
+.brand-mark{
+  width:34px;height:34px;border-radius:10px;
+  background:linear-gradient(135deg,var(--purple-400),var(--gold-500));
+  display:flex;align-items:center;justify-content:center;
+  font-size:17px;
+  flex-shrink:0;
+}
+.brand-text .name{font-family:'Manrope',sans-serif;font-weight:800;font-size:15.5px;letter-spacing:.2px;}
+.brand-text .sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px;}
+
+.nav-group-label{
+  font-size:10.5px;text-transform:uppercase;letter-spacing:.08em;
+  color:rgba(255,255,255,.38);
+  margin:14px 12px 6px;
+  font-weight:700;
+}
+.nav-item{
+  display:flex;align-items:center;gap:11px;
+  padding:10px 12px;
+  border-radius:11px;
+  color:rgba(255,255,255,.72);
+  font-size:13.6px;font-weight:600;
+  margin-bottom:2px;
+  transition:background .15s, color .15s;
+  position:relative;
+  border:none;background:transparent;width:100%;text-align:left;
+}
+.nav-item .ic{width:18px;height:18px;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.nav-item .who{
+  margin-left:auto;font-size:9.5px;font-weight:700;text-transform:uppercase;
+  padding:2px 6px;border-radius:99px;letter-spacing:.03em;
+  background:rgba(255,255,255,.10);color:rgba(255,255,255,.55);
+}
+.nav-item:hover{background:rgba(255,255,255,.06);color:#fff;}
+.nav-item.active{background:rgba(255,255,255,.14);color:#fff;}
+.nav-item.active::before{
+  content:"";position:absolute;left:-14px;top:8px;bottom:8px;width:3px;
+  background:var(--gold-500);border-radius:0 4px 4px 0;
+}
+.nav-item.active .who{background:var(--gold-500);color:#3A2400;}
+
+.sidebar-foot{
+  margin-top:auto;
+  padding:12px;
+  border-radius:12px;
+  background:rgba(255,255,255,.06);
+  font-size:11.5px;
+  color:rgba(255,255,255,.55);
+  line-height:1.5;
+}
+.sidebar-foot b{color:rgba(255,255,255,.85);}
+
+/* ---------- Main ---------- */
+.main{flex:1;min-width:0;display:flex;flex-direction:column;}
+.topbar{
+  background:rgba(246,244,251,.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+  position:sticky;top:0;z-index:20;
+}
+.topbar-brand{
+  display:flex;align-items:center;gap:8px;
+  padding:12px 16px 0;font-family:'Manrope',sans-serif;font-weight:800;font-size:14px;color:var(--purple-700);
+}
+@media (min-width:900px){ .topbar-brand{display:none;} }
+
+/* Role switcher — mobile-first: full-width scroll row of 3 big tabs */
+.role-switch{
+  display:flex;gap:6px;
+  padding:10px 12px;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.role-switch::-webkit-scrollbar{display:none;}
+.role-btn{
+  flex:1;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  padding:10px 10px;border-radius:11px;
+  border:1px solid var(--line);background:#fff;
+  font-size:12.5px;font-weight:700;color:var(--ink-500);
+  white-space:nowrap;transition:all .15s;
+}
+.role-btn .rb-ic{font-size:14px;}
+.role-btn.active{
+  background:var(--purple-500);border-color:var(--purple-500);color:#fff;
+  box-shadow:0 6px 16px -6px rgba(123,47,247,.55);
+}
+.role-btn.active.role-blogger{background:var(--gold-500);border-color:var(--gold-500);box-shadow:0 6px 16px -6px rgba(227,164,25,.5);}
+.role-btn.active.role-buyer{background:var(--green);border-color:var(--green);box-shadow:0 6px 16px -6px rgba(22,163,74,.45);}
+
+/* Sub-nav chips — the views available within the selected role */
+.subnav{
+  display:flex;gap:8px;
+  padding:0 12px 12px;
+  overflow-x:auto;-webkit-overflow-scrolling:touch;
+}
+.subnav::-webkit-scrollbar{display:none;}
+.subnav-chip{
+  flex-shrink:0;
+  display:flex;align-items:center;gap:6px;
+  padding:8px 14px;border-radius:99px;
+  border:1px solid var(--line);background:#fff;
+  font-size:12.5px;font-weight:600;color:var(--ink-700);
+}
+.subnav-chip.active{border-color:var(--purple-400);background:var(--purple-50);color:var(--purple-600);}
+
+@media (min-width:900px){
+  .role-switch{padding:14px 32px 0;max-width:520px;gap:8px;}
+  .subnav{padding:10px 32px 14px;}
+}
+
+.view{display:none;padding:20px 16px 50px;max-width:1240px;}
+@media (min-width:900px){
+  .view{padding:28px 32px 60px;}
+}
+.view.active{display:block;animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+
+.view-head{margin-bottom:22px;}
+.view-head .eyebrow{
+  font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;
+  color:var(--purple-500);display:flex;align-items:center;gap:6px;margin-bottom:6px;
+}
+.view-head h1{font-size:26px;font-weight:800;margin:0 0 6px;letter-spacing:-.01em;}
+.view-head p{font-size:13.6px;color:var(--ink-500);margin:0;max-width:620px;line-height:1.55;}
+
+/* ---------- Generic ---------- */
+.card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow-card);
+}
+.btn{
+  display:inline-flex;align-items:center;gap:6px;justify-content:center;
+  padding:9px 16px;border-radius:10px;font-size:13px;font-weight:700;
+  border:1px solid transparent;transition:all .15s;white-space:nowrap;
+}
+.btn-primary{background:var(--purple-500);color:#fff;}
+.btn-primary:hover{background:var(--purple-600);}
+.btn-ghost{background:#fff;color:var(--ink-700);border-color:var(--line);}
+.btn-ghost:hover{border-color:var(--purple-400);color:var(--purple-600);}
+.btn-soft{background:var(--purple-50);color:var(--purple-600);}
+.btn-soft:hover{background:var(--purple-100);}
+.btn-danger{background:var(--red-100);color:var(--red);}
+.btn-danger:hover{background:#fbd6d6;}
+.btn-sm{padding:6px 11px;font-size:12px;border-radius:8px;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+
+.badge{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:3px 9px;border-radius:99px;font-size:11px;font-weight:700;
+}
+.badge-green{background:var(--green-100);color:var(--green);}
+.badge-gold{background:var(--gold-100);color:#8A5A00;}
+.badge-purple{background:var(--purple-100);color:var(--purple-600);}
+.badge-gray{background:#F1EFF7;color:var(--ink-500);}
+.badge-red{background:var(--red-100);color:var(--red);}
+
+.avatar{
+  border-radius:50%;object-fit:cover;flex-shrink:0;background:var(--purple-100);
+}
+.toast-wrap{position:fixed;bottom:22px;right:22px;z-index:999;display:flex;flex-direction:column;gap:10px;}
+.toast{
+  background:var(--ink-900);color:#fff;padding:12px 18px;border-radius:12px;
+  font-size:13px;font-weight:600;box-shadow:var(--shadow-pop);
+  display:flex;align-items:center;gap:9px;
+  animation:toastIn .25s ease;
+  max-width:320px;
+}
+.toast .dot{width:8px;height:8px;border-radius:50%;background:var(--green);flex-shrink:0;}
+@keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(24,17,32,.5);backdrop-filter:blur(2px);
+  display:none;align-items:center;justify-content:center;z-index:200;padding:20px;
+}
+.modal-overlay.active{display:flex;}
+.modal{
+  background:#fff;border-radius:20px;max-width:520px;width:100%;
+  box-shadow:var(--shadow-pop);max-height:88vh;overflow:auto;
+  animation:modalIn .2s ease;
+}
+@keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(8px);}to{opacity:1;transform:scale(1) translateY(0);}}
+.modal-head{padding:20px 22px 14px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:12px;}
+.modal-head h3{margin:0;font-size:17px;font-weight:800;}
+.modal-head p{margin:4px 0 0;font-size:12.5px;color:var(--ink-500);}
+.modal-close{margin-left:auto;background:#F1EFF7;border:none;width:28px;height:28px;border-radius:50%;font-size:14px;color:var(--ink-500);flex-shrink:0;}
+.modal-body{padding:20px 22px;}
+.modal-foot{padding:16px 22px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;}
+
+::-webkit-scrollbar{width:9px;height:9px;}
+::-webkit-scrollbar-thumb{background:#D9D3EC;border-radius:99px;}
+::-webkit-scrollbar-track{background:transparent;}
+
+.hint-banner{
+  display:flex;gap:12px;align-items:flex-start;
+  background:var(--purple-50);border:1px solid var(--purple-100);
+  border-radius:14px;padding:14px 16px;margin-bottom:20px;font-size:12.8px;color:var(--ink-700);line-height:1.5;
+}
+.hint-banner .ic{color:var(--purple-500);font-size:16px;flex-shrink:0;margin-top:1px;}
+
+/* ---------- Info FAB (top-right "i" — always visible, opens system-logic explainer) ---------- */
+.info-fab{
+  position:fixed;top:10px;right:10px;z-index:50;
+  width:34px;height:34px;border-radius:50%;
+  background:#fff;border:1.5px solid var(--purple-300, var(--purple-400));
+  color:var(--purple-600);font-family:'Manrope',sans-serif;font-weight:800;font-size:15px;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 6px 18px -6px rgba(46,16,101,.35);
+  transition:transform .15s, box-shadow .15s;
+}
+.info-fab:hover{transform:scale(1.07);box-shadow:0 8px 22px -6px rgba(46,16,101,.45);}
+@media (min-width:900px){
+  .info-fab{top:16px;right:20px;width:38px;height:38px;font-size:16px;}
+}
+
+/* ---------- Mobile-first responsive tables (card layout below 640px) ---------- */
+.resp-table{width:100%;border-collapse:collapse;font-size:13px;}
+.resp-table th{text-align:left;font-size:10.8px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-300);font-weight:700;padding:0 14px 10px;border-bottom:1px solid var(--line);}
+.resp-table td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:middle;}
+.resp-table tr:last-child td{border-bottom:none;}
+@media (max-width:640px){
+  .resp-table thead{position:absolute;left:-9999px;top:-9999px;}
+  .resp-table, .resp-table tbody, .resp-table tr, .resp-table td{display:block;width:100%;}
+  .resp-table tr{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;padding:10px 12px;background:#fff;}
+  .resp-table td{border-bottom:1px dashed var(--line);padding:8px 2px 8px 46%;position:relative;text-align:right;min-height:20px;}
+  .resp-table td:last-child{border-bottom:none;}
+  .resp-table td::before{
+    content:attr(data-label);
+    position:absolute;left:2px;top:8px;width:44%;
+    text-align:left;font-size:10.8px;font-weight:700;color:var(--ink-500);
+    text-transform:uppercase;letter-spacing:.03em;
+  }
+  .resp-table td[data-label=""]::before{content:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">🪞</div>
+      <div class="brand-text">
+        <div class="name">Дзеркало</div>
+        <div class="sub">модуль BEROO CRM</div>
+      </div>
+    </div>
+
+    <div class="nav-group-label">Огляд</div>
+    <button class="nav-item active" data-view="store" onclick="selectView('store')">
+      <span class="ic">🏬</span> Магазин <span class="who">продавець</span>
+    </button>
+    <button class="nav-item" data-view="blogger" onclick="selectView('blogger')">
+      <span class="ic">🎥</span> Блогер <span class="who">блогер</span>
+    </button>
+
+    <div class="nav-group-label">Співпраця</div>
+    <button class="nav-item" data-view="application" onclick="selectView('application')">
+      <span class="ic">📝</span> Заявки <span class="who">продавець</span>
+    </button>
+    <button class="nav-item" data-view="request" onclick="selectView('request')">
+      <span class="ic">🤝</span> Запит <span class="who">блогер</span>
+    </button>
+
+    <div class="nav-group-label">Продажі</div>
+    <button class="nav-item" data-view="orders" onclick="selectView('orders')">
+      <span class="ic">📦</span> Замовлення <span class="who">блогер</span>
+    </button>
+    <button class="nav-item" data-view="cart" onclick="selectView('cart')">
+      <span class="ic">🛒</span> Кошик <span class="who">покупець</span>
+    </button>
+
+    <div class="sidebar-foot">
+      Це <b>демонстраційний прототип</b>. Дані вигадані, кнопки імітують реальну логіку системи без підключення до бекенду.
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-brand">🪞 Дзеркало</div>
+      <div class="role-switch" id="roleSwitch"></div>
+      <div class="subnav" id="subNav"></div>
+    </div>
+
+    <button class="info-fab" onclick="openInfo()" aria-label="Довідка про логіку Дзеркало">і</button>
+
+    <!-- ===================== VIEW: STORE (seller) ===================== -->
+    <section class="view active" id="view-store"></section>
+
+    <!-- ===================== VIEW: BLOGGER (creator profile) ===================== -->
+    <section class="view" id="view-blogger"></section>
+
+    <!-- ===================== VIEW: APPLICATION (seller inbox) ===================== -->
+    <section class="view" id="view-application"></section>
+
+    <!-- ===================== VIEW: REQUEST (blogger search) ===================== -->
+    <section class="view" id="view-request"></section>
+
+    <!-- ===================== VIEW: ORDERS (blogger) ===================== -->
+    <section class="view" id="view-orders"></section>
+
+    <!-- ===================== VIEW: CART (buyer) ===================== -->
+    <section class="view" id="view-cart"></section>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- FIXATION MODAL -->
+<div class="modal-overlay" id="fixationModal">
+  <div class="modal" id="fixationModalContent"></div>
+</div>
+
+<!-- GENERIC DETAIL MODAL (blogger full profile from within lists) -->
+<div class="modal-overlay" id="profileModal">
+  <div class="modal" id="profileModalContent" style="max-width:640px;"></div>
+</div>
+
+<!-- INFO MODAL: how Дзеркало works -->
+<div class="modal-overlay" id="infoModal">
+  <div class="modal" id="infoModalContent" style="max-width:820px;"></div>
+</div>
+
+<script>
+/* ============================================================
+   ДЗЕРКАЛО — демонстраційні дані прототипу
+   Усі імена, суми та історії вигадані для демонстрації логіки.
+   ============================================================ */
+
+const CURRENT_STORE = {
+  name: "Shafa Trend",
+  category: "Жіночий одяг та аксесуари",
+  id: "ST-2291",
+  rating: 4.8,
+  productsCount: 214,
+  directSales: true
+};
+
+// ---------- Bloggers working with the current store ----------
+const STORE_BLOGGERS = [
+  {
+    id: "bl-1",
+    name: "Марина Костенко",
+    handle: "@marina.style",
+    city: "Київ",
+    avatarBg: "#F7C9E0",
+    followers: "62 400",
+    totalStars: 4820,
+    storeStars: 2315,
+    lastFixation: { number: 4, stars: 1537, date: "28.06.2026" },
+    rate: 12,
+    status: "active",
+    rating: 4.9,
+    ordersWithStore: 41,
+    fixations: [
+      { number: 1, stars: 410, date: "02.02.2026" },
+      { number: 2, stars: 860, date: "14.03.2026" },
+      { number: 3, stars: 1180, date: "05.05.2026" },
+      { number: 4, stars: 1537, date: "28.06.2026" }
+    ]
+  },
+  {
+    id: "bl-2",
+    name: "Богдан Северин",
+    handle: "@bogdan.wear",
+    city: "Львів",
+    avatarBg: "#CFE0FB",
+    followers: "38 100",
+    totalStars: 2210,
+    storeStars: 980,
+    lastFixation: { number: 2, stars: 640, date: "11.06.2026" },
+    rate: 10,
+    status: "active",
+    rating: 4.6,
+    ordersWithStore: 19,
+    fixations: [
+      { number: 1, stars: 260, date: "20.04.2026" },
+      { number: 2, stars: 640, date: "11.06.2026" }
+    ]
+  },
+  {
+    id: "bl-3",
+    name: "Софія Ткаченко",
+    handle: "@sofia.dailylook",
+    city: "Одеса",
+    avatarBg: "#D8F0DA",
+    followers: "115 000",
+    totalStars: 9040,
+    storeStars: 3720,
+    lastFixation: { number: 6, stars: 3060, date: "30.06.2026" },
+    rate: 14,
+    status: "active",
+    rating: 5.0,
+    ordersWithStore: 88,
+    fixations: [
+      { number: 1, stars: 520, date: "12.01.2026" },
+      { number: 2, stars: 1140, date: "03.02.2026" },
+      { number: 3, stars: 1810, date: "22.03.2026" },
+      { number: 4, stars: 2340, date: "09.04.2026" },
+      { number: 5, stars: 2680, date: "27.05.2026" },
+      { number: 6, stars: 3060, date: "30.06.2026" }
+    ]
+  },
+  {
+    id: "bl-4",
+    name: "Дарина Полюга",
+    handle: "@daryna.mode",
+    city: "Тернопіль",
+    avatarBg: "#FBE7C6",
+    followers: "9 800",
+    totalStars: 640,
+    storeStars: 210,
+    lastFixation: null,
+    rate: 8,
+    status: "paused",
+    rating: 4.2,
+    ordersWithStore: 6,
+    fixations: []
+  },
+  {
+    id: "bl-5",
+    name: "Роман Дацюк",
+    handle: "@roman.urbanfit",
+    city: "Дніпро",
+    avatarBg: "#E5DBF9",
+    followers: "27 300",
+    totalStars: 1510,
+    storeStars: 705,
+    lastFixation: { number: 1, stars: 480, date: "18.05.2026" },
+    rate: 11,
+    status: "active",
+    rating: 4.7,
+    ordersWithStore: 14,
+    fixations: [
+      { number: 1, stars: 480, date: "18.05.2026" }
+    ]
+  }
+];
+
+// ---------- Full blogger questionnaire (for "Блогер" view — Марина) ----------
+const BLOGGER_PROFILE = {
+  id: "bl-1",
+  name: "Марина Костенко",
+  handle: "@marina.style",
+  city: "Київ",
+  age: 27,
+  avatarBg: "#F7C9E0",
+  bio: "Створюю відео про повсякденні образи та огляди українських брендів. Знімаю у власній міні-студії, монтую сама.",
+  contacts: {
+    phone: "+380 67 ••• 45 12",
+    telegram: "@marina_style_tg",
+    instagram: "@marina.style",
+    tiktok: "@marina.style",
+    youtube: "Marina Style — образи щодня",
+    facebook: "Marina Kostenko"
+  },
+  followersBreakdown: [
+    { platform: "TikTok", value: "62 400" },
+    { platform: "Instagram", value: "34 900" },
+    { platform: "YouTube", value: "6 100" }
+  ],
+  work: {
+    activity: "Контент-мейкер, фултайм",
+    fop: true,
+    ownShop: false,
+    helpers: "Монтажер на аутсорсі, 2 відео/тиждень",
+    experience: "3 роки у створенні відео-огляди",
+    studio: true,
+    gear: "Sony ZV-E10, кільцеве світло, петличний мікрофон",
+    interests: ["Мода", "Українські бренди", "Повсякденний стиль", "Розпаковки"],
+    contentThemes: ["Луки дня", "Огляди тканин", "Порівняння розмірів"],
+    sampleTerms: ["Подарунок", "Купівля зі знижкою", "Повернення після зйомки"]
+  },
+  stats: {
+    totalStars: 4820,
+    partnerStores: 6,
+    ordersTotal: 132,
+    salesTotal: "486 200 грн",
+    rating: 4.9
+  },
+  partnerStoresList: [
+    { name: "Shafa Trend", stars: 2315, rate: 12 },
+    { name: "Uzory.ua", stars: 1240, rate: 9 },
+    { name: "Linen&Co", stars: 640, rate: 15 },
+    { name: "Bright Basics", stars: 385, rate: 10 },
+    { name: "MOSAIC studio", stars: 180, rate: 11 },
+    { name: "Kvit Store", stars: 60, rate: 8 }
+  ]
+};
+
+// ---------- Applications inbox (seller sees 10 blogger applications) ----------
+const APPLICATIONS = [
+  {
+    id: "ap-1", name: "Юлія Ковбаса", handle: "@yulia.everyday", city: "Харків", avatarBg:"#F9D8D8",
+    followers: "18 200", totalStars: 1120, expectedRate: 10,
+    note: "Хочу віддзеркалити категорію суконь, знімаю щотижневі луки.",
+    socials:["TikTok","Instagram"], storesCount: 3, mirroredItems: 14, ordersTotal: 22
+  },
+  {
+    id: "ap-2", name: "Максим Гринчук", handle: "@maxim.streetfit", city: "Київ", avatarBg:"#D7E8FB",
+    followers: "44 600", totalStars: 2890, expectedRate: 13,
+    note: "Спеціалізуюсь на чоловічому вбранні, є досвід з 5 магазинами.",
+    socials:["TikTok","YouTube"], storesCount: 5, mirroredItems: 31, ordersTotal: 58
+  },
+  {
+    id: "ap-3", name: "Ірина Мельник", handle: "@irina.cozylook", city: "Львів", avatarBg:"#E3F2D9",
+    followers: "9 400", totalStars: 410, expectedRate: 8,
+    note: "Новачок в системі, хочу почати з 3-5 товарів для тесту.",
+    socials:["Instagram"], storesCount: 1, mirroredItems: 3, ordersTotal: 5
+  },
+  {
+    id: "ap-4", name: "Артем Байрак", handle: "@artem.dailyfits", city: "Одеса", avatarBg:"#FCE8C9",
+    followers: "72 100", totalStars: 5230, expectedRate: 15,
+    note: "Готовий взяти весь каталог верхнього одягу під зйомку.",
+    socials:["TikTok","Instagram","YouTube"], storesCount: 8, mirroredItems: 96, ordersTotal: 214
+  },
+  {
+    id: "ap-5", name: "Вікторія Сорока", handle: "@vika.wardrobe", city: "Вінниця", avatarBg:"#EAD9F7",
+    followers: "26 800", totalStars: 1610, expectedRate: 11,
+    note: "Цікавлять аксесуари та сумки, є окрема рубрика на каналі.",
+    socials:["TikTok"], storesCount: 2, mirroredItems: 11, ordersTotal: 17
+  },
+  {
+    id: "ap-6", name: "Денис Кравчук", handle: "@denys.basics", city: "Дніпро", avatarBg:"#D8F0F0",
+    followers: "15 300", totalStars: 860, expectedRate: 9,
+    note: "Роблю короткі відео-порівняння тканин та посадки розміру.",
+    socials:["TikTok","Instagram"], storesCount: 2, mirroredItems: 9, ordersTotal: 13
+  },
+  {
+    id: "ap-7", name: "Настя Гуменюк", handle: "@nastya.trends", city: "Івано-Франківськ", avatarBg:"#FBE0EC",
+    followers: "51 900", totalStars: 3340, expectedRate: 12,
+    note: "Стабільно 3 відео на тиждень, орієнтуюсь на молодіжний одяг.",
+    socials:["TikTok","Instagram"], storesCount: 4, mirroredItems: 27, ordersTotal: 49
+  },
+  {
+    id: "ap-8", name: "Павло Радченко", handle: "@pavlo.fitcheck", city: "Запоріжжя", avatarBg:"#DDEAFB",
+    followers: "6 700", totalStars: 190, expectedRate: 7,
+    note: "Тільки починаю, хочу спробувати формат бартеру.",
+    socials:["TikTok"], storesCount: 0, mirroredItems: 0, ordersTotal: 0
+  },
+  {
+    id: "ap-9", name: "Оксана Лебідь", handle: "@oksana.styleguide", city: "Полтава", avatarBg:"#F3E3C8",
+    followers: "33 400", totalStars: 2040, expectedRate: 10,
+    note: "Веду блог про капсульний гардероб, шукаю базові речі.",
+    socials:["Instagram","YouTube"], storesCount: 3, mirroredItems: 18, ordersTotal: 30
+  },
+  {
+    id: "ap-10", name: "Ігор Штепа", handle: "@igor.outerwear", city: "Чернівці", avatarBg:"#E6DDF9",
+    followers: "21 100", totalStars: 1290, expectedRate: 11,
+    note: "Цікавить співпраця саме по верхньому одягу на осінь.",
+    socials:["TikTok","Instagram"], storesCount: 2, mirroredItems: 12, ordersTotal: 21
+  }
+];
+
+// ---------- Orders (blogger view) ----------
+const ORDERS = [
+  {
+    id: "#28841", buyer: "Тетяна Р.", city: "Київ", branch: "Нова Пошта №42",
+    items: "Сукня міді \"Амелі\", розмір S", sum: 1290, rate: 12, stars: 155, status: "delivered"
+  },
+  {
+    id: "#28855", buyer: "Марина Д.", city: "Бровари", branch: "Нова Пошта №5",
+    items: "Кардиган вʼязаний, бежевий", sum: 980, rate: 12, stars: 118, status: "shipped"
+  },
+  {
+    id: "#28870", buyer: "Олена К.", city: "Львів", branch: "Нова Пошта №18",
+    items: "Штани палаццо + пояс", sum: 1450, rate: 12, stars: 174, status: "processing"
+  },
+  {
+    id: "#28881", buyer: "Наталія В.", city: "Одеса", branch: "Нова Пошта №61",
+    items: "Блуза шовкова, синя", sum: 760, rate: 12, stars: 91, status: "delivered"
+  },
+  {
+    id: "#28902", buyer: "Христина П.", city: "Ужгород", branch: "Нова Пошта №3",
+    items: "Сукня міді \"Амелі\", розмір M", sum: 1290, rate: 12, stars: 155, status: "returned"
+  }
+];
+
+// ---------- Store search results (blogger "Запит" view) ----------
+const SEARCH_STORES = [
+  { id:"ST-2291", name:"Shafa Trend", category:"Жіночий одяг", rate:"10–14%", products:214, rating:4.8, mode:"партнери + напряму" },
+  { id:"ST-3012", name:"Uzory.ua", category:"Вишиванки та етно", rate:"8–12%", products:96, rating:4.6, mode:"лише через партнерів" },
+  { id:"ST-1187", name:"Linen&Co", category:"Одяг з льону", rate:"12–15%", products:58, rating:4.9, mode:"партнери + напряму" },
+  { id:"ST-4420", name:"Bright Basics", category:"Базовий одяг", rate:"9–11%", products:140, rating:4.5, mode:"партнери + напряму" },
+  { id:"ST-2733", name:"MOSAIC studio", category:"Дизайнерський одяг", rate:"10–13%", products:47, rating:4.7, mode:"лише через партнерів" },
+  { id:"ST-5510", name:"Kvit Store", category:"Взуття", rate:"7–10%", products:180, rating:4.3, mode:"партнери + напряму" }
+];
+
+// ---------- Cart (buyer view), grouped by store ----------
+const CART = [
+  {
+    store: "Shafa Trend", rating: 4.8, itemsCount: 2, sum: 2270, delivery: "Нова Пошта",
+    exchange: true, returnDays: 14, etaDate: "17–19 липня",
+    workHours: "Пн–Сб, 9:00–19:00", reviewsCount: 1204,
+    conditions: "Обмін розміру протягом 14 днів, повернення за рахунок покупця",
+    contacts: "@shafatrend · Київ",
+    items: [
+      { name: "Сукня міді \"Амелі\", S", price: 1290, qty: 1 },
+      { name: "Пояс тканинний, бежевий", price: 980, qty: 1 }
+    ]
+  },
+  {
+    store: "Uzory.ua", rating: 4.6, itemsCount: 1, sum: 1450, delivery: "Укрпошта",
+    exchange: true, returnDays: 10, etaDate: "20–23 липня",
+    workHours: "Пн–Пт, 10:00–18:00", reviewsCount: 640,
+    conditions: "Обмін лише на інший розмір цієї ж моделі",
+    contacts: "@uzory.ua · Львів",
+    items: [
+      { name: "Вишиванка чоловіча \"Козак\", L", price: 1450, qty: 1 }
+    ]
+  },
+  {
+    store: "Kvit Store", rating: 4.3, itemsCount: 1, sum: 890, delivery: "Нова Пошта",
+    exchange: false, returnDays: 7, etaDate: "18–20 липня",
+    workHours: "Щодня, 9:00–21:00", reviewsCount: 388,
+    conditions: "Повернення лише за наявності браку",
+    contacts: "@kvit.store · Одеса",
+    items: [
+      { name: "Кросівки текстильні, 38", price: 890, qty: 1 }
+    ]
+  }
+];
+
+</script>
+<script>
+/* ============================================================
+   ДЗЕРКАЛО — рендер екранів
+   ============================================================ */
+
+function fmt(n){ return n.toLocaleString('uk-UA'); }
+
+function initials(name){
+  return name.split(' ').map(p=>p[0]).join('').slice(0,2).toUpperCase();
+}
+
+function avatarHtml(name, bg, size){
+  size = size || 44;
+  return `<div class="avatar" style="width:${size}px;height:${size}px;background:${bg};display:flex;align-items:center;justify-content:center;font-weight:800;color:#5B2E85;font-size:${size*0.36}px;font-family:'Manrope',sans-serif;">${initials(name)}</div>`;
+}
+
+function statusBadge(status){
+  const map = {
+    active: `<span class="badge badge-green">● активна співпраця</span>`,
+    paused: `<span class="badge badge-gray">⏸ на паузі</span>`,
+    delivered: `<span class="badge badge-green">Доставлено</span>`,
+    shipped: `<span class="badge badge-purple">В дорозі</span>`,
+    processing: `<span class="badge badge-gold">Обробляється</span>`,
+    returned: `<span class="badge badge-red">Повернення</span>`
+  };
+  return map[status] || '';
+}
+
+/* -------- Signature component: Star ledger -------- */
+function starLedger(blogger, opts){
+  opts = opts || {};
+  const newStars = blogger.lastFixation ? blogger.storeStars - blogger.lastFixation.stars : blogger.storeStars;
+  const pct = blogger.storeStars > 0 ? Math.min(100, Math.round((newStars / Math.max(blogger.storeStars,1)) * 100)) : 0;
+  const timeline = (blogger.fixations||[]).slice(-4).map(f => `
+    <div class="fx-point" title="Фіксація №${f.number}: ${fmt(f.stars)} ★ від ${f.date}">
+      <div class="fx-dot"></div>
+      <div class="fx-num">№${f.number}</div>
+      <div class="fx-stars">${fmt(f.stars)}★</div>
+    </div>
+  `).join('<div class="fx-line"></div>');
+
+  return `
+  <div class="ledger">
+    <div class="ledger-row">
+      <div class="ledger-metric">
+        <div class="lm-label">Загальні зірочки блогера</div>
+        <div class="lm-value">${fmt(blogger.totalStars)} <span class="star">★</span></div>
+        <div class="lm-note">за всі магазини, за весь час — не обнуляються</div>
+      </div>
+      <div class="ledger-metric accent">
+        <div class="lm-label">Зірочки по цьому магазину</div>
+        <div class="lm-value">${fmt(blogger.storeStars)} <span class="star">★</span></div>
+        <div class="lm-note">використовуються для взаєморозрахунку</div>
+      </div>
+    </div>
+
+    <div class="ledger-new">
+      <div class="ln-top">
+        <span>Нових зірочок після останньої фіксації</span>
+        <b>+${fmt(newStars)} ★</b>
+      </div>
+      <div class="ln-bar"><div class="ln-fill" style="width:${pct}%"></div></div>
+      <div class="ln-sub">${blogger.lastFixation ? `Остання фіксація №${blogger.lastFixation.number} · ${fmt(blogger.lastFixation.stars)}★ · ${blogger.lastFixation.date}` : 'Фіксацій ще не було'}</div>
+    </div>
+
+    ${timeline ? `<div class="fx-timeline">${timeline}</div>` : ''}
+
+    ${opts.showAction !== false ? `
+    <div class="ledger-actions">
+      <button class="btn btn-primary btn-sm" onclick="openFixation('${blogger.id}')">Запросити фіксацію</button>
+      <button class="btn btn-ghost btn-sm" onclick="showToast('Історію фіксацій відкрито (демо)')">Історія</button>
+    </div>` : ''}
+  </div>`;
+}
+
+const LEDGER_STYLE = `
+<style>
+.ledger{background:linear-gradient(180deg,#FBFAFE,#F7F5FD);border:1px solid var(--purple-100);border-radius:14px;padding:16px;}
+.ledger-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.ledger-metric{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 13px;}
+.ledger-metric.accent{border-color:var(--purple-100);background:var(--purple-50);}
+.lm-label{font-size:10.8px;color:var(--ink-500);font-weight:600;margin-bottom:4px;}
+.lm-value{font-size:19px;font-weight:800;font-family:'Manrope',sans-serif;}
+.lm-note{font-size:10px;color:var(--ink-300);margin-top:3px;}
+.ledger-new{background:#fff;border:1px solid var(--line);border-radius:12px;padding:11px 13px;margin-bottom:12px;}
+.ln-top{display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--ink-700);margin-bottom:7px;}
+.ln-top b{color:var(--green);font-size:14px;font-family:'Manrope',sans-serif;}
+.ln-bar{height:6px;border-radius:99px;background:#EDE9F7;overflow:hidden;}
+.ln-fill{height:100%;background:linear-gradient(90deg,var(--gold-500),var(--purple-500));border-radius:99px;transition:width .5s ease;}
+.ln-sub{font-size:10.5px;color:var(--ink-300);margin-top:6px;}
+.fx-timeline{display:flex;align-items:center;overflow-x:auto;padding:6px 2px 2px;}
+.fx-point{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;min-width:56px;}
+.fx-dot{width:9px;height:9px;border-radius:50%;background:var(--purple-500);border:2px solid #fff;box-shadow:0 0 0 2px var(--purple-100);}
+.fx-num{font-size:9.5px;color:var(--ink-300);font-weight:700;}
+.fx-stars{font-size:10.5px;color:var(--ink-700);font-weight:700;}
+.fx-line{height:2px;background:var(--purple-100);flex:1;min-width:16px;margin-bottom:16px;}
+.ledger-actions{display:flex;gap:8px;margin-top:12px;}
+</style>`;
+
+/* ================= 1. STORE VIEW (seller) ================= */
+function renderStoreView(){
+  const rows = STORE_BLOGGERS.map(b => `
+    <tr>
+      <td data-label="Блогер">
+        <div style="display:flex;align-items:center;gap:10px;">
+          ${avatarHtml(b.name, b.avatarBg, 38)}
+          <div>
+            <div style="font-weight:700;font-size:13.4px;">${b.name}</div>
+            <div style="font-size:11.5px;color:var(--ink-500);">${b.handle} · ${b.city}</div>
+          </div>
+        </div>
+      </td>
+      <td data-label="Статус">${statusBadge(b.status)}</td>
+      <td data-label="Рейтинг"><span class="badge badge-gray">⭐ ${b.rating}</span></td>
+      <td data-label="Загальні ★" style="font-weight:700;">${fmt(b.totalStars)} <span class="star">★</span></td>
+      <td data-label="По магазину ★" style="font-weight:700;color:var(--purple-600);">${fmt(b.storeStars)} <span class="star">★</span></td>
+      <td data-label="Остання фіксація" style="font-size:12px;color:var(--ink-500);">${b.lastFixation ? `№${b.lastFixation.number} · ${b.lastFixation.date}` : '—'}</td>
+      <td data-label="Ставка" style="font-size:12.5px;">${b.rate}%</td>
+      <td data-label="">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="btn btn-soft btn-sm" onclick="openBloggerQuickView('${b.id}')">Профіль</button>
+          <button class="btn btn-primary btn-sm" onclick="openFixation('${b.id}')">Фіксація</button>
+        </div>
+      </td>
+    </tr>
+  `).join('');
+
+  document.getElementById('view-store').innerHTML = `
+    ${LEDGER_STYLE}
+    <style>
+      .kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+      .kpi{padding:14px;}
+      .kpi .k-label{font-size:11px;color:var(--ink-500);font-weight:600;margin-bottom:6px;}
+      .kpi .k-value{font-size:20px;font-weight:800;font-family:'Manrope',sans-serif;}
+      .kpi .k-sub{font-size:10.5px;color:var(--ink-300);margin-top:3px;}
+      @media (min-width:640px){
+        .kpi-row{grid-template-columns:repeat(4,1fr);gap:14px;}
+        .kpi{padding:16px;}
+        .kpi .k-label{font-size:11.5px;}
+        .kpi .k-value{font-size:22px;}
+        .kpi .k-sub{font-size:11px;}
+      }
+    </style>
+    <div class="view-head">
+      <div class="eyebrow">🏬 Магазин · ${CURRENT_STORE.name}</div>
+      <h1>Партнери-блогери</h1>
+      <p>Це екран продавця. Тут видно всіх блогерів, які віддзеркалюють товари магазину, їхній рейтинг, накопичені зірочки та стан останньої фіксації взаєморозрахунків.</p>
+    </div>
+
+    <div class="kpi-row">
+      <div class="card kpi"><div class="k-label">Активних блогерів</div><div class="k-value">${STORE_BLOGGERS.filter(b=>b.status==='active').length}</div><div class="k-sub">з ${STORE_BLOGGERS.length} загалом</div></div>
+      <div class="card kpi"><div class="k-label">Зірочок нараховано (магазин)</div><div class="k-value">${fmt(STORE_BLOGGERS.reduce((s,b)=>s+b.storeStars,0))}</div><div class="k-sub">за весь період</div></div>
+      <div class="card kpi"><div class="k-label">Замовлень через блогерів</div><div class="k-value">${STORE_BLOGGERS.reduce((s,b)=>s+b.ordersWithStore,0)}</div><div class="k-sub">за весь період</div></div>
+      <div class="card kpi"><div class="k-label">Середня ставка</div><div class="k-value">${Math.round(STORE_BLOGGERS.reduce((s,b)=>s+b.rate,0)/STORE_BLOGGERS.length)}%</div><div class="k-sub">по діючим партнерствам</div></div>
+    </div>
+
+    <div class="card" style="overflow:auto;padding:6px 0 4px;">
+      <table class="resp-table">
+        <thead><tr>
+          <th>Блогер</th><th>Статус</th><th>Рейтинг</th><th>Загальні ★</th><th>По магазину ★</th><th>Остання фіксація</th><th>Ставка</th><th>Дії</th>
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+/* ================= 2. BLOGGER VIEW (creator profile) ================= */
+function renderBloggerView(){
+  const p = BLOGGER_PROFILE;
+  const contactRows = Object.entries({
+    "Телефон": p.contacts.phone, "Telegram": p.contacts.telegram, "Instagram": p.contacts.instagram,
+    "TikTok": p.contacts.tiktok, "YouTube": p.contacts.youtube, "Facebook": p.contacts.facebook
+  }).map(([k,v]) => `<div class="kv"><span>${k}</span><b>${v}</b></div>`).join('');
+
+  const followerChips = p.followersBreakdown.map(f => `<span class="chip">${f.platform}: <b>${f.value}</b></span>`).join('');
+  const interestChips = p.work.interests.map(i => `<span class="chip">${i}</span>`).join('');
+  const themeChips = p.work.contentThemes.map(i => `<span class="chip alt">${i}</span>`).join('');
+  const termChips = p.work.sampleTerms.map(i => `<span class="chip good">${i}</span>`).join('');
+
+  const partnerRows = p.partnerStoresList.map(s => `
+    <div class="prow">
+      <span class="prow-name">${s.name}</span>
+      <span class="prow-stars">${fmt(s.stars)} ★</span>
+      <span class="prow-rate">${s.rate}%</span>
+    </div>`).join('');
+
+  document.getElementById('view-blogger').innerHTML = `
+    ${LEDGER_STYLE}
+    <style>
+      .profile-grid{display:grid;grid-template-columns:1fr;gap:16px;align-items:start;}
+      .pf-card{padding:18px;}
+      .pf-head{display:flex;gap:14px;align-items:flex-start;margin-bottom:14px;flex-wrap:wrap;}
+      .pf-head h2{margin:0 0 3px;font-size:18px;font-weight:800;}
+      .pf-head .h-sub{font-size:12px;color:var(--ink-500);}
+      .pf-bio{font-size:12.8px;color:var(--ink-700);line-height:1.6;margin-bottom:16px;}
+      .section-label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;color:var(--ink-300);margin:18px 0 9px;}
+      .kv-grid{display:grid;grid-template-columns:1fr;gap:8px;}
+      .kv{display:flex;justify-content:space-between;font-size:12.5px;border-bottom:1px dashed var(--line);padding-bottom:6px;gap:10px;}
+      .kv span{color:var(--ink-500);flex-shrink:0;}
+      .kv b{font-weight:600;color:var(--ink-900);text-align:right;}
+      .chip{display:inline-flex;padding:5px 10px;border-radius:99px;background:var(--purple-50);color:var(--purple-600);font-size:11.5px;font-weight:600;margin:0 6px 6px 0;}
+      .chip.alt{background:#F1EFF7;color:var(--ink-700);}
+      .chip.good{background:var(--green-100);color:var(--green);}
+      .fact-grid{display:grid;grid-template-columns:1fr;gap:8px;font-size:12.5px;}
+      .fact-grid .f{display:flex;justify-content:space-between;border-bottom:1px dashed var(--line);padding-bottom:6px;gap:10px;}
+      .fact-grid .f span{color:var(--ink-500);flex-shrink:0;}
+      .stat-mini{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:16px;}
+      .stat-mini .sm{background:var(--purple-50);border-radius:12px;padding:12px;text-align:center;}
+      .stat-mini .sm b{display:block;font-size:17px;font-family:'Manrope',sans-serif;}
+      .stat-mini .sm span{font-size:10.5px;color:var(--ink-500);}
+      .prow{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:12.5px;}
+      .prow:last-child{border-bottom:none;}
+      .prow-name{flex:1;font-weight:600;}
+      .prow-stars{color:var(--purple-600);font-weight:700;}
+      .prow-rate{color:var(--ink-500);width:36px;text-align:right;}
+      @media (min-width:640px){
+        .kv-grid, .fact-grid{grid-template-columns:1fr 1fr;gap:8px 16px;}
+      }
+      @media (min-width:960px){
+        .profile-grid{grid-template-columns:1.15fr .85fr;gap:20px;}
+        .pf-card{padding:22px;}
+        .pf-head h2{font-size:19px;}
+        .pf-bio{font-size:13px;}
+      }
+    </style>
+
+    <div class="view-head">
+      <div class="eyebrow">🎥 Блогер · особиста анкета</div>
+      <h1>${p.name}</h1>
+      <p>Це екран блогера. Максимально детальна анкета — саме за цими даними продавці ухвалюють рішення про співпрацю.</p>
+    </div>
+
+    <div class="profile-grid">
+      <div class="card pf-card">
+        <div class="pf-head">
+          ${avatarHtml(p.name, p.avatarBg, 62)}
+          <div>
+            <h2>${p.name}</h2>
+            <div class="h-sub">${p.handle} · ${p.city} · ${p.age} років</div>
+            <div style="margin-top:8px;">${followerChips}</div>
+          </div>
+        </div>
+        <div class="pf-bio">${p.bio}</div>
+
+        <div class="section-label">Контакти</div>
+        <div class="kv-grid">${contactRows}</div>
+
+        <div class="section-label">Про роботу</div>
+        <div class="fact-grid">
+          <div class="f"><span>Зайнятість</span><b>${p.work.activity}</b></div>
+          <div class="f"><span>ФОП</span><b>${p.work.fop ? 'Так' : 'Ні'}</b></div>
+          <div class="f"><span>Власний магазин</span><b>${p.work.ownShop ? 'Так' : 'Ні'}</b></div>
+          <div class="f"><span>Досвід</span><b>${p.work.experience}</b></div>
+          <div class="f"><span>Студія</span><b>${p.work.studio ? 'Є власна' : 'Немає'}</b></div>
+          <div class="f"><span>Допомога зі зйомкою</span><b>${p.work.helpers}</b></div>
+        </div>
+        <div style="font-size:12.5px;color:var(--ink-500);margin-top:8px;">Техніка: <b style="color:var(--ink-900);">${p.work.gear}</b></div>
+
+        <div class="section-label">Інтереси та тематика контенту</div>
+        <div>${interestChips}</div>
+        <div style="margin-top:6px;">${themeChips}</div>
+
+        <div class="section-label">Готовий отримувати товар як</div>
+        <div>${termChips}</div>
+      </div>
+
+      <div>
+        <div class="card" style="padding:18px;margin-bottom:16px;">
+          <div class="section-label" style="margin-top:0;">Загальна статистика</div>
+          <div class="stat-mini">
+            <div class="sm"><b>${fmt(p.stats.totalStars)}★</b><span>Загальні зірочки</span></div>
+            <div class="sm"><b>${p.stats.partnerStores}</b><span>Магазинів-партнерів</span></div>
+            <div class="sm"><b>${p.stats.ordersTotal}</b><span>Замовлень</span></div>
+            <div class="sm"><b>${p.stats.rating}</b><span>Рейтинг</span></div>
+          </div>
+        </div>
+
+        <div class="card" style="padding:18px;margin-bottom:16px;">
+          <div class="section-label" style="margin-top:0;">Зірочки по магазину Shafa Trend</div>
+          ${starLedger(STORE_BLOGGERS[0])}
+        </div>
+
+        <div class="card" style="padding:18px;">
+          <div class="section-label" style="margin-top:0;">Магазини-партнери</div>
+          ${partnerRows}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ================= 3. APPLICATION VIEW (seller inbox) ================= */
+function renderApplicationView(){
+  const cards = APPLICATIONS.map(a => `
+    <div class="app-card card" id="app-${a.id}">
+      <div class="app-card-top">
+        ${avatarHtml(a.name, a.avatarBg, 46)}
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:700;font-size:14px;">${a.name}</div>
+          <div style="font-size:11.5px;color:var(--ink-500);">${a.handle} · ${a.city}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:11px;color:var(--ink-500);">Підписники</div>
+          <div style="font-weight:700;font-size:13px;">${a.followers}</div>
+        </div>
+      </div>
+
+      <div class="app-card-mid">
+        <span class="badge badge-purple">${fmt(a.totalStars)} ★ загалом</span>
+        <span class="badge badge-gold">очікує ${a.expectedRate}%</span>
+        ${a.socials.map(s=>`<span class="badge badge-gray">${s}</span>`).join('')}
+      </div>
+
+      <p class="app-note">«${a.note}»</p>
+
+      <div class="app-card-actions">
+        <button class="btn btn-ghost btn-sm" onclick="toggleApp('${a.id}')">Детальніше</button>
+        <button class="btn btn-soft btn-sm" onclick="showToast('Умови для ${a.name} відкрито для редагування (демо)')">Налаштувати</button>
+        <button class="btn btn-primary btn-sm" onclick="showToast('Заявку від ${a.name} прийнято ✓')">Прийняти</button>
+        <button class="btn btn-danger btn-sm" onclick="showToast('Заявку від ${a.name} відхилено')">Відхилити</button>
+      </div>
+
+      <div class="app-accordion" id="acc-${a.id}">
+        <div class="acc-inner">
+          <div class="section-label" style="margin-top:14px;">Повна анкета</div>
+          <div class="fact-grid">
+            <div class="f"><span>Магазинів-партнерів</span><b>${a.storesCount}</b></div>
+            <div class="f"><span>Товарів віддзеркалено</span><b>${a.mirroredItems}</b></div>
+            <div class="f"><span>Замовлень загалом</span><b>${a.ordersTotal}</b></div>
+            <div class="f"><span>Соцмережі</span><b>${a.socials.join(', ')}</b></div>
+          </div>
+          <div style="font-size:12px;color:var(--ink-500);margin-top:10px;">Повна статистика та історія фіксацій доступні у профілі блогера.</div>
+          <button class="btn btn-ghost btn-sm" style="margin-top:10px;" onclick="openBloggerQuickView('bl-1')">Відкрити профіль ↗</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('view-application').innerHTML = `
+    <style>
+      .app-list{display:flex;flex-direction:column;gap:12px;}
+      .app-card{padding:16px 18px;}
+      .app-card-top{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+      .app-card-mid{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+      .app-note{font-size:12.5px;color:var(--ink-700);font-style:italic;margin:0 0 12px;line-height:1.5;}
+      .app-card-actions{display:flex;gap:8px;flex-wrap:wrap;}
+      .app-accordion{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+      .app-accordion.open{max-height:260px;}
+      .fact-grid{display:grid;grid-template-columns:1fr;gap:8px;font-size:12.5px;}
+      .fact-grid .f{display:flex;justify-content:space-between;border-bottom:1px dashed var(--line);padding-bottom:6px;gap:10px;}
+      .fact-grid .f span{color:var(--ink-500);flex-shrink:0;}
+      @media (min-width:640px){ .fact-grid{grid-template-columns:1fr 1fr;gap:8px 16px;} }
+    </style>
+    <div class="view-head">
+      <div class="eyebrow">📝 Заявки · вхідні від блогерів</div>
+      <h1>Заявки на співпрацю</h1>
+      <p>Це екран продавця. 10 блогерів подали заявку на віддзеркалення товарів магазину. Натисніть «Детальніше», щоб розгорнути повну анкету.</p>
+    </div>
+    <div class="app-list">${cards}</div>
+  `;
+}
+
+/* ================= 4. REQUEST VIEW (blogger searches stores) ================= */
+function renderRequestView(){
+  const rows = SEARCH_STORES.map(s => `
+    <div class="search-row card" onclick="openRequestForm('${s.id}')">
+      <div class="sr-name">
+        <div style="font-weight:700;font-size:13.6px;">${s.name}</div>
+        <div style="font-size:11.5px;color:var(--ink-500);">${s.category} · ID ${s.id}</div>
+      </div>
+      <div class="sr-mid"><span class="badge badge-gray">⭐ ${s.rating}</span><span class="badge badge-gray">${s.products} товарів</span></div>
+      <div class="sr-mode"><span class="badge ${s.mode.includes('лише') ? 'badge-gold' : 'badge-purple'}">${s.mode}</span></div>
+      <div class="sr-rate">${s.rate}</div>
+      <div class="sr-cta">Подати заявку →</div>
+    </div>
+  `).join('');
+
+  document.getElementById('view-request').innerHTML = `
+    <style>
+      .filters{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+      .filter-field{display:flex;flex-direction:column;gap:5px;}
+      .filter-field label{font-size:10.8px;font-weight:700;color:var(--ink-500);text-transform:uppercase;letter-spacing:.03em;}
+      .filter-field select, .filter-field input{
+        padding:9px 11px;border-radius:9px;border:1px solid var(--line);font-size:12.5px;font-family:inherit;background:#fff;width:100%;
+      }
+      .toggle-row{display:flex;flex-direction:column;gap:10px;margin:4px 0 20px;font-size:12.5px;color:var(--ink-700);}
+      .toggle-row label{display:flex;align-items:center;gap:6px;}
+      .search-row{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:border-color .15s, transform .1s;}
+      .search-row:hover{border-color:var(--purple-400);}
+      .sr-mid{display:flex;gap:6px;flex-wrap:wrap;}
+      .sr-rate{font-weight:700;color:var(--purple-600);}
+      .sr-cta{font-size:12px;font-weight:700;color:var(--purple-500);}
+      #requestFormWrap{display:none;margin-top:22px;}
+      #requestFormWrap.open{display:block;}
+      .form-grid{display:grid;grid-template-columns:1fr;gap:14px;}
+      .field{display:flex;flex-direction:column;gap:6px;}
+      .field label{font-size:12px;font-weight:600;color:var(--ink-700);}
+      .field select,.field input,.field textarea{padding:10px 12px;border-radius:10px;border:1px solid var(--line);font-size:13px;font-family:inherit;width:100%;}
+      .radio-cards{display:flex;gap:8px;flex-wrap:wrap;}
+      .radio-card{padding:8px 13px;border-radius:9px;border:1px solid var(--line);font-size:12.5px;cursor:pointer;background:#fff;font-weight:600;}
+      .radio-card.selected{border-color:var(--purple-500);background:var(--purple-50);color:var(--purple-600);}
+      @media (min-width:600px){
+        .filters{grid-template-columns:repeat(4,1fr);}
+        .toggle-row{flex-direction:row;gap:16px;}
+      }
+      @media (min-width:760px){
+        .search-row{display:grid;grid-template-columns:1.6fr .9fr .9fr .6fr .9fr;align-items:center;}
+        .search-row:hover{transform:translateX(2px);}
+        .sr-cta{text-align:right;}
+        .form-grid{grid-template-columns:1fr 1fr;}
+      }
+    </style>
+    <div class="view-head">
+      <div class="eyebrow">🤝 Запит · пошук магазинів</div>
+      <h1>Знайти магазин для співпраці</h1>
+      <p>Це екран блогера. Фільтруйте магазини за категорією, ставкою та рейтингом, потім подайте заявку на віддзеркалення товарів.</p>
+    </div>
+
+    <div class="card" style="padding:18px;margin-bottom:20px;">
+      <div class="filters">
+        <div class="filter-field"><label>ID магазину</label><input placeholder="напр. ST-2291"></div>
+        <div class="filter-field"><label>Категорія</label>
+          <select><option>Усі категорії</option><option>Жіночий одяг</option><option>Взуття</option><option>Етно/вишиванки</option></select>
+        </div>
+        <div class="filter-field"><label>Мін. ставка, %</label><input type="number" placeholder="0"></div>
+        <div class="filter-field"><label>Макс. ставка, %</label><input type="number" placeholder="20"></div>
+      </div>
+      <div class="toggle-row">
+        <label><input type="checkbox"> лише «продає через партнерів»</label>
+        <label><input type="checkbox"> лише «продає також напряму»</label>
+        <label><input type="checkbox"> рейтинг від 4.5</label>
+      </div>
+      ${rows}
+    </div>
+
+    <div class="card" id="requestFormWrap">
+      <div style="padding:20px 22px;border-bottom:1px solid var(--line);">
+        <div class="section-label" style="margin:0 0 4px;">Заявка на співпрацю</div>
+        <h3 style="margin:0;font-size:16.5px;" id="reqFormStoreName">—</h3>
+      </div>
+      <div style="padding:20px 22px;" class="form-grid">
+        <div class="field">
+          <label>Бажана ставка, %</label>
+          <input type="number" value="12">
+        </div>
+        <div class="field">
+          <label>Термін співпраці</label>
+          <select><option>Безстроково</option><option>1 місяць (тест)</option><option>3 місяці</option><option>6 місяців</option></select>
+        </div>
+        <div class="field" style="grid-column:1/-1;">
+          <label>Що потрібно віддзеркалити</label>
+          <div class="radio-cards">
+            <div class="radio-card selected">Один товар</div>
+            <div class="radio-card">Кілька товарів</div>
+            <div class="radio-card">Одна категорія</div>
+            <div class="radio-card">Кілька категорій</div>
+            <div class="radio-card">Увесь магазин</div>
+          </div>
+        </div>
+        <div class="field" style="grid-column:1/-1;">
+          <label>Як отримати зразок</label>
+          <div class="radio-cards">
+            <div class="radio-card selected">Подарунок</div>
+            <div class="radio-card">Купівля зі знижкою</div>
+            <div class="radio-card">Повернення після зйомки</div>
+          </div>
+        </div>
+        <div class="field" style="grid-column:1/-1;">
+          <label>Коментар для продавця</label>
+          <textarea rows="3" placeholder="Розкажіть коротко про формат контенту..."></textarea>
+        </div>
+      </div>
+      <div style="padding:16px 22px;border-top:1px solid var(--line);display:flex;gap:10px;justify-content:flex-end;">
+        <button class="btn btn-ghost" onclick="closeRequestForm()">Скасувати</button>
+        <button class="btn btn-primary" onclick="submitRequest()">Надіслати заявку</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ================= 5. ORDERS VIEW (blogger) ================= */
+function renderOrdersView(){
+  const rows = ORDERS.map(o => `
+    <tr>
+      <td data-label="Замовлення" style="font-weight:700;color:var(--purple-600);">${o.id}</td>
+      <td data-label="Покупець">${o.buyer}<div style="font-size:11px;color:var(--ink-500);">${o.city} · ${o.branch}</div></td>
+      <td data-label="Товари" style="font-size:12.5px;">${o.items}</td>
+      <td data-label="Сума" style="font-weight:700;">${fmt(o.sum)} грн</td>
+      <td data-label="Ставка">${o.rate}%</td>
+      <td data-label="Зірочки" style="font-weight:700;color:var(--gold-500);">+${o.stars} ★</td>
+      <td data-label="Статус">${statusBadge(o.status)}</td>
+    </tr>
+  `).join('');
+
+  const totalStars = ORDERS.reduce((s,o)=>s+o.stars,0);
+  const totalSum = ORDERS.reduce((s,o)=>s+o.sum,0);
+
+  document.getElementById('view-orders').innerHTML = `
+    <style>
+      .kpi-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;}
+      .kpi{padding:14px;}
+      .kpi .k-label{font-size:11px;color:var(--ink-500);font-weight:600;margin-bottom:6px;}
+      .kpi .k-value{font-size:20px;font-weight:800;font-family:'Manrope',sans-serif;}
+      @media (min-width:640px){
+        .kpi-row{grid-template-columns:repeat(3,1fr);gap:14px;}
+        .kpi{padding:16px;}
+        .kpi .k-label{font-size:11.5px;}
+        .kpi .k-value{font-size:22px;}
+      }
+    </style>
+    <div class="view-head">
+      <div class="eyebrow">📦 Замовлення · останні продажі</div>
+      <h1>Замовлення через ваші відео</h1>
+      <p>Це екран блогера. Кожне замовлення, оформлене за вашим посиланням, автоматично нараховує зірочки згідно з вашою ставкою.</p>
+    </div>
+    <div class="kpi-row">
+      <div class="card kpi"><div class="k-label">Замовлень показано</div><div class="k-value">${ORDERS.length}</div></div>
+      <div class="card kpi"><div class="k-label">Сума продажів</div><div class="k-value">${fmt(totalSum)} грн</div></div>
+      <div class="card kpi"><div class="k-label">Нараховано зірочок</div><div class="k-value">${fmt(totalStars)} ★</div></div>
+    </div>
+    <div class="card" style="overflow:auto;padding:6px 0 4px;">
+      <table class="resp-table">
+        <thead><tr><th>Замовлення</th><th>Покупець</th><th>Товари</th><th>Сума</th><th>Ставка</th><th>Зірочки</th><th>Статус</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+/* ================= 6. CART VIEW (buyer) ================= */
+function renderCartView(){
+  const groups = CART.map((g, idx) => {
+    const done = cartCheckedOut.has(idx);
+    return `
+    <div class="cart-store card ${done ? 'is-done' : ''}">
+      <div class="cs-head">
+        <div>
+          <div style="font-weight:800;font-size:14.5px;">${g.store}</div>
+          <div style="font-size:11.5px;color:var(--ink-500);">⭐ ${g.rating} · ${g.reviewsCount} відгуків</div>
+        </div>
+        <div class="cs-sum">${fmt(g.sum)} грн</div>
+      </div>
+
+      <div class="cs-items">
+        ${g.items.map(it => `
+          <div class="cs-item">
+            <div class="cs-thumb"></div>
+            <div style="flex:1;">
+              <div style="font-size:12.8px;font-weight:600;">${it.name}</div>
+              <div style="font-size:11.5px;color:var(--ink-500);">Кількість: ${it.qty}</div>
+            </div>
+            <div style="font-weight:700;font-size:13px;">${fmt(it.price)} грн</div>
+          </div>
+        `).join('')}
+      </div>
+
+      <div class="cs-meta">
+        <span class="badge badge-gray">🚚 ${g.delivery}</span>
+        <span class="badge ${g.exchange ? 'badge-green' : 'badge-red'}">${g.exchange ? 'Обмін можливий' : 'Без обміну'}</span>
+        <span class="badge badge-gray">Повернення ${g.returnDays} дн.</span>
+        <span class="badge badge-purple">Орієнтовно: ${g.etaDate}</span>
+      </div>
+
+      <div class="cs-actions">
+        <button class="btn btn-ghost btn-sm" onclick="toggleCartDetail(${idx})">Детальніше про магазин</button>
+        ${done
+          ? `<span class="badge badge-green cs-done-badge">✓ Замовлення оформлено</span>`
+          : `<button class="btn btn-primary btn-sm" id="cs-checkout-${idx}" onclick="checkoutStore(${idx})" ${cartProcessing ? 'disabled' : ''}>Оформити це замовлення</button>`
+        }
+      </div>
+      <div class="cs-detail" id="cs-detail-${idx}">
+        <div class="cs-detail-inner">
+          <div class="fact-grid">
+            <div class="f"><span>Кількість товарів у магазині</span><b>—</b></div>
+            <div class="f"><span>Графік роботи</span><b>${g.workHours}</b></div>
+            <div class="f"><span>Умови обміну/повернення</span><b>${g.conditions}</b></div>
+            <div class="f"><span>Контакти</span><b>${g.contacts}</b></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  }).join('');
+
+  const total = CART.reduce((s,g)=>s+g.sum,0);
+  const doneCount = cartCheckedOut.size;
+  const allDone = doneCount === CART.length;
+
+  let footerBtn;
+  if (allDone){
+    footerBtn = `<button class="btn btn-ghost" disabled>Усі замовлення оформлено ✓</button>`;
+  } else if (cartProcessing){
+    footerBtn = `<button class="btn btn-primary" disabled>Оформлюємо по черзі… (${doneCount}/${CART.length})</button>`;
+  } else {
+    footerBtn = `<button class="btn btn-primary" onclick="checkoutAllSequential()">Оформити всі замовлення по черзі</button>`;
+  }
+
+  document.getElementById('view-cart').innerHTML = `
+    <style>
+      .cart-store{padding:18px 20px;margin-bottom:14px;transition:opacity .2s;}
+      .cart-store.is-done{opacity:.72;}
+      .cs-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px;}
+      .cs-sum{font-size:17px;font-weight:800;font-family:'Manrope',sans-serif;}
+      .cs-items{display:flex;flex-direction:column;gap:10px;margin-bottom:12px;}
+      .cs-item{display:flex;align-items:center;gap:10px;}
+      .cs-thumb{width:40px;height:40px;border-radius:9px;background:linear-gradient(135deg,var(--purple-100),var(--gold-100));flex-shrink:0;}
+      .cs-meta{display:flex;gap:6px;flex-wrap:wrap;}
+      .cs-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px;}
+      .cs-done-badge{padding:7px 12px;font-size:12px;}
+      .cs-detail{max-height:0;overflow:hidden;transition:max-height .3s ease;}
+      .cs-detail.open{max-height:220px;}
+      .cs-detail-inner{padding-top:14px;}
+      .fact-grid{display:grid;grid-template-columns:1fr;gap:8px;font-size:12.5px;}
+      .fact-grid .f{display:flex;justify-content:space-between;border-bottom:1px dashed var(--line);padding-bottom:6px;gap:20px;}
+      .fact-grid .f span{color:var(--ink-500);}
+      .fact-grid .f b{text-align:right;}
+      .cart-total{display:flex;flex-direction:column;align-items:stretch;gap:12px;padding:18px 20px;}
+      .cart-total .ct-sum{display:flex;justify-content:space-between;align-items:center;}
+      @media (min-width:560px){
+        .cart-total{flex-direction:row;justify-content:space-between;align-items:center;}
+      }
+    </style>
+    <div class="view-head">
+      <div class="eyebrow">🛒 Кошик · покупець</div>
+      <h1>Ваш кошик</h1>
+      <p>Це екран покупця. Товари згруповані по магазинах — кожен продавець оформлює своє замовлення окремо.</p>
+    </div>
+
+    <div class="hint-banner">
+      <span class="ic">ℹ️</span>
+      <span>У вашому кошику товари від кількох різних магазинів. Замовлення будуть оформлені окремо для кожного продавця, з власною доставкою та умовами повернення.</span>
+    </div>
+
+    ${groups}
+
+    <div class="card cart-total">
+      <div class="ct-sum">
+        <div>
+          <div style="font-size:12px;color:var(--ink-500);">Разом до сплати · ${CART.length} магазини</div>
+          <div style="font-size:20px;font-weight:800;font-family:'Manrope',sans-serif;">${fmt(total)} грн</div>
+        </div>
+      </div>
+      ${footerBtn}
+    </div>
+  `;
+}
+
+</script>
+<script>
+/* ============================================================
+   ДЗЕРКАЛО — логіка прототипу
+   ============================================================ */
+
+const ROLES = [
+  { key:'seller',  label:'Продавець', icon:'🏬', views:['store','application'] },
+  { key:'blogger', label:'Блогер',    icon:'🎥', views:['blogger','request','orders'] },
+  { key:'buyer',   label:'Покупець',  icon:'🛒', views:['cart'] }
+];
+
+const VIEW_META = {
+  store:       { title: "Магазин",    icon:'🏬', roleKey: "seller" },
+  blogger:     { title: "Блогер",     icon:'🎥', roleKey: "blogger" },
+  application: { title: "Заявки",     icon:'📝', roleKey: "seller" },
+  request:     { title: "Запит",      icon:'🤝', roleKey: "blogger" },
+  orders:      { title: "Замовлення", icon:'📦', roleKey: "blogger" },
+  cart:        { title: "Кошик",      icon:'🛒', roleKey: "buyer" }
+};
+
+function renderRoleSwitch(activeRoleKey){
+  document.getElementById('roleSwitch').innerHTML = ROLES.map(r => `
+    <button class="role-btn ${r.key === activeRoleKey ? 'active role-' + r.key : ''}" onclick="selectRole('${r.key}')">
+      <span class="rb-ic">${r.icon}</span>${r.label}
+    </button>
+  `).join('');
+}
+
+function renderSubNav(roleKey, activeView){
+  const role = ROLES.find(r => r.key === roleKey);
+  document.getElementById('subNav').innerHTML = role.views.map(v => `
+    <button class="subnav-chip ${v === activeView ? 'active' : ''}" onclick="selectView('${v}')">
+      ${VIEW_META[v].icon} ${VIEW_META[v].title}
+    </button>
+  `).join('');
+}
+
+/* selectRole: jump to the first (or most recently viewed) screen in that role */
+const lastViewByRole = {};
+function selectRole(roleKey){
+  const role = ROLES.find(r => r.key === roleKey);
+  selectView(lastViewByRole[roleKey] || role.views[0]);
+}
+
+/* selectView: single source of truth for switching screens — keeps sidebar,
+   role tabs and subnav chips all in sync, wherever the click came from. */
+function selectView(viewName){
+  const meta = VIEW_META[viewName];
+  if (!meta) return;
+  lastViewByRole[meta.roleKey] = viewName;
+
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + viewName).classList.add('active');
+
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  const navBtn = document.querySelector(`.nav-item[data-view="${viewName}"]`);
+  if (navBtn) navBtn.classList.add('active');
+
+  renderRoleSwitch(meta.roleKey);
+  renderSubNav(meta.roleKey, viewName);
+
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
+/* kept as an alias so any legacy calls still work */
+function switchView(viewName){ selectView(viewName); }
+
+/* -------- Toasts -------- */
+function showToast(msg){
+  const wrap = document.getElementById('toastWrap');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<span class="dot"></span><span>${msg}</span>`;
+  wrap.appendChild(t);
+  setTimeout(() => {
+    t.style.transition = 'opacity .3s, transform .3s';
+    t.style.opacity = '0';
+    t.style.transform = 'translateY(6px)';
+    setTimeout(() => t.remove(), 300);
+  }, 3200);
+}
+
+/* -------- Application accordion -------- */
+function toggleApp(id){
+  document.getElementById('acc-' + id).classList.toggle('open');
+}
+
+/* -------- Cart detail accordion -------- */
+function toggleCartDetail(idx){
+  document.getElementById('cs-detail-' + idx).classList.toggle('open');
+}
+
+/* -------- Cart checkout (per-store + sequential "one by one") -------- */
+const cartCheckedOut = new Set();
+let cartProcessing = false;
+
+function checkoutStore(idx){
+  if (cartProcessing || cartCheckedOut.has(idx)) return;
+  cartCheckedOut.add(idx);
+  showToast(`Замовлення для «${CART[idx].store}» оформлено окремо ✓`);
+  renderCartView();
+}
+
+function checkoutAllSequential(){
+  if (cartProcessing) return;
+  const pending = CART.map((_, i) => i).filter(i => !cartCheckedOut.has(i));
+  if (pending.length === 0) return;
+
+  cartProcessing = true;
+  renderCartView();
+
+  const step = (n) => {
+    if (n >= pending.length){
+      cartProcessing = false;
+      showToast(`Усі ${CART.length} замовлення оформлено окремо для кожного магазину ✓`);
+      renderCartView();
+      return;
+    }
+    const idx = pending[n];
+    cartCheckedOut.add(idx);
+    showToast(`(${n+1}/${pending.length}) Оформлено замовлення для «${CART[idx].store}»`);
+    renderCartView();
+    setTimeout(() => step(n+1), 700);
+  };
+  step(0);
+}
+
+/* -------- Request form -------- */
+function openRequestForm(storeId){
+  const store = SEARCH_STORES.find(s => s.id === storeId);
+  document.getElementById('reqFormStoreName').textContent = store ? store.name + ' · ' + store.category : '—';
+  const wrap = document.getElementById('requestFormWrap');
+  wrap.classList.add('open');
+  wrap.scrollIntoView({behavior:'smooth', block:'start'});
+}
+function closeRequestForm(){
+  document.getElementById('requestFormWrap').classList.remove('open');
+}
+function submitRequest(){
+  closeRequestForm();
+  showToast('Заявку надіслано продавцю. Очікуйте підтвердження ✓');
+}
+
+/* Radio-card single-select within a group */
+document.addEventListener('click', (e) => {
+  const card = e.target.closest('.radio-card');
+  if (!card) return;
+  const group = card.parentElement;
+  group.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
+  card.classList.add('selected');
+});
+
+/* -------- Fixation modal -------- */
+function openFixation(bloggerId){
+  const b = STORE_BLOGGERS.find(x => x.id === bloggerId) || STORE_BLOGGERS[0];
+  const newStars = b.lastFixation ? b.storeStars - b.lastFixation.stars : b.storeStars;
+
+  const content = `
+    <div class="modal-head">
+      ${avatarHtml(b.name, b.avatarBg, 40)}
+      <div>
+        <h3>Фіксація зірочок</h3>
+        <p>${b.name} · ${CURRENT_STORE.name}</p>
+      </div>
+      <button class="modal-close" onclick="closeFixation()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="fix-compare">
+        <div class="fc-box">
+          <div class="fc-label">Зафіксовано раніше</div>
+          <div class="fc-value">${b.lastFixation ? fmt(b.lastFixation.stars) : 0} ★</div>
+          <div class="fc-sub">${b.lastFixation ? 'Фіксація №' + b.lastFixation.number + ' · ' + b.lastFixation.date : 'Фіксацій ще не було'}</div>
+        </div>
+        <div class="fc-arrow">→</div>
+        <div class="fc-box accent">
+          <div class="fc-label">Поточний баланс</div>
+          <div class="fc-value">${fmt(b.storeStars)} ★</div>
+          <div class="fc-sub">+${fmt(newStars)} ★ нових</div>
+        </div>
+      </div>
+
+      <div class="hint-banner" style="margin:16px 0 0;">
+        <span class="ic">🔒</span>
+        <span>Фіксація не переказує кошти. Вона лише документує узгоджену кількість зірочок на цю дату — обидві сторони мають підтвердити її, після чого запис стає незмінним у журналі.</span>
+      </div>
+
+      <div id="fixStep1">
+        <div class="section-label" style="margin-top:16px;">Кроки підтвердження</div>
+        <div class="fix-steps">
+          <div class="fix-step done"><span class="fs-dot">1</span> Блогер запросив фіксацію</div>
+          <div class="fix-step" id="fixStep2"><span class="fs-dot">2</span> Продавець підтверджує суму</div>
+          <div class="fix-step" id="fixStep3"><span class="fs-dot">3</span> Запис додається до журналу</div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeFixation()">Скасувати</button>
+      <button class="btn btn-primary" id="fixConfirmBtn" onclick="confirmFixation('${b.id}')">Підтвердити як продавець</button>
+    </div>
+    <style>
+      .fix-compare{display:flex;align-items:center;gap:12px;}
+      .fc-box{flex:1;background:#F7F5FD;border:1px solid var(--line);border-radius:12px;padding:14px;text-align:center;}
+      .fc-box.accent{background:var(--purple-50);border-color:var(--purple-100);}
+      .fc-label{font-size:10.8px;color:var(--ink-500);font-weight:600;margin-bottom:6px;}
+      .fc-value{font-size:21px;font-weight:800;font-family:'Manrope',sans-serif;}
+      .fc-sub{font-size:10.5px;color:var(--ink-300);margin-top:4px;}
+      .fc-arrow{font-size:18px;color:var(--ink-300);}
+      .fix-steps{display:flex;flex-direction:column;gap:8px;}
+      .fix-step{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-300);}
+      .fix-step.done{color:var(--ink-700);font-weight:600;}
+      .fix-step.active{color:var(--purple-600);font-weight:700;}
+      .fs-dot{width:20px;height:20px;border-radius:50%;background:#EDE9F7;color:var(--ink-500);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+      .fix-step.done .fs-dot{background:var(--green);color:#fff;}
+      .fix-step.active .fs-dot{background:var(--purple-500);color:#fff;}
+    </style>
+  `;
+  document.getElementById('fixationModalContent').innerHTML = content;
+  document.getElementById('fixationModal').classList.add('active');
+  setTimeout(() => document.getElementById('fixStep2')?.classList.add('active'), 200);
+}
+
+function closeFixation(){
+  document.getElementById('fixationModal').classList.remove('active');
+}
+
+function confirmFixation(bloggerId){
+  const b = STORE_BLOGGERS.find(x => x.id === bloggerId);
+  if (!b) return closeFixation();
+
+  document.getElementById('fixStep2')?.classList.remove('active');
+  document.getElementById('fixStep2')?.classList.add('done');
+  document.getElementById('fixStep3')?.classList.add('active');
+  const btn = document.getElementById('fixConfirmBtn');
+  btn.disabled = true;
+  btn.textContent = 'Записуємо у журнал…';
+
+  setTimeout(() => {
+    const newNum = (b.fixations[b.fixations.length-1]?.number || 0) + 1;
+    const today = new Date().toLocaleDateString('uk-UA');
+    const entry = { number: newNum, stars: b.storeStars, date: today };
+    b.fixations.push(entry);
+    b.lastFixation = entry;
+
+    document.getElementById('fixStep3')?.classList.remove('active');
+    document.getElementById('fixStep3')?.classList.add('done');
+    btn.textContent = 'Зафіксовано ✓';
+
+    setTimeout(() => {
+      closeFixation();
+      showToast(`Фіксація №${newNum} для ${b.name}: ${fmt(entry.stars)} ★ записано в журнал`);
+      // Re-render whichever views could show this data
+      if (document.getElementById('view-store').classList.contains('active')) renderStoreView();
+      if (document.getElementById('view-blogger').classList.contains('active')) renderBloggerView();
+    }, 700);
+  }, 900);
+}
+
+/* -------- Quick blogger profile modal (from Store / Application views) -------- */
+function openBloggerQuickView(bloggerId){
+  const b = STORE_BLOGGERS.find(x => x.id === bloggerId) || STORE_BLOGGERS[0];
+  const content = `
+    <div class="modal-head">
+      ${avatarHtml(b.name, b.avatarBg, 44)}
+      <div>
+        <h3>${b.name}</h3>
+        <p>${b.handle} · ${b.city} · рейтинг ⭐ ${b.rating}</p>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('profileModal').classList.remove('active')">✕</button>
+    </div>
+    <div class="modal-body">
+      ${LEDGER_STYLE}
+      ${starLedger(b, {showAction:false})}
+      <div style="display:flex;gap:10px;margin-top:16px;">
+        <button class="btn btn-soft btn-sm" onclick="showToast('Ставку для ${b.name} оновлено (демо)')">Змінити відсоток</button>
+        <button class="btn btn-danger btn-sm" onclick="showToast('Співпрацю з ${b.name} призупинено (демо)')">Припинити співпрацю</button>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="document.getElementById('profileModal').classList.remove('active')">Закрити</button>
+      <button class="btn btn-primary" onclick="document.getElementById('profileModal').classList.remove('active'); selectRole('blogger');">Відкрити повну анкету</button>
+    </div>
+  `;
+  document.getElementById('profileModalContent').innerHTML = content;
+  document.getElementById('profileModal').classList.add('active');
+}
+
+/* -------- Info modal: full visual explainer of the Дзеркало logic -------- */
+function openInfo(){
+  const content = `
+    <div class="modal-head">
+      <div class="info-fab-icon">і</div>
+      <div>
+        <h3>Як працює «Дзеркало»</h3>
+        <p>Логіка модуля покроково — для команди, продавців і блогерів</p>
+      </div>
+      <button class="modal-close" onclick="closeInfo()">✕</button>
+    </div>
+    <div class="modal-body info-content">
+
+      <p class="ic-lead">Багато продавців вміють продавати товар, але не вміють знімати вірусні відео. Водночас тисячі покупців вже знімають відеовідгуки добровільно. «Дзеркало» перетворює цих покупців на партнерів-блогерів, які просувають товар за винагороду.</p>
+
+      <div class="ic-roles">
+        <div class="ic-role">
+          <div class="ic-role-ic">🏬</div>
+          <div class="ic-role-name">Продавець</div>
+          <div class="ic-role-desc">має товар, приймає заявки, бачить статистику блогерів</div>
+        </div>
+        <div class="ic-role-arrow">⇄</div>
+        <div class="ic-role">
+          <div class="ic-role-ic">🎥</div>
+          <div class="ic-role-name">Блогер</div>
+          <div class="ic-role-desc">знімає відео, віддзеркалює товар, заробляє зірочки</div>
+        </div>
+        <div class="ic-role-arrow">⇄</div>
+        <div class="ic-role">
+          <div class="ic-role-ic">🛒</div>
+          <div class="ic-role-name">Покупець</div>
+          <div class="ic-role-desc">купує товар за посиланням із відео</div>
+        </div>
+      </div>
+
+      <div class="ic-section-title">Шлях блогера — від реєстрації до першого продажу</div>
+      <div class="ic-flow">
+        <div class="ic-flow-step"><span class="ic-fs-n">1</span>Реєстрація</div>
+        <div class="ic-flow-arrow">→</div>
+        <div class="ic-flow-step"><span class="ic-fs-n">2</span>Подає «Запит» до магазину</div>
+        <div class="ic-flow-arrow">→</div>
+        <div class="ic-flow-step"><span class="ic-fs-n">3</span>Продавець приймає «Заявку»</div>
+        <div class="ic-flow-arrow">→</div>
+        <div class="ic-flow-step"><span class="ic-fs-n">4</span>Отримує зразок і знімає відео</div>
+        <div class="ic-flow-arrow">→</div>
+        <div class="ic-flow-step"><span class="ic-fs-n">5</span>Покупці замовляють за посиланням</div>
+        <div class="ic-flow-arrow">→</div>
+        <div class="ic-flow-step accent"><span class="ic-fs-n">6</span>Нараховуються зірочки</div>
+      </div>
+
+      <div class="ic-section-title">CRM не є гарантом розрахунків</div>
+      <div class="ic-notdoes">
+        <div class="ic-nd-col bad">
+          <div class="ic-nd-head">❌ CRM не робить</div>
+          <ul><li>не приймає гроші</li><li>не виплачує бонуси</li><li>не виступає посередником у розрахунках</li></ul>
+        </div>
+        <div class="ic-nd-col good">
+          <div class="ic-nd-head">✅ CRM лише</div>
+          <ul><li>рахує зірочки, замовлення, продажі й відсотки</li><li>веде історію та журнал змін</li><li>дозволяє обом сторонам підтвердити факт взаєморозрахунку</li></ul>
+        </div>
+      </div>
+      <p class="ic-note">Люди самостійно домовляються про оплату, подарунки, бартер чи інший спосіб розрахунку — поза системою.</p>
+
+      <div class="ic-section-title">Два види зірочок</div>
+      <div class="ic-stars">
+        <div class="ic-star-card">
+          <div class="lm-label">Загальні зірочки</div>
+          <div class="lm-value">4 820 <span class="star">★</span></div>
+          <div class="ic-star-note">За всі магазини, за весь час. Ніколи не обнуляються — це рейтинг блогера.</div>
+        </div>
+        <div class="ic-star-card accent">
+          <div class="lm-label">Зірочки по магазину</div>
+          <div class="lm-value">2 315 <span class="star">★</span></div>
+          <div class="ic-star-note">Історія співпраці лише з одним продавцем. Саме вони йдуть у взаєморозрахунок.</div>
+        </div>
+      </div>
+
+      <div class="ic-section-title">Як працює фіксація</div>
+      <p class="ic-note" style="margin-top:-4px;">Фіксація документує узгоджену кількість зірочок на конкретну дату. Обидві сторони підтверджують — запис стає незмінним у журналі.</p>
+      <div class="ic-fixation-demo">
+        <div class="ic-fd-box"><b>1 537 ★</b><span>Фіксація №4 — зафіксовано</span></div>
+        <div class="ic-fd-arrow">через тиждень заробив ще</div>
+        <div class="ic-fd-box accent"><b>2 315 ★</b><span>новий поточний баланс</span></div>
+      </div>
+      <div class="ic-fixation-result">Система показує «нових зірочок»: <b>2 315 − 1 537 = 778 ★</b> — і так до наступної фіксації.</div>
+
+      <div class="ic-section-title">Хто що бачить у прототипі</div>
+      <div class="ic-screens">
+        <div class="ic-screen-row"><span class="badge badge-purple">🏬 Продавець</span><span>Магазин · Заявки</span></div>
+        <div class="ic-screen-row"><span class="badge badge-gold">🎥 Блогер</span><span>Блогер · Запит · Замовлення</span></div>
+        <div class="ic-screen-row"><span class="badge badge-green">🛒 Покупець</span><span>Кошик</span></div>
+      </div>
+      <p class="ic-note">Перемикайся між ними вкладками вгорі екрана — кожна роль відкриває свій набір розділів.</p>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-primary" onclick="closeInfo()">Зрозуміло</button>
+    </div>
+
+    <style>
+      .info-fab-icon{
+        width:38px;height:38px;border-radius:50%;flex-shrink:0;
+        background:var(--purple-100);color:var(--purple-600);
+        display:flex;align-items:center;justify-content:center;
+        font-family:'Manrope',sans-serif;font-weight:800;font-size:17px;
+      }
+      .info-content{font-size:13px;line-height:1.6;}
+      .ic-lead{font-size:13.2px;color:var(--ink-700);margin:0 0 18px;}
+      .ic-section-title{
+        font-size:11px;text-transform:uppercase;letter-spacing:.06em;font-weight:800;
+        color:var(--purple-500);margin:22px 0 10px;padding-top:14px;border-top:1px solid var(--line);
+      }
+      .info-content > .ic-section-title:first-of-type{border-top:none;padding-top:0;}
+
+      .ic-roles{display:flex;flex-direction:column;gap:10px;align-items:stretch;margin-bottom:6px;}
+      .ic-role{flex:1;background:var(--purple-50);border:1px solid var(--purple-100);border-radius:14px;padding:14px;text-align:center;}
+      .ic-role-ic{font-size:22px;margin-bottom:6px;}
+      .ic-role-name{font-weight:800;font-family:'Manrope',sans-serif;font-size:13.5px;margin-bottom:4px;}
+      .ic-role-desc{font-size:11.5px;color:var(--ink-500);line-height:1.45;}
+      .ic-role-arrow{text-align:center;font-size:16px;color:var(--purple-300,var(--purple-400));}
+
+      .ic-flow{display:flex;flex-direction:column;gap:6px;margin-bottom:6px;}
+      .ic-flow-step{
+        display:flex;align-items:center;gap:10px;
+        background:#fff;border:1px solid var(--line);border-radius:11px;padding:10px 12px;font-size:12.5px;font-weight:600;color:var(--ink-700);
+      }
+      .ic-flow-step.accent{border-color:var(--purple-200,var(--purple-100));background:var(--purple-50);color:var(--purple-600);}
+      .ic-fs-n{
+        width:20px;height:20px;border-radius:50%;background:var(--purple-100);color:var(--purple-600);
+        display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0;
+      }
+      .ic-flow-step.accent .ic-fs-n{background:var(--purple-500);color:#fff;}
+      .ic-flow-arrow{text-align:center;font-size:13px;color:var(--ink-300);}
+
+      .ic-notdoes{display:flex;flex-direction:column;gap:10px;}
+      .ic-nd-col{border-radius:12px;padding:12px 14px;font-size:12.5px;}
+      .ic-nd-col.bad{background:var(--red-100);}
+      .ic-nd-col.good{background:var(--green-100);}
+      .ic-nd-head{font-weight:800;margin-bottom:6px;font-size:12.5px;}
+      .ic-nd-col ul{margin:0;padding-left:18px;}
+      .ic-nd-col li{margin-bottom:3px;}
+      .ic-note{font-size:12px;color:var(--ink-500);margin:10px 0 0;}
+
+      .ic-stars{display:flex;flex-direction:column;gap:10px;}
+      .ic-star-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;}
+      .ic-star-card.accent{background:var(--purple-50);border-color:var(--purple-100);}
+      .ic-star-note{font-size:11px;color:var(--ink-300);margin-top:5px;line-height:1.4;}
+
+      .ic-fixation-demo{display:flex;flex-direction:column;gap:8px;align-items:stretch;margin-top:6px;}
+      .ic-fd-box{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;text-align:center;}
+      .ic-fd-box.accent{background:var(--purple-50);border-color:var(--purple-100);}
+      .ic-fd-box b{display:block;font-size:18px;font-family:'Manrope',sans-serif;}
+      .ic-fd-box span{font-size:10.8px;color:var(--ink-500);}
+      .ic-fd-arrow{text-align:center;font-size:11.5px;color:var(--ink-300);font-style:italic;}
+      .ic-fixation-result{margin-top:10px;font-size:12.5px;background:var(--gold-100);color:#7A4F00;border-radius:10px;padding:10px 12px;}
+
+      .ic-screens{display:flex;flex-direction:column;gap:8px;}
+      .ic-screen-row{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--ink-700);font-weight:600;}
+
+      @media (min-width:640px){
+        .ic-roles{flex-direction:row;align-items:center;}
+        .ic-role-arrow{transform:none;}
+        .ic-flow{flex-direction:row;flex-wrap:wrap;align-items:center;}
+        .ic-flow-step{flex:1 1 150px;}
+        .ic-flow-arrow{flex:0 0 auto;}
+        .ic-notdoes{flex-direction:row;}
+        .ic-nd-col{flex:1;}
+        .ic-stars{flex-direction:row;}
+        .ic-star-card{flex:1;}
+        .ic-fixation-demo{flex-direction:row;align-items:center;}
+        .ic-fd-box{flex:1;}
+        .ic-fd-arrow{flex:0 0 140px;}
+      }
+    </style>
+  `;
+  document.getElementById('infoModalContent').innerHTML = content;
+  document.getElementById('infoModal').classList.add('active');
+}
+function closeInfo(){
+  document.getElementById('infoModal').classList.remove('active');
+}
+
+/* -------- Close modals on overlay click -------- */
+document.getElementById('fixationModal').addEventListener('click', (e) => {
+  if (e.target.id === 'fixationModal') closeFixation();
+});
+document.getElementById('profileModal').addEventListener('click', (e) => {
+  if (e.target.id === 'profileModal') document.getElementById('profileModal').classList.remove('active');
+});
+document.getElementById('infoModal').addEventListener('click', (e) => {
+  if (e.target.id === 'infoModal') closeInfo();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape'){
+    closeFixation();
+    document.getElementById('profileModal').classList.remove('active');
+    closeInfo();
+  }
+});
+
+/* -------- Init -------- */
+renderStoreView();
+renderBloggerView();
+renderApplicationView();
+renderRequestView();
+renderOrdersView();
+renderCartView();
+selectView('store');
+
+</script>
+</body>
+</html>
