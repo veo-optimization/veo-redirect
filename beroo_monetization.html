@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f7f5fb">
+<meta name="supported-color-schemes" content="light">
+<title>BEROO ONLINE — Чому не зараз</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f5fb;
+    --panel:#ffffff;
+    --panel-2:#efe9fb;
+    --accent:#7b2ff7;
+    --accent-2:#5b21b6;
+    --warn:#9a5510;
+    --text:#191325;
+    --muted:#645d78;
+    --line:rgba(25,15,50,0.12);
+    --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth; color-scheme:light; background:#f7f5fb !important; overflow-x:hidden; width:100%;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 85% -5%, rgba(123,47,247,0.10), transparent 60%),
+      radial-gradient(ellipse 700px 500px at -5% 30%, rgba(123,47,247,0.06), transparent 60%),
+      var(--bg) !important;
+    color:var(--text) !important;
+    color-scheme:light;
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    overflow-x:hidden;
+    width:100%;
+  }
+  ::selection{background:var(--accent); color:#fff;}
+
+  a{color:inherit;}
+
+  .shell{display:grid; grid-template-columns:260px 1fr; max-width:1400px; margin:0 auto;}
+  @media (max-width:980px){ .shell{grid-template-columns:1fr;} .nav{display:none;} }
+
+  .nav{
+    position:sticky; top:0; height:100vh; overflow-y:auto;
+    padding:38px 22px 40px 32px;
+    border-right:1px solid var(--line);
+  }
+  .nav-brand{
+    font-family:'Unbounded',sans-serif; font-weight:700; font-size:15px;
+    letter-spacing:0.02em; margin-bottom:4px;
+  }
+  .nav-brand span{color:var(--accent-2);}
+  .nav-sub{font-family:var(--mono); font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:34px;}
+  .nav-list{list-style:none; display:flex; flex-direction:column; gap:2px;}
+  .nav-list a{
+    display:flex; gap:10px; align-items:baseline;
+    font-size:12.5px; color:var(--muted); text-decoration:none;
+    padding:7px 8px; border-radius:6px; transition:.15s;
+  }
+  .nav-list a:hover{color:var(--text); background:rgba(25,15,50,0.05);}
+  .nav-list a .n{font-family:var(--mono); color:var(--accent-2); font-size:10.5px; width:16px; flex-shrink:0;}
+
+  main{padding:0 0 120px 0;}
+  .wrap{padding:0 56px;}
+  @media (max-width:980px){ .wrap{padding:0 24px;} }
+  @media (max-width:560px){ .wrap{padding:0 16px;} }
+
+  .hero{
+    padding:72px 56px 40px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  @media (max-width:980px){ .hero{padding:52px 24px 32px;} }
+  .eyebrow{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--accent-2); margin-bottom:22px; display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:''; width:22px; height:1px; background:var(--accent-2);}
+  .mirror-block{position:relative;}
+  h1.title{
+    font-family:'Unbounded',sans-serif; font-weight:700; font-size:clamp(30px,5vw,54px);
+    line-height:1.08; letter-spacing:-0.01em; max-width:16ch;
+  }
+  h1.title .r{color:var(--accent-2); font-weight:300; font-style:normal;}
+  .hero-lead{
+    max-width:660px; color:var(--muted); font-size:16.5px; margin-top:26px;
+  }
+  .hero-lead b{color:var(--text); font-weight:600;}
+  .hero-meta{
+    display:flex; gap:28px; flex-wrap:wrap; margin-top:34px;
+    font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em;
+  }
+  .hero-meta span b{color:var(--accent-2); display:block; font-family:'Inter',sans-serif; font-size:20px; text-transform:none; letter-spacing:0; margin-bottom:2px; font-weight:700;}
+
+  section.vol{
+    padding:52px 56px; border-bottom:1px solid var(--line);
+    scroll-margin-top:20px;
+  }
+  @media (max-width:980px){ section.vol{padding:40px 24px;} }
+  .vol-head{display:flex; gap:20px; align-items:flex-start; margin-bottom:26px;}
+  .vol-num{
+    font-family:var(--mono); font-size:13px; color:var(--accent-2);
+    border:1px solid var(--line); border-radius:20px; padding:5px 12px; flex-shrink:0; margin-top:4px;
+  }
+  h2.vol-title{
+    font-family:'Unbounded',sans-serif; font-weight:500; font-size:clamp(22px,3vw,30px); letter-spacing:-0.01em;
+  }
+  .vol-dek{color:var(--muted); font-size:14.5px; max-width:640px; margin-top:6px;}
+  .vol-body{max-width:900px;}
+
+  p{margin-bottom:14px; font-size:15px;}
+  .lead-p{font-size:16.5px; color:var(--text);}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  @media (max-width:760px){ .grid2,.grid3{grid-template-columns:1fr;} }
+
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:20px 22px;
+  }
+  .card h3{font-size:14px; font-weight:600; margin-bottom:8px; color:var(--text);}
+  .card p{font-size:13.5px; color:var(--muted); margin-bottom:0;}
+  .card .tag{font-family:var(--mono); font-size:10px; color:var(--warn); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px; display:block;}
+
+  ul.bullets{list-style:none; display:flex; flex-direction:column; gap:9px; margin:14px 0;}
+  ul.bullets li{padding-left:18px; position:relative; font-size:14.5px; color:var(--muted);}
+  ul.bullets li::before{content:'—'; position:absolute; left:0; color:var(--accent-2);}
+  ul.bullets li b{color:var(--text); font-weight:600;}
+
+  .reframe{
+    background:linear-gradient(135deg, rgba(123,47,247,0.14), rgba(123,47,247,0.02));
+    border:1px solid rgba(123,47,247,0.35); border-radius:12px; padding:22px 24px; margin-top:18px;
+  }
+  .reframe .tag{font-family:var(--mono); font-size:10px; color:var(--accent-2); text-transform:uppercase; letter-spacing:0.1em; display:block; margin-bottom:10px;}
+  .reframe .old{font-size:13.5px; color:var(--muted); text-decoration:line-through; margin-bottom:10px;}
+  .reframe .new{font-size:15px; color:var(--text); font-weight:500;}
+
+  .warn-box{
+    background:linear-gradient(135deg, rgba(154,85,16,0.10), rgba(154,85,16,0.02));
+    border:1px solid rgba(154,85,16,0.35); border-radius:12px; padding:22px 24px; margin-top:18px;
+  }
+  .warn-box .tag{font-family:var(--mono); font-size:10px; color:var(--warn); text-transform:uppercase; letter-spacing:0.1em; display:block; margin-bottom:10px;}
+  .warn-box p{margin-bottom:0; font-size:15px;}
+  .warn-box p b{color:var(--warn);}
+
+  .risk-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:16px;}
+  @media (max-width:760px){ .risk-grid{grid-template-columns:repeat(2,1fr);} }
+  .risk{
+    font-size:12.5px; padding:11px 13px; border-radius:8px; border:1px solid var(--line); background:var(--panel);
+    color:var(--muted);
+  }
+  .risk b{display:block; color:var(--warn); font-size:11px; font-family:var(--mono); text-transform:uppercase; margin-bottom:4px; letter-spacing:0.04em;}
+
+  .split{display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px; margin-top:16px; border:1px solid var(--line); border-radius:12px; overflow:hidden;}
+  @media (max-width:760px){ .split{grid-template-columns:1fr;} }
+  .split > div{padding:20px 22px; background:var(--panel);}
+  .split h4{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent-2); margin-bottom:10px;}
+  .split p{font-size:13.5px; color:var(--muted); margin-bottom:0;}
+
+  .timeline{position:relative; margin-top:24px; padding-left:26px; border-left:2px solid var(--line);}
+  .tl-step{position:relative; padding-bottom:26px;}
+  .tl-step:last-child{padding-bottom:0;}
+  .tl-step::before{
+    content:''; position:absolute; left:-32px; top:3px; width:10px; height:10px; border-radius:50%;
+    background:var(--accent); box-shadow:0 0 0 4px rgba(123,47,247,0.18);
+  }
+  .tl-step h4{font-size:15px; font-weight:600; margin-bottom:3px;}
+  .tl-step h4 .metric{color:var(--accent-2); font-family:var(--mono); font-weight:500; font-size:13px; margin-right:8px;}
+  .tl-step p{font-size:13.5px; color:var(--muted); margin-bottom:0;}
+
+  .metrics{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:16px;}
+  @media (max-width:760px){ .metrics{grid-template-columns:repeat(2,1fr);} }
+  .metric-card{padding:16px; border:1px solid var(--line); border-radius:10px; background:var(--panel);}
+  .metric-card .k{font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em;}
+  .metric-card .v{font-size:14px; color:var(--text); font-weight:600; margin-top:4px;}
+
+  /* visual bar-compare (replaces plain comparison tables) */
+  .stat-bars{display:flex; flex-direction:column; gap:14px; margin-top:22px; max-width:720px;}
+  .stat-bar{padding:14px 16px; background:var(--panel); border:1px solid var(--line); border-radius:10px;}
+  .stat-bar.highlight{border-color:rgba(123,47,247,0.4); background:linear-gradient(135deg, rgba(123,47,247,0.08), transparent);}
+  .stat-bar-head{display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:8px; flex-wrap:wrap;}
+  .stat-bar-head .name{font-weight:600; font-size:14px;}
+  .stat-bar-head .detail{font-family:var(--mono); font-size:11px; color:var(--muted);}
+  .stat-bar-track{height:8px; background:var(--panel-2); border-radius:4px; overflow:hidden;}
+  .stat-bar-fill{height:100%; background:var(--accent); border-radius:4px;}
+  .stat-bar-cagr{font-family:var(--mono); font-size:12px; color:var(--accent-2); margin-top:7px; font-weight:600;}
+
+  /* category cards (replaces the 5000-sellers table) */
+  .cat-grid{display:grid; grid-template-columns:1fr; gap:12px; margin-top:18px;}
+  @media (min-width:640px){ .cat-grid{grid-template-columns:1fr 1fr;} }
+  .cat-card{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px;}
+  .cat-head{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:10px; flex-wrap:wrap;}
+  .cat-name{font-weight:600; font-size:14.5px;}
+  .cat-count{font-family:var(--mono); font-size:11px; color:var(--accent-2);}
+  .cat-stats{display:flex; flex-direction:column; gap:5px; margin-bottom:10px;}
+  .cat-stats div{display:flex; justify-content:space-between; gap:10px; font-size:12.5px;}
+  .cat-stats .cs-k{color:var(--muted);}
+  .cat-stats .cs-v{font-weight:600; color:var(--text); text-align:right;}
+  .cat-stats .cs-v.good{color:var(--accent-2);}
+  .cat-bar-track{height:6px; background:var(--panel-2); border-radius:3px; overflow:hidden;}
+  .cat-bar-fill{height:100%; background:var(--accent); border-radius:3px;}
+
+  footer{padding:44px 56px 60px; color:var(--muted); font-size:12.5px;}
+  @media (max-width:980px){ footer{padding:36px 24px;} }
+  footer .fline{display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; border-top:1px solid var(--line); padding-top:20px; font-family:var(--mono); font-size:11px;}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <nav class="nav">
+    <div class="nav-brand">BEROO <span>ONLINE</span></div>
+    <div class="nav-sub">Записка для команди</div>
+    <ul class="nav-list">
+      <li><a href="#v0"><span class="n">•</span> Команда</a></li>
+      <li><a href="#v1"><span class="n">01</span> Записка для команди</a></li>
+      <li><a href="#v2"><span class="n">02</span> Ринок уже змінився</a></li>
+      <li><a href="#v3"><span class="n">03</span> Прогноз на 6 місяців</a></li>
+      <li><a href="#v4"><span class="n">04</span> Монополізація витрат</a></li>
+      <li><a href="#v5"><span class="n">05</span> Як монетизується Дзеркало</a></li>
+      <li><a href="#v6"><span class="n">06</span> 5 000 продавців у цифрах</a></li>
+      <li><a href="#v7"><span class="n">07</span> Скільки це в грошах</a></li>
+      <li><a href="#v8"><span class="n">08</span> Що залишилось зробити</a></li>
+      <li><a href="#v9"><span class="n">09</span> Обмеження розрахунків</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <div class="eyebrow">Чому старий формат продажів не працює</div>
+      <div class="mirror-block">
+        <h1 class="title">Ринок змінився швидше, ніж бізнес встиг це помітити</h1>
+      </div>
+      <p class="hero-lead">Рекламні доходи TikTok зросли з $3,9 млрд у 2021 до $33,1 млрд у 2025 — у <b>8,5 раза за 4 роки</b>, CAGR 58,2%. Для порівняння: Facebook — 1,8%, Instagram — 12,4%, YouTube — 8,7%. Це не поступове зростання ринку — це вибухова експансія, яку більшість бізнесів досі не помітили.</p>
+
+      <div class="stat-bars">
+        <div class="stat-bar">
+          <div class="stat-bar-head"><span class="name">Facebook</span><span class="detail">$114,9 → $123,7 млрд</span></div>
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:3%;"></div></div>
+          <div class="stat-bar-cagr">CAGR +1,8%</div>
+        </div>
+        <div class="stat-bar">
+          <div class="stat-bar-head"><span class="name">Instagram</span><span class="detail">$42,5 → $69,1 млрд</span></div>
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:21%;"></div></div>
+          <div class="stat-bar-cagr">CAGR +12,4%</div>
+        </div>
+        <div class="stat-bar">
+          <div class="stat-bar-head"><span class="name">YouTube</span><span class="detail">$28,8 → $40,4 млрд</span></div>
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:15%;"></div></div>
+          <div class="stat-bar-cagr">CAGR +8,7%</div>
+        </div>
+        <div class="stat-bar highlight">
+          <div class="stat-bar-head"><span class="name">TikTok</span><span class="detail">$3,9 → $33,1 млрд</span></div>
+          <div class="stat-bar-track"><div class="stat-bar-fill" style="width:100%;"></div></div>
+          <div class="stat-bar-cagr">CAGR +58,2% ↑</div>
+        </div>
+      </div>
+
+      <p class="hero-lead" style="margin-top:26px;">Ще показовіше — час в застосунку і комерційна ефективність. Користувач TikTok проводить у застосунку <b>95 хвилин на день</b> — більше, ніж на будь-якій іншій платформі — а GMV TikTok Shop сягнув <b>$64,3 млрд (+94% рік до року)</b>.</p>
+
+      <div class="metrics" style="max-width:900px;">
+        <div class="metric-card"><div class="k">Facebook</div><div class="v">31 хв/день · GMV $28,0 млрд (C2C)</div></div>
+        <div class="metric-card"><div class="k">Instagram</div><div class="v">35 хв/день · GMV $11,2 млрд (переходи)</div></div>
+        <div class="metric-card"><div class="k">YouTube</div><div class="v">48 хв/день · GMV $5,4 млрд (теги)</div></div>
+        <div class="metric-card" style="border-color:rgba(123,47,247,0.4);"><div class="k">TikTok</div><div class="v">95 хв/день · GMV $64,3 млрд (+94%)</div></div>
+      </div>
+
+      <p class="hero-lead" style="margin-top:22px;">Різниця не лише в цифрах, а в самій моделі: <b>TikTok Shop — повна екосистема</b>, де покупка, оплата й логістика відбуваються всередині одного сеансу. Instagram Shopping здебільшого лишається вітриною з переходом на зовнішні сайти, а Facebook Marketplace — C2C-оголошеннями. Саме тому продавати за старою логікою картки товару й переходу на сайт на цьому ринку вже не працює.</p>
+
+      <p style="font-size:11px; color:var(--muted); margin-top:8px;">Джерело даних: Influencer Marketing Hub 2025 / Red Stag Fulfillment, 2026.</p>
+    </div>
+
+    <div class="wrap" style="padding:0;">
+
+      <section class="vol" id="v0">
+        <div class="vol-head">
+          <div class="vol-num">•</div>
+          <div><h2 class="vol-title">Ми — змій з трьома головами</h2><p class="vol-dek">А не лебідь, щука і рак</p></div>
+        </div>
+        <div class="vol-body">
+          <div class="split">
+            <div>
+              <h4>Василь</h4>
+              <p>Стратегічне й аналітичне мислення щодо кон'юнктури ринку: враховує всі проблеми продавців і психологію користувача, утримання уваги, куди рухається платформа ТікТок, яка вона охоплює ринок, змінює бізнес-реалії, хто, де і скільки на ній заробляє тощо. Веде постійний збір інформації й статистики за останні роки — які клієнти звертаються і що саме кажуть: «Google не працює, Prom не працює, OLX не працює, ми хочемо в TikTok, навчіть нас».</p>
+            </div>
+            <div>
+              <h4>Наталя</h4>
+              <p>20 років досвіду роботи з турецькими торговими мережами, офлайн-магазинами й командами — пройшла кілька ринкових зламів наживо: різкий занепад офлайну і підйом онлайну, потім підйом продажів через TikTok, потім різку зміну знову. Живе в Одесі, спілкується з колегами, друзями й знайомими продавцями — бачить всю картину ринку через клієнтів зсередини. Дипломований психолог і конфліктолог.</p>
+            </div>
+            <div>
+              <h4>Вадим</h4>
+              <p>Програміст надзвичайно високого рівня. Структуровано, грамотно й влучно розробляє архітектуру із сильною безпекою — ці архітектурні й технологічні моменти знає краще за всіх у команді.</p>
+            </div>
+          </div>
+          <p style="margin-top:16px;">Це не лебідь, щука і рак, що тягнуть у різні боки, — це істота з трьома головами на одному тілі. Кожна голова бачить своє, але тіло рухається в один бік. У кожній із трьох зон рішення ухвалює той, чия це експертиза, — інші двоє слухають, а не навчають.</p>
+          <div class="reframe">
+            <span class="tag">Навіщо це все</span>
+            <div class="new">Мета всіх трьох — щоб на момент, коли ринок TikTok «схлопнеться» (перші ознаки цього вже видно), в екосистемі вже був готовий товар, сервіс і повна інфраструктура для продажів. У цій точці BEROO стає практично монополістом на своєму сегменті ринку — і може виставляти комфортні для себе тарифи, які бізнес охоче платитиме, якщо продукт реально працює. Тому фокус зараз — чути одне одного, а не доводити одне одному, що хтось щось робить неправильно: це забирає час і сили та вносить розбрат у довгостроковий проєкт.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="vol" id="v1">
+        <div class="vol-head">
+          <div class="vol-num">01</div>
+          <div><h2 class="vol-title">Записка для команди</h2><p class="vol-dek">Відсутність акценту на монетизації — не відсутність інтересу</p></div>
+        </div>
+        <div class="vol-body">
+          <p class="lead-p">Те, що в щоденній розробці зараз майже не звучить слово «тарифи», — це не означає, що монетизація не цікавить або відкладена на невизначений термін. Навпаки: момент вибухової монетизації вже близько. Залишилось кілька конкретних кроків, щоб перевести платформу з режиму бета-тесту в статус комерційного проєкту — і нижче розписано, чому саме зараз, на чому саме заробляємо і скільки це приблизно в грошах.</p>
+          <p>Ринок навколо нас за останні роки змінився швидше, ніж встигли змінитися звички бізнесу. Це і є вікно, у яке ми входимо не з порожніми руками, а з готовою інфраструктурою.</p>
+        </div>
+      </section>
+
+      <section class="vol" id="v2">
+        <div class="vol-head">
+          <div class="vol-num">02</div>
+          <div><h2 class="vol-title">Ринок уже змінився</h2><p class="vol-dek">Сім тенденцій, які окремо помітні, а разом — необоротні</p></div>
+        </div>
+        <div class="vol-body">
+          <ul class="bullets">
+            <li><b>Вартість залучення клієнта росте.</b> Бюджети на рекламу вимірюються тисячами доларів, а рентабельність падає — проблема вже не в ціні кліка, а в самій моделі боротьби за увагу.</li>
+            <li><b>Покупець змінив спосіб пошуку товару.</b> Раніше — Google. Тепер — TikTok, де людина спочатку просто дивиться відео, а вже потім алгоритм підбирає товар. Пошук перетворюється на рекомендацію.</li>
+            <li><b>Контент став головним джерелом продажів.</b> Раніше продавець шукав покупця. Тепер алгоритм шукає покупця сам — і головне завдання бізнесу вже не сайт, а контент, який алгоритм захоче рекомендувати.</li>
+            <li><b>Довіра перейшла від бренду до автора.</b> Людина вірить не рекламі, а чесному огляду й особистому досвіду. Найбільша цінність — не магазин, а людина, яка вміє показати товар так, щоб його захотіли купити.</li>
+            <li><b>В Україні вже є база майбутньої партнerської економіки.</b> Сотні тисяч людей регулярно знімають відео — продавці, консультанти, майстри, покупці, блогери. Навіть без великої аудиторії окреме відео може набрати сотні тисяч чи мільйони переглядів.</li>
+            <li><b>Бізнесу потрібна нова інфраструктура.</b> Сайт більше не кінцева точка продажу, а місце оформлення замовлення — продаж починається в момент першого перегляду відео. Потрібна система, що об'єднує каталог, CRM, контент, авторів, партнерські продажі, автоматизацію, логістику, оплату й аналітику в одному місці.</li>
+            <li><b>Вікно можливостей вузьке.</b> Хто починає зараз — навчається створювати контент, формує каталог і репутацію заздалегідь. Хто чекає офіційного запуску нових можливостей платформи — наздоганяє тих, хто вже готовий.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="vol" id="v3">
+        <div class="vol-head">
+          <div class="vol-num">03</div>
+          <div><h2 class="vol-title">Прогноз на найближчі 6 місяців</h2><p class="vol-dek">Зсув від «купити рекламу» до «створити систему»</p></div>
+        </div>
+        <div class="vol-body">
+          <p>Найближчі півроку — це подальше зміщення уваги бізнесу від моделі «купити рекламу» до моделі «створити систему, яка сама генерує органічний трафік через контент».</p>
+          <div class="grid2">
+            <div class="card"><h3>Що зростатиме</h3><p>Попит на автоматизацію продажів, інтеграція каталогів із соцплатформами, роль авторів контенту в комерції.</p></div>
+            <div class="card"><h3>До чого готується ринок</h3><p>Формати соціальної комерції, які вже успішно працюють на інших ринках, — Україна лише наближається до цієї моделі.</p></div>
+          </div>
+          <p style="margin-top:14px;">Мета — не замінити наявні канали продажів, а дати бізнесу інфраструктуру, де контент приводить покупця, а технологія забезпечує оформлення, оплату, доставку й масштабування.</p>
+        </div>
+      </section>
+
+      <section class="vol" id="v4">
+        <div class="vol-head">
+          <div class="vol-num">04</div>
+          <div><h2 class="vol-title">Стратегія: монополізація витрат бізнесу</h2><p class="vol-dek">Google-реклама, Instagram-таргет, офлайн-оренда — все це вже витрачається кимось</p></div>
+        </div>
+        <div class="vol-body">
+          <p class="lead-p">Бізнес уже сьогодні платить за увагу клієнта — просто різним підрядникам: Google Ads, таргет в Instagram, оренда офлайн-точки. Мета BEROO — не додати ще один рахунок до цього списку, а поступово акумулювати на собі частину цих витрат, запропонувавши модель, за яку бізнес платить лише за результат, а не наперед.</p>
+          <div class="reframe">
+            <span class="tag">Чому це реалістично</span>
+            <div class="new">Жоден бізнес не буде свідомо відмовлятися від «чарівної» функції, яка приносить продажі без наперед оплаченого ризику, коли її вже використовують конкуренти. Ризикувати рейтингом власного магазину, ігноруючи канал, яким користується вся ніша, — дорожче, ніж спробувати нову модель.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="vol" id="v5">
+        <div class="vol-head">
+          <div class="vol-num">05</div>
+          <div><h2 class="vol-title">Як монетизується «Дзеркало»</h2><p class="vol-dek">Модель, за якою платять лише за результат</p></div>
+        </div>
+        <div class="vol-body">
+          <p>Продавець платить не за спробу, а за фактичний продаж, який приніс автор контенту. Це відрізняє модель від Google Ads чи офлайн-оренди, де гроші йдуть незалежно від результату.</p>
+          <div class="metrics">
+            <div class="metric-card"><div class="k">Комісія автору</div><div class="v">5–20% від продажу (обирає продавець)</div></div>
+            <div class="metric-card"><div class="k">Комісія платформи</div><div class="v">~7% від GMV через «Дзеркало» (припущення)</div></div>
+            <div class="metric-card"><div class="k">Конверсія перегляду в замовлення</div><div class="v">0,1–3% залежно від категорії</div></div>
+            <div class="metric-card"><div class="k">Охоплення одного відео</div><div class="v">від сотень до кількох мільйонів переглядів</div></div>
+          </div>
+          <p style="margin-top:16px; font-size:13.5px; color:var(--muted);">Це припущення для розрахунків нижче, а не зафіксовані тарифи — комісію платформи можна калібрувати після перших реальних даних.</p>
+        </div>
+      </section>
+
+      <section class="vol" id="v6">
+        <div class="vol-head">
+          <div class="vol-num">06</div>
+          <div><h2 class="vol-title">5 000 продавців у цифрах</h2><p class="vol-dek">Ілюстративний розрахунок глибини ринку за категоріями</p></div>
+        </div>
+        <div class="vol-body">
+          <p>Умовний розподіл 5 000 продавців і послуг різних категорій — від одягу до консультацій юриста. Цифри нижче — базовий (не вірусний) місячний сценарій: помірна активність кількох авторів «Дзеркала» на продавця, без одного випадкового відео на мільйони переглядів.</p>
+          <div class="reframe" style="margin-bottom:4px;">
+            <span class="tag">Що означає «Дод. продажі через Дзеркало»</span>
+            <div class="new">GMV (Gross Merchandise Value) — це сума всіх продажів у грошовому виразі. «Дод.» означає додатковий: це не весь оборот продавця, а лише та частина продажів понад звичайний обсяг, яку приносять автори «Дзеркала» — блогери, що показали товар у своєму відео і привели покупця. Тобто це гроші, яких у продавця не було б без цього каналу.</div>
+          </div>
+          <div class="cat-grid">
+            <div class="cat-card">
+              <div class="cat-head"><span class="cat-name">Одяг</span><span class="cat-count">1 000 продавців</span></div>
+              <div class="cat-stats">
+                <div><span class="cs-k">Сер. чек</span><span class="cs-v">900₴</span></div>
+                <div><span class="cs-k">Реклама зараз/міс</span><span class="cs-v">15 000₴</span></div>
+                <div><span class="cs-k">Дод. продажі через «Дзеркало»</span><span class="cs-v good">~18 000₴</span></div>
+              </div>
+              <div class="cat-bar-track"><div class="cat-bar-fill" style="width:86%;"></div></div>
+            </div>
+            <div class="cat-card">
+              <div class="cat-head"><span class="cat-name">Взуття</span><span class="cat-count">600 продавців</span></div>
+              <div class="cat-stats">
+                <div><span class="cs-k">Сер. чек</span><span class="cs-v">1 400₴</span></div>
+                <div><span class="cs-k">Реклама зараз/міс</span><span class="cs-v">12 000₴</span></div>
+                <div><span class="cs-k">Дод. продажі через «Дзеркало»</span><span class="cs-v good">~16 800₴</span></div>
+              </div>
+              <div class="cat-bar-track"><div class="cat-bar-fill" style="width:80%;"></div></div>
+            </div>
+            <div class="cat-card">
+              <div class="cat-head"><span class="cat-name">Косметика</span><span class="cat-count">700 продавців</span></div>
+              <div class="cat-stats">
+                <div><span class="cs-k">Сер. чек</span><span class="cs-v">650₴</span></div>
+                <div><span class="cs-k">Реклама зараз/міс</span><span class="cs-v">10 000₴</span></div>
+                <div><span class="cs-k">Дод. продажі через «Дзеркало»</span><span class="cs-v good">~19 500₴</span></div>
+              </div>
+              <div class="cat-bar-track"><div class="cat-bar-fill" style="width:93%;"></div></div>
+            </div>
+            <div class="cat-card">
+              <div class="cat-head"><span class="cat-name">Продукти харчування</span><span class="cat-count">500 продавців</span></div>
+              <div class="cat-stats">
+                <div><span class="cs-k">Сер. чек</span><span class="cs-v">450₴</span></div>
+                <div><span class="cs-k">Реклама зараз/міс</span><span class="cs-v">8 000₴</span></div>
+                <div><span class="cs-k">Дод. продажі через «Дзеркало»</span><span class="cs-v good">~2 700₴</span></div>
+              </div>
+              <div class="cat-bar-track"><div class="cat-bar-fill" style="width:13%;"></div></div>
+            </div>
+            <div class="cat-card">
+              <div class="cat-head"><span class="cat-name">Дитячі іграшки</span><span class="cat-count">500 продавців</span></div>
+              <div class="cat-stats">
+                <div><span class="cs-k">Сер. чек</span><span class="cs-v">550₴</span></div>
+                <div><span class="cs-k">Реклама зараз/міс</span><span class="cs-v">9 000₴</span></div>
+                <div><span class="cs-k">Дод. продажі через «Дзеркало»</span><span class="cs-v good">~20 900₴</span></div>
+              </div>
+              <div class="cat-bar-track"><div class="cat-bar-fill" style="width:100%;"></div></div>
+            </div>
+            <div class="cat-card">
+              <div class="cat-head"><span class="cat-name">Послуги юриста</span><span class="cat-count">400 продавців</span></div>
+              <div class="cat-stats">
+                <div><span class="cs-k">Сер. чек</span><span class="cs-v">2 000₴</span></div>
+                <div><span class="cs-k">Реклама зараз/міс</span><span class="cs-v">6 000₴</span></div>
+                <div><span class="cs-k">Дод. продажі через «Дзеркало»</span><span class="cs-v good">~2 000₴</span></div>
+              </div>
+              <div class="cat-bar-track"><div class="cat-bar-fill" style="width:10%;"></div></div>
+            </div>
+            <div class="cat-card">
+              <div class="cat-head"><span class="cat-name">Послуги психолога</span><span class="cat-count">500 продавців</span></div>
+              <div class="cat-stats">
+                <div><span class="cs-k">Сер. чек</span><span class="cs-v">900₴</span></div>
+                <div><span class="cs-k">Реклама зараз/міс</span><span class="cs-v">5 000₴</span></div>
+                <div><span class="cs-k">Дод. продажі через «Дзеркало»</span><span class="cs-v good">~1 800₴</span></div>
+              </div>
+              <div class="cat-bar-track"><div class="cat-bar-fill" style="width:9%;"></div></div>
+            </div>
+            <div class="cat-card">
+              <div class="cat-head"><span class="cat-name">Послуги репетитора</span><span class="cat-count">800 продавців</span></div>
+              <div class="cat-stats">
+                <div><span class="cs-k">Сер. чек</span><span class="cs-v">700₴</span></div>
+                <div><span class="cs-k">Реклама зараз/міс</span><span class="cs-v">4 000₴</span></div>
+                <div><span class="cs-k">Дод. продажі через «Дзеркало»</span><span class="cs-v good">~2 800₴</span></div>
+              </div>
+              <div class="cat-bar-track"><div class="cat-bar-fill" style="width:13%;"></div></div>
+            </div>
+          </div>
+          <div class="warn-box" style="margin-top:18px;">
+            <span class="tag">Вірусний сценарій — окремо, не в базі</span>
+            <p>Якщо одне випадкове відео набирає ~1,5 млн переглядів навіть при консервативній конверсії 0,1%, це ще ~1 500 замовлень з одного відео — для товарної категорії з чеком 500–900₴ це <b>0,75–1,35 млн₴ GMV за один вірусний спалах</b>. Це рідкісний, а не базовий сценарій, і стосується окремих продавців у конкретний місяць, а не всієї бази одночасно.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="vol" id="v7">
+        <div class="vol-head">
+          <div class="vol-num">07</div>
+          <div><h2 class="vol-title">Скільки це в грошах</h2><p class="vol-dek">Базовий сценарій, без урахування вірусних спалахів</p></div>
+        </div>
+        <div class="vol-body">
+          <p>Якщо застосувати ~7% комісії платформи до додаткового GMV з таблиці вище й помножити на кількість продавців у кожній категорії, базовий сценарій на 5 000 продавців дає приблизно:</p>
+          <div class="metrics">
+            <div class="metric-card"><div class="k">Дохід платформи</div><div class="v">~4 млн₴/міс (лише комісія з «Дзеркала»)</div></div>
+            <div class="metric-card"><div class="k">Річна проєкція</div><div class="v">~48 млн₴ (~$1,1 млн) на рік</div></div>
+            <div class="metric-card"><div class="k">Плюс підписки</div><div class="v">~1 млн₴/міс з платних тарифів (Pro/Business)</div></div>
+            <div class="metric-card"><div class="k">Пул для монополізації</div><div class="v">~46 млн₴/міс — сума, яку ці 5 000 продавців уже витрачають на Google/Instagram/офлайн-оренду</div></div>
+          </div>
+          <p style="margin-top:16px;">Комісія платформи в базовому сценарії — менше 10% від того, що ці ж 5 000 бізнесів уже витрачають на традиційну рекламу й оренду щомісяця. Це і є простір для зростання: що глибше «Дзеркало» проникає в щоденну роботу продавця, то більша частка цього рекламного бюджету природно перетікає в модель «плати за результат» замість «плати наперед».</p>
+        </div>
+      </section>
+
+      <section class="vol" id="v8">
+        <div class="vol-head">
+          <div class="vol-num">08</div>
+          <div><h2 class="vol-title">Що залишилось зробити</h2><p class="vol-dek">Конкретні кроки з бета-тесту в комерційний проєкт</p></div>
+        </div>
+        <div class="vol-body">
+          <div class="timeline">
+            <div class="tl-step"><h4><span class="metric">Крок 1</span>стабілізувати базовий шлях продавця</h4><p>Реєстрація → каталог → замовлення без плутанини й без багів — умова для будь-якої монетизації.</p></div>
+            <div class="tl-step"><h4><span class="metric">Крок 2</span>запустити чергу/анкетування</h4><p>Продавці вже зараз збирають чергу з майбутніх авторів «Дзеркала» — паралельно з розробкою самої функції.</p></div>
+            <div class="tl-step"><h4><span class="metric">Крок 3</span>запустити «Дзеркало» в повному обсязі</h4><p>Функція, яка перетворює накопичену чергу авторів на реальний трафік і перші виміряні продажі.</p></div>
+            <div class="tl-step"><h4><span class="metric">Крок 4</span>увести тарифи на перевіреному продукті</h4><p>Комісія з «Дзеркала» + платні тарифи (Pro/Business) — лише коли є дані з реального використання, а не припущення.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="vol" id="v9">
+        <div class="vol-head">
+          <div class="vol-num">09</div>
+          <div><h2 class="vol-title">Обмеження цих розрахунків</h2><p class="vol-dek">Це припущення для орієнтиру, а не гарантований прогноз</p></div>
+        </div>
+        <div class="vol-body">
+          <p>Середні чеки, витрати на рекламу, конверсія й комісія платформи вище — orієнтовні цифри для ілюстрації глибини ринку, а не зафіксовані тарифи чи гарантований дохід. Реальна конверсія залежить від категорії товару, якості контенту й довіри до конкретного автора; вірусні спалахи — рідкісні події, які не можна планувати як базовий дохід. Ці розрахунки варто перерахувати на перших реальних даних одразу після запуску «Дзеркала».</p>
+        </div>
+      </section>
+
+    </div>
+
+    <footer>
+      <div class="fline">
+        <span>BEROO ONLINE — записка для команди: чому монетизація вже близько</span>
+        <span>beroo.space · beroo.online</span>
+      </div>
+    </footer>
+  </main>
+</div>
+</body>
+</html>
