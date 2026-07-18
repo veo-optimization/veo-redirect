@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>BEROO — Політика конфіденційності для Покупців</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#ffffff;--surface:#f8f9fa;--border:#e2e5e9;--border-mid:#cdd1d8;
+  --text:#1e2228;--text-mid:#4a515c;--text-dim:#8a9099;
+  --crit:#d93025;--crit-bg:#fff5f4;--crit-border:#f5bbb8;
+  --imp:#b45a00;--imp-bg:#fffaf3;--imp-border:#f5d9a8;
+  --teal:#006b6b;--teal-bg:#f2fbfb;--teal-border:#99d6d6;
+  --std:#3d6b3d;--std-bg:#f5fbf5;--std-border:#b3d9b3;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;background:#ffffff;}
+body{background:#ffffff !important;color:#1e2228;font-family:'Montserrat',sans-serif;font-size:13px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+.hdr{background:#fff;border-bottom:2px solid var(--text);padding:14px 16px;position:sticky;top:0;z-index:200;display:flex;align-items:center;justify-content:space-between;}
+.hdr-logo{font-size:20px;font-weight:700;color:var(--text);letter-spacing:3px;text-transform:uppercase;}
+.hdr-sub{font-size:9px;font-weight:500;color:var(--text-dim);letter-spacing:1.5px;margin-top:2px;text-transform:uppercase;}
+.hdr-btn{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;padding:8px 14px;background:var(--text);color:#fff;border:none;border-radius:5px;cursor:pointer;letter-spacing:1px;text-transform:uppercase;white-space:nowrap;transition:opacity .15s;}
+.hdr-btn:hover{opacity:.8;}
+.toc{background:#fff;border-bottom:1px solid var(--border);padding:12px 16px;}
+.toc-label{font-size:9px;font-weight:600;color:var(--text-dim);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
+.toc-grid{display:flex;flex-wrap:wrap;gap:5px;}
+.toc-chip{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:500;padding:4px 10px;background:var(--surface);border:1px solid var(--border);border-radius:20px;color:var(--text-mid);cursor:pointer;transition:all .15s;white-space:nowrap;}
+.toc-chip:hover{background:#fff;border-color:var(--border-mid);color:var(--text);}
+.toc-chip.active{background:var(--text);border-color:var(--text);color:#fff;}
+main{background:#ffffff;padding:24px 16px 72px;}
+.doc-title{font-size:26px;font-weight:700;color:var(--text);line-height:1.2;margin-bottom:6px;letter-spacing:.5px;}
+.doc-meta{font-size:10px;font-weight:500;color:var(--text-dim);margin-bottom:28px;line-height:2;letter-spacing:.5px;text-transform:uppercase;}
+.doc-meta b{color:var(--text);font-weight:700;}
+.legend{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:28px;padding:14px;background:var(--surface);border-radius:8px;border:1px solid var(--border);}
+.legend-label{width:100%;font-size:9px;font-weight:600;color:var(--text-dim);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px;}
+.badge{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;padding:3px 8px;border-radius:3px;letter-spacing:.8px;text-transform:uppercase;}
+.b-crit{background:var(--crit-bg);color:var(--crit);border:1px solid var(--crit-border);}
+.b-imp{background:var(--imp-bg);color:var(--imp);border:1px solid var(--imp-border);}
+.b-teal{background:var(--teal-bg);color:var(--teal);border:1px solid var(--teal-border);}
+.b-std{background:var(--std-bg);color:var(--std);border:1px solid var(--std-border);}
+.sec{margin-bottom:40px;scroll-margin-top:120px;}
+.sec-hdr{display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;}
+.sec-num{font-size:10px;font-weight:700;color:var(--text-mid);background:var(--surface);border:1px solid var(--border);padding:3px 8px;border-radius:4px;white-space:nowrap;flex-shrink:0;margin-top:4px;}
+.sec-title{font-size:16px;font-weight:700;color:var(--text);line-height:1.3;}
+.sec-divider{height:2px;background:var(--border);margin-bottom:14px;}
+.cl{border:1px solid var(--border);border-radius:8px;margin-bottom:8px;overflow:hidden;background:#fff;transition:border-color .2s,box-shadow .2s;}
+.cl:hover{border-color:var(--border-mid);box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.cl.crit{border-left:3px solid var(--crit);border-color:var(--crit-border);}
+.cl.crit .cl-id{background:var(--crit-bg);color:var(--crit);border-color:var(--crit-border);}
+.cl.imp{border-left:3px solid var(--imp);border-color:var(--imp-border);}
+.cl.imp .cl-id{background:var(--imp-bg);color:var(--imp);border-color:var(--imp-border);}
+.cl.teal{border-left:3px solid var(--teal);border-color:var(--teal-border);}
+.cl.teal .cl-id{background:var(--teal-bg);color:var(--teal);border-color:var(--teal-border);}
+.cl.std{border-left:3px solid var(--std);border-color:var(--std-border);}
+.cl.std .cl-id{background:var(--std-bg);color:var(--std);border-color:var(--std-border);}
+.cl-hdr{display:flex;align-items:center;gap:8px;padding:11px 12px;cursor:pointer;user-select:none;}
+.cl-id{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;background:var(--surface);color:var(--text-mid);border:1px solid var(--border);padding:3px 7px;border-radius:4px;flex-shrink:0;}
+.cl-prev{font-size:11px;color:var(--text-dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;flex:1;}
+.cl-arr{color:var(--text-dim);font-size:12px;flex-shrink:0;transition:transform .2s;}
+.cl.open .cl-arr{transform:rotate(180deg);}
+.cl-body{display:none;padding:0 12px 12px;}
+.cl.open .cl-body{display:block;}
+.cl-text{font-family:'Montserrat',sans-serif;font-size:12px;line-height:1.8;color:var(--text);background:var(--surface);padding:12px;border-radius:6px;border:1px solid var(--border);min-height:50px;white-space:pre-wrap;word-break:break-word;outline:none;-webkit-user-modify:read-write-plaintext-only;}
+.cl-text:focus{border-color:var(--text);background:#fff;box-shadow:0 0 0 3px rgba(30,34,40,.06);}
+.cl-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;}
+.btn-cp{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:600;padding:4px 10px;background:transparent;border:1px solid var(--border);color:var(--text-dim);border-radius:4px;cursor:pointer;transition:all .15s;text-transform:uppercase;}
+.btn-cp:hover{border-color:var(--text);color:var(--text);}
+.toast{position:fixed;bottom:20px;right:16px;left:16px;background:var(--text);color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;padding:12px 16px;border-radius:7px;text-align:center;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;}
+.toast.show{opacity:1;}
+</style>
+</head>
+<body>
+<div class="hdr">
+  <div>
+    <div class="hdr-logo">BEROO</div>
+    <div class="hdr-sub">beroo.online/privacy · Для Покупців</div>
+  </div>
+  <button class="hdr-btn" onclick="exportDoc()">&#8595; .TXT</button>
+</div>
+<div class="toc">
+  <div class="toc-label">Розділи документу</div>
+  <div class="toc-grid" id="tocGrid"></div>
+</div>
+<main>
+  <div class="doc-title">Політика конфіденційності для Покупців</div>
+  <div class="doc-meta">
+    ФОП Шеремета Василь Анатолійович &middot; ІПН <b>3361708913</b><br>
+    Платформа: <b>beroo.online</b> &middot; beroo.online/privacy<br>
+    Редакція 1.0 &middot; &laquo;___&raquo; __________ 2025 р.
+  </div>
+  <div class="legend">
+    <div class="legend-label">Позначення важливості пунктів</div>
+    <span class="badge b-crit">Критично</span>
+    <span class="badge b-imp">Важливо</span>
+    <span class="badge b-teal">Права покупця</span>
+    <span class="badge b-std">Стандарт</span>
+  </div>
+  <div id="sectionsContainer"></div>
+</main>
+<div class="toast" id="toast">Скопійовано &#10003;</div>
+<script>
+const DATA = [
+  {
+    id:"1", title:"ЗАГАЛЬНІ ПОЛОЖЕННЯ",
+    clauses:[
+      {id:"1.1",badge:"std",text:"Ця Політика конфіденційності (надалі — Політика) визначає порядок збору, обробки, зберігання та захисту персональних даних Покупців платформи BEROO Online (beroo.online). Оператором даних є ФОП Шеремета Василь Анатолійович (ІПН 3361708913) (надалі — Оператор)."},
+      {id:"1.2",badge:"imp",text:"Покупець, реєструючи обліковий запис або здійснюючи замовлення на beroo.online, підтверджує свою згоду з умовами цієї Політики. Політика є невід'ємною частиною Публічної оферти beroo.online/terms."},
+      {id:"1.3",badge:"std",text:"Ця Політика регулює обробку даних Покупців виключно Оператором платформи. Кожен Продавець на beroo.online є самостійним контролером персональних даних своїх Покупців та зобов'язаний мати власну політику конфіденційності. Оператор рекомендує Покупцям ознайомлюватися з політикою конфіденційності конкретного Продавця перед здійсненням покупки."},
+      {id:"1.4",badge:"std",text:"Оператор залишає за собою право вносити зміни до цієї Політики. Нова редакція набуває чинності з моменту публікації на beroo.online/privacy. Продовження використання платформи після публікації змін є акцептом оновленої Політики."}
+    ]
+  },
+  {
+    id:"2", title:"ЯКІ ДАНІ МИ ЗБИРАЄМО",
+    clauses:[
+      {id:"2.1",badge:"std",text:"При реєстрації облікового запису Оператор збирає такі дані:\n— ім'я та прізвище;\n— адреса електронної пошти (логін);\n— номер мобільного телефону;\n— пароль (зберігається у зашифрованому вигляді)."},
+      {id:"2.2",badge:"imp",text:"Покупець може добровільно додати до свого профілю:\n— адреси доставки (місто, вулиця, будинок, квартира);\n— реквізити для доставки (відділення Нової Пошти, Укрпошти тощо);\n— антропометричні дані (розміри одягу, взуття тощо);\n— дані про членів родини (ім'я, розміри) для зручності оформлення замовлень;\n— фото профілю (за бажанням)."},
+      {id:"2.3",badge:"std",text:"Технічні дані, що збираються автоматично:\n— IP-адреса;\n— тип та версія браузера;\n— дата і час відвідування;\n— сторінки та магазини, що переглядалися;\n— файли cookie та аналогічні технології."},
+      {id:"2.4",badge:"std",text:"Дані про замовлення:\n— перелік замовлених товарів та магазинів;\n— суми та дати замовлень;\n— статуси замовлень та доставок;\n— комунікація з Продавцями через платформу."}
+    ]
+  },
+  {
+    id:"3", title:"МЕТА ТА ПІДСТАВИ ОБРОБКИ ДАНИХ",
+    clauses:[
+      {id:"3.1",badge:"std",text:"Оператор обробляє персональні дані Покупця для:\n— забезпечення роботи облікового запису та авторизації;\n— відображення та автозаповнення даних при оформленні замовлень;\n— надсилання підтверджень замовлень та сповіщень;\n— технічної підтримки;\n— забезпечення безпеки платформи та виявлення шахрайства."},
+      {id:"3.2",badge:"crit",text:"Оператор також обробляє дані Покупця для зазначених нижче цілей — на підставі окремої добровільної згоди, яка надається Покупцем шляхом позначення відповідного чекбоксу при реєстрації або в налаштуваннях облікового запису. Така згода є відокремленою від основного договору та може бути відкликана Покупцем у будь-який момент без наслідків для основного функціоналу платформи:\n— аналіз поведінки Покупців на платформі (категорії товарів, відвідані магазини, частота покупок) для персоналізації рекомендацій;\n— формування знеособленої аналітики для Продавців та покращення платформи;\n— персоналізація показу товарів та рекомендацій;\n— організація та показ реклами інших магазинів платформи BEROO відповідно до розділу 5 цієї Політики.\nПравова підстава: окрема добровільна згода Покупця (ст. 6 ЗУ \"Про захист персональних даних\"). Відмова від надання такої згоди не впливає на можливість реєстрації та здійснення покупок на платформі."},
+      {id:"3.3",badge:"imp",text:"Продавець конкретного магазину на beroo.online є самостійним контролером персональних даних, які Покупець надає при оформленні замовлення в цьому магазині (ім'я, телефон, адреса доставки для конкретного замовлення). Оператор забезпечує технічну передачу цих даних Продавцю, але не контролює їх подальшу обробку Продавцем."}
+    ]
+  },
+  {
+    id:"4", title:"ЗБЕРІГАННЯ ТА ЗАХИСТ ДАНИХ",
+    clauses:[
+      {id:"4.1",badge:"std",text:"Персональні дані Покупця зберігаються протягом усього строку існування облікового запису та 1 (одного) року після його видалення — для цілей безпеки та вирішення можливих спорів."},
+      {id:"4.2",badge:"std",text:"Дані про замовлення зберігаються протягом 3 (трьох) років з дати замовлення — відповідно до вимог законодавства України."},
+      {id:"4.3",badge:"imp",text:"Оператор вживає технічних та організаційних заходів захисту даних:\n— шифрування передачі даних (TLS/HTTPS);\n— хешування паролів;\n— захист від несанкціонованого доступу та DDoS-атак;\n— обмежений доступ до персональних даних."},
+      {id:"4.4",badge:"crit",text:"Оператор не несе відповідальності за витік даних, спричинений: діями самого Покупця (передача логіну/паролю третім особам); атаками хакерів, що вийшли за межі розумних заходів захисту; обставинами форс-мажору (воєнні дії, блекаути, удари по інфраструктурі)."},
+      {id:"4.5",badge:"std",text:"Дані Покупця не передаються до держав-агресорів (Російська Федерація, Республіка Білорусь) та особам, афілійованим з ними."}
+    ]
+  },
+  {
+    id:"5", title:"РЕКЛАМНА МОДЕЛЬ ПЛАТФОРМИ",
+    clauses:[
+      {id:"5.1",badge:"crit",text:"Покупець, реєструючи обліковий запис на beroo.online та акцептуючи Оферту beroo.online/terms, надає Оператору право показувати йому рекламу товарів та магазинів платформи BEROO Online. Така реклама може відображатися:\n— на сторінках магазинів beroo.online (якщо магазин не підключив преміум-тариф без реклами);\n— у Telegram-ботах магазинів, на які підписаний Покупець;\n— у персоналізованих рекомендаціях на основі поведінки Покупця на платформі;\n— в інших каналах платформи, що з'являться в майбутньому."},
+      {id:"5.2",badge:"imp",text:"Персоналізація реклами здійснюється на основі: категорій товарів, що переглядав Покупець; магазинів, які Покупець відвідував; частоти та сум покупок; географії замовлень. Оператор не розкриває персональні дані конкретного Покупця іншим Продавцям — реклама показується на підставі агрегованих поведінкових патернів."},
+      {id:"5.3",badge:"teal",text:"Покупець має право безкоштовно відмовитися від персоналізованої реклами через налаштування облікового запису або відкликавши відповідну згоду. В такому разі реклама може продовжувати відображатися, але без персоналізації — виключно на основі загальних категорій товарів платформи, без прив'язки до конкретного Покупця. Повна відсутність будь-якої реклами можлива лише при використанні магазинів Продавців, що підключили відповідний тариф без реклами. Відмова від персоналізації не призводить до погіршення якості основних функцій платформи або обмеження доступу до магазинів."}
+    ]
+  },
+  {
+    id:"6", title:"ПЕРЕДАЧА ДАНИХ ТРЕТІМ ОСОБАМ",
+    clauses:[
+      {id:"6.1",badge:"std",text:"Оператор передає дані Покупця таким категоріям отримувачів:\n— Продавцям магазинів beroo.online — у обсязі, необхідному для виконання конкретного замовлення;\n— платіжним системам — для проведення оплати (лише якщо Покупець здійснює оплату через платформу);\n— службам доставки — адреса та контактні дані для доставки замовлення;\n— технічним партнерам Оператора — для забезпечення роботи платформи, на підставі угод про конфіденційність."},
+      {id:"6.2",badge:"crit",text:"Оператор не продає персональні дані Покупців третім особам для їх власних маркетингових цілей поза межами платформи BEROO."},
+      {id:"6.3",badge:"imp",text:"У разі виявлення шахрайства або на законну вимогу правоохоронних органів України Оператор має право розкрити дані Покупця без його попереднього повідомлення."}
+    ]
+  },
+  {
+    id:"7", title:"ПРАВА ПОКУПЦЯ",
+    clauses:[
+      {id:"7.1",badge:"teal",text:"Покупець має право:\n— отримати доступ до своїх персональних даних;\n— вимагати виправлення неточних даних;\n— вимагати видалення своїх даних (право на забуття);\n— відкликати згоду на обробку даних;\n— відмовитися від маркетингових повідомлень;\n— отримати свої дані у машинозчитуваному форматі;\n— звернутися до Уповноваженого Верховної Ради України з прав людини (ombudsman.gov.ua)."},
+      {id:"7.2",badge:"teal",text:"Для реалізації прав Покупець надсилає запит на privacy@beroo.space з вказанням імені, email та суті запиту. Оператор відповідає протягом 30 (тридцяти) календарних днів."},
+      {id:"7.3",badge:"imp",text:"Видалення облікового запису або відкликання згоди не впливає на замовлення в процесі виконання. Дані, необхідні для завершення чинних замовлень та вирішення спорів, зберігаються до їх завершення."}
+    ]
+  },
+  {
+    id:"8", title:"COOKIES",
+    clauses:[
+      {id:"8.1",badge:"std",text:"Платформа beroo.online використовує файли cookie:\n— Обов'язкові cookie — для роботи облікового запису та авторизації (не можуть бути відключені);\n— Аналітичні cookie — для аналізу відвідуваності та покращення платформи;\n— Маркетингові cookie — для персоналізації реклами (можуть бути відключені в налаштуваннях браузера)."},
+      {id:"8.2",badge:"std",text:"Відключення маркетингових cookie не відключає рекламу повністю, але робить її неперсоналізованою. Відключення обов'язкових cookie унеможливлює авторизацію."}
+    ]
+  },
+  {
+    id:"9", title:"КОНТАКТНА ІНФОРМАЦІЯ",
+    clauses:[
+      {id:"9.1",badge:"std",text:"З питань обробки персональних даних:\nФОП Шеремета Василь Анатолійович\nІПН: 3361708913\nАдреса: Україна, 03115, м. Київ, вул. Верховинна, буд. 34, кв. 64\nEmail: privacy@beroo.space\nПлатформа: beroo.online\nОферта: beroo.online/terms"},
+      {id:"9.2",badge:"teal",text:"Якщо Покупець вважає, що його права порушені, він може звернутися до Уповноваженого Верховної Ради України з прав людини: ombudsman.gov.ua, адреса: 01008, м. Київ, вул. Інститутська, 21/8."}
+    ]
+  }
+];
+
+function bc(b){return b==="crit"?"b-crit":b==="imp"?"b-imp":b==="teal"?"b-teal":"b-std";}
+function bl(b){return b==="crit"?"Критично":b==="imp"?"Важливо":b==="teal"?"Права покупця":"Стандарт";}
+function cc(b){return b==="crit"?"crit":b==="imp"?"imp":b==="teal"?"teal":"std";}
+
+function buildTOC(){
+  var g=document.getElementById("tocGrid");
+  DATA.forEach(function(s){
+    var c=document.createElement("div");
+    c.className="toc-chip";
+    c.textContent=s.id+". "+s.title;
+    c.onclick=function(){
+      var el=document.getElementById("sec"+s.id);
+      if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
+      document.querySelectorAll(".toc-chip").forEach(function(x){x.classList.remove("active");});
+      c.classList.add("active");
+    };
+    g.appendChild(c);
+  });
+}
+
+function buildSections(){
+  var cont=document.getElementById("sectionsContainer");
+  DATA.forEach(function(sec){
+    var sd=document.createElement("div");
+    sd.className="sec"; sd.id="sec"+sec.id;
+    sd.innerHTML="<div class=\"sec-hdr\"><span class=\"sec-num\">"+sec.id+"</span><h2 class=\"sec-title\">"+sec.title+"</h2></div><div class=\"sec-divider\"></div>";
+    sec.clauses.forEach(function(cl,ci){
+      var cd=document.createElement("div");
+      cd.className="cl "+cc(cl.badge);
+      var prev=cl.text.substring(0,70)+"...";
+      cd.innerHTML="<div class=\"cl-hdr\" onclick=\"toggle(this.parentElement)\"><span class=\"cl-id\">"+cl.id+"</span><span class=\"cl-prev\">"+prev+"</span><span class=\"cl-arr\">&#9662;</span></div><div class=\"cl-body\"><div class=\"cl-text\" contenteditable=\"true\" spellcheck=\"true\" oninput=\"sync(this,'"+sec.id+"',"+ci+")\">"+cl.text+"</div><div class=\"cl-foot\"><span class=\"badge "+bc(cl.badge)+"\">"+bl(cl.badge)+"</span><button class=\"btn-cp\" onclick=\"copyClause('"+cl.id+"')\" >Копіювати</button></div></div>";
+      sd.appendChild(cd);
+    });
+    cont.appendChild(sd);
+  });
+}
+
+function toggle(el){el.classList.toggle("open");}
+function sync(el,sid,ci){
+  var s=DATA.find(function(x){return x.id===sid;});
+  if(s)s.clauses[ci].text=el.innerText;
+  el.closest(".cl").querySelector(".cl-prev").textContent=el.innerText.substring(0,70)+"...";
+}
+function copyClause(id){
+  var all=document.querySelectorAll(".cl"),found=null;
+  all.forEach(function(c){if(c.querySelector(".cl-id")&&c.querySelector(".cl-id").textContent.trim()===id)found=c;});
+  if(!found)return;
+  navigator.clipboard.writeText(id+". "+found.querySelector(".cl-text").innerText).then(showToast);
+}
+function showToast(){
+  var t=document.getElementById("toast");
+  t.classList.add("show");
+  setTimeout(function(){t.classList.remove("show");},2000);
+}
+function exportDoc(){
+  var txt="ПОЛІТИКА КОНФІДЕНЦІЙНОСТІ ДЛЯ ПОКУПЦІВ\nberoo.online/privacy · beroo.online\nFOP Sheremeta Vasyl · IPN 3361708913\n\n";
+  DATA.forEach(function(s){
+    txt+="\n"+s.id+". "+s.title+"\n"+"─".repeat(50)+"\n";
+    s.clauses.forEach(function(c){txt+="\n"+c.id+". "+c.text+"\n";});
+  });
+  var a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([txt],{type:"text/plain;charset=utf-8"}));
+  a.download="beroo-online-privacy.txt";
+  a.click();
+}
+function initScroll(){
+  var chips=Array.from(document.querySelectorAll(".toc-chip"));
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        var id=e.target.id.replace("sec","");
+        chips.forEach(function(c,i){c.classList.toggle("active",DATA[i]&&DATA[i].id===id);});
+      }
+    });
+  },{threshold:0.1,rootMargin:"-110px 0px -80% 0px"});
+  document.querySelectorAll(".sec").forEach(function(s){obs.observe(s);});
+}
+buildTOC(); buildSections(); initScroll();
+</script>
+</body>
+</html>
