@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Конструктор тарифних планів BEROO Online</title>
+<style>
+  :root{
+    --purple:#7C3AED; --purple-dark:#5B21B6; --purple-tint:#F3EEFC;
+    --text:#161320; --muted:#6B6478; --line:#E7E4EF;
+    --bg:#FFFFFF; --bg-soft:#FAF9FC;
+    --amber:#F59E0B; --amber-tint:#FEF3E0;
+    --green:#16A34A; --green-tint:#E9F7EE;
+    --red:#DC2626; --red-tint:#FBEAEA;
+    --ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --mono:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",Menlo,monospace;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ overflow-x:hidden; width:100%; }
+  html,body{ max-width:100%; }
+  body{
+    background:var(--bg); color:var(--text); font-family:var(--ui);
+    line-height:1.5; -webkit-font-smoothing:antialiased;
+    overflow-x:hidden; width:100%; touch-action:pan-y;
+  }
+  @media (prefers-reduced-motion: reduce){ *{ transition:none!important; animation:none!important; } }
+  button{ font-family:var(--ui); }
+  :focus-visible{ outline:2px solid var(--purple); outline-offset:2px; }
+  .wrap{ max-width:900px; margin:0 auto; padding:0 16px; }
+
+  /* ---------- HEADER ---------- */
+  header{ position:sticky; top:0; z-index:80; background:rgba(255,255,255,.94); backdrop-filter:blur(10px); border-bottom:1px solid var(--line); }
+  .head-top{ padding:16px 16px 4px; }
+  .head-top h1{ font-size:19px; font-weight:800; letter-spacing:-.01em; }
+  .head-top p{ font-size:13px; color:var(--muted); margin-top:4px; }
+  .toolbar{ display:flex; gap:8px; padding:12px 16px; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .toolbar::-webkit-scrollbar{ display:none; }
+  .tbtn{
+    flex:none; display:inline-flex; align-items:center; gap:6px; white-space:nowrap;
+    background:var(--bg-soft); border:1px solid var(--line); color:var(--text);
+    font-size:13px; font-weight:700; padding:9px 14px; border-radius:10px; cursor:pointer;
+  }
+  .tbtn:hover{ border-color:var(--purple); color:var(--purple-dark); }
+  .tbtn.primary{ background:var(--purple); color:#fff; border-color:var(--purple); }
+  .tbtn.primary:hover{ background:var(--purple-dark); }
+
+  main{ padding:20px 0 60px; }
+  .sec-title{ font-size:15px; font-weight:800; margin-bottom:4px; }
+  .sec-sub{ font-size:13px; color:var(--muted); margin-bottom:14px; }
+
+  /* ---------- TARIFF NAMES BAR ---------- */
+  .tariff-bar{ display:flex; flex-direction:column; gap:8px; background:var(--bg-soft); border:1px solid var(--line); border-radius:14px; padding:14px 16px; margin-bottom:20px; }
+  .tariff-bar-label{ font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+  .tariff-inputs{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .tariff-name-input{
+    width:100%; border:1px solid var(--line); border-radius:9px; padding:9px 10px;
+    font-size:14px; font-weight:800; color:var(--purple-dark); background:#fff; text-align:center;
+  }
+
+  /* ---------- SECTIONS ---------- */
+  .section-card{ border:1px solid var(--line); border-radius:16px; margin-bottom:14px; overflow:hidden; background:#fff; }
+  .section-head{ display:flex; align-items:center; gap:10px; padding:13px 14px; cursor:pointer; user-select:none; }
+  .section-dot{ flex:none; width:11px; height:11px; border-radius:999px; }
+  .section-name{ flex:1; font-size:14.5px; font-weight:800; }
+  .section-count{ font-size:12px; color:var(--muted); font-weight:600; }
+  .section-chevron{ font-size:12px; color:var(--muted); transition:transform .18s ease; flex:none; }
+  .section-card.collapsed .section-chevron{ transform:rotate(-90deg); }
+  .section-body{ padding:4px 12px 14px; }
+  .section-card.collapsed .section-body{ display:none; }
+
+  /* ---------- ROW CARD ---------- */
+  .row-card{ background:var(--bg-soft); border:1px solid var(--line); border-radius:12px; padding:10px; margin-top:8px; }
+  .row-card.dragging{ opacity:.4; }
+  .row-card.drag-over-top{ box-shadow: inset 0 3px 0 0 var(--purple); }
+  .row-card.drag-over-bottom{ box-shadow: inset 0 -3px 0 0 var(--purple); }
+  .row-top{ display:flex; align-items:center; gap:6px; margin-bottom:8px; }
+  .drag-handle{ flex:none; width:22px; height:28px; display:flex; align-items:center; justify-content:center; color:var(--muted); cursor:grab; font-size:14px; letter-spacing:-2px; user-select:none; -webkit-user-select:none; }
+  .drag-handle:active{ cursor:grabbing; }
+  .row-name-input{ flex:1; min-width:0; border:1px solid var(--line); border-radius:8px; padding:7px 9px; font-size:13.5px; font-weight:700; background:#fff; color:var(--text); }
+  .info-btn{
+    flex:none; width:22px; height:22px; border-radius:999px; border:1.5px solid var(--purple); color:var(--purple);
+    background:#fff; font-size:11px; font-weight:800; font-style:italic; font-family:Georgia,serif; cursor:pointer;
+    display:flex; align-items:center; justify-content:center; line-height:1;
+  }
+  .info-btn:hover{ background:var(--purple); color:#fff; }
+  .del-btn{
+    flex:none; width:26px; height:26px; border-radius:8px; border:1px solid var(--line); background:#fff;
+    color:var(--muted); cursor:pointer; font-size:13px; display:flex; align-items:center; justify-content:center;
+  }
+  .del-btn:hover{ border-color:var(--red); color:var(--red); background:var(--red-tint); }
+
+  .row-vals{ display:grid; grid-template-columns:repeat(3,1fr); gap:6px; }
+  .row-vals.diff .val-input{ background:var(--amber-tint); border-color:var(--amber); }
+  .val-wrap{ display:flex; flex-direction:column; gap:3px; min-width:0; }
+  .val-label{ font-size:9.5px; font-weight:800; text-transform:uppercase; letter-spacing:.03em; color:var(--muted); padding-left:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .val-input{
+    width:100%; resize:none; overflow:hidden; border:1px solid var(--line); border-radius:8px;
+    padding:7px 8px; font-size:13px; font-weight:600; color:var(--text); background:#fff; font-family:var(--ui); min-height:34px;
+  }
+  .val-input:focus{ border-color:var(--purple); }
+
+  .add-row-btn{
+    width:100%; margin-top:10px; padding:10px; border:1.5px dashed var(--line); border-radius:10px;
+    background:transparent; color:var(--muted); font-weight:700; font-size:13px; cursor:pointer;
+  }
+  .add-row-btn:hover{ border-color:var(--purple); color:var(--purple-dark); }
+
+  /* ---------- PREVIEW ---------- */
+  .preview-grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+  @media (min-width:760px){ .preview-grid{ grid-template-columns:repeat(3,1fr); align-items:start; } }
+  .preview-card{ border:1px solid var(--line); border-radius:16px; padding:18px; background:#fff; }
+  .preview-card h3{ font-size:17px; font-weight:800; text-align:center; color:var(--purple-dark); padding-bottom:12px; border-bottom:1px solid var(--line); margin-bottom:12px; }
+  .preview-sec-title{ font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin:14px 0 6px; }
+  .preview-row{ display:flex; justify-content:space-between; gap:10px; padding:6px 0; font-size:13.5px; border-bottom:1px solid var(--bg-soft); }
+  .preview-row .pname{ color:var(--text); }
+  .preview-row .pval{ font-weight:700; text-align:right; flex:none; max-width:55%; }
+  .pval .chk{ color:var(--green); font-weight:800; }
+  .pval .cross{ color:var(--line); font-weight:800; }
+  .pval .dash{ color:var(--line); }
+
+  /* ---------- PROMPT PANEL (signature element) ---------- */
+  .prompt-panel{ border-radius:16px; overflow:hidden; border:1px solid #2A2438; }
+  .prompt-tab{ background:#1C1728; color:#B9B2CC; font-family:var(--mono); font-size:12px; padding:10px 16px; display:flex; justify-content:space-between; align-items:center; }
+  .prompt-tab span{ opacity:.75; }
+  .prompt-tab button{ background:var(--purple); color:#fff; border:0; border-radius:7px; padding:6px 12px; font-family:var(--ui); font-size:12px; font-weight:700; cursor:pointer; }
+  .prompt-tab button:hover{ background:var(--purple-dark); }
+  #promptOutput{
+    display:block; width:100%; min-height:280px; background:#100D1A; color:#DCD6EC; border:0;
+    font-family:var(--mono); font-size:12.5px; line-height:1.6; padding:16px; resize:vertical; white-space:pre-wrap;
+  }
+  #promptOutput:focus{ outline:none; }
+
+  section.band{ padding:26px 0; border-top:1px solid var(--line); }
+
+  /* ---------- MODAL ---------- */
+  .modal-overlay{ position:fixed; inset:0; background:rgba(10,8,16,.5); display:flex; align-items:flex-end; justify-content:center; z-index:200; }
+  .modal-overlay.hidden{ display:none; }
+  .modal{ background:#fff; border-radius:18px 18px 0 0; width:100%; max-width:520px; padding:20px; max-height:80vh; overflow:auto; }
+  @media (min-width:640px){ .modal-overlay{ align-items:center; } .modal{ border-radius:18px; } }
+  .modal-head{ display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:14px; }
+  .modal-head h3{ font-size:16px; font-weight:800; }
+  .modal-close{ flex:none; width:28px; height:28px; border-radius:999px; border:1px solid var(--line); background:#fff; cursor:pointer; font-size:14px; color:var(--muted); }
+  .modal label{ font-size:12px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.03em; display:block; margin-bottom:6px; }
+  #modalDesc{ width:100%; min-height:120px; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:14px; font-family:var(--ui); resize:vertical; }
+  .modal-actions{ margin-top:14px; display:flex; justify-content:flex-end; }
+  .modal-actions button{ background:var(--purple); color:#fff; border:0; border-radius:9px; padding:10px 18px; font-weight:700; font-size:13px; cursor:pointer; }
+  .modal-actions button:hover{ background:var(--purple-dark); }
+
+  /* ---------- TOAST ---------- */
+  #toastRoot{ position:fixed; left:0; right:0; bottom:18px; display:flex; justify-content:center; z-index:300; pointer-events:none; }
+  .toast{ background:var(--text); color:#fff; font-size:13px; font-weight:600; padding:10px 18px; border-radius:999px; box-shadow:0 10px 30px -10px rgba(0,0,0,.4); opacity:0; transform:translateY(8px); transition:opacity .2s ease, transform .2s ease; }
+  .toast.show{ opacity:1; transform:none; }
+
+  @media print{
+    .no-print{ display:none!important; }
+    body{ background:#fff; }
+    .preview-grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="no-print">
+  <div class="wrap head-top">
+    <h1>Конструктор тарифних планів BEROO Online</h1>
+    <p>Заповніть значення тарифів. Внизу автоматично сформується готовий промпт для ChatGPT або Claude.</p>
+  </div>
+  <div class="wrap toolbar">
+    <button class="tbtn primary" id="btnCopy">✅ Копіювати промпт</button>
+    <button class="tbtn" id="btnClear">🗑 Очистити</button>
+    <button class="tbtn" id="btnSave">💾 Зберегти JSON</button>
+    <button class="tbtn" id="btnOpen">📂 Відкрити JSON</button>
+    <button class="tbtn" id="btnImport">📥 Імпорт</button>
+    <button class="tbtn" id="btnExport">📤 Експорт</button>
+    <button class="tbtn" id="btnPrint">🖨 Друк</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section>
+    <div class="tariff-bar no-print">
+      <div class="tariff-bar-label">Назви тарифів</div>
+      <div class="tariff-inputs">
+        <input class="tariff-name-input" data-idx="0">
+        <input class="tariff-name-input" data-idx="1">
+        <input class="tariff-name-input" data-idx="2">
+      </div>
+    </div>
+
+    <div class="sec-title no-print">Функціонал за тарифами</div>
+    <div class="sec-sub no-print">Групи функцій нижче — кожна своя кольорова секція. Натисніть ⓘ біля будь-якої функції, щоб побачити або додати детальний опис.</div>
+    <div id="sectionsRoot" class="no-print"></div>
+  </section>
+
+  <section class="band">
+    <div class="sec-title">Попередній перегляд</div>
+    <div class="sec-sub">Так тарифи побачить клієнт.</div>
+    <div id="previewRoot" class="preview-grid"></div>
+  </section>
+
+  <section class="band no-print">
+    <div class="sec-title">Промпт для ChatGPT / Claude</div>
+    <div class="sec-sub">Оновлюється автоматично після будь-якої зміни в таблиці вище.</div>
+    <div class="prompt-panel">
+      <div class="prompt-tab"><span>prompt.txt</span><button id="btnCopyInline">Копіювати</button></div>
+      <textarea id="promptOutput" readonly spellcheck="false"></textarea>
+    </div>
+  </section>
+
+</main>
+
+<div id="modalOverlay" class="modal-overlay hidden no-print">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="modalTitle">Функція</h3>
+      <button class="modal-close" id="modalCloseBtn">✕</button>
+    </div>
+    <label for="modalDesc">Детальний опис функції</label>
+    <textarea id="modalDesc" placeholder="Додайте опис цієї функції для команди…"></textarea>
+    <div class="modal-actions"><button id="modalSaveBtn">Зберегти</button></div>
+  </div>
+</div>
+
+<input type="file" id="fileInput" accept="application/json" style="display:none">
+<div id="toastRoot"></div>
+
+<script>
+(function(){
+  "use strict";
+
+  var LS_KEY = "beroo_tariff_builder_v1";
+
+  var SECTION_DEFS = [
+    { key:"general",   name:"Загальні",   accent:"#7C3AED", tint:"#F3EEFC" },
+    { key:"telegram",  name:"Telegram",   accent:"#0EA5E9", tint:"#E7F5FC" },
+    { key:"payments",  name:"Оплати",     accent:"#16A34A", tint:"#E8F7ED" },
+    { key:"catalog",   name:"Каталог",    accent:"#D97706", tint:"#FCF1E0" },
+    { key:"marketing", name:"Маркетинг",  accent:"#E11D48", tint:"#FCE9ED" },
+    { key:"crm",       name:"CRM",        accent:"#4F46E5", tint:"#ECEBFB" },
+    { key:"orders",    name:"Замовлення", accent:"#0D9488", tint:"#E3F6F4" },
+    { key:"mirror",    name:"Дзеркало",   accent:"#C026D3", tint:"#FAEAFB" },
+    { key:"ai",        name:"AI",         accent:"#0891B2", tint:"#E3F4F7" },
+    { key:"ads",       name:"Реклама",    accent:"#475569", tint:"#ECEEF1" },
+    { key:"tariff",    name:"Тариф",      accent:"#9333EA", tint:"#F5EDFC" }
+  ];
+
+  var DEFAULT_ROWS = {
+    general: [
+      ["Генерація інтернет-магазину","Автоматичне створення повноцінного магазину з власною адресою (наприклад, 12345.beroo.online) без програмістів і складних налаштувань.","+","+","+"],
+      ["Налаштування кольорової теми сайту","Можливість підібрати кольори вітрини магазину під бренд продавця.","+","+","+"],
+      ["Власний домен","Підключення власного домену замість стандартної адреси *.beroo.online.","-","+","+"],
+      ["SSL-сертифікат","Захищене з'єднання (https) для магазину та сторінок оплати.","+","+","+"],
+      ["SEO налаштування магазину","Базові інструменти для пошукової оптимізації магазину в Google та інших системах.","-","+","+"]
+    ],
+    telegram: [
+      ["Telegram-бот для сповіщень продавця","Бот, який надсилає продавцю сповіщення про нові замовлення та події магазину.","+","+","+"],
+      ["Telegram-бот для покупців","Окремий бот для покупців: підписка на новинки, акції та персональні добірки товарів.","-","+","+"],
+      ["Ліміт відправок товарів у Telegram-бот","Максимальна кількість товарів або розсилок, які можна надіслати підписникам бота за місяць.","30","300","Без обмежень"],
+      ["Push-сповіщення про замовлення","Автоматичні повідомлення покупцю про статус його замовлення.","-","+","+"]
+    ],
+    payments: [
+      ["WayForPay","Приймання онлайн-оплат через платіжний шлюз WayForPay.","-","+","+"],
+      ["Monobank","Приймання оплат через Monobank Acquiring.","-","+","+"],
+      ["Інші платіжні шлюзи","Підключення додаткових платіжних систем за потреби продавця.","-","-","+"]
+    ],
+    catalog: [
+      ["Кількість товарів","Максимальна кількість товарів, які можна додати в каталог магазину на цьому тарифі.","30","1000","Без обмежень"],
+      ["Загальна вартість каталогу","Обмеження на суму вартості всіх товарів у каталозі.","-","-","Без обмежень"],
+      ["Категорії товарів","Можливість розділяти товари на категорії для зручної навігації.","-","+","+"],
+      ["Варіації товарів","Розміри, кольори та інші варіанти одного товару в межах однієї картки.","-","+","+"],
+      ["Опис товару","Текстовий опис товару на картці.","+","+","+"],
+      ["Посилання на TikTok-відеоогляд","Прикріплення відео з TikTok прямо до картки товару.","+","+","+"],
+      ["SEO кожної картки товару","Індивідуальні мета-теги та налаштування для пошукової видачі кожного товару.","-","+","+"],
+      ["Рекомендовані товари на головній сторінці","Кількість товарів, які можна виділити в блоці рекомендацій на головній.","2","6","15"]
+    ],
+    marketing: [
+      ["Google Merchant","Вивантаження каталогу в Google Merchant Center для показу товарів у Google Shopping.","-","-","+"],
+      ["Маркетингова вітрина","Окрема сторінка для акцій, підборів і промо-кампаній.","-","+","+"],
+      ["XML-експорт товарів","Автоматичне формування XML-фіда каталогу для маркетплейсів і рекламних систем.","-","-","+"],
+      ["Open Graph","Коректне відображення товарів і сторінок при поширенні посилань у соцмережах.","+","+","+"],
+      ["Pixel / аналітика","Підключення пікселів (Meta, TikTok) та систем аналітики для відстеження конверсій.","-","+","+"]
+    ],
+    crm: [
+      ["Команда","Можливість додавати співробітників до управління магазином.","-","-","+"],
+      ["Ролі адміністраторів","Розподіл прав доступу між членами команди.","-","-","+"],
+      ["Історія змін","Журнал того, що і коли змінювалося в магазині чи товарах.","-","+","+"],
+      ["Журнал дій","Детальний лог дій співробітників у системі.","-","-","+"]
+    ],
+    orders: [
+      ["Автоматичне створення ТТН Нової пошти","Накладна створюється автоматично одразу після оформлення замовлення.","-","+","+"],
+      ["Автоматичне оновлення статусів","Статус замовлення оновлюється сам, без ручного втручання продавця.","-","+","+"],
+      ["Автоматичне приймання оплат","Система сама фіксує надходження оплати й підтверджує замовлення.","-","+","+"]
+    ],
+    mirror: [
+      ["Максимальна кількість дзеркал","Скільки партнерських «дзеркал» каталогу може мати магазин одночасно.","2","20","Без обмежень"],
+      ["Максимальна кількість партнерів","Обмеження на кількість партнерів (Affiliate), які можуть рекомендувати товари магазину.","3","50","Без обмежень"],
+      ["Пріоритет видачі партнерів","Наскільки високо магазин показується партнерам, що шукають товари для просування.","Базовий","Підвищений","Максимальний"]
+    ],
+    ai: [
+      ["AI-помічник","Помічник на основі AI для допомоги продавцю в щоденних задачах.","-","+","+"],
+      ["AI-промпти","Готові сценарії запитів для швидкої роботи з AI-інструментами магазину.","-","+","+"],
+      ["Генерація описів","Автоматичне створення описів товарів за допомогою AI.","3","100","Без обмежень"],
+      ["Генерація SEO","Автоматичне формування SEO-текстів і мета-тегів за допомогою AI.","-","+","+"]
+    ],
+    ads: [
+      ["Відображення реклами інших магазинів","На безкоштовному тарифі в магазині може показуватися реклама інших продавців BEROO Online.","+","-","-"],
+      ["Приховати рекламу","Можливість вимкнути показ чужої реклами у своєму магазині.","-","+","+"],
+      ["Просування магазину","Додаткова видимість магазину всередині екосистеми BEROO Online.","-","-","+"]
+    ],
+    tariff: [
+      ["Кредитний період після неоплати","Скільки днів магазин продовжує працювати після закінчення оплаченого періоду.","-","3 дні","7 днів"],
+      ["Пріоритет технічної підтримки","Швидкість і черговість відповіді служби підтримки.","Стандартний","Пришвидшений","Найвищий"],
+      ["Резервне копіювання","Автоматичне збереження копій даних магазину.","-","+","+"]
+    ]
+  };
+
+  var idCounter = 1;
+  function genId(){ idCounter += 1; return "id" + Date.now().toString(36) + idCounter.toString(36); }
+
+  function buildDefaultState(){
+    var sections = SECTION_DEFS.map(function(def){
+      var rows = (DEFAULT_ROWS[def.key] || []).map(function(r){
+        return { id: genId(), name:r[0], desc:r[1], values:[r[2],r[3],r[4]] };
+      });
+      return { id:def.key, name:def.name, accent:def.accent, tint:def.tint, collapsed:false, rows:rows };
+    });
+    return { tariffs:["Запуск","Бізнес","Масштаб"], sections:sections };
+  }
+
+  function loadState(){
+    try{
+      var raw = localStorage.getItem(LS_KEY);
+      if(!raw) return buildDefaultState();
+      var obj = JSON.parse(raw);
+      if(!obj || !Array.isArray(obj.tariffs) || !Array.isArray(obj.sections)) return buildDefaultState();
+      return obj;
+    }catch(e){ return buildDefaultState(); }
+  }
+
+  function saveState(){
+    try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){ /* ignore */ }
+  }
+
+  var state = loadState();
+
+  // ---------- DOM refs ----------
+  var sectionsRoot = document.getElementById("sectionsRoot");
+  var previewRoot = document.getElementById("previewRoot");
+  var promptOutput = document.getElementById("promptOutput");
+  var tariffInputs = Array.prototype.slice.call(document.querySelectorAll(".tariff-name-input"));
+  var modalOverlay = document.getElementById("modalOverlay");
+  var modalTitle = document.getElementById("modalTitle");
+  var modalDesc = document.getElementById("modalDesc");
+  var fileInput = document.getElementById("fileInput");
+  var toastRoot = document.getElementById("toastRoot");
+
+  var modalCtx = { sectionId:null, rowId:null };
+  var dragSrc = { sectionId:null, rowId:null };
+
+  // ---------- utils ----------
+  function autoresize(el){
+    el.style.height = "auto";
+    el.style.height = (el.scrollHeight) + "px";
+  }
+
+  function findSection(id){
+    for(var i=0;i<state.sections.length;i++){ if(state.sections[i].id===id) return state.sections[i]; }
+    return null;
+  }
+  function findRow(section, rowId){
+    for(var i=0;i<section.rows.length;i++){ if(section.rows[i].id===rowId) return section.rows[i]; }
+    return null;
+  }
+
+  function showToast(msg){
+    var t = document.createElement("div");
+    t.className = "toast";
+    t.textContent = msg;
+    toastRoot.appendChild(t);
+    requestAnimationFrame(function(){ t.classList.add("show"); });
+    setTimeout(function(){
+      t.classList.remove("show");
+      setTimeout(function(){ t.remove(); }, 250);
+    }, 1600);
+  }
+
+  // ---------- render: sections/editor ----------
+  function renderSections(){
+    sectionsRoot.innerHTML = "";
+    state.sections.forEach(function(section){
+      sectionsRoot.appendChild(buildSectionCard(section));
+    });
+  }
+
+  function buildSectionCard(section){
+    var card = document.createElement("div");
+    card.className = "section-card" + (section.collapsed ? " collapsed" : "");
+    card.dataset.sectionId = section.id;
+
+    var head = document.createElement("div");
+    head.className = "section-head";
+    head.style.background = section.tint;
+
+    var dot = document.createElement("span");
+    dot.className = "section-dot";
+    dot.style.background = section.accent;
+
+    var name = document.createElement("span");
+    name.className = "section-name";
+    name.style.color = section.accent;
+    name.textContent = section.name;
+
+    var count = document.createElement("span");
+    count.className = "section-count";
+    count.textContent = section.rows.length + " функцій";
+
+    var chev = document.createElement("span");
+    chev.className = "section-chevron";
+    chev.textContent = "▾";
+
+    head.appendChild(dot); head.appendChild(name); head.appendChild(count); head.appendChild(chev);
+    head.addEventListener("click", function(){
+      section.collapsed = !section.collapsed;
+      renderSections();
+      saveState();
+    });
+
+    var body = document.createElement("div");
+    body.className = "section-body";
+
+    section.rows.forEach(function(row){
+      body.appendChild(buildRowCard(section, row));
+    });
+
+    body.addEventListener("dragover", function(e){
+      if(!dragSrc.rowId) return;
+      e.preventDefault();
+    });
+    body.addEventListener("drop", function(e){
+      if(!dragSrc.rowId) return;
+      if(e.target !== body) return;
+      e.preventDefault();
+      moveRow(dragSrc.sectionId, dragSrc.rowId, section.id, section.rows.length);
+    });
+
+    var addBtn = document.createElement("button");
+    addBtn.type = "button";
+    addBtn.className = "add-row-btn";
+    addBtn.textContent = "➕ Додати функцію";
+    addBtn.addEventListener("click", function(){ addRow(section); });
+
+    card.appendChild(head);
+    card.appendChild(body);
+    card.appendChild(addBtn);
+    return card;
+  }
+
+  function buildRowCard(section, row){
+    var card = document.createElement("div");
+    card.className = "row-card";
+    card.draggable = true;
+    card.dataset.sectionId = section.id;
+    card.dataset.rowId = row.id;
+
+    card.addEventListener("dragstart", function(e){
+      dragSrc = { sectionId:section.id, rowId:row.id };
+      card.classList.add("dragging");
+      try{ e.dataTransfer.setData("text/plain", row.id); }catch(err){}
+      e.dataTransfer.effectAllowed = "move";
+    });
+    card.addEventListener("dragend", function(){
+      card.classList.remove("dragging");
+      dragSrc = { sectionId:null, rowId:null };
+      clearDragOverStyles();
+    });
+    card.addEventListener("dragover", function(e){
+      if(!dragSrc.rowId || dragSrc.rowId === row.id) return;
+      e.preventDefault();
+      var rect = card.getBoundingClientRect();
+      var before = (e.clientY - rect.top) < rect.height / 2;
+      card.classList.toggle("drag-over-top", before);
+      card.classList.toggle("drag-over-bottom", !before);
+    });
+    card.addEventListener("dragleave", function(){
+      card.classList.remove("drag-over-top", "drag-over-bottom");
+    });
+    card.addEventListener("drop", function(e){
+      if(!dragSrc.rowId || dragSrc.rowId === row.id) return;
+      e.preventDefault();
+      var before = card.classList.contains("drag-over-top");
+      var targetIdx = section.rows.findIndex(function(r){ return r.id === row.id; });
+      moveRow(dragSrc.sectionId, dragSrc.rowId, section.id, before ? targetIdx : targetIdx + 1);
+    });
+
+    var top = document.createElement("div");
+    top.className = "row-top";
+
+    var handle = document.createElement("span");
+    handle.className = "drag-handle";
+    handle.setAttribute("aria-hidden", "true");
+    handle.textContent = "⠿";
+
+    var nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.className = "row-name-input";
+    nameInput.setAttribute("draggable", "false");
+    nameInput.value = row.name;
+    nameInput.placeholder = "Назва функції";
+    nameInput.addEventListener("input", function(){
+      row.name = nameInput.value;
+      renderPreview();
+      renderPrompt();
+      saveState();
+    });
+
+    var infoBtn = document.createElement("button");
+    infoBtn.type = "button";
+    infoBtn.className = "info-btn";
+    infoBtn.setAttribute("draggable", "false");
+    infoBtn.setAttribute("aria-label", "Детальна інформація про функцію");
+    infoBtn.textContent = "i";
+    infoBtn.addEventListener("click", function(){ openModal(section, row); });
+
+    var delBtn = document.createElement("button");
+    delBtn.type = "button";
+    delBtn.className = "del-btn";
+    delBtn.setAttribute("draggable", "false");
+    delBtn.setAttribute("aria-label", "Видалити функцію");
+    delBtn.textContent = "🗑";
+    delBtn.addEventListener("click", function(){ deleteRow(section, row.id); });
+
+    top.appendChild(handle);
+    top.appendChild(nameInput);
+    top.appendChild(infoBtn);
+    top.appendChild(delBtn);
+
+    var vals = document.createElement("div");
+    vals.className = "row-vals";
+
+    for(var i=0;i<3;i++){
+      (function(i){
+        var wrap = document.createElement("div");
+        wrap.className = "val-wrap";
+
+        var label = document.createElement("span");
+        label.className = "val-label";
+        label.dataset.tidx = String(i);
+        label.textContent = state.tariffs[i] || ("Тариф " + (i+1));
+
+        var ta = document.createElement("textarea");
+        ta.className = "val-input";
+        ta.rows = 1;
+        ta.setAttribute("draggable", "false");
+        ta.value = row.values[i] || "";
+        ta.addEventListener("input", function(){
+          row.values[i] = ta.value;
+          autoresize(ta);
+          recomputeDiff(vals);
+          renderPreview();
+          renderPrompt();
+          saveState();
+        });
+
+        wrap.appendChild(label);
+        wrap.appendChild(ta);
+        vals.appendChild(wrap);
+      })(i);
+    }
+
+    card.appendChild(top);
+    card.appendChild(vals);
+
+    setTimeout(function(){
+      Array.prototype.forEach.call(vals.querySelectorAll(".val-input"), autoresize);
+      recomputeDiff(vals);
+    }, 0);
+
+    return card;
+  }
+
+  function clearDragOverStyles(){
+    Array.prototype.forEach.call(document.querySelectorAll(".drag-over-top,.drag-over-bottom"), function(el){
+      el.classList.remove("drag-over-top", "drag-over-bottom");
+    });
+  }
+
+  function moveRow(srcSectionId, rowId, destSectionId, destIndex){
+    var srcSection = findSection(srcSectionId);
+    var destSection = findSection(destSectionId);
+    if(!srcSection || !destSection) return;
+    var srcIdx = srcSection.rows.findIndex(function(r){ return r.id === rowId; });
+    if(srcIdx === -1) return;
+    var moved = srcSection.rows.splice(srcIdx, 1)[0];
+    if(srcSection.id === destSection.id && srcIdx < destIndex) destIndex -= 1;
+    if(destIndex < 0) destIndex = 0;
+    if(destIndex > destSection.rows.length) destIndex = destSection.rows.length;
+    destSection.rows.splice(destIndex, 0, moved);
+    renderSections();
+    renderPreview();
+    renderPrompt();
+    saveState();
+  }
+
+  function recomputeDiff(valsEl){
+    var inputs = valsEl.querySelectorAll(".val-input");
+    var v0 = inputs[0].value.trim().toLowerCase();
+    var v1 = inputs[1].value.trim().toLowerCase();
+    var v2 = inputs[2].value.trim().toLowerCase();
+    var differs = !(v0 === v1 && v1 === v2);
+    valsEl.classList.toggle("diff", differs);
+  }
+
+  function addRow(section){
+    var row = { id: genId(), name:"Нова функція", desc:"", values:["","",""] };
+    section.rows.push(row);
+    section.collapsed = false;
+    renderSections();
+    renderPreview();
+    renderPrompt();
+    saveState();
+    var rowCard = sectionsRoot.querySelector(
+      '.row-card[data-section-id="' + section.id + '"][data-row-id="' + row.id + '"]'
+    );
+    var input = rowCard ? rowCard.querySelector(".row-name-input") : null;
+    if(input){ input.focus(); input.select(); }
+  }
+
+  function deleteRow(section, rowId){
+    section.rows = section.rows.filter(function(r){ return r.id !== rowId; });
+    renderSections();
+    renderPreview();
+    renderPrompt();
+    saveState();
+  }
+
+  // ---------- preview ----------
+  function valueDisplayNode(raw){
+    var v = (raw || "").trim();
+    var span = document.createElement("span");
+    span.className = "pval";
+    if(v === ""){
+      var d = document.createElement("span"); d.className="dash"; d.textContent="—"; span.appendChild(d);
+    } else if(/^(\+|✓|yes|так|є)$/i.test(v)){
+      var c = document.createElement("span"); c.className="chk"; c.textContent="✓"; span.appendChild(c);
+    } else if(/^(-|✕|x|ні|немає)$/i.test(v)){
+      var x = document.createElement("span"); x.className="cross"; x.textContent="—"; span.appendChild(x);
+    } else {
+      span.appendChild(document.createTextNode(v));
+    }
+    return span;
+  }
+
+  function renderPreview(){
+    previewRoot.innerHTML = "";
+    for(var i=0;i<3;i++){
+      (function(i){
+        var card = document.createElement("div");
+        card.className = "preview-card";
+
+        var h = document.createElement("h3");
+        h.textContent = state.tariffs[i] || ("Тариф " + (i+1));
+        card.appendChild(h);
+
+        state.sections.forEach(function(section){
+          var visibleRows = section.rows.filter(function(r){ return r.name && r.name.trim() !== ""; });
+          if(visibleRows.length === 0) return;
+
+          var st = document.createElement("div");
+          st.className = "preview-sec-title";
+          st.style.color = section.accent;
+          st.textContent = section.name;
+          card.appendChild(st);
+
+          visibleRows.forEach(function(row){
+            var pr = document.createElement("div");
+            pr.className = "preview-row";
+            var pn = document.createElement("span");
+            pn.className = "pname";
+            pn.textContent = row.name;
+            pr.appendChild(pn);
+            pr.appendChild(valueDisplayNode(row.values[i]));
+            card.appendChild(pr);
+          });
+        });
+
+        previewRoot.appendChild(card);
+      })(i);
+    }
+  }
+
+  // ---------- prompt ----------
+  function renderPrompt(){
+    var lines = [];
+    lines.push("Онови таблицю тарифних планів BEROO Online.");
+    lines.push("");
+    lines.push("Тарифи:");
+    state.tariffs.forEach(function(t){ lines.push("• " + (t && t.trim() ? t.trim() : "—")); });
+    lines.push("");
+    lines.push("Нові параметри:");
+    lines.push("");
+    state.sections.forEach(function(section){
+      section.rows.forEach(function(row){
+        if(!row.name || !row.name.trim()) return;
+        lines.push(row.name.trim());
+        for(var i=0;i<3;i++){
+          var tname = (state.tariffs[i] && state.tariffs[i].trim()) ? state.tariffs[i].trim() : ("Тариф " + (i+1));
+          var val = (row.values[i] || "").trim();
+          lines.push(tname + ": " + (val === "" ? "—" : val));
+        }
+        lines.push("");
+      });
+    });
+    lines.push("Онови документ відповідно до цих параметрів.");
+    lines.push("Нічого більше не змінюй.");
+    promptOutput.value = lines.join("\n");
+  }
+
+  // ---------- tariff names ----------
+  function updateTariffLabels(idx, value){
+    var labels = document.querySelectorAll('.val-label[data-tidx="' + idx + '"]');
+    Array.prototype.forEach.call(labels, function(l){ l.textContent = value || ("Тариф " + (idx+1)); });
+  }
+
+  tariffInputs.forEach(function(inp){
+    var idx = Number(inp.dataset.idx);
+    inp.value = state.tariffs[idx] || "";
+    inp.addEventListener("input", function(){
+      state.tariffs[idx] = inp.value;
+      updateTariffLabels(idx, inp.value);
+      renderPreview();
+      renderPrompt();
+      saveState();
+    });
+  });
+
+  // ---------- modal ----------
+  function openModal(section, row){
+    modalCtx = { sectionId: section.id, rowId: row.id };
+    modalTitle.textContent = row.name && row.name.trim() ? row.name.trim() : "Функція без назви";
+    modalDesc.value = row.desc || "";
+    modalOverlay.classList.remove("hidden");
+    setTimeout(function(){ modalDesc.focus(); }, 50);
+  }
+  function closeModal(){
+    modalOverlay.classList.add("hidden");
+    modalCtx = { sectionId:null, rowId:null };
+  }
+  function saveModal(){
+    var section = findSection(modalCtx.sectionId);
+    var row = section ? findRow(section, modalCtx.rowId) : null;
+    if(row){ row.desc = modalDesc.value; saveState(); }
+    closeModal();
+    showToast("Опис збережено");
+  }
+
+  document.getElementById("modalCloseBtn").addEventListener("click", closeModal);
+  document.getElementById("modalSaveBtn").addEventListener("click", saveModal);
+  modalOverlay.addEventListener("click", function(e){ if(e.target === modalOverlay) closeModal(); });
+  document.addEventListener("keydown", function(e){
+    if(e.key === "Escape" && !modalOverlay.classList.contains("hidden")) closeModal();
+  });
+
+  // ---------- toolbar actions ----------
+  function copyPrompt(){
+    var text = promptOutput.value;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(text).then(function(){
+        showToast("Промпт скопійовано");
+      }).catch(function(){ fallbackCopy(); });
+    } else {
+      fallbackCopy();
+    }
+    function fallbackCopy(){
+      promptOutput.removeAttribute("readonly");
+      promptOutput.focus();
+      promptOutput.select();
+      try{ document.execCommand("copy"); showToast("Промпт скопійовано"); }
+      catch(e){ showToast("Не вдалося скопіювати"); }
+      promptOutput.setAttribute("readonly", "readonly");
+    }
+  }
+
+  document.getElementById("btnCopy").addEventListener("click", copyPrompt);
+  document.getElementById("btnCopyInline").addEventListener("click", copyPrompt);
+
+  document.getElementById("btnClear").addEventListener("click", function(){
+    var ok = confirm("Очистити всі значення тарифів? Назви функцій та описи залишаться.");
+    if(!ok) return;
+    state.sections.forEach(function(section){
+      section.rows.forEach(function(row){ row.values = ["","",""]; });
+    });
+    renderSections();
+    renderPreview();
+    renderPrompt();
+    saveState();
+    showToast("Значення очищено");
+  });
+
+  function downloadJSON(filename){
+    var blob = new Blob([JSON.stringify(state, null, 2)], { type:"application/json" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 1000);
+  }
+  document.getElementById("btnSave").addEventListener("click", function(){
+    downloadJSON("beroo-tariffs.json");
+    showToast("JSON збережено");
+  });
+  document.getElementById("btnExport").addEventListener("click", function(){
+    downloadJSON("beroo-tariffs-export.json");
+    showToast("Експортовано");
+  });
+
+  function triggerFileOpen(){ fileInput.value = ""; fileInput.click(); }
+  document.getElementById("btnOpen").addEventListener("click", triggerFileOpen);
+  document.getElementById("btnImport").addEventListener("click", triggerFileOpen);
+
+  fileInput.addEventListener("change", function(e){
+    var file = e.target.files && e.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(){
+      try{
+        var obj = JSON.parse(String(reader.result));
+        if(!obj || !Array.isArray(obj.tariffs) || !Array.isArray(obj.sections)){ throw new Error("bad shape"); }
+        state = obj;
+        tariffInputs.forEach(function(inp){
+          var idx = Number(inp.dataset.idx);
+          inp.value = state.tariffs[idx] || "";
+        });
+        renderSections();
+        renderPreview();
+        renderPrompt();
+        saveState();
+        showToast("Файл завантажено");
+      }catch(err){
+        alert("Не вдалося прочитати файл. Перевірте формат JSON.");
+      }
+    };
+    reader.readAsText(file);
+  });
+
+  document.getElementById("btnPrint").addEventListener("click", function(){ window.print(); });
+
+  // ---------- init ----------
+  renderSections();
+  renderPreview();
+  renderPrompt();
+
+})();
+</script>
+
+</body>
+</html>
