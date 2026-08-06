@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TikTok Консультації — Прайс</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Unbounded:wght@400;700;900&display=swap');
+
+:root {
+  --bg: #0e0e0e;
+  --card: #1a1a1a;
+  --border: #2a2a2a;
+  --accent: #c8f542;
+  --accent2: #f5a623;
+  --pink: #ff4d8f;
+  --text: #e8e8e8;
+  --muted: #666;
+}
+
+html, body {
+  background: #0e0e0e !important;
+  background-color: #0e0e0e !important;
+  color: #e8e8e8 !important;
+  font-family: 'Space Mono', monospace;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 20px 80px;
+}
+
+header {
+  text-align: center;
+  padding-bottom: 48px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 48px;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 4px 14px;
+  border-radius: 2px;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(1.5rem, 5vw, 2.8rem);
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--text);
+  margin-bottom: 14px;
+}
+
+header h1 span { color: var(--accent); }
+
+header p {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.2s, transform 0.2s;
+}
+
+.card:hover { border-color: #3a3a3a; transform: translateY(-2px); }
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: var(--border);
+}
+
+.card.featured { border-color: #3a1a2a; }
+.card.featured::before { background: var(--pink); }
+.card.accent-green::before { background: var(--accent); }
+.card.accent-orange::before { background: var(--accent2); }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 2px;
+  margin-bottom: 16px;
+}
+
+.badge.best { background: #3a0a1f; color: var(--pink); border: 1px solid #5a1535; }
+.badge.popular { background: #1e2a0a; color: var(--accent); border: 1px solid #3a5010; }
+
+.card-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+
+.card-price {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.card.featured .card-price { color: var(--pink); }
+.card.accent-orange .card-price { color: var(--accent2); }
+
+.card-duration {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.card-desc {
+  font-size: 0.72rem;
+  color: #aaa;
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.card-includes {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.58rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.card ul li {
+  font-size: 0.72rem;
+  color: var(--text);
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.5;
+}
+
+.card ul li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--muted);
+}
+
+.card.featured ul li::before { color: var(--pink); }
+.card.accent-green ul li::before { color: var(--accent); }
+.card.accent-orange ul li::before { color: var(--accent2); }
+
+.card-format {
+  font-size: 0.68rem;
+  color: var(--muted);
+  line-height: 1.6;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+/* TURNKEY */
+.card-turnkey {
+  background: #111;
+  border: 1px solid #2a2000;
+  border-radius: 8px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+.card-turnkey::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+}
+
+.turnkey-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #2a2000;
+}
+
+.turnkey-label {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent2);
+  margin-bottom: 10px;
+}
+
+.turnkey-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(1.2rem, 3vw, 1.8rem);
+  font-weight: 900;
+  color: var(--text);
+  line-height: 1.1;
+}
+
+.turnkey-price { text-align: right; }
+.turnkey-price .from {
+  font-size: 0.65rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 0.1em;
+  display: block; margin-bottom: 4px;
+}
+.turnkey-price .amount {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 900; color: var(--accent2); line-height: 1;
+}
+.turnkey-price .period {
+  font-size: 0.65rem; color: var(--muted); margin-top: 4px; display: block;
+}
+
+.turnkey-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.turnkey-desc {
+  font-size: 0.75rem; color: #aaa; line-height: 1.8;
+  grid-column: 1 / -1;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #2a2000;
+  margin-bottom: 4px;
+}
+
+.turnkey-col-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.58rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 12px;
+}
+
+.turnkey-body ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.turnkey-body ul li {
+  font-size: 0.72rem; color: var(--text);
+  padding-left: 18px; position: relative; line-height: 1.5;
+}
+.turnkey-body ul li::before {
+  content: '→'; position: absolute; left: 0;
+  color: var(--accent2); font-size: 0.65rem;
+}
+
+/* CONTACTS */
+.contacts-section {
+  margin-top: 48px;
+  border-top: 1px solid var(--border);
+  padding-top: 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.contacts-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+  grid-column: 1 / -1;
+}
+
+.contact-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+}
+
+.contact-card.requisites::before { background: var(--accent2); }
+.contact-card.telegram::before { background: #29b4e8; }
+
+.contact-card-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fop-name {
+  font-size: 0.78rem;
+  color: var(--accent2);
+  font-weight: 700;
+  margin-bottom: 20px;
+  line-height: 1.4;
+}
+
+.req-label {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.55rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+}
+
+.copy-block {
+  background: #111;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.copy-block:hover { border-color: var(--accent2); }
+
+.copy-block.copied { border-color: var(--accent); }
+
+.copy-text {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.68rem;
+  color: var(--text);
+  word-break: break-all;
+  line-height: 1.4;
+}
+
+.copy-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 0.65rem;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: 'Space Mono', monospace;
+  transition: color 0.15s;
+  flex-shrink: 0;
+  padding: 0;
+}
+
+.copy-block:hover .copy-btn { color: var(--accent2); }
+.copy-block.copied .copy-btn { color: var(--accent); }
+
+.copy-hint {
+  font-size: 0.62rem;
+  color: var(--muted);
+  margin-top: -10px;
+  margin-bottom: 16px;
+  padding-left: 4px;
+}
+
+.tg-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #0e1e2a;
+  border: 1px solid #1a3a4a;
+  border-radius: 6px;
+  padding: 16px;
+  text-decoration: none;
+  transition: border-color 0.15s, transform 0.15s;
+  margin-top: 8px;
+}
+
+.tg-link:hover { border-color: #29b4e8; transform: translateY(-1px); }
+
+.tg-icon {
+  width: 36px; height: 36px;
+  background: #29b4e8;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.tg-info { flex: 1; }
+
+.tg-label {
+  font-size: 0.62rem;
+  color: #29b4e8;
+  font-family: 'Unbounded', sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.tg-handle {
+  font-size: 0.8rem;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.tg-arrow { color: var(--muted); font-size: 0.8rem; }
+
+.online-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.62rem;
+  color: #4caf7d;
+  margin-top: 12px;
+}
+
+.online-dot {
+  width: 7px; height: 7px;
+  background: #4caf7d;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* CTA */
+.cta-section {
+  text-align: center;
+  padding: 48px 20px 0;
+  border-top: 1px solid var(--border);
+  margin-top: 48px;
+}
+
+.cta-section p {
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 20px;
+  line-height: 1.7;
+}
+
+.cta-btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #000;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 14px 32px;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.cta-btn:hover { opacity: 0.9; transform: translateY(-1px); }
+
+.updated-note {
+  text-align: center;
+  font-size: 0.62rem;
+  color: var(--muted);
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+
+@media (max-width: 720px) {
+  .cards { grid-template-columns: 1fr; }
+  .card-turnkey { padding: 24px; }
+  .turnkey-body { grid-template-columns: 1fr; }
+  .turnkey-top { flex-direction: column; }
+  .turnkey-price { text-align: left; }
+  .contacts-section { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="eyebrow">Прайс актуальний з 06.08.2026</div>
+    <h1>TikTok-консультації<br><span>для бізнесу</span></h1>
+    <p>Індивідуальна робота з підприємцями та брендами, які хочуть будувати продажі в TikTok системно — і бути готовими до того, що на нас чекає.</p>
+  </header>
+
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-name">Бліц</div>
+      <div class="card-price">2 000 грн</div>
+      <div class="card-duration">15–20 хвилин</div>
+      <div class="card-desc">Для тих, кому потрібно швидко отримати відповіді без глибокого занурення.</div>
+      <div class="card-includes">Що входить</div>
+      <ul>
+        <li>відповіді на 2–3 конкретні питання</li>
+        <li>швидкий аналіз ситуації</li>
+        <li>рекомендації щодо наступних кроків</li>
+      </ul>
+    </div>
+
+    <div class="card accent-orange">
+      <div class="card-name">Експрес</div>
+      <div class="card-price">8 000 грн</div>
+      <div class="card-duration">1 година</div>
+      <div class="card-desc">Для підприємців, які хочуть розібрати конкретну задачу або проблему.</div>
+      <div class="card-includes">Що входить</div>
+      <ul>
+        <li>детальний розбір вашої ситуації</li>
+        <li>аналіз акаунта, контенту, реклами або бізнес-процесів</li>
+        <li>відповіді на всі питання протягом консультації</li>
+        <li>авторські навчальні матеріали</li>
+        <li>підтримка в Telegram протягом 24 годин</li>
+      </ul>
+      <div class="card-format">Аудіодзвінок + робота в чаті Telegram зі скріншотами, посиланнями та відео.</div>
+    </div>
+
+    <div class="card accent-green">
+      <div class="badge popular">⭐ Найкращий вибір</div>
+      <div class="card-name">Старт</div>
+      <div class="card-price">12 000 грн</div>
+      <div class="card-duration">2 години</div>
+      <div class="card-desc">Готовий план дій — від аудиту до покрокового впровадження.</div>
+      <div class="card-includes">Що входить</div>
+      <ul>
+        <li>усе з пакету «Експрес»</li>
+        <li>повний аудит бізнесу або акаунта</li>
+        <li>побудова персональної стратегії</li>
+        <li>покроковий план впровадження</li>
+        <li>авторські навчальні матеріали</li>
+        <li>підтримка в Telegram протягом 14 днів</li>
+      </ul>
+      <div class="card-format">Аудіодзвінок + практична робота в чаті Telegram через скріншоти, посилання та відео.</div>
+    </div>
+
+    <div class="card featured">
+      <div class="badge best">⭐ Максимум цінності</div>
+      <div class="card-name">Наставництво</div>
+      <div class="card-price">18 000 грн</div>
+      <div class="card-duration">2 консультації по 2 години</div>
+      <div class="card-desc">Не просто поради — впровадження з супроводом і коригуванням стратегії.</div>
+      <div class="card-includes">Що входить</div>
+      <ul>
+        <li>дві повноцінні консультації</li>
+        <li>аналіз результатів між зустрічами</li>
+        <li>коригування стратегії після впровадження</li>
+        <li>відповіді на запитання між консультаціями</li>
+        <li>всі авторські навчальні матеріали</li>
+        <li>підтримка в Telegram протягом 30 днів</li>
+      </ul>
+      <div class="card-format">Аудіодзвінок + усі матеріали, аналізи, скріншоти та відео в чаті Telegram.</div>
+    </div>
+
+  </div>
+
+  <div class="card-turnkey">
+    <div class="turnkey-top">
+      <div>
+        <div class="turnkey-label">Комплексний супровід</div>
+        <div class="turnkey-name">Запуск під ключ</div>
+      </div>
+      <div class="turnkey-price">
+        <span class="from">від</span>
+        <span class="amount">75 000 грн</span>
+        <span class="period">Індивідуальна робота від 3 місяців</span>
+      </div>
+    </div>
+
+    <div class="turnkey-body">
+      <div class="turnkey-desc">
+        Комплексний супровід від стратегії до результату — включаючи підготовку до TikTok Shop і всього, що на нас чекає. Підходить компаніям, які хочуть побудувати систему продажів, а не отримати лише разову консультацію.
+      </div>
+
+      <div>
+        <div class="turnkey-col-title">Стратегія та аналіз</div>
+        <ul>
+          <li>стратегія розвитку</li>
+          <li>аналіз контенту</li>
+          <li>розробка системи продажів</li>
+          <li>підготовка до TikTok Shop</li>
+          <li>індивідуальні рішення під ваш бізнес</li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="turnkey-col-title">Супровід і підтримка</div>
+        <ul>
+          <li>регулярні консультації</li>
+          <li>супровід впровадження</li>
+          <li>допомога з автоматизацією</li>
+          <li>перевірка виконання завдань</li>
+          <li>пріоритетна підтримка в Telegram</li>
+          <li>авторські матеріали та шаблони</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACTS -->
+  <div class="contacts-section">
+    <div class="contacts-title">🔹 Реквізити та контакти</div>
+
+    <div class="contact-card requisites">
+      <div class="contact-card-title">💳 Реквізити для оплати</div>
+      <div class="fop-name">ФОП Черних Наталя Віталіївна</div>
+
+      <div class="req-label">IBAN</div>
+      <div class="copy-block" onclick="copyText(this, 'UA373220010000026006380003997')">
+        <span class="copy-text">UA373220010000026006380003997</span>
+        <button class="copy-btn">👆 скопіювати</button>
+      </div>
+
+      <div class="req-label">Призначення платежу</div>
+      <div class="copy-block" onclick="copyText(this, 'Оплата за інформаційно-консультаційні послуги')">
+        <span class="copy-text">Оплата за інформаційно-консультаційні послуги</span>
+        <button class="copy-btn">👆 скопіювати</button>
+      </div>
+    </div>
+
+    <div class="contact-card telegram">
+      <div class="contact-card-title">🟢 Написати нам</div>
+      <p style="font-size:0.72rem;color:#aaa;line-height:1.7;margin-bottom:16px;">Маєш питання або хочеш обрати пакет? Напиши — розберемося разом.</p>
+      <a class="tg-link" href="https://t.me/veoforce_support" target="_blank">
+        <div class="tg-icon">✈️</div>
+        <div class="tg-info">
+          <div class="tg-label">Telegram</div>
+          <div class="tg-handle">@veoforce_support</div>
+        </div>
+        <div class="tg-arrow">→</div>
+      </a>
+      <div class="online-badge">
+        <div class="online-dot"></div>
+        на зв'язку
+      </div>
+    </div>
+  </div>
+
+  <div class="updated-note">
+    Прайс актуальний з 06.08.2026 · ФОП Черних Наталя Віталіївна
+  </div>
+
+</div>
+
+<script>
+function copyText(block, text) {
+  navigator.clipboard.writeText(text).then(() => {
+    block.classList.add('copied');
+    const btn = block.querySelector('.copy-btn');
+    const original = btn.textContent;
+    btn.textContent = '✓ скопійовано';
+    setTimeout(() => {
+      block.classList.remove('copied');
+      btn.textContent = original;
+    }, 2000);
+  });
+}
+</script>
+</body>
+</html>
