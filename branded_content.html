@@ -2,552 +2,881 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Порівняння правил TikTok · VEO FORCE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>BEROO — TikTok Branded Content Audit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #f8f9fa;
+            --border: #e2e5e9;
+            --text: #1e2228;
+            --text-mid: #4a515c;
+            --text-dim: #8a9099;
+            --crit: #d93025;
+            --crit-bg: #fff5f4;
+            --crit-border: #f5bbb8;
+            --warn: #b45a00;
+            --warn-bg: #fffaf3;
+            --warn-border: #f5d9a8;
+            --ok: #3d6b3d;
+            --ok-bg: #f5fbf5;
+            --ok-border: #b3d9b3;
+            --blue: #1a56a0;
+            --blue-bg: #f0f5ff;
+            --blue-border: #b3c8f0;
+            --ai-bg: #f0f0ff;
+            --ai-border: #b3b3e8;
+        }
         * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+            background: #fff;
         }
         body {
-            background: #f2f4fa;
-            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, system-ui, sans-serif;
-            padding: 12px 10px 20px;
-            color: #121826;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+            background: #fff !important;
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
         }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            width: 100%;
-            background: #ffffff;
-            border-radius: 24px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
-            padding: 16px 14px 18px;
-            flex: 1;
-        }
-        /* header */
-        .header-title {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: baseline;
-            gap: 6px 4px;
-            margin-bottom: 10px;
-        }
-        .header-title h1 {
-            font-size: 1.5rem;
-            font-weight: 650;
-            letter-spacing: -0.3px;
-            line-height: 1.2;
-        }
-        .header-title .version-badge {
-            font-size: 0.7rem;
-            background: #e6eaf2;
-            padding: 0.2rem 0.7rem;
-            border-radius: 40px;
-            color: #2f364a;
-            font-weight: 500;
-            white-space: nowrap;
-        }
-        .subhead {
-            background: #f0f3fc;
-            border-left: 4px solid #25f4ee;
-            padding: 12px 14px;
-            border-radius: 0 16px 16px 0;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin: 8px 0 16px 0;
-            color: #1b2237;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
-        }
-        .subhead strong {
-            color: #0b1a2a;
-        }
-        .diff-add {
-            background: #dff3ee;
-            padding: 0 4px;
-            border-radius: 6px;
-            color: #0c5f4e;
-        }
-        .diff-remove {
-            background: #fce7e9;
-            padding: 0 4px;
-            border-radius: 6px;
-            color: #ac2c2c;
-        }
-        .badge-old, .badge-new {
-            display: inline-block;
-            font-size: 0.6rem;
-            font-weight: 600;
-            padding: 0.15rem 0.6rem;
-            border-radius: 30px;
-            letter-spacing: 0.2px;
-            margin-left: 4px;
-            white-space: nowrap;
-        }
-        .badge-old { background: #d5dbe6; color: #2b3147; }
-        .badge-new { background: #1b8c7e; color: white; }
 
-        /* table card */
-        .table-card {
-            border: 1px solid #e3e8f0;
-            border-radius: 20px;
-            overflow: hidden;
-            margin-top: 6px;
-        }
-        .table-row {
-            display: flex;
-            flex-direction: column;
-            border-bottom: 1px solid #e9eef5;
-        }
-        .table-row:last-child { border-bottom: none; }
-        .row-header {
-            background: #f6f8fe;
-            padding: 10px 12px;
-            font-weight: 600;
-            font-size: 0.85rem;
-            color: #1e253b;
-            border-bottom: 1px solid #dce2ec;
+        .hdr {
+            background: #fff;
+            border-bottom: 2px solid var(--text);
+            padding: 14px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: space-between;
             flex-wrap: wrap;
+            gap: 6px 10px;
         }
-        .row-header .cat-tag {
-            background: #e1e7f0;
-            padding: 0.1rem 0.6rem;
+        .hdr-logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 2px;
+        }
+        .hdr-sub {
+            font-size: 9px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+        .hdr-badge {
+            font-size: 8px;
+            font-weight: 700;
+            background: var(--text);
+            color: #fff;
+            padding: 4px 12px;
             border-radius: 30px;
-            font-size: 0.6rem;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .intro {
+            padding: 20px 16px 0;
+        }
+        .intro-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .intro-desc {
+            font-size: 12px;
+            color: var(--text-mid);
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        /* ---------- ПРАКТИЧНИЙ ГІД (новий блок) ---------- */
+        .guide-block {
+            background: var(--surface);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            padding: 16px 16px 12px;
+            margin-bottom: 20px;
+        }
+        .guide-block h2 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .guide-block h2 small {
+            font-size: 10px;
             font-weight: 500;
-            color: #2f3a57;
+            color: var(--text-dim);
+            background: #eef0f5;
+            padding: 0.1rem 0.8rem;
+            border-radius: 30px;
         }
-        .row-body {
-            padding: 8px 12px 12px 12px;
-            background: #fbfdff;
-        }
-        .compare-grid {
+        .guide-grid {
             display: flex;
             flex-direction: column;
             gap: 10px;
+            margin-top: 6px;
         }
-        .compare-item {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
+        .guide-item {
+            background: #fff;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            padding: 10px 12px;
         }
-        .compare-item .label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-            color: #5b637c;
+        .guide-item .g-title {
+            font-weight: 700;
+            font-size: 11px;
+            color: var(--text);
             display: flex;
             align-items: center;
             gap: 6px;
         }
-        .compare-item .content {
-            font-size: 0.82rem;
-            line-height: 1.5;
-            padding: 6px 10px;
-            border-radius: 12px;
-            background: #f8faff;
-            border: 1px solid #eef2f9;
-            color: #1c2338;
-        }
-        .content.old-ver {
-            border-left: 3px solid #9aa3b9;
-        }
-        .content.new-ver {
-            border-left: 3px solid #25c9b8;
-            background: #f6fdfb;
-        }
-        .content ul, .content .list {
-            margin: 0.2rem 0 0.1rem 1rem;
-            padding-left: 0.2rem;
-        }
-        .content li {
-            margin-bottom: 0.2rem;
-        }
-        .country-list {
-            font-size: 0.7rem;
-            background: #f2f5fc;
-            padding: 4px 6px;
-            border-radius: 14px;
-            border: 1px solid #e2e8f2;
-            margin-top: 4px;
-            max-height: 100px;
-            overflow-y: auto;
-        }
-        .country-list span {
-            display: inline-block;
-            background: white;
-            padding: 0.1rem 0.5rem;
+        .guide-item .g-title .badge {
+            font-size: 8px;
+            font-weight: 700;
+            padding: 0.1rem 0.6rem;
             border-radius: 30px;
-            margin: 0.1rem 0.15rem;
-            border: 1px solid #dce2ed;
-            font-size: 0.6rem;
+            background: var(--blue);
+            color: #fff;
         }
-        .section-divider {
+        .guide-item .g-desc {
+            font-size: 11.5px;
+            color: var(--text-mid);
+            margin-top: 2px;
+            line-height: 1.6;
+        }
+        .guide-item .g-example {
+            font-size: 10.5px;
+            background: #f8faff;
+            padding: 6px 10px;
+            border-radius: 8px;
+            margin-top: 4px;
+            border-left: 3px solid var(--blue);
+            color: #1a2a4a;
+        }
+
+        .guide-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10.5px;
+            margin-top: 6px;
+        }
+        .guide-table th {
             background: #eef2f9;
-            padding: 8px 12px;
+            text-align: left;
+            padding: 6px 10px;
             font-weight: 600;
-            font-size: 0.9rem;
-            color: #0f1d30;
-            border-bottom: 2px solid #d0d8e6;
-            border-top: 1px solid #d0d8e6;
+            border-bottom: 2px solid var(--border);
+        }
+        .guide-table td {
+            padding: 6px 10px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        .guide-table .tag {
+            display: inline-block;
+            background: #eef2f9;
+            padding: 0.1rem 0.5rem;
+            border-radius: 20px;
+            font-size: 9px;
+            font-weight: 600;
+        }
+        .guide-table .tag-green {
+            background: var(--ok-bg);
+            color: var(--ok);
+        }
+        .guide-table .tag-red {
+            background: var(--crit-bg);
+            color: var(--crit);
+        }
+        .guide-table .tag-blue {
+            background: var(--blue-bg);
+            color: var(--blue);
+        }
+
+        /* ---------- AI-детекція (розгорнутий блок) ---------- */
+        .ai-block {
+            background: var(--ai-bg);
+            border-radius: 14px;
+            border: 2px solid var(--ai-border);
+            padding: 16px 16px 12px;
+            margin-bottom: 20px;
+        }
+        .ai-block h2 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1a1a4a;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
-        .section-divider:first-of-type { border-top: none; }
-
-        .footnote {
-            margin-top: 18px;
-            background: #f2f6fe;
-            padding: 14px 16px;
-            border-radius: 22px;
-            font-size: 0.8rem;
-            color: #1f2740;
-            border-left: 5px solid #25f4ee;
+        .ai-block h2 .ai-badge {
+            background: #1a1a4a;
+            color: #fff;
+            font-size: 8px;
+            padding: 0.1rem 0.8rem;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+        }
+        .ai-block .ai-desc {
+            font-size: 11.5px;
+            color: #1a1a4a;
+            line-height: 1.6;
+            margin-top: 4px;
+        }
+        .ai-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .ai-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 10px 12px;
+            border: 1px solid #d0d0e8;
+        }
+        .ai-card .ai-icon {
+            font-size: 16px;
+        }
+        .ai-card .ai-label {
+            font-weight: 700;
+            font-size: 10px;
+            color: #1a1a4a;
+            margin-top: 2px;
+        }
+        .ai-card .ai-text {
+            font-size: 10px;
+            color: var(--text-mid);
             line-height: 1.5;
         }
-        .legend {
+        .ai-card .ai-example {
+            font-size: 9.5px;
+            background: #f5f5ff;
+            padding: 4px 8px;
+            border-radius: 6px;
+            margin-top: 4px;
+            color: #2a2a5a;
+        }
+
+        .ai-full {
+            grid-column: 1 / -1;
+        }
+
+        @media (max-width: 480px) {
+            .ai-grid {
+                grid-template-columns: 1fr;
+            }
+            .ai-full {
+                grid-column: 1;
+            }
+        }
+
+        /* ---------- ДАТА-ЛАЙН ТА СТАТИСТИКА ---------- */
+        .date-line {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px 16px;
-            margin: 6px 0 12px 0;
-            font-size: 0.7rem;
-            color: #343d57;
-        }
-        .legend span {
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-        }
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 4px;
-        }
-        .dot-green { background: #dff3ee; border: 1px solid #8dc7ba; }
-        .dot-red { background: #fce7e9; border: 1px solid #dbb5b5; }
-
-        /* footer VEO */
-        .veo-footer {
-            margin-top: 20px;
-            text-align: center;
-            font-size: 0.75rem;
-            color: #3a415b;
-            border-top: 1px solid #e5eaf2;
-            padding-top: 14px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-        .veo-footer .brand {
-            font-weight: 700;
-            letter-spacing: 0.5px;
-            color: #0d1f2e;
-            font-size: 0.9rem;
-        }
-        .veo-footer .brand span {
-            background: #0d1f2e;
-            color: white;
-            padding: 0.1rem 0.7rem;
-            border-radius: 40px;
-            font-size: 0.6rem;
-            margin-left: 5px;
-        }
-        .veo-footer .contact {
-            background: #eaf0f8;
-            padding: 0.2rem 1.2rem;
-            border-radius: 40px;
-            display: inline-block;
-            font-weight: 500;
-            font-size: 0.8rem;
-            margin-top: 3px;
-        }
-        .veo-footer .contact a {
-            color: #0b2840;
-            text-decoration: none;
+            gap: 12px 24px;
+            background: var(--surface);
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            font-size: 11px;
             font-weight: 600;
+            border: 1px solid var(--border);
         }
-        hr {
-            border: none;
-            border-top: 2px dashed #dce2ec;
-            margin: 12px 0 6px 0;
+        .date-line .old {
+            color: var(--crit);
+        }
+        .date-line .new {
+            color: var(--ok);
         }
 
-        /* mobile first — все адаптивно */
-        @media (max-width: 480px) {
-            .container { padding: 12px 10px; }
-            .header-title h1 { font-size: 1.3rem; }
-            .subhead { font-size: 0.8rem; padding: 10px 12px; }
-            .compare-item .content { font-size: 0.78rem; padding: 5px 8px; }
-            .row-header { font-size: 0.8rem; padding: 8px 10px; }
+        .stats {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
         }
-        /* трохи більше повітря */
-        .mt-1 { margin-top: 6px; }
+        .stat {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            flex: 1;
+            min-width: 80px;
+            text-align: center;
+        }
+        .stat-num {
+            font-size: 22px;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .stat-crit {
+            background: var(--crit-bg);
+            color: var(--crit);
+            border: 1px solid var(--crit-border);
+        }
+        .stat-warn {
+            background: var(--warn-bg);
+            color: var(--warn);
+            border: 1px solid var(--warn-border);
+        }
+        .stat-ok {
+            background: var(--ok-bg);
+            color: var(--ok);
+            border: 1px solid var(--ok-border);
+        }
+
+        main {
+            padding: 0 16px 80px;
+        }
+
+        /* ---------- КАРТКИ (ISSUE) ---------- */
+        .issue {
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .issue-hdr {
+            padding: 14px 16px;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .issue.crit .issue-hdr {
+            background: var(--crit-bg);
+            border-bottom: 1px solid var(--crit-border);
+        }
+        .issue.warn .issue-hdr {
+            background: var(--warn-bg);
+            border-bottom: 1px solid var(--warn-border);
+        }
+        .issue.low .issue-hdr {
+            background: #fffdf0;
+            border-bottom: 1px solid #f0e8a0;
+        }
+        .risk-badge {
+            font-size: 9px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 3px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+        .rb-crit {
+            background: var(--crit);
+            color: #fff;
+        }
+        .rb-warn {
+            background: var(--warn);
+            color: #fff;
+        }
+        .rb-low {
+            background: #8a7a00;
+            color: #fff;
+        }
+        .issue-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            flex: 1;
+            line-height: 1.4;
+        }
+        .issue-ref {
+            font-size: 10px;
+            color: var(--text-dim);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .issue-arr {
+            color: var(--text-dim);
+            font-size: 13px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            transition: transform .2s;
+        }
+        .issue.open .issue-arr {
+            transform: rotate(180deg);
+        }
+
+        .issue-body {
+            display: none;
+            padding: 16px;
+        }
+        .issue.open .issue-body {
+            display: block;
+        }
+
+        .block {
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            border: 1px solid;
+        }
+        .block-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .block-text {
+            font-size: 12px;
+            line-height: 1.75;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .block-old {
+            background: #fff5f5;
+            border-color: #f5bbb8;
+        }
+        .block-old .block-label {
+            color: var(--crit);
+        }
+        .block-old .block-text {
+            color: #6b2020;
+        }
+
+        .block-new {
+            background: #f5fbf5;
+            border-color: #b3d9b3;
+        }
+        .block-new .block-label {
+            color: var(--ok);
+        }
+        .block-new .block-text {
+            color: #1e3d1e;
+        }
+
+        .block-explain {
+            background: var(--blue-bg);
+            border-color: var(--blue-border);
+        }
+        .block-explain .block-label {
+            color: var(--blue);
+        }
+        .block-explain .block-text {
+            color: #1a2a4a;
+        }
+
+        .apply-btn {
+            display: inline-block;
+            margin-top: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 8px 16px;
+            background: var(--text);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            transition: opacity .15s;
+        }
+        .apply-btn:hover {
+            opacity: .8;
+        }
+        .apply-btn.applied {
+            background: var(--ok);
+            cursor: default;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 16px;
+            right: 16px;
+            background: var(--text);
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 7px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity .3s;
+            pointer-events: none;
+            z-index: 999;
+        }
+        .toast.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 480px) {
+            .intro-title {
+                font-size: 18px;
+            }
+            .hdr-logo {
+                font-size: 15px;
+            }
+            .stat {
+                font-size: 10px;
+                padding: 8px 10px;
+                min-width: 60px;
+            }
+            .stat-num {
+                font-size: 18px;
+            }
+            .issue-title {
+                font-size: 12px;
+            }
+            .block-text {
+                font-size: 11px;
+            }
+            .hdr-badge {
+                font-size: 7px;
+                padding: 3px 10px;
+            }
+            .guide-block h2 {
+                font-size: 14px;
+            }
+            .guide-item .g-desc {
+                font-size: 10.5px;
+            }
+            .guide-table {
+                font-size: 9.5px;
+            }
+            .guide-table th,
+            .guide-table td {
+                padding: 4px 6px;
+            }
+            .ai-block h2 {
+                font-size: 13px;
+            }
+            .ai-card .ai-text {
+                font-size: 9.5px;
+            }
+        }
     </style>
 </head>
 <body>
-<div class="container">
-    <!-- header -->
-    <div class="header-title">
-        <h1>📋 TikTok Branded</h1>
-        <span class="version-badge">стара vs нова</span>
+
+    <div class="hdr">
+        <div>
+            <div class="hdr-logo">BEROO · ЮРИДИЧНИЙ АУДИТ</div>
+            <div class="hdr-sub">TikTok Branded Content Policy · Глобальні зміни 2026</div>
+        </div>
+        <span class="hdr-badge">🌍 всесвітнє оновлення</span>
     </div>
 
-    <!-- тлумачення -->
-    <div class="subhead">
-        <strong>🔎 Ключові зміни:</strong> Нова версія (з 31.08.2026) замінює <span class="diff-add">«children» на «minors»</span>, коригує перелік обмежених категорій та <span class="diff-remove">масово виключає</span> європейські ринки (FR, DE, IT, ES, UK) з дозволених для алкоголю, дейтингу, фінансів, БАДів та азартних ігор.
+    <div class="intro">
+        <div class="intro-title">Аудит змін у правилах брендованого контенту TikTok</div>
+
+        <!-- ============================================================ -->
+        <!--  БЛОК 1: ПРАКТИЧНИЙ ГІД – ПРАВИЛА РОЗКРИТТЯ КОМЕРЦІЙНОГО КОНТЕНТУ -->
+        <!-- ============================================================ -->
+        <div class="guide-block">
+            <h2>🛒 Практичний гід: комерційний контент у TikTok <small>що, як і коли розкривати</small></h2>
+
+            <div style="font-size:11px; color:var(--text-mid); margin:4px 0 10px 0; background:#eef2f9; padding:6px 12px; border-radius:8px;">
+                <strong>Головне правило:</strong> TikTok вимагає, щоб <strong>будь-який комерційний контент</strong> був позначений через вбудований перемикач «Disclose commercial content». Хештеги <code>#ad</code> або <code>#sponsored</code> більше не є достатніми.
+            </div>
+
+            <div class="guide-grid">
+                <!-- Сценарій 1 -->
+                <div class="guide-item">
+                    <div class="g-title"><span>📦</span> Ви продаєте власний товар <span class="badge">Your brand</span></div>
+                    <div class="g-desc"><strong>Коли:</strong> завжди, коли публікуєте контент, що просуває ваш власний бренд або бізнес.</div>
+                    <div class="g-example">
+                        <strong>Приклад:</strong> У вас магазин handmade-свічок, ви знімаєте відео «Як створюється моя нова свічка».<br>
+                        <strong>Дія:</strong> Увімкнути «Disclose commercial content» → вибрати «Your brand» → на відео з’явиться мітка «Promotional content».
+                    </div>
+                </div>
+
+                <!-- Сценарій 2 -->
+                <div class="guide-item">
+                    <div class="g-title"><span>🤝</span> Огляд чужого товару за винагороду <span class="badge">Branded content</span></div>
+                    <div class="g-desc"><strong>Коли:</strong> якщо отримуєте будь-яку винагороду — гроші, подарунок, партнерську комісію, амбасадорство.</div>
+                    <div class="g-example">
+                        <strong>Приклад:</strong> Вам подарували безкоштовний крем, ви знімаєте огляд «Мій новий улюбленець».<br>
+                        <strong>Дія:</strong> Увімкнути «Disclose commercial content» → вибрати «Branded content» → на відео з’явиться мітка «Paid partnership».
+                    </div>
+                </div>
+
+                <!-- Сценарій 3 -->
+                <div class="guide-item">
+                    <div class="g-title"><span>💬</span> Рекомендація без винагороди <span class="badge" style="background:var(--text-dim);">органічний</span></div>
+                    <div class="g-desc"><strong>Коли:</strong> якщо не отримуєте жодної вигоди — немає грошей, подарунків, партнерських посилань.</div>
+                    <div class="g-example">
+                        <strong>Приклад:</strong> Ви самостійно купили каву в кав’ярні, яка вам сподобалася, і знімаєте відео без домовленостей з брендом.<br>
+                        <strong>Дія:</strong> Перемикач вмикати НЕ потрібно. Це органічний контент.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Шпаргалка-таблиця -->
+            <div style="margin-top:12px;">
+                <div style="font-size:10px; font-weight:700; color:var(--text-mid); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">📋 Шпаргалка: що і коли вмикати</div>
+                <table class="guide-table">
+                    <thead>
+                        <tr><th>Ваші дії</th><th>Винагорода?</th><th>Який перемикач?</th><th>Мітка на відео</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Огляд вашого власного товару</td><td>Ні (але це ваш бізнес)</td><td><span class="tag tag-blue">Your brand</span></td><td>«Promotional content»</td></tr>
+                        <tr><td>Реклама чужого бренду за гроші</td><td><span class="tag tag-red">Так</span></td><td><span class="tag tag-blue">Branded content</span></td><td>«Paid partnership»</td></tr>
+                        <tr><td>Огляд подарунка від бренду</td><td><span class="tag tag-red">Так</span> (безкоштовний продукт)</td><td><span class="tag tag-blue">Branded content</span></td><td>«Paid partnership»</td></tr>
+                        <tr><td>Партнерське посилання на товар</td><td><span class="tag tag-red">Так</span> (комісія)</td><td><span class="tag tag-blue">Branded content</span></td><td>«Paid partnership»</td></tr>
+                        <tr><td>Ви — амбасадор бренду</td><td><span class="tag tag-red">Так</span></td><td><span class="tag tag-blue">Branded content</span></td><td>«Paid partnership»</td></tr>
+                        <tr><td>Просто поділилися враженням від купленої речі</td><td><span class="tag tag-green">Немає</span></td><td><span class="tag" style="background:#eef0f5;">Не вмикати</span></td><td>Без мітки</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="font-size:10px; color:var(--text-dim); margin-top:8px; padding:6px 10px; background:#f5f7fc; border-radius:8px;">
+                ⚠️ <strong>Термін виправлення:</strong> якщо TikTok надіслав сповіщення про помилку розкриття — у вас є <strong>24 години</strong>, щоб виправити, інакше відео втратить доступ до стрічки «Для вас».
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!--  БЛОК 2: ЯК ШІ TikTok ВИЗНАЧАЄ КОМЕРЦІЙНИЙ КОНТЕНТ (розгорнуто) -->
+        <!-- ============================================================ -->
+        <div class="ai-block">
+            <h2>🧠 Як ШІ TikTok автоматично визначає комерційний контент <span class="ai-badge">AI-детекція</span></h2>
+            <div class="ai-desc">
+                <strong>TikTok може автоматично визначити комерційний контент, навіть якщо ви не ввімкнули перемикач.</strong><br>
+                Система аналізує десятки сигналів — від тексту в описі до поведінки акаунта. Ось що зчитує алгоритм:
+            </div>
+
+            <div class="ai-grid">
+                <div class="ai-card">
+                    <div class="ai-icon">🎤</div>
+                    <div class="ai-label">Сказане на відео (аудіо-розпізнавання)</div>
+                    <div class="ai-text">ШІ аналізує мовлення: фрази «купуйте за посиланням», «отримала в подарунок», «ось мій промокод», «партнерська програма».</div>
+                    <div class="ai-example">📌 Приклад: сказано «використовуйте мій промокод SALE10» — система фіксує комерційний інтент.</div>
+                </div>
+                <div class="ai-card">
+                    <div class="ai-icon">👁️</div>
+                    <div class="ai-label">Показане на відео (комп'ютерний зір)</div>
+                    <div class="ai-text">Розпізнавання продуктів, логотипів брендів, упаковки, посилань або QR-кодів у кадрі.</div>
+                    <div class="ai-example">📌 Приклад: у відео помітно логотип бренду на коробці з товаром — це маркер для ШІ.</div>
+                </div>
+                <div class="ai-card">
+                    <div class="ai-icon">📝</div>
+                    <div class="ai-label">Опис під відео та коментарі</div>
+                    <div class="ai-text">Аналіз тексту: згадки брендів через @, хештеги (#ad, #sponsored, #gifted), посилання, промокоди.</div>
+                    <div class="ai-example">📌 Приклад: в описі написано «спасибі бренду @Nike за подарунок» — система розпізнає комерційний характер.</div>
+                </div>
+                <div class="ai-card">
+                    <div class="ai-icon">🔄</div>
+                    <div class="ai-label">Циклічність комерційних маркерів</div>
+                    <div class="ai-text">Якщо ви регулярно публікуєте контент з ознаками реклами — ШІ запам'ятовує цей патерн і застосовує його до нових відео.</div>
+                    <div class="ai-example">📌 Приклад: 5 відео поспіль із промокодами → 6-те відео без промокоду, але з продуктом, буде позначено автоматично.</div>
+                </div>
+                <div class="ai-card ai-full">
+                    <div class="ai-icon">📊</div>
+                    <div class="ai-label">Історія акаунта, семантичне ядро профілю та контенту</div>
+                    <div class="ai-text">Алгоритм аналізує весь профіль: тематику відео, ключові слова в описах, хештеги, частоту згадок брендів. Формується «профіль комерційного акаунта».</div>
+                    <div class="ai-example">📌 Приклад: якщо 70% вашого контенту — огляди товарів, система класифікує вас як «комерційного автора» і посилює моніторинг.</div>
+                </div>
+                <div class="ai-card ai-full">
+                    <div class="ai-icon">💬</div>
+                    <div class="ai-label">Переписки в директі, опис у профілі та посилання</div>
+                    <div class="ai-text">Аналізуються: посилання в біо (на магазин, прайс-лист), текст у шапці профілю, активність у переписках (надсилання цін, промокодів).</div>
+                    <div class="ai-example">📌 Приклад: у профілі вказано «Замовлення в директ» або посилання на магазин — це додатковий комерційний сигнал для ШІ.</div>
+                </div>
+            </div>
+
+            <div style="background:#fff; border-radius:10px; padding:10px 14px; margin-top:10px; border:1px solid #d0d0e8;">
+                <div style="font-size:11px; font-weight:700; color:#1a1a4a;">⚠️ Важливий висновок</div>
+                <div style="font-size:11px; color:var(--text-mid); line-height:1.6;">
+                    TikTok використовує комплексний підхід: аудіо, відео, текст, поведінку акаунта та історію публікацій. Навіть якщо ви не ввімкнете перемикач, система може <strong>самостійно позначити ваш контент</strong> або обмежити його поширення. Тому <strong>краще вмикати розкриття свідомо</strong> — це зберігає ваш охоплення та захищає від штрафів.
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================================================ -->
+        <!--  ДАТА-ЛАЙН ТА СТАТИСТИКА (залишаємо) -->
+        <!-- ============================================================ -->
+        <div class="date-line">
+            <span class="old">📌 <strong>СТАРЕ</strong> — до 31 серпня 2026 (чинна редакція)</span>
+            <span class="new">📌 <strong>НОВЕ</strong> — з 31 серпня 2026 (нова редакція)</span>
+        </div>
+
+        <div class="stats">
+            <div class="stat stat-crit"><span class="stat-num">4</span>КРИТИЧНІ</div>
+            <div class="stat stat-warn"><span class="stat-num">3</span>ВАЖЛИВІ</div>
+            <div class="stat stat-ok"><span class="stat-num">3</span>МЕНШІ</div>
+        </div>
     </div>
 
-    <!-- легенда -->
-    <div class="legend">
-        <span><span class="dot dot-green"></span> додано / змінено</span>
-        <span><span class="dot dot-red"></span> вилучено / обмежено</span>
-        <span><span class="badge-old" style="font-size:0.6rem;">старе</span> <span class="badge-new" style="font-size:0.6rem;">нове</span></span>
-    </div>
+    <main id="main"></main>
+    <div class="toast" id="toast">✓ Скопійовано нове формулювання</div>
 
-    <!-- таблиця-картка -->
-    <div class="table-card">
-        <!-- Визначення -->
-        <div class="section-divider">📌 Визначення Branded Content</div>
-        <div class="table-row">
-            <div class="row-body">
-                <div class="compare-grid">
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-old">старе</span></div>
-                        <div class="content old-ver">«…promotes or reviews…» <br> згадка <strong>«children»</strong></div>
-                    </div>
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-new">нове</span></div>
-                        <div class="content new-ver"><span class="diff-add">«minors»</span> замість «children» <br> (юридично точніше)</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <script>
+        const ISSUES = [{
+            id: "T1",
+            risk: "crit",
+            doc: "ВИЗНАЧЕННЯ",
+            ref: "Branded Content",
+            title: "«Children» замінено на «Minors» — зміна термінології",
+            was: `Branded Content includes content that features or references: ... (пункти без змін). У загальних правилах: "cause physical, mental or moral detriment to children; exhort children to buy... exploit the special trust that children place in parents, teachers or other persons"`,
+            proposed: `У всіх пунктах замінено "children" на "minors". Тепер: "cause physical, mental or moral detriment to minors; exhort minors to buy... exploit the special trust minors place in parents, teachers or other persons"`,
+            why: `Зміна термінології з "children" на "minors" (неповнолітні) є юридично більш точною, оскільки охоплює всіх осіб до 18 років, а не лише дітей молодшого віку. Це дозволяє TikTok уникнути тлумачень, що правила захищають лише малолітніх (до 14 років). Для творців контенту це означає: якщо раніше ви могли звертатися до "дітей" у рекламі іграшок, то тепер краще використовувати "неповнолітні" або "підлітки", щоб відповідати новій термінології.`
+        }, {
+            id: "T2",
+            risk: "crit",
+            doc: "АЛКОГОЛЬ",
+            ref: "список країн 18+",
+            title: "Вилучення Європи з дозволених ринків для алкоголю",
+            was: `18+ : Аргентина, Австралія, Бразилія, Камбоджа, Колумбія, Німеччина, Ізраїль, Італія, Кенія, Мексика, Філіппіни, Нігерія, Сінгапур, Іспанія, ПАР, Тайвань, Велика Британія, В'єтнам`,
+            proposed: `18+ : Аргентина, Австралія, Бразилія, Камбоджа, Колумбія, Ізраїль, Мексика, Філіппіни, Сінгапур, Тайвань, В'єтнам (вилучено: Німеччина, Італія, Кенія, Нігерія, Іспанія, ПАР, Велика Британія)`,
+            why: `Якщо раніше ви могли рекламувати алкоголь у Німеччині, Італії, Іспанії чи Великій Британії — тепер це заборонено. Ваше відео з келихом вина, зняте в Лондоні або Берліні, не покажуть місцевій аудиторії. TikTok суттєво звужує дозволені ринки для алкоголю, залишаючи переважно країни Азії, Південної Америки та Близького Сходу. Для креаторів це означає: якщо ви планували рекламувати алкогольний бренд — орієнтуйтесь на США, Бразилію або Сінгапур, але не на Європу.`
+        }, {
+            id: "T3",
+            risk: "crit",
+            doc: "ДЕЙТИНГ",
+            ref: "список країн 18+",
+            title: "Вилучення Європи з дозволених ринків для дейтингу",
+            was: `18+ : Австралія, Аргентина, Бразилія, Канада, Колумбія, Франція, Німеччина, Ізраїль, Італія, Японія, Кенія, Корея, Малайзія, Мексика, Нігерія, Філіппіни, Сінгапур, ПАР, Іспанія, Тайвань, Таїланд, Велика Британія, США, В'єтнам, Індонезія`,
+            proposed: `18+ : Австралія, Аргентина, Бразилія, Канада, Колумбія, Індонезія, Японія, Корея, Малайзія, Мексика, Філіппіни, Сінгапур, Тайвань, Таїланд, США, В'єтнам (вилучено: Франція, Німеччина, Ізраїль, Італія, Кенія, Нігерія, ПАР, Іспанія, Велика Британія)`,
+            why: `Якщо раніше ви могли просувати додаток для знайомств у Франції чи Німеччині — тепер це заборонено. TikTok масово виключає європейські ринки з дозволених для дейтингу. Ваше відео з посиланням на Tinder або Bumble не побачать глядачі з Великої Британії, Італії чи Іспанії. Орієнтуйтесь на США, Бразилію, Мексику або країни Азії.`
+        }, {
+            id: "T4",
+            risk: "crit",
+            doc: "ФІНАНСИ",
+            ref: "список країн 18+",
+            title: "Вилучення Європи з дозволених ринків для фінансових послуг",
+            was: `18+ : Аргентина, Австралія, Бразилія, Канада, Колумбія, Єгипет, Франція, Німеччина, Індонезія, Італія, Японія, Корея, Малайзія, Мексика, Філіппіни, Саудівська Аравія, Сінгапур, ПАР, Іспанія, Тайвань, Таїланд, Туреччина, ОАЕ, Велика Британія, США, В'єтнам`,
+            proposed: `18+ : Аргентина, Австралія, Бразилія, Канада, Колумбія, Єгипет, Індонезія, Японія, Корея, Малайзія, Мексика, Філіппіни, Саудівська Аравія, Сінгапур, Тайвань, Таїланд, Туреччина, ОАЕ, США, В'єтнам (вилучено: Франція, Німеччина, Італія, ПАР, Іспанія, Велика Британія)`,
+            why: `Якщо раніше ви рекламували кредитні картки або інвестиційні додатки в Німеччині, Франції чи Великій Британії — тепер це заборонено. TikTok залишає фінансову рекламу для США, Бразилії, Саудівської Аравії та Азії, але закриває більшість європейських ринків.`
+        }, {
+            id: "T5",
+            risk: "warn",
+            doc: "БЕЗРЕЦЕПТУРНІ ЛІКИ",
+            ref: "список країн 18+",
+            title: "Значне скорочення дозволених ринків",
+            was: `18+ : Австралія, Аргентина, Азербайджан, Бахрейн, Бангладеш, Білорусь, Бразилія, Канада, Колумбія, Єгипет, Франція, Німеччина, Ірак, Ізраїль, Йорданія, Казахстан, Кувейт, Ліван, Мексика, Марокко, Оман, Пакистан, Катар, Саудівська Аравія, ПАР, Іспанія, ОАЕ, Велика Британія, США`,
+            proposed: `18+ : Австралія, Аргентина, Бразилія, Канада, Колумбія, Єгипет, Ізраїль, Мексика, Саудівська Аравія, ОАЕ, США (вилучено: Франція, Німеччина, Велика Британія, Іспанія, ПАР, Азербайджан, Бахрейн, Бангладеш, Білорусь, Ірак, Йорданія, Казахстан, Кувейт, Ліван, Марокко, Оман, Пакистан, Катар)`,
+            why: `Якщо раніше ви могли рекламувати знеболювальне у Франції, Великій Британії чи Німеччині — тепер це заборонено. TikTok залишає лише США, Канаду, Бразилію, Мексику, Аргентину, Колумбію, Єгипет, Ізраїль, Саудівську Аравію та ОАЕ. Всі інші ринки закриті.`
+        }, {
+            id: "T6",
+            risk: "warn",
+            doc: "ВІТАМІНИ",
+            ref: "список країн 18+",
+            title: "Вилучення Європи з дозволених ринків для вітамінів",
+            was: `18+ : Канада, Франція, Німеччина, Ізраїль, Індонезія, Італія, Японія, Корея, Малайзія, Філіппіни, Іспанія, Тайвань, Таїланд, Велика Британія, США, В'єтнам`,
+            proposed: `18+ : Канада, Індонезія, Японія, Корея, Малайзія, Філіппіни, Тайвань, Таїланд, США, В'єтнам (вилучено: Франція, Німеччина, Ізраїль, Італія, Іспанія, Велика Британія)`,
+            why: `Якщо раніше ви рекламували вітамінні комплекси в Італії, Франції чи Великій Британії — тепер це заборонено. TikTok залишає вітаміни для ринків Азії, Канади та США, але закриває Європу.`
+        }, {
+            id: "T7",
+            risk: "warn",
+            doc: "АЗАРТНІ ІГРИ",
+            ref: "список країн 18+",
+            title: "Вилучення Європи з дозволених ринків для азартних ігор",
+            was: `18+ : Аргентина, Австралія, Бразилія, Канада, Колумбія, Франція, Німеччина, Ізраїль, Японія, Мексика, Філіппіни, Саудівська Аравія, Сінгапур, Іспанія, Тайвань, Туреччина, ОАЕ, Велика Британія, США, В'єтнам`,
+            proposed: `18+ : Аргентина, Австралія, Бразилія, Канада, Колумбія, Ізраїль, Японія, Мексика, Філіппіни, Саудівська Аравія, Сінгапур, Тайвань, Туреччина, ОАЕ, США, В'єтнам (вилучено: Франція, Німеччина, Іспанія, Велика Британія)`,
+            why: `Якщо раніше ви рекламували онлайн-казино у Великій Британії, Німеччині чи Франції — тепер це заборонено. TikTok залишає азартні ігри для США, Бразилії, Австралії та країн Близького Сходу, але закриває більшість європейських ринків.`
+        }, {
+            id: "T8",
+            risk: "low",
+            doc: "АЛКОГОЛЬ",
+            ref: "вікові обмеження",
+            title: "Вилучення України з 25+ для алкоголю",
+            was: `25+ : Індонезія, Корея, Малайзія, Таїланд, Україна`,
+            proposed: `25+ : Індонезія, Корея, Малайзія, Таїланд (вилучено: Україна)`,
+            why: `Якщо раніше в Україні алкоголь можна було рекламувати з 25 років, то тепер ця категорія взагалі заборонена для українського ринку. Відео з алкоголем не покажуть в Україні.`
+        }, {
+            id: "T9",
+            risk: "low",
+            doc: "ДЕЙТИНГ",
+            ref: "список країн",
+            title: "Вилучення України з дозволених для дейтингу (раніше вже не було)",
+            was: `У старій версії Україна була в списку "не дозволено" (як і більшість країн).`,
+            proposed: `У новій версії Україна залишається в списку "не дозволено". Змін немає.`,
+            why: `Для України правила щодо дейтингу не змінились — реклама дейтинг-додатків все ще заборонена, як і раніше.`
+        }, {
+            id: "T10",
+            risk: "low",
+            doc: "ЗАГАЛЬНІ ПРАВИЛА",
+            ref: "пункти про неповнолітніх",
+            title: "Уточнення формулювань щодо захисту неповнолітніх",
+            was: `"cause physical, mental or moral detriment to children; exhort children to buy... exploit the special trust that children place in parents, teachers or other persons"`,
+            proposed: `"cause physical, mental or moral detriment to minors; exhort minors to buy... exploit the special trust minors place in parents, teachers or other persons"`,
+            why: `Якщо раніше правила захищали "children" (дітей), що могло тлумачитись як лише малолітні (до 14 років), то тепер "minors" охоплює всіх неповнолітніх до 18 років. Для творців це означає: якщо ви знімаєте відео з підлітком 16 років, який рекламує продукт, тепер це підпадає під більш суворі обмеження.`
+        }];
 
-        <!-- Загальні правила -->
-        <div class="section-divider">⚖️ Загальні правила</div>
-        <div class="table-row">
-            <div class="row-body">
-                <div class="compare-grid">
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-old">старе</span></div>
-                        <div class="content old-ver">Заборона: приховані техніки, дискримінація, шкода здоров'ю, <strong>експлуатація дітей</strong> тощо.</div>
-                    </div>
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-new">нове</span></div>
-                        <div class="content new-ver"><span class="diff-add">«minors»</span> замість «children» у пунктах про шкоду, спонукання до покупки, експлуатацію довіри. <br> Інші правила без змін.</div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        function riskLabel(r) {
+            return r === 'crit' ? 'КРИТИЧНО' : r === 'warn' ? 'ВАЖЛИВО' : 'МЕНШИЙ РИЗИК';
+        }
 
-        <!-- Заборонені індустрії -->
-        <div class="section-divider">🚫 Заборонені індустрії</div>
-        <div class="table-row">
-            <div class="row-body">
-                <div class="compare-item">
-                    <div class="label">перелік</div>
-                    <div class="content old-ver" style="border-left-color:#9aa3b9;">
-                        <span class="badge-old">старе</span> Дорослі товари, тютюн, дейтинг, наркотики, фінансові піраміди, фарма, політика, зброя, схуднення, підробки тощо.
-                    </div>
-                    <div class="content new-ver" style="border-left-color:#25c9b8; margin-top:4px;">
-                        <span class="badge-new">нове</span> <span class="diff-remove">Без змін</span> — ті самі категорії, формулювання ідентичні (крім заміни «children» на «minors» у чутливому релігійному контенті).
-                    </div>
-                </div>
-            </div>
-        </div>
+        function riskClass(r) {
+            return r === 'crit' ? 'crit' : r === 'warn' ? 'warn' : 'low';
+        }
 
-        <!-- ОБМЕЖЕНІ: алкоголь -->
-        <div class="section-divider">🔞 Алкоголь (обмежена)</div>
-        <div class="table-row">
-            <div class="row-body">
-                <div class="compare-grid">
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-old">старе</span></div>
-                        <div class="content old-ver">
-                            <strong>18+</strong> : AR, AU, BR, KH, CO, DE, IL, IT, KE, MX, PH, NG, SG, ES, ZA, TW, UK, VN <br>
-                            <strong>21+</strong> : CA, JP, US <br>
-                            <strong>25+</strong> : ID, KR, MY, TH, UA <br>
-                            <span class="country-list"><span>не дозволено в 60+ країнах (FR, DE, IT, UK, ES та ін.)</span></span>
-                        </div>
-                    </div>
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-new">нове</span></div>
-                        <div class="content new-ver">
-                            <span class="diff-remove">Вилучено з 18+ : DE, IT, KE, NG, ZA, ES, UK</span> <br>
-                            <strong>18+</strong> : AR, AU, BR, KH, CO, IL, MX, PH, SG, TW, VN <br>
-                            <strong>21+</strong> : CA, JP, US <br>
-                            <strong>25+</strong> : ID, KR, MY, TH <span class="diff-remove">(UA вилучено)</span> <br>
-                            <span class="diff-add">Не дозволено: додано DE, IT, UK, ES, ZA, KE, NG, SE тощо.</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        function esc(s) {
+            return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
 
-        <!-- Дейтинг -->
-        <div class="section-divider">💞 Дейтинг та live-відео</div>
-        <div class="table-row">
-            <div class="row-body">
-                <div class="compare-grid">
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-old">старе</span></div>
-                        <div class="content old-ver">
-                            <strong>18+</strong> : AU, AR, BR, CA, CO, FR, DE, IL, IT, JP, KE, KR, MY, MX, NG, PH, SG, ZA, ES, TW, TH, UK, US, VN, ID <br>
-                            <span class="country-list"><span>не дозволено в багатьох країнах</span></span>
-                        </div>
-                    </div>
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-new">нове</span></div>
-                        <div class="content new-ver">
-                            <span class="diff-remove">Вилучено з 18+ : FR, DE, IL, IT, KE, NG, ZA, ES, UK</span> <br>
-                            <strong>18+</strong> : AU, AR, BR, CA, CO, ID, JP, KR, MY, MX, PH, SG, TW, TH, US, VN <br>
-                            <span class="diff-add">Не дозволено: додано FR, DE, IT, UK, ES, ZA, KE, NG та ін.</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        function toggle(el) {
+            el.classList.toggle('open');
+        }
 
-        <!-- Фінансові послуги -->
-        <div class="section-divider">💰 Фінансові послуги</div>
-        <div class="table-row">
-            <div class="row-body">
-                <div class="compare-grid">
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-old">старе</span></div>
-                        <div class="content old-ver">
-                            <strong>18+</strong> : AR, AU, BR, CA, CO, EG, FR, DE, ID, IT, JP, KR, MY, MX, PH, SA, SG, ZA, ES, TW, TH, TR, AE, UK, US, VN <br>
-                            <span class="country-list"><span>не дозволено в 50+</span></span>
-                        </div>
-                    </div>
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-new">нове</span></div>
-                        <div class="content new-ver">
-                            <span class="diff-remove">Вилучено з 18+ : FR, DE, IT, ZA, ES, UK</span> <br>
-                            <strong>18+</strong> : AR, AU, BR, CA, CO, EG, ID, JP, KR, MY, MX, PH, SA, SG, TW, TH, TR, AE, US, VN <br>
-                            <span class="diff-add">Не дозволено: додано FR, DE, IT, UK, ZA, ES</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        function copyProposed(id) {
+            const issue = ISSUES.find(function(i) { return i.id === id; });
+            if (!issue) return;
+            navigator.clipboard.writeText(issue.proposed).then(function() {
+                var t = document.getElementById('toast');
+                t.classList.add('show');
+                setTimeout(function() { t.classList.remove('show'); }, 2000);
+                var btn = document.querySelector('#' + id + ' .apply-btn');
+                if (btn) { btn.textContent = '✓ Скопійовано';
+                    btn.classList.add('applied'); }
+            });
+        }
 
-        <!-- Безрецептурні ліки -->
-        <div class="section-divider">💊 Безрецептурні ліки</div>
-        <div class="table-row">
-            <div class="row-body">
-                <div class="compare-grid">
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-old">старе</span></div>
-                        <div class="content old-ver">
-                            <strong>18+</strong> : AU, AR, AZ, BH, BD, BY, BR, CA, CO, EG, FR, DE, IQ, IL, JO, KZ, KW, LB, MX, MA, OM, PK, QA, SA, ZA, ES, AE, UK, US <br>
-                            <span class="country-list"><span>не дозволено в IT, JP, KR та ін.</span></span>
-                        </div>
-                    </div>
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-new">нове</span></div>
-                        <div class="content new-ver">
-                            <span class="diff-remove">Скорочено 18+ : AU, AR, BR, CA, CO, EG, IL, MX, SA, AE, US</span> <br>
-                            <span class="diff-add">Вилучено: FR, DE, UK, ES, ZA, AZ, BH, BD, BY, IQ, JO, KZ, KW, LB, MA, OM, PK, QA</span> <br>
-                            <span class="diff-remove">Не дозволено: додано FR, DE, UK, IT, JP, KR, MY, SG, TW, TH, VN та ін.</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        function build() {
+            const main = document.getElementById('main');
+            ISSUES.forEach(function(issue) {
+                const div = document.createElement('div');
+                div.className = 'issue ' + riskClass(issue.risk);
+                div.id = issue.id;
+                div.innerHTML =
+                    '<div class="issue-hdr" onclick="toggle(this.parentElement)">' +
+                    '<span class="risk-badge rb-' + riskClass(issue.risk) + '">' + riskLabel(issue.risk) + '</span>' +
+                    '<div>' +
+                    '<div class="issue-title">' + issue.title + '</div>' +
+                    '<div class="issue-ref">' + issue.doc + ' · ' + issue.ref + '</div>' +
+                    '</div>' +
+                    '<span class="issue-arr">▾</span>' +
+                    '</div>' +
+                    '<div class="issue-body">' +
+                    '<div class="block block-old"><div class="block-label">● СТАРЕ</div><div class="block-text">' + esc(issue
+                        .was) + '</div></div>' +
+                    '<div class="block block-new"><div class="block-label">✓ НОВЕ</div><div class="block-text">' +
+                    esc(issue.proposed) + '</div></div>' +
+                    '<div class="block block-explain"><div class="block-label">⚖ ПОЯСНЕННЯ</div><div class="block-text">' +
+                    esc(issue.why) + '</div></div>' +
+                    '<button class="apply-btn" onclick="copyProposed(\'' + issue.id + '\')">Копіювати нове формулювання</button>' +
+                    '</div>';
+                main.appendChild(div);
+            });
+        }
 
-        <!-- Вітаміни -->
-        <div class="section-divider">🧪 Вітаміни та добавки</div>
-        <div class="table-row">
-            <div class="row-body">
-                <div class="compare-grid">
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-old">старе</span></div>
-                        <div class="content old-ver">
-                            <strong>18+</strong> : CA, FR, DE, IL, ID, IT, JP, KR, MY, PH, ES, TW, TH, UK, US, VN <br>
-                            <span class="country-list"><span>не дозволено в AU, BR, MX та ін.</span></span>
-                        </div>
-                    </div>
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-new">нове</span></div>
-                        <div class="content new-ver">
-                            <span class="diff-remove">Вилучено з 18+ : FR, DE, IL, IT, ES, UK</span> <br>
-                            <strong>18+</strong> : CA, ID, JP, KR, MY, PH, TW, TH, US, VN <br>
-                            <span class="diff-add">Не дозволено: додано FR, DE, IT, UK, ES, AU, BR, MX</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Азартні ігри -->
-        <div class="section-divider">🎰 Азартні ігри, лотереї</div>
-        <div class="table-row">
-            <div class="row-body">
-                <div class="compare-grid">
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-old">старе</span></div>
-                        <div class="content old-ver">
-                            <strong>18+</strong> : AR, AU, BR, CA, CO, FR, DE, IL, JP, MX, PH, SA, SG, ES, TW, TR, AE, UK, US, VN <br>
-                            <span class="country-list"><span>не дозволено в IT, KR, TH та ін.</span></span>
-                        </div>
-                    </div>
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-new">нове</span></div>
-                        <div class="content new-ver">
-                            <span class="diff-remove">Вилучено з 18+ : FR, DE, ES, UK</span> <br>
-                            <strong>18+</strong> : AR, AU, BR, CA, CO, IL, JP, MX, PH, SA, SG, TW, TR, AE, US, VN <br>
-                            <span class="diff-add">Не дозволено: додано FR, DE, IT, UK, ES, KR, TH та ін.</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- енергетики, спідня білизна (коротко) -->
-        <div class="section-divider">⚡ Інші обмежені категорії</div>
-        <div class="table-row">
-            <div class="row-body">
-                <div class="compare-grid">
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-old">старе</span></div>
-                        <div class="content old-ver">
-                            <strong>Енергетики:</strong> 18+ (заборона в KW) <br>
-                            <strong>Спідня білизна:</strong> 18+, заборона напівоголеності < 18
-                        </div>
-                    </div>
-                    <div class="compare-item">
-                        <div class="label"><span class="badge-new">нове</span></div>
-                        <div class="content new-ver">
-                            <span class="diff-remove">Без змін</span> (енергетики 18+, не дозволено KW; спідня білизна — 18+)
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> <!-- end table-card -->
-
-    <!-- загальна примітка -->
-    <div class="footnote">
-        <strong>📌 Висновок:</strong> Нова версія вносить термінологічні уточнення (minors) і суттєво звужує перелік дозволених ринків для обмежених категорій, особливо в Європі. Перелік заборонених індустрій залишився незмінним.
-    </div>
-
-    <!-- VEO FORCE footer -->
-    <div class="veo-footer">
-        <div class="brand">VEO FORCE <span>аналітичний центр</span></div>
-        <div class="contact">📲 <a href="https://t.me/veoforce_support" target="_blank">t.me/veoforce_support</a></div>
-        <div style="font-size:0.6rem; opacity:0.6; margin-top:4px;">порівняльна таблиця на основі політик TikTok 2026</div>
-    </div>
-</div>
+        build();
+    </script>
 </body>
 </html>
