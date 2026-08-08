@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Порівняння правил TikTok · VEO FORCE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #f2f4fa;
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, system-ui, sans-serif;
+            padding: 12px 10px 20px;
+            color: #121826;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+            background: #ffffff;
+            border-radius: 24px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04), 0 2px 8px rgba(0, 0, 0, 0.02);
+            padding: 16px 14px 18px;
+            flex: 1;
+        }
+        /* header */
+        .header-title {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 6px 4px;
+            margin-bottom: 10px;
+        }
+        .header-title h1 {
+            font-size: 1.5rem;
+            font-weight: 650;
+            letter-spacing: -0.3px;
+            line-height: 1.2;
+        }
+        .header-title .version-badge {
+            font-size: 0.7rem;
+            background: #e6eaf2;
+            padding: 0.2rem 0.7rem;
+            border-radius: 40px;
+            color: #2f364a;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .subhead {
+            background: #f0f3fc;
+            border-left: 4px solid #25f4ee;
+            padding: 12px 14px;
+            border-radius: 0 16px 16px 0;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 8px 0 16px 0;
+            color: #1b2237;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .subhead strong {
+            color: #0b1a2a;
+        }
+        .diff-add {
+            background: #dff3ee;
+            padding: 0 4px;
+            border-radius: 6px;
+            color: #0c5f4e;
+        }
+        .diff-remove {
+            background: #fce7e9;
+            padding: 0 4px;
+            border-radius: 6px;
+            color: #ac2c2c;
+        }
+        .badge-old, .badge-new {
+            display: inline-block;
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 0.15rem 0.6rem;
+            border-radius: 30px;
+            letter-spacing: 0.2px;
+            margin-left: 4px;
+            white-space: nowrap;
+        }
+        .badge-old { background: #d5dbe6; color: #2b3147; }
+        .badge-new { background: #1b8c7e; color: white; }
+
+        /* table card */
+        .table-card {
+            border: 1px solid #e3e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+        .table-row {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 1px solid #e9eef5;
+        }
+        .table-row:last-child { border-bottom: none; }
+        .row-header {
+            background: #f6f8fe;
+            padding: 10px 12px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #1e253b;
+            border-bottom: 1px solid #dce2ec;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .row-header .cat-tag {
+            background: #e1e7f0;
+            padding: 0.1rem 0.6rem;
+            border-radius: 30px;
+            font-size: 0.6rem;
+            font-weight: 500;
+            color: #2f3a57;
+        }
+        .row-body {
+            padding: 8px 12px 12px 12px;
+            background: #fbfdff;
+        }
+        .compare-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .compare-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .compare-item .label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            color: #5b637c;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .compare-item .content {
+            font-size: 0.82rem;
+            line-height: 1.5;
+            padding: 6px 10px;
+            border-radius: 12px;
+            background: #f8faff;
+            border: 1px solid #eef2f9;
+            color: #1c2338;
+        }
+        .content.old-ver {
+            border-left: 3px solid #9aa3b9;
+        }
+        .content.new-ver {
+            border-left: 3px solid #25c9b8;
+            background: #f6fdfb;
+        }
+        .content ul, .content .list {
+            margin: 0.2rem 0 0.1rem 1rem;
+            padding-left: 0.2rem;
+        }
+        .content li {
+            margin-bottom: 0.2rem;
+        }
+        .country-list {
+            font-size: 0.7rem;
+            background: #f2f5fc;
+            padding: 4px 6px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f2;
+            margin-top: 4px;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+        .country-list span {
+            display: inline-block;
+            background: white;
+            padding: 0.1rem 0.5rem;
+            border-radius: 30px;
+            margin: 0.1rem 0.15rem;
+            border: 1px solid #dce2ed;
+            font-size: 0.6rem;
+        }
+        .section-divider {
+            background: #eef2f9;
+            padding: 8px 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #0f1d30;
+            border-bottom: 2px solid #d0d8e6;
+            border-top: 1px solid #d0d8e6;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .section-divider:first-of-type { border-top: none; }
+
+        .footnote {
+            margin-top: 18px;
+            background: #f2f6fe;
+            padding: 14px 16px;
+            border-radius: 22px;
+            font-size: 0.8rem;
+            color: #1f2740;
+            border-left: 5px solid #25f4ee;
+            line-height: 1.5;
+        }
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 16px;
+            margin: 6px 0 12px 0;
+            font-size: 0.7rem;
+            color: #343d57;
+        }
+        .legend span {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 4px;
+        }
+        .dot-green { background: #dff3ee; border: 1px solid #8dc7ba; }
+        .dot-red { background: #fce7e9; border: 1px solid #dbb5b5; }
+
+        /* footer VEO */
+        .veo-footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #3a415b;
+            border-top: 1px solid #e5eaf2;
+            padding-top: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+        .veo-footer .brand {
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            color: #0d1f2e;
+            font-size: 0.9rem;
+        }
+        .veo-footer .brand span {
+            background: #0d1f2e;
+            color: white;
+            padding: 0.1rem 0.7rem;
+            border-radius: 40px;
+            font-size: 0.6rem;
+            margin-left: 5px;
+        }
+        .veo-footer .contact {
+            background: #eaf0f8;
+            padding: 0.2rem 1.2rem;
+            border-radius: 40px;
+            display: inline-block;
+            font-weight: 500;
+            font-size: 0.8rem;
+            margin-top: 3px;
+        }
+        .veo-footer .contact a {
+            color: #0b2840;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        hr {
+            border: none;
+            border-top: 2px dashed #dce2ec;
+            margin: 12px 0 6px 0;
+        }
+
+        /* mobile first — все адаптивно */
+        @media (max-width: 480px) {
+            .container { padding: 12px 10px; }
+            .header-title h1 { font-size: 1.3rem; }
+            .subhead { font-size: 0.8rem; padding: 10px 12px; }
+            .compare-item .content { font-size: 0.78rem; padding: 5px 8px; }
+            .row-header { font-size: 0.8rem; padding: 8px 10px; }
+        }
+        /* трохи більше повітря */
+        .mt-1 { margin-top: 6px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- header -->
+    <div class="header-title">
+        <h1>📋 TikTok Branded</h1>
+        <span class="version-badge">стара vs нова</span>
+    </div>
+
+    <!-- тлумачення -->
+    <div class="subhead">
+        <strong>🔎 Ключові зміни:</strong> Нова версія (з 31.08.2026) замінює <span class="diff-add">«children» на «minors»</span>, коригує перелік обмежених категорій та <span class="diff-remove">масово виключає</span> європейські ринки (FR, DE, IT, ES, UK) з дозволених для алкоголю, дейтингу, фінансів, БАДів та азартних ігор.
+    </div>
+
+    <!-- легенда -->
+    <div class="legend">
+        <span><span class="dot dot-green"></span> додано / змінено</span>
+        <span><span class="dot dot-red"></span> вилучено / обмежено</span>
+        <span><span class="badge-old" style="font-size:0.6rem;">старе</span> <span class="badge-new" style="font-size:0.6rem;">нове</span></span>
+    </div>
+
+    <!-- таблиця-картка -->
+    <div class="table-card">
+        <!-- Визначення -->
+        <div class="section-divider">📌 Визначення Branded Content</div>
+        <div class="table-row">
+            <div class="row-body">
+                <div class="compare-grid">
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-old">старе</span></div>
+                        <div class="content old-ver">«…promotes or reviews…» <br> згадка <strong>«children»</strong></div>
+                    </div>
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-new">нове</span></div>
+                        <div class="content new-ver"><span class="diff-add">«minors»</span> замість «children» <br> (юридично точніше)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Загальні правила -->
+        <div class="section-divider">⚖️ Загальні правила</div>
+        <div class="table-row">
+            <div class="row-body">
+                <div class="compare-grid">
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-old">старе</span></div>
+                        <div class="content old-ver">Заборона: приховані техніки, дискримінація, шкода здоров'ю, <strong>експлуатація дітей</strong> тощо.</div>
+                    </div>
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-new">нове</span></div>
+                        <div class="content new-ver"><span class="diff-add">«minors»</span> замість «children» у пунктах про шкоду, спонукання до покупки, експлуатацію довіри. <br> Інші правила без змін.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Заборонені індустрії -->
+        <div class="section-divider">🚫 Заборонені індустрії</div>
+        <div class="table-row">
+            <div class="row-body">
+                <div class="compare-item">
+                    <div class="label">перелік</div>
+                    <div class="content old-ver" style="border-left-color:#9aa3b9;">
+                        <span class="badge-old">старе</span> Дорослі товари, тютюн, дейтинг, наркотики, фінансові піраміди, фарма, політика, зброя, схуднення, підробки тощо.
+                    </div>
+                    <div class="content new-ver" style="border-left-color:#25c9b8; margin-top:4px;">
+                        <span class="badge-new">нове</span> <span class="diff-remove">Без змін</span> — ті самі категорії, формулювання ідентичні (крім заміни «children» на «minors» у чутливому релігійному контенті).
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ОБМЕЖЕНІ: алкоголь -->
+        <div class="section-divider">🔞 Алкоголь (обмежена)</div>
+        <div class="table-row">
+            <div class="row-body">
+                <div class="compare-grid">
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-old">старе</span></div>
+                        <div class="content old-ver">
+                            <strong>18+</strong> : AR, AU, BR, KH, CO, DE, IL, IT, KE, MX, PH, NG, SG, ES, ZA, TW, UK, VN <br>
+                            <strong>21+</strong> : CA, JP, US <br>
+                            <strong>25+</strong> : ID, KR, MY, TH, UA <br>
+                            <span class="country-list"><span>не дозволено в 60+ країнах (FR, DE, IT, UK, ES та ін.)</span></span>
+                        </div>
+                    </div>
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-new">нове</span></div>
+                        <div class="content new-ver">
+                            <span class="diff-remove">Вилучено з 18+ : DE, IT, KE, NG, ZA, ES, UK</span> <br>
+                            <strong>18+</strong> : AR, AU, BR, KH, CO, IL, MX, PH, SG, TW, VN <br>
+                            <strong>21+</strong> : CA, JP, US <br>
+                            <strong>25+</strong> : ID, KR, MY, TH <span class="diff-remove">(UA вилучено)</span> <br>
+                            <span class="diff-add">Не дозволено: додано DE, IT, UK, ES, ZA, KE, NG, SE тощо.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Дейтинг -->
+        <div class="section-divider">💞 Дейтинг та live-відео</div>
+        <div class="table-row">
+            <div class="row-body">
+                <div class="compare-grid">
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-old">старе</span></div>
+                        <div class="content old-ver">
+                            <strong>18+</strong> : AU, AR, BR, CA, CO, FR, DE, IL, IT, JP, KE, KR, MY, MX, NG, PH, SG, ZA, ES, TW, TH, UK, US, VN, ID <br>
+                            <span class="country-list"><span>не дозволено в багатьох країнах</span></span>
+                        </div>
+                    </div>
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-new">нове</span></div>
+                        <div class="content new-ver">
+                            <span class="diff-remove">Вилучено з 18+ : FR, DE, IL, IT, KE, NG, ZA, ES, UK</span> <br>
+                            <strong>18+</strong> : AU, AR, BR, CA, CO, ID, JP, KR, MY, MX, PH, SG, TW, TH, US, VN <br>
+                            <span class="diff-add">Не дозволено: додано FR, DE, IT, UK, ES, ZA, KE, NG та ін.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Фінансові послуги -->
+        <div class="section-divider">💰 Фінансові послуги</div>
+        <div class="table-row">
+            <div class="row-body">
+                <div class="compare-grid">
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-old">старе</span></div>
+                        <div class="content old-ver">
+                            <strong>18+</strong> : AR, AU, BR, CA, CO, EG, FR, DE, ID, IT, JP, KR, MY, MX, PH, SA, SG, ZA, ES, TW, TH, TR, AE, UK, US, VN <br>
+                            <span class="country-list"><span>не дозволено в 50+</span></span>
+                        </div>
+                    </div>
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-new">нове</span></div>
+                        <div class="content new-ver">
+                            <span class="diff-remove">Вилучено з 18+ : FR, DE, IT, ZA, ES, UK</span> <br>
+                            <strong>18+</strong> : AR, AU, BR, CA, CO, EG, ID, JP, KR, MY, MX, PH, SA, SG, TW, TH, TR, AE, US, VN <br>
+                            <span class="diff-add">Не дозволено: додано FR, DE, IT, UK, ZA, ES</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Безрецептурні ліки -->
+        <div class="section-divider">💊 Безрецептурні ліки</div>
+        <div class="table-row">
+            <div class="row-body">
+                <div class="compare-grid">
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-old">старе</span></div>
+                        <div class="content old-ver">
+                            <strong>18+</strong> : AU, AR, AZ, BH, BD, BY, BR, CA, CO, EG, FR, DE, IQ, IL, JO, KZ, KW, LB, MX, MA, OM, PK, QA, SA, ZA, ES, AE, UK, US <br>
+                            <span class="country-list"><span>не дозволено в IT, JP, KR та ін.</span></span>
+                        </div>
+                    </div>
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-new">нове</span></div>
+                        <div class="content new-ver">
+                            <span class="diff-remove">Скорочено 18+ : AU, AR, BR, CA, CO, EG, IL, MX, SA, AE, US</span> <br>
+                            <span class="diff-add">Вилучено: FR, DE, UK, ES, ZA, AZ, BH, BD, BY, IQ, JO, KZ, KW, LB, MA, OM, PK, QA</span> <br>
+                            <span class="diff-remove">Не дозволено: додано FR, DE, UK, IT, JP, KR, MY, SG, TW, TH, VN та ін.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Вітаміни -->
+        <div class="section-divider">🧪 Вітаміни та добавки</div>
+        <div class="table-row">
+            <div class="row-body">
+                <div class="compare-grid">
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-old">старе</span></div>
+                        <div class="content old-ver">
+                            <strong>18+</strong> : CA, FR, DE, IL, ID, IT, JP, KR, MY, PH, ES, TW, TH, UK, US, VN <br>
+                            <span class="country-list"><span>не дозволено в AU, BR, MX та ін.</span></span>
+                        </div>
+                    </div>
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-new">нове</span></div>
+                        <div class="content new-ver">
+                            <span class="diff-remove">Вилучено з 18+ : FR, DE, IL, IT, ES, UK</span> <br>
+                            <strong>18+</strong> : CA, ID, JP, KR, MY, PH, TW, TH, US, VN <br>
+                            <span class="diff-add">Не дозволено: додано FR, DE, IT, UK, ES, AU, BR, MX</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Азартні ігри -->
+        <div class="section-divider">🎰 Азартні ігри, лотереї</div>
+        <div class="table-row">
+            <div class="row-body">
+                <div class="compare-grid">
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-old">старе</span></div>
+                        <div class="content old-ver">
+                            <strong>18+</strong> : AR, AU, BR, CA, CO, FR, DE, IL, JP, MX, PH, SA, SG, ES, TW, TR, AE, UK, US, VN <br>
+                            <span class="country-list"><span>не дозволено в IT, KR, TH та ін.</span></span>
+                        </div>
+                    </div>
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-new">нове</span></div>
+                        <div class="content new-ver">
+                            <span class="diff-remove">Вилучено з 18+ : FR, DE, ES, UK</span> <br>
+                            <strong>18+</strong> : AR, AU, BR, CA, CO, IL, JP, MX, PH, SA, SG, TW, TR, AE, US, VN <br>
+                            <span class="diff-add">Не дозволено: додано FR, DE, IT, UK, ES, KR, TH та ін.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- енергетики, спідня білизна (коротко) -->
+        <div class="section-divider">⚡ Інші обмежені категорії</div>
+        <div class="table-row">
+            <div class="row-body">
+                <div class="compare-grid">
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-old">старе</span></div>
+                        <div class="content old-ver">
+                            <strong>Енергетики:</strong> 18+ (заборона в KW) <br>
+                            <strong>Спідня білизна:</strong> 18+, заборона напівоголеності < 18
+                        </div>
+                    </div>
+                    <div class="compare-item">
+                        <div class="label"><span class="badge-new">нове</span></div>
+                        <div class="content new-ver">
+                            <span class="diff-remove">Без змін</span> (енергетики 18+, не дозволено KW; спідня білизна — 18+)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> <!-- end table-card -->
+
+    <!-- загальна примітка -->
+    <div class="footnote">
+        <strong>📌 Висновок:</strong> Нова версія вносить термінологічні уточнення (minors) і суттєво звужує перелік дозволених ринків для обмежених категорій, особливо в Європі. Перелік заборонених індустрій залишився незмінним.
+    </div>
+
+    <!-- VEO FORCE footer -->
+    <div class="veo-footer">
+        <div class="brand">VEO FORCE <span>аналітичний центр</span></div>
+        <div class="contact">📲 <a href="https://t.me/veoforce_support" target="_blank">t.me/veoforce_support</a></div>
+        <div style="font-size:0.6rem; opacity:0.6; margin-top:4px;">порівняльна таблиця на основі політик TikTok 2026</div>
+    </div>
+</div>
+</body>
+</html>
