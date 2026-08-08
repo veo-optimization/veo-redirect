@@ -1,254 +1,576 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-<title>BEROO — Юридичний аудит</title>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-:root{
-  --bg:#ffffff;--surface:#f8f9fa;--border:#e2e5e9;
-  --text:#1e2228;--text-mid:#4a515c;--text-dim:#8a9099;
-  --crit:#d93025;--crit-bg:#fff5f4;--crit-border:#f5bbb8;
-  --warn:#b45a00;--warn-bg:#fffaf3;--warn-border:#f5d9a8;
-  --ok:#3d6b3d;--ok-bg:#f5fbf5;--ok-border:#b3d9b3;
-  --blue:#1a56a0;--blue-bg:#f0f5ff;--blue-border:#b3c8f0;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-html{scroll-behavior:smooth;background:#fff;}
-body{background:#fff !important;color:var(--text);font-family:'Montserrat',sans-serif;font-size:13px;line-height:1.7;-webkit-font-smoothing:antialiased;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>BEROO — TikTok Branded Content Audit</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #f8f9fa;
+            --border: #e2e5e9;
+            --text: #1e2228;
+            --text-mid: #4a515c;
+            --text-dim: #8a9099;
+            --crit: #d93025;
+            --crit-bg: #fff5f4;
+            --crit-border: #f5bbb8;
+            --warn: #b45a00;
+            --warn-bg: #fffaf3;
+            --warn-border: #f5d9a8;
+            --ok: #3d6b3d;
+            --ok-bg: #f5fbf5;
+            --ok-border: #b3d9b3;
+            --blue: #1a56a0;
+            --blue-bg: #f0f5ff;
+            --blue-border: #b3c8f0;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+            background: #fff;
+        }
+        body {
+            background: #fff !important;
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
 
-.hdr{background:#fff;border-bottom:2px solid var(--text);padding:14px 16px;position:sticky;top:0;z-index:100;display:flex;align-items:center;justify-content:space-between;}
-.hdr-logo{font-size:18px;font-weight:700;color:var(--text);letter-spacing:2px;}
-.hdr-sub{font-size:9px;color:var(--text-dim);letter-spacing:1px;text-transform:uppercase;margin-top:2px;}
+        .hdr {
+            background: #fff;
+            border-bottom: 2px solid var(--text);
+            padding: 14px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 6px 10px;
+        }
+        .hdr-logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 2px;
+        }
+        .hdr-sub {
+            font-size: 9px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+        .hdr-badge {
+            font-size: 8px;
+            font-weight: 700;
+            background: var(--text);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
 
-.intro{padding:20px 16px 0;}
-.intro-title{font-size:22px;font-weight:700;color:var(--text);margin-bottom:6px;}
-.intro-desc{font-size:12px;color:var(--text-mid);line-height:1.7;margin-bottom:20px;}
+        .intro {
+            padding: 20px 16px 0;
+        }
+        .intro-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .intro-desc {
+            font-size: 12px;
+            color: var(--text-mid);
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+        .intro-strategy {
+            background: #f0f5ff;
+            border-left: 4px solid var(--blue);
+            padding: 12px 16px;
+            border-radius: 0 12px 12px 0;
+            font-size: 11.5px;
+            color: #1a2a4a;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .intro-strategy strong {
+            color: #0b1d3a;
+        }
+        .date-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 24px;
+            background: var(--surface);
+            padding: 10px 14px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid var(--border);
+        }
+        .date-line .old {
+            color: var(--crit);
+        }
+        .date-line .new {
+            color: var(--ok);
+        }
 
-.stats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px;}
-.stat{padding:10px 14px;border-radius:8px;font-size:11px;font-weight:600;flex:1;min-width:80px;text-align:center;}
-.stat-num{font-size:22px;font-weight:700;display:block;margin-bottom:2px;}
-.stat-crit{background:var(--crit-bg);color:var(--crit);border:1px solid var(--crit-border);}
-.stat-warn{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-border);}
-.stat-ok{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-border);}
+        .stats {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .stat {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            flex: 1;
+            min-width: 80px;
+            text-align: center;
+        }
+        .stat-num {
+            font-size: 22px;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .stat-crit {
+            background: var(--crit-bg);
+            color: var(--crit);
+            border: 1px solid var(--crit-border);
+        }
+        .stat-warn {
+            background: var(--warn-bg);
+            color: var(--warn);
+            border: 1px solid var(--warn-border);
+        }
+        .stat-ok {
+            background: var(--ok-bg);
+            color: var(--ok);
+            border: 1px solid var(--ok-border);
+        }
 
-main{padding:0 16px 80px;}
+        main {
+            padding: 0 16px 80px;
+        }
 
-.issue{border-radius:10px;margin-bottom:20px;overflow:hidden;border:1px solid var(--border);}
-.issue-hdr{padding:14px 16px;cursor:pointer;user-select:none;display:flex;align-items:flex-start;gap:10px;}
-.issue.crit .issue-hdr{background:var(--crit-bg);border-bottom:1px solid var(--crit-border);}
-.issue.warn .issue-hdr{background:var(--warn-bg);border-bottom:1px solid var(--warn-border);}
-.issue.low .issue-hdr{background:#fffdf0;border-bottom:1px solid #f0e8a0;}
-.risk-badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:3px;white-space:nowrap;flex-shrink:0;margin-top:2px;text-transform:uppercase;letter-spacing:.5px;}
-.rb-crit{background:var(--crit);color:#fff;}
-.rb-warn{background:var(--warn);color:#fff;}
-.rb-low{background:#8a7a00;color:#fff;}
-.issue-title{font-size:13px;font-weight:700;color:var(--text);flex:1;line-height:1.4;}
-.issue-ref{font-size:10px;color:var(--text-dim);font-weight:500;margin-top:2px;}
-.issue-arr{color:var(--text-dim);font-size:13px;flex-shrink:0;margin-top:2px;transition:transform .2s;}
-.issue.open .issue-arr{transform:rotate(180deg);}
+        .issue {
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        .issue-hdr {
+            padding: 14px 16px;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+        .issue.crit .issue-hdr {
+            background: var(--crit-bg);
+            border-bottom: 1px solid var(--crit-border);
+        }
+        .issue.warn .issue-hdr {
+            background: var(--warn-bg);
+            border-bottom: 1px solid var(--warn-border);
+        }
+        .issue.low .issue-hdr {
+            background: #fffdf0;
+            border-bottom: 1px solid #f0e8a0;
+        }
+        .risk-badge {
+            font-size: 9px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 3px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+        }
+        .rb-crit {
+            background: var(--crit);
+            color: #fff;
+        }
+        .rb-warn {
+            background: var(--warn);
+            color: #fff;
+        }
+        .rb-low {
+            background: #8a7a00;
+            color: #fff;
+        }
+        .issue-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text);
+            flex: 1;
+            line-height: 1.4;
+        }
+        .issue-ref {
+            font-size: 10px;
+            color: var(--text-dim);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .issue-arr {
+            color: var(--text-dim);
+            font-size: 13px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            transition: transform .2s;
+        }
+        .issue.open .issue-arr {
+            transform: rotate(180deg);
+        }
 
-.issue-body{display:none;padding:16px;}
-.issue.open .issue-body{display:block;}
+        .issue-body {
+            display: none;
+            padding: 16px;
+        }
+        .issue.open .issue-body {
+            display: block;
+        }
 
-.block{border-radius:8px;padding:12px 14px;margin-bottom:10px;border:1px solid;}
-.block-label{font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
-.block-text{font-size:12px;line-height:1.75;white-space:pre-wrap;word-break:break-word;}
+        .block {
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            border: 1px solid;
+        }
+        .block-label {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+        }
+        .block-text {
+            font-size: 12px;
+            line-height: 1.75;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
 
-.block-was{background:#fff5f5;border-color:#f5bbb8;}
-.block-was .block-label{color:var(--crit);}
-.block-was .block-text{color:#6b2020;}
+        .block-old {
+            background: #fff5f5;
+            border-color: #f5bbb8;
+        }
+        .block-old .block-label {
+            color: var(--crit);
+        }
+        .block-old .block-text {
+            color: #6b2020;
+        }
 
-.block-proposed{background:#f5fbf5;border-color:#b3d9b3;}
-.block-proposed .block-label{color:var(--ok);}
-.block-proposed .block-text{color:#1e3d1e;}
+        .block-new {
+            background: #f5fbf5;
+            border-color: #b3d9b3;
+        }
+        .block-new .block-label {
+            color: var(--ok);
+        }
+        .block-new .block-text {
+            color: #1e3d1e;
+        }
 
-.block-why{background:var(--blue-bg);border-color:var(--blue-border);}
-.block-why .block-label{color:var(--blue);}
-.block-why .block-text{color:#1a2a4a;}
+        .block-explain {
+            background: var(--blue-bg);
+            border-color: var(--blue-border);
+        }
+        .block-explain .block-label {
+            color: var(--blue);
+        }
+        .block-explain .block-text {
+            color: #1a2a4a;
+        }
 
-.apply-btn{display:inline-block;margin-top:4px;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;padding:8px 16px;background:var(--text);color:#fff;border:none;border-radius:5px;cursor:pointer;letter-spacing:.5px;text-transform:uppercase;transition:opacity .15s;}
-.apply-btn:hover{opacity:.8;}
-.apply-btn.applied{background:var(--ok);cursor:default;}
+        .apply-btn {
+            display: inline-block;
+            margin-top: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 10px;
+            font-weight: 700;
+            padding: 8px 16px;
+            background: var(--text);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            transition: opacity .15s;
+        }
+        .apply-btn:hover {
+            opacity: .8;
+        }
+        .apply-btn.applied {
+            background: var(--ok);
+            cursor: default;
+        }
 
-.toast{position:fixed;bottom:20px;left:16px;right:16px;background:var(--text);color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;padding:12px;border-radius:7px;text-align:center;opacity:0;transition:opacity .3s;pointer-events:none;z-index:999;}
-.toast.show{opacity:1;}
-</style>
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 16px;
+            right: 16px;
+            background: var(--text);
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 7px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity .3s;
+            pointer-events: none;
+            z-index: 999;
+        }
+        .toast.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 480px) {
+            .intro-title {
+                font-size: 18px;
+            }
+            .hdr-logo {
+                font-size: 15px;
+            }
+            .stat {
+                font-size: 10px;
+                padding: 8px 10px;
+                min-width: 60px;
+            }
+            .stat-num {
+                font-size: 18px;
+            }
+            .issue-title {
+                font-size: 12px;
+            }
+            .block-text {
+                font-size: 11px;
+            }
+            .hdr-badge {
+                font-size: 7px;
+                padding: 3px 10px;
+            }
+            .intro-strategy {
+                font-size: 10.5px;
+                padding: 10px 12px;
+            }
+            .date-line {
+                font-size: 10px;
+                padding: 8px 12px;
+            }
+        }
+    </style>
 </head>
 <body>
 
-<div class="hdr">
-  <div>
-    <div class="hdr-logo">BEROO · ЮРИДИЧНИЙ АУДИТ</div>
-    <div class="hdr-sub">Оферта + Політика конфіденційності · Знайдені вразливості</div>
-  </div>
-</div>
+    <div class="hdr">
+        <div>
+            <div class="hdr-logo">BEROO · ЮРИДИЧНИЙ АУДИТ</div>
+            <div class="hdr-sub">TikTok Branded Content Policy · Глобальні зміни 2026</div>
+        </div>
+        <span class="hdr-badge">🌍 всесвітнє оновлення</span>
+    </div>
 
-<div class="intro">
-  <div class="intro-title">Аудит юридичних вразливостей</div>
-  <div class="intro-desc">Аналіз проведено з позиції адвоката противника. Кожен блок містить: поточне формулювання (БУЛО), запропоноване виправлення (ПРОПОНУЄТЬСЯ) та юридичне обґрунтування (ЧОМУ).</div>
-  <div class="stats">
-    <div class="stat stat-crit"><span class="stat-num">4</span>КРИТИЧНІ</div>
-    <div class="stat stat-warn"><span class="stat-num">4</span>ВАЖЛИВІ</div>
-    <div class="stat stat-ok"><span class="stat-num">2</span>МЕНШІ</div>
-  </div>
-</div>
+    <div class="intro">
+        <div class="intro-title">Аудит змін у правилах брендованого контенту TikTok</div>
 
-<main id="main"></main>
-<div class="toast" id="toast">✓ Скопійовано нове формулювання</div>
+        <!-- Дата-лайн -->
+        <div class="date-line">
+            <span class="old">📌 <strong>СТАРЕ</strong> — до 31 серпня 2026 (чинна редакція)</span>
+            <span class="new">📌 <strong>НОВЕ</strong> — з 31 серпня 2026 (нова редакція)</span>
+        </div>
 
-<script>
-const ISSUES = [
-  {
-    id: "I1",
-    risk: "crit",
-    doc: "ОФЕРТА",
-    ref: "п. 7.3",
-    title: "«Вважаються компенсацією збитків» — незаконне утримання коштів",
-    was: `У разі блокування, деактивації або видалення облікового запису Продавця та/або його Вітрини з ініціативи Виконавця з будь-якої з таких підстав: (а) порушення правил Платформи; (б) порушення Правил спільноти TikTok або інших соціальних мереж; (в) підозра або підтверджений факт шахрайства, фішингу або скаму; (г) загроза репутації або технічній стабільності доменів beroo.space і/або beroo.online; (д) будь-яке інше порушення умов цього Договору — кошти за оплачені, але невикористані тарифні пакети НЕ ПОВЕРТАЮТЬСЯ та вважаються компенсацією збитків Виконавця.`,
-    proposed: `У разі блокування, деактивації або видалення облікового запису Продавця та/або його Вітрини з ініціативи Виконавця з будь-якої з таких підстав: (а) порушення правил Платформи; (б) порушення Правил спільноти TikTok або інших соціальних мереж; (в) підозра або підтверджений факт шахрайства, фішингу або скаму; (г) загроза репутації або технічній стабільності доменів beroo.space і/або beroo.online; (д) будь-яке інше порушення умов цього Договору — кошти за оплачені, але невикористані тарифні пакети НЕ ПОВЕРТАЮТЬСЯ. Сторони погоджуються, що у зазначених випадках надані послуги вважаються використаними, а невикористаний залишок тарифного пакету є платою за резервування технічної інфраструктури та адміністрування облікового запису Продавця протягом оплаченого періоду.`,
-    why: `Ст. 22 ЗУ "Про захист прав споживачів" та ст. 624 ЦКУ — штрафні санкції у вигляді утримання коштів можливі лише якщо доведено реальні збитки або вони прямо передбачені законом. Фраза "вважаються компенсацією збитків" без зазначення розміру збитків — суд може кваліфікувати як безпідставне збагачення (ст. 1212 ЦКУ) і зобов'язати повернути кошти + 3% річних. Нове формулювання: "плата за резервування інфраструктури" — це законна підстава утримання, яка не потребує доведення збитків.`
-  },
-  {
-    id: "I2",
-    risk: "crit",
-    doc: "ОФЕРТА",
-    ref: "п. 5.3",
-    title: "«БЕЗ ПОВЕРНЕННЯ КОШТІВ без пояснень» — несправедлива умова договору",
-    was: `Виконавець залишає за собою безумовне право в будь-який момент, без попереднього повідомлення, без надання пояснень та БЕЗ ПОВЕРНЕННЯ КОШТІВ за оплачений, але не використаний період: (а) обмежувати, призупиняти, заморожувати або деактивовувати Особистий кабінет Продавця на app.beroo.space; (б) вимикати, перенаправляти або повністю видаляти Вітрину Продавця на beroo.online...`,
-    proposed: `Виконавець залишає за собою право в будь-який момент обмежувати, призупиняти або деактивовувати Особистий кабінет Продавця та його Вітрину у разі виявлення ознак порушення умов цього Договору, загрози репутації Платформи або безпеці Покупців. У таких випадках невикористаний залишок оплаченого тарифного пакету не повертається, оскільки є платою за резервування технічної інфраструктури відповідно до п. 7.3. Виконавець повідомляє Продавця про блокування у розумний строк, крім випадків, коли таке повідомлення може зашкодити розслідуванню або безпеці Платформи.`,
-    why: `Ст. 18 ЗУ "Про захист прав споживачів" — умова договору є несправедливою, якщо всупереч принципу добросовісності надає продавцю право розірвати договір без підстав і залишити кошти. Великі літери "БЕЗ ПОВЕРНЕННЯ КОШТІВ" можуть бути кваліфіковані судом як навмисне приховування невигідної умови (ст. 228 ЦКУ — правочин, що порушує публічний порядок). Нове формулювання прив'язує блокування до конкретних підстав і пояснює чому кошти не повертаються.`
-  },
-  {
-    id: "I3",
-    risk: "crit",
-    doc: "ОФЕРТА",
-    ref: "п. 7.5",
-    title: "«Рішення є остаточним» — обмеження конституційного права на суд",
-    was: `Рішення про повернення або відмову у поверненні приймається Виконавцем одноособово та є остаточним.`,
-    proposed: `Рішення про повернення або відмову у поверненні приймається Виконавцем одноособово. Продавець має право оскаржити таке рішення у судовому порядку відповідно до законодавства України.`,
-    why: `Ст. 55 Конституції України — право на судовий захист є невідчужуваним і не може бути обмежене договором. Формулювання "є остаточним" прямо суперечить цій нормі і може бути визнане нікчемним (ст. 228 ЦКУ). Парадокс: цей пункт не лише не захищає — він послаблює весь п. 7.5, бо суд, визнавши одне речення нікчемним, може поставити під сумнів весь пункт. Додавання одного речення про право на суд — усуває ризик і нічого не втрачає, адже право на суд і так є.`
-  },
-  {
-    id: "I4",
-    risk: "crit",
-    doc: "ОФЕРТА",
-    ref: "п. 13.2",
-    title: "«Не несе відповідальності за непрямі збитки» — не діє щодо фізосіб",
-    was: `Сукупна відповідальність Виконавця за будь-якими вимогами Продавця, що виникають з цього Договору, не може перевищувати суму, сплачену Продавцем за один (1) останній тарифний місяць використання Платформи. Виконавець у жодному разі не несе відповідальності за непрямі, побічні, спеціальні або наслідкові збитки, включаючи втрату прибутку, клієнтів або ділової репутації.`,
-    proposed: `Сукупна відповідальність Виконавця за будь-якими вимогами Продавця, що виникають з цього Договору, не може перевищувати суму, сплачену Продавцем за три (3) останніх тарифних місяці використання Платформи. Виконавець не несе відповідальності за непрямі, побічні або наслідкові збитки, включаючи втрату прибутку або ділової репутації, якщо такі збитки виникли не з вини Виконавця або є наслідком порушення Продавцем умов цього Договору. Дана умова застосовується в межах, що не суперечать законодавству України.`,
-    why: `Ст. 22 ЦКУ — повне виключення відповідальності за збитки між фізичними особами (а Продавець може бути фіз.особою) — не допускається. Ст. 616 ЦКУ дозволяє обмеження відповідальності лише між суб'єктами господарювання. Ліміт в "1 місяць" суд може визнати несправедливим, якщо Продавець заплатив рік і втратив бізнес. "3 місяці" — розумніший ліміт, менш вразливий. Фраза "в межах, що не суперечать законодавству" — захисна кліпса.`
-  },
-  {
-    id: "I5",
-    risk: "warn",
-    doc: "ОФЕРТА",
-    ref: "п. 1.3",
-    title: "Зміни без повідомлення — ризик оскарження конкретних змін тарифу",
-    was: `Оферта набуває чинності з моменту її розміщення на beroo.space і діє до її відкликання Виконавцем. Виконавець залишає за собою право вносити зміни до умов Оферти в односторонньому порядку без попереднього повідомлення. Зміни набувають чинності з моменту публікації оновленої редакції.`,
-    proposed: `Оферта набуває чинності з моменту її розміщення на beroo.space і діє до її відкликання Виконавцем. Виконавець залишає за собою право вносити зміни до умов Оферти в односторонньому порядку. Зміни, що стосуються збільшення вартості тарифів, набувають чинності не раніше ніж через 7 (сім) календарних днів з моменту публікації оновленої редакції. Всі інші зміни набувають чинності з моменту публікації. Продовження використання Платформи після публікації змін є акцептом нових умов.`,
-    why: `Ст. 651 ЦКУ — зміна умов договору, що погіршують становище споживача (підвищення ціни), без розумного строку повідомлення може бути оскаржена. 7 днів для цінових змін — мінімальний розумний строк. Це нічого не втрачає, але закриває вразливість для оскарження конкретного підвищення тарифу як такого, що не набрало чинності.`
-  },
-  {
-    id: "I6",
-    risk: "warn",
-    doc: "ОФЕРТА",
-    ref: "п. 12.6",
-    title: "Реклама третіх осіб Покупцям — без прямої згоди Покупця",
-    was: `РЕКЛАМНА МОДЕЛЬ ПЛАТФОРМИ. Якщо обраний Продавцем Тарифний пакет не включає опцію відключення реклами від інших магазинів платформи BEROO, Виконавець має право розміщувати рекламні матеріали інших Продавців платформи у всіх каналах магазину Продавця... Акцептуючи цю Оферту, Продавець підтверджує свою повну та беззастережну згоду з показом реклами інших магазинів BEROO своїм Покупцям у разі, якщо обраний тариф не виключає цього.`,
-    proposed: `РЕКЛАМНА МОДЕЛЬ ПЛАТФОРМИ. Якщо обраний Продавцем Тарифний пакет не включає опцію відключення реклами від інших магазинів платформи BEROO, Виконавець має право розміщувати рекламні матеріали інших Продавців платформи у всіх каналах магазину Продавця. Продавець зобов'язаний інформувати своїх Покупців про можливість показу реклами інших магазинів BEROO у своїй публічній оферті та/або Політиці конфіденційності на beroo.online. Згода Покупця на отримання такої реклами отримується при реєстрації на beroo.online відповідно до beroo.online/privacy.`,
-    why: `ЗУ "Про рекламу" ст. 8 та ЗУ "Про захист персональних даних" ст. 6 — використання даних Покупця для показу реклами третіх осіб потребує його власної згоди. Згода Продавця на показ реклами своїм Покупцям юридично не замінює згоду самих Покупців. Якщо Покупець поскаржиться до Уповноваженого — цей пункт не захищає. Рішення: перенести отримання згоди на beroo.online при реєстрації Покупця.`
-  },
-  {
-    id: "I7",
-    risk: "warn",
-    doc: "ОФЕРТА",
-    ref: "п. 14.2",
-    title: "Форс-мажор через волонтерів — без документального підтвердження",
-    was: `...форс-мажорні обставини особистого або сімейного характеру, що стосуються осіб, залучених до обслуговування Платформи на цивільно-правових або волонтерських засадах: поранення, загибель, захворювання, мобілізація, вимушене переміщення або інші надзвичайні обставини...`,
-    proposed: `...форс-мажорні обставини особистого або сімейного характеру, що стосуються осіб, залучених до обслуговування Платформи: поранення, загибель, захворювання, мобілізація, вимушене переміщення або інші надзвичайні обставини, що об'єктивно унеможливлюють участь таких осіб у забезпеченні роботи Платформи. Для підтвердження таких обставин Виконавець може використовувати будь-які наявні докази, включаючи медичні документи, повістки, повідомлення у ЗМІ або офіційні заяви органів влади. Відсутність письмових договорів з такими особами не є підставою для відмови у визнанні форс-мажору.`,
-    why: `Ст. 617 ЦКУ — для визнання форс-мажору суд вимагає доказів. Якщо волонтери не мають жодного договору, суд може запитати: "Доведіть що ця особа взагалі існувала і була причетна до роботи Платформи". Фраза "відсутність письмових договорів не є підставою для відмови" — превентивно закриває цей аргумент противника.`
-  },
-  {
-    id: "I8",
-    risk: "warn",
-    doc: "ОФЕРТА",
-    ref: "п. 3.1",
-    title: "«Безоплатного та/або платного доступу» — Продавець може відмовитись платити",
-    was: `Предметом цього Договору є надання Виконавцем Продавцеві безоплатного та/або платного доступу до функціональних можливостей Платформи beroo.space в рамках обраного Тарифного пакету...`,
-    proposed: `Предметом цього Договору є надання Виконавцем Продавцеві доступу до функціональних можливостей Платформи beroo.space в рамках обраного Тарифного пакету. Окремі функції Платформи можуть надаватися безоплатно в межах безкоштовного тарифу, визначеного на beroo.space/pricing. Обсяг доступних функцій визначається виключно обраним та оплаченим Тарифним пакетом.`,
-    why: `Слово "безоплатного" у предметі договору — потенційна зброя для Продавця: "у договорі написано безоплатний доступ, тому я нічого не винен платити". Нове формулювання розмежовує безкоштовний тариф як окрему сутність і прибирає двозначність.`
-  },
-  {
-    id: "I9",
-    risk: "low",
-    doc: "ПОЛІТИКА",
-    ref: "п. 10.5",
-    title: "«Знеособлені дані» для реклами — суперечність у термінах",
-    was: `Виконавець залишає за собою право використовувати знеособлені та агреговані дані Покупців (без можливості ідентифікації конкретної особи) для таких цілей: ... (г) організація та забезпечення функціонування рекламних кампаній, акцій та промо-активностей у межах платформи...`,
-    proposed: `Виконавець залишає за собою право використовувати знеособлені та агреговані дані Покупців для таких цілей: ... (г) організація рекламних кампаній та промо-активностей у межах платформи BEROO — виключно на основі агрегованих поведінкових патернів (категорії товарів, географія, частота покупок) без прив'язки до конкретної особи Покупця. Індивідуальні персональні дані Покупців не використовуються для таргетованої реклами без їхньої окремої згоди, отриманої при реєстрації на beroo.online.`,
-    why: `GDPR та ЗУ "Про захист ПД" — якщо дані використовуються для таргетованої реклами (тобто реклама показується конкретному Покупцю на основі його поведінки) — вони НЕ є знеособленими за визначенням. Суперечність "знеособлені дані для реклами" може бути використана регулятором як підстава для перевірки. Нове формулювання уточнює: використовуються патерни, не персональні дані.`
-  },
-  {
-    id: "I10",
-    risk: "low",
-    doc: "ОФЕРТА",
-    ref: "п. 18.4",
-    title: "Волонтери — ризик перекваліфікації у трудові відносини",
-    was: `Виконавець у розумінні цього Договору — це не лише ФОП Шеремета Василь Анатолійович як фізична особа-підприємець, а й організатор діяльності платформи BEROO, який для виконання своїх зобов'язань за цим Договором має право залучати фахівців, консультантів та інших осіб на підставі цивільно-правових відносин або на волонтерських засадах — без виникнення між ними трудових відносин.`,
-    proposed: `Виконавець у розумінні цього Договору — це не лише ФОП Шеремета Василь Анатолійович як фізична особа-підприємець, а й організатор діяльності платформи BEROO, який для виконання своїх зобов'язань за цим Договором має право залучати фахівців, консультантів та інших осіб на підставі цивільно-правових відносин або на громадських засадах — без виникнення між ними трудових відносин у розумінні Кодексу законів про працю України. Залучення таких осіб є добровільним та не створює жодних зобов'язань між Виконавцем та зазначеними особами, окрім тих, що прямо передбачені відповідними цивільно-правовими угодами.`,
-    why: `Ст. 21 КЗпП України — якщо особа регулярно виконує роботу під керівництвом іншої особи — це ознаки трудових відносин незалежно від назви. Податкова може перекваліфікувати "волонтерів" у найманих працівників і донарахувати ЄСВ (22%) та ПДФО (18%). Заміна "волонтерських засад" на "громадські засади" + фраза про КЗпП — більш точна юридична конструкція.`
-  }
-];
+        <!-- Стратегічний контекст -->
+        <div class="intro-strategy">
+            <strong>🌐 Стратегічний контекст глобального оновлення:</strong><br>
+            TikTok суттєво переглядає політику брендованого контенту в глобальному масштабі. Це не регіональне оновлення, а системна зміна, продиктована <strong>посиленням конкуренції</strong> з Instagram та YouTube, які вже запровадили жорсткіші правила для брендованого контенту. Крім того, TikTok адаптується до <strong>нових бюрократичних вимог</strong> ЄС (DSA — Digital Services Act) та посиленого контролю з боку регуляторів у США та Великій Британії. <strong>Юридичні ризики</strong> через судові позови щодо неповнолітніх також вплинули на зміну термінології. Мета TikTok — <strong>уніфікувати правила</strong> для всіх ринків, звузивши дозволені категорії в Європі, щоб мінімізувати регуляторні ризики та <strong>спростити монетизацію</strong> для рекламодавців у країнах з менш суворим законодавством.
+        </div>
 
-function riskLabel(r){return r==='crit'?'КРИТИЧНО':r==='warn'?'ВАЖЛИВО':'МЕНШИЙ РИЗИК';}
-function riskClass(r){return r==='crit'?'crit':r==='warn'?'warn':'low';}
+        <div class="stats">
+            <div class="stat stat-crit"><span class="stat-num">4</span>КРИТИЧНІ</div>
+            <div class="stat stat-warn"><span class="stat-num">3</span>ВАЖЛИВІ</div>
+            <div class="stat stat-ok"><span class="stat-num">3</span>МЕНШІ</div>
+        </div>
+    </div>
 
-function build(){
-  const main = document.getElementById('main');
-  ISSUES.forEach(function(issue){
-    const div = document.createElement('div');
-    div.className = 'issue ' + riskClass(issue.risk);
-    div.id = issue.id;
-    div.innerHTML =
-      '<div class="issue-hdr" onclick="toggle(this.parentElement)">' +
-        '<span class="risk-badge rb-' + riskClass(issue.risk) + '">' + riskLabel(issue.risk) + '</span>' +
-        '<div>' +
-          '<div class="issue-title">' + issue.title + '</div>' +
-          '<div class="issue-ref">' + issue.doc + ' · ' + issue.ref + '</div>' +
-        '</div>' +
-        '<span class="issue-arr">▾</span>' +
-      '</div>' +
-      '<div class="issue-body">' +
-        '<div class="block block-was"><div class="block-label">● БУЛО</div><div class="block-text">' + esc(issue.was) + '</div></div>' +
-        '<div class="block block-proposed"><div class="block-label">✓ ПРОПОНУЄТЬСЯ</div><div class="block-text">' + esc(issue.proposed) + '</div></div>' +
-        '<div class="block block-why"><div class="block-label">⚖ ЧОМУ — ЮРИДИЧНЕ ОБҐРУНТУВАННЯ</div><div class="block-text">' + esc(issue.why) + '</div></div>' +
-        '<button class="apply-btn" onclick="copyProposed(\'' + issue.id + '\')">Копіювати нове формулювання</button>' +
-      '</div>';
-    main.appendChild(div);
-  });
-}
+    <main id="main"></main>
+    <div class="toast" id="toast">✓ Скопійовано нове формулювання</div>
 
-function esc(s){
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+    <script>
+        const ISSUES = [{
+            id: "T1",
+            risk: "crit",
+            doc: "ВИЗНАЧЕННЯ",
+            ref: "Branded Content",
+            title: "«Children» замінено на «Minors» — зміна термінології",
+            was: `Branded Content includes content that features or references: ... (пункти без змін). У загальних правилах: "cause physical, mental or moral detriment to children; exhort children to buy... exploit the special trust that children place in parents, teachers or other persons"`,
+            proposed: `У всіх пунктах замінено "children" на "minors". Тепер: "cause physical, mental or moral detriment to minors; exhort minors to buy... exploit the special trust minors place in parents, teachers or other persons"`,
+            why: `Зміна термінології з "children" на "minors" (неповнолітні) є юридично більш точною, оскільки охоплює всіх осіб до 18 років, а не лише дітей молодшого віку. Це дозволяє TikTok уникнути тлумачень, що правила захищають лише малолітніх (до 14 років). Для творців контенту це означає: якщо раніше ви могли звертатися до "дітей" у рекламі іграшок, то тепер краще використовувати "неповнолітні" або "підлітки", щоб відповідати новій термінології.`
+        }, {
+            id: "T2",
+            risk: "crit",
+            doc: "АЛКОГОЛЬ",
+            ref: "список країн 18+",
+            title: "Вилучення Європи з дозволених ринків для алкоголю",
+            was: `18+ : Аргентина, Австралія, Бразилія, Камбоджа, Колумбія, Німеччина, Ізраїль, Італія, Кенія, Мексика, Філіппіни, Нігерія, Сінгапур, Іспанія, ПАР, Тайвань, Велика Британія, В'єтнам`,
+            proposed: `18+ : Аргентина, Австралія, Бразилія, Камбоджа, Колумбія, Ізраїль, Мексика, Філіппіни, Сінгапур, Тайвань, В'єтнам (вилучено: Німеччина, Італія, Кенія, Нігерія, Іспанія, ПАР, Велика Британія)`,
+            why: `Якщо раніше ви могли рекламувати алкоголь у Німеччині, Італії, Іспанії чи Великій Британії — тепер це заборонено. Ваше відео з келихом вина, зняте в Лондоні або Берліні, не покажуть місцевій аудиторії. TikTok суттєво звужує дозволені ринки для алкоголю, залишаючи переважно країни Азії, Південної Америки та Близького Сходу. Для креаторів це означає: якщо ви планували рекламувати алкогольний бренд — орієнтуйтесь на США, Бразилію або Сінгапур, але не на Європу.`
+        }, {
+            id: "T3",
+            risk: "crit",
+            doc: "ДЕЙТИНГ",
+            ref: "список країн 18+",
+            title: "Вилучення Європи з дозволених ринків для дейтингу",
+            was: `18+ : Австралія, Аргентина, Бразилія, Канада, Колумбія, Франція, Німеччина, Ізраїль, Італія, Японія, Кенія, Корея, Малайзія, Мексика, Нігерія, Філіппіни, Сінгапур, ПАР, Іспанія, Тайвань, Таїланд, Велика Британія, США, В'єтнам, Індонезія`,
+            proposed: `18+ : Австралія, Аргентина, Бразилія, Канада, Колумбія, Індонезія, Японія, Корея, Малайзія, Мексика, Філіппіни, Сінгапур, Тайвань, Таїланд, США, В'єтнам (вилучено: Франція, Німеччина, Ізраїль, Італія, Кенія, Нігерія, ПАР, Іспанія, Велика Британія)`,
+            why: `Якщо раніше ви могли просувати додаток для знайомств у Франції чи Німеччині — тепер це заборонено. TikTok масово виключає європейські ринки з дозволених для дейтингу. Ваше відео з посиланням на Tinder або Bumble не побачать глядачі з Великої Британії, Італії чи Іспанії. Орієнтуйтесь на США, Бразилію, Мексику або країни Азії.`
+        }, {
+            id: "T4",
+            risk: "crit",
+            doc: "ФІНАНСИ",
+            ref: "список країн 18+",
+            title: "Вилучення Європи з дозволених ринків для фінансових послуг",
+            was: `18+ : Аргентина, Австралія, Бразилія, Канада, Колумбія, Єгипет, Франція, Німеччина, Індонезія, Італія, Японія, Корея, Малайзія, Мексика, Філіппіни, Саудівська Аравія, Сінгапур, ПАР, Іспанія, Тайвань, Таїланд, Туреччина, ОАЕ, Велика Британія, США, В'єтнам`,
+            proposed: `18+ : Аргентина, Австралія, Бразилія, Канада, Колумбія, Єгипет, Індонезія, Японія, Корея, Малайзія, Мексика, Філіппіни, Саудівська Аравія, Сінгапур, Тайвань, Таїланд, Туреччина, ОАЕ, США, В'єтнам (вилучено: Франція, Німеччина, Італія, ПАР, Іспанія, Велика Британія)`,
+            why: `Якщо раніше ви рекламували кредитні картки або інвестиційні додатки в Німеччині, Франції чи Великій Британії — тепер це заборонено. TikTok залишає фінансову рекламу для США, Бразилії, Саудівської Аравії та Азії, але закриває більшість європейських ринків.`
+        }, {
+            id: "T5",
+            risk: "warn",
+            doc: "БЕЗРЕЦЕПТУРНІ ЛІКИ",
+            ref: "список країн 18+",
+            title: "Значне скорочення дозволених ринків",
+            was: `18+ : Австралія, Аргентина, Азербайджан, Бахрейн, Бангладеш, Білорусь, Бразилія, Канада, Колумбія, Єгипет, Франція, Німеччина, Ірак, Ізраїль, Йорданія, Казахстан, Кувейт, Ліван, Мексика, Марокко, Оман, Пакистан, Катар, Саудівська Аравія, ПАР, Іспанія, ОАЕ, Велика Британія, США`,
+            proposed: `18+ : Австралія, Аргентина, Бразилія, Канада, Колумбія, Єгипет, Ізраїль, Мексика, Саудівська Аравія, ОАЕ, США (вилучено: Франція, Німеччина, Велика Британія, Іспанія, ПАР, Азербайджан, Бахрейн, Бангладеш, Білорусь, Ірак, Йорданія, Казахстан, Кувейт, Ліван, Марокко, Оман, Пакистан, Катар)`,
+            why: `Якщо раніше ви могли рекламувати знеболювальне у Франції, Великій Британії чи Німеччині — тепер це заборонено. TikTok залишає лише США, Канаду, Бразилію, Мексику, Аргентину, Колумбію, Єгипет, Ізраїль, Саудівську Аравію та ОАЕ. Всі інші ринки закриті.`
+        }, {
+            id: "T6",
+            risk: "warn",
+            doc: "ВІТАМІНИ",
+            ref: "список країн 18+",
+            title: "Вилучення Європи з дозволених ринків для вітамінів",
+            was: `18+ : Канада, Франція, Німеччина, Ізраїль, Індонезія, Італія, Японія, Корея, Малайзія, Філіппіни, Іспанія, Тайвань, Таїланд, Велика Британія, США, В'єтнам`,
+            proposed: `18+ : Канада, Індонезія, Японія, Корея, Малайзія, Філіппіни, Тайвань, Таїланд, США, В'єтнам (вилучено: Франція, Німеччина, Ізраїль, Італія, Іспанія, Велика Британія)`,
+            why: `Якщо раніше ви рекламували вітамінні комплекси в Італії, Франції чи Великій Британії — тепер це заборонено. TikTok залишає вітаміни для ринків Азії, Канади та США, але закриває Європу.`
+        }, {
+            id: "T7",
+            risk: "warn",
+            doc: "АЗАРТНІ ІГРИ",
+            ref: "список країн 18+",
+            title: "Вилучення Європи з дозволених ринків для азартних ігор",
+            was: `18+ : Аргентина, Австралія, Бразилія, Канада, Колумбія, Франція, Німеччина, Ізраїль, Японія, Мексика, Філіппіни, Саудівська Аравія, Сінгапур, Іспанія, Тайвань, Туреччина, ОАЕ, Велика Британія, США, В'єтнам`,
+            proposed: `18+ : Аргентина, Австралія, Бразилія, Канада, Колумбія, Ізраїль, Японія, Мексика, Філіппіни, Саудівська Аравія, Сінгапур, Тайвань, Туреччина, ОАЕ, США, В'єтнам (вилучено: Франція, Німеччина, Іспанія, Велика Британія)`,
+            why: `Якщо раніше ви рекламували онлайн-казино у Великій Британії, Німеччині чи Франції — тепер це заборонено. TikTok залишає азартні ігри для США, Бразилії, Австралії та країн Близького Сходу, але закриває більшість європейських ринків.`
+        }, {
+            id: "T8",
+            risk: "low",
+            doc: "АЛКОГОЛЬ",
+            ref: "вікові обмеження",
+            title: "Вилучення України з 25+ для алкоголю",
+            was: `25+ : Індонезія, Корея, Малайзія, Таїланд, Україна`,
+            proposed: `25+ : Індонезія, Корея, Малайзія, Таїланд (вилучено: Україна)`,
+            why: `Якщо раніше в Україні алкоголь можна було рекламувати з 25 років, то тепер ця категорія взагалі заборонена для українського ринку. Відео з алкоголем не покажуть в Україні.`
+        }, {
+            id: "T9",
+            risk: "low",
+            doc: "ДЕЙТИНГ",
+            ref: "список країн",
+            title: "Вилучення України з дозволених для дейтингу (раніше вже не було)",
+            was: `У старій версії Україна була в списку "не дозволено" (як і більшість країн).`,
+            proposed: `У новій версії Україна залишається в списку "не дозволено". Змін немає.`,
+            why: `Для України правила щодо дейтингу не змінились — реклама дейтинг-додатків все ще заборонена, як і раніше.`
+        }, {
+            id: "T10",
+            risk: "low",
+            doc: "ЗАГАЛЬНІ ПРАВИЛА",
+            ref: "пункти про неповнолітніх",
+            title: "Уточнення формулювань щодо захисту неповнолітніх",
+            was: `"cause physical, mental or moral detriment to children; exhort children to buy... exploit the special trust that children place in parents, teachers or other persons"`,
+            proposed: `"cause physical, mental or moral detriment to minors; exhort minors to buy... exploit the special trust minors place in parents, teachers or other persons"`,
+            why: `Якщо раніше правила захищали "children" (дітей), що могло тлумачитись як лише малолітні (до 14 років), то тепер "minors" охоплює всіх неповнолітніх до 18 років. Для творців це означає: якщо ви знімаєте відео з підлітком 16 років, який рекламує продукт, тепер це підпадає під більш суворі обмеження.`
+        }];
 
-function toggle(el){el.classList.toggle('open');}
+        function riskLabel(r) {
+            return r === 'crit' ? 'КРИТИЧНО' : r === 'warn' ? 'ВАЖЛИВО' : 'МЕНШИЙ РИЗИК';
+        }
 
-function copyProposed(id){
-  const issue = ISSUES.find(function(i){return i.id===id;});
-  if(!issue)return;
-  navigator.clipboard.writeText(issue.proposed).then(function(){
-    var t=document.getElementById('toast');
-    t.classList.add('show');
-    setTimeout(function(){t.classList.remove('show');},2000);
-    var btn = document.querySelector('#'+id+' .apply-btn');
-    if(btn){btn.textContent='✓ Скопійовано';btn.classList.add('applied');}
-  });
-}
+        function riskClass(r) {
+            return r === 'crit' ? 'crit' : r === 'warn' ? 'warn' : 'low';
+        }
 
-build();
-</script>
+        function esc(s) {
+            return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function toggle(el) {
+            el.classList.toggle('open');
+        }
+
+        function copyProposed(id) {
+            const issue = ISSUES.find(function(i) { return i.id === id; });
+            if (!issue) return;
+            navigator.clipboard.writeText(issue.proposed).then(function() {
+                var t = document.getElementById('toast');
+                t.classList.add('show');
+                setTimeout(function() { t.classList.remove('show'); }, 2000);
+                var btn = document.querySelector('#' + id + ' .apply-btn');
+                if (btn) { btn.textContent = '✓ Скопійовано';
+                    btn.classList.add('applied'); }
+            });
+        }
+
+        function build() {
+            const main = document.getElementById('main');
+            ISSUES.forEach(function(issue) {
+                const div = document.createElement('div');
+                div.className = 'issue ' + riskClass(issue.risk);
+                div.id = issue.id;
+                div.innerHTML =
+                    '<div class="issue-hdr" onclick="toggle(this.parentElement)">' +
+                    '<span class="risk-badge rb-' + riskClass(issue.risk) + '">' + riskLabel(issue.risk) + '</span>' +
+                    '<div>' +
+                    '<div class="issue-title">' + issue.title + '</div>' +
+                    '<div class="issue-ref">' + issue.doc + ' · ' + issue.ref + '</div>' +
+                    '</div>' +
+                    '<span class="issue-arr">▾</span>' +
+                    '</div>' +
+                    '<div class="issue-body">' +
+                    '<div class="block block-old"><div class="block-label">● СТАРЕ</div><div class="block-text">' + esc(issue
+                        .was) + '</div></div>' +
+                    '<div class="block block-new"><div class="block-label">✓ НОВЕ</div><div class="block-text">' +
+                    esc(issue.proposed) + '</div></div>' +
+                    '<div class="block block-explain"><div class="block-label">⚖ ПОЯСНЕННЯ</div><div class="block-text">' +
+                    esc(issue.why) + '</div></div>' +
+                    '<button class="apply-btn" onclick="copyProposed(\'' + issue.id + '\')">Копіювати нове формулювання</button>' +
+                    '</div>';
+                main.appendChild(div);
+            });
+        }
+
+        build();
+    </script>
 </body>
 </html>
