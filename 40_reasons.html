@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>BEROO — 40 причин ризику для акаунта TikTok</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #ffffff;
+            --surface: #f8f9fa;
+            --border: #e2e5e9;
+            --text: #1e2228;
+            --text-mid: #4a515c;
+            --text-dim: #8a9099;
+            --crit: #d93025;
+            --crit-bg: #fff5f4;
+            --crit-border: #f5bbb8;
+            --warn: #b45a00;
+            --warn-bg: #fffaf3;
+            --warn-border: #f5d9a8;
+            --ok: #3d6b3d;
+            --ok-bg: #f5fbf5;
+            --ok-border: #b3d9b3;
+            --blue: #1a56a0;
+            --blue-bg: #f0f5ff;
+            --blue-border: #b3c8f0;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+            background: #fff;
+        }
+        body {
+            background: #fff !important;
+            color: var(--text);
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: 40px;
+        }
+
+        .hdr {
+            background: #fff;
+            border-bottom: 2px solid var(--text);
+            padding: 14px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 6px 10px;
+        }
+        .hdr-logo {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: 2px;
+        }
+        .hdr-sub {
+            font-size: 9px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+        .hdr-badge {
+            font-size: 8px;
+            font-weight: 700;
+            background: var(--text);
+            color: #fff;
+            padding: 4px 12px;
+            border-radius: 30px;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+        }
+
+        .intro {
+            padding: 20px 16px 0;
+        }
+        .intro-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+        .intro-desc {
+            font-size: 12px;
+            color: var(--text-mid);
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        .highlight-box {
+            background: #f0f5ff;
+            border-left: 6px solid var(--blue);
+            padding: 14px 18px;
+            border-radius: 0 14px 14px 0;
+            margin-bottom: 20px;
+            font-size: 12px;
+            line-height: 1.7;
+            color: #1a2a4a;
+        }
+        .highlight-box strong {
+            color: #0b1d3a;
+        }
+        .highlight-box .tag {
+            display: inline-block;
+            padding: 0.1rem 0.8rem;
+            border-radius: 30px;
+            font-size: 9px;
+            font-weight: 700;
+            margin-right: 4px;
+        }
+        .tag-violation {
+            background: var(--crit);
+            color: #fff;
+        }
+        .tag-restrict {
+            background: var(--warn);
+            color: #fff;
+        }
+        .tag-risk {
+            background: #8a7a00;
+            color: #fff;
+        }
+
+        .stats {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+        .stat {
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            flex: 1;
+            min-width: 80px;
+            text-align: center;
+        }
+        .stat-num {
+            font-size: 22px;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 2px;
+        }
+        .stat-crit {
+            background: var(--crit-bg);
+            color: var(--crit);
+            border: 1px solid var(--crit-border);
+        }
+        .stat-warn {
+            background: var(--warn-bg);
+            color: var(--warn);
+            border: 1px solid var(--warn-border);
+        }
+        .stat-ok {
+            background: var(--ok-bg);
+            color: var(--ok);
+            border: 1px solid var(--ok-border);
+        }
+
+        main {
+            padding: 0 16px 20px;
+        }
+
+        .risk-item {
+            border-radius: 10px;
+            margin-bottom: 14px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: #fff;
+        }
+        .risk-item-hdr {
+            padding: 12px 14px;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            background: #fafcff;
+            border-bottom: 1px solid var(--border);
+        }
+        .risk-item-hdr:hover {
+            background: #f5f7fc;
+        }
+        .risk-num {
+            font-weight: 700;
+            font-size: 11px;
+            color: var(--text-dim);
+            flex-shrink: 0;
+            min-width: 28px;
+            margin-top: 1px;
+        }
+        .risk-title {
+            font-size: 12.5px;
+            font-weight: 600;
+            color: var(--text);
+            flex: 1;
+            line-height: 1.4;
+        }
+        .risk-tag {
+            font-size: 8px;
+            font-weight: 700;
+            padding: 2px 10px;
+            border-radius: 30px;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-top: 2px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .risk-tag.violation {
+            background: var(--crit);
+            color: #fff;
+        }
+        .risk-tag.restrict {
+            background: var(--warn);
+            color: #fff;
+        }
+        .risk-tag.pattern {
+            background: #8a7a00;
+            color: #fff;
+        }
+        .risk-tag.context {
+            background: var(--blue);
+            color: #fff;
+        }
+        .risk-arr {
+            color: var(--text-dim);
+            font-size: 12px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            transition: transform .2s;
+        }
+        .risk-item.open .risk-arr {
+            transform: rotate(180deg);
+        }
+
+        .risk-body {
+            display: none;
+            padding: 14px 16px;
+            background: #fbfdff;
+        }
+        .risk-item.open .risk-body {
+            display: block;
+        }
+        .risk-body .desc {
+            font-size: 12px;
+            color: var(--text-mid);
+            line-height: 1.7;
+            margin-bottom: 6px;
+        }
+        .risk-body .source {
+            font-size: 10px;
+            color: var(--text-dim);
+            word-break: break-all;
+            background: #f0f2f7;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        .risk-body .source a {
+            color: var(--blue);
+            text-decoration: none;
+        }
+        .risk-body .source a:hover {
+            text-decoration: underline;
+        }
+
+        .strategy-block {
+            background: #f5f8ff;
+            border-radius: 14px;
+            border: 2px solid var(--blue-border);
+            padding: 16px 18px;
+            margin-top: 24px;
+        }
+        .strategy-block h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #0b1d3a;
+            margin-bottom: 8px;
+        }
+        .strategy-block p {
+            font-size: 12px;
+            color: var(--text-mid);
+            line-height: 1.7;
+            margin-bottom: 6px;
+        }
+        .strategy-block .highlight {
+            background: #fff;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border-left: 4px solid var(--blue);
+            font-size: 12px;
+            color: #1a2a4a;
+            margin-top: 8px;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 16px;
+            right: 16px;
+            background: var(--text);
+            color: #fff;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 12px;
+            border-radius: 7px;
+            text-align: center;
+            opacity: 0;
+            transition: opacity .3s;
+            pointer-events: none;
+            z-index: 999;
+        }
+        .toast.show {
+            opacity: 1;
+        }
+
+        @media (max-width: 480px) {
+            .intro-title {
+                font-size: 18px;
+            }
+            .hdr-logo {
+                font-size: 15px;
+            }
+            .stat {
+                font-size: 10px;
+                padding: 8px 10px;
+                min-width: 60px;
+            }
+            .stat-num {
+                font-size: 18px;
+            }
+            .risk-title {
+                font-size: 11.5px;
+            }
+            .risk-body .desc {
+                font-size: 11px;
+            }
+            .hdr-badge {
+                font-size: 7px;
+                padding: 3px 10px;
+            }
+            .highlight-box {
+                font-size: 11px;
+                padding: 12px 14px;
+            }
+            .strategy-block p {
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hdr">
+        <div>
+            <div class="hdr-logo">BEROO · ЮРИДИЧНИЙ АУДИТ</div>
+            <div class="hdr-sub">40 причин ризику для акаунта TikTok</div>
+        </div>
+        <span class="hdr-badge">🔍 повний список</span>
+    </div>
+
+    <div class="intro">
+        <div class="intro-title">40 причин ризику для акаунта TikTok</div>
+
+        <!-- ============================================================ -->
+        <!--  ВАЖЛИВЕ УТОЧНЕННЯ -->
+        <!-- ============================================================ -->
+        <div class="highlight-box">
+            <strong>📌 Важливе уточнення:</strong> не всі 40 пунктів є автоматичним порушенням правил TikTok.
+            <br><br>
+            <span class="tag tag-violation">Пряме порушення</span>
+            <span class="tag tag-restrict">Причина для обмеження рекомендацій</span>
+            <span class="tag tag-risk">Ризиковий патерн</span>
+            <span class="tag tag-context">Залежить від контексту</span>
+            <br><br>
+            Частина з них — <strong>прямі порушення</strong>, що можуть призвести до видалення контенту або блокування.
+            Частина — <strong>причини для обмеження рекомендацій</strong> (відео не потрапляє в FYF).
+            А частина — <strong>ризикові патерни</strong>, які в конкретному контексті можуть привернути увагу модерації.
+        </div>
+
+        <!-- ============================================================ -->
+        <!--  СТАТИСТИКА -->
+        <!-- ============================================================ -->
+        <div class="stats">
+            <div class="stat stat-crit"><span class="stat-num">12</span>прямих порушень</div>
+            <div class="stat stat-warn"><span class="stat-num">14</span>обмеження рекомендацій</div>
+            <div class="stat stat-ok"><span class="stat-num">14</span>ризикові патерни</div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!--  СПИСОК 40 ПРИЧИН -->
+    <!-- ============================================================ -->
+    <main id="main"></main>
+
+    <!-- ============================================================ -->
+    <!--  СТРАТЕГІЧНИЙ БЛОК ДЛЯ КОНСУЛЬТАЦІЙ -->
+    <!-- ============================================================ -->
+    <div style="padding:0 16px;">
+        <div class="strategy-block">
+            <h3>💡 Стратегічна концепція для консультацій з продавцями</h3>
+            <p>
+                <strong>Продавець повинен будувати не просто відеоакаунт, а цілісний цифровий профіль бізнесу</strong>
+                — з правильною комерційною позначкою, достовірними даними, нормальним сайтом, зрозумілими умовами продажу,
+                коректною рекламою, відповідним контентом і чистою історією акаунта.
+            </p>
+            <p>
+                TikTok зараз прямо розширює автоматизовану модерацію: за власними даними платформи,
+                <strong>понад 85% видаленого за порушення контенту виявляється автоматично</strong>.
+            </p>
+            <div class="highlight">
+                <strong>⚠️ Важливий нюанс для публічної комунікації:</strong><br>
+                Падіння охоплень не варто автоматично називати «тіньовим баном» або «баном на 30/60/90 днів»,
+                якщо в акаунті немає відповідного офіційного повідомлення. Набагато професійніше говорити про
+                <strong>обмеження рекомендацій</strong>, <strong>непридатність контенту для FYF</strong>,
+                <strong>обмеження функцій</strong> або <strong>enforcement action</strong> —
+                бо саме такі категорії TikTok описує у своїх правилах.
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast">✓ Скопійовано посилання</div>
+
+    <script>
+        const RISKS = [{
+            num: 1,
+            title: 'Неправильне або відсутнє розкриття комерційного контенту',
+            type: 'violation',
+            desc: 'Якщо відео просуває власний бізнес, товар або послугу, TikTok вимагає використовувати налаштування розкриття комерційного контенту. Відсутність або неправильне розкриття — пряме порушення.',
+            source: 'https://www.tiktok.com/community-guidelines'
+        }, {
+            num: 2,
+            title: 'Неправильний тип комерційної позначки',
+            type: 'violation',
+            desc: 'Власне просування бізнесу та просування стороннього бренду мають різні типи disclosure. Позначення Paid partnership замість Your brand може бути некоректним.',
+            source: 'https://developers.tiktok.com/doc/content-sharing-guidelines/'
+        }, {
+            num: 3,
+            title: 'Комерційний контент без необхідної прозорості',
+            type: 'restrict',
+            desc: 'TikTok може прибирати неправильно розкритий комерційний контент із рекомендацій. Систематичні порушення можуть призвести до обмеження акаунта.',
+            source: 'https://www.tiktok.com/community-guidelines/en/accounts-features/'
+        }, {
+            num: 4,
+            title: 'Масове розміщення однотипного контенту',
+            type: 'restrict',
+            desc: 'Публікація великої кількості практично однакових роликів може розглядатися як спам або маніпулювання платформою.',
+            source: 'https://www.tiktok.com/community-guidelines/en/integrity-authenticity/'
+        }, {
+            num: 5,
+            title: 'Використання мережі резервних акаунтів для обходу обмежень',
+            type: 'violation',
+            desc: 'Створення або використання іншого акаунта після блокування чи обмеження для продовження тієї самої діяльності заборонене.',
+            source: 'https://www.tiktok.com/community-guidelines/en/integrity-authenticity/'
+        }, {
+            num: 6,
+            title: 'Купівля лайків, переглядів або підписників',
+            type: 'violation',
+            desc: 'TikTok прямо забороняє послуги та поведінку, спрямовані на штучне збільшення показників.',
+            source: 'https://www.tiktok.com/community-guidelines/en/integrity-authenticity/'
+        }, {
+            num: 7,
+            title: 'Фальшиве залучення через підставні акаунти',
+            type: 'restrict',
+            desc: 'Like-for-like, штучні коментарі, підставні профілі та інші способи створення неправдивої активності можуть зробити контент непридатним для рекомендацій.',
+            source: 'https://www.tiktok.com/community-guidelines/en/integrity-authenticity/'
+        }, {
+            num: 8,
+            title: 'Маніпулювання алгоритмом рекомендацій',
+            type: 'violation',
+            desc: 'Будь-які схеми, спрямовані на штучне збільшення охоплення або обман рекомендаційної системи, належать до ризикової поведінки.',
+            source: 'https://www.tiktok.com/community-guidelines/en/integrity-authenticity/'
+        }, {
+            num: 9,
+            title: 'Клікбейт із неправдивою обіцянкою',
+            type: 'restrict',
+            desc: 'Заголовок або перша фраза не повинні створювати неправдиве очікування щодо того, що людина отримає після перегляду чи переходу.',
+            source: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-misleading-and-false-content?lang=en'
+        }, {
+            num: 10,
+            title: 'Завищені або нереалістичні обіцянки результату',
+            type: 'violation',
+            desc: 'Особливо ризиковими є твердження про гарантований фінансовий, медичний, косметичний або інший результат.',
+            source: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-misleading-and-false-content?lang=en'
+        }, {
+            num: 11,
+            title: 'Приховування важливих умов, платежів або тарифів',
+            type: 'violation',
+            desc: 'TikTok прямо відносить оманливе приховування інформації про fees, charges і tariffs до deceptive practices.',
+            source: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-deceptive-practices?lang=en'
+        }, {
+            num: 12,
+            title: 'Фальшиві документи або підроблена інформація',
+            type: 'violation',
+            desc: 'Використання фальшивих документів, підроблених підтверджень або неправдивої ідентифікації є прямим ризиком блокування.',
+            source: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-deceptive-practices?lang=en'
+        }, {
+            num: 13,
+            title: 'Неправдива інформація про компанію або продукт',
+            type: 'violation',
+            desc: 'Назва, характеристики, умови, ціна, ліцензії чи інші істотні відомості не повинні вводити користувача в оману.',
+            source: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-misleading-and-false-content?lang=en'
+        }, {
+            num: 14,
+            title: 'Продаж або просування заборонених товарів',
+            type: 'violation',
+            desc: 'TikTok забороняє цілу низку категорій, зокрема незаконні товари, зброю, контрафакт, сексуальні послуги та інші високоризикові категорії.',
+            source: 'https://www.tiktok.com/community-guidelines/en/regulated-commercial-activities/'
+        }, {
+            num: 15,
+            title: 'Алкоголь у комерційному контенті без дотримання спеціальних вимог',
+            type: 'violation',
+            desc: 'Алкоголь регулюється окремими правилами, які залежать від країни, віку аудиторії та формату реклами.',
+            source: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-alcohol?lang=en'
+        }, {
+            num: 16,
+            title: 'Згадки або просування тютюну, вейпів та нікотинових продуктів',
+            type: 'violation',
+            desc: 'Це належить до регульованих товарів і має окремі жорсткі обмеження.',
+            source: 'https://www.tiktok.com/community-guidelines/en/regulated-commercial-activities/'
+        }, {
+            num: 17,
+            title: 'Продаж або просування фармацевтичних чи інших регульованих речовин',
+            type: 'violation',
+            desc: 'Ліки, певні добавки, речовини для схуднення та інші регульовані категорії мають спеціальні обмеження.',
+            source: 'https://www.tiktok.com/community-guidelines/en/regulated-commercial-activities/'
+        }, {
+            num: 18,
+            title: 'Небезпечні або перебільшені медичні твердження',
+            type: 'violation',
+            desc: 'Обіцянки лікування, гарантованого оздоровлення або результатів, які не мають належного підтвердження, можуть бути проблемними.',
+            source: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-misleading-and-false-content?lang=en'
+        }, {
+            num: 19,
+            title: 'Контент про схуднення із небезпечними або перебільшеними твердженнями',
+            type: 'violation',
+            desc: 'TikTok окремо посилив правила щодо exaggerated weight-loss claims, body shaming і небезпечної поведінки щодо ваги.',
+            source: 'https://ads.tiktok.com/help/article/update-to-weight-management-and-body-image-policy-may-2026'
+        }, {
+            num: 20,
+            title: 'До/після, яке перебільшує результат',
+            type: 'restrict',
+            desc: 'Особливо в медичних, косметичних і weight-management тематиках такі порівняння можуть бути обмежені або заборонені в рекламі.',
+            source: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-misleading-and-false-content?lang=en'
+        }, {
+            num: 21,
+            title: 'Образи, цькування та приниження клієнтів',
+            type: 'violation',
+            desc: 'Атаки на конкретну людину з метою принизити, залякати або переслідувати її можуть порушувати правила harassment and bullying.',
+            source: 'https://www.tiktok.com/community-guidelines/en/safety-civility/'
+        }, {
+            num: 22,
+            title: 'Бажання смерті, хвороби або фізичної шкоди іншій людині',
+            type: 'violation',
+            desc: 'Такі висловлювання прямо зазначені TikTok серед забороненої поведінки.',
+            source: 'https://www.tiktok.com/community-guidelines/en/safety-civility/'
+        }, {
+            num: 23,
+            title: 'Заклик аудиторії атакувати людину в коментарях',
+            type: 'violation',
+            desc: 'Організація coordinated harassment, наприклад заклики масово писати образливі коментарі, заборонена.',
+            source: 'https://www.tiktok.com/community-guidelines/en/safety-civility/'
+        }, {
+            num: 24,
+            title: 'Doxxing або публікація чужих персональних даних',
+            type: 'violation',
+            desc: 'Поширення номера телефону, адреси, приватних даних чи іншої інформації, яка може поставити людину під ризик, є серйозною проблемою.',
+            source: 'https://www.tiktok.com/community-guidelines/en/privacy-security/'
+        }, {
+            num: 25,
+            title: 'Номер телефону у коментарях — залежить від контексту',
+            type: 'context',
+            desc: 'Номер телефону у коментарях сам по собі не є автоматичним порушенням. Але передача контактних даних у контексті забороненої або регульованої торгівлі може розглядатися як частина торгівлі або redirect off-platform.',
+            source: 'https://www.tiktok.com/community-guidelines/en/regulated-commercial-activities/'
+        }, {
+            num: 26,
+            title: 'Переведення людей за межі TikTok у контексті забороненої торгівлі',
+            type: 'violation',
+            desc: 'TikTok прямо зазначає, що trade може включати redirect людей на взаємодію поза платформою, зокрема через direct messaging.',
+            source: 'https://www.tiktok.com/community-guidelines/en/regulated-commercial-activities/'
+        }, {
+            num: 27,
+            title: 'Продаж через особисті повідомлення — залежить від контексту',
+            type: 'context',
+            desc: 'Продаж через особисті повідомлення не є універсально забороненим. Але для регульованих категорій redirect у DM або на зовнішній ресурс може становити частину забороненої торгівлі.',
+            source: 'https://www.tiktok.com/community-guidelines/en/regulated-commercial-activities/'
+        }, {
+            num: 28,
+            title: 'Переведення аудиторії в Instagram — залежить від контексту',
+            type: 'context',
+            desc: 'Сам по собі заклик перейти в Instagram не означає порушення, однак він може стати проблемою, якщо використовується для обходу обмежень або в контексті забороненої діяльності.',
+            source: 'https://www.tiktok.com/community-guidelines/en/integrity-authenticity/'
+        }, {
+            num: 29,
+            title: 'Демонстрація приватної переписки може створити проблему з приватністю',
+            type: 'restrict',
+            desc: 'Публікація чужих персональних даних, номерів, адрес, приватної інформації чи іншого чутливого листування може порушувати правила.',
+            source: 'https://www.tiktok.com/community-guidelines/en/privacy-security/'
+        }, {
+            num: 30,
+            title: 'Агресивна поведінка під час LIVE',
+            type: 'restrict',
+            desc: 'LIVE має окремі правила, а комерційний контент у LIVE також повинен правильно розкриватися.',
+            source: 'https://www.tiktok.com/community-guidelines/en/accounts-features/'
+        }, {
+            num: 31,
+            title: 'Неправильне використання комерційного контенту в LIVE',
+            type: 'violation',
+            desc: 'Комерційний контент у LIVE має бути позначений через відповідний disclosure toggle.',
+            source: 'https://www.tiktok.com/community-guidelines/en/accounts-features/'
+        }, {
+            num: 32,
+            title: 'Нецензурна, образлива або принизлива поведінка в рекламі',
+            type: 'violation',
+            desc: 'У рекламній політиці TikTok прямо відзначає profane, disrespectful, coarse language та insulting actions як проблемний контент.',
+            source: 'https://ads.tiktok.com/help/article/discrimination-harassment-bullying'
+        }, {
+            num: 33,
+            title: 'Сексистські або сексуалізовані образи в комерційному контенті',
+            type: 'violation',
+            desc: 'Сексуалізація, сексуальні послуги та сексуально експліцитний комерційний контент мають жорсткі обмеження.',
+            source: 'https://www.tiktok.com/community-guidelines/en/sensitive-mature-themes/'
+        }, {
+            num: 34,
+            title: 'Контент із дітьми, використаними як елемент комерційного продажу',
+            type: 'context',
+            desc: 'Наявність дитини сама по собі не означає порушення, але сексуалізація, експлуатація або небезпечне використання неповнолітніх категорично заборонені.',
+            source: 'https://www.tiktok.com/community-guidelines/en/safety-civility/'
+        }, {
+            num: 35,
+            title: 'Критика конкурентного бренду, яка переходить у приниження або неправдиві твердження',
+            type: 'restrict',
+            desc: 'Критика продукту допустима значно ширше, ніж персональні атаки чи неправдиві комерційні твердження про конкурента.',
+            source: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-misleading-and-false-content?lang=en'
+        }, {
+            num: 36,
+            title: 'Фейкова експертність або неправдиві кваліфікації',
+            type: 'violation',
+            desc: 'Представляти себе фахівцем, ліцензованою особою або володарем кваліфікації, якої немає, може розглядатися як deceptive behavior.',
+            source: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-deceptive-practices?lang=en'
+        }, {
+            num: 37,
+            title: 'Фінансові обіцянки типу «заробиш гарантовано»',
+            type: 'violation',
+            desc: 'Для фінансових продуктів і послуг TikTok вимагає підвищеної прозорості, а нереалістичні фінансові обіцянки забороняються.',
+            source: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-financial-services?lang=en'
+        }, {
+            num: 38,
+            title: 'Просування грантів, інвестицій, фінансування або державних виплат із перебільшенням вигоди',
+            type: 'violation',
+            desc: 'Особливо небезпечними є гарантії отримання грошей, твердження про легке збагачення або приховування ризиків та умов.',
+            source: 'https://ads.tiktok.com/help/article/tiktok-ads-policy-deceptive-practices?lang=en'
+        }, {
+            num: 39,
+            title: 'Порушення правил кількома пов’язаними акаунтами',
+            type: 'restrict',
+            desc: 'TikTok може враховувати зв’язок між акаунтами, а використання інших акаунтів для обходу санкцій може призвести до їхнього блокування також.',
+            source: 'https://www.tiktok.com/community-guidelines/en/integrity-authenticity/'
+        }, {
+            num: 40,
+            title: 'Накопичення порушень і невирішених санкцій',
+            type: 'restrict',
+            desc: 'Повторні порушення можуть призвести до обмеження функцій, монетизації або самого акаунта.',
+            source: 'https://www.tiktok.com/community-guidelines/en/accounts-features/'
+        }];
+
+        function typeLabel(type) {
+            const map = {
+                'violation': 'пряме порушення',
+                'restrict': 'обмеження рекомендацій',
+                'context': 'залежить від контексту',
+                'pattern': 'ризиковий патерн'
+            };
+            return map[type] || type;
+        }
+
+        function typeClass(type) {
+            const map = {
+                'violation': 'violation',
+                'restrict': 'restrict',
+                'context': 'context',
+                'pattern': 'pattern'
+            };
+            return map[type] || 'context';
+        }
+
+        function esc(s) {
+            return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        function toggle(el) {
+            el.classList.toggle('open');
+        }
+
+        function copySource(source) {
+            navigator.clipboard.writeText(source).then(function() {
+                var t = document.getElementById('toast');
+                t.textContent = '✓ Посилання скопійовано';
+                t.classList.add('show');
+                setTimeout(function() { t.classList.remove('show'); }, 2000);
+            });
+        }
+
+        function build() {
+            const main = document.getElementById('main');
+            RISKS.forEach(function(item) {
+                const div = document.createElement('div');
+                div.className = 'risk-item';
+                div.id = 'risk-' + item.num;
+                div.innerHTML =
+                    '<div class="risk-item-hdr" onclick="toggle(this.parentElement)">' +
+                    '<span class="risk-num">#' + item.num + '</span>' +
+                    '<span class="risk-title">' + esc(item.title) + '</span>' +
+                    '<span class="risk-tag ' + typeClass(item.type) + '">' + typeLabel(item.type) + '</span>' +
+                    '<span class="risk-arr">▾</span>' +
+                    '</div>' +
+                    '<div class="risk-body">' +
+                    '<div class="desc">' + esc(item.desc) + '</div>' +
+                    '<div class="source">🔗 <a href="' + esc(item.source) + '" target="_blank">' + esc(item.source) +
+                    '</a> <button style="background:none;border:none;color:var(--blue);cursor:pointer;font-size:10px;font-weight:600;margin-left:6px;" onclick="event.stopPropagation();copySource(\'' +
+                    esc(item.source) + '\')">📋 копіювати</button></div>' +
+                    '</div>';
+                main.appendChild(div);
+            });
+        }
+
+        build();
+    </script>
+</body>
+</html>
