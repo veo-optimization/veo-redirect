@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#ffffff">
+<title>TikTok Team Survey</title>
+<style>
+:root{
+  color-scheme: light only;
+  --red:#fe2c55; --red2:#ff375f; --black:#111; --text:#111; --muted:#555;
+  --border:#d7d7d7; --bg:#fff; --soft:#f7f7f7;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background:#fff;color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+body{width:100%;overflow-x:hidden}
+main{width:100%;max-width:760px;margin:0 auto;padding:18px 14px 50px}
+h1{font-size:30px;line-height:1.08;margin:8px 0 8px;font-weight:800}
+h2{font-size:23px;line-height:1.15;margin:0 0 10px;font-weight:800}
+h3{font-size:18px;line-height:1.25;margin:0 0 8px;font-weight:800}
+p{line-height:1.45}
+.intro{margin:0 0 18px;color:#333;font-size:15px}
+.card{border:2px solid #222;border-radius:20px;padding:18px 14px;margin:14px 0;background:#fff}
+.section-title{font-size:22px;font-weight:800;margin:0 0 14px}
+.q{margin:0 0 22px}
+label.qtitle{display:block;font-size:17px;line-height:1.28;font-weight:750;margin-bottom:9px}
+input[type=text],input[type=url],input[type=number],textarea,select{
+  display:block;width:100%;min-width:0;background:#fff;color:#111;border:2px solid #bfc1c5;
+  border-radius:14px;padding:14px 14px;font-size:17px;line-height:1.3;outline:none;
+}
+textarea{min-height:100px;resize:vertical}
+input:focus,textarea:focus,select:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(254,44,85,.12)}
+::placeholder{color:#555;opacity:1}
+.checkbox-list{display:grid;gap:9px}
+.check{
+  display:flex;align-items:flex-start;gap:11px;width:100%;padding:13px 12px;border:2px solid #d1d1d1;
+  border-radius:15px;background:#fff;color:#111;font-size:16px;line-height:1.3;cursor:pointer;
+}
+.check input{appearance:none;-webkit-appearance:none;flex:0 0 24px;width:24px;height:24px;margin:0;border:2px solid #8d8f94;border-radius:7px;background:#fff;position:relative}
+.check input:checked{background:var(--red);border-color:var(--red)}
+.check input:checked:after{content:"✓";position:absolute;color:#fff;font-weight:900;font-size:17px;left:3px;top:-1px}
+.check span{display:block;min-width:0}
+.inline{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.timebox{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.smallhint{font-size:13px;color:#555;margin:6px 0 0}
+.required{color:var(--red)}
+#resultsCard{background:#fff}
+#results{
+  width:100%;white-space:normal;overflow:visible;word-break:break-word;overflow-wrap:anywhere;
+  background:#111;color:#fff;border-radius:16px;padding:18px;
+  font:14px/1.55 ui-monospace,SFMono-Regular,Menlo,Monospace;
+  border:2px solid #111;
+}
+.result-line{font-size:16px;margin-bottom:2px}
+.result-sep{margin-bottom:14px}
+.result-item{
+  padding:12px 0;border-bottom:1px solid #444;
+}
+.result-item:last-child{border-bottom:0}
+.result-item span{
+  display:block;margin-top:4px;color:#fff;font-weight:700;
+  white-space:pre-wrap;overflow-wrap:anywhere;
+}
+.copy{
+  width:100%;margin-top:14px;border:0;border-radius:16px;background:var(--red);color:#fff;
+  font-size:18px;font-weight:800;padding:16px;cursor:pointer
+}
+.copy:active{transform:scale(.99)}
+.copy.ok{background:#111}
+.note{font-size:13px;color:#555;margin:8px 0 0}
+.credit{
+  display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+  margin:0 0 18px;padding:12px 14px;border:2px solid #222;border-radius:16px;
+  background:#111;color:#fff;font-size:14px;line-height:1.35;
+}
+.credit b{color:#fff}
+.credit a{color:#fff;text-decoration:underline;text-decoration-color:var(--red2)}
+.credit-item{display:flex;align-items:center;gap:7px;white-space:nowrap}
+.credit-item svg{flex:0 0 auto;display:block}
+.creative-intro{font-size:14.5px;color:#333;line-height:1.5;margin:0 0 16px}
+.creative-sub{
+  display:block;font-size:14px;font-weight:800;color:var(--red);
+  text-transform:uppercase;letter-spacing:.02em;margin:0 0 12px;
+}
+.organ-block{border-top:1px dashed #d1d1d1;padding-top:16px;margin-top:16px}
+.organ-block:first-of-type{border-top:0;padding-top:0;margin-top:0}
+.hero{
+  background:#111;color:#fff;border-radius:20px;padding:20px 16px;margin:0 0 14px;
+}
+.hero h1{color:#fff;margin:0 0 8px}
+.hero .intro{color:#e6e6e6;margin:0}
+.micro-note{
+  background:#fff4f6;border:2px solid var(--red2);border-radius:14px;
+  padding:12px 13px;margin:12px 0 16px;font-size:14px;line-height:1.5;color:#111;
+}
+.micro-note b{color:var(--red)}
+.ta-3{min-height:94px}
+.ta-2{min-height:72px}
+@media(min-width:600px){main{padding:28px 22px 60px}.card{padding:22px 20px}}
+</style>
+</head>
+<body>
+<main>
+  <div class="hero">
+    <h1>TikTok Team Survey</h1>
+    <p class="intro">Анкета для учасників консультації. Відповіді автоматично дублюються у чорному полі «Результати анкети» внизу сторінки.</p>
+  </div>
+
+  <div class="credit">
+    <span class="credit-item">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#fe2c55"/><path d="M9.5 8.5v7a2.5 2.5 0 1 0 2.5-2.5V6h2.2c.2 1.4 1 2.5 2.3 2.9v2.1c-1-.1-1.9-.5-2.5-1v3.5A4.5 4.5 0 1 1 9.5 9.9V8.5Z" fill="#fff"/></svg>
+      Анкету розробив <b>Василь VEO</b> · TikTok&nbsp;Аналітика
+    </span>
+    <span class="credit-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#fff" opacity=".12"/><path d="M4 12c0-.3.2-.6.5-.7l14-5.4c.5-.2 1 .3.8.8l-2.4 13.4c-.1.5-.7.7-1.1.4l-3.7-2.9-2 1.9c-.3.3-.8.1-.8-.3l.1-3.4 6.7-6.7-8.6 5.7-3-1c-.3-.1-.5-.4-.5-.8Z" fill="#fff"/></svg>
+      <a href="https://www.tiktok.com/@vasil_veo" target="_blank" rel="noopener">tiktok: vasil_veo</a>
+    </span>
+    <span class="credit-item">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#fff" opacity=".12"/><path d="M4 12c0-.3.2-.6.5-.7l14-5.4c.5-.2 1 .3.8.8l-2.4 13.4c-.1.5-.7.7-1.1.4l-3.7-2.9-2 1.9c-.3.3-.8.1-.8-.3l.1-3.4 6.7-6.7-8.6 5.7-3-1c-.3-.1-.5-.4-.5-.8Z" fill="#fff"/></svg>
+      <a href="https://t.me/veoforce_support" target="_blank" rel="noopener">телеграм: veoforce_support</a>
+    </span>
+  </div>
+
+  <section class="card">
+    <div class="section-title">1. Про вас і акаунти</div>
+
+    <div class="q">
+      <label class="qtitle">1. Ваше ім'я <span class="required">*</span></label>
+      <input id="name" type="text" placeholder="Введіть ім'я">
+    </div>
+
+    <div class="q">
+      <label class="qtitle">2. Посилання на ваші TikTok-акаунти</label>
+      <textarea id="accounts" placeholder="Вставте одне або декілька посилань, кожне з нового рядка"></textarea>
+    </div>
+
+    <div class="q">
+      <label class="qtitle">3. Скільки років ви користуєтеся TikTok?</label>
+      <input id="years" type="text" placeholder="Наприклад: 2 роки">
+    </div>
+
+    <div class="q">
+      <label class="qtitle">4. Скільки активних TikTok-акаунтів у вас зараз?</label>
+      <input id="activeAccounts" type="number" min="0" placeholder="Кількість">
+    </div>
+
+    <div class="q">
+      <label class="qtitle">5. Скільки TikTok-акаунтів ви втрачали або отримували блокування?</label>
+      <input id="lostAccounts" type="number" min="0" placeholder="Кількість">
+    </div>
+
+    <div class="q">
+      <label class="qtitle">6. Якщо акаунти втрачалися, з яких причин, на вашу думку?</label>
+      <textarea id="lostReasons" placeholder="Коротко опишіть, якщо пам'ятаєте"></textarea>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-title">2. Ваша активність і контент</div>
+
+    <div class="q">
+      <label class="qtitle">7. Скільки відео ви в середньому публікуєте на день?</label>
+      <input id="videosDay" type="number" min="0" placeholder="Кількість">
+    </div>
+
+    <div class="q">
+      <label class="qtitle">8. Яка максимальна кількість переглядів була у вашого відео?</label>
+      <input id="maxViews" type="text" placeholder="Наприклад: 250 000">
+    </div>
+
+    <div class="q">
+      <label class="qtitle">9. Скільки відео за останній місяць набрали 10 000+ переглядів?</label>
+      <input id="views10k" type="number" min="0" placeholder="Кількість">
+    </div>
+
+    <div class="q">
+      <label class="qtitle">10. Скільки відео за останній місяць набрали 100 000+ переглядів?</label>
+      <input id="views100k" type="number" min="0" placeholder="Кількість">
+    </div>
+
+    <div class="q">
+      <label class="qtitle">11. Які формати ви використовуєте? Можна кілька.</label>
+      <div class="checkbox-list" data-group="formats">
+        <label class="check"><input type="checkbox" value="Розмовні відео з обличчям"><span>Розмовні відео з обличчям</span></label>
+        <label class="check"><input type="checkbox" value="Відео під музику / тренди"><span>Відео під музику / тренди</span></label>
+        <label class="check"><input type="checkbox" value="Відео без обличчя"><span>Відео без обличчя</span></label>
+        <label class="check"><input type="checkbox" value="Фото / слайди"><span>Фото / слайди</span></label>
+        <label class="check"><input type="checkbox" value="Освітній / експертний контент"><span>Освітній / експертний контент</span></label>
+        <label class="check"><input type="checkbox" value="Емоційний / розважальний контент"><span>Емоційний / розважальний контент</span></label>
+        <label class="check"><input type="checkbox" value="Інше"><span>Інше</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <label class="qtitle">12. Чи знімаєте ви відео з обличчям?</label>
+      <select id="face"><option value="">Оберіть</option><option>Так, регулярно</option><option>Іноді</option><option>Рідко</option><option>Ні</option></select>
+    </div>
+
+    <div class="q">
+      <label class="qtitle">13. Чи проводите прямі ефіри?</label>
+      <select id="lives"><option value="">Оберіть</option><option>Так, регулярно</option><option>Іноді</option><option>Раніше проводив(ла), зараз ні</option><option>Ні</option></select>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-title">3. Ваше користування TikTok</div>
+
+    <div class="q">
+      <label class="qtitle">14. Скільки часу TikTok показує вам як середній час використання за день за останній тиждень?</label>
+      <div class="timebox">
+        <input id="hours" type="number" min="0" max="24" placeholder="Години">
+        <input id="minutes" type="number" min="0" max="59" placeholder="Хвилини">
+      </div>
+      <p class="smallhint">TikTok → Профіль → ☰ → Параметри та конфіденційність → Час і добробут → Час використання. Вкажіть середнє за день за тиждень.</p>
+    </div>
+
+    <div class="q">
+      <label class="qtitle">15. Як ви взаємодієте з коментарями, коли просто гортаєте TikTok?</label>
+      <div class="checkbox-list" data-group="comments">
+        <label class="check"><input type="checkbox" value="Часто лайкаю коментарі"><span>Часто лайкаю коментарі, які сподобалися</span></label>
+        <label class="check"><input type="checkbox" value="Рідко лайкаю коментарі"><span>Рідко лайкаю коментарі</span></label>
+        <label class="check"><input type="checkbox" value="Часто пишу коментарі"><span>Часто пишу коментарі</span></label>
+        <label class="check"><input type="checkbox" value="Майже не взаємодію"><span>Майже не взаємодію</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <label class="qtitle">16. Який тип подачі вам ближчий?</label>
+      <div class="checkbox-list" data-group="style">
+        <label class="check"><input type="checkbox" value="Емоційна подача"><span>Емоційна подача</span></label>
+        <label class="check"><input type="checkbox" value="Експертна подача"><span>Експертна подача</span></label>
+        <label class="check"><input type="checkbox" value="Поєднання емоційної та експертної"><span>Поєднання обох</span></label>
+        <label class="check"><input type="checkbox" value="Поки не знаю"><span>Поки не знаю</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <label class="qtitle">17. Чи читали ви Правила спільноти TikTok?</label>
+      <select id="rules"><option value="">Оберіть</option><option>Так, регулярно стежу за оновленнями</option><option>Так, але давно</option><option>Переглядав(ла) окремі розділи</option><option>Ні</option></select>
+    </div>
+
+    <div class="q">
+      <label class="qtitle">18. Як, на вашу думку, TikTok заробляє гроші?</label>
+      <textarea id="money" placeholder="Напишіть своїми словами"></textarea>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-title">4. Ваша експертність і продукти</div>
+
+    <div class="q">
+      <label class="qtitle">19. Які три продукти вам найпростіше просувати або про які ви можете говорити «від зубів»?</label>
+      <div class="q"><input id="product1" type="text" placeholder="Продукт 1"></div>
+      <div class="q"><input id="product2" type="text" placeholder="Продукт 2"></div>
+      <div class="q"><input id="product3" type="text" placeholder="Продукт 3"></div>
+    </div>
+
+    <div class="q">
+      <label class="qtitle">20. Який продукт, тема або твердження у вашій ніші викликає найбільше дискусій, суперечок чи запитань і чому?</label>
+      <textarea id="controversial" placeholder="Опишіть продукт/тему та коротко поясніть, чому вона викликає дискусії"></textarea>
+    </div>
+
+    <div class="q">
+      <label class="qtitle">Додатково: яка у вас освіта або підготовка, пов'язана з анатомією, біохімією, біомеханікою, харчуванням чи іншою тематикою, про яку ви говорите?</label>
+      <textarea id="education" placeholder="Наприклад: медична освіта, курси, самоосвіта, профільної освіти немає"></textarea>
+    </div>
+
+    <div class="q">
+      <label class="qtitle">Додатково: які питання найбільше хвилюють вас перед консультацією? Можна кілька.</label>
+      <div class="checkbox-list" data-group="concerns">
+        <label class="check"><input type="checkbox" value="Падіння охоплень"><span>Падіння охоплень</span></label>
+        <label class="check"><input type="checkbox" value="Блокування акаунта"><span>Блокування акаунта</span></label>
+        <label class="check"><input type="checkbox" value="Стоп-слова та ризикові формулювання"><span>Стоп-слова та ризикові формулювання</span></label>
+        <label class="check"><input type="checkbox" value="Комерційний контент і його позначення"><span>Комерційний контент і його позначення</span></label>
+        <label class="check"><input type="checkbox" value="Як збільшити продажі через TikTok"><span>Як збільшити продажі через TikTok</span></label>
+        <label class="check"><input type="checkbox" value="Що зміниться з розвитком TikTok Shop"><span>Що зміниться з розвитком TikTok Shop</span></label>
+        <label class="check"><input type="checkbox" value="Інше"><span>Інше</span></label>
+      </div>
+    </div>
+
+    <div class="q">
+      <label class="qtitle">Що ви найбільше хочете отримати від цієї консультації?</label>
+      <textarea id="goal" placeholder="Напишіть 2–3 речення"></textarea>
+    </div>
+  </section>
+
+  <section class="card">
+    <div class="section-title">5. Творчий блок: перші 5 слів</div>
+    <p class="creative-intro">
+      Уявіть: ви стоїте з сумкою препаратів на площі, де зібралась різноманітна аудиторія — різного віку, статку і становища. Ваша мета — крикнути в рупор лише <b>5 слів</b>, після яких рахують відсоток людей, що не відвернулись. На 15-й секунді ви називаєте сам препарат — і зацікавлені підходять запитати, як його придбати. Нас цікавлять саме ці перші 5 слів.
+    </p>
+    <p class="creative-intro">
+      Це суцільна фраза-вигук, яку ви кричите в рупор, — як одне речення, а не список слів через кому. Незвичний порядок слів — це нормально: наприклад, фраза «змішувати слів незвично порядок можна» звучить нестандартно, але цілком підходить, головне — щоб вона передавала суть і чіпляла увагу.
+    </p>
+    <div class="micro-note">
+      <b>Важливо:</b> добре подумайте і розставте слова за вагою — перше слово має бути найважливішим, друге — трохи менш важливим, і так по спадній до п'ятого, найменш важливого.
+    </div>
+
+    <div class="organ-block">
+      <span class="creative-sub">Система 1 · Серцево-судинна система</span>
+      <div class="q">
+        <label class="qtitle">Назва продукту і від чого він (лікує/покращує)</label>
+        <textarea id="organ1_product" class="ta-3" rows="3" placeholder="Наприклад: комплекс з Омега-3 — підтримує серце і судини, знижує тиск"></textarea>
+      </div>
+      <div class="q">
+        <label class="qtitle">Перші 5 слів у рупор</label>
+        <textarea id="organ1_words" class="ta-2" rows="2" placeholder="Ваша фраза-вигук із 5 слів"></textarea>
+      </div>
+    </div>
+
+    <div class="organ-block">
+      <span class="creative-sub">Система 2 · Травна система (ШКТ)</span>
+      <div class="q">
+        <label class="qtitle">Назва продукту і від чого він (лікує/покращує)</label>
+        <textarea id="organ2_product" class="ta-3" rows="3" placeholder="Наприклад: пробіотик — відновлює мікрофлору, знімає здуття"></textarea>
+      </div>
+      <div class="q">
+        <label class="qtitle">Перші 5 слів у рупор</label>
+        <textarea id="organ2_words" class="ta-2" rows="2" placeholder="Ваша фраза-вигук із 5 слів"></textarea>
+      </div>
+    </div>
+
+    <div class="organ-block">
+      <span class="creative-sub">Система 3 · Нервова система</span>
+      <div class="q">
+        <label class="qtitle">Назва продукту і від чого він (лікує/покращує)</label>
+        <textarea id="organ3_product" class="ta-3" rows="3" placeholder="Наприклад: магній B6 — заспокоює, покращує сон і концентрацію"></textarea>
+      </div>
+      <div class="q">
+        <label class="qtitle">Перші 5 слів у рупор</label>
+        <textarea id="organ3_words" class="ta-2" rows="2" placeholder="Ваша фраза-вигук із 5 слів"></textarea>
+      </div>
+    </div>
+
+    <div class="organ-block">
+      <span class="creative-sub">Система 4 · Імунна система</span>
+      <div class="q">
+        <label class="qtitle">Назва продукту і від чого він (лікує/покращує)</label>
+        <textarea id="organ4_product" class="ta-3" rows="3" placeholder="Наприклад: вітамін D3 + цинк — зміцнює імунітет"></textarea>
+      </div>
+      <div class="q">
+        <label class="qtitle">Перші 5 слів у рупор</label>
+        <textarea id="organ4_words" class="ta-2" rows="2" placeholder="Ваша фраза-вигук із 5 слів"></textarea>
+      </div>
+    </div>
+
+    <div class="organ-block">
+      <span class="creative-sub">Система 5 · Опорно-рухова система</span>
+      <div class="q">
+        <label class="qtitle">Назва продукту і від чого він (лікує/покращує)</label>
+        <textarea id="organ5_product" class="ta-3" rows="3" placeholder="Наприклад: колаген + кальцій — зміцнює суглоби і кістки"></textarea>
+      </div>
+      <div class="q">
+        <label class="qtitle">Перші 5 слів у рупор</label>
+        <textarea id="organ5_words" class="ta-2" rows="2" placeholder="Ваша фраза-вигук із 5 слів"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <section class="card" id="resultsCard">
+    <h2>Результати анкети</h2>
+    <p class="intro">Поле заповнюється автоматично під час проходження анкети. Тут завжди є всі запитання, а відповіді підставляються одразу після внесення.</p>
+    <div id="results" aria-live="polite">
+  <div class="result-line"><strong>TIKTOK TEAM SURVEY</strong></div>
+  <div class="result-sep">===================</div>
+
+  <div class="result-item">1. Ваше ім'я:<br><span data-result="name">—</span></div>
+  <div class="result-item">2. Посилання на TikTok-акаунти:<br><span data-result="accounts">—</span></div>
+  <div class="result-item">3. Скільки років користуєтеся TikTok?<br><span data-result="years">—</span></div>
+  <div class="result-item">4. Скільки активних TikTok-акаунтів зараз?<br><span data-result="activeAccounts">—</span></div>
+  <div class="result-item">5. Скільки акаунтів втрачали / отримували блокування?<br><span data-result="lostAccounts">—</span></div>
+  <div class="result-item">6. Причини втрати акаунтів:<br><span data-result="lostReasons">—</span></div>
+  <div class="result-item">7. Скільки відео публікуєте в середньому на день?<br><span data-result="videosDay">—</span></div>
+  <div class="result-item">8. Максимальна кількість переглядів одного відео:<br><span data-result="maxViews">—</span></div>
+  <div class="result-item">9. Відео за останній місяць із 10 000+ переглядів:<br><span data-result="views10k">—</span></div>
+  <div class="result-item">10. Відео за останній місяць із 100 000+ переглядів:<br><span data-result="views100k">—</span></div>
+  <div class="result-item">11. Формати контенту:<br><span data-result="formats">—</span></div>
+  <div class="result-item">12. Чи знімаєте відео з обличчям?<br><span data-result="face">—</span></div>
+  <div class="result-item">13. Чи проводите прямі ефіри?<br><span data-result="lives">—</span></div>
+  <div class="result-item">14. Середній час TikTok за день за останній тиждень:<br><span data-result="time">—</span></div>
+  <div class="result-item">15. Взаємодія з коментарями:<br><span data-result="comments">—</span></div>
+  <div class="result-item">16. Тип подачі:<br><span data-result="style">—</span></div>
+  <div class="result-item">17. Чи читали Правила спільноти TikTok?<br><span data-result="rules">—</span></div>
+  <div class="result-item">18. Як TikTok, на вашу думку, заробляє гроші?<br><span data-result="money">—</span></div>
+  <div class="result-item">19. Три продукти, які найпростіше просувати:<br><span data-result="products">—</span></div>
+  <div class="result-item">20. Продукт / тема, що викликає найбільше дискусій, і чому:<br><span data-result="controversial">—</span></div>
+  <div class="result-item">Додатково. Освіта / підготовка:<br><span data-result="education">—</span></div>
+  <div class="result-item">Додатково. Що найбільше хвилює перед консультацією:<br><span data-result="concerns">—</span></div>
+  <div class="result-item">Що найбільше хочете отримати від консультації:<br><span data-result="goal">—</span></div>
+
+  <div class="result-line"><strong>5. ТВОРЧИЙ БЛОК: ПЕРШІ 5 СЛІВ</strong></div>
+  <div class="result-item">Система 1 (серцево-судинна) — продукт:<br><span data-result="organ1_product">—</span></div>
+  <div class="result-item">Система 1 — перші 5 слів:<br><span data-result="organ1_words">—</span></div>
+  <div class="result-item">Система 2 (травна / ШКТ) — продукт:<br><span data-result="organ2_product">—</span></div>
+  <div class="result-item">Система 2 — перші 5 слів:<br><span data-result="organ2_words">—</span></div>
+  <div class="result-item">Система 3 (нервова) — продукт:<br><span data-result="organ3_product">—</span></div>
+  <div class="result-item">Система 3 — перші 5 слів:<br><span data-result="organ3_words">—</span></div>
+  <div class="result-item">Система 4 (імунна) — продукт:<br><span data-result="organ4_product">—</span></div>
+  <div class="result-item">Система 4 — перші 5 слів:<br><span data-result="organ4_words">—</span></div>
+  <div class="result-item">Система 5 (опорно-рухова) — продукт:<br><span data-result="organ5_product">—</span></div>
+  <div class="result-item">Система 5 — перші 5 слів:<br><span data-result="organ5_words">—</span></div>
+</div>
+    <button class="copy" id="copyBtn" type="button">Скопіювати результати</button>
+    <p class="note" id="copyNote"></p>
+  </section>
+</main>
+
+<script>
+function cleanValue(value){
+  const v = String(value ?? "").trim();
+  return v === "" ? "—" : v;
+}
+
+function readValue(id){
+  const el = document.getElementById(id);
+  return el ? cleanValue(el.value) : "—";
+}
+
+function readChecks(group){
+  const items = [...document.querySelectorAll(`[data-group="${group}"] input[type="checkbox"]:checked`)]
+    .map(el => el.value.trim())
+    .filter(Boolean);
+  return items.length ? items.join(", ") : "—";
+}
+
+function setResult(key, value){
+  const el = document.querySelector(`[data-result="${key}"]`);
+  if (el) el.textContent = value;
+}
+
+function updateResults(){
+  // Text, URL and numeric fields
+  setResult("name", readValue("name"));
+  setResult("accounts", readValue("accounts"));
+  setResult("years", readValue("years"));
+  setResult("activeAccounts", readValue("activeAccounts"));
+  setResult("lostAccounts", readValue("lostAccounts"));
+  setResult("lostReasons", readValue("lostReasons"));
+  setResult("videosDay", readValue("videosDay"));
+  setResult("maxViews", readValue("maxViews"));
+  setResult("views10k", readValue("views10k"));
+  setResult("views100k", readValue("views100k"));
+
+  // Checkboxes and selects
+  setResult("formats", readChecks("formats"));
+  setResult("face", readValue("face"));
+  setResult("lives", readValue("lives"));
+  setResult("comments", readChecks("comments"));
+  setResult("style", readChecks("style"));
+  setResult("rules", readValue("rules"));
+
+  // TikTok screen-time: always show one combined value
+  const hours = document.getElementById("hours")?.value.trim() || "";
+  const minutes = document.getElementById("minutes")?.value.trim() || "";
+  const time = (hours === "" && minutes === "")
+    ? "—"
+    : `${hours || "0"} год ${minutes || "0"} хв`;
+  setResult("time", time);
+
+  setResult("money", readValue("money"));
+
+  const products = [
+    readValue("product1"),
+    readValue("product2"),
+    readValue("product3")
+  ];
+  setResult(
+    "products",
+    products.every(v => v === "—") ? "—" : products.join(" | ")
+  );
+
+  setResult("controversial", readValue("controversial"));
+  setResult("education", readValue("education"));
+  setResult("concerns", readChecks("concerns"));
+  setResult("goal", readValue("goal"));
+
+  // Creative block: 5 organ systems
+  for (let i = 1; i <= 5; i++){
+    setResult(`organ${i}_product`, readValue(`organ${i}_product`));
+    setResult(`organ${i}_words`, readValue(`organ${i}_words`));
+  }
+}
+
+// Live update for EVERY text/number/url/textarea/select control.
+// Кілька подій одразу — бо на мобільних (особливо iOS Safari) деякі
+// способи вводу (автозаповнення, голосове введення, вставка через
+// меню, зміна select) не завжди генерують "input"/"keyup" одразу.
+const liveEvents = ["input", "change", "keyup", "paste", "cut", "blur", "focusout"];
+liveEvents.forEach(evt => {
+  document.addEventListener(evt, () => {
+    // paste/cut подеколи оновлюють value поля з невеликою затримкою —
+    // тому додатково перераховуємо результат в наступному тіку.
+    updateResults();
+    setTimeout(updateResults, 0);
+  }, {passive:true});
+});
+
+// Підстраховка для мобільних клавіатур: періодично (раз на секунду)
+// синхронізуємо результати з поточними значеннями полів, навіть якщо
+// подія з якоїсь причини не спрацювала.
+setInterval(updateResults, 1000);
+
+// Initial render: questions are already visible in HTML;
+// this only fills any values that may already exist.
+updateResults();
+
+document.getElementById("copyBtn").addEventListener("click",async()=>{
+  const text=document.getElementById("results").innerText.trim();
+  try{
+    await navigator.clipboard.writeText(text);
+  }catch(e){
+    const ta=document.createElement("textarea");
+    ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove();
+  }
+  const b=document.getElementById("copyBtn"), n=document.getElementById("copyNote");
+  b.textContent="Скопійовано ✓"; b.classList.add("ok"); n.textContent="Результати скопійовано в буфер обміну.";
+  setTimeout(()=>{b.textContent="Скопіювати результати";b.classList.remove("ok");n.textContent=""},1800);
+});
+updateResults();
+</script>
+</body>
+</html>
