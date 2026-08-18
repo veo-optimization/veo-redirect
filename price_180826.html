@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VASIL VEO — Прайс на послуги</title>
+<meta name="description" content="VASIL VEO та команда: лекції, консультації, супровід, послуги та комплексна робота для бізнесу в TikTok. Індивідуальний підхід, прозорі ціни, формати роботи.">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root{
+  --bg:#F6F7F5;
+  --surface:#FFFFFF;
+  --surface-soft:#EFF1ED;
+  --border:#E2E5DF;
+  --ink:#14171A;
+  --ink-soft:#565C58;
+  --muted:#8A9089;
+  --accent:#0E6B4C;
+  --accent-soft:#E5F0EA;
+  --navy:#1F2A44;
+  --navy-soft:#E9EBF1;
+  --amber:#9C6B14;
+  --amber-soft:#F5ECD8;
+  --radius:18px;
+  --radius-sm:12px;
+  --shadow:0 1px 2px rgba(20,23,26,0.04), 0 8px 24px -12px rgba(20,23,26,0.10);
+  --shadow-hover:0 4px 10px rgba(20,23,26,0.06), 0 20px 40px -16px rgba(20,23,26,0.16);
+  --cart-bar-h:64px;
+}
+
+*,*::before,*::after{box-sizing:border-box;}
+
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto;}
+  *{animation-duration:0.001ms !important;animation-iteration-count:1 !important;transition-duration:0.001ms !important;}
+}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Montserrat',sans-serif;
+  font-weight:500;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:0;
+}
+body.has-cart{padding-bottom:var(--cart-bar-h);}
+
+.mono{font-family:'JetBrains Mono',monospace;}
+a{color:inherit;}
+button{font-family:inherit;}
+
+.skip-link{
+  position:absolute; left:-9999px; top:0;
+  background:var(--ink); color:#fff; padding:10px 16px; border-radius:8px; z-index:300;
+}
+.skip-link:focus{left:16px; top:16px;}
+
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
+  outline:2px solid var(--accent);
+  outline-offset:3px;
+  border-radius:6px;
+}
+
+/* ---------- Header ---------- */
+.hero{padding:56px 20px 28px; max-width:920px; margin:0 auto;}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'JetBrains Mono',monospace; font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--accent); background:var(--accent-soft); border:1px solid #CFE4D8;
+  padding:6px 12px; border-radius:999px; margin-bottom:22px;
+}
+.eyebrow .dot{width:6px;height:6px;border-radius:50%; background:var(--accent); animation:pulse 2.2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.25;}}
+.hero h1{font-size:clamp(2rem,7vw,3.4rem); font-weight:800; letter-spacing:-0.03em; line-height:1.05; margin:0 0 18px;}
+.hero h1 em{font-style:normal; color:var(--accent);}
+.hero p.lede{font-size:clamp(0.92rem,2.4vw,1.08rem); color:var(--ink-soft); max-width:620px; font-weight:500; margin:0;}
+
+/* ---------- Tabs (2-row nav) ---------- */
+.tabs-wrap{
+  position:sticky; top:0; z-index:100;
+  background:rgba(246,247,245,0.94); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--border); padding:12px 20px;
+}
+.tabs{
+  display:flex; flex-wrap:wrap; justify-content:center; gap:8px;
+  max-width:920px; margin:0 auto;
+}
+.tab{
+  flex:1 1 28%; max-width:172px; min-width:104px;
+  border:1px solid var(--border); background:var(--surface); color:var(--ink-soft);
+  font-weight:700; font-size:0.82rem; padding:10px 12px; border-radius:999px;
+  cursor:pointer; white-space:nowrap; text-align:center;
+  transition:background .18s ease, color .18s ease, border-color .18s ease, transform .12s ease;
+}
+.tab:hover{border-color:#C9CFC5; transform:translateY(-1px);}
+.tab[aria-current="true"]{background:var(--ink); border-color:var(--ink); color:#fff;}
+
+/* ---------- Sections (stacked / continuous scroll) ---------- */
+main{max-width:920px; margin:0 auto; padding:0 20px 60px;}
+.section{padding-top:44px; scroll-margin-top:96px;}
+.section + .section{border-top:1px solid var(--border); margin-top:44px;}
+
+.section-head{margin-bottom:28px;}
+.section-head h2{font-size:clamp(1.5rem,4.5vw,2rem); font-weight:800; letter-spacing:-0.02em; margin:0 0 8px;}
+.section-head p{color:var(--ink-soft); font-size:0.94rem; margin:0; max-width:560px;}
+
+.info-box{background:var(--accent-soft); border:1px solid #CFE4D8; border-radius:var(--radius-sm); padding:20px 22px; margin-bottom:28px;}
+.info-box .info-title{font-weight:700; font-size:0.98rem; color:var(--accent); margin-bottom:10px;}
+.info-box p{margin:0 0 10px; font-size:0.86rem; color:#2C3B33; line-height:1.7;}
+.info-box p:last-child{margin-bottom:0;}
+.info-box .chips{display:flex; flex-wrap:wrap; gap:7px; margin-top:12px;}
+.info-box .chips span{font-family:'JetBrains Mono',monospace; font-size:0.68rem; background:#fff; border:1px solid #CFE4D8; color:var(--accent); padding:5px 10px; border-radius:999px;}
+
+.grid{display:grid; grid-template-columns:1fr; gap:14px;}
+@media (min-width:640px){.grid.cols-2{grid-template-columns:1fr 1fr;}}
+
+.card{
+  background:var(--surface); border:1px solid var(--border); border-radius:var(--radius);
+  padding:24px; box-shadow:var(--shadow);
+  transition:box-shadow .2s ease, transform .2s ease, border-color .2s ease;
+  display:flex; flex-direction:column;
+}
+.card:hover{box-shadow:var(--shadow-hover); transform:translateY(-2px); border-color:#D2D7CD;}
+
+.card-top{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:10px;}
+.card-name{font-size:1.05rem; font-weight:800; letter-spacing:-0.01em;}
+.badge{font-family:'JetBrains Mono',monospace; font-size:0.62rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:4px 9px; border-radius:6px; white-space:nowrap;}
+.badge.optimal{background:var(--navy-soft); color:var(--navy);}
+.badge.maximal{background:var(--amber-soft); color:var(--amber);}
+.badge.bundle{background:var(--accent-soft); color:var(--accent);}
+.featured-lecture{border-color:#CFE4D8;}
+.price-old{font-family:'JetBrains Mono',monospace; font-size:0.9rem; color:var(--muted); text-decoration:line-through;}
+
+.price-row{display:flex; align-items:baseline; gap:8px; margin-bottom:4px;}
+.price{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:1.5rem; color:var(--ink);}
+.price-unit{font-size:0.76rem; color:var(--muted); font-weight:500;}
+
+.duration{font-family:'JetBrains Mono',monospace; font-size:0.72rem; color:var(--accent); background:var(--accent-soft); display:inline-block; padding:4px 9px; border-radius:6px; margin-bottom:14px; width:fit-content;}
+.positioning{font-style:italic; font-weight:600; font-size:0.9rem; color:var(--ink); border-left:2px solid var(--accent); padding-left:12px; margin:2px 0 14px;}
+.desc{font-size:0.84rem; color:var(--ink-soft); margin-bottom:14px;}
+.includes-label{font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-bottom:9px;}
+.card ul{list-style:none; margin:0 0 16px; padding:0; display:flex; flex-direction:column; gap:7px;}
+.card ul li{font-size:0.84rem; padding-left:16px; position:relative; color:var(--ink);}
+.card ul li::before{content:'–'; position:absolute; left:0; color:var(--muted);}
+.note{font-size:0.78rem; color:var(--ink-soft); background:var(--surface-soft); border-radius:10px; padding:12px 14px; margin-bottom:14px; line-height:1.6;}
+.note strong{color:var(--ink);}
+.format-line{font-size:0.76rem; color:var(--muted); padding-top:14px; border-top:1px solid var(--border); margin-top:auto;}
+
+.btn{
+  margin-top:16px; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  background:var(--ink); color:#fff; font-weight:700; font-size:0.84rem; padding:13px 18px;
+  border-radius:10px; border:none; cursor:pointer;
+  transition:opacity .15s ease, transform .15s ease, background .15s ease; width:100%;
+}
+.btn:hover{opacity:0.88; transform:translateY(-1px);}
+.btn.ghost{background:transparent; color:var(--ink); border:1px solid var(--border);}
+.btn.ghost:hover{border-color:var(--ink);}
+.btn.selected{background:var(--accent); color:#fff;}
+.btn.ghost.selected{background:var(--accent-soft); color:var(--accent); border-color:#CFE4D8;}
+
+.subtopics{display:grid; grid-template-columns:1fr; gap:12px; margin:16px 0 18px;}
+@media (min-width:640px){.subtopics{grid-template-columns:1fr 1fr 1fr;}}
+.subtopic{background:var(--surface-soft); border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px;}
+.subtopic .st-num{font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--accent); margin-bottom:6px;}
+.subtopic h4{margin:0 0 8px; font-size:0.92rem; font-weight:700;}
+.subtopic ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:5px;}
+.subtopic ul li{font-size:0.78rem; color:var(--ink-soft); padding-left:13px; position:relative;}
+.subtopic ul li::before{content:'—'; position:absolute; left:0; color:var(--muted);}
+
+.basic-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:28px; box-shadow:var(--shadow);}
+.basic-top{display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:16px; padding-bottom:20px; border-bottom:1px solid var(--border); margin-bottom:20px;}
+.basic-top .price{font-size:2rem;}
+.variants{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:22px;}
+@media (max-width:520px){.variants{grid-template-columns:1fr;}}
+.variant{background:var(--accent-soft); border:1px solid #CFE4D8; border-radius:10px; padding:14px; text-align:center;}
+.variant .v-label{font-family:'JetBrains Mono',monospace; font-size:0.64rem; color:var(--accent); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:5px;}
+.variant .v-value{font-weight:700; font-size:0.88rem;}
+
+.blocks{display:grid; grid-template-columns:1fr; gap:12px; margin-bottom:20px;}
+@media (min-width:640px){.blocks{grid-template-columns:1fr 1fr;}}
+.block{border:1px solid var(--border); border-radius:var(--radius-sm); padding:16px;}
+.block .b-title{display:flex; align-items:center; gap:8px; font-weight:700; font-size:0.86rem; margin-bottom:9px;}
+.block .b-num{font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:#fff; background:var(--accent); width:20px; height:20px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+.block ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:5px;}
+.block ul li{font-size:0.78rem; color:var(--ink-soft); padding-left:13px; position:relative;}
+.block ul li::before{content:'—'; position:absolute; left:0; color:var(--muted);}
+.quote{font-style:italic; font-weight:600; font-size:0.96rem; border-left:3px solid var(--accent); padding:4px 0 4px 16px; color:var(--ink);}
+
+.tier-card{background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:24px; box-shadow:var(--shadow); margin-bottom:14px;}
+.tier-card.optimal{border-color:#C7CEDD;}
+.tier-card.maximal{border-color:#E3D2A6;}
+.tier-head{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:12px;}
+.tier-head h3{margin:0; font-size:1.1rem; font-weight:800;}
+.rate-row{display:flex; gap:18px; flex-wrap:wrap; margin-bottom:16px;}
+.rate{background:var(--surface-soft); border-radius:10px; padding:10px 14px; flex:1; min-width:130px;}
+.rate .r-label{font-family:'JetBrains Mono',monospace; font-size:0.6rem; text-transform:uppercase; letter-spacing:0.08em; color:var(--muted); margin-bottom:4px;}
+.rate .r-value{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:1rem;}
+.rate.save .r-value{color:var(--accent);}
+
+.packages{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:16px 0;}
+@media (max-width:560px){.packages{grid-template-columns:1fr;}}
+.package{border:1px solid var(--border); border-radius:10px; padding:14px; text-align:center; display:flex; flex-direction:column; gap:8px;}
+.package .p-period{font-size:0.74rem; color:var(--ink-soft);}
+.package .p-price{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:1.02rem;}
+.package .btn{margin-top:2px; padding:9px 10px; font-size:0.74rem;}
+
+.savings-note{font-size:0.78rem; color:var(--accent); background:var(--accent-soft); border-radius:8px; padding:9px 12px; margin-top:4px;}
+
+.complex-hero{background:var(--ink); color:#fff; border-radius:var(--radius); padding:36px 26px; position:relative; overflow:hidden;}
+.complex-hero::before{content:''; position:absolute; inset:0; background:radial-gradient(600px 260px at 85% -10%, rgba(14,107,76,0.35), transparent 70%); pointer-events:none;}
+.complex-hero .c-inner{position:relative; z-index:1;}
+.complex-hero .c-eyebrow{font-family:'JetBrains Mono',monospace; font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase; color:#8FD9B7; margin-bottom:14px;}
+.complex-hero h3{font-size:clamp(1.3rem,4vw,1.9rem); font-weight:800; margin:0 0 10px; letter-spacing:-0.02em;}
+.complex-hero .c-sub{color:#C7CCC4; font-size:0.92rem; margin:0 0 22px; max-width:520px;}
+.complex-price-row{display:flex; gap:24px; flex-wrap:wrap; margin-bottom:22px; border-top:1px solid rgba(255,255,255,0.14); border-bottom:1px solid rgba(255,255,255,0.14); padding:18px 0;}
+.complex-price-row div{flex:1; min-width:160px;}
+.complex-price-row .c-label{font-family:'JetBrains Mono',monospace; font-size:0.64rem; text-transform:uppercase; letter-spacing:0.08em; color:#8FD9B7; margin-bottom:6px;}
+.complex-price-row .c-value{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:1.5rem;}
+.complex-positioning{font-style:italic; font-weight:600; font-size:1rem; color:#EDEFEC; border-left:3px solid #8FD9B7; padding-left:16px; margin-bottom:24px;}
+.complex-cols{display:grid; grid-template-columns:1fr; gap:16px;}
+@media (min-width:640px){.complex-cols{grid-template-columns:1fr 1fr;}}
+.complex-col .cc-title{font-family:'JetBrains Mono',monospace; font-size:0.64rem; letter-spacing:0.1em; text-transform:uppercase; color:#8FD9B7; margin-bottom:10px;}
+.complex-col ul{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:7px;}
+.complex-col ul li{font-size:0.84rem; color:#DEE1DA; padding-left:17px; position:relative;}
+.complex-col ul li::before{content:'→'; position:absolute; left:0; color:#8FD9B7;}
+.complex-footnote{margin-top:24px; font-size:0.76rem; color:#A7ACA2;}
+.complex-hero .btn{margin-top:24px; background:#fff; color:var(--ink); width:auto; padding:14px 26px;}
+.complex-hero .btn.selected{background:#8FD9B7; color:var(--ink);}
+
+.updated-note{text-align:center; font-family:'JetBrains Mono',monospace; font-size:0.68rem; color:var(--muted); margin-top:60px; padding-top:24px; border-top:1px solid var(--border);}
+
+/* ---------- Cart bar ---------- */
+.cart-bar{
+  position:fixed; left:0; right:0; bottom:0; z-index:200;
+  background:var(--ink); color:#fff;
+  box-shadow:0 -8px 24px rgba(0,0,0,0.18);
+  transform:translateY(100%);
+  transition:transform .25s ease;
+}
+.cart-bar.visible{transform:translateY(0);}
+.cart-bar-inner{
+  max-width:920px; margin:0 auto; padding:13px 20px;
+  display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+}
+.cart-bar-text{font-size:0.84rem;}
+.cart-bar-text strong{font-family:'JetBrains Mono',monospace; color:#8FD9B7;}
+.cart-bar-actions{display:flex; gap:8px;}
+.btn-small{
+  font-family:inherit; font-weight:700; font-size:0.78rem; padding:9px 14px; border-radius:8px; cursor:pointer; border:1px solid transparent;
+  transition:opacity .15s ease;
+}
+.btn-small:hover{opacity:0.85;}
+.btn-small.primary{background:#fff; color:var(--ink);}
+.btn-small.ghost{background:transparent; color:#fff; border-color:rgba(255,255,255,0.35);}
+
+/* ---------- Cart modal ---------- */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(20,23,26,0.5); z-index:300;
+  display:flex; align-items:flex-end; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity .2s ease;
+}
+.modal-overlay.open{opacity:1; pointer-events:auto;}
+@media (min-width:640px){.modal-overlay{align-items:center;}}
+.modal{
+  background:var(--surface); width:100%; max-width:520px; max-height:85vh; overflow-y:auto;
+  border-radius:20px 20px 0 0; padding:24px; transform:translateY(24px); transition:transform .25s ease;
+}
+@media (min-width:640px){.modal{border-radius:20px;}}
+.modal-overlay.open .modal{transform:translateY(0);}
+.modal-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;}
+.modal-head h3{margin:0; font-size:1.1rem; font-weight:800;}
+.modal-close{background:var(--surface-soft); border:none; width:34px; height:34px; border-radius:50%; cursor:pointer; font-size:1rem; color:var(--ink);}
+.cart-list{list-style:none; margin:0 0 18px; padding:0; display:flex; flex-direction:column; gap:10px;}
+.cart-list li{
+  display:flex; align-items:center; justify-content:space-between; gap:10px;
+  border:1px solid var(--border); border-radius:10px; padding:12px 14px;
+}
+.cart-item-name{font-size:0.86rem; font-weight:600;}
+.cart-item-price{font-family:'JetBrains Mono',monospace; font-size:0.86rem; color:var(--accent); white-space:nowrap;}
+.cart-item-remove{
+  background:none; border:none; color:var(--muted); cursor:pointer; font-size:1rem; line-height:1; padding:4px 6px;
+}
+.cart-item-remove:hover{color:#C0392B;}
+.cart-empty{color:var(--ink-soft); font-size:0.86rem; text-align:center; padding:30px 0;}
+.cart-total-row{display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--border); padding-top:16px; margin-bottom:6px;}
+.cart-total-row span:first-child{font-weight:700; font-size:0.94rem;}
+.cart-total-row span:last-child{font-family:'JetBrains Mono',monospace; font-weight:700; font-size:1.2rem;}
+
+/* ---------- Anketa (questionnaire) ---------- */
+.anketa-toggle{
+  display:flex; align-items:center; justify-content:space-between; width:100%;
+  background:var(--surface-soft); border:1px solid var(--border); border-radius:10px;
+  padding:12px 14px; margin:16px 0; cursor:pointer; font-weight:700; font-size:0.84rem; color:var(--ink);
+}
+.anketa-toggle .chev{transition:transform .2s ease; color:var(--muted);}
+.anketa-toggle[aria-expanded="true"] .chev{transform:rotate(180deg);}
+.anketa-body{display:none; margin-bottom:16px;}
+.anketa-body.open{display:block;}
+.anketa-hint{font-size:0.78rem; color:var(--ink-soft); margin:0 0 14px; line-height:1.6;}
+.field-group{margin-bottom:14px;}
+.field-label{display:block; font-family:'JetBrains Mono',monospace; font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-bottom:7px;}
+.field-input{
+  width:100%; border:1px solid var(--border); border-radius:9px; padding:11px 12px;
+  font-family:inherit; font-size:16px; color:var(--ink); background:var(--surface);
+  margin-bottom:8px;
+}
+.field-input:focus-visible{outline:2px solid var(--accent); outline-offset:1px;}
+.field-input::placeholder{color:var(--muted);}
+.field-add{
+  background:none; border:1px dashed var(--border); color:var(--accent); font-weight:700; font-size:0.78rem;
+  padding:9px 12px; border-radius:9px; cursor:pointer; width:100%; margin-bottom:4px;
+}
+.field-add:hover{border-color:var(--accent);}
+.tiktok-row{display:flex; gap:8px; align-items:center;}
+.tiktok-row .field-input{margin-bottom:8px;}
+.tiktok-remove{
+  background:none; border:none; color:var(--muted); cursor:pointer; font-size:1rem; padding:4px 6px; margin-bottom:8px; flex-shrink:0;
+}
+.tiktok-remove:hover{color:#C0392B;}
+.copy-feedback{font-size:0.76rem; color:var(--accent); text-align:center; min-height:18px; margin-top:8px;}
+</style>
+</head>
+<body>
+
+<a href="#main-content" class="skip-link">Перейти до вмісту</a>
+
+<header class="hero">
+  <span class="eyebrow"><span class="dot"></span>Актуальні формати роботи</span>
+  <h1>VASIL VEO <em>&</em> команда</h1>
+  <p class="lede">Індивідуальна робота з підприємцями, брендами та командами, які хочуть системно будувати присутність, продажі та бізнес-процеси в TikTok — і бути готовими до розвитку платформи та її майбутнього інструментарію.</p>
+</header>
+
+<nav class="tabs-wrap" aria-label="Розділи прайсу">
+  <div class="tabs" id="tabs">
+    <button class="tab" data-target="lectures" id="tab-lectures" type="button">Лекції</button>
+    <button class="tab" data-target="consultations" id="tab-consultations" type="button">Консультації</button>
+    <button class="tab" data-target="support" id="tab-support" type="button">Супровід</button>
+    <button class="tab" data-target="services" id="tab-services" type="button">Послуги</button>
+    <button class="tab" data-target="complex" id="tab-complex" type="button">Комплекс</button>
+  </div>
+</nav>
+
+<main id="main-content">
+
+  <!-- ===================== ЛЕКЦІЇ ===================== -->
+  <section class="section" id="lectures">
+    <div class="section-head">
+      <h2>Лекції</h2>
+      <p>Авторські матеріали для самостійного опрацювання — концептуальні розбори специфіки TikTok</p>
+    </div>
+
+    <div class="grid cols-2">
+      <article class="card">
+        <div class="card-top"><span class="card-name">Логіка TikTok vs Інші платформи</span></div>
+        <div class="price-row"><span class="price">400 <span class="price-unit">грн</span></span></div>
+        <p class="desc">Чому контент з Instagram, Likee та YouTube тут не працює. Глибокий розбір філософії та алгоритмів TikTok. Чому сліпе копіювання красивої картинки з Instagram чи довгих форматів з YouTube завалює охоплення. Як перебудувати мислення та створювати контент у питомому стилі TikTok.</p>
+        <button class="btn ghost" type="button" data-cart-name="Лекція «Логіка TikTok vs Інші платформи»" data-cart-price="400">Обрати</button>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="card-name">Жорстка модерація та ШІ TikTok</span></div>
+        <div class="price-row"><span class="price">500 <span class="price-unit">грн</span></span></div>
+        <p class="desc">Як працювати за правилами платформи без банів. Аналіз роботи нейромереж та штучного інтелекту, які оцінюють контент. Технічні та смислові вимоги платформи, підводні камені автоматичної модерації, запобігання тіньовим банам і правильна верифікація бізнес-акаунта.</p>
+        <button class="btn ghost" type="button" data-cart-name="Лекція «Жорстка модерація та ШІ TikTok»" data-cart-price="500">Обрати</button>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="card-name">Бізнес-продакшн vs Блогерство</span></div>
+        <div class="price-row"><span class="price">700 <span class="price-unit">грн</span></span></div>
+        <p class="desc">Фундаментальна різниця підходів для продажів. Чому мільйонні охоплення блогерів не гарантують касу бізнесу. Різниця між контентом на емоції/впізнаваність та контентом, що конвертує в чек. Як побудувати системний бізнес-продакшн, орієнтований на ліди та прибуток.</p>
+        <button class="btn ghost" type="button" data-cart-name="Лекція «Бізнес-продакшн vs Блогерство»" data-cart-price="700">Обрати</button>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="card-name">Технічний інструментарій TikTok</span></div>
+        <div class="price-row"><span class="price">800 <span class="price-unit">грн</span></span></div>
+        <p class="desc">Як змусити наявні функції працювати на ваш бізнес. Повний розбір внутрішніх інструментів платформи. Як влаштований сучасний інструментарій, які механіки залучення працюють зараз і як правильно застосовувати актуальні зв'язки для просування.</p>
+        <button class="btn ghost" type="button" data-cart-name="Лекція «Технічний інструментарій TikTok»" data-cart-price="800">Обрати</button>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="card-name">Ефективні зв'язки в TikTok</span></div>
+        <div class="price-row"><span class="price">1 000 <span class="price-unit">грн</span></span></div>
+        <p class="desc">Від першого перегляду до автоматизованої покупки. Практичний розбір робочих зв'язок: як шлях користувача від перегляду ролику конвертується у заявку, роботу CRM та продаж. Автоматизація воронки та обробка лідів.</p>
+        <button class="btn ghost" type="button" data-cart-name="Лекція «Ефективні зв'язки в TikTok»" data-cart-price="1000">Обрати</button>
+      </article>
+
+      <article class="card featured-lecture">
+        <div class="card-top">
+          <span class="card-name">Академія VASIL VEO</span>
+          <span class="badge bundle">Вигідно</span>
+        </div>
+        <div class="price-row">
+          <span class="price-old">3 400 грн</span>
+          <span class="price">2 500 <span class="price-unit">грн</span></span>
+        </div>
+        <p class="desc">Всі матеріали та лекції в одному пакеті. Повний комплекс із усіх 5 матеріалів (Лекції 1–5). Фундаментальна база знань для підприємця та команди, яка закриває всі питання: від алгоритмів і ШІ-модерації до бізнес-продакшну та автоматизації продажів.</p>
+        <button class="btn" type="button" data-cart-name="Академія VASIL VEO (усі 5 лекцій)" data-cart-price="2500">Обрати</button>
+      </article>
+    </div>
+  </section>
+
+
+  <!-- ===================== КОНСУЛЬТАЦІЇ ===================== -->
+  <section class="section" id="consultations">
+    <div class="section-head">
+      <h2>Консультації</h2>
+      <p>Індивідуальна робота з конкретною задачею — від швидкого питання до глибокого занурення в бізнес-логіку TikTok</p>
+    </div>
+
+    <div class="info-box">
+      <div class="info-title">Усі консультації проводяться у форматі індивідуального аудіодзвінка в Telegram</div>
+      <p>Під час консультації робота відбувається одночасно в аудіодзвінку та в чаті Telegram. Клієнт слухає консультацію в аудіоформаті, а паралельно дивиться матеріали та рекомендації в Telegram-чаті.</p>
+      <p>У чаті використовуються:</p>
+      <div class="chips">
+        <span>скріншоти</span><span>текст</span><span>посилання</span><span>відео</span>
+        <span>аналіз TikTok-профілю</span><span>аналіз контенту</span><span>аналіз коментарів</span>
+        <span>інші матеріали під конкретну консультацію</span>
+      </div>
+    </div>
+
+    <article class="card" style="margin-bottom:14px;">
+      <div class="card-top"><span class="card-name">Бліц</span></div>
+      <div class="price-row"><span class="price">2 500 <span class="price-unit">грн</span></span></div>
+      <span class="duration">45 хвилин</span>
+      <p class="positioning">Швидко розібратися в конкретній ситуації та отримати чіткий напрямок дій.</p>
+      <p class="desc">Для підприємців, яким потрібно поставити питання та отримати лаконічні, конкретні відповіді без глибокого занурення в усі аспекти бізнесу.</p>
+      <div class="includes-label">Можна</div>
+      <ul>
+        <li>поставити декілька конкретних питань</li>
+        <li>отримати швидкий аналіз ситуації</li>
+        <li>отримати рекомендації щодо наступних кроків</li>
+      </ul>
+      <div class="note"><strong>Важлива особливість:</strong> одне питання за бажанням можна розібрати глибоко — з аргументацією, структурою та причинно-наслідковими зв'язками. У такому випадку на інші питання часу може залишитися менше.</div>
+      <div class="includes-label">Для кого</div>
+      <ul>
+        <li>ознайомлення з підходом VASIL VEO</li>
+        <li>перше знайомство з бізнесом</li>
+        <li>швидкий зріз ситуації</li>
+        <li>актуальні питання</li>
+        <li>уточнення після проходження більшої консультації</li>
+      </ul>
+      <div class="format-line">Формат: Telegram аудіодзвінок + робота в чаті</div>
+      <button class="btn" type="button" data-cart-name="Бліц" data-cart-price="2500">Обрати</button>
+    </article>
+
+    <article class="card" style="margin-bottom:14px;">
+      <div class="card-top"><span class="card-name">Експрес</span></div>
+      <div class="price-row"><span class="price">8 000 <span class="price-unit">грн</span></span></div>
+      <span class="duration">2 години</span>
+      <p class="positioning">Глибокий розбір одного конкретного напряму.</p>
+
+      <div class="subtopics">
+        <div class="subtopic">
+          <div class="st-num">Тема 1</div>
+          <h4>Стратегічний напрям</h4>
+          <ul>
+            <li>куди рухається TikTok</li>
+            <li>як змінюється платформа</li>
+            <li>як TikTok заробляє</li>
+            <li>чому платформа зацікавлена в розвитку комерційного контенту</li>
+            <li>яке місце бізнес може зайняти в екосистемі TikTok</li>
+            <li>як адаптувати стратегію бізнесу до майбутніх змін</li>
+          </ul>
+        </div>
+        <div class="subtopic">
+          <div class="st-num">Тема 2</div>
+          <h4>Профіль → клієнт → покупка</h4>
+          <ul>
+            <li>шлях користувача</li>
+            <li>психологію переходу від контенту до покупки</li>
+            <li>структуру профілю</li>
+            <li>точки втрати потенційного клієнта</li>
+            <li>конверсію</li>
+            <li>оптимізацію шляху клієнта</li>
+          </ul>
+        </div>
+        <div class="subtopic">
+          <div class="st-num">Тема 3</div>
+          <h4>Контент та правила</h4>
+          <ul>
+            <li>який контент створювати</li>
+            <li>які формати можуть бути ризикованими</li>
+            <li>правила платформи</li>
+            <li>як правильно оформлювати контент</li>
+            <li>як зменшити ризик порушень</li>
+            <li>як адаптувати контент під правила TikTok</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="note">До консультації входять навчальні / текстові матеріали.</div>
+      <div class="format-line">Формат: Telegram аудіодзвінок + робота в чаті</div>
+      <button class="btn" type="button" data-cart-name="Експрес" data-cart-price="8000">Обрати</button>
+    </article>
+
+    <article class="card" style="margin-bottom:14px;">
+      <div class="card-top"><span class="card-name">Оптимальний</span></div>
+      <div class="price-row"><span class="price">14 000 <span class="price-unit">грн</span></span></div>
+      <span class="duration">3–4 години</span>
+      <p class="positioning">Комплексна консультація на стику стратегії, контенту й техніки.</p>
+      <div class="includes-label">Що входить</div>
+      <ul>
+        <li>стратегія</li>
+        <li>контент-система</li>
+        <li>технічна база акаунта</li>
+      </ul>
+      <div class="format-line">Формат: Telegram аудіодзвінок + робота в чаті</div>
+      <button class="btn" type="button" data-cart-name="Оптимальний" data-cart-price="14000">Обрати</button>
+    </article>
+
+    <div class="basic-card">
+      <div class="basic-top">
+        <div>
+          <span class="card-name">Базовий (Преміум-інтенсив)</span>
+          <p class="positioning" style="margin-top:10px;">Не просто серія консультацій. Це системне занурення в логіку TikTok та побудову бізнес-моделі всередині платформи.</p>
+        </div>
+        <div class="price-row"><span class="price">22 000 <span class="price-unit">грн</span></span></div>
+      </div>
+      <span class="duration" style="margin-bottom:20px;">6 годин</span>
+
+      <div class="includes-label">Два варіанти проходження</div>
+      <div class="variants">
+        <div class="variant">
+          <div class="v-label">Варіант А</div>
+          <div class="v-value">2 консультації × 3 години</div>
+        </div>
+        <div class="variant">
+          <div class="v-label">Варіант Б</div>
+          <div class="v-value">3 консультації × 2 години</div>
+        </div>
+      </div>
+      <p class="desc" style="margin-top:-10px;">Клієнт сам обирає формат залежно від того, як йому зручніше працювати з великим обсягом інформації.</p>
+
+      <div class="includes-label">Занурювальні блоки</div>
+      <div class="blocks">
+        <div class="block"><div class="b-title"><span class="b-num">1</span>Бізнес у TikTok</div></div>
+        <div class="block"><div class="b-title"><span class="b-num">2</span>Психологія покупця</div></div>
+        <div class="block"><div class="b-title"><span class="b-num">3</span>Алгоритми</div></div>
+        <div class="block"><div class="b-title"><span class="b-num">4</span>Конверсії</div></div>
+        <div class="block"><div class="b-title"><span class="b-num">5</span>CRM</div></div>
+        <div class="block"><div class="b-title"><span class="b-num">6</span>Автоматизація</div></div>
+        <div class="block"><div class="b-title"><span class="b-num">7</span>Персональні навчальні матеріали</div></div>
+      </div>
+
+      <p class="quote">Базовий — це не просто серія консультацій. Це системне занурення в логіку TikTok та побудову бізнес-моделі всередині платформи.</p>
+      <button class="btn" type="button" style="max-width:280px; margin-top:20px;" data-cart-name="Базовий" data-cart-price="22000">Додати до замовлення</button>
+    </div>
+  </section>
+
+  <!-- ===================== СУПРОВІД ===================== -->
+  <section class="section" id="support">
+    <div class="section-head">
+      <h2>Супровід</h2>
+      <p>Постійна підтримка на обраний період — три рівні залучення команди та VASIL VEO</p>
+    </div>
+
+    <div class="tier-card">
+      <div class="tier-head"><h3>Командний супровід</h3></div>
+      <div class="rate-row">
+        <div class="rate"><div class="r-label">Базова ставка</div><div class="r-value">500 грн / день</div></div>
+      </div>
+      <p class="desc">Команда відповідає в Telegram-чаті текстовими повідомленнями.</p>
+      <div class="includes-label">Допомога</div>
+      <ul>
+        <li>поточні питання</li>
+        <li>рекомендації</li>
+        <li>орієнтація щодо наступних дій</li>
+        <li>перевірка інформації</li>
+        <li>допомога з реалізацією</li>
+        <li>підтримка під час впровадження</li>
+      </ul>
+      <div class="includes-label">Пакети</div>
+      <div class="packages">
+        <div class="package"><div class="p-period">1 тиждень</div><div class="p-price">3 500 грн</div><button class="btn ghost" type="button" data-cart-name="Командний супровід — 1 тиждень" data-cart-price="3500">Обрати</button></div>
+        <div class="package"><div class="p-period">1 місяць</div><div class="p-price">15 000 грн</div><button class="btn ghost" type="button" data-cart-name="Командний супровід — 1 місяць" data-cart-price="15000">Обрати</button></div>
+        <div class="package"><div class="p-period">2 місяці</div><div class="p-price">28 500 грн</div><button class="btn ghost" type="button" data-cart-name="Командний супровід — 2 місяці" data-cart-price="28500">Обрати</button></div>
+      </div>
+      <div class="savings-note">2 місяці — додатково -5% від щомісячної ставки.</div>
+    </div>
+
+    <div class="tier-card optimal">
+      <div class="tier-head"><h3>Оптимальний супровід</h3><span class="badge optimal">Оптимальний</span></div>
+      <div class="rate-row">
+        <div class="rate"><div class="r-label">Базова ставка</div><div class="r-value">1 000 грн / день</div></div>
+        <div class="rate save"><div class="r-label">Пакетна ставка</div><div class="r-value">900 грн / день</div></div>
+      </div>
+      <p class="desc">Рівень, де до команди підключається VASIL VEO.</p>
+      <div class="includes-label">Входить</div>
+      <ul>
+        <li>текстова підтримка команди</li>
+        <li>відповіді VASIL VEO</li>
+        <li>голосові повідомлення від VASIL VEO</li>
+        <li>розбір складніших ситуацій</li>
+        <li>допомога з прийняттям рішень</li>
+        <li>рекомендації щодо впровадження</li>
+      </ul>
+      <div class="includes-label">Пакети</div>
+      <div class="packages">
+        <div class="package"><div class="p-period">1 тиждень</div><div class="p-price">6 300 грн</div><button class="btn ghost" type="button" data-cart-name="Оптимальний супровід — 1 тиждень" data-cart-price="6300">Обрати</button></div>
+        <div class="package"><div class="p-period">1 місяць</div><div class="p-price">27 000 грн</div><button class="btn ghost" type="button" data-cart-name="Оптимальний супровід — 1 місяць" data-cart-price="27000">Обрати</button></div>
+        <div class="package"><div class="p-period">2 місяці</div><div class="p-price">51 300 грн</div><button class="btn ghost" type="button" data-cart-name="Оптимальний супровід — 2 місяці" data-cart-price="51300">Обрати</button></div>
+      </div>
+      <div class="savings-note">Пакетна ставка нижча за базову щоденну ставку; 2 місяці — додатково -5%.</div>
+    </div>
+
+    <div class="tier-card maximal">
+      <div class="tier-head"><h3>Максимальний супровід</h3><span class="badge maximal">Максимальний</span></div>
+      <div class="rate-row">
+        <div class="rate"><div class="r-label">Базова ставка</div><div class="r-value">1 500 грн / день</div></div>
+        <div class="rate save"><div class="r-label">Пакетна ставка</div><div class="r-value">1 125 грн / день</div></div>
+      </div>
+      <p class="desc">Найвищий рівень супроводу.</p>
+      <div class="includes-label">Входить</div>
+      <ul>
+        <li>текстова підтримка команди</li>
+        <li>VASIL VEO підключається до роботи</li>
+        <li>голосові відповіді VASIL VEO</li>
+        <li>розбір складних ситуацій</li>
+        <li>оперативна допомога</li>
+        <li>прийняття стратегічних рішень</li>
+        <li>протягом тижня можливі 1–3 короткі зідзвони (≈15–30 хв кожен)</li>
+      </ul>
+      <div class="includes-label">Пакети</div>
+      <div class="packages">
+        <div class="package"><div class="p-period">1 тиждень</div><div class="p-price">7 875 грн</div><button class="btn ghost" type="button" data-cart-name="Максимальний супровід — 1 тиждень" data-cart-price="7875">Обрати</button></div>
+        <div class="package"><div class="p-period">1 місяць</div><div class="p-price">33 750 грн</div><button class="btn ghost" type="button" data-cart-name="Максимальний супровід — 1 місяць" data-cart-price="33750">Обрати</button></div>
+        <div class="package"><div class="p-period">2 місяці</div><div class="p-price">64 000 грн</div><button class="btn ghost" type="button" data-cart-name="Максимальний супровід — 2 місяці" data-cart-price="64000">Обрати</button></div>
+      </div>
+      <div class="savings-note">Пакетна ставка нижча за базову щоденну ставку; 2 місяці — додатково -5%.</div>
+    </div>
+  </section>
+
+  <!-- ===================== ПОСЛУГИ ===================== -->
+  <section class="section" id="services">
+    <div class="section-head">
+      <h2>Послуги</h2>
+      <p>Точкові роботи — аудити, технічна допомога та виїзні сесії</p>
+    </div>
+
+    <div class="grid">
+      <article class="card">
+        <div class="card-top"><span class="card-name">Аудит акаунта</span></div>
+        <div class="price-row"><span class="price">3 000 <span class="price-unit">грн</span></span></div>
+        <p class="desc">Аналізується весь профіль: ім'я, аватар, опис, позиціонування, структура профілю, закріплені відео, вкладки, шлях користувача, шлях клієнта, логіка переходу до цільової дії.</p>
+        <div class="includes-label">Що входить</div>
+        <ul>
+          <li>рекомендації з поясненням, чому саме ця зміна необхідна конкретному бізнесу, ніші та типу контенту</li>
+          <li>конкретні точки покращення</li>
+          <li>практичний напрямок подальших дій</li>
+        </ul>
+        <div class="note">Рекомендації можуть бути впроваджені повністю або частково.</div>
+        <div class="format-line">Результат: скріншоти, текстові та голосові повідомлення — у Telegram-чаті</div>
+        <button class="btn ghost" type="button" data-cart-name="Аудит акаунта" data-cart-price="3000">Додати до замовлення</button>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="card-name">Аудит контенту</span></div>
+        <div class="price-row"><span class="price">5 000 <span class="price-unit">грн</span></span></div>
+        <p class="desc">Аналізуємо сильні сторони автора, стиль подачі, комунікацію, відповіді на коментарі, аудиторію, коментарі, подачу матеріалу, кадри, формат зйомки, найбільш органічний формат відео, кількість відео на день, залученість, перспективні та ризиковані формати.</p>
+        <div class="quote" style="margin-bottom:14px;">Що залишити → що посилити → що змінити → від чого відмовитися → на чому сфокусуватися.</div>
+        <div class="format-line">Результат: скріншоти, текстові та голосові повідомлення — у Telegram-чаті</div>
+        <button class="btn ghost" type="button" data-cart-name="Аудит контенту" data-cart-price="5000">Додати до замовлення</button>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="card-name">Комплексний аудит</span></div>
+        <div class="price-row"><span class="price">7 000 <span class="price-unit">грн</span></span></div>
+        <div class="includes-label">Включає</div>
+        <ul>
+          <li>аудит акаунта</li>
+          <li>аудит контенту</li>
+        </ul>
+        <div class="quote" style="margin-bottom:14px;">Профіль → контент → автор → аудиторія → взаємодія → шлях клієнта → конверсія.</div>
+        <p class="positioning">Цілісна картина TikTok-присутності бізнесу та основні точки росту.</p>
+        <button class="btn ghost" type="button" data-cart-name="Комплексний аудит" data-cart-price="7000">Додати до замовлення</button>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="card-name">Технічна допомога — команда</span></div>
+        <div class="price-row"><span class="price">2 000 <span class="price-unit">грн / год</span></span></div>
+        <div class="format-line" style="border-top:none; padding-top:0; margin-bottom:14px;">Формат: текстовий Telegram-чат із командою</div>
+        <div class="includes-label">Допомагаємо</div>
+        <ul>
+          <li>зареєструвати, налаштувати, підключити, додати</li>
+          <li>знайти потрібну функцію</li>
+          <li>пройти технічну послідовність</li>
+          <li>розібрати інтеграцію</li>
+          <li>працювати з токенами</li>
+          <li>зрозуміти технічні нюанси</li>
+          <li>знайти та усунути типові помилки</li>
+        </ul>
+        <div class="note">Головна цінність: економія часу та скорочення шляху від проблеми до працюючого рішення.</div>
+        <button class="btn ghost" type="button" data-cart-name="Технічна допомога — команда (1 год)" data-cart-price="2000">Додати до замовлення</button>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="card-name">Технічний супровід VASIL VEO</span></div>
+        <div class="price-row"><span class="price">6 000 <span class="price-unit">грн / год</span></span></div>
+        <div class="format-line" style="border-top:none; padding-top:0; margin-bottom:14px;">Формат: аудіодзвінок + Telegram-чат, скріншоти, текст, посилання, покрокові пояснення</div>
+        <p class="desc">VASIL VEO безпосередньо пояснює: що зробити, де це знайти, у якій послідовності, що натиснути, які дані потрібні, які можуть бути підводні камені, як уникнути типових помилок.</p>
+        <p class="positioning">Ви платите не за те, щоб вам показали кнопку. Ви платите за скорочення шляху від «не знаю, як це зробити» до «це вже працює».</p>
+        <button class="btn ghost" type="button" data-cart-name="Технічний супровід VASIL VEO (1 год)" data-cart-price="6000">Додати до замовлення</button>
+      </article>
+
+      <article class="card">
+        <div class="card-top"><span class="card-name">Виїзний спеціаліст</span></div>
+        <p class="desc">Спеціаліст команди приїжджає безпосередньо на об'єкт бізнесу: оглядає товар, аналізує його особливості, оглядає локацію, визначає можливості для зйомки, підбирає ракурси та кадри, визначає напрям контенту, підбирає практичний інструментарій, дає рекомендації на місці, проводить мікронавчання команди, якщо команда присутня.</p>
+        <div class="includes-label">Важливо</div>
+        <ul>
+          <li>спеціаліст працює на місці, а VASIL VEO паралельно залучений дистанційно</li>
+          <li>спеціаліст показує ситуацію, локацію та матеріали</li>
+          <li>VASIL VEO бере участь у прийнятті рішень та дає додаткові рекомендації</li>
+          <li>після виїзду — 2 тижні супроводу</li>
+        </ul>
+        <div class="note">Трансфер оплачується додатково та розраховується окремо для обох тарифів. Можливість виїзду залежить від локації спеціаліста, календаря, завантаження команди та попереднього планування.</div>
+
+        <div class="includes-label">Тарифи</div>
+        <div class="packages" style="grid-template-columns:1fr 1fr;">
+          <div class="package">
+            <div class="p-period">Стандарт<br>5 год очної/виїзної роботи + 2 тижні супроводу</div>
+            <div class="p-price">20 000 грн</div>
+            <button class="btn ghost" type="button" data-cart-name="Виїзний спеціаліст — Стандарт (5 год + 2 тижні супроводу)" data-cart-price="20000">Додати до замовлення</button>
+          </div>
+          <div class="package">
+            <div class="p-period">Преміум<br>6 год очної/виїзної роботи + 2 тижні супроводу</div>
+            <div class="p-price">25 000 грн</div>
+            <button class="btn ghost" type="button" data-cart-name="Виїзний спеціаліст — Преміум (6 год + 2 тижні супроводу)" data-cart-price="25000">Додати до замовлення</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ===================== КОМПЛЕКС ===================== -->
+  <section class="section" id="complex">
+    <div class="section-head">
+      <h2>Комплекс</h2>
+      <p>Для бізнесу, якому потрібна не окрема консультація, а системна побудова TikTok-напряму</p>
+    </div>
+
+    <div class="complex-hero">
+      <div class="c-inner">
+        <div class="c-eyebrow">Комплексна робота</div>
+        <h3>Запуск під ключ</h3>
+        <p class="c-sub">Комплексний супровід від стратегії до реалізації — для компаній, які хочуть побудувати систему роботи в TikTok, а не отримати лише разову консультацію.</p>
+
+        <div class="complex-price-row">
+          <div><div class="c-label">Вартість</div><div class="c-value">75 000–150 000 грн</div></div>
+          <div><div class="c-label">Мінімальний горизонт</div><div class="c-value">Від 3 місяців</div></div>
+        </div>
+
+        <div class="complex-cols">
+          <div class="complex-col">
+            <div class="cc-title">Стратегія та аналіз</div>
+            <ul>
+              <li>розробка архітектури бізнесу</li>
+              <li>аналіз та створення системи контенту</li>
+              <li>налаштування продажів та CRM</li>
+              <li>підготовка до TikTok Shop</li>
+            </ul>
+          </div>
+          <div class="complex-col">
+            <div class="cc-title">Супровід та реалізація</div>
+            <ul>
+              <li>супровід впровадження</li>
+              <li>автоматизація</li>
+              <li>пріоритетна підтримка</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="complex-footnote">Точний склад пакета формується індивідуально під бізнес.</p>
+        <button class="btn" type="button" data-cart-name="Запуск під ключ (від 75 000, точна вартість — за брифом)" data-cart-price="75000">Додати до замовлення</button>
+      </div>
+    </div>
+  </section>
+
+  <div class="updated-note">VASIL VEO — прайс на послуги</div>
+</main>
+
+<!-- ---------- Cart bar ---------- -->
+<div class="cart-bar" id="cartBar" aria-live="polite">
+  <div class="cart-bar-inner">
+    <div class="cart-bar-text">Ви обрали <strong id="cartCount">0</strong> позицій на <strong id="cartTotal">0</strong> грн</div>
+    <div class="cart-bar-actions">
+      <button class="btn-small ghost" id="cartCopyBtn" type="button">Скопіювати</button>
+      <button class="btn-small primary" id="cartDetailsBtn" type="button">Детальніше</button>
+    </div>
+  </div>
+</div>
+
+<!-- ---------- Cart modal ---------- -->
+<div class="modal-overlay" id="cartModal" role="dialog" aria-modal="true" aria-labelledby="cartModalTitle">
+  <div class="modal">
+    <div class="modal-head">
+      <h3 id="cartModalTitle">Ваше замовлення</h3>
+      <button class="modal-close" id="cartModalClose" type="button" aria-label="Закрити">✕</button>
+    </div>
+    <ul class="cart-list" id="cartList"></ul>
+    <div class="cart-total-row"><span>Разом</span><span id="cartModalTotal">0 грн</span></div>
+
+    <button class="anketa-toggle" id="anketaToggle" type="button" aria-expanded="false" aria-controls="anketaBody">
+      <span>Заповнити анкету для замовлення</span>
+      <span class="chev">▾</span>
+    </button>
+
+    <div class="anketa-body" id="anketaBody">
+      <p class="anketa-hint">Заповніть контактні дані — вони додадуться до тексту замовлення разом із клікабельними посиланнями.</p>
+
+      <div class="field-group">
+        <label class="field-label" for="tiktokField-0">Ваш TikTok-акаунт</label>
+        <div id="tiktokFields">
+          <div class="tiktok-row">
+            <input class="field-input" id="tiktokField-0" type="text" placeholder="@username або посилання на профіль">
+          </div>
+        </div>
+        <button class="field-add" id="addTiktokField" type="button">+ Додати ще акаунт</button>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="telegramField">Ваш Telegram-канал</label>
+        <input class="field-input" id="telegramField" type="text" placeholder="@channel або посилання">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="viberField">Ваша Viber-спільнота</label>
+        <input class="field-input" id="viberField" type="text" placeholder="Посилання на спільноту у Viber">
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="websiteField">Ваш сайт</label>
+        <input class="field-input" id="websiteField" type="text" placeholder="Посилання на сайт">
+      </div>
+    </div>
+
+    <button class="btn" id="cartCopyFull" type="button">Скопіювати замовлення</button>
+    <div class="copy-feedback" id="copyFeedback"></div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ---------- Scrollspy nav ---------- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var sections = Array.prototype.slice.call(document.querySelectorAll('.section'));
+
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      var target = document.getElementById(tab.dataset.target);
+      if(target){ target.scrollIntoView({behavior:'smooth', block:'start'}); }
+    });
+  });
+
+  function setActiveTab(id){
+    tabs.forEach(function(t){
+      t.setAttribute('aria-current', t.dataset.target === id ? 'true' : 'false');
+    });
+  }
+
+  if('IntersectionObserver' in window){
+    var observer = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){ setActiveTab(entry.target.id); }
+      });
+    }, {rootMargin:'-45% 0px -50% 0px', threshold:0});
+    sections.forEach(function(s){ observer.observe(s); });
+  }
+  if(tabs[0]){ setActiveTab(tabs[0].dataset.target); }
+
+  /* ---------- Cart ---------- */
+  var cart = {};
+  var cartBar = document.getElementById('cartBar');
+  var cartCount = document.getElementById('cartCount');
+  var cartTotal = document.getElementById('cartTotal');
+  var cartList = document.getElementById('cartList');
+  var cartModalTotal = document.getElementById('cartModalTotal');
+  var cartModal = document.getElementById('cartModal');
+  var body = document.body;
+
+  function formatMoney(n){
+    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+  }
+
+  function renderBar(){
+    var ids = Object.keys(cart);
+    var count = ids.length;
+    var total = 0;
+    ids.forEach(function(id){ total += cart[id].price; });
+    cartCount.textContent = count;
+    cartTotal.textContent = formatMoney(total);
+    if(count > 0){
+      cartBar.classList.add('visible');
+      body.classList.add('has-cart');
+    } else {
+      cartBar.classList.remove('visible');
+      body.classList.remove('has-cart');
+    }
+  }
+
+  function renderModal(){
+    var ids = Object.keys(cart);
+    cartList.innerHTML = '';
+    var total = 0;
+    if(ids.length === 0){
+      var empty = document.createElement('li');
+      empty.className = 'cart-empty';
+      empty.textContent = 'Кошик порожній. Оберіть послуги на сторінці.';
+      cartList.appendChild(empty);
+    } else {
+      ids.forEach(function(id){
+        var item = cart[id];
+        total += item.price;
+        var li = document.createElement('li');
+
+        var nameSpan = document.createElement('span');
+        nameSpan.className = 'cart-item-name';
+        nameSpan.textContent = item.name;
+
+        var priceSpan = document.createElement('span');
+        priceSpan.className = 'cart-item-price';
+        priceSpan.textContent = formatMoney(item.price) + ' грн';
+
+        var removeBtn = document.createElement('button');
+        removeBtn.className = 'cart-item-remove';
+        removeBtn.type = 'button';
+        removeBtn.setAttribute('aria-label', 'Прибрати ' + item.name);
+        removeBtn.textContent = '✕';
+        removeBtn.addEventListener('click', function(){
+          removeFromCart(id);
+          renderModal();
+        });
+
+        li.appendChild(nameSpan);
+        li.appendChild(priceSpan);
+        li.appendChild(removeBtn);
+        cartList.appendChild(li);
+      });
+    }
+    cartModalTotal.textContent = formatMoney(total) + ' грн';
+  }
+
+  function addToCart(btn){
+    var id = btn.dataset.cartId;
+    cart[id] = {
+      name: btn.dataset.cartName,
+      price: parseInt(btn.dataset.cartPrice, 10) || 0
+    };
+    btn.classList.add('selected');
+    btn.textContent = '✓ Обрано';
+  }
+
+  function removeFromCartByBtn(btn){
+    var id = btn.dataset.cartId;
+    delete cart[id];
+    btn.classList.remove('selected');
+    btn.textContent = btn.dataset.originalLabel;
+  }
+
+  function removeFromCart(id){
+    delete cart[id];
+    var btn = document.querySelector('[data-cart-id="' + id + '"]');
+    if(btn){
+      btn.classList.remove('selected');
+      btn.textContent = btn.dataset.originalLabel;
+    }
+    renderBar();
+  }
+
+  var cartButtons = Array.prototype.slice.call(document.querySelectorAll('[data-cart-price]'));
+  cartButtons.forEach(function(btn, idx){
+    var id = 'item-' + idx;
+    btn.dataset.cartId = id;
+    btn.dataset.originalLabel = btn.textContent;
+    btn.addEventListener('click', function(){
+      if(cart[id]){
+        removeFromCartByBtn(btn);
+      } else {
+        addToCart(btn);
+      }
+      renderBar();
+    });
+  });
+
+  document.getElementById('cartDetailsBtn').addEventListener('click', function(){
+    renderModal();
+    cartModal.classList.add('open');
+  });
+  document.getElementById('cartModalClose').addEventListener('click', function(){
+    cartModal.classList.remove('open');
+  });
+  cartModal.addEventListener('click', function(e){
+    if(e.target === cartModal){ cartModal.classList.remove('open'); }
+  });
+
+  /* ---------- Anketa (questionnaire) ---------- */
+  var anketaToggle = document.getElementById('anketaToggle');
+  var anketaBody = document.getElementById('anketaBody');
+  anketaToggle.addEventListener('click', function(){
+    var isOpen = anketaBody.classList.toggle('open');
+    anketaToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  var tiktokFieldsWrap = document.getElementById('tiktokFields');
+  var tiktokIndex = 1;
+  document.getElementById('addTiktokField').addEventListener('click', function(){
+    var row = document.createElement('div');
+    row.className = 'tiktok-row';
+
+    var input = document.createElement('input');
+    input.className = 'field-input';
+    input.type = 'text';
+    input.id = 'tiktokField-' + tiktokIndex;
+    input.placeholder = '@username або посилання на профіль';
+
+    var removeBtn = document.createElement('button');
+    removeBtn.className = 'tiktok-remove';
+    removeBtn.type = 'button';
+    removeBtn.setAttribute('aria-label', 'Прибрати поле акаунта');
+    removeBtn.textContent = '✕';
+    removeBtn.addEventListener('click', function(){ row.remove(); });
+
+    row.appendChild(input);
+    row.appendChild(removeBtn);
+    tiktokFieldsWrap.appendChild(row);
+    tiktokIndex++;
+    input.focus();
+  });
+
+  function normalizeUrl(v){
+    v = (v || '').trim();
+    if(!v){ return ''; }
+    if(/^https?:\/\//i.test(v)){ return v; }
+    return 'https://' + v.replace(/^\/+/, '');
+  }
+  function tiktokUrl(v){
+    v = (v || '').trim();
+    if(!v){ return ''; }
+    if(/^https?:\/\//i.test(v)){ return v; }
+    return 'https://www.tiktok.com/@' + v.replace(/^@/, '');
+  }
+  function telegramUrl(v){
+    v = (v || '').trim();
+    if(!v){ return ''; }
+    if(/^https?:\/\//i.test(v)){ return v; }
+    return 'https://t.me/' + v.replace(/^@/, '');
+  }
+  function mdLink(label, url){
+    return '[' + label + '](' + url + ')';
+  }
+
+  function buildOrderText(){
+    var ids = Object.keys(cart);
+    var total = 0;
+    var lines = ['Замовлення VASIL VEO:', ''];
+    ids.forEach(function(id){
+      var item = cart[id];
+      total += item.price;
+      lines.push('— ' + item.name + ' — ' + formatMoney(item.price) + ' грн');
+    });
+    lines.push('');
+    lines.push('Разом: ' + formatMoney(total) + ' грн');
+
+    var tiktokInputs = Array.prototype.slice.call(document.querySelectorAll('#tiktokFields input'));
+    var tiktokValues = tiktokInputs.map(function(i){ return i.value.trim(); }).filter(Boolean);
+    var telegramVal = document.getElementById('telegramField').value.trim();
+    var viberVal = document.getElementById('viberField').value.trim();
+    var websiteVal = document.getElementById('websiteField').value.trim();
+
+    if(tiktokValues.length || telegramVal || viberVal || websiteVal){
+      lines.push('');
+      lines.push('Контакти клієнта:');
+      tiktokValues.forEach(function(v, i){
+        var label = tiktokValues.length > 1 ? 'TikTok ' + (i + 1) : 'TikTok';
+        lines.push(mdLink(label + ': ' + v, tiktokUrl(v)));
+      });
+      if(telegramVal){ lines.push(mdLink('Telegram-канал: ' + telegramVal, telegramUrl(telegramVal))); }
+      if(viberVal){ lines.push(mdLink('Viber-спільнота', normalizeUrl(viberVal))); }
+      if(websiteVal){ lines.push(mdLink('Сайт: ' + websiteVal, normalizeUrl(websiteVal))); }
+    }
+
+    return lines.join('\n');
+  }
+
+  function copyText(text, feedbackEl){
+    function ok(){ if(feedbackEl){ feedbackEl.textContent = 'Скопійовано ✓'; setTimeout(function(){ feedbackEl.textContent = ''; }, 2500); } }
+    function fail(){
+      try{
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.left = '-9999px';
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        ok();
+      } catch(err){
+        if(feedbackEl){ feedbackEl.textContent = 'Не вдалося скопіювати'; }
+      }
+    }
+    try{
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(ok).catch(fail);
+      } else {
+        fail();
+      }
+    } catch(err){
+      fail();
+    }
+  }
+
+  document.getElementById('cartCopyBtn').addEventListener('click', function(){
+    if(Object.keys(cart).length === 0){ return; }
+    copyText(buildOrderText(), null);
+    var original = this.textContent;
+    var self = this;
+    this.textContent = 'Скопійовано ✓';
+    setTimeout(function(){ self.textContent = original; }, 2000);
+  });
+
+  document.getElementById('cartCopyFull').addEventListener('click', function(){
+    copyText(buildOrderText(), document.getElementById('copyFeedback'));
+  });
+
+  renderBar();
+})();
+</script>
+
+</body>
+</html>
