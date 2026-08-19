@@ -5,17 +5,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>VASIL VEO — Прайс на послуги</title>
 <meta name="description" content="VASIL VEO та команда: лекції, консультації, супровід, послуги та комплексна робота для бізнесу в TikTok. Індивідуальний підхід, прозорі ціни, формати роботи.">
+<meta name="color-scheme" content="light only">
+<meta name="theme-color" content="#F6F7F5">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 :root{
+  color-scheme: light only;
   --bg:#F6F7F5;
   --surface:#FFFFFF;
   --surface-soft:#EFF1ED;
   --border:#E2E5DF;
   --ink:#14171A;
   --ink-soft:#565C58;
-  --muted:#8A9089;
+  --muted:#6B716A;
   --accent:#0E6B4C;
   --accent-soft:#E5F0EA;
   --navy:#1F2A44;
@@ -29,6 +32,11 @@
   --cart-bar-h:64px;
 }
 
+html{
+  color-scheme: light only;
+  background-color:#F6F7F5;
+}
+
 *,*::before,*::after{box-sizing:border-box;}
 
 html{scroll-behavior:smooth;}
@@ -39,6 +47,7 @@ html{scroll-behavior:smooth;}
 
 body{
   margin:0;
+  background-color:#F6F7F5;
   background:var(--bg);
   color:var(--ink);
   font-family:'Montserrat',sans-serif;
@@ -66,7 +75,7 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
 }
 
 /* ---------- Header ---------- */
-.hero{padding:56px 20px 28px; max-width:920px; margin:0 auto;}
+.hero{background-color:#F6F7F5; padding:56px 20px 28px; max-width:920px; margin:0 auto;}
 .eyebrow{
   display:inline-flex; align-items:center; gap:8px;
   font-family:'JetBrains Mono',monospace; font-size:0.68rem; letter-spacing:0.14em; text-transform:uppercase;
@@ -100,11 +109,11 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible{
 .tab[aria-current="true"]{background:var(--ink); border-color:var(--ink); color:#fff;}
 
 /* ---------- Sections (stacked / continuous scroll) ---------- */
-main{max-width:920px; margin:0 auto; padding:0 20px 60px;}
-.section{padding-top:44px; scroll-margin-top:96px;}
+main{background-color:#F6F7F5; max-width:920px; margin:0 auto; padding:0 20px 60px;}
+.section{background-color:#F6F7F5; padding-top:44px; scroll-margin-top:96px;}
 .section + .section{border-top:1px solid var(--border); margin-top:44px;}
 
-.section-head{margin-bottom:28px;}
+.section-head{background-color:#F6F7F5; margin-bottom:28px;}
 .section-head h2{font-size:clamp(1.5rem,4.5vw,2rem); font-weight:800; letter-spacing:-0.02em; margin:0 0 8px;}
 .section-head p{color:var(--ink-soft); font-size:0.94rem; margin:0; max-width:560px;}
 
@@ -149,6 +158,48 @@ main{max-width:920px; margin:0 auto; padding:0 20px 60px;}
 .note{font-size:0.78rem; color:var(--ink-soft); background:var(--surface-soft); border-radius:10px; padding:12px 14px; margin-bottom:14px; line-height:1.6;}
 .note strong{color:var(--ink);}
 .format-line{font-size:0.76rem; color:var(--muted); padding-top:14px; border-top:1px solid var(--border); margin-top:auto;}
+
+/* ---------- Accordion (collapsed items) ---------- */
+.acc-toggle{
+  display:flex; align-items:center; justify-content:space-between; width:100%;
+  background:var(--surface-soft); border:1px solid var(--border); border-radius:10px;
+  padding:11px 14px; margin:8px 0 0; cursor:pointer;
+  font-family:inherit; font-weight:700; font-size:0.8rem; color:var(--ink);
+  transition:border-color .15s ease;
+}
+.acc-toggle:hover{border-color:var(--accent);}
+.acc-toggle .chev{transition:transform .2s ease; color:var(--muted); flex-shrink:0; margin-left:10px; font-size:0.9rem;}
+.acc-toggle[aria-expanded="true"] .chev{transform:rotate(180deg);}
+.acc-toggle[aria-expanded="true"]{border-color:#CFE4D8; background:var(--accent-soft); color:var(--accent);}
+.acc-body{display:none; padding-top:16px;}
+.acc-body.open{display:block; animation:fadeUp .25s ease both;}
+.card .acc-toggle{margin-top:8px;}
+
+/* ---------- Select checkbox (collapsed-state add-to-cart) ---------- */
+.card-top-right{display:flex; flex-direction:column; align-items:flex-end; gap:8px; flex-shrink:0;}
+.select-check{
+  display:inline-flex; align-items:center; gap:7px;
+  border:1.5px solid var(--border); border-radius:8px;
+  padding:7px 11px; cursor:pointer; background:#fff;
+  font-family:inherit; font-size:0.72rem; font-weight:700; color:var(--ink-soft);
+  flex-shrink:0; white-space:nowrap;
+  transition:border-color .15s ease, background .15s ease, color .15s ease;
+}
+.select-check:hover{border-color:var(--accent);}
+.select-check .box{
+  width:16px; height:16px; border:1.5px solid var(--border); border-radius:5px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center; background:#fff;
+  transition:background .15s ease, border-color .15s ease;
+}
+.select-check .box svg{width:10px; height:10px; opacity:0; transition:opacity .15s ease;}
+.select-check.checked{border-color:var(--accent); background:var(--accent-soft); color:var(--accent);}
+.select-check.checked .box{background:var(--accent); border-color:var(--accent);}
+.select-check.checked .box svg{opacity:1;}
+.select-check.on-dark{background:rgba(255,255,255,0.06); border-color:rgba(255,255,255,0.25); color:#EDEFEC;}
+.select-check.on-dark .box{background:rgba(255,255,255,0.08); border-color:rgba(255,255,255,0.35);}
+.select-check.on-dark:hover{border-color:#8FD9B7;}
+.select-check.on-dark.checked{background:rgba(143,217,183,0.16); border-color:#8FD9B7; color:#8FD9B7;}
+.select-check.on-dark.checked .box{background:#8FD9B7; border-color:#8FD9B7;}
 
 .btn{
   margin-top:16px; display:inline-flex; align-items:center; justify-content:center; gap:8px;
@@ -874,6 +925,110 @@ main{max-width:920px; margin:0 auto; padding:0 20px 60px;}
   }
   if(tabs[0]){ setActiveTab(tabs[0].dataset.target); }
 
+  /* ---------- Accordion: collapse each item, expand on demand ---------- */
+  var accCounter = 0;
+  function elMatchesKeep(el, keepList){
+    if(keepList.indexOf(el.tagName) !== -1){ return true; }
+    var cls = ' ' + (el.className || '') + ' ';
+    return keepList.some(function(k){ return cls.indexOf(' ' + k + ' ') !== -1; });
+  }
+  function checkboxSvg(){
+    return '<svg viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6.2L4.6 9L10 3" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+  function buildSelectCheck(btn, onDark){
+    var wrap = document.createElement('button');
+    wrap.type = 'button';
+    wrap.className = 'select-check' + (onDark ? ' on-dark' : '');
+    wrap.setAttribute('role', 'checkbox');
+    wrap.setAttribute('aria-checked', 'false');
+    wrap.dataset.checkFor = btn.dataset.cartName;
+    var box = document.createElement('span');
+    box.className = 'box';
+    box.innerHTML = checkboxSvg();
+    var label = document.createElement('span');
+    label.className = 'select-check-label';
+    label.textContent = 'Обрати';
+    wrap.appendChild(box);
+    wrap.appendChild(label);
+    wrap.addEventListener('click', function(e){
+      e.stopPropagation();
+      toggleCartByButton(btn);
+    });
+    return wrap;
+  }
+  /* wraps head-row's non-primary children (badge etc.) + a select-check into a right-aligned column */
+  function attachSelectCheck(headRow, btn, onDark){
+    if(!headRow || !btn){ return; }
+    var check = buildSelectCheck(btn, onDark);
+    var extras = Array.prototype.slice.call(headRow.children).slice(1);
+    var rightWrap = document.createElement('div');
+    rightWrap.className = 'card-top-right';
+    extras.forEach(function(el){ rightWrap.appendChild(el); });
+    rightWrap.appendChild(check);
+    headRow.appendChild(rightWrap);
+  }
+  function makeAccordion(container, keepList, label, opts){
+    opts = opts || {};
+    var children = Array.prototype.slice.call(container.children);
+    var splitIndex = 0;
+    while(splitIndex < children.length && elMatchesKeep(children[splitIndex], keepList)){
+      splitIndex++;
+    }
+    var headEls = children.slice(0, splitIndex);
+    var body = children.slice(splitIndex);
+
+    if(opts.checkboxHeadSelector){
+      var headRow = container.querySelector(opts.checkboxHeadSelector);
+      var cartBtn = container.querySelector('[data-cart-price]');
+      if(headRow && cartBtn && headEls.indexOf(headRow) !== -1){
+        attachSelectCheck(headRow, cartBtn, !!opts.onDark);
+      }
+    }
+
+    if(body.length === 0){ return; }
+
+    var bodyDiv = document.createElement('div');
+    bodyDiv.className = 'acc-body';
+    var bodyId = 'accbody-' + (accCounter++);
+    bodyDiv.id = bodyId;
+    body.forEach(function(el){ bodyDiv.appendChild(el); });
+
+    var toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'acc-toggle';
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-controls', bodyId);
+    var labelSpan = document.createElement('span');
+    labelSpan.textContent = label;
+    var chev = document.createElement('span');
+    chev.className = 'chev';
+    chev.setAttribute('aria-hidden', 'true');
+    chev.textContent = '▾';
+    toggle.appendChild(labelSpan);
+    toggle.appendChild(chev);
+
+    container.appendChild(toggle);
+    container.appendChild(bodyDiv);
+
+    toggle.addEventListener('click', function(){
+      var isOpen = bodyDiv.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  }
+
+  Array.prototype.slice.call(document.querySelectorAll('main .card')).forEach(function(c){
+    makeAccordion(c, ['card-top', 'price-row', 'duration'], 'Деталі', {checkboxHeadSelector:'.card-top'});
+  });
+  Array.prototype.slice.call(document.querySelectorAll('.basic-card')).forEach(function(c){
+    makeAccordion(c, ['basic-top', 'duration'], 'Деталі програми', {checkboxHeadSelector:'.basic-top'});
+  });
+  Array.prototype.slice.call(document.querySelectorAll('.tier-card')).forEach(function(c){
+    makeAccordion(c, ['tier-head', 'rate-row'], 'Деталі та пакети');
+  });
+  Array.prototype.slice.call(document.querySelectorAll('.complex-hero .c-inner')).forEach(function(c){
+    makeAccordion(c, ['c-eyebrow', 'H3', 'complex-price-row'], 'Деталі', {checkboxHeadSelector:'.c-eyebrow', onDark:true});
+  });
+
   /* ---------- Cart ---------- */
   var cart = {};
   var cartBar = document.getElementById('cartBar');
@@ -946,45 +1101,56 @@ main{max-width:920px; margin:0 auto; padding:0 20px 60px;}
     cartModalTotal.textContent = formatMoney(total) + ' грн';
   }
 
-  function addToCart(btn){
-    var id = btn.dataset.cartId;
-    cart[id] = {
-      name: btn.dataset.cartName,
-      price: parseInt(btn.dataset.cartPrice, 10) || 0
-    };
-    btn.classList.add('selected');
-    btn.textContent = '✓ Обрано';
+  function syncItemVisual(id){
+    var isSel = !!cart[id];
+    var btn = buttonsById[id];
+    if(btn){
+      btn.classList.toggle('selected', isSel);
+      btn.textContent = isSel ? '✓ Обрано' : btn.dataset.originalLabel;
+    }
+    var check = checkboxesById[id];
+    if(check){
+      check.classList.toggle('checked', isSel);
+      check.setAttribute('aria-checked', isSel ? 'true' : 'false');
+      var lbl = check.querySelector('.select-check-label');
+      if(lbl){ lbl.textContent = isSel ? 'Додано' : 'Обрати'; }
+    }
   }
 
-  function removeFromCartByBtn(btn){
-    var id = btn.dataset.cartId;
-    delete cart[id];
-    btn.classList.remove('selected');
-    btn.textContent = btn.dataset.originalLabel;
+  function toggleCartByButton(btn){
+    var id = btn.dataset.cartName;
+    if(cart[id]){
+      delete cart[id];
+    } else {
+      cart[id] = {
+        name: btn.dataset.cartName,
+        price: parseInt(btn.dataset.cartPrice, 10) || 0
+      };
+    }
+    syncItemVisual(id);
+    renderBar();
   }
 
   function removeFromCart(id){
     delete cart[id];
-    var btn = document.querySelector('[data-cart-id="' + id + '"]');
-    if(btn){
-      btn.classList.remove('selected');
-      btn.textContent = btn.dataset.originalLabel;
-    }
+    syncItemVisual(id);
     renderBar();
   }
 
+  var checkboxesById = {};
+  Array.prototype.slice.call(document.querySelectorAll('.select-check')).forEach(function(c){
+    checkboxesById[c.dataset.checkFor] = c;
+  });
+
+  var buttonsById = {};
   var cartButtons = Array.prototype.slice.call(document.querySelectorAll('[data-cart-price]'));
-  cartButtons.forEach(function(btn, idx){
-    var id = 'item-' + idx;
+  cartButtons.forEach(function(btn){
+    var id = btn.dataset.cartName;
     btn.dataset.cartId = id;
     btn.dataset.originalLabel = btn.textContent;
+    buttonsById[id] = btn;
     btn.addEventListener('click', function(){
-      if(cart[id]){
-        removeFromCartByBtn(btn);
-      } else {
-        addToCart(btn);
-      }
-      renderBar();
+      toggleCartByButton(btn);
     });
   });
 
