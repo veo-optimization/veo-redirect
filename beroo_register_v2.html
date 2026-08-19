@@ -60,14 +60,15 @@
   .onboarding.locked{ overflow:hidden; scroll-snap-type:none; }
 
   .screen{
-    min-height:100svh;
-    min-height:100vh;
+    height:100svh;
+    height:100vh;
     scroll-snap-align:start;
     scroll-snap-stop:always;
     display:flex;
     flex-direction:column;
     padding: calc(20px + var(--safe-t)) 22px calc(20px + 33px + var(--safe-b)) 22px;
     position:relative;
+    overflow:hidden;
   }
 
   .brandmark{
@@ -77,6 +78,7 @@
     letter-spacing:0.04em;
     color:var(--ink-faint);
     text-transform:uppercase;
+    flex-shrink:0;
   }
   .brandmark b{color:var(--ink);}
 
@@ -85,6 +87,7 @@
     display:flex;
     gap:6px;
     margin: 18px 0 4px 0;
+    flex-shrink:0;
   }
   .progress i{
     flex:1;
@@ -111,6 +114,8 @@
     padding-top:8px;
     padding-bottom:8px;
     min-height:0;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
   }
   .screen.top-align .screen-body{ justify-content:flex-start; padding-top:18px; }
 
@@ -142,6 +147,7 @@
     display:flex;
     flex-direction:column;
     gap:12px;
+    flex-shrink:0;
   }
 
   /* ---------- Buttons ---------- */
