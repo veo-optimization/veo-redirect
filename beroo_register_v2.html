@@ -66,7 +66,7 @@
     scroll-snap-stop:always;
     display:flex;
     flex-direction:column;
-    padding: calc(20px + var(--safe-t)) 22px calc(20px + 28px + var(--safe-b)) 22px;
+    padding: calc(20px + var(--safe-t)) 22px calc(20px + 33px + var(--safe-b)) 22px;
     position:relative;
   }
 
@@ -198,6 +198,24 @@
   .field input::placeholder{ color:var(--ink-faint); font-weight:500; }
   .field input:focus{ border-color:var(--ink); background:#fff; }
   .field.error input{ border-color:var(--accent); }
+  .field .input-wrap{ position:relative; }
+  .field .input-wrap input{ padding-right:52px; }
+  .field .eye-toggle{
+    position:absolute;
+    right:6px;
+    top:50%;
+    transform:translateY(-50%);
+    width:40px;height:40px;
+    border:none;
+    background:transparent;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    color:var(--ink-soft);
+    -webkit-tap-highlight-color:transparent;
+  }
+  .field .eye-toggle:active{ color:var(--ink); }
   .hint{ font-size:12.5px; color:var(--ink-faint); margin-top:6px; padding-left:4px; font-weight:600; }
   .hint.err{ color:var(--accent); }
 
@@ -554,15 +572,25 @@
         <div style="margin-top:22px;">
           <div class="field">
             <label>Логін або email</label>
-            <input type="text" id="f-login" placeholder="you@example.com" autocomplete="off">
+            <input type="text" id="f-login" placeholder="you@example.com" autocomplete="off" value="vasil_veo@beroo.online">
           </div>
           <div class="field">
             <label>Пароль</label>
-            <input type="password" id="f-pass" placeholder="Мінімум 6 символів" autocomplete="off">
+            <div class="input-wrap">
+              <input type="text" id="f-pass" placeholder="Мінімум 6 символів" autocomplete="off" value="Beroo2026!">
+              <button type="button" class="eye-toggle" data-target="f-pass" aria-label="Показати або приховати пароль">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path class="eye-open" d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle class="eye-open" cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path class="eye-closed" style="display:none" d="M3 3l18 18M10.6 10.6a3 3 0 004.24 4.24M9.9 5.1A10.9 10.9 0 0112 5c7 0 11 7 11 7a17.6 17.6 0 01-3.2 4.1M6.5 6.6C3.7 8.3 2 11 2 11s4 7 11 7c1.4 0 2.7-.2 3.9-.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
           </div>
           <div class="field" id="f-pass2-wrap">
             <label>Підтвердження паролю</label>
-            <input type="password" id="f-pass2" placeholder="Повторіть пароль" autocomplete="off">
+            <div class="input-wrap">
+              <input type="text" id="f-pass2" placeholder="Повторіть пароль" autocomplete="off" value="Beroo2026!">
+              <button type="button" class="eye-toggle" data-target="f-pass2" aria-label="Показати або приховати пароль">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path class="eye-open" d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><circle class="eye-open" cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.8"/><path class="eye-closed" style="display:none" d="M3 3l18 18M10.6 10.6a3 3 0 004.24 4.24M9.9 5.1A10.9 10.9 0 0112 5c7 0 11 7 11 7a17.6 17.6 0 01-3.2 4.1M6.5 6.6C3.7 8.3 2 11 2 11s4 7 11 7c1.4 0 2.7-.2 3.9-.7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </div>
             <div class="hint err" id="pass-hint" style="display:none;">Паролі не збігаються</div>
           </div>
           <label class="checkline">
@@ -899,6 +927,17 @@ function validateStep2(){
 [fLogin, fPass, fPass2].forEach(el=>el.addEventListener("input", validateStep2));
 fOffer.addEventListener("change", validateStep2);
 btnStep2.addEventListener("click", ()=>{ if(!btnStep2.disabled) goTo("screen-3"); });
+
+document.querySelectorAll('.eye-toggle').forEach(btn=>{
+  btn.addEventListener("click", ()=>{
+    const input = $(btn.dataset.target);
+    const isHidden = input.type === "password";
+    input.type = isHidden ? "text" : "password";
+    btn.querySelector('.eye-open').style.display = isHidden ? "none" : "";
+    btn.querySelector('.eye-closed').style.display = isHidden ? "" : "none";
+  });
+});
+validateStep2();
 
 /* ============ SCREEN 3 — shop name ============ */
 const fShop = $("f-shopname"), btnStep3 = $("btn-step3");
