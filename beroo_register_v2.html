@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BEROO Online — Реєстрація магазину</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff;
+    --surface:#F7F7F8;
+    --surface-2:#EFEFF2;
+    --ink:#15151A;
+    --ink-soft:#7A7A85;
+    --ink-faint:#B4B4BC;
+    --accent:#FF2E56;
+    --accent-ink:#ffffff;
+    --accent-soft:#FFE7EC;
+    --border:#E9E9EC;
+    --radius-lg:26px;
+    --radius-md:18px;
+    --radius-pill:999px;
+    --safe-b: env(safe-area-inset-bottom, 0px);
+    --safe-t: env(safe-area-inset-top, 0px);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overscroll-behavior-y:none;
+  }
+  h1,h2,h3,.display{
+    font-family:'Unbounded','Inter',sans-serif;
+    font-weight:800;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  ::selection{background:var(--accent-soft);}
+
+  /* ---------- App shell ---------- */
+  .app{
+    max-width:480px;
+    margin:0 auto;
+    background:var(--bg);
+    position:relative;
+  }
+  .onboarding{
+    height:100svh;
+    height:100vh;
+    overflow-y:auto;
+    scroll-snap-type:y mandatory;
+    scroll-behavior:smooth;
+    -webkit-overflow-scrolling:touch;
+  }
+  .onboarding.locked{ overflow:hidden; scroll-snap-type:none; }
+
+  .screen{
+    min-height:100svh;
+    min-height:100vh;
+    scroll-snap-align:start;
+    scroll-snap-stop:always;
+    display:flex;
+    flex-direction:column;
+    padding: calc(20px + var(--safe-t)) 22px calc(20px + var(--safe-b)) 22px;
+    position:relative;
+  }
+
+  .brandmark{
+    font-family:'Unbounded',sans-serif;
+    font-weight:800;
+    font-size:13px;
+    letter-spacing:0.04em;
+    color:var(--ink-faint);
+    text-transform:uppercase;
+  }
+  .brandmark b{color:var(--ink);}
+
+  /* ---------- Progress ---------- */
+  .progress{
+    display:flex;
+    gap:6px;
+    margin: 18px 0 4px 0;
+  }
+  .progress i{
+    flex:1;
+    height:4px;
+    border-radius:99px;
+    background:var(--surface-2);
+    overflow:hidden;
+    position:relative;
+  }
+  .progress i b{
+    position:absolute; inset:0;
+    background:var(--accent);
+    width:0%;
+    transition:width .5s cubic-bezier(.4,0,.2,1);
+    border-radius:99px;
+  }
+
+  /* ---------- Generic screen composition ---------- */
+  .screen-body{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    padding-top:8px;
+    padding-bottom:8px;
+    min-height:0;
+  }
+  .screen.top-align .screen-body{ justify-content:flex-start; padding-top:18px; }
+
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--accent);
+    background:var(--accent-soft);
+    padding:6px 14px;
+    border-radius:var(--radius-pill);
+    width:max-content;
+    margin-bottom:16px;
+  }
+  h1.title{ font-size:30px; line-height:1.15; }
+  h2.title{ font-size:24px; line-height:1.2; }
+  .subtitle{
+    color:var(--ink-soft);
+    font-size:15.5px;
+    line-height:1.5;
+    margin-top:10px;
+    font-weight:500;
+  }
+
+  .footer-cta{
+    padding-top:16px;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn{
+    appearance:none;
+    border:none;
+    font-family:'Inter',sans-serif;
+    font-weight:700;
+    font-size:16px;
+    border-radius:var(--radius-pill);
+    min-height:56px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    cursor:pointer;
+    width:100%;
+    transition:transform .15s ease, opacity .2s ease, background .2s ease;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .btn:active{ transform:scale(0.97); }
+  .btn-primary{ background:var(--ink); color:#fff; }
+  .btn-primary:disabled{ background:var(--surface-2); color:var(--ink-faint); cursor:not-allowed; }
+  .btn-primary:disabled:active{ transform:none; }
+  .btn-accent{ background:var(--accent); color:#fff; }
+  .btn-accent:disabled{ background:var(--surface-2); color:var(--ink-faint); cursor:not-allowed; }
+  .btn-accent:disabled:active{ transform:none; }
+  .btn-ghost{ background:transparent; color:var(--ink-soft); font-weight:600; font-size:14.5px; min-height:40px; }
+  .btn-outline{ background:#fff; color:var(--ink); border:1.5px solid var(--border); }
+
+  /* ---------- Inputs ---------- */
+  .field{ margin-bottom:14px; }
+  .field label{
+    display:block;
+    font-size:13px;
+    font-weight:700;
+    color:var(--ink-soft);
+    margin-bottom:7px;
+    padding-left:4px;
+  }
+  .field input{
+    width:100%;
+    background:var(--surface);
+    border:1.5px solid transparent;
+    border-radius:var(--radius-md);
+    padding:16px 18px;
+    font-size:16.5px;
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    color:var(--ink);
+    outline:none;
+    transition:border-color .15s ease, background .15s ease;
+  }
+  .field input::placeholder{ color:var(--ink-faint); font-weight:500; }
+  .field input:focus{ border-color:var(--ink); background:#fff; }
+  .field.error input{ border-color:var(--accent); }
+  .hint{ font-size:12.5px; color:var(--ink-faint); margin-top:6px; padding-left:4px; font-weight:600; }
+  .hint.err{ color:var(--accent); }
+
+  .checkline{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    padding:14px 4px;
+    cursor:pointer;
+    user-select:none;
+  }
+  .checkline .box{
+    width:24px;height:24px;min-width:24px;
+    border-radius:8px;
+    border:2px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    transition:all .15s ease;
+    margin-top:1px;
+  }
+  .checkline input{ display:none; }
+  .checkline input:checked + .box{ background:var(--accent); border-color:var(--accent); }
+  .checkline input:checked + .box svg{ opacity:1; transform:scale(1); }
+  .checkline .box svg{ opacity:0; transform:scale(.5); transition:all .15s ease; width:14px;height:14px; }
+  .checkline span.txt{ font-size:14.5px; color:var(--ink); font-weight:600; line-height:1.4; }
+  .checkline span.txt a{ color:var(--accent); text-decoration:none; font-weight:700; }
+
+  .preview-card{
+    margin-top:22px;
+    background:var(--surface);
+    border-radius:var(--radius-md);
+    padding:18px 20px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .preview-card .dot{
+    width:44px;height:44px;border-radius:14px;background:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-family:'Unbounded',sans-serif;font-weight:800;color:#fff;font-size:16px;
+    flex-shrink:0;
+  }
+  .preview-card .txt small{ display:block; color:var(--ink-faint); font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:.03em; margin-bottom:2px; }
+  .preview-card .txt strong{ font-size:16px; font-family:'Unbounded',sans-serif; font-weight:700; }
+
+  /* ---------- Category chips (screen 4) ---------- */
+  .chip-scroll{
+    flex:1;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    padding: 4px 2px 8px 2px;
+    min-height:0;
+  }
+  .chip-wrap{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
+  .chip{
+    appearance:none;
+    border:1.5px solid var(--border);
+    background:#fff;
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    font-weight:600;
+    font-size:14.5px;
+    padding:12px 18px;
+    border-radius:var(--radius-pill);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:6px;
+    transition:all .18s cubic-bezier(.4,0,.2,1);
+    -webkit-tap-highlight-color:transparent;
+  }
+  .chip:active{ transform:scale(0.95); }
+  .chip.disabled{ opacity:.4; }
+  .chip.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#fff;
+    transform:scale(1.03);
+  }
+  .chip .ck{ width:15px; opacity:0; transition:opacity .15s ease; }
+  .chip.active .ck{ opacity:1; }
+
+  .counter-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:14px;
+    padding:0 2px;
+  }
+  .counter-row .badge{
+    font-size:13px;
+    font-weight:700;
+    color:var(--accent);
+    background:var(--accent-soft);
+    padding:6px 12px;
+    border-radius:var(--radius-pill);
+  }
+
+  /* ---------- Screen 5 ---------- */
+  .add-product-visual{
+    width:100%;
+    aspect-ratio:1.5;
+    background:var(--surface);
+    border-radius:var(--radius-lg);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:26px;
+    border:1.5px dashed var(--border);
+  }
+  .add-product-visual .plus{
+    width:64px;height:64px;border-radius:50%;
+    background:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:30px;font-weight:300;
+  }
+
+  /* ---------- Screen 6: category tree ---------- */
+  .screen-tree{ height:100svh; height:100vh; }
+  .tree-scroll{
+    flex:1;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    padding: 2px 2px 12px 2px;
+    min-height:0;
+  }
+  .acc{
+    border-bottom:1px solid var(--border);
+  }
+  .acc:first-child{ border-top:1px solid var(--border); }
+  .acc-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 6px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .acc-head h3{ font-size:17px; font-family:'Unbounded',sans-serif; font-weight:700; }
+  .acc-head .chev{
+    width:34px;height:34px;border-radius:50%;
+    background:var(--surface);
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .25s cubic-bezier(.4,0,.2,1), background .2s ease;
+    flex-shrink:0;
+  }
+  .acc.open .acc-head .chev{ transform:rotate(180deg); background:var(--accent-soft); }
+  .acc.open .acc-head .chev svg{ stroke:var(--accent); }
+  .acc-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .35s cubic-bezier(.4,0,.2,1);
+  }
+  .acc.open .acc-body{ max-height:2000px; }
+  .acc-body-in{ padding: 0 6px 14px 6px; }
+
+  .node-b{ margin-bottom:4px; }
+  .node-b-head{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 10px;
+    border-radius:14px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .node-b-head:active{ background:var(--surface); }
+  .node-b-head .expander{
+    margin-left:auto;
+    width:26px;height:26px;
+    display:flex;align-items:center;justify-content:center;
+    transition:transform .25s ease;
+    color:var(--ink-faint);
+  }
+  .node-b.open .node-b-head .expander{ transform:rotate(90deg); }
+  .node-b-head .label{ font-size:15.5px; font-weight:700; color:var(--ink); }
+
+  .cbox{
+    width:23px;height:23px;min-width:23px;
+    border-radius:7px;
+    border:2px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    transition:all .15s ease;
+    background:#fff;
+  }
+  .cbox.checked{ background:var(--accent); border-color:var(--accent); }
+  .cbox.indet{ background:var(--accent); border-color:var(--accent); }
+  .cbox svg{ width:13px;height:13px; opacity:0; transition:opacity .12s ease; }
+  .cbox.checked svg.full{ opacity:1; }
+  .cbox.indet svg.mid{ opacity:1; }
+  .cbox.pulse{ animation:pop .28s ease; }
+  @keyframes pop{ 0%{transform:scale(1);} 40%{transform:scale(1.22);} 100%{transform:scale(1);} }
+
+  .node-b-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .3s cubic-bezier(.4,0,.2,1);
+    padding-left:14px;
+    border-left:2px solid var(--surface-2);
+    margin-left:22px;
+  }
+  .node-b.open .node-b-body{ max-height:600px; }
+
+  .node-c{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:11px 10px;
+    border-radius:12px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .node-c:active{ background:var(--surface); }
+  .node-c .label{ font-size:14px; font-weight:600; color:var(--ink-soft); }
+  .node-c.checked .label{ color:var(--ink); }
+
+  .tree-empty-hint{
+    background:var(--surface);
+    border-radius:var(--radius-md);
+    padding:16px 18px;
+    font-size:14px;
+    color:var(--ink-soft);
+    font-weight:600;
+    line-height:1.5;
+    margin-top:10px;
+  }
+
+  /* ---------- Dashboard ---------- */
+  .dash-hero{
+    background:var(--ink);
+    border-radius:var(--radius-lg);
+    padding:26px 22px;
+    color:#fff;
+    margin-bottom:16px;
+  }
+  .dash-hero .store-badge{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(255,255,255,.12);
+    padding:6px 12px;
+    border-radius:var(--radius-pill);
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:14px;
+  }
+  .dash-hero .store-badge .live-dot{
+    width:7px;height:7px;border-radius:50%;background:var(--accent);
+  }
+  .dash-hero h2{ font-size:22px; color:#fff; }
+  .dash-hero .cats{ margin-top:12px; display:flex; flex-wrap:wrap; gap:8px; }
+  .dash-hero .cats span{
+    background:rgba(255,255,255,.1);
+    padding:6px 12px;
+    border-radius:var(--radius-pill);
+    font-size:12.5px;
+    font-weight:600;
+  }
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+  .stat-card{
+    background:var(--surface);
+    border-radius:var(--radius-md);
+    padding:18px;
+  }
+  .stat-card .num{ font-family:'Unbounded',sans-serif; font-size:26px; font-weight:800; }
+  .stat-card .lbl{ font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-top:4px; }
+  .menu-card{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:var(--surface);
+    border-radius:var(--radius-md);
+    padding:16px 18px;
+    margin-bottom:10px;
+    cursor:pointer;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .menu-card:active{ background:var(--surface-2); }
+  .menu-card .ic{
+    width:40px;height:40px;border-radius:12px;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;
+    flex-shrink:0;
+  }
+  .menu-card .txt strong{ display:block; font-size:14.5px; font-weight:700; }
+  .menu-card .txt small{ color:var(--ink-soft); font-size:12px; font-weight:600; }
+  .menu-card .arrow{ margin-left:auto; color:var(--ink-faint); }
+  .dash-scroll{
+    flex:1;
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    min-height:0;
+    padding-bottom:8px;
+  }
+
+  /* ---------- Toast ---------- */
+  #toast{
+    position:fixed;
+    left:50%;
+    bottom:calc(28px + var(--safe-b));
+    transform:translate(-50%, 20px);
+    background:var(--ink);
+    color:#fff;
+    padding:14px 20px;
+    border-radius:var(--radius-pill);
+    font-size:13.5px;
+    font-weight:600;
+    box-shadow:0 12px 30px rgba(0,0,0,.25);
+    opacity:0;
+    pointer-events:none;
+    transition:all .3s cubic-bezier(.4,0,.2,1);
+    z-index:999;
+    max-width:88%;
+    text-align:center;
+  }
+  #toast.show{ opacity:1; transform:translate(-50%, 0); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ transition-duration:.01ms !important; animation-duration:.01ms !important; scroll-behavior:auto !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="onboarding" id="onboarding">
+
+    <!-- SCREEN 1 — старт -->
+    <section class="screen" id="screen-1">
+      <div class="brandmark"><b>BEROO</b> ONLINE</div>
+      <div class="screen-body">
+        <div class="eyebrow">Новий магазин за 5 хвилин</div>
+        <h1 class="title">Створіть свій магазин</h1>
+        <p class="subtitle">Запускайте продажі онлайн, керуйте товарами та приймайте замовлення в одному місці.</p>
+      </div>
+      <div class="footer-cta">
+        <button class="btn btn-accent" id="btn-start">Зареєструватися</button>
+        <button class="btn btn-ghost" id="btn-login">Вже маєте магазин? Увійти</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 2 — акаунт -->
+    <section class="screen top-align" id="screen-2">
+      <div class="brandmark"><b>BEROO</b> ONLINE</div>
+      <div class="progress" data-progress></div>
+      <div class="screen-body">
+        <h2 class="title">Створіть обліковий запис</h2>
+        <p class="subtitle">Це знадобиться для входу в панель керування магазином.</p>
+
+        <div style="margin-top:22px;">
+          <div class="field">
+            <label>Логін або email</label>
+            <input type="text" id="f-login" placeholder="you@example.com" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>Пароль</label>
+            <input type="password" id="f-pass" placeholder="Мінімум 6 символів" autocomplete="off">
+          </div>
+          <div class="field" id="f-pass2-wrap">
+            <label>Підтвердження паролю</label>
+            <input type="password" id="f-pass2" placeholder="Повторіть пароль" autocomplete="off">
+            <div class="hint err" id="pass-hint" style="display:none;">Паролі не збігаються</div>
+          </div>
+          <label class="checkline">
+            <input type="checkbox" id="f-offer">
+            <span class="box"><svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <span class="txt">Погоджуюсь з <a href="#" onclick="event.preventDefault(); toast('Демо-прототип: документ не додано');">офертою</a></span>
+          </label>
+        </div>
+      </div>
+      <div class="footer-cta">
+        <button class="btn btn-primary" id="btn-step2" disabled>Далі</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 3 — назва магазину -->
+    <section class="screen top-align" id="screen-3">
+      <div class="brandmark"><b>BEROO</b> ONLINE</div>
+      <div class="progress" data-progress></div>
+      <div class="screen-body">
+        <h2 class="title">Як називатиметься ваш магазин?</h2>
+        <p class="subtitle">Цю назву покупці бачитимуть у вашому магазині.</p>
+
+        <div class="field" style="margin-top:22px;">
+          <label>Назва магазину</label>
+          <input type="text" id="f-shopname" placeholder="Наприклад, Дитячий світ">
+        </div>
+
+        <div class="preview-card">
+          <div class="dot" id="preview-dot">?</div>
+          <div class="txt">
+            <small>Ваш магазин</small>
+            <strong id="preview-name">Введіть назву</strong>
+          </div>
+        </div>
+      </div>
+      <div class="footer-cta">
+        <button class="btn btn-primary" id="btn-step3" disabled>Далі</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 4 — основні категорії -->
+    <section class="screen top-align" id="screen-4">
+      <div class="brandmark"><b>BEROO</b> ONLINE</div>
+      <div class="progress" data-progress></div>
+      <div class="screen-body" style="padding-top:14px;">
+        <h2 class="title">Чим ви займаєтесь?</h2>
+        <p class="subtitle">Оберіть до 3 категорій товарів або послуг для вашого магазину.</p>
+        <div class="counter-row">
+          <span class="badge" id="cat-counter">Обрано: 0 / 3</span>
+        </div>
+        <div class="chip-scroll">
+          <div class="chip-wrap" id="chip-wrap"></div>
+        </div>
+      </div>
+      <div class="footer-cta">
+        <button class="btn btn-primary" id="btn-step4" disabled>Далі</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 5 — додати товар -->
+    <section class="screen" id="screen-5">
+      <div class="brandmark"><b>BEROO</b> ONLINE</div>
+      <div class="progress" data-progress></div>
+      <div class="screen-body">
+        <div class="add-product-visual"><div class="plus">+</div></div>
+        <h2 class="title">Ваш магазин майже готовий</h2>
+        <p class="subtitle">Додайте перший товар, щоб почати наповнювати магазин.</p>
+      </div>
+      <div class="footer-cta">
+        <button class="btn btn-accent" id="btn-step5">+ Додати перший товар</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 6 — дерево категорій -->
+    <section class="screen screen-tree" id="screen-6">
+      <div class="brandmark"><b>BEROO</b> ONLINE</div>
+      <div class="progress" data-progress></div>
+      <div style="padding-top:14px;">
+        <h2 class="title" style="font-size:22px;">Налаштуйте категорії магазину</h2>
+        <p class="subtitle" style="margin-top:6px;">Оберіть тільки ті категорії, з якими ви працюєте.</p>
+      </div>
+      <div class="tree-scroll" id="tree-scroll"></div>
+      <div class="footer-cta">
+        <button class="btn btn-accent" id="btn-step6">Готово</button>
+      </div>
+    </section>
+
+    <!-- SCREEN 7 — dashboard -->
+    <section class="screen" id="screen-7">
+      <div class="brandmark"><b>BEROO</b> ONLINE</div>
+      <div class="progress" data-progress></div>
+      <div class="dash-scroll">
+        <div style="margin-top:14px;">
+          <h2 class="title" style="font-size:22px;">Ваш магазин готовий</h2>
+          <p class="subtitle" style="margin-top:6px; margin-bottom:18px;">Керуйте магазином, товарами, замовленнями та продажами з одного місця.</p>
+        </div>
+
+        <div class="dash-hero">
+          <div class="store-badge"><span class="live-dot"></span> Магазин <span id="dash-storeid">40525</span></div>
+          <h2 id="dash-name">Мій магазин</h2>
+          <div class="cats" id="dash-cats"></div>
+        </div>
+
+        <div class="grid2">
+          <div class="stat-card"><div class="num">0</div><div class="lbl">Товари</div></div>
+          <div class="stat-card"><div class="num">0</div><div class="lbl">Замовлення</div></div>
+        </div>
+        <div class="grid2">
+          <div class="stat-card"><div class="num" id="dash-catcount">0</div><div class="lbl">Категорії</div></div>
+          <div class="stat-card"><div class="num" id="dash-subcount">0</div><div class="lbl">Підкатегорій</div></div>
+        </div>
+
+        <div id="dash-menu" style="margin-top:6px;"></div>
+      </div>
+      <div class="footer-cta">
+        <button class="btn btn-accent" id="btn-viewsite">Переглянути мій сайт</button>
+        <button class="btn btn-outline" id="btn-dashboard">Перейти до dashboard</button>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ============ DATA ============ */
+const CATEGORIES = [
+{name:"Авто і мото", sub:[
+  {name:"Легкові автомобілі", sub:["Седани","Позашляховики та кросовери","Хетчбеки"]},
+  {name:"Мото та мототехніка", sub:["Мотоцикли","Скутери та мопеди","Квадроцикли"]},
+  {name:"Автозапчастини та аксесуари", sub:["Запчастини для авто","Автохімія та масла","Автоаксесуари"]}]},
+{name:"Бізнес та обладнання", sub:[
+  {name:"Торгове обладнання", sub:["Каси та термінали","Стелажі та вітрини","Ваги"]},
+  {name:"Промислове обладнання", sub:["Верстати","Виробничі лінії","Компресори"]},
+  {name:"Офісне обладнання", sub:["Меблі для офісу","Оргтехніка для бізнесу","Системи безпеки"]}]},
+{name:"Будівництво і ремонт", sub:[
+  {name:"Будматеріали", sub:["Цемент та суміші","Цегла та блоки","Пиломатеріали"]},
+  {name:"Оздоблювальні матеріали", sub:["Шпалери","Плитка та кераміка","Фарби та лаки"]},
+  {name:"Інженерні системи", sub:["Сантехніка","Електрика","Опалення та вентиляція"]}]},
+{name:"Дитячі товари", sub:[
+  {name:"Дитячий транспорт", sub:["Коляски","Автокрісла","Дитячі велосипеди"]},
+  {name:"Дитячі меблі", sub:["Ліжечка","Стільчики для годування","Манежі"]},
+  {name:"Дитяча гігієна", sub:["Підгузки","Засоби для купання","Дитяча косметика"]}]},
+{name:"Дім і побут", sub:[
+  {name:"Текстиль для дому", sub:["Постільна білизна","Рушники","Пледи та покривала"]},
+  {name:"Освітлення", sub:["Люстри","Настільні лампи","LED-стрічки"]},
+  {name:"Господарські товари", sub:["Посуд","Засоби для прибирання","Зберігання речей"]}]},
+{name:"Електроніка", sub:[
+  {name:"Смартфони та гаджети", sub:["Смартфони","Планшети","Розумні годинники"]},
+  {name:"Аудіо та відео", sub:["Навушники","Колонки","Телевізори"]},
+  {name:"Комплектуючі", sub:["Аксесуари для гаджетів","Зарядні пристрої","Кабелі та адаптери"]}]},
+{name:"Зоотовари", sub:[
+  {name:"Корми", sub:["Корм для котів","Корм для собак","Корм для гризунів і птахів"]},
+  {name:"Аксесуари для тварин", sub:["Повідки та нашийники","Лежанки та будиночки","Переноски"]},
+  {name:"Догляд за тваринами", sub:["Ветаптечка","Засоби гігієни","Іграшки для тварин"]}]},
+{name:"Інструменти", sub:[
+  {name:"Ручний інструмент", sub:["Викрутки та набори","Молотки та ключі","Ручні пили"]},
+  {name:"Електроінструмент", sub:["Дрилі та шуруповерти","Кутові шліфмашини","Перфоратори"]},
+  {name:"Вимірювальні прилади", sub:["Рівні","Рулетки","Мультиметри"]}]},
+{name:"Кафе, ресторани та напої", sub:[
+  {name:"Продукти для закладів", sub:["Кава та чай","Безалкогольні напої","Кондитерські вироби"]},
+  {name:"Обладнання для кухні", sub:["Кухонна техніка","Посуд для закладів","Меблі для кафе"]},
+  {name:"Послуги харчування", sub:["Кейтеринг","Доставка їжі","Оренда обладнання"]}]},
+{name:"Книги, канцтовари та офіс", sub:[
+  {name:"Книги", sub:["Художня література","Навчальна література","Дитячі книги"]},
+  {name:"Канцтовари", sub:["Зошити та блокноти","Письмове приладдя","Папір та бланки"]},
+  {name:"Офісні товари", sub:["Органайзери","Друкована продукція","Офісні аксесуари"]}]},
+{name:"Комп'ютери та оргтехніка", sub:[
+  {name:"Комп'ютери", sub:["Настільні ПК","Ноутбуки","Моноблоки"]},
+  {name:"Периферія", sub:["Клавіатури та миші","Монітори","Принтери та сканери"]},
+  {name:"Комплектуючі ПК", sub:["Відеокарти","Процесори","Накопичувачі"]}]},
+{name:"Краса і здоров'я", sub:[
+  {name:"Косметика", sub:["Догляд за обличчям","Догляд за тілом","Декоративна косметика"]},
+  {name:"Парфумерія", sub:["Жіночі парфуми","Чоловічі парфуми","Унісекс аромати"]},
+  {name:"Здоров'я", sub:["Вітаміни та БАДи","Медичні вироби","Засоби гігієни"]}]},
+{name:"Меблі та інтер'єр", sub:[
+  {name:"Меблі для дому", sub:["Дивани та крісла","Столи та стільці","Шафи та комоди"]},
+  {name:"Спальні меблі", sub:["Ліжка","Матраци","Приліжкові тумби"]},
+  {name:"Декор інтер'єру", sub:["Дзеркала","Картини та постери","Вази та декор"]}]},
+{name:"Медичне обладнання та товари", sub:[
+  {name:"Діагностичне обладнання", sub:["Тонометри","Глюкометри","Термометри"]},
+  {name:"Медичні вироби", sub:["Ортопедичні вироби","Засоби реабілітації","Медичний одяг"]},
+  {name:"Витратні матеріали", sub:["Бинти та пов'язки","Маски та рукавички","Дезінфектори"]}]},
+{name:"Нерухомість", sub:[
+  {name:"Житлова нерухомість", sub:["Квартири","Будинки","Кімнати"]},
+  {name:"Комерційна нерухомість", sub:["Офіси","Торгові приміщення","Склади"]},
+  {name:"Земельні ділянки", sub:["Ділянки під забудову","Сільськогосподарські землі","Дачні ділянки"]}]},
+{name:"Одяг та взуття", sub:[
+  {name:"Жіночий одяг", sub:["Плаття та сукні","Верхній одяг","Спортивний одяг"]},
+  {name:"Чоловічий одяг", sub:["Футболки та сорочки","Куртки та верхній одяг","Штани та джинси"]},
+  {name:"Дитячий одяг", sub:["Верхній одяг","Одяг для немовлят","Повсякденний дитячий одяг"]}]},
+{name:"Освіта та курси", sub:[
+  {name:"Онлайн-курси", sub:["IT та програмування","Іноземні мови","Дизайн та творчість"]},
+  {name:"Репетиторство", sub:["Шкільні предмети","Підготовка до ЗНО/НМТ","Іноземні мови"]},
+  {name:"Розвиваючі заняття", sub:["Дитячі гуртки","Творчі майстер-класи","Спортивні секції"]}]},
+{name:"Побутова техніка", sub:[
+  {name:"Техніка для кухні", sub:["Холодильники","Мікрохвильові печі","Кавомашини"]},
+  {name:"Техніка для дому", sub:["Пральні машини","Пилососи","Праски"]},
+  {name:"Клімат-техніка", sub:["Кондиціонери","Обігрівачі","Очищувачі повітря"]}]},
+{name:"Подарунки та свята", sub:[
+  {name:"Подарунки", sub:["Подарункові набори","Сувеніри","Листівки"]},
+  {name:"Святкове оформлення", sub:["Повітряні кульки","Гірлянди та декор","Святковий посуд"]},
+  {name:"Товари для свят", sub:["Костюми та маски","Товари для дня народження","Пакування подарунків"]}]},
+{name:"Послуги", sub:[
+  {name:"Побутові послуги", sub:["Клінінг","Ремонт техніки","Кравецькі послуги"]},
+  {name:"Професійні послуги", sub:["Юридичні послуги","Бухгалтерські послуги","Консалтинг"]},
+  {name:"Послуги краси", sub:["Перукарські послуги","Манікюр та педикюр","Масаж"]}]},
+{name:"Продукти харчування", sub:[
+  {name:"Бакалія", sub:["Крупи та макарони","Консервація","Спеції та приправи"]},
+  {name:"Свіжі продукти", sub:["Овочі та фрукти","М'ясо та риба","Молочні продукти"]},
+  {name:"Кондитерка та випічка", sub:["Солодощі","Домашня випічка","Мед та варення"]}]},
+{name:"Рибальство та полювання", sub:[
+  {name:"Рибальське спорядження", sub:["Вудки та котушки","Наживки та прикорм","Риболовні аксесуари"]},
+  {name:"Мисливське спорядження", sub:["Одяг для полювання","Оптика та прицели","Мисливські аксесуари"]},
+  {name:"Спорядження для активного відпочинку", sub:["Намети","Спальні мішки","Похідне приладдя"]}]},
+{name:"Робота", sub:[
+  {name:"Вакансії", sub:["Повна зайнятість","Часткова зайнятість","Віддалена робота"]},
+  {name:"Резюме та кар'єра", sub:["Складання резюме","Кар'єрний коучинг","Підготовка до співбесід"]},
+  {name:"HR-послуги", sub:["Підбір персоналу","Кадрове діловодство","Навчання персоналу"]}]},
+{name:"Сад та город", sub:[
+  {name:"Рослини", sub:["Саджанці дерев","Насіння овочів","Кімнатні рослини"]},
+  {name:"Садовий інвентар", sub:["Лопати та граблі","Шланги та поливалки","Садові меблі"]},
+  {name:"Догляд за рослинами", sub:["Добрива","Засоби захисту рослин","Горщики та кашпо"]}]},
+{name:"Спорт", sub:[
+  {name:"Фітнес", sub:["Тренажери","Гантелі та штанги","Килимки для йоги"]},
+  {name:"Командні види спорту", sub:["Футбольний інвентар","Баскетбольний інвентар","Волейбольний інвентар"]},
+  {name:"Спортивний одяг та взуття", sub:["Кросівки","Спортивні костюми","Термобілизна"]}]},
+{name:"Сумки та аксесуари", sub:[
+  {name:"Сумки", sub:["Жіночі сумки","Чоловічі сумки","Рюкзаки"]},
+  {name:"Гаманці та портмоне", sub:["Жіночі гаманці","Чоловічі портмоне","Картхолдери"]},
+  {name:"Аксесуари", sub:["Ремені","Парасольки","Валізи та дорожні сумки"]}]},
+{name:"Творчість та розвиток", sub:[
+  {name:"Товари для творчості", sub:["Малювання та живопис","Рукоділля","Ліплення"]},
+  {name:"Хобі", sub:["Моделювання","Колекціонування","Настільні ігри"]},
+  {name:"Музика", sub:["Музичні інструменти","Ноти та навчальні матеріали","Аксесуари для музикантів"]}]},
+{name:"Туризм та подорожі", sub:[
+  {name:"Спорядження для подорожей", sub:["Валізи","Дорожні аксесуари","Рюкзаки для подорожей"]},
+  {name:"Активний туризм", sub:["Туристичне спорядження","Треккінгове взуття","Екіпірування для походів"]},
+  {name:"Туристичні послуги", sub:["Бронювання турів","Оренда житла","Трансфер та екскурсії"]}]},
+{name:"Фінансові послуги", sub:[
+  {name:"Кредитування", sub:["Споживчі кредити","Кредитні картки","Мікропозики"]},
+  {name:"Страхування", sub:["Автострахування","Страхування майна","Медичне страхування"]},
+  {name:"Інвестиції", sub:["Консультації з інвестування","Ощадні продукти","Фінансове планування"]}]},
+{name:"Ювелірні вироби та годинники", sub:[
+  {name:"Прикраси", sub:["Каблучки","Сережки","Намиста та підвіски"]},
+  {name:"Годинники", sub:["Чоловічі наручні годинники","Жіночі наручні годинники","Смарт-годинники"]},
+  {name:"Аксесуари", sub:["Запонки","Ювелірні набори","Скриньки для прикрас"]}]}
+];
+
+/* ============ STATE ============ */
+const state = {
+  account:{ login:"", pass:"", pass2:"", offer:false },
+  shopName:"",
+  mainCategories:[],           // array of indexes into CATEGORIES
+  checkedC:new Set(),          // "mIdx-bIdx-cIdx"
+  openAcc:new Set(),           // mIdx
+  openB:new Set()              // "mIdx-bIdx"
+};
+
+/* ============ HELPERS ============ */
+const $ = (id)=>document.getElementById(id);
+function toast(msg){
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(window.__toastTimer);
+  window.__toastTimer = setTimeout(()=>t.classList.remove("show"), 2200);
+}
+function goTo(id){
+  document.getElementById(id).scrollIntoView({behavior:"smooth", block:"start"});
+}
+function initials(str){
+  if(!str) return "?";
+  const parts = str.trim().split(/\s+/);
+  return (parts[0][0] + (parts[1]?parts[1][0]:"")).toUpperCase();
+}
+
+/* progress: 6 dots representing screens 2..7 */
+const progressBars = document.querySelectorAll('[data-progress]');
+function buildProgress(){
+  progressBars.forEach(bar=>{
+    bar.innerHTML = "";
+    for(let i=0;i<6;i++){
+      const i_el = document.createElement('i');
+      i_el.innerHTML = '<b></b>';
+      bar.appendChild(i_el);
+    }
+  });
+}
+buildProgress();
+function setProgress(stepIndex){ // stepIndex 0..5 for screens 2..7
+  progressBars.forEach(bar=>{
+    [...bar.children].forEach((seg, idx)=>{
+      const b = seg.querySelector('b');
+      b.style.width = idx < stepIndex ? "100%" : (idx===stepIndex ? "100%" : "0%");
+      seg.style.opacity = idx <= stepIndex ? "1" : "1";
+      b.style.background = idx<=stepIndex ? "var(--accent)" : "var(--accent)";
+      if(idx>stepIndex) b.style.width="0%";
+    });
+  });
+}
+
+/* observe which screen is in view to update progress + trigger builds */
+const screenOrder = ["screen-1","screen-2","screen-3","screen-4","screen-5","screen-6","screen-7"];
+const io = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting && e.intersectionRatio > 0.6){
+      const idx = screenOrder.indexOf(e.target.id);
+      if(idx >= 1) setProgress(idx-1);
+      if(e.target.id === "screen-6") renderTree();
+    }
+  });
+}, {threshold:[0.6], root:$("onboarding")});
+screenOrder.forEach(id=>io.observe($(id)));
+
+/* ============ SCREEN 1 ============ */
+$("btn-start").addEventListener("click", ()=>goTo("screen-2"));
+$("btn-login").addEventListener("click", ()=>toast("Демо-прототип: авторизація не реалізована"));
+
+/* ============ SCREEN 2 — account ============ */
+const fLogin = $("f-login"), fPass = $("f-pass"), fPass2 = $("f-pass2"), fOffer = $("f-offer");
+const btnStep2 = $("btn-step2");
+function validateStep2(){
+  const loginOk = fLogin.value.trim().length >= 3;
+  const passOk = fPass.value.length >= 6;
+  const matchOk = fPass.value.length>0 && fPass.value === fPass2.value;
+  $("pass-hint").style.display = (fPass2.value.length>0 && !matchOk) ? "block" : "none";
+  $("f-pass2-wrap").classList.toggle("error", fPass2.value.length>0 && !matchOk);
+  const ok = loginOk && passOk && matchOk && fOffer.checked;
+  btnStep2.disabled = !ok;
+  state.account = {login:fLogin.value.trim(), pass:fPass.value, pass2:fPass2.value, offer:fOffer.checked};
+}
+[fLogin, fPass, fPass2].forEach(el=>el.addEventListener("input", validateStep2));
+fOffer.addEventListener("change", validateStep2);
+btnStep2.addEventListener("click", ()=>{ if(!btnStep2.disabled) goTo("screen-3"); });
+
+/* ============ SCREEN 3 — shop name ============ */
+const fShop = $("f-shopname"), btnStep3 = $("btn-step3");
+fShop.addEventListener("input", ()=>{
+  const val = fShop.value.trim();
+  state.shopName = val;
+  $("preview-name").textContent = val || "Введіть назву";
+  $("preview-dot").textContent = val ? initials(val) : "?";
+  btnStep3.disabled = val.length < 2;
+});
+btnStep3.addEventListener("click", ()=>{ if(!btnStep3.disabled) goTo("screen-4"); });
+
+/* ============ SCREEN 4 — main categories ============ */
+const chipWrap = $("chip-wrap"), catCounter = $("cat-counter"), btnStep4 = $("btn-step4");
+function renderChips(){
+  chipWrap.innerHTML = "";
+  CATEGORIES.forEach((cat, idx)=>{
+    const chip = document.createElement('button');
+    chip.className = "chip";
+    chip.type = "button";
+    chip.innerHTML = `<svg class="ck" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg><span>${cat.name}</span>`;
+    chip.addEventListener("click", ()=>toggleCategory(idx, chip));
+    chipWrap.appendChild(chip);
+  });
+  refreshChipStates();
+}
+function toggleCategory(idx, el){
+  const pos = state.mainCategories.indexOf(idx);
+  if(pos >= 0){
+    state.mainCategories.splice(pos,1);
+  } else {
+    if(state.mainCategories.length >= 3){
+      toast("Можна обрати максимум 3 категорії");
+      return;
+    }
+    state.mainCategories.push(idx);
+  }
+  refreshChipStates();
+}
+function refreshChipStates(){
+  [...chipWrap.children].forEach((chip, idx)=>{
+    const active = state.mainCategories.includes(idx);
+    chip.classList.toggle("active", active);
+    chip.classList.toggle("disabled", !active && state.mainCategories.length>=3);
+  });
+  catCounter.textContent = `Обрано: ${state.mainCategories.length} / 3`;
+  btnStep4.disabled = state.mainCategories.length === 0;
+}
+renderChips();
+btnStep4.addEventListener("click", ()=>{ if(!btnStep4.disabled) goTo("screen-5"); });
+
+/* ============ SCREEN 5 ============ */
+$("btn-step5").addEventListener("click", ()=>goTo("screen-6"));
+
+/* ============ SCREEN 6 — category tree ============ */
+const treeScroll = $("tree-scroll");
+let treeBuilt = false;
+function keyBC(m,b,c){ return `${m}-${b}-${c}`; }
+function bChildrenChecked(m,b){
+  const cat = CATEGORIES[m];
+  const total = cat.sub[b].sub.length;
+  let checked = 0;
+  for(let c=0;c<total;c++){ if(state.checkedC.has(keyBC(m,b,c))) checked++; }
+  return {checked, total};
+}
+function renderTree(){
+  if(treeBuilt) { updateAllBoxes(); return; }
+  treeScroll.innerHTML = "";
+  if(state.mainCategories.length === 0){
+    treeScroll.innerHTML = '<div class="tree-empty-hint">Спочатку оберіть категорії на попередньому кроці.</div>';
+    return;
+  }
+  state.mainCategories.forEach(mIdx=>{
+    const cat = CATEGORIES[mIdx];
+    const acc = document.createElement('div');
+    acc.className = "acc";
+    acc.dataset.m = mIdx;
+
+    const head = document.createElement('div');
+    head.className = "acc-head";
+    head.innerHTML = `<h3>${cat.name}</h3><div class="chev"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="#15151A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`;
+    head.addEventListener("click", ()=>{
+      acc.classList.toggle("open");
+    });
+    acc.appendChild(head);
+
+    const body = document.createElement('div');
+    body.className = "acc-body";
+    const bodyIn = document.createElement('div');
+    bodyIn.className = "acc-body-in";
+
+    cat.sub.forEach((bNode, bIdx)=>{
+      const nodeB = document.createElement('div');
+      nodeB.className = "node-b";
+      nodeB.dataset.b = bIdx;
+
+      const bHead = document.createElement('div');
+      bHead.className = "node-b-head";
+      bHead.innerHTML = `
+        <span class="cbox" data-role="bbox">
+          <svg class="full" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg class="mid" viewBox="0 0 24 24" fill="none"><rect x="5" y="11" width="14" height="2.4" rx="1.2" fill="white"/></svg>
+        </span>
+        <span class="label">${bNode.name}</span>
+        <span class="expander"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M9 6l6 6-6 6" stroke="#B4B4BC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      `;
+      bHead.querySelector('[data-role="bbox"]').addEventListener("click", (e)=>{
+        e.stopPropagation();
+        toggleB(mIdx, bIdx, bNode.sub.length, e.currentTarget);
+      });
+      bHead.addEventListener("click", ()=>{ nodeB.classList.toggle("open"); });
+      nodeB.appendChild(bHead);
+
+      const bBody = document.createElement('div');
+      bBody.className = "node-b-body";
+      bNode.sub.forEach((cName, cIdx)=>{
+        const nodeC = document.createElement('div');
+        nodeC.className = "node-c";
+        nodeC.dataset.c = cIdx;
+        nodeC.innerHTML = `
+          <span class="cbox" data-role="cbox">
+            <svg class="full" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="label">${cName}</span>
+        `;
+        nodeC.addEventListener("click", ()=>toggleC(mIdx, bIdx, cIdx, bNode.sub.length, nodeC));
+        bBody.appendChild(nodeC);
+      });
+      nodeB.appendChild(bBody);
+      bodyIn.appendChild(nodeB);
+    });
+
+    body.appendChild(bodyIn);
+    acc.appendChild(body);
+    treeScroll.appendChild(acc);
+  });
+  treeBuilt = true;
+}
+function toggleC(m,b,c,totalC,nodeCEl){
+  const k = keyBC(m,b,c);
+  const wasChecked = state.checkedC.has(k);
+  if(wasChecked) state.checkedC.delete(k); else state.checkedC.add(k);
+  nodeCEl.classList.toggle("checked", !wasChecked);
+  const box = nodeCEl.querySelector('.cbox');
+  box.classList.toggle("checked", !wasChecked);
+  box.classList.add("pulse");
+  setTimeout(()=>box.classList.remove("pulse"), 300);
+  updateBBox(m,b);
+}
+function toggleB(m,b,totalC,bboxEl){
+  const {checked} = bChildrenChecked(m,b);
+  const shouldCheckAll = checked < totalC;
+  for(let c=0;c<totalC;c++){
+    const k = keyBC(m,b,c);
+    if(shouldCheckAll) state.checkedC.add(k); else state.checkedC.delete(k);
+  }
+  bboxEl.classList.add("pulse");
+  setTimeout(()=>bboxEl.classList.remove("pulse"), 300);
+  // repaint this B's children + box
+  refreshNodeB(m,b);
+}
+function refreshNodeB(m,b){
+  const acc = [...treeScroll.children].find(a=>+a.dataset.m===m);
+  if(!acc) return;
+  const nodeB = [...acc.querySelectorAll('.node-b')].find(nb=>+nb.dataset.b===b);
+  if(!nodeB) return;
+  nodeB.querySelectorAll('.node-c').forEach((nc, cIdx)=>{
+    const k = keyBC(m,b,cIdx);
+    const on = state.checkedC.has(k);
+    nc.classList.toggle("checked", on);
+    nc.querySelector('.cbox').classList.toggle("checked", on);
+  });
+  updateBBox(m,b);
+}
+function updateBBox(m,b){
+  const acc = [...treeScroll.children].find(a=>+a.dataset.m===m);
+  if(!acc) return;
+  const nodeB = [...acc.querySelectorAll('.node-b')].find(nb=>+nb.dataset.b===b);
+  if(!nodeB) return;
+  const totalC = CATEGORIES[m].sub[b].sub.length;
+  const {checked} = bChildrenChecked(m,b);
+  const box = nodeB.querySelector('[data-role="bbox"]');
+  box.classList.remove("checked","indet");
+  if(checked === totalC && totalC>0) box.classList.add("checked");
+  else if(checked > 0) box.classList.add("indet");
+}
+function updateAllBoxes(){
+  state.mainCategories.forEach(m=>{
+    CATEGORIES[m].sub.forEach((bNode,b)=>updateBBox(m,b));
+  });
+}
+$("btn-step6").addEventListener("click", ()=>{
+  buildDashboard();
+  goTo("screen-7");
+});
+
+/* ============ SCREEN 7 — dashboard ============ */
+function buildDashboard(){
+  $("dash-name").textContent = state.shopName || "Мій магазин";
+  const catsWrap = $("dash-cats");
+  catsWrap.innerHTML = "";
+  state.mainCategories.forEach(idx=>{
+    const s = document.createElement('span');
+    s.textContent = CATEGORIES[idx].name;
+    catsWrap.appendChild(s);
+  });
+  $("dash-catcount").textContent = state.mainCategories.length;
+  $("dash-subcount").textContent = state.checkedC.size;
+
+  const menuItems = [
+    {ic:"🏪", t:"Дані магазину", s:"Контакти, реквізити, адреса"},
+    {ic:"🌐", t:"Міні-сайт", s:"Вітрина вашого магазину"},
+    {ic:"📦", t:"Каталог", s:"Категорії та товари"},
+    {ic:"🧾", t:"Товари", s:"Керування асортиментом"},
+    {ic:"📬", t:"Замовлення", s:"Нові та в обробці"},
+    {ic:"📈", t:"Аналітика", s:"Продажі та статистика"},
+    {ic:"⚙️", t:"Налаштування", s:"Тарифи, доступи, бот"},
+  ];
+  const menuWrap = $("dash-menu");
+  menuWrap.innerHTML = "";
+  menuItems.forEach(item=>{
+    const el = document.createElement('div');
+    el.className = "menu-card";
+    el.innerHTML = `<div class="ic">${item.ic}</div><div class="txt"><strong>${item.t}</strong><small>${item.s}</small></div><div class="arrow">›</div>`;
+    el.addEventListener("click", ()=>toast(`«${item.t}» — розділ у демо-версії`));
+    menuWrap.appendChild(el);
+  });
+}
+$("btn-viewsite").addEventListener("click", ()=>toast("Демо-прототип: перегляд сайту недоступний"));
+$("btn-dashboard").addEventListener("click", ()=>toast("Ви вже в панелі керування магазином"));
+
+/* init */
+setProgress(0);
+</script>
+</body>
+</html>
