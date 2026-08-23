@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Зведена таблиця · VEO FORCE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #FFFFFF;
+            font-family: 'Manrope', sans-serif;
+            font-size: 15px;
+            line-height: 1.5;
+            color: #0A0A0A;
+            padding: 16px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 420px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        .header {
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid #F0EFE9;
+        }
+
+        .header-brand {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 900;
+            color: #0A0A0A;
+            letter-spacing: -0.01em;
+        }
+
+        .header-brand span {
+            color: #FF0050;
+        }
+
+        .header-sub {
+            font-size: 0.7rem;
+            color: #888;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+
+        .header-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: #0A0A0A;
+            margin-top: 12px;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+
+        .header-meta {
+            font-size: 0.7rem;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        /* CARD */
+        .card {
+            background: #FFFFFF;
+            border: 1.5px solid #E8E5DE;
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            transition: border-color 0.2s;
+        }
+
+        .card-highlight {
+            border-color: rgba(255, 0, 80, 0.25);
+            background: #FFF8FA;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .card-name {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 800;
+            color: #0A0A0A;
+            letter-spacing: -0.01em;
+            line-height: 1.2;
+        }
+
+        .card-badge {
+            font-size: 0.58rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #fff;
+            background: #0A0A0A;
+            padding: 2px 10px;
+            border-radius: 20px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .card-badge.orange {
+            background: #CC7700;
+        }
+
+        .card-badge.green {
+            background: #1A7A3C;
+        }
+
+        .card-badge.red {
+            background: #CC0030;
+        }
+
+        .card-badge.pink {
+            background: #FF0050;
+        }
+
+        .card-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #F5F4F0;
+            font-size: 0.75rem;
+        }
+
+        .card-row:last-child {
+            border-bottom: none;
+        }
+
+        .card-row-label {
+            color: #888;
+            font-weight: 500;
+            flex-shrink: 0;
+            margin-right: 12px;
+        }
+
+        .card-row-value {
+            color: #0A0A0A;
+            font-weight: 600;
+            text-align: right;
+            word-break: break-word;
+        }
+
+        .card-row-value .tag {
+            display: inline-block;
+            background: #F0EFE9;
+            border-radius: 4px;
+            padding: 0 6px;
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: #555;
+            margin: 1px 2px 1px 0;
+        }
+
+        .card-row-value .tag.green {
+            background: #E0F5E8;
+            color: #1A7A3C;
+        }
+
+        .card-row-value .tag.red {
+            background: #FFE8E8;
+            color: #CC0030;
+        }
+
+        .card-row-value .tag.gold {
+            background: #FFF3D0;
+            color: #996600;
+        }
+
+        .card-row-value .tag.pink {
+            background: #FFE8F0;
+            color: #CC0040;
+        }
+
+        .concerns-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            justify-content: flex-end;
+        }
+
+        .concerns-list .tag {
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: #F0EFE9;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* HOOK BLOCK */
+        .hooks-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .hook-item {
+            background: #FAFAF8;
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: 0.7rem;
+            line-height: 1.4;
+            border: 1px solid #F0EFE9;
+        }
+
+        .hook-item .system {
+            font-weight: 700;
+            color: #0A0A0A;
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .hook-item .product {
+            color: #555;
+            font-weight: 500;
+            font-size: 0.65rem;
+        }
+
+        .hook-item .hook-text {
+            color: #FF0050;
+            font-weight: 600;
+            font-size: 0.68rem;
+            margin-top: 3px;
+            display: block;
+        }
+
+        /* STATS ROW */
+        .stats-mini {
+            display: flex;
+            gap: 10px;
+            margin: 8px 0 4px;
+            flex-wrap: wrap;
+        }
+
+        .stats-mini-item {
+            flex: 1;
+            min-width: 60px;
+            background: #FAFAF8;
+            border-radius: 8px;
+            padding: 6px 10px;
+            text-align: center;
+        }
+
+        .stats-mini-item .num {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 900;
+            color: #0A0A0A;
+            display: block;
+            letter-spacing: -0.02em;
+        }
+
+        .stats-mini-item .label {
+            font-size: 0.55rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: 600;
+        }
+
+        /* SECTION TITLE */
+        .section-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 800;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 20px 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #E8E5DE;
+        }
+
+        .section-title span {
+            color: #FF0050;
+        }
+
+        /* FOOTER */
+        .footer {
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #F0EFE9;
+            font-size: 0.65rem;
+            color: #aaa;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        .footer strong {
+            color: #0A0A0A;
+            font-weight: 700;
+        }
+
+        /* TOGGLE */
+        .toggle-wrap {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .toggle-btn {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1.5px solid #E8E5DE;
+            background: #fff;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.15s;
+            flex: 1;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .toggle-btn.active {
+            border-color: #FF0050;
+            background: rgba(255, 0, 80, 0.06);
+            color: #FF0050;
+        }
+
+        .toggle-btn:hover {
+            border-color: #ccc;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 380px) {
+            .hooks-grid {
+                grid-template-columns: 1fr;
+            }
+            .card-header {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+
+        <!-- HEADER -->
+        <div class="header">
+            <div class="header-brand"><span>VEO</span> FORCE · @vasil_veo</div>
+            <div class="header-sub">Аналітика команди · 2026</div>
+            <div class="header-title">Зведена таблиця учасників</div>
+            <div class="header-meta">9 учасників · Дані з анкет</div>
+        </div>
+
+        <!-- FILTER TOGGLE -->
+        <div class="toggle-wrap" id="filterWrap">
+            <button class="toggle-btn active" data-filter="all">Усі</button>
+            <button class="toggle-btn" data-filter="high">Високі охоплення</button>
+            <button class="toggle-btn" data-filter="blocked">Блокування</button>
+            <button class="toggle-btn" data-filter="low">Низька активність</button>
+        </div>
+
+        <!-- CARDS -->
+        <div id="cardsContainer">
+
+            <!-- 1. Тетяна -->
+            <div class="card" data-views="2000000" data-blocked="true" data-active="true">
+                <div class="card-header">
+                    <div class="card-name">Тетяна</div>
+                    <div class="card-badge pink">4 роки</div>
+                </div>
+                <div class="stats-mini">
+                    <div class="stats-mini-item"><span class="num">2M</span><span class="label">макс</span></div>
+                    <div class="stats-mini-item"><span class="num">2/д</span><span class="label">пости</span></div>
+                    <div class="stats-mini-item"><span class="num">🚫</span><span class="label">блокування</span></div>
+                </div>
+                <div class="card-row"><span class="card-row-label">Акаунти</span><span class="card-row-value">2 (1 втрачено)</span></div>
+                <div class="card-row"><span class="card-row-label">Причина блокування</span><span class="card-row-value" style="font-size:0.7rem;color:#CC0030;">Заборонені слова, номер телефону</span></div>
+                <div class="card-row"><span class="card-row-label">Формати</span><span class="card-row-value"><span class="tag">Розмовні</span></span></div>
+                <div class="card-row"><span class="card-row-label">Стиль</span><span class="card-row-value"><span class="tag">Емоційна</span><span class="tag">Експертна</span></span></div>
+                <div class="card-row"><span class="card-row-label">Освіта</span><span class="card-row-value">Програміст</span></div>
+                <div class="card-row"><span class="card-row-label">Топ-продукти</span><span class="card-row-value"><span class="tag">Очисна</span><span class="tag">Грибок</span><span class="tag">Схуднення</span></span></div>
+                <div class="card-row"><span class="card-row-label">Запит</span><span class="card-row-value" style="font-size:0.7rem;color:#0A0A0A;">Навчитись знімати так, щоб не блокували і було багато замовлень</span></div>
+                <div class="card-row"><span class="card-row-label">Гачки</span></div>
+                <div class="hooks-grid">
+                    <div class="hook-item"><span class="system">Серцево-судинна</span><span class="product">Капісудин</span><span class="hook-text">Допомога при високому тиску</span></div>
+                    <div class="hook-item"><span class="system">Травна</span><span class="product">Ферментозин</span><span class="hook-text">Здуття, закрепи — допоможе</span></div>
+                    <div class="hook-item"><span class="system">Нервова</span><span class="product">Магній</span><span class="hook-text">Не спите, нервуєте — вам потрібен</span></div>
+                    <div class="hook-item"><span class="system">Імунна</span><span class="product">Імуностан</span><span class="hook-text">Соплі, кашель — в поміч</span></div>
+                    <div class="hook-item"><span class="system">Опорно-рухова</span><span class="product">Хондротин</span><span class="hook-text">Хрустять коліна — допоможе</span></div>
+                </div>
+                <div class="card-row" style="margin-top:6px;border-top:1px solid #F0EFE9;padding-top:8px;">
+                    <span class="card-row-label">Турбує</span>
+                    <span class="card-row-value"><div class="concerns-list"><span class="tag">Падіння охоплень</span><span class="tag">Блокування</span><span class="tag">Стоп-слова</span><span class="tag">Комерційний контент</span><span class="tag">Продажі</span><span class="tag">TikTok Shop</span></div></span>
+                </div>
+            </div>
+
+            <!-- 2. Анастасія Данільченко -->
+            <div class="card card-highlight" data-views="560000" data-blocked="true" data-active="true">
+                <div class="card-header">
+                    <div class="card-name">Анастасія Данільченко</div>
+                    <div class="card-badge green">5 років</div>
+                </div>
+                <div class="stats-mini">
+                    <div class="stats-mini-item"><span class="num">560K</span><span class="label">макс</span></div>
+                    <div class="stats-mini-item"><span class="num">3/д</span><span class="label">пости</span></div>
+                    <div class="stats-mini-item"><span class="num">165 хв</span><span class="label">в TikTok</span></div>
+                </div>
+                <div class="card-row"><span class="card-row-label">Акаунти</span><span class="card-row-value">1 (1 втрачено 5 років тому)</span></div>
+                <div class="card-row"><span class="card-row-label">Формати</span><span class="card-row-value"><span class="tag">Розмовні</span><span class="tag green">Освітній</span></span></div>
+                <div class="card-row"><span class="card-row-label">Стиль</span><span class="card-row-value"><span class="tag gold">Поєднання</span></span></div>
+                <div class="card-row"><span class="card-row-label">Освіта</span><span class="card-row-value" style="font-size:0.7rem;">Фельдшер-акушер · Фіз.терапевт · Натуропат · Нутриціолог</span></div>
+                <div class="card-row"><span class="card-row-label">Топ-продукти</span><span class="card-row-value"><span class="tag">Лецитин+таурин</span><span class="tag">Печія</span><span class="tag">БАДи</span></span></div>
+                <div class="card-row"><span class="card-row-label">Запит</span><span class="card-row-value" style="font-size:0.7rem;">Давати користь, не втрачати аудиторію, збільшити конверсію</span></div>
+                <div class="card-row"><span class="card-row-label">Гачки</span></div>
+                <div class="hooks-grid">
+                    <div class="hook-item"><span class="system">Серцево-судинна</span><span class="product">Коензим Q10</span><span class="hook-text">Серце втомилось — дай коензим</span></div>
+                    <div class="hook-item"><span class="system">Травна</span><span class="product">Лецитин+таурин</span><span class="hook-text">Печінку нагодуй лецитином</span></div>
+                    <div class="hook-item"><span class="system">Нервова</span><span class="product">Магній</span><span class="hook-text">Нерви в порядку разом з магнієм</span></div>
+                    <div class="hook-item"><span class="system">Імунна</span><span class="product">Вітамін D</span><span class="hook-text">Просів імунітет — підійме</span></div>
+                    <div class="hook-item"><span class="system">Опорно-рухова</span><span class="product">Кальцимін</span><span class="hook-text">Остеопороз — не вирок</span></div>
+                </div>
+                <div class="card-row" style="margin-top:6px;border-top:1px solid #F0EFE9;padding-top:8px;">
+                    <span class="card-row-label">Турбує</span>
+                    <span class="card-row-value"><div class="concerns-list"><span class="tag">Падіння охоплень</span><span class="tag">Стоп-слова</span><span class="tag">Продажі</span><span class="tag">TikTok Shop</span></div></span>
+                </div>
+            </div>
+
+            <!-- 3. Ірина Жаркова -->
+            <div class="card" data-views="1200000" data-blocked="true" data-active="true">
+                <div class="card-header">
+                    <div class="card-name">Ірина Жаркова</div>
+                    <div class="card-badge pink">5 років</div>
+                </div>
+                <div class="stats-mini">
+                    <div class="stats-mini-item"><span class="num">1.2M</span><span class="label">макс</span></div>
+                    <div class="stats-mini-item"><span class="num">1/д</span><span class="label">пости</span></div>
+                    <div class="stats-mini-item"><span class="num">4 ак</span><span class="label">акаунти</span></div>
+                </div>
+                <div class="card-row"><span class="card-row-label">Акаунти</span><span class="card-row-value">4 (1 втрачено)</span></div>
+                <div class="card-row"><span class="card-row-label">Причина блокування</span><span class="card-row-value" style="font-size:0.7rem;color:#CC0030;">Блокування сторінки, переданий дітям</span></div>
+                <div class="card-row"><span class="card-row-label">Формати</span><span class="card-row-value"><span class="tag">Розмовні</span><span class="tag">Без обличчя</span><span class="tag">Слайди</span></span></div>
+                <div class="card-row"><span class="card-row-label">Стиль</span><span class="card-row-value"><span class="tag gold">Поєднання</span></span></div>
+                <div class="card-row"><span class="card-row-label">Освіта</span><span class="card-row-value">Хімік-лаборант · Народна медицина (самоосвіта)</span></div>
+                <div class="card-row"><span class="card-row-label">Топ-продукти</span><span class="card-row-value"><span class="tag">Очищення</span><span class="tag">Кандида</span><span class="tag">Великий живіт</span></span></div>
+                <div class="card-row"><span class="card-row-label">Запит</span><span class="card-row-value" style="font-size:0.7rem;">Зрозуміти стоп-слова, не отримати блок, збільшити продажі</span></div>
+                <div class="card-row"><span class="card-row-label">Гачки</span></div>
+                <div class="hooks-grid">
+                    <div class="hook-item"><span class="system">Серцево-судинна</span><span class="product">Вітакард</span><span class="hook-text">Легкість кровообігу</span></div>
+                    <div class="hook-item"><span class="system">Травна</span><span class="product">Біфідолактин</span><span class="hook-text">Бактерії шукають новий дім</span></div>
+                    <div class="hook-item"><span class="system">Нервова</span><span class="product">Нервостабін</span><span class="hook-text">Спокій вже поруч</span></div>
+                    <div class="hook-item"><span class="system">Імунна</span><span class="product">Імуностан</span><span class="hook-text">Підкріплення вже поруч</span></div>
+                    <div class="hook-item"><span class="system">Опорно-рухова</span><span class="product">Хондротин</span><span class="hook-text">Суглоби просять ремонту</span></div>
+                </div>
+                <div class="card-row" style="margin-top:6px;border-top:1px solid #F0EFE9;padding-top:8px;">
+                    <span class="card-row-label">Турбує</span>
+                    <span class="card-row-value"><div class="concerns-list"><span class="tag">Падіння охоплень</span><span class="tag">Стоп-слова</span><span class="tag">Комерційний контент</span><span class="tag">Продажі</span></div></span>
+                </div>
+            </div>
+
+            <!-- 4. Ольга Басумак -->
+            <div class="card" data-views="500000" data-blocked="false" data-active="true">
+                <div class="card-header">
+                    <div class="card-name">Ольга Басумак</div>
+                    <div class="card-badge">4 роки</div>
+                </div>
+                <div class="stats-mini">
+                    <div class="stats-mini-item"><span class="num">500K</span><span class="label">макс</span></div>
+                    <div class="stats-mini-item"><span class="num">1/д</span><span class="label">пости</span></div>
+                    <div class="stats-mini-item"><span class="num">7 хв</span><span class="label">в TikTok</span></div>
+                </div>
+                <div class="card-row"><span class="card-row-label">Акаунти</span><span class="card-row-value">1</span></div>
+                <div class="card-row"><span class="card-row-label">Формати</span><span class="card-row-value"><span class="tag">Розмовні</span></span></div>
+                <div class="card-row"><span class="card-row-label">Стиль</span><span class="card-row-value"><span class="tag green">Експертна</span></span></div>
+                <div class="card-row"><span class="card-row-label">Освіта</span><span class="card-row-value">Економічна</span></div>
+                <div class="card-row"><span class="card-row-label">Топ-продукти</span><span class="card-row-value"><span class="tag">Очищення</span><span class="tag">Суглоби</span><span class="tag">Кандидоз</span></span></div>
+                <div class="card-row"><span class="card-row-label">Запит</span><span class="card-row-value" style="font-size:0.7rem;">Які слова можна використовувати без порушень, контент що спонукає до покупки</span></div>
+                <div class="card-row"><span class="card-row-label">Гачки</span></div>
+                <div class="hooks-grid">
+                    <div class="hook-item"><span class="system">Серцево-судинна</span><span class="product">Омега</span><span class="hook-text">Знижує ризик інфарктів</span></div>
+                    <div class="hook-item"><span class="system">Травна</span><span class="product">Травлесил</span><span class="hook-text">Позбутися печії реально</span></div>
+                    <div class="hook-item"><span class="system">Нервова</span><span class="product">Магній</span><span class="hook-text">Спокій, сон, міцні нерви</span></div>
+                    <div class="hook-item"><span class="system">Імунна</span><span class="product">Вітамінна бомба</span><span class="hook-text">Міцний імунітет</span></div>
+                    <div class="hook-item"><span class="system">Опорно-рухова</span><span class="product">Пропаїн</span><span class="hook-text">Відновлення спини, знеболення</span></div>
+                </div>
+                <div class="card-row" style="margin-top:6px;border-top:1px solid #F0EFE9;padding-top:8px;">
+                    <span class="card-row-label">Турбує</span>
+                    <span class="card-row-value"><div class="concerns-list"><span class="tag">Падіння охоплень</span><span class="tag">Стоп-слова</span><span class="tag">Продажі</span><span class="tag">TikTok Shop</span></div></span>
+                </div>
+            </div>
+
+            <!-- 5. Альона -->
+            <div class="card" data-views="1200000" data-blocked="false" data-active="false">
+                <div class="card-header">
+                    <div class="card-name">Альона</div>
+                    <div class="card-badge orange">3 роки</div>
+                </div>
+                <div class="stats-mini">
+                    <div class="stats-mini-item"><span class="num">1.2M</span><span class="label">макс</span></div>
+                    <div class="stats-mini-item"><span class="num">—</span><span class="label">пости</span></div>
+                    <div class="stats-mini-item"><span class="num">⏸️</span><span class="label">перерва</span></div>
+                </div>
+                <div class="card-row"><span class="card-row-label">Акаунти</span><span class="card-row-value">3</span></div>
+                <div class="card-row"><span class="card-row-label">Формати</span><span class="card-row-value"><span class="tag">Розмовні</span><span class="tag">Без обличчя</span></span></div>
+                <div class="card-row"><span class="card-row-label">Стиль</span><span class="card-row-value"><span class="tag pink">Емоційна</span></span></div>
+                <div class="card-row"><span class="card-row-label">Освіта</span><span class="card-row-value" style="font-size:0.7rem;">Нутриціолог · Експерт з вітамінів · Таргет</span></div>
+                <div class="card-row"><span class="card-row-label">Топ-продукти</span><span class="card-row-value"><span class="tag">Магній</span><span class="tag">Колаген</span><span class="tag">Очисна</span></span></div>
+                <div class="card-row"><span class="card-row-label">Запит</span><span class="card-row-value" style="font-size:0.7rem;">Почати активно вести після перерви, змінити подачу, структурувати роботу</span></div>
+                <div class="card-row"><span class="card-row-label">Гачки</span></div>
+                <div class="hooks-grid">
+                    <div class="hook-item"><span class="system">Серцево-судинна</span><span class="product">Магній, Омега</span><span class="hook-text">Підтримка серцевого ритму</span></div>
+                    <div class="hook-item"><span class="system">Травна</span><span class="product">Ферментозин</span><span class="hook-text">Заміна Креону? Розберемось</span></div>
+                    <div class="hook-item"><span class="system">Нервова</span><span class="product">Магній+Грифон</span><span class="hook-text">Апатія, дратівливість, безсоння</span></div>
+                    <div class="hook-item"><span class="system">Імунна</span><span class="product">Антивірин+D+C+цинк</span><span class="hook-text">Часті хвороби, отити, кашель</span></div>
+                    <div class="hook-item"><span class="system">Опорно-рухова</span><span class="product">Пропаїн+колаген</span><span class="hook-text">Тягне ногу, важко стояти</span></div>
+                </div>
+                <div class="card-row" style="margin-top:6px;border-top:1px solid #F0EFE9;padding-top:8px;">
+                    <span class="card-row-label">Турбує</span>
+                    <span class="card-row-value"><div class="concerns-list"><span class="tag">Падіння охоплень</span><span class="tag">Стоп-слова</span><span class="tag">Комерційний контент</span><span class="tag">Продажі</span></div></span>
+                </div>
+            </div>
+
+            <!-- 6. Наталія -->
+            <div class="card card-highlight" data-views="850000" data-blocked="true" data-active="false">
+                <div class="card-header">
+                    <div class="card-name">Наталія</div>
+                    <div class="card-badge red">1.5 роки</div>
+                </div>
+                <div class="stats-mini">
+                    <div class="stats-mini-item"><span class="num">850K</span><span class="label">макс</span></div>
+                    <div class="stats-mini-item"><span class="num">—</span><span class="label">пости</span></div>
+                    <div class="stats-mini-item"><span class="num">🚫🚫</span><span class="label">2 блокування</span></div>
+                </div>
+                <div class="card-row"><span class="card-row-label">Акаунти</span><span class="card-row-value">0 (2 втрачено)</span></div>
+                <div class="card-row"><span class="card-row-label">Причина блокування</span><span class="card-row-value" style="font-size:0.7rem;color:#CC0030;">Суворі правила TikTok</span></div>
+                <div class="card-row"><span class="card-row-label">Формати</span><span class="card-row-value"><span class="tag">Розмовні</span><span class="tag">Без обличчя</span></span></div>
+                <div class="card-row"><span class="card-row-label">Стиль</span><span class="card-row-value"><span class="tag gold">Поєднання</span></span></div>
+                <div class="card-row"><span class="card-row-label">Освіта</span><span class="card-row-value">Немає</span></div>
+                <div class="card-row"><span class="card-row-label">Топ-продукти</span><span class="card-row-value"><span class="tag">Фунгіцин</span><span class="tag">Лімфорен</span><span class="tag">Гепатовіт</span></span></div>
+                <div class="card-row"><span class="card-row-label">Запит</span><span class="card-row-value" style="font-size:0.7rem;">Навчитися правильно вести акаунти, збільшити охоплення та продажі</span></div>
+                <div class="card-row"><span class="card-row-label">Гачки</span></div>
+                <div class="hooks-grid">
+                    <div class="hook-item"><span class="system">Серцево-судинна</span><span class="product">Фунгіцин</span><span class="hook-text">Хочеш бути здоровим — очищайся</span></div>
+                    <div class="hook-item"><span class="system">Травна</span><span class="product">Біфідолактин</span><span class="hook-text">Відновлюйте мікрофлору</span></div>
+                    <div class="hook-item"><span class="system">Нервова</span><span class="product">Магній цитрат</span><span class="hook-text">Магній потрібен кожному</span></div>
+                    <div class="hook-item"><span class="system">Імунна</span><span class="product">Імуностан</span><span class="hook-text">Зберігайте високий імунітет</span></div>
+                    <div class="hook-item"><span class="system">Опорно-рухова</span><span class="product">Антиревматин</span><span class="hook-text">Здоров'я суглобів — довголіття</span></div>
+                </div>
+                <div class="card-row" style="margin-top:6px;border-top:1px solid #F0EFE9;padding-top:8px;">
+                    <span class="card-row-label">Турбує</span>
+                    <span class="card-row-value"><div class="concerns-list"><span class="tag">Падіння охоплень</span><span class="tag">Блокування</span><span class="tag">Стоп-слова</span><span class="tag">Продажі</span><span class="tag">TikTok Shop</span></div></span>
+                </div>
+            </div>
+
+            <!-- 7. Лєна -->
+            <div class="card" data-views="449500" data-blocked="false" data-active="true">
+                <div class="card-header">
+                    <div class="card-name">Лєна</div>
+                    <div class="card-badge orange">2 роки</div>
+                </div>
+                <div class="stats-mini">
+                    <div class="stats-mini-item"><span class="num">449K</span><span class="label">макс</span></div>
+                    <div class="stats-mini-item"><span class="num">3/д</span><span class="label">пости</span></div>
+                    <div class="stats-mini-item"><span class="num">54 хв</span><span class="label">в TikTok</span></div>
+                </div>
+                <div class="card-row"><span class="card-row-label">Акаунти</span><span class="card-row-value">1 (активний 3 міс)</span></div>
+                <div class="card-row"><span class="card-row-label">Формати</span><span class="card-row-value"><span class="tag">Розмовні</span></span></div>
+                <div class="card-row"><span class="card-row-label">Стиль</span><span class="card-row-value"><span class="tag gold">Поєднання</span></span></div>
+                <div class="card-row"><span class="card-row-label">Освіта</span><span class="card-row-value">Самоосвіта</span></div>
+                <div class="card-row"><span class="card-row-label">Топ-продукти</span><span class="card-row-value"><span class="tag">Кандида</span><span class="tag">Очисна</span><span class="tag">Алергії</span></span></div>
+                <div class="card-row"><span class="card-row-label">Запит</span><span class="card-row-value" style="font-size:0.7rem;">Що і як писати, щоб не блокували, та створювати вірусні ролики</span></div>
+                <div class="card-row"><span class="card-row-label">Гачки</span></div>
+                <div class="hooks-grid">
+                    <div class="hook-item"><span class="system">Серцево-судинна</span><span class="product">Лецитин</span><span class="hook-text">Захистить печінку</span></div>
+                    <div class="hook-item"><span class="system">Травна</span><span class="product">Ферментозин</span><span class="hook-text">Здуття, важкість, підшлункова</span></div>
+                    <div class="hook-item"><span class="system">Нервова</span><span class="product">Нервостабін</span><span class="hook-text">Злий як пес і погано спиш?</span></div>
+                    <div class="hook-item"><span class="system">Імунна</span><span class="product">Лізин</span><span class="hook-text">Герпес, часті простуди?</span></div>
+                    <div class="hook-item"><span class="system">Опорно-рухова</span><span class="product">Пропаїн</span><span class="hook-text">Болять суглоби, сидиш на знеболювальних?</span></div>
+                </div>
+                <div class="card-row" style="margin-top:6px;border-top:1px solid #F0EFE9;padding-top:8px;">
+                    <span class="card-row-label">Турбує</span>
+                    <span class="card-row-value"><div class="concerns-list"><span class="tag">Падіння охоплень</span><span class="tag">Блокування</span><span class="tag">Стоп-слова</span><span class="tag">Продажі</span></div></span>
+                </div>
+            </div>
+
+            <!-- 8. Ірина Реп'ях -->
+            <div class="card" data-views="100000" data-blocked="true" data-active="true">
+                <div class="card-header">
+                    <div class="card-name">Ірина Реп'ях</div>
+                    <div class="card-badge">4 роки</div>
+                </div>
+                <div class="stats-mini">
+                    <div class="stats-mini-item"><span class="num">100K</span><span class="label">макс</span></div>
+                    <div class="stats-mini-item"><span class="num">—</span><span class="label">пости</span></div>
+                    <div class="stats-mini-item"><span class="num">🚫</span><span class="label">блокування</span></div>
+                </div>
+                <div class="card-row"><span class="card-row-label">Акаунти</span><span class="card-row-value">2 (1 втрачено)</span></div>
+                <div class="card-row"><span class="card-row-label">Причина блокування</span><span class="card-row-value" style="font-size:0.7rem;color:#CC0030;">Медичні терміни: грибок Кандида, антипаразитарний, холестерин</span></div>
+                <div class="card-row"><span class="card-row-label">Формати</span><span class="card-row-value"><span class="tag">Розмовні</span><span class="tag">Без обличчя</span><span class="tag">Слайди</span><span class="tag green">Освітній</span></span></div>
+                <div class="card-row"><span class="card-row-label">Стиль</span><span class="card-row-value"><span class="tag gold">Поєднання</span></span></div>
+                <div class="card-row"><span class="card-row-label">Освіта</span><span class="card-row-value">Курси дієтолога · Нутриціолога</span></div>
+                <div class="card-row"><span class="card-row-label">Топ-продукти</span><span class="card-row-value"><span class="tag">БАДи</span><span class="tag">Харчування</span><span class="tag">Комплекси</span></span></div>
+                <div class="card-row"><span class="card-row-label">Запит</span><span class="card-row-value" style="font-size:0.7rem;">Навчитись створювати «зальотні відео», щоб не блокувало</span></div>
+                <div class="card-row"><span class="card-row-label">Гачки</span></div>
+                <div class="hooks-grid">
+                    <div class="hook-item"><span class="system">Серцево-судинна</span><span class="product">Вітакард</span><span class="hook-text">Знизити тиск рослинними — реально</span></div>
+                    <div class="hook-item"><span class="system">Травна</span><span class="product">Ферментозин</span><span class="hook-text">Важкість після їжі зникне</span></div>
+                    <div class="hook-item"><span class="system">Нервова</span><span class="product">Магній+Грифон</span><span class="hook-text">Безсоння, тривожність зникнуть</span></div>
+                    <div class="hook-item"><span class="system">Імунна</span><span class="product">D+C+цинк</span><span class="hook-text">Активуй імунітет природно</span></div>
+                    <div class="hook-item"><span class="system">Опорно-рухова</span><span class="product">Пропаїн</span><span class="hook-text">Забудь про біль в суглобах</span></div>
+                </div>
+                <div class="card-row" style="margin-top:6px;border-top:1px solid #F0EFE9;padding-top:8px;">
+                    <span class="card-row-label">Турбує</span>
+                    <span class="card-row-value"><div class="concerns-list"><span class="tag">Падіння охоплень</span><span class="tag">Блокування</span><span class="tag">Стоп-слова</span><span class="tag">Комерційний контент</span><span class="tag">Продажі</span><span class="tag">TikTok Shop</span></div></span>
+                </div>
+            </div>
+
+            <!-- 9. Олена Драбик -->
+            <div class="card card-highlight" data-views="1700000" data-blocked="false" data-active="true">
+                <div class="card-header">
+                    <div class="card-name">Олена Драбик</div>
+                    <div class="card-badge pink">4 роки</div>
+                </div>
+                <div class="stats-mini">
+                    <div class="stats-mini-item"><span class="num">1.7M</span><span class="label">макс</span></div>
+                    <div class="stats-mini-item"><span class="num">1/д</span><span class="label">пости</span></div>
+                    <div class="stats-mini-item"><span class="num">15 хв</span><span class="label">в TikTok</span></div>
+                </div>
+                <div class="card-row"><span class="card-row-label">Акаунти</span><span class="card-row-value">2</span></div>
+                <div class="card-row"><span class="card-row-label">Формати</span><span class="card-row-value"><span class="tag">Розмовні</span></span></div>
+                <div class="card-row"><span class="card-row-label">Стиль</span><span class="card-row-value"><span class="tag gold">Поєднання</span></span></div>
+                <div class="card-row"><span class="card-row-label">Освіта</span><span class="card-row-value" style="font-size:0.7rem;">Економічна · Режисер · Актриса · Холістичний терапевт</span></div>
+                <div class="card-row"><span class="card-row-label">Топ-продукти</span><span class="card-row-value"><span class="tag">Курс очищення</span><span class="tag">Від живота</span><span class="tag">Від грибка</span></span></div>
+                <div class="card-row"><span class="card-row-label">Запит</span><span class="card-row-value" style="font-size:0.7rem;">Зрозуміти, як тепер записувати — місяць не публікує, бо боїться втратити акаунт</span></div>
+                <div class="card-row"><span class="card-row-label">Гачки</span></div>
+                <div class="hooks-grid">
+                    <div class="hook-item"><span class="system">Серцево-судинна</span><span class="product">Вітакард</span><span class="hook-text">Щоб не хапатися за серце</span></div>
+                    <div class="hook-item"><span class="system">Травна</span><span class="product">Ферментозин</span><span class="hook-text">Ніби наївся камінців</span></div>
+                    <div class="hook-item"><span class="system">Нервова</span><span class="product">Нервостабін+магній</span><span class="hook-text">Гавкаєш на людей як пес</span></div>
+                    <div class="hook-item"><span class="system">Імунна</span><span class="product">Антивірин+Імуностан</span><span class="hook-text">Щоб не носити додому шмарклі</span></div>
+                    <div class="hook-item"><span class="system">Опорно-рухова</span><span class="product">Антиревматин</span><span class="hook-text">Ніби ще не такий старий…</span></div>
+                </div>
+                <div class="card-row" style="margin-top:6px;border-top:1px solid #F0EFE9;padding-top:8px;">
+                    <span class="card-row-label">Турбує</span>
+                    <span class="card-row-value"><div class="concerns-list"><span class="tag">Стоп-слова</span><span class="tag">Комерційний контент</span><span class="tag">Продажі</span><span class="tag">TikTok Shop</span></div></span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <strong>VEO FORCE</strong> · Аналітика команди · 2026<br>
+            Дані з анкет учасників · <span id="countDisplay">9 учасників</span>
+        </div>
+
+    </div>
+
+    <script>
+        (function() {
+            const container = document.getElementById('cardsContainer');
+            const cards = container.querySelectorAll('.card');
+            const filterBtns = document.querySelectorAll('.toggle-btn');
+            const countDisplay = document.getElementById('countDisplay');
+
+            function updateCount(visibleCount) {
+                countDisplay.textContent = visibleCount + ' учасників';
+            }
+
+            function filterCards(filter) {
+                let visible = 0;
+                cards.forEach(card => {
+                    const views = parseInt(card.dataset.views) || 0;
+                    const blocked = card.dataset.blocked === 'true';
+                    const active = card.dataset.active === 'true';
+
+                    let show = false;
+
+                    switch (filter) {
+                        case 'all':
+                            show = true;
+                            break;
+                        case 'high':
+                            show = views >= 1000000;
+                            break;
+                        case 'blocked':
+                            show = blocked === true;
+                            break;
+                        case 'low':
+                            show = active === false || views < 500000;
+                            break;
+                        default:
+                            show = true;
+                    }
+
+                    if (show) {
+                        card.classList.remove('hidden');
+                        visible++;
+                    } else {
+                        card.classList.add('hidden');
+                    }
+                });
+
+                updateCount(visible);
+            }
+
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const filter = this.dataset.filter;
+                    filterCards(filter);
+                });
+            });
+
+            // initial count
+            updateCount(cards.length);
+        })();
+    </script>
+
+</body>
+</html>
