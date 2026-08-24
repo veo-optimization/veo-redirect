@@ -1,0 +1,2294 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Анкета · Реєстрація міні-сайту · VEO FORCE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #FAFAF8;
+            font-family: 'Manrope', sans-serif;
+            font-size: 16px;
+            line-height: 1.7;
+            color: #0A0A0A;
+            padding: 16px 12px 60px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 820px;
+            margin: 0 auto;
+        }
+
+        /* HEADER */
+        .doc-header {
+            background: #0A0A0A;
+            border-radius: 16px;
+            padding: 24px 18px 20px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .doc-header::after {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,0,80,0.08), transparent 70%);
+            pointer-events: none;
+        }
+
+        .doc-header .badge {
+            display: inline-block;
+            font-size: 0.55rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 4px;
+            padding: 3px 10px;
+            margin-bottom: 10px;
+        }
+
+        .doc-header h1 {
+            font-family: 'Unbounded', sans-serif;
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -0.04em;
+            line-height: 1.15;
+            position: relative;
+            z-index: 1;
+        }
+
+        .doc-header h1 em {
+            font-style: normal;
+            color: #FF0050;
+        }
+
+        .doc-header .sub {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.4);
+            margin-top: 8px;
+            max-width: 600px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .doc-header .meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-top: 14px;
+            font-size: 0.65rem;
+            color: rgba(255,255,255,0.25);
+            position: relative;
+            z-index: 1;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            padding-top: 12px;
+        }
+
+        .doc-header .meta span strong {
+            color: rgba(255,255,255,0.6);
+            font-weight: 600;
+        }
+
+        /* SECTIONS */
+        section {
+            background: #fff;
+            border: 1.5px solid #E8E5DE;
+            border-radius: 14px;
+            padding: 18px 16px 20px;
+            margin-bottom: 14px;
+            transition: border-color 0.2s;
+        }
+
+        section:focus-within {
+            border-color: #FF0050;
+        }
+
+        .section-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.55rem;
+            font-weight: 700;
+            color: #FF0050;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        section h2 {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 900;
+            color: #0A0A0A;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+
+        section h2 em {
+            font-style: normal;
+            color: #FF0050;
+        }
+
+        section .desc {
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 14px;
+            line-height: 1.6;
+        }
+
+        /* FORM ELEMENTS */
+        .form-group {
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #0A0A0A;
+            margin-bottom: 3px;
+        }
+
+        .form-group label .required {
+            color: #FF0050;
+            margin-left: 2px;
+        }
+
+        .form-group .helper {
+            font-size: 0.7rem;
+            color: #888;
+            margin-top: 2px;
+            line-height: 1.4;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid #E8E5DE;
+            border-radius: 8px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.88rem;
+            color: #0A0A0A;
+            background: #FAFAF8;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            border-color: #FF0050;
+            box-shadow: 0 0 0 3px rgba(255, 0, 80, 0.08);
+            background: #fff;
+        }
+
+        .form-group input.error,
+        .form-group select.error,
+        .form-group textarea.error {
+            border-color: #CC0030;
+            background: #FFF5F5;
+        }
+
+        .form-group input.success {
+            border-color: #1A7A3C;
+            background: #F5FFF8;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 60px;
+        }
+
+        .form-group .error-msg {
+            font-size: 0.7rem;
+            color: #CC0030;
+            margin-top: 3px;
+            display: none;
+        }
+
+        .form-group .error-msg.show {
+            display: block;
+        }
+
+        /* PASSWORD */
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 44px;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 1.1rem;
+            cursor: pointer;
+            color: #888;
+            padding: 4px;
+            line-height: 1;
+        }
+
+        .password-toggle:hover {
+            color: #0A0A0A;
+        }
+
+        .password-strength {
+            display: flex;
+            gap: 4px;
+            margin-top: 6px;
+            height: 4px;
+        }
+
+        .password-strength .bar {
+            flex: 1;
+            height: 100%;
+            border-radius: 2px;
+            background: #E8E5DE;
+            transition: background 0.3s;
+        }
+
+        .password-strength .bar.active.weak {
+            background: #CC0030;
+        }
+        .password-strength .bar.active.medium {
+            background: #CC7700;
+        }
+        .password-strength .bar.active.strong {
+            background: #1A7A3C;
+        }
+
+        .password-requirements {
+            font-size: 0.7rem;
+            color: #888;
+            margin-top: 4px;
+            line-height: 1.5;
+        }
+
+        .password-requirements .req {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .password-requirements .req.done {
+            color: #1A7A3C;
+        }
+
+        .password-requirements .req.fail {
+            color: #CC0030;
+        }
+
+        .password-generate-wrap {
+            display: flex;
+            gap: 8px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+
+        .btn-generate-pw {
+            padding: 6px 14px;
+            background: #0A0A0A;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .btn-generate-pw:hover {
+            background: #FF0050;
+        }
+
+        /* CHECKBOXES */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin: 6px 0;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 0.82rem;
+            color: #333;
+            line-height: 1.5;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            margin-top: 2px;
+            accent-color: #FF0050;
+            cursor: pointer;
+        }
+
+        .checkbox-item input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            min-width: 18px;
+            margin-top: 2px;
+            accent-color: #FF0050;
+            cursor: pointer;
+        }
+
+        .checkbox-item .label-text {
+            font-size: 0.82rem;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .checkbox-item .label-text .note {
+            font-size: 0.7rem;
+            color: #888;
+            display: block;
+        }
+
+        /* REPEATABLE FIELDS */
+        .repeatable-wrap {
+            border: 1px solid #F0EFE9;
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-top: 8px;
+            background: #FAFAF8;
+        }
+
+        .repeatable-wrap .entry {
+            border-bottom: 1px solid #E8E5DE;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .repeatable-wrap .entry:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .repeatable-wrap .entry .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .btn-add {
+            padding: 6px 14px;
+            background: transparent;
+            color: #FF0050;
+            border: 1.5px dashed #FF0050;
+            border-radius: 6px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            margin-top: 6px;
+        }
+
+        .btn-add:hover {
+            background: #FFF5F7;
+            border-style: solid;
+        }
+
+        .btn-remove {
+            padding: 3px 10px;
+            background: transparent;
+            color: #CC0030;
+            border: 1px solid #E6CCCC;
+            border-radius: 4px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            margin-top: 4px;
+        }
+
+        .btn-remove:hover {
+            background: #FFEAEA;
+        }
+
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .entry-header .entry-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        /* TIKTOK */
+        .tiktok-radio-group {
+            display: flex;
+            gap: 14px;
+            margin: 4px 0 6px;
+            flex-wrap: wrap;
+        }
+
+        .tiktok-radio-group label {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: #555;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .tiktok-radio-group input[type="radio"] {
+            accent-color: #FF0050;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        /* RADIO GROUP */
+        .radio-group {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin: 4px 0 6px;
+        }
+
+        .radio-group label {
+            font-size: 0.82rem;
+            font-weight: 500;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .radio-group input[type="radio"] {
+            accent-color: #FF0050;
+            width: 17px;
+            height: 17px;
+            cursor: pointer;
+        }
+
+        /* CONDITIONAL */
+        .conditional {
+            display: none;
+            margin-top: 8px;
+            padding: 12px 14px;
+            background: #FAFAF8;
+            border-radius: 8px;
+            border: 1px solid #F0EFE9;
+        }
+
+        .conditional.show {
+            display: block;
+        }
+
+        /* RESULT BLOCK */
+        .result-block {
+            background: #0A0A0A;
+            border-radius: 14px;
+            padding: 20px 18px;
+            margin-top: 20px;
+            position: relative;
+        }
+
+        .result-block .result-title {
+            font-family: 'Unbounded', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 900;
+            color: #fff;
+            letter-spacing: -0.02em;
+            margin-bottom: 4px;
+        }
+
+        .result-block .result-sub {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.3);
+            margin-bottom: 14px;
+        }
+
+        .result-block .result-content {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.85);
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 14px 16px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+            line-height: 1.7;
+        }
+
+        .result-block .result-content .empty {
+            color: rgba(255,255,255,0.2);
+            font-style: italic;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn-copy {
+            padding: 10px 24px;
+            background: #FF0050;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .btn-copy:hover {
+            background: #CC003A;
+        }
+
+        .btn-copy.copied {
+            background: #1A7A3C;
+        }
+
+        .btn-reset {
+            padding: 10px 24px;
+            background: transparent;
+            color: rgba(255,255,255,0.5);
+            border: 1.5px solid rgba(255,255,255,0.15);
+            border-radius: 8px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .btn-reset:hover {
+            background: rgba(255,255,255,0.05);
+            color: #fff;
+        }
+
+        /* TOAST */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #0A0A0A;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.82rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s, transform 0.3s;
+            pointer-events: none;
+            z-index: 999;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* PASSWORD RESULT BLOCK */
+        .password-result {
+            background: #1A0A0A;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-top: 12px;
+            border: 1px solid rgba(255,0,80,0.2);
+        }
+
+        .password-result .label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255,255,255,0.3);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .password-result .value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #fff;
+            word-break: break-all;
+        }
+
+        .password-result .actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .password-result .actions button {
+            padding: 4px 12px;
+            background: rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.7);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            font-family: 'Manrope', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .password-result .actions button:hover {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 480px) {
+            body {
+                padding: 10px 8px 40px;
+            }
+            section {
+                padding: 14px 12px 16px;
+            }
+            .doc-header {
+                padding: 18px 14px 16px;
+            }
+            .doc-header h1 {
+                font-size: 1.1rem;
+            }
+            .result-block .result-content {
+                font-size: 0.65rem;
+                padding: 10px 12px;
+            }
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                font-size: 0.82rem;
+                padding: 8px 10px;
+            }
+            .radio-group {
+                gap: 10px;
+            }
+            .radio-group label {
+                font-size: 0.78rem;
+            }
+            .password-requirements .req {
+                display: block;
+                margin-right: 0;
+            }
+            .tiktok-radio-group {
+                gap: 8px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .result-actions {
+                flex-direction: column;
+            }
+            .result-actions .btn-copy,
+            .result-actions .btn-reset {
+                width: 100%;
+                text-align: center;
+            }
+            .password-generate-wrap {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="doc-header">
+        <div class="badge">📋 Анкета · VEO FORCE</div>
+        <h1>Реєстрація міні-сайту<br><em>збір даних</em></h1>
+        <p class="sub">Заповніть усі поля, щоб ми могли створити ваш міні-сайт. Після заповнення ви зможете скопіювати всі дані для відправки.</p>
+        <div class="meta">
+            <span><strong>Для:</strong> продавці · ФОП · бізнес</span>
+            <span><strong>Формат:</strong> міні-сайт</span>
+            <span><strong>Статус:</strong> ⚡ автоматична генерація</span>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 00: REGISTRATION -->
+    <!-- ============================================================ -->
+    <section id="section-00">
+        <span class="section-number">Секція 00 · Обов'язково</span>
+        <h2>Реєстрація магазину</h2>
+        <p class="desc">Ці дані використовуються для реєстрації магазину в системі. Email є логіном для входу, пароль — для доступу до магазину.</p>
+
+        <!-- Registration Email -->
+        <div class="form-group">
+            <label>Електронна пошта для реєстрації магазину <span class="required">*</span></label>
+            <input type="email" id="reg_email" placeholder="Введіть email для входу в магазин" autocomplete="email">
+            <div class="helper">Ця електронна пошта використовується як логін для реєстрації та входу в магазин. Це НЕ обов'язково контактна пошта, яка буде відображатися на сайті.</div>
+            <div class="error-msg" id="reg_email_error">Будь ласка, введіть коректний email</div>
+        </div>
+
+        <!-- Registration Password -->
+        <div class="form-group">
+            <label>Придумайте пароль для реєстрації магазину <span class="required">*</span></label>
+            <div class="password-wrapper">
+                <input type="password" id="reg_password" placeholder="Створіть новий унікальний пароль" autocomplete="new-password">
+                <button class="password-toggle" id="pw_toggle" type="button" aria-label="Показати/приховати пароль">👁️</button>
+            </div>
+            <div class="helper">Рекомендуємо придумати новий пароль, який раніше ніде не використовувався.</div>
+            <div class="password-strength" id="pw_strength">
+                <div class="bar" id="pw_bar_1"></div>
+                <div class="bar" id="pw_bar_2"></div>
+                <div class="bar" id="pw_bar_3"></div>
+                <div class="bar" id="pw_bar_4"></div>
+            </div>
+            <div class="password-requirements" id="pw_reqs">
+                <span class="req" id="req_length">🔲 мін. 6 символів</span>
+                <span class="req" id="req_upper">🔲 велика літера</span>
+                <span class="req" id="req_lower">🔲 мала літера</span>
+                <span class="req" id="req_number">🔲 цифра</span>
+                <span class="req" id="req_special">🔲 спецсимвол</span>
+            </div>
+            <div class="password-generate-wrap">
+                <button class="btn-generate-pw" id="btn_generate_pw">🔑 Згенерувати безпечний пароль</button>
+            </div>
+            <div class="error-msg" id="reg_password_error">Пароль не відповідає вимогам</div>
+        </div>
+
+        <!-- Password Confirmation -->
+        <div class="form-group">
+            <label>Повторіть пароль <span class="required">*</span></label>
+            <div class="password-wrapper">
+                <input type="password" id="reg_password_confirm" placeholder="Повторіть пароль" autocomplete="new-password">
+                <button class="password-toggle" id="pw_confirm_toggle" type="button" aria-label="Показати/приховати пароль">👁️</button>
+            </div>
+            <div class="error-msg" id="reg_password_confirm_error">Паролі не збігаються</div>
+        </div>
+
+        <!-- Security Notice -->
+        <div style="background:#FFF5F7;border-left:3px solid #FF0050;padding:10px 14px;border-radius:0 8px 8px 0;margin-top:8px;font-size:0.78rem;color:#555;">
+            🔒 <strong>Важливо:</strong> Створіть окремий пароль спеціально для цього магазину. Не використовуйте пароль, який уже використовується на інших сервісах. Пароль не зберігається в анкеті — він лише показується вам для копіювання.
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 01: STORE & FOP -->
+    <!-- ============================================================ -->
+    <section id="section-01">
+        <span class="section-number">Секція 01</span>
+        <h2>Основна інформація про магазин та ФОП</h2>
+
+        <div class="form-group">
+            <label>Назва магазину <span class="required">*</span></label>
+            <input type="text" id="store_name" placeholder="Наприклад: Beroo Fashion">
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="form-group">
+                <label>Прізвище ФОП <span class="required">*</span></label>
+                <input type="text" id="fop_surname" placeholder="Прізвище">
+            </div>
+            <div class="form-group">
+                <label>Ім'я ФОП <span class="required">*</span></label>
+                <input type="text" id="fop_name" placeholder="Ім'я">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>По батькові ФОП</label>
+            <input type="text" id="fop_patronymic" placeholder="По батькові (необов'язково)">
+        </div>
+
+        <div class="form-group">
+            <label>IBAN рахунку <span class="required">*</span></label>
+            <input type="text" id="iban" placeholder="UA...">
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div class="form-group">
+                <label>ЄДРПОУ <span class="required">*</span></label>
+                <input type="text" id="edrpou" placeholder="ЄДРПОУ">
+            </div>
+            <div class="form-group">
+                <label>ІПН ФОП <span class="required">*</span></label>
+                <input type="text" id="fop_tax_id" placeholder="ІПН">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Назва банку <span class="required">*</span></label>
+            <input type="text" id="bank_name" placeholder="Наприклад: Monobank, ПриватБанк">
+        </div>
+
+        <div class="form-group">
+            <label>Призначення платежу <span class="required">*</span></label>
+            <textarea id="payment_purpose" rows="3" placeholder="Що кінцевий споживач повинен вказувати у призначенні платежу під час оплати на IBAN?"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>Категорія товарів або послуг <span class="required">*</span></label>
+            <textarea id="product_categories" rows="3" placeholder="Вкажіть ключові напрямки діяльності. Наприклад: жіночий одяг, дитячий одяг, чоловічий одяг, автомобілі, автозапчастини, нерухомість, юридичні послуги, кондитерство."></textarea>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 02: CONTACTS -->
+    <!-- ============================================================ -->
+    <section id="section-02">
+        <span class="section-number">Секція 02</span>
+        <h2>Контакти та соціальні мережі</h2>
+        <p class="desc">Оберіть контакти, які повинні відображатися на міні-сайті. Після вибору чекбокса відповідні поля з'являться автоматично.</p>
+
+        <!-- TELEGRAM -->
+        <div class="checkbox-item">
+            <input type="checkbox" id="cb_telegram">
+            <span class="label-text">Telegram</span>
+        </div>
+        <div class="conditional" id="cond_telegram">
+            <div class="repeatable-wrap" id="telegram_wrap">
+                <div class="entry" data-idx="0">
+                    <div class="entry-header">
+                        <span class="entry-label">Telegram #1</span>
+                        <button class="btn-remove" onclick="removeEntry('telegram_wrap', this)">✕ Видалити</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Тип</label>
+                        <select class="telegram_type">
+                            <option value="Написати менеджеру">Написати менеджеру</option>
+                            <option value="Канал">Канал</option>
+                            <option value="Група / спільнота">Група / спільнота</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Посилання або username</label>
+                        <input type="text" class="telegram_value" placeholder="https://t.me/... або @username">
+                    </div>
+                </div>
+            </div>
+            <button class="btn-add" onclick="addEntry('telegram_wrap', 'telegram')">+ Додати ще Telegram</button>
+        </div>
+
+        <!-- VIBER -->
+        <div class="checkbox-item">
+            <input type="checkbox" id="cb_viber">
+            <span class="label-text">Viber</span>
+        </div>
+        <div class="conditional" id="cond_viber">
+            <div class="repeatable-wrap" id="viber_wrap">
+                <div class="entry" data-idx="0">
+                    <div class="entry-header">
+                        <span class="entry-label">Viber #1</span>
+                        <button class="btn-remove" onclick="removeEntry('viber_wrap', this)">✕ Видалити</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Тип</label>
+                        <select class="viber_type">
+                            <option value="Написати менеджеру">Написати менеджеру</option>
+                            <option value="Канал">Канал</option>
+                            <option value="Група / спільнота">Група / спільнота</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Номер або посилання</label>
+                        <input type="text" class="viber_value" placeholder="+380... або посилання">
+                    </div>
+                </div>
+            </div>
+            <button class="btn-add" onclick="addEntry('viber_wrap', 'viber')">+ Додати ще Viber</button>
+        </div>
+
+        <!-- PHONE -->
+        <div class="checkbox-item">
+            <input type="checkbox" id="cb_phone">
+            <span class="label-text">Номер телефону</span>
+        </div>
+        <div class="conditional" id="cond_phone">
+            <div class="repeatable-wrap" id="phone_wrap">
+                <div class="entry" data-idx="0">
+                    <div class="entry-header">
+                        <span class="entry-label">Телефон #1</span>
+                        <button class="btn-remove" onclick="removeEntry('phone_wrap', this)">✕ Видалити</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Номер</label>
+                        <input type="text" class="phone_value" placeholder="+380...">
+                    </div>
+                    <div class="form-group">
+                        <label>Підпис номера</label>
+                        <input type="text" class="phone_label" placeholder="Наприклад: Менеджер">
+                    </div>
+                </div>
+            </div>
+            <button class="btn-add" onclick="addEntry('phone_wrap', 'phone')">+ Додати ще номер</button>
+        </div>
+
+        <!-- CONTACT EMAIL -->
+        <div class="checkbox-item">
+            <input type="checkbox" id="cb_contact_email">
+            <span class="label-text">Електронна пошта для зв'язку</span>
+        </div>
+        <div class="conditional" id="cond_contact_email">
+            <div class="repeatable-wrap" id="contact_email_wrap">
+                <div class="entry" data-idx="0">
+                    <div class="entry-header">
+                        <span class="entry-label">Email #1</span>
+                        <button class="btn-remove" onclick="removeEntry('contact_email_wrap', this)">✕ Видалити</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="contact_email_value" placeholder="example@domain.com">
+                    </div>
+                </div>
+            </div>
+            <button class="btn-add" onclick="addEntry('contact_email_wrap', 'contact_email')">+ Додати ще Email</button>
+            <div class="helper" style="margin-top:4px;color:#888;font-size:0.7rem;">Це окреме поле від реєстраційного email. Реєстраційний email є логіном магазину і не повинен автоматично ставати публічним контактом.</div>
+        </div>
+
+        <!-- WHATSAPP -->
+        <div class="checkbox-item">
+            <input type="checkbox" id="cb_whatsapp">
+            <span class="label-text">WhatsApp</span>
+        </div>
+        <div class="conditional" id="cond_whatsapp">
+            <div class="repeatable-wrap" id="whatsapp_wrap">
+                <div class="entry" data-idx="0">
+                    <div class="entry-header">
+                        <span class="entry-label">WhatsApp #1</span>
+                        <button class="btn-remove" onclick="removeEntry('whatsapp_wrap', this)">✕ Видалити</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Номер або посилання</label>
+                        <input type="text" class="whatsapp_value" placeholder="+380... або посилання">
+                    </div>
+                </div>
+            </div>
+            <button class="btn-add" onclick="addEntry('whatsapp_wrap', 'whatsapp')">+ Додати ще WhatsApp</button>
+        </div>
+
+        <!-- YOUTUBE -->
+        <div class="checkbox-item">
+            <input type="checkbox" id="cb_youtube">
+            <span class="label-text">YouTube</span>
+        </div>
+        <div class="conditional" id="cond_youtube">
+            <div class="repeatable-wrap" id="youtube_wrap">
+                <div class="entry" data-idx="0">
+                    <div class="entry-header">
+                        <span class="entry-label">YouTube #1</span>
+                        <button class="btn-remove" onclick="removeEntry('youtube_wrap', this)">✕ Видалити</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Посилання</label>
+                        <input type="text" class="youtube_value" placeholder="https://youtube.com/...">
+                    </div>
+                </div>
+            </div>
+            <button class="btn-add" onclick="addEntry('youtube_wrap', 'youtube')">+ Додати ще YouTube</button>
+        </div>
+
+        <!-- FACEBOOK -->
+        <div class="checkbox-item">
+            <input type="checkbox" id="cb_facebook">
+            <span class="label-text">Facebook</span>
+        </div>
+        <div class="conditional" id="cond_facebook">
+            <div class="repeatable-wrap" id="facebook_wrap">
+                <div class="entry" data-idx="0">
+                    <div class="entry-header">
+                        <span class="entry-label">Facebook #1</span>
+                        <button class="btn-remove" onclick="removeEntry('facebook_wrap', this)">✕ Видалити</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Посилання</label>
+                        <input type="text" class="facebook_value" placeholder="https://facebook.com/...">
+                    </div>
+                </div>
+            </div>
+            <button class="btn-add" onclick="addEntry('facebook_wrap', 'facebook')">+ Додати ще Facebook</button>
+        </div>
+
+        <!-- INSTAGRAM -->
+        <div class="checkbox-item">
+            <input type="checkbox" id="cb_instagram">
+            <span class="label-text">Instagram</span>
+        </div>
+        <div class="conditional" id="cond_instagram">
+            <div class="repeatable-wrap" id="instagram_wrap">
+                <div class="entry" data-idx="0">
+                    <div class="entry-header">
+                        <span class="entry-label">Instagram #1</span>
+                        <button class="btn-remove" onclick="removeEntry('instagram_wrap', this)">✕ Видалити</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Посилання</label>
+                        <input type="text" class="instagram_value" placeholder="https://instagram.com/...">
+                    </div>
+                </div>
+            </div>
+            <button class="btn-add" onclick="addEntry('instagram_wrap', 'instagram')">+ Додати ще Instagram</button>
+        </div>
+
+        <!-- TIKTOK -->
+        <div class="checkbox-item">
+            <input type="checkbox" id="cb_tiktok">
+            <span class="label-text">TikTok</span>
+        </div>
+        <div class="conditional" id="cond_tiktok">
+            <div class="repeatable-wrap" id="tiktok_wrap">
+                <div class="entry" data-idx="0">
+                    <div class="entry-header">
+                        <span class="entry-label">TikTok #1</span>
+                        <button class="btn-remove" onclick="removeEntry('tiktok_wrap', this)">✕ Видалити</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Посилання на TikTok</label>
+                        <input type="text" class="tiktok_value" placeholder="https://tiktok.com/@username">
+                    </div>
+                    <div class="tiktok-radio-group">
+                        <label><input type="radio" name="tiktok_main_0" value="1" class="tiktok_main"> Основна сторінка</label>
+                        <label><input type="radio" name="tiktok_backup_0" value="1" class="tiktok_backup"> Резервна сторінка</label>
+                    </div>
+                </div>
+            </div>
+            <button class="btn-add" onclick="addEntry('tiktok_wrap', 'tiktok')">+ Додати ще TikTok</button>
+            <div class="helper" style="margin-top:4px;color:#888;font-size:0.7rem;">Максимум одна основна та одна резервна сторінка. Одна сторінка не може одночасно бути основною та резервною.</div>
+        </div>
+
+        <!-- WEBSITE -->
+        <div class="checkbox-item">
+            <input type="checkbox" id="cb_website">
+            <span class="label-text">Власний сайт</span>
+        </div>
+        <div class="conditional" id="cond_website">
+            <div class="repeatable-wrap" id="website_wrap">
+                <div class="entry" data-idx="0">
+                    <div class="entry-header">
+                        <span class="entry-label">Сайт #1</span>
+                        <button class="btn-remove" onclick="removeEntry('website_wrap', this)">✕ Видалити</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Посилання</label>
+                        <input type="text" class="website_value" placeholder="https://...">
+                    </div>
+                </div>
+            </div>
+            <button class="btn-add" onclick="addEntry('website_wrap', 'website')">+ Додати ще сайт</button>
+        </div>
+
+        <!-- OLX -->
+        <div class="checkbox-item">
+            <input type="checkbox" id="cb_olx">
+            <span class="label-text">OLX</span>
+        </div>
+        <div class="conditional" id="cond_olx">
+            <div class="repeatable-wrap" id="olx_wrap">
+                <div class="entry" data-idx="0">
+                    <div class="entry-header">
+                        <span class="entry-label">OLX #1</span>
+                        <button class="btn-remove" onclick="removeEntry('olx_wrap', this)">✕ Видалити</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Посилання</label>
+                        <input type="text" class="olx_value" placeholder="https://olx.ua/...">
+                    </div>
+                </div>
+            </div>
+            <button class="btn-add" onclick="addEntry('olx_wrap', 'olx')">+ Додати ще OLX</button>
+        </div>
+
+        <!-- PROM.UA -->
+        <div class="checkbox-item">
+            <input type="checkbox" id="cb_prom">
+            <span class="label-text">Prom.ua</span>
+        </div>
+        <div class="conditional" id="cond_prom">
+            <div class="repeatable-wrap" id="prom_wrap">
+                <div class="entry" data-idx="0">
+                    <div class="entry-header">
+                        <span class="entry-label">Prom.ua #1</span>
+                        <button class="btn-remove" onclick="removeEntry('prom_wrap', this)">✕ Видалити</button>
+                    </div>
+                    <div class="form-group">
+                        <label>Посилання</label>
+                        <input type="text" class="prom_value" placeholder="https://prom.ua/...">
+                    </div>
+                </div>
+            </div>
+            <button class="btn-add" onclick="addEntry('prom_wrap', 'prom')">+ Додати ще Prom.ua</button>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 03: SITE PAGES -->
+    <!-- ============================================================ -->
+    <section id="section-03">
+        <span class="section-number">Секція 03</span>
+        <h2>Сторінки міні-сайту</h2>
+        <p class="desc">Оберіть сторінки, які потрібно створити на міні-сайті.</p>
+
+        <div class="checkbox-group">
+            <div class="checkbox-item"><input type="checkbox" class="page_check" value="Доставка та оплата"><span class="label-text">Доставка та оплата</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="page_check" value="Повернення та обмін"><span class="label-text">Повернення та обмін</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="page_check" value="Контакти та оплата"><span class="label-text">Контакти та оплата</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="page_check" value="Публічна оферта"><span class="label-text">Публічна оферта</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="page_check" value="Політика конфіденційності"><span class="label-text">Політика конфіденційності</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="page_check" value="Умови співпраці"><span class="label-text">Умови співпраці</span></div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 04: PAYMENT -->
+    <!-- ============================================================ -->
+    <section id="section-04">
+        <span class="section-number">Секція 04</span>
+        <h2>Оплата</h2>
+
+        <div class="checkbox-group">
+            <div class="checkbox-item"><input type="checkbox" class="payment_check" value="Оплата на IBAN"><span class="label-text">Оплата на IBAN</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="payment_check" value="Оплата карткою"><span class="label-text">Оплата карткою</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="payment_check" value="Оплата готівкою"><span class="label-text">Оплата готівкою</span></div>
+            <div class="checkbox-item"><input type="checkbox" id="cb_cod" class="payment_check" value="Накладений платіж"><span class="label-text">Накладений платіж</span></div>
+        </div>
+
+        <div class="conditional" id="cond_cod">
+            <div class="form-group">
+                <label>Сума передоплати</label>
+                <input type="text" id="cod_prepaid" placeholder="Наприклад: 200 грн">
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top:10px;">
+            <label>Мінімальна сума замовлення</label>
+            <input type="text" id="minimum_order" placeholder="Наприклад: 500 грн">
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 05: SHIPPING -->
+    <!-- ============================================================ -->
+    <section id="section-05">
+        <span class="section-number">Секція 05</span>
+        <h2>Доставка</h2>
+
+        <div class="checkbox-group">
+            <div class="checkbox-item"><input type="checkbox" class="shipping_check" value="Нова Пошта"><span class="label-text">Нова Пошта</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="shipping_check" value="Укрпошта"><span class="label-text">Укрпошта</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="shipping_check" value="Meest Express"><span class="label-text">Meest Express</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="shipping_check" value="Delivery"><span class="label-text">Delivery</span></div>
+            <div class="checkbox-item"><input type="checkbox" id="cb_shipping_other" class="shipping_check"><span class="label-text">Інша служба доставки</span></div>
+        </div>
+
+        <div class="conditional" id="cond_shipping_other">
+            <div class="form-group">
+                <label>Вкажіть службу доставки</label>
+                <input type="text" id="shipping_other_name" placeholder="Назва служби доставки">
+            </div>
+        </div>
+
+        <div class="form-group" style="margin-top:10px;">
+            <label>Термін відправки</label>
+            <input type="number" id="shipping_days" placeholder="Кількість робочих днів" style="max-width:200px;">
+            <span style="font-size:0.75rem;color:#888;margin-left:6px;">робочих днів</span>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 06: FISCAL RECEIPT -->
+    <!-- ============================================================ -->
+    <section id="section-06">
+        <span class="section-number">Секція 06</span>
+        <h2>Фіскальний чек</h2>
+
+        <div class="form-group">
+            <label>Чи створює продавець фіскальний чек?</label>
+            <div class="radio-group">
+                <label><input type="radio" name="fiscal_receipt" value="Так" class="fiscal_radio"> Так</label>
+                <label><input type="radio" name="fiscal_receipt" value="Ні" class="fiscal_radio"> Ні</label>
+            </div>
+        </div>
+
+        <div class="conditional" id="cond_receipt_yes">
+            <div class="form-group">
+                <label>Як покупець отримує чек?</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="receipt_delivery" value="Вкладається в посилку" class="receipt_radio"> Вкладається в посилку</label>
+                    <label><input type="radio" name="receipt_delivery" value="Надсилається електронною поштою" class="receipt_radio"> Надсилається електронною поштою</label>
+                    <label><input type="radio" name="receipt_delivery" value="Інший спосіб" class="receipt_radio"> Інший спосіб</label>
+                </div>
+            </div>
+            <div class="conditional" id="cond_receipt_other">
+                <div class="form-group">
+                    <label>Опишіть спосіб надсилання чека</label>
+                    <input type="text" id="receipt_other_method" placeholder="Опишіть, як покупець отримує чек">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 07: EXCHANGE & RETURN -->
+    <!-- ============================================================ -->
+    <section id="section-07">
+        <span class="section-number">Секція 07</span>
+        <h2>Обмін та повернення</h2>
+
+        <!-- Exchange -->
+        <div class="checkbox-item">
+            <input type="checkbox" id="cb_exchange">
+            <span class="label-text">Є можливість обміну</span>
+        </div>
+        <div class="conditional" id="cond_exchange">
+            <div class="form-group">
+                <label>Умови обміну</label>
+                <textarea id="exchange_terms" rows="4" placeholder="Опишіть умови обміну. Наприклад: через Нову Пошту, кур'єром, особисто тощо."></textarea>
+            </div>
+        </div>
+
+        <!-- Return -->
+        <div class="checkbox-item" style="margin-top:8px;">
+            <input type="checkbox" id="cb_return">
+            <span class="label-text">Є можливість повернення</span>
+        </div>
+        <div class="conditional" id="cond_return">
+            <div class="form-group">
+                <label>Термін повернення</label>
+                <select id="return_period">
+                    <option value="14 днів">14 днів</option>
+                    <option value="Інший термін">Інший термін</option>
+                </select>
+            </div>
+            <div class="conditional" id="cond_return_other">
+                <div class="form-group">
+                    <label>Вкажіть термін повернення</label>
+                    <input type="text" id="return_period_other" placeholder="Наприклад: 30 днів">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Додаткові умови повернення</label>
+                <textarea id="return_terms" rows="4" placeholder="Додаткові умови повернення"></textarea>
+            </div>
+        </div>
+
+        <!-- Legal checkbox -->
+        <div class="checkbox-item" style="margin-top:10px;">
+            <input type="checkbox" id="cb_legal_return">
+            <span class="label-text">Враховувати законодавчі обмеження щодо товарів, які не підлягають обміну та поверненню</span>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 08: PRIVACY -->
+    <!-- ============================================================ -->
+    <section id="section-08">
+        <span class="section-number">Секція 08</span>
+        <h2>Політика конфіденційності</h2>
+
+        <div class="checkbox-group">
+            <div class="checkbox-item"><input type="checkbox" class="privacy_check" value="Погоджуюсь на обробку персональних даних відповідно до законодавства України."><span class="label-text">Погоджуюсь на обробку персональних даних відповідно до законодавства України.</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="privacy_check" value="Підтверджую, що продавець самостійно відповідає за збереження персональних даних своїх клієнтів."><span class="label-text">Підтверджую, що продавець самостійно відповідає за збереження персональних даних своїх клієнтів.</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="privacy_check" value="Підтверджую, що персональні дані не передаються третім особам без законних підстав або необхідної згоди."><span class="label-text">Підтверджую, що персональні дані не передаються третім особам без законних підстав або необхідної згоди.</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="privacy_check" value="Підтверджую достовірність інформації, наданої для створення сайту."><span class="label-text">Підтверджую достовірність інформації, наданої для створення сайту.</span></div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 09: PUBLIC OFFER -->
+    <!-- ============================================================ -->
+    <section id="section-09">
+        <span class="section-number">Секція 09</span>
+        <h2>Публічна оферта</h2>
+
+        <div class="checkbox-group">
+            <div class="checkbox-item"><input type="checkbox" class="offer_check" value="Підтверджую, що продавець самостійно визначає умови продажу товарів або надання послуг."><span class="label-text">Підтверджую, що продавець самостійно визначає умови продажу товарів або надання послуг.</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="offer_check" value="Підтверджую, що умови оплати відповідають фактичним умовам роботи продавця."><span class="label-text">Підтверджую, що умови оплати відповідають фактичним умовам роботи продавця.</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="offer_check" value="Підтверджую, що умови доставки відповідають фактичним умовам роботи продавця."><span class="label-text">Підтверджую, що умови доставки відповідають фактичним умовам роботи продавця.</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="offer_check" value="Підтверджую, що умови обміну та повернення відповідають фактичним умовам роботи продавця."><span class="label-text">Підтверджую, що умови обміну та повернення відповідають фактичним умовам роботи продавця.</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="offer_check" value="Підтверджую достовірність інформації, наданої для формування публічної оферти."><span class="label-text">Підтверджую достовірність інформації, наданої для формування публічної оферти.</span></div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 10: COOPERATION -->
+    <!-- ============================================================ -->
+    <section id="section-10">
+        <span class="section-number">Секція 10</span>
+        <h2>Умови співпраці</h2>
+
+        <div class="checkbox-group">
+            <div class="checkbox-item"><input type="checkbox" class="cooperation_check" value="Підтверджую, що надана інформація є актуальною."><span class="label-text">Підтверджую, що надана інформація є актуальною.</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="cooperation_check" value="Підтверджую відповідальність за достовірність реквізитів та контактних даних."><span class="label-text">Підтверджую відповідальність за достовірність реквізитів та контактних даних.</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="cooperation_check" value="Підтверджую відповідальність за фактичні умови оплати, доставки, обміну та повернення."><span class="label-text">Підтверджую відповідальність за фактичні умови оплати, доставки, обміну та повернення.</span></div>
+            <div class="checkbox-item"><input type="checkbox" class="cooperation_check" value="Погоджуюсь із використанням наданої інформації для створення та налаштування міні-сайту."><span class="label-text">Погоджуюсь із використанням наданої інформації для створення та налаштування міні-сайту.</span></div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- RESULT BLOCK -->
+    <!-- ============================================================ -->
+    <div class="result-block" id="resultBlock">
+        <div class="result-title">📄 Дані для реєстрації та створення міні-сайту</div>
+        <div class="result-sub">Live-генерація. Усі заповнені поля будуть зібрані тут.</div>
+
+        <!-- PASSWORD RESULT (SEPARATE) -->
+        <div class="password-result" id="passwordResult">
+            <span class="label">🔑 Дані для входу (окремо, не передаються в загальний блок)</span>
+            <div class="value" id="passwordDisplay">Пароль буде показано після заповнення</div>
+            <div class="actions">
+                <button id="btn_copy_password" onclick="copyPassword()">📋 Скопіювати пароль</button>
+            </div>
+        </div>
+
+        <!-- MAIN RESULT -->
+        <div class="result-content" id="resultContent">
+            <span class="empty">Заповніть анкету — дані з'являться автоматично</span>
+        </div>
+
+        <div class="result-actions">
+            <button class="btn-copy" id="btn_copy_result" onclick="copyResult()">📋 Скопіювати всі дані</button>
+            <button class="btn-reset" onclick="resetForm()">🔄 Очистити анкету</button>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div class="toast" id="toast"></div>
+
+</div>
+
+<script>
+    // ============================================================
+    // REPEATABLE FIELDS
+    // ============================================================
+    let entryCounters = {};
+
+    function getCounter(prefix) {
+        if (!entryCounters[prefix]) entryCounters[prefix] = 0;
+        return entryCounters[prefix]++;
+    }
+
+    function addEntry(wrapId, type) {
+        const wrap = document.getElementById(wrapId);
+        const entries = wrap.querySelectorAll('.entry');
+        const idx = entries.length;
+        const counter = getCounter(type);
+
+        const entry = document.createElement('div');
+        entry.className = 'entry';
+        entry.dataset.idx = idx;
+
+        let html = '';
+        const labelMap = {
+            'telegram': 'Telegram',
+            'viber': 'Viber',
+            'phone': 'Телефон',
+            'contact_email': 'Email',
+            'whatsapp': 'WhatsApp',
+            'youtube': 'YouTube',
+            'facebook': 'Facebook',
+            'instagram': 'Instagram',
+            'tiktok': 'TikTok',
+            'website': 'Сайт',
+            'olx': 'OLX',
+            'prom': 'Prom.ua'
+        };
+
+        const label = labelMap[type] || 'Запис';
+
+        html += `<div class="entry-header">
+            <span class="entry-label">${label} #${idx + 1}</span>
+            <button class="btn-remove" onclick="removeEntry('${wrapId}', this)">✕ Видалити</button>
+        </div>`;
+
+        if (type === 'telegram') {
+            html += `<div class="form-group"><label>Тип</label><select class="telegram_type">
+                <option value="Написати менеджеру">Написати менеджеру</option>
+                <option value="Канал">Канал</option>
+                <option value="Група / спільнота">Група / спільнота</option>
+            </select></div>
+            <div class="form-group"><label>Посилання або username</label>
+            <input type="text" class="telegram_value" placeholder="https://t.me/... або @username"></div>`;
+        } else if (type === 'viber') {
+            html += `<div class="form-group"><label>Тип</label><select class="viber_type">
+                <option value="Написати менеджеру">Написати менеджеру</option>
+                <option value="Канал">Канал</option>
+                <option value="Група / спільнота">Група / спільнота</option>
+            </select></div>
+            <div class="form-group"><label>Номер або посилання</label>
+            <input type="text" class="viber_value" placeholder="+380... або посилання"></div>`;
+        } else if (type === 'phone') {
+            html += `<div class="form-group"><label>Номер</label>
+            <input type="text" class="phone_value" placeholder="+380..."></div>
+            <div class="form-group"><label>Підпис номера</label>
+            <input type="text" class="phone_label" placeholder="Наприклад: Менеджер"></div>`;
+        } else if (type === 'contact_email') {
+            html += `<div class="form-group"><label>Email</label>
+            <input type="email" class="contact_email_value" placeholder="example@domain.com"></div>`;
+        } else if (type === 'tiktok') {
+            html += `<div class="form-group"><label>Посилання на TikTok</label>
+            <input type="text" class="tiktok_value" placeholder="https://tiktok.com/@username"></div>
+            <div class="tiktok-radio-group">
+                <label><input type="radio" name="tiktok_main_${counter}" value="1" class="tiktok_main"> Основна сторінка</label>
+                <label><input type="radio" name="tiktok_backup_${counter}" value="1" class="tiktok_backup"> Резервна сторінка</label>
+            </div>`;
+        } else {
+            const placeholderMap = {
+                'whatsapp': '+380... або посилання',
+                'youtube': 'https://youtube.com/...',
+                'facebook': 'https://facebook.com/...',
+                'instagram': 'https://instagram.com/...',
+                'website': 'https://...',
+                'olx': 'https://olx.ua/...',
+                'prom': 'https://prom.ua/...'
+            };
+            html += `<div class="form-group"><label>Посилання</label>
+            <input type="text" class="${type}_value" placeholder="${placeholderMap[type] || 'https://...'}"></div>`;
+        }
+
+        entry.innerHTML = html;
+        wrap.appendChild(entry);
+
+        // Attach change listeners
+        const inputs = entry.querySelectorAll('input, select, textarea');
+        inputs.forEach(el => {
+            el.addEventListener('input', updateResult);
+            el.addEventListener('change', updateResult);
+        });
+
+        updateResult();
+    }
+
+    function removeEntry(wrapId, btn) {
+        const wrap = document.getElementById(wrapId);
+        const entry = btn.closest('.entry');
+        if (wrap.querySelectorAll('.entry').length > 1) {
+            entry.remove();
+            // Re-index
+            wrap.querySelectorAll('.entry').forEach((el, i) => {
+                el.dataset.idx = i;
+                const label = el.querySelector('.entry-label');
+                if (label) {
+                    const parts = label.textContent.split(' #');
+                    label.textContent = parts[0] + ' #' + (i + 1);
+                }
+            });
+            updateResult();
+        } else {
+            showToast('Мінімум один запис має бути');
+        }
+    }
+
+    // ============================================================
+    // CONDITIONAL VISIBILITY
+    // ============================================================
+    function setupConditional(checkboxId, containerId, invert) {
+        const cb = document.getElementById(checkboxId);
+        const container = document.getElementById(containerId);
+        if (!cb || !container) return;
+
+        function toggle() {
+            if (invert) {
+                container.classList.toggle('show', !cb.checked);
+            } else {
+                container.classList.toggle('show', cb.checked);
+            }
+            // Re-trigger result update
+            setTimeout(updateResult, 50);
+        }
+
+        cb.addEventListener('change', toggle);
+        toggle();
+    }
+
+    // Setup all conditionals
+    document.addEventListener('DOMContentLoaded', function() {
+        // Contacts
+        setupConditional('cb_telegram', 'cond_telegram');
+        setupConditional('cb_viber', 'cond_viber');
+        setupConditional('cb_phone', 'cond_phone');
+        setupConditional('cb_contact_email', 'cond_contact_email');
+        setupConditional('cb_whatsapp', 'cond_whatsapp');
+        setupConditional('cb_youtube', 'cond_youtube');
+        setupConditional('cb_facebook', 'cond_facebook');
+        setupConditional('cb_instagram', 'cond_instagram');
+        setupConditional('cb_tiktok', 'cond_tiktok');
+        setupConditional('cb_website', 'cond_website');
+        setupConditional('cb_olx', 'cond_olx');
+        setupConditional('cb_prom', 'cond_prom');
+
+        // Payment
+        setupConditional('cb_cod', 'cond_cod');
+
+        // Shipping
+        setupConditional('cb_shipping_other', 'cond_shipping_other');
+
+        // Exchange
+        setupConditional('cb_exchange', 'cond_exchange');
+        setupConditional('cb_return', 'cond_return');
+
+        // Return period other
+        const returnPeriod = document.getElementById('return_period');
+        const returnOther = document.getElementById('cond_return_other');
+        if (returnPeriod && returnOther) {
+            returnPeriod.addEventListener('change', function() {
+                returnOther.classList.toggle('show', this.value === 'Інший термін');
+                updateResult();
+            });
+            // Initial check
+            if (returnPeriod.value === 'Інший термін') {
+                returnOther.classList.add('show');
+            }
+        }
+
+        // Fiscal receipt
+        const fiscalRadios = document.querySelectorAll('.fiscal_radio');
+        const receiptYes = document.getElementById('cond_receipt_yes');
+        fiscalRadios.forEach(r => {
+            r.addEventListener('change', function() {
+                if (this.value === 'Так' && this.checked) {
+                    receiptYes.classList.add('show');
+                } else {
+                    receiptYes.classList.remove('show');
+                }
+                updateResult();
+            });
+        });
+
+        // Receipt delivery other
+        const receiptRadios = document.querySelectorAll('.receipt_radio');
+        const receiptOther = document.getElementById('cond_receipt_other');
+        receiptRadios.forEach(r => {
+            r.addEventListener('change', function() {
+                if (this.value === 'Інший спосіб' && this.checked) {
+                    receiptOther.classList.add('show');
+                } else {
+                    receiptOther.classList.remove('show');
+                }
+                updateResult();
+            });
+        });
+
+        // Password toggle
+        document.getElementById('pw_toggle').addEventListener('click', function() {
+            const input = document.getElementById('reg_password');
+            input.type = input.type === 'password' ? 'text' : 'password';
+            this.textContent = input.type === 'password' ? '👁️' : '🙈';
+        });
+
+        document.getElementById('pw_confirm_toggle').addEventListener('click', function() {
+            const input = document.getElementById('reg_password_confirm');
+            input.type = input.type === 'password' ? 'text' : 'password';
+            this.textContent = input.type === 'password' ? '👁️' : '🙈';
+        });
+
+        // Password generate
+        document.getElementById('btn_generate_pw').addEventListener('click', generatePassword);
+
+        // Password real-time validation
+        const pwInput = document.getElementById('reg_password');
+        const pwConfirm = document.getElementById('reg_password_confirm');
+        pwInput.addEventListener('input', validatePassword);
+        pwInput.addEventListener('input', updateResult);
+        pwConfirm.addEventListener('input', validatePassword);
+        pwConfirm.addEventListener('input', updateResult);
+
+        // All inputs
+        document.querySelectorAll('input, select, textarea').forEach(el => {
+            el.addEventListener('input', updateResult);
+            el.addEventListener('change', updateResult);
+        });
+
+        // Initial result
+        setTimeout(updateResult, 100);
+
+        // Re-run on checkbox clicks (for dynamic visibility)
+        document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+            el.addEventListener('change', function() {
+                setTimeout(updateResult, 100);
+            });
+        });
+    });
+
+    // ============================================================
+    // PASSWORD VALIDATION
+    // ============================================================
+    function validatePassword() {
+        const pw = document.getElementById('reg_password').value;
+        const confirm = document.getElementById('reg_password_confirm').value;
+        const pwInput = document.getElementById('reg_password');
+        const confirmInput = document.getElementById('reg_password_confirm');
+        const pwError = document.getElementById('reg_password_error');
+        const confirmError = document.getElementById('reg_password_confirm_error');
+
+        // Requirements
+        const hasLength = pw.length >= 6;
+        const hasUpper = /[A-Z]/.test(pw);
+        const hasLower = /[a-z]/.test(pw);
+        const hasNumber = /[0-9]/.test(pw);
+        const hasSpecial = /[^A-Za-z0-9]/.test(pw);
+
+        const allValid = hasLength && hasUpper && hasLower && hasNumber && hasSpecial;
+
+        // Update requirements display
+        const reqs = {
+            'req_length': hasLength,
+            'req_upper': hasUpper,
+            'req_lower': hasLower,
+            'req_number': hasNumber,
+            'req_special': hasSpecial
+        };
+
+        Object.keys(reqs).forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.className = 'req ' + (reqs[id] ? 'done' : 'fail');
+                el.textContent = (reqs[id] ? '✅' : '🔲') + el.textContent.substring(2);
+            }
+        });
+
+        // Strength meter
+        const bars = document.querySelectorAll('.password-strength .bar');
+        let score = 0;
+        if (hasLength) score++;
+        if (hasUpper) score++;
+        if (hasLower) score++;
+        if (hasNumber) score++;
+        if (hasSpecial) score++;
+
+        bars.forEach((bar, i) => {
+            bar.className = 'bar';
+            if (i < score) {
+                bar.classList.add('active');
+                if (score <= 2) bar.classList.add('weak');
+                else if (score <= 4) bar.classList.add('medium');
+                else bar.classList.add('strong');
+            }
+        });
+
+        // Show error if invalid and not empty
+        if (pw.length > 0 && !allValid) {
+            pwError.classList.add('show');
+            pwInput.classList.add('error');
+            pwInput.classList.remove('success');
+        } else if (pw.length > 0 && allValid) {
+            pwError.classList.remove('show');
+            pwInput.classList.remove('error');
+            pwInput.classList.add('success');
+        } else {
+            pwError.classList.remove('show');
+            pwInput.classList.remove('error');
+            pwInput.classList.remove('success');
+        }
+
+        // Confirm validation
+        if (confirm.length > 0 && pw !== confirm) {
+            confirmError.classList.add('show');
+            confirmInput.classList.add('error');
+            confirmInput.classList.remove('success');
+        } else if (confirm.length > 0 && pw === confirm) {
+            confirmError.classList.remove('show');
+            confirmInput.classList.remove('error');
+            confirmInput.classList.add('success');
+        } else {
+            confirmError.classList.remove('show');
+            confirmInput.classList.remove('error');
+            confirmInput.classList.remove('success');
+        }
+
+        // Update password display
+        const pwDisplay = document.getElementById('passwordDisplay');
+        if (pw.length > 0 && allValid && pw === confirm) {
+            pwDisplay.textContent = pw;
+        } else if (pw.length > 0 && !allValid) {
+            pwDisplay.textContent = '❌ Пароль не відповідає вимогам';
+        } else if (pw.length > 0 && pw !== confirm) {
+            pwDisplay.textContent = '❌ Паролі не збігаються';
+        } else {
+            pwDisplay.textContent = '⚠️ Пароль буде показано після заповнення';
+        }
+
+        return allValid && pw === confirm;
+    }
+
+    // ============================================================
+    // GENERATE PASSWORD
+    // ============================================================
+    function generatePassword() {
+        const length = 12;
+        const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+        const numbers = '0123456789';
+        const special = '!@#$%^&*()_+-=<>?';
+
+        let chars = uppercase + lowercase + numbers + special;
+        let password = '';
+        password += uppercase[Math.floor(Math.random() * uppercase.length)];
+        password += lowercase[Math.floor(Math.random() * lowercase.length)];
+        password += numbers[Math.floor(Math.random() * numbers.length)];
+        password += special[Math.floor(Math.random() * special.length)];
+
+        for (let i = 4; i < length; i++) {
+            password += chars[Math.floor(Math.random() * chars.length)];
+        }
+
+        // Shuffle
+        password = password.split('').sort(() => Math.random() - 0.5).join('');
+
+        document.getElementById('reg_password').value = password;
+        document.getElementById('reg_password_confirm').value = password;
+        validatePassword();
+        updateResult();
+        showToast('🔑 Пароль згенеровано!');
+    }
+
+    // ============================================================
+    // COPY PASSWORD
+    // ============================================================
+    function copyPassword() {
+        const pw = document.getElementById('reg_password').value;
+        if (!pw || pw.length < 6) {
+            showToast('❌ Спочатку створіть пароль');
+            return;
+        }
+        navigator.clipboard.writeText(pw).then(() => {
+            showToast('✅ Пароль скопійовано!');
+        }).catch(() => {
+            // Fallback
+            const textarea = document.createElement('textarea');
+            textarea.value = pw;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast('✅ Пароль скопійовано!');
+        });
+    }
+
+    // ============================================================
+    // GET ALL DATA
+    // ============================================================
+    function getAllData() {
+        const data = {};
+
+        // Registration
+        data.registration_email = document.getElementById('reg_email').value.trim();
+        data.registration_password = document.getElementById('reg_password').value;
+
+        // Store & FOP
+        data.store_name = document.getElementById('store_name').value.trim();
+        data.fop_surname = document.getElementById('fop_surname').value.trim();
+        data.fop_name = document.getElementById('fop_name').value.trim();
+        data.fop_patronymic = document.getElementById('fop_patronymic').value.trim();
+        data.iban = document.getElementById('iban').value.trim();
+        data.edrpou = document.getElementById('edrpou').value.trim();
+        data.fop_tax_id = document.getElementById('fop_tax_id').value.trim();
+        data.bank_name = document.getElementById('bank_name').value.trim();
+        data.payment_purpose = document.getElementById('payment_purpose').value.trim();
+        data.product_categories = document.getElementById('product_categories').value.trim();
+
+        // Contacts - repeatable
+        data.telegram = getRepeatableData('telegram', ['type', 'value']);
+        data.viber = getRepeatableData('viber', ['type', 'value']);
+        data.phone = getRepeatableData('phone', ['value', 'label']);
+        data.contact_email = getRepeatableData('contact_email', ['value']);
+        data.whatsapp = getRepeatableData('whatsapp', ['value']);
+        data.youtube = getRepeatableData('youtube', ['value']);
+        data.facebook = getRepeatableData('facebook', ['value']);
+        data.instagram = getRepeatableData('instagram', ['value']);
+        data.tiktok = getTikTokData();
+        data.website = getRepeatableData('website', ['value']);
+        data.olx = getRepeatableData('olx', ['value']);
+        data.prom = getRepeatableData('prom', ['value']);
+
+        // Site pages
+        data.site_pages = [];
+        document.querySelectorAll('.page_check:checked').forEach(el => {
+            data.site_pages.push(el.value);
+        });
+
+        // Payment
+        data.payment_methods = [];
+        document.querySelectorAll('.payment_check:checked').forEach(el => {
+            data.payment_methods.push(el.value);
+        });
+        data.cod_prepaid = document.getElementById('cod_prepaid').value.trim();
+        data.minimum_order = document.getElementById('minimum_order').value.trim();
+
+        // Shipping
+        data.shipping_methods = [];
+        document.querySelectorAll('.shipping_check:checked').forEach(el => {
+            data.shipping_methods.push(el.value);
+        });
+        data.shipping_other = document.getElementById('shipping_other_name').value.trim();
+        data.shipping_days = document.getElementById('shipping_days').value.trim();
+
+        // Fiscal receipt
+        const fiscalRadio = document.querySelector('.fiscal_radio:checked');
+        data.fiscal_receipt = fiscalRadio ? fiscalRadio.value : '';
+        const receiptRadio = document.querySelector('.receipt_radio:checked');
+        data.receipt_delivery = receiptRadio ? receiptRadio.value : '';
+        data.receipt_other_method = document.getElementById('receipt_other_method').value.trim();
+
+        // Exchange & Return
+        data.exchange_available = document.getElementById('cb_exchange').checked;
+        data.exchange_terms = document.getElementById('exchange_terms').value.trim();
+        data.return_available = document.getElementById('cb_return').checked;
+        data.return_period = document.getElementById('return_period').value;
+        data.return_period_other = document.getElementById('return_period_other').value.trim();
+        data.return_terms = document.getElementById('return_terms').value.trim();
+        data.legal_return = document.getElementById('cb_legal_return').checked;
+
+        // Privacy
+        data.privacy = [];
+        document.querySelectorAll('.privacy_check:checked').forEach(el => {
+            data.privacy.push(el.value);
+        });
+
+        // Public offer
+        data.public_offer = [];
+        document.querySelectorAll('.offer_check:checked').forEach(el => {
+            data.public_offer.push(el.value);
+        });
+
+        // Cooperation
+        data.cooperation = [];
+        document.querySelectorAll('.cooperation_check:checked').forEach(el => {
+            data.cooperation.push(el.value);
+        });
+
+        return data;
+    }
+
+    function getRepeatableData(prefix, fields) {
+        const wrap = document.getElementById(prefix + '_wrap');
+        if (!wrap) return [];
+        const entries = wrap.querySelectorAll('.entry');
+        const result = [];
+        entries.forEach(entry => {
+            const obj = {};
+            fields.forEach(f => {
+                const el = entry.querySelector('.' + prefix + '_' + f);
+                if (el) obj[f] = el.value.trim();
+            });
+            if (Object.values(obj).some(v => v)) {
+                result.push(obj);
+            }
+        });
+        return result;
+    }
+
+    function getTikTokData() {
+        const wrap = document.getElementById('tiktok_wrap');
+        if (!wrap) return [];
+        const entries = wrap.querySelectorAll('.entry');
+        const result = [];
+        let mainCount = 0;
+        let backupCount = 0;
+
+        entries.forEach(entry => {
+            const value = entry.querySelector('.tiktok_value');
+            const mainRadio = entry.querySelector('.tiktok_main');
+            const backupRadio = entry.querySelector('.tiktok_backup');
+
+            const obj = {
+                value: value ? value.value.trim() : '',
+                is_main: mainRadio ? mainRadio.checked : false,
+                is_backup: backupRadio ? backupRadio.checked : false
+            };
+
+            if (obj.value) {
+                // Enforce max 1 main and 1 backup
+                if (obj.is_main && mainCount < 1) {
+                    mainCount++;
+                } else if (obj.is_main) {
+                    obj.is_main = false;
+                }
+                if (obj.is_backup && backupCount < 1) {
+                    backupCount++;
+                } else if (obj.is_backup) {
+                    obj.is_backup = false;
+                }
+                result.push(obj);
+            }
+        });
+
+        return result;
+    }
+
+    // ============================================================
+    // UPDATE RESULT
+    // ============================================================
+    function updateResult() {
+        const data = getAllData();
+        const resultEl = document.getElementById('resultContent');
+
+        let lines = [];
+
+        // Registration
+        if (data.registration_email) {
+            lines.push('📧 Реєстраційний email: ' + data.registration_email);
+        }
+
+        // Store
+        if (data.store_name) lines.push('🏪 Назва магазину: ' + data.store_name);
+
+        // FOP
+        let fopName = '';
+        if (data.fop_surname) fopName += data.fop_surname + ' ';
+        if (data.fop_name) fopName += data.fop_name + ' ';
+        if (data.fop_patronymic) fopName += data.fop_patronymic;
+        if (fopName.trim()) lines.push('👤 ФОП: ' + fopName.trim());
+
+        if (data.iban) lines.push('🏦 IBAN: ' + data.iban);
+        if (data.edrpou) lines.push('📋 ЄДРПОУ: ' + data.edrpou);
+        if (data.fop_tax_id) lines.push('📋 ІПН: ' + data.fop_tax_id);
+        if (data.bank_name) lines.push('🏛️ Банк: ' + data.bank_name);
+        if (data.payment_purpose) lines.push('📝 Призначення платежу: ' + data.payment_purpose);
+        if (data.product_categories) lines.push('📦 Категорії: ' + data.product_categories);
+
+        // Contacts
+        if (data.telegram.length > 0) {
+            lines.push('📱 Telegram:');
+            data.telegram.forEach(t => {
+                lines.push('  • ' + (t.type || '') + ': ' + (t.value || ''));
+            });
+        }
+
+        if (data.viber.length > 0) {
+            lines.push('📱 Viber:');
+            data.viber.forEach(v => {
+                lines.push('  • ' + (v.type || '') + ': ' + (v.value || ''));
+            });
+        }
+
+        if (data.phone.length > 0) {
+            lines.push('📞 Телефони:');
+            data.phone.forEach(p => {
+                lines.push('  • ' + (p.value || '') + (p.label ? ' (' + p.label + ')' : ''));
+            });
+        }
+
+        if (data.contact_email.length > 0) {
+            lines.push('📧 Контактні Email:');
+            data.contact_email.forEach(e => {
+                lines.push('  • ' + e.value);
+            });
+        }
+
+        if (data.whatsapp.length > 0) {
+            lines.push('💬 WhatsApp:');
+            data.whatsapp.forEach(w => {
+                lines.push('  • ' + w.value);
+            });
+        }
+
+        if (data.youtube.length > 0) {
+            lines.push('▶️ YouTube:');
+            data.youtube.forEach(y => {
+                lines.push('  • ' + y.value);
+            });
+        }
+
+        if (data.facebook.length > 0) {
+            lines.push('📘 Facebook:');
+            data.facebook.forEach(f => {
+                lines.push('  • ' + f.value);
+            });
+        }
+
+        if (data.instagram.length > 0) {
+            lines.push('📸 Instagram:');
+            data.instagram.forEach(i => {
+                lines.push('  • ' + i.value);
+            });
+        }
+
+        if (data.tiktok.length > 0) {
+            lines.push('🎵 TikTok:');
+            data.tiktok.forEach(t => {
+                let label = '';
+                if (t.is_main) label = ' [ОСНОВНА]';
+                if (t.is_backup) label = ' [РЕЗЕРВНА]';
+                lines.push('  • ' + t.value + label);
+            });
+        }
+
+        if (data.website.length > 0) {
+            lines.push('🌐 Сайти:');
+            data.website.forEach(w => {
+                lines.push('  • ' + w.value);
+            });
+        }
+
+        if (data.olx.length > 0) {
+            lines.push('🛒 OLX:');
+            data.olx.forEach(o => {
+                lines.push('  • ' + o.value);
+            });
+        }
+
+        if (data.prom.length > 0) {
+            lines.push('🛒 Prom.ua:');
+            data.prom.forEach(p => {
+                lines.push('  • ' + p.value);
+            });
+        }
+
+        // Site pages
+        if (data.site_pages.length > 0) {
+            lines.push('📄 Сторінки: ' + data.site_pages.join(', '));
+        }
+
+        // Payment
+        if (data.payment_methods.length > 0) {
+            lines.push('💳 Оплата: ' + data.payment_methods.join(', '));
+        }
+        if (data.cod_prepaid) lines.push('  • Передоплата: ' + data.cod_prepaid);
+        if (data.minimum_order) lines.push('  • Мін. сума: ' + data.minimum_order);
+
+        // Shipping
+        if (data.shipping_methods.length > 0) {
+            lines.push('🚚 Доставка: ' + data.shipping_methods.join(', '));
+        }
+        if (data.shipping_other) lines.push('  • Інша: ' + data.shipping_other);
+        if (data.shipping_days) lines.push('  • Термін: ' + data.shipping_days + ' роб. днів');
+
+        // Fiscal receipt
+        if (data.fiscal_receipt) {
+            lines.push('🧾 Фіскальний чек: ' + data.fiscal_receipt);
+            if (data.receipt_delivery) {
+                lines.push('  • Отримання чека: ' + data.receipt_delivery);
+            }
+            if (data.receipt_other_method) {
+                lines.push('  • Інший спосіб: ' + data.receipt_other_method);
+            }
+        }
+
+        // Exchange
+        if (data.exchange_available) {
+            lines.push('🔄 Обмін: Так');
+            if (data.exchange_terms) lines.push('  • Умови: ' + data.exchange_terms);
+        }
+
+        // Return
+        if (data.return_available) {
+            lines.push('↩️ Повернення: Так');
+            let period = data.return_period;
+            if (period === 'Інший термін' && data.return_period_other) {
+                period = data.return_period_other;
+            }
+            lines.push('  • Термін: ' + period);
+            if (data.return_terms) lines.push('  • Умови: ' + data.return_terms);
+        }
+        if (data.legal_return) {
+            lines.push('  • Враховано законодавчі обмеження');
+        }
+
+        // Privacy
+        if (data.privacy.length > 0) {
+            lines.push('🔒 Політика конфіденційності:');
+            data.privacy.forEach(p => {
+                lines.push('  ✓ ' + p);
+            });
+        }
+
+        // Public offer
+        if (data.public_offer.length > 0) {
+            lines.push('📜 Публічна оферта:');
+            data.public_offer.forEach(o => {
+                lines.push('  ✓ ' + o);
+            });
+        }
+
+        // Cooperation
+        if (data.cooperation.length > 0) {
+            lines.push('🤝 Умови співпраці:');
+            data.cooperation.forEach(c => {
+                lines.push('  ✓ ' + c);
+            });
+        }
+
+        if (lines.length === 0) {
+            resultEl.innerHTML = '<span class="empty">Заповніть анкету — дані з\'являться автоматично</span>';
+        } else {
+            resultEl.innerHTML = lines.join('\n');
+        }
+    }
+
+    // ============================================================
+    // COPY RESULT
+    // ============================================================
+    function copyResult() {
+        const content = document.getElementById('resultContent');
+        let text = content.textContent;
+        if (text.includes('Заповніть анкету')) {
+            showToast('⚠️ Немає даних для копіювання');
+            return;
+        }
+
+        // Add header
+        const email = document.getElementById('reg_email').value.trim() || 'не вказано';
+        const store = document.getElementById('store_name').value.trim() || 'не вказано';
+        const header = '📋 Дані для створення міні-сайту\n';
+        const divider = '─'.repeat(40) + '\n';
+        const fullText = header + divider + text;
+
+        navigator.clipboard.writeText(fullText).then(() => {
+            const btn = document.getElementById('btn_copy_result');
+            btn.textContent = '✅ Скопійовано!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.textContent = '📋 Скопіювати всі дані';
+                btn.classList.remove('copied');
+            }, 2000);
+            showToast('✅ Дані скопійовано!');
+        }).catch(() => {
+            // Fallback
+            const textarea = document.createElement('textarea');
+            textarea.value = fullText;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+            showToast('✅ Дані скопійовано!');
+        });
+    }
+
+    // ============================================================
+    // RESET FORM
+    // ============================================================
+    function resetForm() {
+        if (!confirm('Ви впевнені, що хочете очистити всі поля?')) return;
+
+        document.querySelectorAll('input[type="text"], input[type="email"], input[type="password"], input[type="number"], textarea').forEach(el => {
+            el.value = '';
+        });
+
+        document.querySelectorAll('input[type="checkbox"]').forEach(el => {
+            el.checked = false;
+        });
+
+        document.querySelectorAll('input[type="radio"]').forEach(el => {
+            el.checked = false;
+        });
+
+        document.querySelectorAll('select').forEach(el => {
+            el.selectedIndex = 0;
+        });
+
+        // Reset password fields
+        document.getElementById('reg_password').classList.remove('error', 'success');
+        document.getElementById('reg_password_confirm').classList.remove('error', 'success');
+        document.getElementById('reg_password_error').classList.remove('show');
+        document.getElementById('reg_password_confirm_error').classList.remove('show');
+
+        // Reset password bars
+        document.querySelectorAll('.password-strength .bar').forEach(el => {
+            el.className = 'bar';
+        });
+
+        // Reset password requirements
+        document.querySelectorAll('.password-requirements .req').forEach(el => {
+            el.className = 'req fail';
+            el.textContent = '🔲' + el.textContent.substring(2);
+        });
+
+        // Reset password display
+        document.getElementById('passwordDisplay').textContent = 'Пароль буде показано після заповнення';
+
+        // Reset result
+        document.getElementById('resultContent').innerHTML = '<span class="empty">Заповніть анкету — дані з\'являться автоматично</span>';
+
+        // Remove repeatable entries (keep first)
+        document.querySelectorAll('.repeatable-wrap').forEach(wrap => {
+            const entries = wrap.querySelectorAll('.entry');
+            if (entries.length > 1) {
+                entries.forEach((el, i) => {
+                    if (i > 0) el.remove();
+                });
+                // Reset first entry
+                const first = wrap.querySelector('.entry');
+                if (first) {
+                    first.querySelectorAll('input, select, textarea').forEach(el => {
+                        if (el.tagName === 'SELECT') el.selectedIndex = 0;
+                        else el.value = '';
+                    });
+                }
+            }
+        });
+
+        // Hide all conditionals
+        document.querySelectorAll('.conditional').forEach(el => {
+            el.classList.remove('show');
+        });
+
+        // Reset fiscal receipt
+        document.getElementById('cond_receipt_yes').classList.remove('show');
+        document.getElementById('cond_receipt_other').classList.remove('show');
+
+        // Reset return period
+        document.getElementById('cond_return_other').classList.remove('show');
+
+        showToast('🔄 Анкету очищено');
+    }
+
+    // ============================================================
+    // TOAST
+    // ============================================================
+    let toastTimeout;
+
+    function showToast(message) {
+        const el = document.getElementById('toast');
+        el.textContent = message;
+        el.classList.add('show');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => {
+            el.classList.remove('show');
+        }, 2500);
+    }
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    console.log('✅ Анкета для міні-сайту завантажена');
+    console.log('📌 VEO FORCE · @vasil_veo');
+</script>
+
+</body>
+</html>
