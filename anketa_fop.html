@@ -630,16 +630,15 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* PASSWORD RESULT BLOCK */
-        .password-result {
-            background: #1A0A0A;
+        /* LOGIN DISPLAY */
+        .login-display-box {
+            background: #0A0A0A;
             border-radius: 10px;
             padding: 14px 16px;
             margin-top: 12px;
-            border: 1px solid rgba(255,0,80,0.2);
         }
 
-        .password-result .label {
+        .login-display-box .label {
             font-size: 0.6rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -649,20 +648,26 @@
             margin-bottom: 4px;
         }
 
-        .password-result .value {
+        .login-display-box .value {
             font-family: 'JetBrains Mono', monospace;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #fff;
             word-break: break-all;
+            line-height: 1.6;
         }
 
-        .password-result .actions {
+        .login-display-box .value .placeholder {
+            color: rgba(255,255,255,0.2);
+            font-style: italic;
+        }
+
+        .login-display-box .actions {
             display: flex;
             gap: 8px;
             margin-top: 8px;
         }
 
-        .password-result .actions button {
+        .login-display-box .actions button {
             padding: 4px 12px;
             background: rgba(255,255,255,0.08);
             color: rgba(255,255,255,0.7);
@@ -675,7 +680,7 @@
             transition: all 0.15s;
         }
 
-        .password-result .actions button:hover {
+        .login-display-box .actions button:hover {
             background: rgba(255,255,255,0.15);
             color: #fff;
         }
@@ -751,29 +756,28 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- SECTION 00: REGISTRATION -->
+    <!-- SECTION 00: REGISTRATION (ОБ'ЄДНАНИЙ БЛОК) -->
     <!-- ============================================================ -->
     <section id="section-00">
         <span class="section-number">Секція 00 · Обов'язково</span>
         <h2>Реєстрація магазину</h2>
-        <p class="desc">Ці дані використовуються для реєстрації магазину в системі. Email є логіном для входу, пароль — для доступу до магазину.</p>
+        <p class="desc">Заповніть ці дані для реєстрації магазину. Email є логіном, пароль — для доступу.</p>
 
-        <!-- Registration Email -->
+        <!-- Email -->
         <div class="form-group">
-            <label>Електронна пошта для реєстрації магазину <span class="required">*</span></label>
+            <label>Електронна пошта для реєстрації (логін) <span class="required">*</span></label>
             <input type="email" id="reg_email" placeholder="Введіть email для входу в магазин" autocomplete="email">
-            <div class="helper">Ця електронна пошта використовується як логін для реєстрації та входу в магазин. Це НЕ обов'язково контактна пошта, яка буде відображатися на сайті.</div>
             <div class="error-msg" id="reg_email_error">Будь ласка, введіть коректний email</div>
         </div>
 
-        <!-- Registration Password -->
+        <!-- Пароль -->
         <div class="form-group">
-            <label>Придумайте пароль для реєстрації магазину <span class="required">*</span></label>
+            <label>Пароль для реєстрації <span class="required">*</span></label>
             <div class="password-wrapper">
                 <input type="password" id="reg_password" placeholder="Створіть новий унікальний пароль" autocomplete="new-password">
-                <button class="password-toggle" id="pw_toggle" type="button" aria-label="Показати/приховати пароль">👁️</button>
+                <button class="password-toggle" id="pw_toggle" type="button">👁️</button>
             </div>
-            <div class="helper">Рекомендуємо придумати новий пароль, який раніше ніде не використовувався.</div>
+            <div class="helper">Мінімум 6 символів: велика літера, мала літера, цифра, спецсимвол</div>
             <div class="password-strength" id="pw_strength">
                 <div class="bar" id="pw_bar_1"></div>
                 <div class="bar" id="pw_bar_2"></div>
@@ -793,19 +797,29 @@
             <div class="error-msg" id="reg_password_error">Пароль не відповідає вимогам</div>
         </div>
 
-        <!-- Password Confirmation -->
+        <!-- Підтвердження пароля -->
         <div class="form-group">
             <label>Повторіть пароль <span class="required">*</span></label>
             <div class="password-wrapper">
                 <input type="password" id="reg_password_confirm" placeholder="Повторіть пароль" autocomplete="new-password">
-                <button class="password-toggle" id="pw_confirm_toggle" type="button" aria-label="Показати/приховати пароль">👁️</button>
+                <button class="password-toggle" id="pw_confirm_toggle" type="button">👁️</button>
             </div>
             <div class="error-msg" id="reg_password_confirm_error">Паролі не збігаються</div>
         </div>
 
-        <!-- Security Notice -->
+        <!-- РЕЗУЛЬТАТ РЕЄСТРАЦІЇ (внизу блоку) -->
+        <div class="login-display-box">
+            <span class="label">🔑 Дані для входу</span>
+            <div class="value" id="loginDisplay">
+                <span class="placeholder">Заповніть поля вище</span>
+            </div>
+            <div class="actions">
+                <button onclick="copyLoginData()">📋 Скопіювати логін і пароль</button>
+            </div>
+        </div>
+
         <div style="background:#FFF5F7;border-left:3px solid #FF0050;padding:10px 14px;border-radius:0 8px 8px 0;margin-top:8px;font-size:0.78rem;color:#555;">
-            🔒 <strong>Важливо:</strong> Створіть окремий пароль спеціально для цього магазину. Не використовуйте пароль, який уже використовується на інших сервісах. Пароль не зберігається в анкеті — він лише показується вам для копіювання.
+            🔒 <strong>Важливо:</strong> Створіть окремий пароль спеціально для цього магазину. Не використовуйте пароль від інших сервісів.
         </div>
     </section>
 
@@ -842,15 +856,10 @@
             <input type="text" id="iban" placeholder="UA...">
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <div class="form-group">
-                <label>ЄДРПОУ <span class="required">*</span></label>
-                <input type="text" id="edrpou" placeholder="ЄДРПОУ">
-            </div>
-            <div class="form-group">
-                <label>ІПН ФОП <span class="required">*</span></label>
-                <input type="text" id="fop_tax_id" placeholder="ІПН">
-            </div>
+        <!-- ОБ'ЄДНАНО: ЄДРПОУ / ІПН -->
+        <div class="form-group">
+            <label>ЄДРПОУ / ІПН <span class="required">*</span></label>
+            <input type="text" id="edrpou" placeholder="Введіть ЄДРПОУ або ІПН">
         </div>
 
         <div class="form-group">
@@ -1330,11 +1339,12 @@
     </section>
 
     <!-- ============================================================ -->
-    <!-- SECTION 09: PUBLIC OFFER -->
+    <!-- SECTION 09: PUBLIC OFFER (З ПОЛЕМ "ВСТАВИТИ СВОЄ") -->
     <!-- ============================================================ -->
     <section id="section-09">
         <span class="section-number">Секція 09</span>
         <h2>Публічна оферта</h2>
+        <p class="desc">Оберіть пункти, які будуть включені в публічну оферту. Ви також можете додати власний текст.</p>
 
         <div class="checkbox-group">
             <div class="checkbox-item"><input type="checkbox" class="offer_check" value="Підтверджую, що продавець самостійно визначає умови продажу товарів або надання послуг."><span class="label-text">Підтверджую, що продавець самостійно визначає умови продажу товарів або надання послуг.</span></div>
@@ -1342,6 +1352,22 @@
             <div class="checkbox-item"><input type="checkbox" class="offer_check" value="Підтверджую, що умови доставки відповідають фактичним умовам роботи продавця."><span class="label-text">Підтверджую, що умови доставки відповідають фактичним умовам роботи продавця.</span></div>
             <div class="checkbox-item"><input type="checkbox" class="offer_check" value="Підтверджую, що умови обміну та повернення відповідають фактичним умовам роботи продавця."><span class="label-text">Підтверджую, що умови обміну та повернення відповідають фактичним умовам роботи продавця.</span></div>
             <div class="checkbox-item"><input type="checkbox" class="offer_check" value="Підтверджую достовірність інформації, наданої для формування публічної оферти."><span class="label-text">Підтверджую достовірність інформації, наданої для формування публічної оферти.</span></div>
+        </div>
+
+        <!-- ПОЛЕ "ВСТАВИТИ СВОЄ" -->
+        <div style="margin-top:14px;border-top:1px solid #F0EFE9;padding-top:14px;">
+            <div class="checkbox-item">
+                <input type="checkbox" id="cb_custom_offer">
+                <span class="label-text">➕ Додати власний пункт у публічну оферту</span>
+            </div>
+            <div class="conditional" id="cond_custom_offer">
+                <div class="form-group">
+                    <label>Вставте або напишіть власний текст</label>
+                    <textarea id="custom_offer_text" rows="3" placeholder="Напишіть або вставте власний пункт публічної оферти..."></textarea>
+                </div>
+                <button class="btn-generate-pw" onclick="insertCustomOffer()" style="margin-top:4px;font-size:0.7rem;padding:4px 12px;">📋 Вставити з буфера обміну</button>
+                <div style="font-size:0.7rem;color:#888;margin-top:4px;">💡 Ви можете скопіювати текст з будь-якого документа і вставити його сюди</div>
+            </div>
         </div>
     </section>
 
@@ -1367,16 +1393,6 @@
         <div class="result-title">📄 Дані для реєстрації та створення міні-сайту</div>
         <div class="result-sub">Live-генерація. Усі заповнені поля будуть зібрані тут.</div>
 
-        <!-- PASSWORD RESULT (SEPARATE) -->
-        <div class="password-result" id="passwordResult">
-            <span class="label">🔑 Дані для входу (окремо, не передаються в загальний блок)</span>
-            <div class="value" id="passwordDisplay">Пароль буде показано після заповнення</div>
-            <div class="actions">
-                <button id="btn_copy_password" onclick="copyPassword()">📋 Скопіювати пароль</button>
-            </div>
-        </div>
-
-        <!-- MAIN RESULT -->
         <div class="result-content" id="resultContent">
             <span class="empty">Заповніть анкету — дані з'являться автоматично</span>
         </div>
@@ -1484,7 +1500,6 @@
         entry.innerHTML = html;
         wrap.appendChild(entry);
 
-        // Attach change listeners
         const inputs = entry.querySelectorAll('input, select, textarea');
         inputs.forEach(el => {
             el.addEventListener('input', updateResult);
@@ -1499,7 +1514,6 @@
         const entry = btn.closest('.entry');
         if (wrap.querySelectorAll('.entry').length > 1) {
             entry.remove();
-            // Re-index
             wrap.querySelectorAll('.entry').forEach((el, i) => {
                 el.dataset.idx = i;
                 const label = el.querySelector('.entry-label');
@@ -1517,18 +1531,13 @@
     // ============================================================
     // CONDITIONAL VISIBILITY
     // ============================================================
-    function setupConditional(checkboxId, containerId, invert) {
+    function setupConditional(checkboxId, containerId) {
         const cb = document.getElementById(checkboxId);
         const container = document.getElementById(containerId);
         if (!cb || !container) return;
 
         function toggle() {
-            if (invert) {
-                container.classList.toggle('show', !cb.checked);
-            } else {
-                container.classList.toggle('show', cb.checked);
-            }
-            // Re-trigger result update
+            container.classList.toggle('show', cb.checked);
             setTimeout(updateResult, 50);
         }
 
@@ -1536,7 +1545,6 @@
         toggle();
     }
 
-    // Setup all conditionals
     document.addEventListener('DOMContentLoaded', function() {
         // Contacts
         setupConditional('cb_telegram', 'cond_telegram');
@@ -1562,6 +1570,9 @@
         setupConditional('cb_exchange', 'cond_exchange');
         setupConditional('cb_return', 'cond_return');
 
+        // Custom offer
+        setupConditional('cb_custom_offer', 'cond_custom_offer');
+
         // Return period other
         const returnPeriod = document.getElementById('return_period');
         const returnOther = document.getElementById('cond_return_other');
@@ -1570,7 +1581,6 @@
                 returnOther.classList.toggle('show', this.value === 'Інший термін');
                 updateResult();
             });
-            // Initial check
             if (returnPeriod.value === 'Інший термін') {
                 returnOther.classList.add('show');
             }
@@ -1590,7 +1600,6 @@
             });
         });
 
-        // Receipt delivery other
         const receiptRadios = document.querySelectorAll('.receipt_radio');
         const receiptOther = document.getElementById('cond_receipt_other');
         receiptRadios.forEach(r => {
@@ -1617,27 +1626,25 @@
             this.textContent = input.type === 'password' ? '👁️' : '🙈';
         });
 
-        // Password generate
         document.getElementById('btn_generate_pw').addEventListener('click', generatePassword);
 
-        // Password real-time validation
         const pwInput = document.getElementById('reg_password');
         const pwConfirm = document.getElementById('reg_password_confirm');
+        const emailInput = document.getElementById('reg_email');
         pwInput.addEventListener('input', validatePassword);
         pwInput.addEventListener('input', updateResult);
         pwConfirm.addEventListener('input', validatePassword);
         pwConfirm.addEventListener('input', updateResult);
+        emailInput.addEventListener('input', validatePassword);
+        emailInput.addEventListener('input', updateResult);
 
-        // All inputs
         document.querySelectorAll('input, select, textarea').forEach(el => {
             el.addEventListener('input', updateResult);
             el.addEventListener('change', updateResult);
         });
 
-        // Initial result
         setTimeout(updateResult, 100);
 
-        // Re-run on checkbox clicks (for dynamic visibility)
         document.querySelectorAll('input[type="checkbox"]').forEach(el => {
             el.addEventListener('change', function() {
                 setTimeout(updateResult, 100);
@@ -1651,12 +1658,12 @@
     function validatePassword() {
         const pw = document.getElementById('reg_password').value;
         const confirm = document.getElementById('reg_password_confirm').value;
+        const email = document.getElementById('reg_email').value.trim();
         const pwInput = document.getElementById('reg_password');
         const confirmInput = document.getElementById('reg_password_confirm');
         const pwError = document.getElementById('reg_password_error');
         const confirmError = document.getElementById('reg_password_confirm_error');
 
-        // Requirements
         const hasLength = pw.length >= 6;
         const hasUpper = /[A-Z]/.test(pw);
         const hasLower = /[a-z]/.test(pw);
@@ -1665,7 +1672,6 @@
 
         const allValid = hasLength && hasUpper && hasLower && hasNumber && hasSpecial;
 
-        // Update requirements display
         const reqs = {
             'req_length': hasLength,
             'req_upper': hasUpper,
@@ -1677,12 +1683,12 @@
         Object.keys(reqs).forEach(id => {
             const el = document.getElementById(id);
             if (el) {
+                const label = el.textContent.substring(2);
                 el.className = 'req ' + (reqs[id] ? 'done' : 'fail');
-                el.textContent = (reqs[id] ? '✅' : '🔲') + el.textContent.substring(2);
+                el.textContent = (reqs[id] ? '✅' : '🔲') + label;
             }
         });
 
-        // Strength meter
         const bars = document.querySelectorAll('.password-strength .bar');
         let score = 0;
         if (hasLength) score++;
@@ -1701,7 +1707,6 @@
             }
         });
 
-        // Show error if invalid and not empty
         if (pw.length > 0 && !allValid) {
             pwError.classList.add('show');
             pwInput.classList.add('error');
@@ -1716,7 +1721,6 @@
             pwInput.classList.remove('success');
         }
 
-        // Confirm validation
         if (confirm.length > 0 && pw !== confirm) {
             confirmError.classList.add('show');
             confirmInput.classList.add('error');
@@ -1731,16 +1735,18 @@
             confirmInput.classList.remove('success');
         }
 
-        // Update password display
-        const pwDisplay = document.getElementById('passwordDisplay');
-        if (pw.length > 0 && allValid && pw === confirm) {
-            pwDisplay.textContent = pw;
-        } else if (pw.length > 0 && !allValid) {
-            pwDisplay.textContent = '❌ Пароль не відповідає вимогам';
-        } else if (pw.length > 0 && pw !== confirm) {
-            pwDisplay.textContent = '❌ Паролі не збігаються';
+        // Update login display
+        const loginDisplay = document.getElementById('loginDisplay');
+        if (email && pw && allValid && pw === confirm) {
+            loginDisplay.innerHTML = '📧 ' + email + '<br>🔑 ' + pw;
+        } else if (!email) {
+            loginDisplay.innerHTML = '<span style="color:rgba(255,255,255,0.2);">Введіть email</span>';
+        } else if (pw && !allValid) {
+            loginDisplay.innerHTML = '<span style="color:#FF6688;">⚠️ Пароль не відповідає вимогам</span>';
+        } else if (pw && pw !== confirm) {
+            loginDisplay.innerHTML = '<span style="color:#FF6688;">⚠️ Паролі не збігаються</span>';
         } else {
-            pwDisplay.textContent = '⚠️ Пароль буде показано після заповнення';
+            loginDisplay.innerHTML = '<span style="color:rgba(255,255,255,0.2);">Заповніть поля вище</span>';
         }
 
         return allValid && pw === confirm;
@@ -1767,7 +1773,6 @@
             password += chars[Math.floor(Math.random() * chars.length)];
         }
 
-        // Shuffle
         password = password.split('').sort(() => Math.random() - 0.5).join('');
 
         document.getElementById('reg_password').value = password;
@@ -1778,26 +1783,49 @@
     }
 
     // ============================================================
-    // COPY PASSWORD
+    // COPY LOGIN DATA
     // ============================================================
-    function copyPassword() {
+    function copyLoginData() {
+        const email = document.getElementById('reg_email').value.trim();
         const pw = document.getElementById('reg_password').value;
-        if (!pw || pw.length < 6) {
-            showToast('❌ Спочатку створіть пароль');
+
+        if (!email || !pw || pw.length < 6) {
+            showToast('❌ Спочатку заповніть email і створіть пароль');
             return;
         }
-        navigator.clipboard.writeText(pw).then(() => {
-            showToast('✅ Пароль скопійовано!');
+
+        const text = '📧 Логін: ' + email + '\n🔑 Пароль: ' + pw;
+
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('✅ Логін і пароль скопійовано!');
         }).catch(() => {
-            // Fallback
             const textarea = document.createElement('textarea');
-            textarea.value = pw;
+            textarea.value = text;
             document.body.appendChild(textarea);
             textarea.select();
             document.execCommand('copy');
             document.body.removeChild(textarea);
-            showToast('✅ Пароль скопійовано!');
+            showToast('✅ Логін і пароль скопійовано!');
         });
+    }
+
+    // ============================================================
+    // INSERT CUSTOM OFFER
+    // ============================================================
+    function insertCustomOffer() {
+        if (navigator.clipboard) {
+            navigator.clipboard.readText().then(text => {
+                const textarea = document.getElementById('custom_offer_text');
+                textarea.value = text;
+                textarea.dispatchEvent(new Event('input'));
+                showToast('✅ Текст вставлено з буфера!');
+            }).catch(() => {
+                showToast('⚠️ Не вдалося прочитати буфер. Вставте текст вручну (Ctrl+V)');
+            });
+        } else {
+            showToast('⚠️ Ваш браузер не підтримує читання буфера. Вставте текст вручну (Ctrl+V)');
+            document.getElementById('custom_offer_text').focus();
+        }
     }
 
     // ============================================================
@@ -1806,23 +1834,19 @@
     function getAllData() {
         const data = {};
 
-        // Registration
         data.registration_email = document.getElementById('reg_email').value.trim();
         data.registration_password = document.getElementById('reg_password').value;
 
-        // Store & FOP
         data.store_name = document.getElementById('store_name').value.trim();
         data.fop_surname = document.getElementById('fop_surname').value.trim();
         data.fop_name = document.getElementById('fop_name').value.trim();
         data.fop_patronymic = document.getElementById('fop_patronymic').value.trim();
         data.iban = document.getElementById('iban').value.trim();
         data.edrpou = document.getElementById('edrpou').value.trim();
-        data.fop_tax_id = document.getElementById('fop_tax_id').value.trim();
         data.bank_name = document.getElementById('bank_name').value.trim();
         data.payment_purpose = document.getElementById('payment_purpose').value.trim();
         data.product_categories = document.getElementById('product_categories').value.trim();
 
-        // Contacts - repeatable
         data.telegram = getRepeatableData('telegram', ['type', 'value']);
         data.viber = getRepeatableData('viber', ['type', 'value']);
         data.phone = getRepeatableData('phone', ['value', 'label']);
@@ -1836,13 +1860,11 @@
         data.olx = getRepeatableData('olx', ['value']);
         data.prom = getRepeatableData('prom', ['value']);
 
-        // Site pages
         data.site_pages = [];
         document.querySelectorAll('.page_check:checked').forEach(el => {
             data.site_pages.push(el.value);
         });
 
-        // Payment
         data.payment_methods = [];
         document.querySelectorAll('.payment_check:checked').forEach(el => {
             data.payment_methods.push(el.value);
@@ -1850,7 +1872,6 @@
         data.cod_prepaid = document.getElementById('cod_prepaid').value.trim();
         data.minimum_order = document.getElementById('minimum_order').value.trim();
 
-        // Shipping
         data.shipping_methods = [];
         document.querySelectorAll('.shipping_check:checked').forEach(el => {
             data.shipping_methods.push(el.value);
@@ -1858,14 +1879,12 @@
         data.shipping_other = document.getElementById('shipping_other_name').value.trim();
         data.shipping_days = document.getElementById('shipping_days').value.trim();
 
-        // Fiscal receipt
         const fiscalRadio = document.querySelector('.fiscal_radio:checked');
         data.fiscal_receipt = fiscalRadio ? fiscalRadio.value : '';
         const receiptRadio = document.querySelector('.receipt_radio:checked');
         data.receipt_delivery = receiptRadio ? receiptRadio.value : '';
         data.receipt_other_method = document.getElementById('receipt_other_method').value.trim();
 
-        // Exchange & Return
         data.exchange_available = document.getElementById('cb_exchange').checked;
         data.exchange_terms = document.getElementById('exchange_terms').value.trim();
         data.return_available = document.getElementById('cb_return').checked;
@@ -1874,19 +1893,20 @@
         data.return_terms = document.getElementById('return_terms').value.trim();
         data.legal_return = document.getElementById('cb_legal_return').checked;
 
-        // Privacy
         data.privacy = [];
         document.querySelectorAll('.privacy_check:checked').forEach(el => {
             data.privacy.push(el.value);
         });
 
-        // Public offer
         data.public_offer = [];
         document.querySelectorAll('.offer_check:checked').forEach(el => {
             data.public_offer.push(el.value);
         });
+        const customOfferText = document.getElementById('custom_offer_text');
+        if (document.getElementById('cb_custom_offer').checked && customOfferText && customOfferText.value.trim()) {
+            data.public_offer.push('📝 Власний пункт: ' + customOfferText.value.trim());
+        }
 
-        // Cooperation
         data.cooperation = [];
         document.querySelectorAll('.cooperation_check:checked').forEach(el => {
             data.cooperation.push(el.value);
@@ -1933,7 +1953,6 @@
             };
 
             if (obj.value) {
-                // Enforce max 1 main and 1 backup
                 if (obj.is_main && mainCount < 1) {
                     mainCount++;
                 } else if (obj.is_main) {
@@ -1960,15 +1979,12 @@
 
         let lines = [];
 
-        // Registration
         if (data.registration_email) {
             lines.push('📧 Реєстраційний email: ' + data.registration_email);
         }
 
-        // Store
         if (data.store_name) lines.push('🏪 Назва магазину: ' + data.store_name);
 
-        // FOP
         let fopName = '';
         if (data.fop_surname) fopName += data.fop_surname + ' ';
         if (data.fop_name) fopName += data.fop_name + ' ';
@@ -1976,13 +1992,11 @@
         if (fopName.trim()) lines.push('👤 ФОП: ' + fopName.trim());
 
         if (data.iban) lines.push('🏦 IBAN: ' + data.iban);
-        if (data.edrpou) lines.push('📋 ЄДРПОУ: ' + data.edrpou);
-        if (data.fop_tax_id) lines.push('📋 ІПН: ' + data.fop_tax_id);
+        if (data.edrpou) lines.push('📋 ЄДРПОУ / ІПН: ' + data.edrpou);
         if (data.bank_name) lines.push('🏛️ Банк: ' + data.bank_name);
         if (data.payment_purpose) lines.push('📝 Призначення платежу: ' + data.payment_purpose);
         if (data.product_categories) lines.push('📦 Категорії: ' + data.product_categories);
 
-        // Contacts
         if (data.telegram.length > 0) {
             lines.push('📱 Telegram:');
             data.telegram.forEach(t => {
@@ -2070,26 +2084,22 @@
             });
         }
 
-        // Site pages
         if (data.site_pages.length > 0) {
             lines.push('📄 Сторінки: ' + data.site_pages.join(', '));
         }
 
-        // Payment
         if (data.payment_methods.length > 0) {
             lines.push('💳 Оплата: ' + data.payment_methods.join(', '));
         }
         if (data.cod_prepaid) lines.push('  • Передоплата: ' + data.cod_prepaid);
         if (data.minimum_order) lines.push('  • Мін. сума: ' + data.minimum_order);
 
-        // Shipping
         if (data.shipping_methods.length > 0) {
             lines.push('🚚 Доставка: ' + data.shipping_methods.join(', '));
         }
         if (data.shipping_other) lines.push('  • Інша: ' + data.shipping_other);
         if (data.shipping_days) lines.push('  • Термін: ' + data.shipping_days + ' роб. днів');
 
-        // Fiscal receipt
         if (data.fiscal_receipt) {
             lines.push('🧾 Фіскальний чек: ' + data.fiscal_receipt);
             if (data.receipt_delivery) {
@@ -2100,13 +2110,11 @@
             }
         }
 
-        // Exchange
         if (data.exchange_available) {
             lines.push('🔄 Обмін: Так');
             if (data.exchange_terms) lines.push('  • Умови: ' + data.exchange_terms);
         }
 
-        // Return
         if (data.return_available) {
             lines.push('↩️ Повернення: Так');
             let period = data.return_period;
@@ -2120,7 +2128,6 @@
             lines.push('  • Враховано законодавчі обмеження');
         }
 
-        // Privacy
         if (data.privacy.length > 0) {
             lines.push('🔒 Політика конфіденційності:');
             data.privacy.forEach(p => {
@@ -2128,7 +2135,6 @@
             });
         }
 
-        // Public offer
         if (data.public_offer.length > 0) {
             lines.push('📜 Публічна оферта:');
             data.public_offer.forEach(o => {
@@ -2136,7 +2142,6 @@
             });
         }
 
-        // Cooperation
         if (data.cooperation.length > 0) {
             lines.push('🤝 Умови співпраці:');
             data.cooperation.forEach(c => {
@@ -2162,7 +2167,6 @@
             return;
         }
 
-        // Add header
         const email = document.getElementById('reg_email').value.trim() || 'не вказано';
         const store = document.getElementById('store_name').value.trim() || 'не вказано';
         const header = '📋 Дані для створення міні-сайту\n';
@@ -2179,7 +2183,6 @@
             }, 2000);
             showToast('✅ Дані скопійовано!');
         }).catch(() => {
-            // Fallback
             const textarea = document.createElement('textarea');
             textarea.value = fullText;
             document.body.appendChild(textarea);
@@ -2212,37 +2215,31 @@
             el.selectedIndex = 0;
         });
 
-        // Reset password fields
         document.getElementById('reg_password').classList.remove('error', 'success');
         document.getElementById('reg_password_confirm').classList.remove('error', 'success');
         document.getElementById('reg_password_error').classList.remove('show');
         document.getElementById('reg_password_confirm_error').classList.remove('show');
 
-        // Reset password bars
         document.querySelectorAll('.password-strength .bar').forEach(el => {
             el.className = 'bar';
         });
 
-        // Reset password requirements
         document.querySelectorAll('.password-requirements .req').forEach(el => {
+            const label = el.textContent.substring(2);
             el.className = 'req fail';
-            el.textContent = '🔲' + el.textContent.substring(2);
+            el.textContent = '🔲' + label;
         });
 
-        // Reset password display
-        document.getElementById('passwordDisplay').textContent = 'Пароль буде показано після заповнення';
+        document.getElementById('loginDisplay').innerHTML = '<span style="color:rgba(255,255,255,0.2);">Заповніть поля вище</span>';
 
-        // Reset result
         document.getElementById('resultContent').innerHTML = '<span class="empty">Заповніть анкету — дані з\'являться автоматично</span>';
 
-        // Remove repeatable entries (keep first)
         document.querySelectorAll('.repeatable-wrap').forEach(wrap => {
             const entries = wrap.querySelectorAll('.entry');
             if (entries.length > 1) {
                 entries.forEach((el, i) => {
                     if (i > 0) el.remove();
                 });
-                // Reset first entry
                 const first = wrap.querySelector('.entry');
                 if (first) {
                     first.querySelectorAll('input, select, textarea').forEach(el => {
@@ -2253,16 +2250,12 @@
             }
         });
 
-        // Hide all conditionals
         document.querySelectorAll('.conditional').forEach(el => {
             el.classList.remove('show');
         });
 
-        // Reset fiscal receipt
         document.getElementById('cond_receipt_yes').classList.remove('show');
         document.getElementById('cond_receipt_other').classList.remove('show');
-
-        // Reset return period
         document.getElementById('cond_return_other').classList.remove('show');
 
         showToast('🔄 Анкету очищено');
@@ -2283,9 +2276,6 @@
         }, 2500);
     }
 
-    // ============================================================
-    // INIT
-    // ============================================================
     console.log('✅ Анкета для міні-сайту завантажена');
     console.log('📌 VEO FORCE · @vasil_veo');
 </script>
