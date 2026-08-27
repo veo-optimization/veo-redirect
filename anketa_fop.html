@@ -187,7 +187,7 @@
             border: 1.5px solid #E8E5DE;
             border-radius: 8px;
             font-family: 'Manrope', sans-serif;
-            font-size: 0.88rem;
+            font-size: 16px;
             color: #0A0A0A;
             background: #FAFAF8;
             transition: border-color 0.2s, box-shadow 0.2s;
@@ -706,7 +706,7 @@
             .form-group input,
             .form-group select,
             .form-group textarea {
-                font-size: 0.82rem;
+                font-size: 16px;
                 padding: 8px 10px;
             }
             .radio-group {
@@ -769,58 +769,6 @@
             <input type="email" id="reg_email" placeholder="Введіть email для входу в магазин" autocomplete="email">
             <div class="error-msg" id="reg_email_error">Будь ласка, введіть коректний email</div>
         </div>
-
-        <!-- Пароль -->
-        <div class="form-group">
-            <label>Пароль для реєстрації <span class="required">*</span></label>
-            <div class="password-wrapper">
-                <input type="password" id="reg_password" placeholder="Створіть новий унікальний пароль" autocomplete="new-password">
-                <button class="password-toggle" id="pw_toggle" type="button">👁️</button>
-            </div>
-            <div class="helper">Мінімум 6 символів: велика літера, мала літера, цифра, спецсимвол</div>
-            <div class="password-strength" id="pw_strength">
-                <div class="bar" id="pw_bar_1"></div>
-                <div class="bar" id="pw_bar_2"></div>
-                <div class="bar" id="pw_bar_3"></div>
-                <div class="bar" id="pw_bar_4"></div>
-            </div>
-            <div class="password-requirements" id="pw_reqs">
-                <span class="req" id="req_length">🔲 мін. 6 символів</span>
-                <span class="req" id="req_upper">🔲 велика літера</span>
-                <span class="req" id="req_lower">🔲 мала літера</span>
-                <span class="req" id="req_number">🔲 цифра</span>
-                <span class="req" id="req_special">🔲 спецсимвол</span>
-            </div>
-            <div class="password-generate-wrap">
-                <button class="btn-generate-pw" id="btn_generate_pw">🔑 Згенерувати безпечний пароль</button>
-            </div>
-            <div class="error-msg" id="reg_password_error">Пароль не відповідає вимогам</div>
-        </div>
-
-        <!-- Підтвердження пароля -->
-        <div class="form-group">
-            <label>Повторіть пароль <span class="required">*</span></label>
-            <div class="password-wrapper">
-                <input type="password" id="reg_password_confirm" placeholder="Повторіть пароль" autocomplete="new-password">
-                <button class="password-toggle" id="pw_confirm_toggle" type="button">👁️</button>
-            </div>
-            <div class="error-msg" id="reg_password_confirm_error">Паролі не збігаються</div>
-        </div>
-
-        <!-- РЕЗУЛЬТАТ РЕЄСТРАЦІЇ (внизу блоку) -->
-        <div class="login-display-box">
-            <span class="label">🔑 Дані для входу</span>
-            <div class="value" id="loginDisplay">
-                <span class="placeholder">Заповніть поля вище</span>
-            </div>
-            <div class="actions">
-                <button onclick="copyLoginData()">📋 Скопіювати логін і пароль</button>
-            </div>
-        </div>
-
-        <div style="background:#FFF5F7;border-left:3px solid #FF0050;padding:10px 14px;border-radius:0 8px 8px 0;margin-top:8px;font-size:0.78rem;color:#555;">
-            🔒 <strong>Важливо:</strong> Створіть окремий пароль спеціально для цього магазину. Не використовуйте пароль від інших сервісів.
-        </div>
     </section>
 
     <!-- ============================================================ -->
@@ -832,7 +780,7 @@
 
         <div class="form-group">
             <label>Назва магазину <span class="required">*</span></label>
-            <input type="text" id="store_name" placeholder="Наприклад: Beroo Fashion">
+            <input type="text" id="store_name" placeholder="Наприклад: Shevchenko Shop">
         </div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
@@ -1166,24 +1114,6 @@
     </section>
 
     <!-- ============================================================ -->
-    <!-- SECTION 03: SITE PAGES -->
-    <!-- ============================================================ -->
-    <section id="section-03">
-        <span class="section-number">Секція 03</span>
-        <h2>Сторінки міні-сайту</h2>
-        <p class="desc">Оберіть сторінки, які потрібно створити на міні-сайті.</p>
-
-        <div class="checkbox-group">
-            <div class="checkbox-item"><input type="checkbox" class="page_check" value="Доставка та оплата"><span class="label-text">Доставка та оплата</span></div>
-            <div class="checkbox-item"><input type="checkbox" class="page_check" value="Повернення та обмін"><span class="label-text">Повернення та обмін</span></div>
-            <div class="checkbox-item"><input type="checkbox" class="page_check" value="Контакти та оплата"><span class="label-text">Контакти та оплата</span></div>
-            <div class="checkbox-item"><input type="checkbox" class="page_check" value="Публічна оферта"><span class="label-text">Публічна оферта</span></div>
-            <div class="checkbox-item"><input type="checkbox" class="page_check" value="Політика конфіденційності"><span class="label-text">Політика конфіденційності</span></div>
-            <div class="checkbox-item"><input type="checkbox" class="page_check" value="Умови співпраці"><span class="label-text">Умови співпраці</span></div>
-        </div>
-    </section>
-
-    <!-- ============================================================ -->
     <!-- SECTION 04: PAYMENT -->
     <!-- ============================================================ -->
     <section id="section-04">
@@ -1320,69 +1250,6 @@
         <div class="checkbox-item" style="margin-top:10px;">
             <input type="checkbox" id="cb_legal_return">
             <span class="label-text">Враховувати законодавчі обмеження щодо товарів, які не підлягають обміну та поверненню</span>
-        </div>
-    </section>
-
-    <!-- ============================================================ -->
-    <!-- SECTION 08: PRIVACY -->
-    <!-- ============================================================ -->
-    <section id="section-08">
-        <span class="section-number">Секція 08</span>
-        <h2>Політика конфіденційності</h2>
-
-        <div class="checkbox-group">
-            <div class="checkbox-item"><input type="checkbox" class="privacy_check" value="Погоджуюсь на обробку персональних даних відповідно до законодавства України."><span class="label-text">Погоджуюсь на обробку персональних даних відповідно до законодавства України.</span></div>
-            <div class="checkbox-item"><input type="checkbox" class="privacy_check" value="Підтверджую, що продавець самостійно відповідає за збереження персональних даних своїх клієнтів."><span class="label-text">Підтверджую, що продавець самостійно відповідає за збереження персональних даних своїх клієнтів.</span></div>
-            <div class="checkbox-item"><input type="checkbox" class="privacy_check" value="Підтверджую, що персональні дані не передаються третім особам без законних підстав або необхідної згоди."><span class="label-text">Підтверджую, що персональні дані не передаються третім особам без законних підстав або необхідної згоди.</span></div>
-            <div class="checkbox-item"><input type="checkbox" class="privacy_check" value="Підтверджую достовірність інформації, наданої для створення сайту."><span class="label-text">Підтверджую достовірність інформації, наданої для створення сайту.</span></div>
-        </div>
-    </section>
-
-    <!-- ============================================================ -->
-    <!-- SECTION 09: PUBLIC OFFER (З ПОЛЕМ "ВСТАВИТИ СВОЄ") -->
-    <!-- ============================================================ -->
-    <section id="section-09">
-        <span class="section-number">Секція 09</span>
-        <h2>Публічна оферта</h2>
-        <p class="desc">Оберіть пункти, які будуть включені в публічну оферту. Ви також можете додати власний текст.</p>
-
-        <div class="checkbox-group">
-            <div class="checkbox-item"><input type="checkbox" class="offer_check" value="Підтверджую, що продавець самостійно визначає умови продажу товарів або надання послуг."><span class="label-text">Підтверджую, що продавець самостійно визначає умови продажу товарів або надання послуг.</span></div>
-            <div class="checkbox-item"><input type="checkbox" class="offer_check" value="Підтверджую, що умови оплати відповідають фактичним умовам роботи продавця."><span class="label-text">Підтверджую, що умови оплати відповідають фактичним умовам роботи продавця.</span></div>
-            <div class="checkbox-item"><input type="checkbox" class="offer_check" value="Підтверджую, що умови доставки відповідають фактичним умовам роботи продавця."><span class="label-text">Підтверджую, що умови доставки відповідають фактичним умовам роботи продавця.</span></div>
-            <div class="checkbox-item"><input type="checkbox" class="offer_check" value="Підтверджую, що умови обміну та повернення відповідають фактичним умовам роботи продавця."><span class="label-text">Підтверджую, що умови обміну та повернення відповідають фактичним умовам роботи продавця.</span></div>
-            <div class="checkbox-item"><input type="checkbox" class="offer_check" value="Підтверджую достовірність інформації, наданої для формування публічної оферти."><span class="label-text">Підтверджую достовірність інформації, наданої для формування публічної оферти.</span></div>
-        </div>
-
-        <!-- ПОЛЕ "ВСТАВИТИ СВОЄ" -->
-        <div style="margin-top:14px;border-top:1px solid #F0EFE9;padding-top:14px;">
-            <div class="checkbox-item">
-                <input type="checkbox" id="cb_custom_offer">
-                <span class="label-text">➕ Додати власний пункт у публічну оферту</span>
-            </div>
-            <div class="conditional" id="cond_custom_offer">
-                <div class="form-group">
-                    <label>Вставте або напишіть власний текст</label>
-                    <textarea id="custom_offer_text" rows="3" placeholder="Напишіть або вставте власний пункт публічної оферти..."></textarea>
-                </div>
-                <button class="btn-generate-pw" onclick="insertCustomOffer()" style="margin-top:4px;font-size:0.7rem;padding:4px 12px;">📋 Вставити з буфера обміну</button>
-                <div style="font-size:0.7rem;color:#888;margin-top:4px;">💡 Ви можете скопіювати текст з будь-якого документа і вставити його сюди</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================================ -->
-    <!-- SECTION 10: COOPERATION -->
-    <!-- ============================================================ -->
-    <section id="section-10">
-        <span class="section-number">Секція 10</span>
-        <h2>Умови співпраці</h2>
-
-        <div class="checkbox-group">
-            <div class="checkbox-item"><input type="checkbox" class="cooperation_check" value="Підтверджую, що надана інформація є актуальною."><span class="label-text">Підтверджую, що надана інформація є актуальною.</span></div>
-            <div class="checkbox-item"><input type="checkbox" class="cooperation_check" value="Підтверджую відповідальність за достовірність реквізитів та контактних даних."><span class="label-text">Підтверджую відповідальність за достовірність реквізитів та контактних даних.</span></div>
-            <div class="checkbox-item"><input type="checkbox" class="cooperation_check" value="Підтверджую відповідальність за фактичні умови оплати, доставки, обміну та повернення."><span class="label-text">Підтверджую відповідальність за фактичні умови оплати, доставки, обміну та повернення.</span></div>
-            <div class="checkbox-item"><input type="checkbox" class="cooperation_check" value="Погоджуюсь із використанням наданої інформації для створення та налаштування міні-сайту."><span class="label-text">Погоджуюсь із використанням наданої інформації для створення та налаштування міні-сайту.</span></div>
         </div>
     </section>
 
@@ -1570,9 +1437,6 @@
         setupConditional('cb_exchange', 'cond_exchange');
         setupConditional('cb_return', 'cond_return');
 
-        // Custom offer
-        setupConditional('cb_custom_offer', 'cond_custom_offer');
-
         // Return period other
         const returnPeriod = document.getElementById('return_period');
         const returnOther = document.getElementById('cond_return_other');
@@ -1613,31 +1477,6 @@
             });
         });
 
-        // Password toggle
-        document.getElementById('pw_toggle').addEventListener('click', function() {
-            const input = document.getElementById('reg_password');
-            input.type = input.type === 'password' ? 'text' : 'password';
-            this.textContent = input.type === 'password' ? '👁️' : '🙈';
-        });
-
-        document.getElementById('pw_confirm_toggle').addEventListener('click', function() {
-            const input = document.getElementById('reg_password_confirm');
-            input.type = input.type === 'password' ? 'text' : 'password';
-            this.textContent = input.type === 'password' ? '👁️' : '🙈';
-        });
-
-        document.getElementById('btn_generate_pw').addEventListener('click', generatePassword);
-
-        const pwInput = document.getElementById('reg_password');
-        const pwConfirm = document.getElementById('reg_password_confirm');
-        const emailInput = document.getElementById('reg_email');
-        pwInput.addEventListener('input', validatePassword);
-        pwInput.addEventListener('input', updateResult);
-        pwConfirm.addEventListener('input', validatePassword);
-        pwConfirm.addEventListener('input', updateResult);
-        emailInput.addEventListener('input', validatePassword);
-        emailInput.addEventListener('input', updateResult);
-
         document.querySelectorAll('input, select, textarea').forEach(el => {
             el.addEventListener('input', updateResult);
             el.addEventListener('change', updateResult);
@@ -1653,189 +1492,12 @@
     });
 
     // ============================================================
-    // PASSWORD VALIDATION
-    // ============================================================
-    function validatePassword() {
-        const pw = document.getElementById('reg_password').value;
-        const confirm = document.getElementById('reg_password_confirm').value;
-        const email = document.getElementById('reg_email').value.trim();
-        const pwInput = document.getElementById('reg_password');
-        const confirmInput = document.getElementById('reg_password_confirm');
-        const pwError = document.getElementById('reg_password_error');
-        const confirmError = document.getElementById('reg_password_confirm_error');
-
-        const hasLength = pw.length >= 6;
-        const hasUpper = /[A-Z]/.test(pw);
-        const hasLower = /[a-z]/.test(pw);
-        const hasNumber = /[0-9]/.test(pw);
-        const hasSpecial = /[^A-Za-z0-9]/.test(pw);
-
-        const allValid = hasLength && hasUpper && hasLower && hasNumber && hasSpecial;
-
-        const reqs = {
-            'req_length': hasLength,
-            'req_upper': hasUpper,
-            'req_lower': hasLower,
-            'req_number': hasNumber,
-            'req_special': hasSpecial
-        };
-
-        Object.keys(reqs).forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                const label = el.textContent.substring(2);
-                el.className = 'req ' + (reqs[id] ? 'done' : 'fail');
-                el.textContent = (reqs[id] ? '✅' : '🔲') + label;
-            }
-        });
-
-        const bars = document.querySelectorAll('.password-strength .bar');
-        let score = 0;
-        if (hasLength) score++;
-        if (hasUpper) score++;
-        if (hasLower) score++;
-        if (hasNumber) score++;
-        if (hasSpecial) score++;
-
-        bars.forEach((bar, i) => {
-            bar.className = 'bar';
-            if (i < score) {
-                bar.classList.add('active');
-                if (score <= 2) bar.classList.add('weak');
-                else if (score <= 4) bar.classList.add('medium');
-                else bar.classList.add('strong');
-            }
-        });
-
-        if (pw.length > 0 && !allValid) {
-            pwError.classList.add('show');
-            pwInput.classList.add('error');
-            pwInput.classList.remove('success');
-        } else if (pw.length > 0 && allValid) {
-            pwError.classList.remove('show');
-            pwInput.classList.remove('error');
-            pwInput.classList.add('success');
-        } else {
-            pwError.classList.remove('show');
-            pwInput.classList.remove('error');
-            pwInput.classList.remove('success');
-        }
-
-        if (confirm.length > 0 && pw !== confirm) {
-            confirmError.classList.add('show');
-            confirmInput.classList.add('error');
-            confirmInput.classList.remove('success');
-        } else if (confirm.length > 0 && pw === confirm) {
-            confirmError.classList.remove('show');
-            confirmInput.classList.remove('error');
-            confirmInput.classList.add('success');
-        } else {
-            confirmError.classList.remove('show');
-            confirmInput.classList.remove('error');
-            confirmInput.classList.remove('success');
-        }
-
-        // Update login display
-        const loginDisplay = document.getElementById('loginDisplay');
-        if (email && pw && allValid && pw === confirm) {
-            loginDisplay.innerHTML = '📧 ' + email + '<br>🔑 ' + pw;
-        } else if (!email) {
-            loginDisplay.innerHTML = '<span style="color:rgba(255,255,255,0.2);">Введіть email</span>';
-        } else if (pw && !allValid) {
-            loginDisplay.innerHTML = '<span style="color:#FF6688;">⚠️ Пароль не відповідає вимогам</span>';
-        } else if (pw && pw !== confirm) {
-            loginDisplay.innerHTML = '<span style="color:#FF6688;">⚠️ Паролі не збігаються</span>';
-        } else {
-            loginDisplay.innerHTML = '<span style="color:rgba(255,255,255,0.2);">Заповніть поля вище</span>';
-        }
-
-        return allValid && pw === confirm;
-    }
-
-    // ============================================================
-    // GENERATE PASSWORD
-    // ============================================================
-    function generatePassword() {
-        const length = 12;
-        const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        const lowercase = 'abcdefghijklmnopqrstuvwxyz';
-        const numbers = '0123456789';
-        const special = '!@#$%^&*()_+-=<>?';
-
-        let chars = uppercase + lowercase + numbers + special;
-        let password = '';
-        password += uppercase[Math.floor(Math.random() * uppercase.length)];
-        password += lowercase[Math.floor(Math.random() * lowercase.length)];
-        password += numbers[Math.floor(Math.random() * numbers.length)];
-        password += special[Math.floor(Math.random() * special.length)];
-
-        for (let i = 4; i < length; i++) {
-            password += chars[Math.floor(Math.random() * chars.length)];
-        }
-
-        password = password.split('').sort(() => Math.random() - 0.5).join('');
-
-        document.getElementById('reg_password').value = password;
-        document.getElementById('reg_password_confirm').value = password;
-        validatePassword();
-        updateResult();
-        showToast('🔑 Пароль згенеровано!');
-    }
-
-    // ============================================================
-    // COPY LOGIN DATA
-    // ============================================================
-    function copyLoginData() {
-        const email = document.getElementById('reg_email').value.trim();
-        const pw = document.getElementById('reg_password').value;
-
-        if (!email || !pw || pw.length < 6) {
-            showToast('❌ Спочатку заповніть email і створіть пароль');
-            return;
-        }
-
-        const text = '📧 Логін: ' + email + '\n🔑 Пароль: ' + pw;
-
-        navigator.clipboard.writeText(text).then(() => {
-            showToast('✅ Логін і пароль скопійовано!');
-        }).catch(() => {
-            const textarea = document.createElement('textarea');
-            textarea.value = text;
-            document.body.appendChild(textarea);
-            textarea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textarea);
-            showToast('✅ Логін і пароль скопійовано!');
-        });
-    }
-
-    // ============================================================
-    // INSERT CUSTOM OFFER
-    // ============================================================
-    function insertCustomOffer() {
-        if (navigator.clipboard) {
-            navigator.clipboard.readText().then(text => {
-                const textarea = document.getElementById('custom_offer_text');
-                textarea.value = text;
-                textarea.dispatchEvent(new Event('input'));
-                showToast('✅ Текст вставлено з буфера!');
-            }).catch(() => {
-                showToast('⚠️ Не вдалося прочитати буфер. Вставте текст вручну (Ctrl+V)');
-            });
-        } else {
-            showToast('⚠️ Ваш браузер не підтримує читання буфера. Вставте текст вручну (Ctrl+V)');
-            document.getElementById('custom_offer_text').focus();
-        }
-    }
-
-    // ============================================================
     // GET ALL DATA
     // ============================================================
     function getAllData() {
         const data = {};
 
         data.registration_email = document.getElementById('reg_email').value.trim();
-        data.registration_password = document.getElementById('reg_password').value;
 
         data.store_name = document.getElementById('store_name').value.trim();
         data.fop_surname = document.getElementById('fop_surname').value.trim();
@@ -1859,11 +1521,6 @@
         data.website = getRepeatableData('website', ['value']);
         data.olx = getRepeatableData('olx', ['value']);
         data.prom = getRepeatableData('prom', ['value']);
-
-        data.site_pages = [];
-        document.querySelectorAll('.page_check:checked').forEach(el => {
-            data.site_pages.push(el.value);
-        });
 
         data.payment_methods = [];
         document.querySelectorAll('.payment_check:checked').forEach(el => {
@@ -1892,25 +1549,6 @@
         data.return_period_other = document.getElementById('return_period_other').value.trim();
         data.return_terms = document.getElementById('return_terms').value.trim();
         data.legal_return = document.getElementById('cb_legal_return').checked;
-
-        data.privacy = [];
-        document.querySelectorAll('.privacy_check:checked').forEach(el => {
-            data.privacy.push(el.value);
-        });
-
-        data.public_offer = [];
-        document.querySelectorAll('.offer_check:checked').forEach(el => {
-            data.public_offer.push(el.value);
-        });
-        const customOfferText = document.getElementById('custom_offer_text');
-        if (document.getElementById('cb_custom_offer').checked && customOfferText && customOfferText.value.trim()) {
-            data.public_offer.push('📝 Власний пункт: ' + customOfferText.value.trim());
-        }
-
-        data.cooperation = [];
-        document.querySelectorAll('.cooperation_check:checked').forEach(el => {
-            data.cooperation.push(el.value);
-        });
 
         return data;
     }
@@ -2084,10 +1722,6 @@
             });
         }
 
-        if (data.site_pages.length > 0) {
-            lines.push('📄 Сторінки: ' + data.site_pages.join(', '));
-        }
-
         if (data.payment_methods.length > 0) {
             lines.push('💳 Оплата: ' + data.payment_methods.join(', '));
         }
@@ -2126,27 +1760,6 @@
         }
         if (data.legal_return) {
             lines.push('  • Враховано законодавчі обмеження');
-        }
-
-        if (data.privacy.length > 0) {
-            lines.push('🔒 Політика конфіденційності:');
-            data.privacy.forEach(p => {
-                lines.push('  ✓ ' + p);
-            });
-        }
-
-        if (data.public_offer.length > 0) {
-            lines.push('📜 Публічна оферта:');
-            data.public_offer.forEach(o => {
-                lines.push('  ✓ ' + o);
-            });
-        }
-
-        if (data.cooperation.length > 0) {
-            lines.push('🤝 Умови співпраці:');
-            data.cooperation.forEach(c => {
-                lines.push('  ✓ ' + c);
-            });
         }
 
         if (lines.length === 0) {
@@ -2215,23 +1828,6 @@
             el.selectedIndex = 0;
         });
 
-        document.getElementById('reg_password').classList.remove('error', 'success');
-        document.getElementById('reg_password_confirm').classList.remove('error', 'success');
-        document.getElementById('reg_password_error').classList.remove('show');
-        document.getElementById('reg_password_confirm_error').classList.remove('show');
-
-        document.querySelectorAll('.password-strength .bar').forEach(el => {
-            el.className = 'bar';
-        });
-
-        document.querySelectorAll('.password-requirements .req').forEach(el => {
-            const label = el.textContent.substring(2);
-            el.className = 'req fail';
-            el.textContent = '🔲' + label;
-        });
-
-        document.getElementById('loginDisplay').innerHTML = '<span style="color:rgba(255,255,255,0.2);">Заповніть поля вище</span>';
-
         document.getElementById('resultContent').innerHTML = '<span class="empty">Заповніть анкету — дані з\'являться автоматично</span>';
 
         document.querySelectorAll('.repeatable-wrap').forEach(wrap => {
@@ -2276,8 +1872,6 @@
         }, 2500);
     }
 
-    console.log('✅ Анкета для міні-сайту завантажена');
-    console.log('📌 VEO FORCE · @vasil_veo');
 </script>
 
 </body>
