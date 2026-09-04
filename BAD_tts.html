@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Гайд-шпаргалка · VEO FORCE · БАДи та фітопрепарати в TikTok</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;800;900&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  background:#FFFFFF; font-family:'Manrope',sans-serif; font-size:14.5px;
+  line-height:1.65; color:#0A0A0A; -webkit-font-smoothing:antialiased;
+}
+.wrap { max-width:460px; margin:0 auto; padding:0 0 60px; }
+
+/* HEADER */
+.hero { background:#0A0A0A; color:#fff; padding:24px 18px 22px; }
+.hero-brand { font-family:'Unbounded',sans-serif; font-weight:900; font-size:0.8rem; letter-spacing:-0.01em; }
+.hero-brand span { color:#FF0050; }
+.hero-sub { font-size:0.68rem; color:#999; margin-top:2px; }
+.hero-title { font-family:'Unbounded',sans-serif; font-weight:800; font-size:1.45rem; line-height:1.25; margin-top:16px; letter-spacing:-0.02em; }
+.hero-desc { font-size:0.82rem; color:#c9c9c9; margin-top:10px; line-height:1.6; }
+.hero-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; }
+.hero-tags span { font-size:0.62rem; font-weight:700; padding:4px 10px; border-radius:20px; background:rgba(255,0,80,0.18); color:#FF6B93; border:1px solid rgba(255,0,80,0.35); }
+
+/* URGENCY STRIP */
+.urgency { background:#FFF3D0; border-bottom:2px solid #E0B030; padding:12px 18px; font-size:0.75rem; color:#6b4a00; line-height:1.6; }
+.urgency b { color:#4a3200; }
+
+/* TOC */
+.toc { padding:16px 18px; border-bottom:1px solid #F0EFE9; }
+.toc-title { font-size:0.62rem; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:#999; margin-bottom:8px; }
+.toc a { display:flex; align-items:center; gap:8px; font-size:0.78rem; font-weight:600; color:#0A0A0A; text-decoration:none; padding:6px 0; }
+.toc a .n { color:#FF0050; font-family:'Unbounded',sans-serif; font-weight:800; font-size:0.72rem; width:20px; }
+
+main { padding:0 18px; }
+section { padding-top:28px; }
+
+.s-eyebrow { font-size:0.65rem; font-weight:700; color:#FF0050; letter-spacing:0.03em; }
+.s-title { font-family:'Unbounded',sans-serif; font-weight:800; font-size:1.15rem; margin-top:4px; letter-spacing:-0.02em; line-height:1.3; }
+.s-lead { font-size:0.83rem; color:#555; margin-top:8px; line-height:1.65; }
+
+.dual { display:flex; flex-direction:column; gap:8px; margin-top:16px; }
+.dual-card { border:1.5px solid #E8E5DE; border-radius:12px; padding:12px 14px; }
+.dual-card .tag { display:inline-block; font-size:0.6rem; font-weight:700; padding:2px 9px; border-radius:20px; margin-bottom:6px; }
+.dual-card.ua .tag { background:#FFF3D0; color:#996600; }
+.dual-card.tt .tag { background:#FFE8F0; color:#CC0040; }
+.dual-card h4 { font-family:'Unbounded',sans-serif; font-size:0.78rem; font-weight:700; margin-bottom:4px; }
+.dual-card p { font-size:0.76rem; color:#555; }
+.dual-conclusion { margin-top:10px; background:#FAFAF8; border-left:3px solid #FF0050; border-radius:0 10px 10px 0; padding:10px 14px; font-size:0.78rem; color:#333; }
+
+.rz { border:1.5px solid #E8E5DE; border-radius:12px; margin-top:10px; overflow:hidden; }
+.rz-hdr { padding:12px 14px; display:flex; gap:10px; align-items:flex-start; cursor:pointer; background:#FFF5F5; }
+.rz-badge { font-size:0.58rem; font-weight:700; background:#CC0030; color:#fff; padding:3px 8px; border-radius:4px; flex-shrink:0; margin-top:1px; white-space:nowrap; }
+.rz-title { font-size:0.8rem; font-weight:700; flex:1; line-height:1.35; }
+.rz-arr { color:#999; font-size:0.7rem; transition:transform .2s; flex-shrink:0; margin-top:2px; }
+.rz.open .rz-arr { transform:rotate(180deg); }
+.rz-body { display:none; padding:12px 14px; font-size:0.78rem; color:#555; line-height:1.6; background:#fff; }
+.rz.open .rz-body { display:block; }
+.rz-body strong { color:#0A0A0A; }
+
+.term-table { width:100%; border-collapse:collapse; margin-top:14px; font-size:0.72rem; }
+.term-table th { background:#F5F4F0; text-align:left; padding:8px 10px; font-weight:700; font-size:0.65rem; text-transform:uppercase; letter-spacing:0.02em; color:#888; }
+.term-table td { padding:9px 10px; border-bottom:1px solid #F0EFE9; vertical-align:top; }
+.term-table .no { color:#CC0030; }
+.term-table .no::before { content:"✕ "; }
+.term-table .yes { color:#1A7A3C; }
+.term-table .yes::before { content:"✓ "; }
+
+.funnel { margin-top:16px; display:flex; flex-direction:column; gap:0; }
+.funnel-step { border:1.5px solid #E8E5DE; border-radius:10px; padding:10px 14px; font-size:0.78rem; position:relative; }
+.funnel-step b { font-family:'Unbounded',sans-serif; font-weight:700; font-size:0.72rem; display:block; margin-bottom:2px; }
+.funnel-arrow { text-align:center; color:#FF0050; font-size:0.9rem; padding:2px 0; }
+
+/* SIGNAL DIAGRAM (commercial intent) */
+.signal-chain { margin-top:16px; display:flex; flex-direction:column; gap:0; }
+.signal-step { border:1.5px solid #E8E5DE; border-radius:10px; padding:11px 14px; font-size:0.78rem; background:#FAFAF8; }
+.signal-step b { font-family:'Unbounded',sans-serif; font-weight:700; font-size:0.72rem; display:block; margin-bottom:2px; color:#0A0A0A; }
+.signal-arrow { text-align:center; color:#999; font-size:0.85rem; padding:2px 0; }
+.signal-final { border-color:rgba(204,0,48,0.4); background:#FFF5F5; }
+.signal-final b { color:#CC0030; }
+
+/* HOOKS TABLE */
+.hook-card { border:1.5px solid #E8E5DE; border-radius:12px; padding:12px 14px; margin-top:10px; }
+.hook-card .sys { font-family:'Unbounded',sans-serif; font-size:0.68rem; font-weight:700; color:#FF0050; text-transform:uppercase; letter-spacing:0.02em; }
+.hook-card .hook { font-size:0.82rem; color:#0A0A0A; margin-top:5px; font-weight:600; line-height:1.5; }
+.hook-card .why { font-size:0.7rem; color:#888; margin-top:4px; }
+
+.ending-list { margin-top:12px; display:flex; flex-direction:column; gap:8px; }
+.ending-item { border:1.5px solid #E8E5DE; border-radius:10px; padding:10px 14px; font-size:0.78rem; }
+.ending-item .yes-tag { display:inline-block; font-size:0.58rem; font-weight:700; background:#E0F5E8; color:#1A7A3C; padding:2px 8px; border-radius:20px; margin-bottom:5px; }
+.ending-bad { border-color:rgba(204,0,48,0.3); background:#FFFAF9; }
+.ending-bad .no-tag { display:inline-block; font-size:0.58rem; font-weight:700; background:#FFE8E8; color:#CC0030; padding:2px 8px; border-radius:20px; margin-bottom:5px; }
+
+/* SEGMENT CARDS */
+.seg-card { border:1.5px solid #E8E5DE; border-radius:14px; padding:14px 16px; margin-top:12px; }
+.seg-card.risk-high { border-color:rgba(204,0,48,0.35); background:#FFFAF9; }
+.seg-card.risk-mid { border-color:rgba(204,119,0,0.3); background:#FFFCF7; }
+.seg-card.risk-low { border-color:rgba(26,122,60,0.3); background:#F9FDFA; }
+.seg-head { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; margin-bottom:6px; }
+.seg-name { font-family:'Unbounded',sans-serif; font-weight:800; font-size:0.85rem; }
+.seg-members { font-size:0.68rem; color:#888; margin-top:2px; }
+.seg-risk { font-size:0.6rem; font-weight:700; padding:3px 9px; border-radius:20px; white-space:nowrap; flex-shrink:0; }
+.risk-high .seg-risk { background:#FFE8E8; color:#CC0030; }
+.risk-mid .seg-risk { background:#FFF3D0; color:#996600; }
+.risk-low .seg-risk { background:#E0F5E8; color:#1A7A3C; }
+.seg-diag { font-size:0.76rem; color:#444; margin-top:8px; line-height:1.6; }
+.seg-actions { margin-top:8px; }
+.seg-actions div { font-size:0.75rem; color:#0A0A0A; padding:4px 0 4px 16px; position:relative; }
+.seg-actions div::before { content:"→"; color:#FF0050; position:absolute; left:0; }
+
+/* MEMBER ACCORDION */
+.members { margin-top:12px; }
+.member { border:1.5px solid #E8E5DE; border-radius:10px; margin-top:8px; overflow:hidden; background:#fff; }
+.member-hdr { padding:10px 12px; display:flex; align-items:center; gap:8px; cursor:pointer; }
+.member-name { font-family:'Unbounded',sans-serif; font-size:0.74rem; font-weight:700; flex:1; }
+.member-meta { font-size:0.62rem; color:#999; }
+.member-arr { color:#999; font-size:0.65rem; transition:transform .2s; flex-shrink:0; }
+.member.open .member-arr { transform:rotate(180deg); }
+.member-body { display:none; padding:0 12px 12px; }
+.member.open .member-body { display:block; }
+.member-links { display:flex; flex-direction:column; gap:3px; margin-bottom:8px; }
+.member-links a { font-size:0.68rem; color:#1a56a0; text-decoration:none; word-break:break-all; }
+.member-links a:hover { text-decoration:underline; }
+.member-trigger { background:#FFF5F5; border-left:3px solid #CC0030; border-radius:0 8px 8px 0; padding:8px 10px; font-size:0.72rem; color:#6b2020; margin-bottom:8px; line-height:1.55; }
+.member-focus { font-size:0.72rem; color:#333; line-height:1.6; }
+.member-focus b { color:#0A0A0A; }
+
+.calc-table { width:100%; border-collapse:collapse; margin-top:14px; font-size:0.72rem; }
+.calc-table th { background:#0A0A0A; color:#fff; padding:8px 8px; font-weight:700; text-align:center; }
+.calc-table th:first-child { text-align:left; }
+.calc-table td { padding:8px 8px; text-align:center; border-bottom:1px solid #F0EFE9; }
+.calc-table td:first-child { text-align:left; font-weight:700; }
+.calc-table .now { color:#888; }
+.calc-table .future { color:#1A7A3C; font-weight:700; }
+.calc-note { font-size:0.68rem; color:#999; margin-top:8px; line-height:1.55; }
+.calc-base { background:#FAFAF8; border-radius:10px; padding:10px 14px; margin-top:12px; font-size:0.75rem; }
+.calc-base b { color:#FF0050; }
+
+/* CLOSING PHILOSOPHY */
+.closing { margin-top:32px; border:1.5px solid #0A0A0A; border-radius:16px; padding:20px 18px; background:#0A0A0A; color:#fff; }
+.closing .cl-eyebrow { font-size:0.62rem; font-weight:700; color:#FF6B93; letter-spacing:0.04em; text-transform:uppercase; }
+.closing h3 { font-family:'Unbounded',sans-serif; font-size:1rem; font-weight:800; margin-top:8px; line-height:1.35; }
+.closing p { font-size:0.8rem; color:#c9c9c9; margin-top:10px; line-height:1.7; }
+.closing .signature { margin-top:14px; font-size:0.72rem; color:#888; font-style:normal; }
+
+.footer { margin-top:24px; padding:16px 18px 0; border-top:1px solid #F0EFE9; font-size:0.65rem; color:#aaa; text-align:center; line-height:1.7; }
+.footer strong { color:#0A0A0A; }
+
+/* SOURCES */
+.sources { margin-top:32px; }
+.src-item { border:1.5px solid #E8E5DE; border-radius:12px; padding:12px 14px; margin-top:10px; }
+.src-item .src-tag { display:inline-block; font-size:0.58rem; font-weight:700; padding:2px 9px; border-radius:20px; margin-bottom:6px; }
+.src-item.ua-src .src-tag { background:#FFF3D0; color:#996600; }
+.src-item.tt-src .src-tag { background:#FFE8F0; color:#CC0040; }
+.src-item h5 { font-family:'Unbounded',sans-serif; font-size:0.76rem; font-weight:700; line-height:1.4; }
+.src-item a { font-size:0.68rem; color:#1a56a0; word-break:break-all; display:block; margin-top:4px; text-decoration:none; }
+.src-item a:hover { text-decoration:underline; }
+.src-item p { font-size:0.75rem; color:#555; margin-top:6px; line-height:1.55; }
+.src-item .used-in { font-size:0.65rem; color:#999; margin-top:6px; }
+.src-item .used-in b { color:#FF0050; font-weight:700; }
+
+h4.sub { font-family:'Unbounded',sans-serif; font-size:0.78rem; font-weight:700; margin-top:16px; margin-bottom:6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="hero-brand"><span>VEO</span> FORCE · @vasil_veo</div>
+    <div class="hero-sub">Бізнес-гайд для команди · серпень–вересень 2026</div>
+    <div class="hero-title">Як продавати фітопрепарати й БАДи в TikTok і не втратити акаунт</div>
+    <div class="hero-desc">Об'єднує законодавство України, актуальні правила TikTok і TikTok Shop, логіку роботи алгоритму комерційної детекції та персональний розбір 9 акаунтів команди.</div>
+    <div class="hero-tags">
+      <span>Закон про рекламу ст.21</span>
+      <span>TikTok Community Guidelines</span>
+      <span>TikTok Shop Health Policy</span>
+    </div>
+  </div>
+
+  <div class="urgency">
+    <b>Кінець 2026 — початок 2027-го: вузьке вікно.</b> До моменту запуску TikTok Shop платформа проводить масштабну чистку контенту під нові вимоги — і це стосується не лише БАДів. Ту саму хвилю зараз проходять юриспруденція, ріелторські послуги, рекрутинг, фінансові й бухгалтерські послуги, медицина, продаж побутової техніки та інших товарів. Багато акаунтів у цих нішах уже «вилітають» з платформи, не встигнувши підлаштуватись. Категорія Health & Wellness при цьому одразу підпадає під найсуворіший контроль, і паралельно діють українські законодавчі норми щодо реклами. Втратити акаунт і отримати позначку «ризикований» у цифровому профілі зараз простіше, ніж будь-коли раніше — і складніше відновити довіру алгоритму заново. Мета цього вікна — не просто вціліти, а використати його на свою користь, поки конкуренти йдуть з ринку.
+  </div>
+
+  <div class="toc">
+    <div class="toc-title">Зміст</div>
+    <a href="#s1"><span class="n">01</span> Правовий фундамент</a>
+    <a href="#s2"><span class="n">02</span> Червона зона — що не можна</a>
+    <a href="#s3"><span class="n">03</span> Безпечна термінологія</a>
+    <a href="#s4"><span class="n">04</span> Стратегія акаунтів і воронка</a>
+    <a href="#s5"><span class="n">05</span> Платформа, яка читає наміри</a>
+    <a href="#s6"><span class="n">06</span> Довіра замість продажу</a>
+    <a href="#s7"><span class="n">07</span> Безпечні хуки й фінал відео</a>
+    <a href="#s8"><span class="n">08</span> Сегментація команди</a>
+    <a href="#s9"><span class="n">09</span> Калькулятор доходності</a>
+    <a href="#s10"><span class="n">10</span> Джерела</a>
+  </div>
+
+  <main>
+
+    <!-- ============ 01 ПРАВОВИЙ ФУНДАМЕНТ ============ -->
+    <section id="s1">
+      <div class="s-eyebrow">01 · ФУНДАМЕНТ</div>
+      <div class="s-title">Подвійний контроль: закон і платформа діють одночасно</div>
+      <div class="s-lead">TikTok блокує не лише за порушення власних правил спільноти — платформа також враховує місцеве законодавство країни перегляду. Тому дозволене за одним контуром може все одно потрапити під блок за іншим.</div>
+
+      <div class="dual">
+        <div class="dual-card ua">
+          <span class="tag">Закон України</span>
+          <h4>Ст. 21 Закону «Про рекламу»</h4>
+          <p>Забороняє присвоювати БАДам і фітопрепаратам лікувальні властивості, посилатись на випадки «зцілення» чи натякати, що продукт замінює консультацію лікаря. Обов'язковий дисклеймер: «Не є лікарським засобом» + «Перед застосуванням проконсультуйтесь з лікарем».</p>
+        </div>
+        <div class="dual-card ua">
+          <span class="tag">Юридичний статус</span>
+          <h4>БАД ≠ ліки</h4>
+          <p>За Законом «Про безпечність та якість харчових продуктів» фітопрепарати й БАДи юридично є дієтичними добавками (харчовими продуктами), а не ліками. На маркуванні й у презентації заборонено вказувати, що продукт лікує конкретні хвороби.</p>
+        </div>
+        <div class="dual-card tt">
+          <span class="tag">TikTok</span>
+          <h4>Ads Policy: Healthcare & Pharmaceuticals</h4>
+          <p>Забороняє обіцянки конкретного результату («мінус 10 кг за тиждень»), вимагає таргет 18+ для контенту про БАДи, забороняє порівняння «До / Після».</p>
+        </div>
+        <div class="dual-card tt">
+          <span class="tag">TikTok Shop</span>
+          <h4>Health & Wellness — Restricted</h4>
+          <p>Категорія з обмеженим доступом: продавати зможуть лише ті, у кого є документи на продукцію (сертифікати якості, ISO/GMP), контент має фокусуватись на «підтримці самопочуття», а не на діагнозах чи обіцянках лікування.</p>
+        </div>
+      </div>
+
+      <div class="dual-conclusion">
+        <strong>Висновок:</strong> навіть повністю легальне за українським законом формулювання може отримати блок від алгоритму TikTok — і навпаки, дозволене TikTok формулювання може порушувати українське рекламне законодавство. Безпечний контент має проходити обидва фільтри одночасно.
+      </div>
+    </section>
+
+    <!-- ============ 02 ЧЕРВОНА ЗОНА ============ -->
+    <section id="s2">
+      <div class="s-eyebrow">02 · ЧЕК-ЛИСТ</div>
+      <div class="s-title">Червона зона: що категорично не можна</div>
+      <div class="s-lead">Натисніть на пункт, щоб побачити пояснення та приклад із практики команди.</div>
+
+      <div id="rzList"></div>
+    </section>
+
+    <!-- ============ 03 ТЕРМІНОЛОГІЯ ============ -->
+    <section id="s3">
+      <div class="s-eyebrow">03 · СЛОВНИК</div>
+      <div class="s-title">Безпечна термінологія для продажів</div>
+      <div class="s-lead">Той самий сенс, без слів-тригерів для алгоритму та без порушення закону.</div>
+
+      <table class="term-table">
+        <thead><tr><th>Замість</th><th>Кажіть</th></tr></thead>
+        <tbody>
+          <tr><td class="no">лікує / виліковує</td><td class="yes">підтримує / сприяє покращенню</td></tr>
+          <tr><td class="no">гарантований результат / назавжди позбудетесь</td><td class="yes">допомагає організму в період…</td></tr>
+          <tr><td class="no">заміна ліків / замість лікаря</td><td class="yes">доповнює раціон, не замінює консультацію лікаря</td></tr>
+          <tr><td class="no">діагноз (кандида, грибок, тиск) як висновок про глядача</td><td class="yes">опис відчуттів («важкість після їжі», «неспокійний сон») без постановки діагнозу</td></tr>
+          <tr><td class="no">«До / Після» — фото чи цифри</td><td class="yes">опис звички чи рутини без порівняння станів</td></tr>
+          <tr><td class="no">номер телефону / «пишіть на +380…» у кадрі чи описі</td><td class="yes">«деталі — у шапці профілю»</td></tr>
+          <tr><td class="no">назва продукту з медичним коренем (Антиревматин, Гепатовіт)</td><td class="yes">у мовленні — нейтральна назва без хвороби («комплекс для суглобів», «підтримка печінки»)</td></tr>
+        </tbody>
+      </table>
+
+      <div class="dual-conclusion" style="margin-top:14px;">
+        Алгоритм TikTok зчитує не лише текст титрів — він аналізує аудіодоріжку, опис, коментарі та навіть назви продуктів, вимовлені вголос. Тому заміна слів має бути наскрізною: у сценарії, в описі й у відповідях на коментарі.
+      </div>
+    </section>
+
+    <!-- ============ 04 СТРАТЕГІЯ АКАУНТІВ ============ -->
+    <section id="s4">
+      <div class="s-eyebrow">04 · СТРАТЕГІЯ</div>
+      <div class="s-title">«Тихий» нативний контент і воронка без прямих продажів</div>
+      <div class="s-lead">Поки TikTok Shop офіційно не запущений в Україні, головне завдання — не «впарювати» товар, а продавати стан, який людина отримує. Товар не герой відео. Героєм є досвід, рутина, естетика та турботливий експертний підхід.</div>
+
+      <h4 class="sub">Три робочі вектори контенту</h4>
+      <div class="dual-card ua" style="margin-top:8px;">
+        <h4>«Один мій день для відновлення ресурсу»</h4>
+        <p>Aesthetic lifestyle: сон, вода, сніданок, прогулянка — і паралельно прийом вітамінів як частина самотурботи. Приклад: «Мої 3 звички для спокійного вечора та якісного сну».</p>
+      </div>
+      <div class="dual-card ua" style="margin-top:8px;">
+        <h4>«Розбір тарілки та мікронутрієнти»</h4>
+        <p>Простий нутриціологічний лікбез: чому із сучасної їжі важко отримати всі мікроелементи. Будує експертну довіру без «впарювання».</p>
+      </div>
+      <div class="dual-card ua" style="margin-top:8px;">
+        <h4>«Легкість, травлення та енергія»</h4>
+        <p>Прості рецепти, відчуття легкості протягом дня, фітопрепарати як природне доповнення раціону, а не ліки.</p>
+      </div>
+
+      <h4 class="sub">Воронка без ризику бану</h4>
+      <div class="funnel">
+        <div class="funnel-step"><b>1. Відео в TikTok</b>естетика / рутина / спокій, без прямих закликів купити</div>
+        <div class="funnel-arrow">↓</div>
+        <div class="funnel-step"><b>2. М'який фінал відео</b>без «звертайтесь» чи «пишіть у шапку» — див. розділ 07</div>
+        <div class="funnel-arrow">↓</div>
+        <div class="funnel-step"><b>3. Шапка профілю</b>міні-сайт (Linktree-подібний сервіс) — деталі нижче</div>
+        <div class="funnel-arrow">↓</div>
+        <div class="funnel-step"><b>4. Telegram-канал</b>лише відкритий, публічний, з іменним посиланням</div>
+      </div>
+
+      <h4 class="sub">Анатомія безпечної шапки профілю</h4>
+      <div class="dual-card ua">
+        <h4>Хто ви за описом</h4>
+        <p>Опис профілю має подавати вас як людину, яка захоплюється темою здорового способу життя й турботою про себе — а не як точку продажу. Це рамка, у яку вписується все інше на сторінці.</p>
+      </div>
+      <div class="dual-card ua" style="margin-top:8px;">
+        <h4>Міні-сайт замість прямого посилання</h4>
+        <p>У шапці профілю — посилання не на конкретний канал чи месенджер, а на міні-сайт від сервісу типу Linktree (link-in-bio): сторінка з кількома кнопками й короткими підписами. TikTok-браузер сканує весь вміст цієї сторінки, коли переходить за посиланням із профілю — і саме це визначає, як платформа класифікує ваш акаунт.</p>
+      </div>
+      <div class="dual-card ua" style="margin-top:8px;">
+        <h4>Що обов'язково має бути на міні-сайті</h4>
+        <p>Крім кнопки на Telegram-канал і кнопки написати особисто — обов'язково 1-2 посилання на зовнішні інформаційні джерела: статтю на Вікіпедії чи офіційне дослідження за темою здоров'я. Підписи кнопок — спокійні, без сильних закликів і без комерційних маркерів («докладніше про цю тему», а не «купити зараз» чи «замовити зі знижкою»).</p>
+      </div>
+
+      <div class="dual-conclusion" style="margin-top:10px;">
+        <strong>Чому це працює:</strong> коли у відео чи коментарі звучить «деталі в профілі» або «багато інформації в профілі», TikTok-браузер переходить за посиланням і бачить сторінку з реальним корисним і офіційно опублікованим контентом, а не лише вузьку воронку продажу. Це знижує ймовірність того, що сама сторінка призначення буде прочитана як комерційний чи ризикований маркер.
+      </div>
+
+      <div class="rz" style="margin-top:10px;">
+        <div class="rz-hdr" onclick="this.parentElement.classList.toggle('open')">
+          <span class="rz-badge">✕ ЗАБОРОНЕНО</span>
+          <div class="rz-title">Пряме посилання на закритий Telegram-канал або в особисті повідомлення з шапки профілю</div>
+          <span class="rz-arr">▾</span>
+        </div>
+        <div class="rz-body">Посилання на закриті (приватні, за інвайтом) Telegram-канали технічно мають той самий формат, що й посилання, які використовує трафік-арбітраж для обману людей — прихованого переливу трафіку на казино, заборонені препарати, наркотики тощо. Тому платформа й антифрод-системи розглядають такий тип посилання як маркер підвищеного ризику незалежно від того, що саме за ним ховається. <strong>Правило:</strong> лише відкриті, публічні Telegram-канали з іменним посиланням (t.me/назва_каналу), ніколи не закриті/інвайт-посилання чи прямі лінки в особисті повідомлення з шапки профілю.</div>
+      </div>
+
+      <div class="dual-conclusion" style="margin-top:14px;">
+        <strong>Чому ця інвестиція окупиться:</strong> коли TikTok Shop запрацює в Україні, пріоритет у видачі отримають «білі» акаунти без порушень. Аудиторія, яка вже звикла довіряти й купувати, дасть миттєвий старт продажів через офіційний кошик — замість того, щоб будувати довіру з нуля.
+      </div>
+    </section>
+
+    <!-- ============ 05 ПЛАТФОРМА, ЯКА ЧИТАЄ НАМІРИ ============ -->
+    <section id="s5">
+      <div class="s-eyebrow">05 · ВАЖЛИВО РОЗУМІТИ</div>
+      <div class="s-title">TikTok — це платформа, яка читає наміри, а не лише слова</div>
+      <div class="s-lead">Це не залякування, а опис того, як фактично влаштована модерація зараз. Розуміння цього механізму — найкращий захист від випадкового бану.</div>
+
+      <div class="signal-chain">
+        <div class="signal-step"><b>Коментарі під відео</b>TikTok бачить не тільки текст коментаря, а й хто саме його залишив.</div>
+        <div class="signal-arrow">↓</div>
+        <div class="signal-step"><b>Історія цього глядача</b>якщо той самий користувач за останні тижні, дні чи години вже писав «як замовити» під іншими подібними відео про препарати — це відомо платформі.</div>
+        <div class="signal-arrow">↓</div>
+        <div class="signal-step"><b>Комерційна мітка на вашому відео</b>такий коментар під вашим відео підсилює семантичну й контекстну класифікацію саме вашого контенту як комерційного — незалежно від того, що сказали ви самі.</div>
+        <div class="signal-arrow">↓</div>
+        <div class="signal-step signal-final"><b>Результат</b>у ніші фітопрепаратів і БАДів комерційні маркери особливо небезпечні — вони прискорюють ту саму посилену перевірку, яку описано в розділі 01 і 02.</div>
+      </div>
+
+      <div class="dual-conclusion" style="margin-top:14px;">
+        Важливий висновок для команди: ви не повністю контролюєте, які коментарі отримує ваше відео. Але ви повністю контролюєте, чи дає ваш власний контент і фінал відео привід платформі й глядачам поводитись комерційно. Саме тому розділи 06 і 07 — не стилістична порада, а частина захисту акаунта.
+      </div>
+    </section>
+
+    <!-- ============ 06 ДОВІРА ЗАМІСТЬ ПРОДАЖУ ============ -->
+    <section id="s6">
+      <div class="s-eyebrow">06 · ПІДХІД</div>
+      <div class="s-title">Довіра замість продажу: гра в довгу</div>
+      <div class="s-lead">У цій ніші формат «продати просто у відеоролику» зараз найризикованіший з можливих. Тому мета кожного відео — не конверсія тут і зараз, а побудова довіри, яка конвертується пізніше й в іншому місці.</div>
+
+      <div class="dual-card ua">
+        <h4>Окситоциновий підхід</h4>
+        <p>Подача автора має викликати довіру й тепло, а не терміновість чи тиск купити. Глядач має відчути турботу й компетентність — це те, що запам'ятовується.</p>
+      </div>
+      <div class="dual-card ua" style="margin-top:8px;">
+        <h4>Ім'я та обличчя — головний актив</h4>
+        <p>Замовники запам'ятовують не назву продукту з відео, а конкретну людину: її ім'я, обличчя, манеру говорити. Довіра до людини — це те, що потім самостійно приводить до пошуку в Google чи на сайт.</p>
+      </div>
+      <div class="dual-card ua" style="margin-top:8px;">
+        <h4>Продаж не відбувається у відео</h4>
+        <p>Це ключова відмінність від старого підходу: відео більше не є місцем угоди. Воно — місце знайомства й довіри. Угода відбувається пізніше, у Telegram, на сайті чи в директ-повідомленнях, куди людина прийшла сама, за власним рішенням.</p>
+      </div>
+
+      <div class="dual-conclusion" style="margin-top:14px;">
+        <strong>Роль TikTok Shop у цій моделі:</strong> коли з'явиться кошик прямо у відео, довіра, накопичена зараз, стане прямою перевагою — люди купуватимуть у знайомого й перевіреного автора значно охочіше, ніж у випадкового. Ця стратегія не суперечить майбутньому TikTok Shop, вона його готує.
+      </div>
+    </section>
+
+    <!-- ============ 07 БЕЗПЕЧНІ ХУКИ ТА ФІНАЛ ============ -->
+    <section id="s7">
+      <div class="s-eyebrow">07 · ФОРМАТ</div>
+      <div class="s-title">Безпечні хуки та фінал відео без заклику</div>
+      <div class="s-lead">Перші секунди мають зачепити дофамінову ставку — впізнаваність, «це про мене» — без жодного медичного твердження, пояснення чи обіцянки. Останні секунди не повинні містити прямого заклику написати чи звернутись.</div>
+
+      <h4 class="sub">Приклади безпечних хуків за системами</h4>
+
+      <div class="hook-card">
+        <div class="sys">Серцево-судинна</div>
+        <div class="hook">«Той момент, коли встаєш різко — і на секунду все пливе перед очима»</div>
+        <div class="why">Масове, впізнаване відчуття. Без згадки тиску, діагнозу чи препарату.</div>
+      </div>
+      <div class="hook-card">
+        <div class="sys">Травна</div>
+        <div class="hook">«Коли після обіду хочеться просто лягти й нічого не робити»</div>
+        <div class="why">Універсальний досвід, без слів «здуття», «закреп», «травлення».</div>
+      </div>
+      <div class="hook-card">
+        <div class="sys">Нервова</div>
+        <div class="hook">«3 ранку, очі відкриті, а причини для тривоги — жодної»</div>
+        <div class="why">Емоційна впізнаваність без слів «безсоння», «тривожність» як діагнозу.</div>
+      </div>
+      <div class="hook-card">
+        <div class="sys">Імунна</div>
+        <div class="hook">«Осінь ще навіть не почалась, а перший нежить уже тут»</div>
+        <div class="why">Сезонне, знайоме кожному — без обіцянок «зміцнить імунітет».</div>
+      </div>
+      <div class="hook-card">
+        <div class="sys">Опорно-рухова</div>
+        <div class="hook">«Той хрускіт у коліні, коли встаєш зі стільця після робочого дня»</div>
+        <div class="why">Побутова деталь, не медичний симптом і не діагноз.</div>
+      </div>
+
+      <h4 class="sub">Фінал відео — без прямого заклику</h4>
+      <div class="ending-list">
+        <div class="ending-item ending-bad">
+          <span class="no-tag">✕ Уникати</span><br>
+          «Звертайтесь до мене» / «Пишіть у шапку профілю» / «Замовляйте зараз»
+        </div>
+        <div class="ending-item">
+          <span class="yes-tag">✓ Безпечно</span><br>
+          «Кому цікаво детальніше — багато цікавого в мене на акаунті»
+        </div>
+        <div class="ending-item">
+          <span class="yes-tag">✓ Безпечно</span><br>
+          «Мій канал присвячений саме цьому — кому цікаво, можете зазирнути»
+        </div>
+        <div class="ending-item">
+          <span class="yes-tag">✓ Безпечно</span><br>
+          «Хто хоче більше себе пізнати — у мене багато інформації на акаунті»
+        </div>
+        <div class="ending-item">
+          <span class="yes-tag">✓ Безпечно</span><br>
+          «Кому мій труд цікавий — завітайте»
+        </div>
+      </div>
+
+      <div class="dual-conclusion" style="margin-top:14px;">
+        Різниця між «звертайтесь» і «кому цікаво — зазирніть» здається дрібною, але для алгоритму й для глядача це різні сигнали: перше — заклик до угоди, друге — запрошення в простір довіри. Саме друге не залишає комерційного маркера, описаного в розділі 05.
+      </div>
+    </section>
+
+    <!-- ============ 08 СЕГМЕНТАЦІЯ ============ -->
+    <section id="s8">
+      <div class="s-eyebrow">08 · КОМАНДА</div>
+      <div class="s-title">Сегментація за анкетами: 4 групи, 4 вектори роботи</div>
+      <div class="s-lead">9 учасниць команди розподілені за головним блокером — тим, що зараз найбільше заважає рости. Кожну анкету можна розгорнути окремо — там посилання на акаунти та конкретні маркери, які підняли ризик саме для цієї людини.</div>
+
+      <div class="seg-card risk-high">
+        <div class="seg-head">
+          <div>
+            <div class="seg-name">Група A · Вже «горіли»</div>
+            <div class="seg-members">Тетяна · Ірина Реп'ях · Наталія</div>
+          </div>
+          <span class="seg-risk">Найвищий ризик</span>
+        </div>
+        <div class="seg-diag">Уже мають підтверджені бани саме за медичну термінологію, номер телефону в кадрі чи занадто «діагностичний» контент (тест на кандиду склянкою води). Продукти з медичними коренями в назвах (Фунгіцин, Лімфорен, Гепатовіт) самі є тригером, незалежно від сценарію. Саме ці конкретні маркери підняли групу в найризикованішу категорію — тому опис, заголовки й підписи на кожному з акаунтів нижче потребують окремого, уважнішого перегляду, а не загального підходу «як у всіх».</div>
+        <div class="seg-actions">
+          <div>Словник заміни термінів (розділ 03) застосовується перш ніж знімається нове відео — без винятків</div>
+          <div>Телефон і прямі контакти прибираються з кадру та опису на кожному акаунті — лише «шапка профілю»</div>
+          <div>Фінал відео переходить на м'який формат без заклику (розділ 07) — саме прямі заклики й контакти найбільше підсилюють комерційну мітку</div>
+          <div>Новий контент знімається за «тихою» стратегією (розділи 04 і 06), без повернення до старого стилю подачі</div>
+        </div>
+
+        <div class="members">
+          <div class="member">
+            <div class="member-hdr" onclick="this.parentElement.classList.toggle('open')">
+              <div class="member-name">Тетяна</div>
+              <span class="member-meta">2 акаунти · 1 втрачено</span>
+              <span class="member-arr">▾</span>
+            </div>
+            <div class="member-body">
+              <div class="member-links">
+                <a href="https://www.tiktok.com/@tanya_opryshko" target="_blank" rel="noopener">tiktok.com/@tanya_opryshko</a>
+                <a href="https://www.tiktok.com/@tanya.opryshko.rk" target="_blank" rel="noopener">tiktok.com/@tanya.opryshko.rk</a>
+              </div>
+              <div class="member-trigger">З анкети: втрачений акаунт заблокували за заборонені слова й номер телефону в кадрі. Топ-продукти включають «Схуднення» — категорію з окремою забороною на обіцянки результату.</div>
+              <div class="member-focus"><b>Фокус:</b> перевірити опис і закріплені відео на обох акаунтах на предмет контактів і слів із розділу 02; для теми схуднення — жодних цифр і термінів «за N днів».</div>
+            </div>
+          </div>
+
+          <div class="member">
+            <div class="member-hdr" onclick="this.parentElement.classList.toggle('open')">
+              <div class="member-name">Ірина Реп'ях</div>
+              <span class="member-meta">2 акаунти · 1 втрачено</span>
+              <span class="member-arr">▾</span>
+            </div>
+            <div class="member-body">
+              <div class="member-links">
+                <a href="https://www.tiktok.com/@irina_grigorivna_rk" target="_blank" rel="noopener">tiktok.com/@irina_grigorivna_rk</a>
+              </div>
+              <div class="member-trigger">З анкети: втрачений акаунт заблокували за медичні терміни й діагнози — «грибок Кандида», «антипаразитарний комплекс», «холестерин». Запит — навчитись знімати «зальотні відео», щоб не блокувало.</div>
+              <div class="member-focus"><b>Фокус:</b> ці три терміни («кандида», «антипаразитарний», «холестерин») виключаються з заголовків і титрів на активному акаунті повністю, замінюються за словником розділу 03; хвороба може згадуватись лише приватно, у Telegram.</div>
+            </div>
+          </div>
+
+          <div class="member">
+            <div class="member-hdr" onclick="this.parentElement.classList.toggle('open')">
+              <div class="member-name">Наталія</div>
+              <span class="member-meta">0 акаунтів · 2 втрачено</span>
+              <span class="member-arr">▾</span>
+            </div>
+            <div class="member-body">
+              <div class="member-links">
+                <div style="font-size:0.7rem; color:#999;">Активних акаунтів немає — обидва втрачені</div>
+              </div>
+              <div class="member-trigger">З анкети: причина втрати — «правила занадто суворі». Продукти: Фунгіцин, Лімфорен, Гепатовіт — назви з прямим медичним коренем. Формат «домашній тест на виявлення грибка кандиди зі стаканом води» викликав багато хейту й діагностичну подачу.</div>
+              <div class="member-focus"><b>Фокус:</b> новий акаунт будується з нуля за розділом 04 і 06; назви продуктів у мовленні замінюються на нейтральні («комплекс для…»); формат «домашній тест» більше не використовується як контент — він за визначенням є діагностикою глядача.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seg-card risk-mid">
+        <div class="seg-head">
+          <div>
+            <div class="seg-name">Група B · Стабільні, але провисає конверсія</div>
+            <div class="seg-members">Анастасія Данільченко · Ольга Басумак · Лєна</div>
+          </div>
+          <span class="seg-risk">Середній ризик</span>
+        </div>
+        <div class="seg-diag">Немає активних бан-історій, є профільна освіта (у Анастасії — фельдшер-акушер, дипломований натуропат, член асоціації нутриціологів), регулярна активність. Головний біль — не блокування, а конверсія: Анастасія прямо каже, що при спробі продати аудиторія «зливається» й купує в інших. У Ольги й Лєни серед топ-продуктів фігурує «кандида» — саме те слово, яке вже призвело до бану у двох учасниць групи A, тому опис і заголовки з цим словом варто перевірити окремо навіть за відсутності блокувань.</div>
+        <div class="seg-actions">
+          <div>Перехід від «продати у відео» до окситоцинової подачі (розділ 06) — саме спроба продати в моменті й «зливає» аудиторію</div>
+          <div>Експертна освіта Анастасії використовується як довіра, а не як дозвіл говорити «лікує» — освіта не знімає юридичного обмеження</div>
+          <div>Telegram-канал з приватними консультаціями тестується як заміна прямих продажів у коментарях</div>
+        </div>
+
+        <div class="members">
+          <div class="member">
+            <div class="member-hdr" onclick="this.parentElement.classList.toggle('open')">
+              <div class="member-name">Анастасія Данільченко</div>
+              <span class="member-meta">1 акаунт · 0 блокувань</span>
+              <span class="member-arr">▾</span>
+            </div>
+            <div class="member-body">
+              <div class="member-links">
+                <a href="https://www.tiktok.com/@danilchenkoanastasya" target="_blank" rel="noopener">tiktok.com/@danilchenkoanastasya</a>
+              </div>
+              <div class="member-trigger">З анкети: попередній акаунт (5 років тому, тема схуднення) уже був знесений. Поточний запит — низька конверсія, аудиторія «зливається» на етапі продажу.</div>
+              <div class="member-focus"><b>Фокус:</b> опис і заголовки на активному акаунті вже відносно чисті — основна робота не в compliance, а в переході на модель довіри з розділу 06.</div>
+            </div>
+          </div>
+
+          <div class="member">
+            <div class="member-hdr" onclick="this.parentElement.classList.toggle('open')">
+              <div class="member-name">Ольга Басумак</div>
+              <span class="member-meta">1 акаунт · 0 блокувань</span>
+              <span class="member-arr">▾</span>
+            </div>
+            <div class="member-body">
+              <div class="member-links">
+                <a href="https://www.tiktok.com/@olyabasumak_fito" target="_blank" rel="noopener">tiktok.com/@olyabasumak_fito</a>
+              </div>
+              <div class="member-trigger">З анкети: топ-продукт включає «Кандидоз» — слово, яке вже стало причиною бану в іншої учасниці команди. Запит — безпечні слова для контенту, що спонукає до покупки.</div>
+              <div class="member-focus"><b>Фокус:</b> заголовки й титри з «кандидоз»/«грибок» перевіряються й замінюються за словником розділу 03 до того, як накопичиться історія використання цього слова на акаунті.</div>
+            </div>
+          </div>
+
+          <div class="member">
+            <div class="member-hdr" onclick="this.parentElement.classList.toggle('open')">
+              <div class="member-name">Лєна</div>
+              <span class="member-meta">1 акаунт · 0 блокувань · активний 3 міс</span>
+              <span class="member-arr">▾</span>
+            </div>
+            <div class="member-body">
+              <div class="member-links">
+                <a href="https://www.tiktok.com/@dolena252" target="_blank" rel="noopener">tiktok.com/@dolena252</a>
+              </div>
+              <div class="member-trigger">З анкети: топ-продукти — Кандида, Очисна, Алергії. Акаунт молодий (активний 3 місяці) — звички ще не закріпились.</div>
+              <div class="member-focus"><b>Фокус:</b> саме зараз, поки акаунт молодий, найдешевше закласти правильні звички — заголовки без назв хвороб і фінал відео за розділом 07 з першого ж нового відео.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seg-card risk-mid">
+        <div class="seg-head">
+          <div>
+            <div class="seg-name">Група C · Заморожені страхом</div>
+            <div class="seg-members">Олена Драбик · Альона</div>
+          </div>
+          <span class="seg-risk">Ризик простою</span>
+        </div>
+        <div class="seg-diag">Олена не публікує вже місяць — боїться втратити акаунт з найвищим охопленням у команді (1.7М). Альона теж на паузі, повертається після перерви. Обидві мають досвід і охоплення, але паралізовані невизначеністю щодо нових правил — це втрата доходу, а не ризик бану.</div>
+        <div class="seg-actions">
+          <div>Розділи 02-03 і 07 читаються перед першим новим відео — саме конкретика знімає невизначеність, яка й тримає обидва акаунти на паузі</div>
+          <div>Перший тестовий заїзд знімається виключно за форматом «Один мій день» (розділ 04) — найбезпечніший вхід у нову подачу</div>
+          <div>Перші 2 тижні після відновлення не ставиться мета продати — лише відновлення довіри алгоритму й аудиторії за принципами розділу 06</div>
+        </div>
+
+        <div class="members">
+          <div class="member">
+            <div class="member-hdr" onclick="this.parentElement.classList.toggle('open')">
+              <div class="member-name">Олена Драбик</div>
+              <span class="member-meta">2 акаунти · 0 блокувань · пауза 1 міс</span>
+              <span class="member-arr">▾</span>
+            </div>
+            <div class="member-body">
+              <div class="member-links">
+                <a href="https://www.tiktok.com/@olena_drabyk" target="_blank" rel="noopener">tiktok.com/@olena_drabyk</a>
+                <a href="https://www.tiktok.com/@olena.drabuk" target="_blank" rel="noopener">tiktok.com/@olena.drabuk</a>
+              </div>
+              <div class="member-trigger">З анкети: топ-продукти названі як «Курс від великого живота», «Курс від грибка» — назва курсу прямо містить назву стану/хвороби. Місяць без публікацій через страх втратити акаунт.</div>
+              <div class="member-focus"><b>Фокус:</b> перед поверненням — назви курсів у закріплених відео й описі на обох акаунтах переформулювати без слова «грибок»; починати саме з формату «Один мій день», не з презентації курсу.</div>
+            </div>
+          </div>
+
+          <div class="member">
+            <div class="member-hdr" onclick="this.parentElement.classList.toggle('open')">
+              <div class="member-name">Альона</div>
+              <span class="member-meta">3 акаунти · 0 блокувань · на паузі</span>
+              <span class="member-arr">▾</span>
+            </div>
+            <div class="member-body">
+              <div class="member-links">
+                <a href="https://www.tiktok.com/@alonka_vitaminka" target="_blank" rel="noopener">tiktok.com/@alonka_vitaminka</a>
+                <div style="font-size:0.68rem; color:#999; margin-top:2px;">Ще 2 акаунти — посилання не надані в анкеті</div>
+              </div>
+              <div class="member-trigger">З анкети: продукти (магній, колаген, очисна програма) відносно нейтральні за назвами. Головний блокер — не compliance, а невпевненість у власній подачі після перерви.</div>
+              <div class="member-focus"><b>Фокус:</b> шапка профілю на основному акаунті оновлюється за анатомією з розділу 04 ще до першого нового відео, щоб було куди вести глядача одразу.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="seg-card risk-mid">
+        <div class="seg-head">
+          <div>
+            <div class="seg-name">Група D · Дрейф у бік діагностики</div>
+            <div class="seg-members">Ірина Жаркова</div>
+          </div>
+          <span class="seg-risk">Середній ризик</span>
+        </div>
+        <div class="seg-diag">4 активні акаунти, непогане охоплення (1.2М), але прямо запитує «як обійти стоп-слова» — це сигнал, що фокус зараз на обході, а не на заміні сенсу. Продукти на кшталт «Комплекс від грибка Кандида» називають хворобу прямо в назві контенту — точно те слово, яке вже стало причиною бану в групі A.</div>
+        <div class="seg-actions">
+          <div>Запит переформульовується з «як обійти» на «як сказати те саме безпечно» — робота зі словником (розділ 03), а не з лазівками</div>
+          <div>Назва хвороби прибирається з заголовків і титрів на всіх чотирьох акаунтах, залишається лише в приватних консультаціях у Telegram</div>
+        </div>
+
+        <div class="members">
+          <div class="member">
+            <div class="member-hdr" onclick="this.parentElement.classList.toggle('open')">
+              <div class="member-name">Ірина Жаркова</div>
+              <span class="member-meta">4 акаунти · 1 втрачено</span>
+              <span class="member-arr">▾</span>
+            </div>
+            <div class="member-body">
+              <div class="member-links">
+                <a href="https://www.tiktok.com/@irynazharkova" target="_blank" rel="noopener">tiktok.com/@irynazharkova</a>
+                <a href="https://www.tiktok.com/@irynazharkovark" target="_blank" rel="noopener">tiktok.com/@irynazharkovark</a>
+                <div style="font-size:0.68rem; color:#999; margin-top:2px;">Ще 2 акаунти — посилання не надані в анкеті</div>
+              </div>
+              <div class="member-trigger">З анкети: втрачений акаунт — причина не медична (передала дітям для перепродажу одягу), тож поточний ризик групи D не про історію блокувань, а про формулювання «Комплекс від грибка Кандида» в заголовках топ-продуктів.</div>
+              <div class="member-focus"><b>Фокус:</b> усі чотири акаунти перевіряються на слово «Кандида»/«грибок» у заголовках і закріплених відео — саме на цю комбінацію вже двічі спрацював алгоритм в інших учасниць команди.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============ 09 КАЛЬКУЛЯТОР ============ -->
+    <section id="s9">
+      <div class="s-eyebrow">09 · ПОТЕНЦІАЛ</div>
+      <div class="s-title">Орієнтовний калькулятор доходності</div>
+      <div class="s-lead">На прикладі бестселера №1 у TikTok Shop США — магнію.</div>
+
+      <div class="calc-base">
+        Ціна банки: <b>$25</b> · комісія афіліата: <b>25%</b> = <b>$6.25</b> з однієї продажі
+      </div>
+
+      <table class="calc-table">
+        <thead><tr><th>Перегляди / міс</th><th>Зараз<br>(Telegram-воронка)</th><th>Після TikTok Shop<br>(кошик у відео)</th></tr></thead>
+        <tbody>
+          <tr><td>10 000</td><td class="now">~3 продажі<br>$18.75</td><td class="future">~30 продажів<br>$187.50</td></tr>
+          <tr><td>50 000</td><td class="now">~15 продажів<br>$93.75</td><td class="future">~150 продажів<br>$937.50</td></tr>
+          <tr><td>100 000</td><td class="now">~30 продажів<br>$187.50</td><td class="future">~300 продажів<br>$1 875</td></tr>
+          <tr><td>500 000</td><td class="now">~150 продажів<br>$937.50</td><td class="future">~1 500 продажів<br>$9 375</td></tr>
+        </tbody>
+      </table>
+
+      <div class="calc-note">
+        <strong>Джерело коефіцієнта 0,3%:</strong> опубліковані бенчмарки TikTok Shop США за 2026 рік показують конверсію органічного афіліат-відео в діапазоні 3-6%, а по всій платформі в середньому 3,4-4,7% — суттєво вище за 0,3%.
+        <a href="https://www.dashboardly.io/statistics/tiktok-shop-conversion-rate-statistics" target="_blank" rel="noopener" style="display:block; margin:4px 0; font-size:0.68rem; color:#1a56a0;">Dashboardly — TikTok Shop Conversion Rate Benchmarks 2026</a>
+        <a href="https://www.hamstergarage.com/article/creator-commerce-benchmark-report" target="_blank" rel="noopener" style="display:block; margin-bottom:4px; font-size:0.68rem; color:#1a56a0;">Hamster Garage — Creator Commerce Benchmark Report 2026</a>
+        За тими самими джерелами, конверсія сильно залежить від ніші й контенту: загальний афіліат-маркетинг у середньому дає лише 0,5-1%, тоді як інфлюенсери з вузькою, сильно залученою аудиторією сягають 4-8%. Публічні цифри «3-6%» зазвичай рахуються від залучених переглядів чи кліків, а не від усіх переглядів відео поспіль — тому реальна конверсія «перегляд → покупка» для конкретного автора зазвичай нижча за headline-цифру. Щоб не «літати в хмарах» і не будувати очікування на завищеній цифрі, у калькуляторі свідомо взято мінімальну консервативну планку — <strong>0,3% від усіх переглядів</strong>. За наведеними джерелами реальний результат у ніші здоров'я/добробуту цілком може виявитись вищим.
+      </div>
+
+      <div class="dual-card tt" style="margin-top:14px;">
+        <span class="tag">Інструмент</span>
+        <h4>fastmoss.com — моніторинг ринку TikTok Shop</h4>
+        <p>Аналітична платформа для TikTok Shop: показує, які товари зараз ростуть у категорії Health & Wellness, які автори на них найбільше заробляють, скільки продажів приносить конкретне відео, і що пишуть у коментарях під найуспішнішими роликами.</p>
+        <p style="margin-top:6px;"><strong>Що варто робити регулярно:</strong> заходити раз на кілька днів у розділ трендових товарів у своїй категорії, дивитись відео топових авторів у цій ніші (як побудований хук, як звучить фінал без прямого заклику), перевіряти коментарі під їхніми роликами — це готовий орієнтир, які формулювання проходять модерацію, а які викликають негатив чи запитання про купівлю напряму в коментарях.</p>
+        <a href="https://www.fastmoss.com/" target="_blank" rel="noopener" style="display:block; margin-top:6px; font-size:0.7rem; color:#1a56a0;">fastmoss.com</a>
+      </div>
+    </section>
+
+    <!-- ============ ЗАКЛЮЧНЕ СЛОВО ============ -->
+    <div class="closing">
+      <div class="cl-eyebrow">Позиція VEO FORCE</div>
+      <h3>Краще працювати серйозно, ніж нервувати</h3>
+      <p>Ситуація в Україні зараз повторює те, що вже сталося на інших ринках: значна частина акаунтів у цій ніші протягом наступного року піде з платформи — не через заборону самої теми, а через несерйозне ставлення до правил спільноти й до того, як саме читає контент алгоритм.</p>
+      <p>Місце тих, хто піде, займуть ті, хто поставиться до платформи серйозно вже зараз: розуміє, як вона працює, будує довіру замість тиску на продаж і готує акаунт заздалегідь, а не в момент, коли TikTok Shop вже запущено. Василь VEO і команда VEO FORCE переконані, що найкраща відповідь на це вікно невизначеності — не тривога, а системна, вдумлива робота за принципами цього гайду.</p>
+      <div class="signature">— Василь VEO, VEO FORCE</div>
+    </div>
+
+    <!-- ============ ДЖЕРЕЛА ============ -->
+    <section class="sources" id="s10">
+      <div class="s-eyebrow">10 · ДЖЕРЕЛА</div>
+      <div class="s-title">Повний перелік першоджерел</div>
+      <div class="s-lead">Кожне посилання — з поясненням, що саме звідти взято і в якому розділі гайду це використано.</div>
+
+      <div class="src-item ua-src">
+        <span class="src-tag">Закон України</span>
+        <h5>Закон «Про рекламу», ст. 21 — реклама лікарських засобів, медичної техніки, методів профілактики, діагностики, лікування та реабілітації</h5>
+        <a href="https://zakon.rada.gov.ua/laws/show/270/96-%D0%B2%D1%80" target="_blank" rel="noopener">zakon.rada.gov.ua/laws/show/270/96-вр</a>
+        <p>Звідси взято заборону присвоювати БАДам і фітопрепаратам лікувальні властивості, заборону посилатись на випадки «зцілення» чи натякати на заміну консультації лікаря, а також вимогу обов'язкового дисклеймера «Не є лікарським засобом» + «Перед застосуванням проконсультуйтесь з лікарем».</p>
+        <div class="used-in">Використано в: <b>розділ 01</b> (правовий фундамент), <b>розділ 03</b> (словник термінів)</div>
+      </div>
+
+      <div class="src-item ua-src">
+        <span class="src-tag">Закон України</span>
+        <h5>Закон «Про основні принципи та вимоги до безпечності та якості харчових продуктів»</h5>
+        <a href="https://zakon.rada.gov.ua/laws/show/771/97-%D0%B2%D1%80" target="_blank" rel="noopener">zakon.rada.gov.ua/laws/show/771/97-вр</a>
+        <p>Звідси — юридичне визначення: фітопрепарати й БАДи в Україні законодавчо є харчовими продуктами (дієтичними добавками), а не ліками, і вимога, що на маркуванні та в презентації заборонено вказувати лікування конкретних хвороб.</p>
+        <div class="used-in">Використано в: <b>розділ 01</b> («БАД ≠ ліки»)</div>
+      </div>
+
+      <div class="src-item ua-src">
+        <span class="src-tag">Державний орган</span>
+        <h5>Роз'яснення Держпродспоживслужби щодо ринку дієтичних добавок та операторів ринку</h5>
+        <a href="https://dpss.gov.ua/news/vse-pro-povidomlennia-shchodo-diietychnykh-dobavok-stroky-dokumenty-poriadok-podannia" target="_blank" rel="noopener">dpss.gov.ua — усе про повідомлення щодо дієтичних добавок</a>
+        <p>Пояснює повідомний порядок введення добавки в обіг і чому важливо мати документи від виробника/постачальника (сертифікати якості, ТУ, ТТН) для продажу через мережу.</p>
+        <div class="used-in">Довідковий контекст для <b>розділу 01</b> та вимог до документів у <b>TikTok Shop (Restricted)</b></div>
+      </div>
+
+      <div class="src-item tt-src">
+        <span class="src-tag">TikTok</span>
+        <h5>TikTok Ads Policy — Healthcare & Pharmaceuticals</h5>
+        <a href="https://ads.tiktok.com/resources/help/article/tiktok-ads-policy-healthcare-pharmaceuticals" target="_blank" rel="noopener">ads.tiktok.com/resources/help/article/tiktok-ads-policy-healthcare-pharmaceuticals</a>
+        <p>Джерело заборони на обіцянки конкретного результату («мінус 10 кг за тиждень»), вимоги таргетувати контент про БАДи на аудиторію 18+, і заборони порівнянь «До / Після».</p>
+        <div class="used-in">Використано в: <b>розділ 01</b>, <b>розділ 02</b> (червона зона)</div>
+      </div>
+
+      <div class="src-item tt-src">
+        <span class="src-tag">TikTok</span>
+        <h5>Правила спільноти TikTok (Community Guidelines) — розділ про шкідливий та оманливий контент</h5>
+        <a href="https://www.tiktok.com/community-guidelines/uk-ua/" target="_blank" rel="noopener">tiktok.com/community-guidelines/uk-ua</a>
+        <p>Джерело заборони медичної дезінформації (Medical Misinformation), вимоги позначки Branded Content / Commercial Content при демонстрації товарів, і заборони просування рецептурних препаратів чи речовин з невизначеним статусом.</p>
+        <div class="used-in">Використано в: <b>розділ 02</b> (червона зона), <b>розділ 05</b> (комерційні маркери)</div>
+      </div>
+
+      <div class="src-item tt-src">
+        <span class="src-tag">TikTok Shop</span>
+        <h5>TikTok Shop — Health & Wellness Content Policy</h5>
+        <a href="https://seller-us.tiktok.com/university/essay?knowledge_id=2951403553752833" target="_blank" rel="noopener">seller-us.tiktok.com/university · knowledge_id=2951403553752833</a>
+        <p>Категорично забороняє обіцянки конкретних результатів, медичні діагнози, «До / Після» та заяви про швидке схуднення чи лікування — суворіші правила, ніж загальна Ads Policy, оскільки товар продається безпосередньо через платформу.</p>
+        <div class="used-in">Використано в: <b>розділ 01</b> (TikTok Shop — Restricted), <b>розділ 09</b> (калькулятор — контекст майбутнього запуску)</div>
+      </div>
+
+      <div class="src-item tt-src">
+        <span class="src-tag">TikTok Shop</span>
+        <h5>TikTok Shop — Dietary Supplements Requirements</h5>
+        <a href="https://seller-us.tiktok.com/university/essay?knowledge_id=1411277869713198" target="_blank" rel="noopener">seller-us.tiktok.com/university · knowledge_id=1411277869713198</a>
+        <p>Продавати БАДи в TikTok Shop зможуть лише ті, у кого є офіційні документи на продукцію (сертифікати якості, ISO/GMP); контент має фокусуватись на «підтримці загального самопочуття», а не на лікуванні.</p>
+        <div class="used-in">Використано в: <b>розділ 01</b> (TikTok Shop — Restricted)</div>
+      </div>
+
+      <div class="src-item tt-src">
+        <span class="src-tag">TikTok</span>
+        <h5>Branded Content Policy (нова редакція, чинна з 31 серпня 2026)</h5>
+        <p>Документ надано у форматі PDF/тексту без прямого URL. Визначає, що таке брендований контент, правила розкриття комерційного контенту (перемикач «Disclose commercial content»), заборонені й обмежені індустрії для брендованого контенту, включно з переліком країн для кожної категорії (алкоголь, дейтинг, фінансові послуги, ліки, вітаміни, азартні ігри).</p>
+        <div class="used-in">Використано побічно як контекст для <b>розділу 05</b> (логіка комерційної детекції) — детальний розбір змін по країнах зафіксовано в окремому документі аудиту TikTok Branded Content Policy</div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="footer">
+    <strong>VEO FORCE</strong> · Бізнес-гайд для команди · 2026
+  </div>
+
+</div>
+
+<script>
+const RED_ZONE = [
+  {
+    title: "Обіцянки конкретного результату чи зцілення",
+    body: "Фрази на кшталт «вилікує», «гарантовано», «назавжди позбудетесь» — заборонені й законом (ст. 21 «Про рекламу»), і TikTok Ads Policy. <strong>З практики:</strong> саме такі формулювання — головна причина блокувань у Тетяни та Ірини Реп'ях."
+  },
+  {
+    title: "Постановка діагнозу глядачу через відео чи ефір",
+    body: "Не можна визначати хворобу глядача за симптомами в коментарях чи стрімі («у вас точно кандида»). <strong>Безпечно:</strong> описувати відчуття («важкість після їжі»), а не ставити діагноз."
+  },
+  {
+    title: "Порівняння «До / Після»",
+    body: "Заборонено і TikTok (правила брендованого контенту прямо це виключають для реклами), і як формат, що імітує медичний доказ ефективності без клінічних досліджень."
+  },
+  {
+    title: "Протиставлення класичній медицині",
+    body: "Формулювання «замість лікаря», «ліки не потрібні» порушують і закон, і правила TikTok щодo медичної дезінформації (Medical Misinformation)."
+  },
+  {
+    title: "Номер телефону та прямі контакти в кадрі чи описі",
+    body: "<strong>З практики:</strong> у Тетяни блокування відео стало саме через комбінацію «заборонені слова + номер телефону». Контакти виносяться виключно в шапку профілю."
+  },
+  {
+    title: "Назва хвороби чи діагнозу як хук у заголовку відео",
+    body: "«Комплекс від грибка Кандида» в заголовку — прямий тригер для семантичного аналізу профілю. Хвороба може обговорюватись лише приватно, у Telegram-консультації."
+  },
+  {
+    title: "Продуктові назви з медичним коренем без пояснення",
+    body: "Назви на кшталт Антиревматин, Гепатовіт, Фунгіцин самі зчитуються алгоритмом як медичний маркер, навіть якщо сценарій відео абсолютно нейтральний."
+  },
+  {
+    title: "Прямий заклик до дії в кінці відео",
+    body: "«Звертайтесь до мене», «Пишіть у шапку», «Замовляйте зараз» — такі фрази поруч із продуктом посилюють комерційну класифікацію контенту навіть тоді, коли сам сценарій нейтральний. Безпечні варіанти — у розділі 07."
+  }
+];
+
+function buildRedZone() {
+  const list = document.getElementById('rzList');
+  RED_ZONE.forEach(function(item, i) {
+    const div = document.createElement('div');
+    div.className = 'rz';
+    div.innerHTML =
+      '<div class="rz-hdr" onclick="this.parentElement.classList.toggle(\'open\')">' +
+      '<span class="rz-badge">✕ ЗАБОРОНЕНО</span>' +
+      '<div class="rz-title">' + item.title + '</div>' +
+      '<span class="rz-arr">▾</span>' +
+      '</div>' +
+      '<div class="rz-body">' + item.body + '</div>';
+    list.appendChild(div);
+  });
+}
+buildRedZone();
+</script>
+</body>
+</html>
