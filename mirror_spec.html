@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f7f5fb">
+<meta name="supported-color-schemes" content="light">
+<title>BEROO — Функція «Дзеркало»</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;500;700;900&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f5fb;
+    --panel:#ffffff;
+    --panel-2:#efe9fb;
+    --accent:#7b2ff7;
+    --accent-2:#5b21b6;
+    --warn:#9a5510;
+    --text:#191325;
+    --muted:#645d78;
+    --line:rgba(25,15,50,0.12);
+    --mono:'JetBrains Mono',monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth; color-scheme:light; background:#f7f5fb !important; overflow-x:hidden; width:100%;}
+  body{
+    background:
+      radial-gradient(ellipse 900px 500px at 85% -5%, rgba(123,47,247,0.10), transparent 60%),
+      radial-gradient(ellipse 700px 500px at -5% 30%, rgba(123,47,247,0.06), transparent 60%),
+      var(--bg) !important;
+    color:var(--text) !important;
+    color-scheme:light;
+    font-family:'Inter',sans-serif;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    overflow-x:hidden;
+    width:100%;
+  }
+  ::selection{background:var(--accent); color:#fff;}
+
+  a{color:inherit;}
+
+  .shell{display:grid; grid-template-columns:260px 1fr; max-width:1400px; margin:0 auto;}
+  @media (max-width:980px){ .shell{grid-template-columns:1fr;} .nav{display:none;} }
+
+  .nav{
+    position:sticky; top:0; height:100vh; overflow-y:auto;
+    padding:38px 22px 40px 32px;
+    border-right:1px solid var(--line);
+  }
+  .nav-brand{
+    font-family:'Unbounded',sans-serif; font-weight:700; font-size:15px;
+    letter-spacing:0.02em; margin-bottom:4px;
+  }
+  .nav-brand span{color:var(--accent-2);}
+  .nav-sub{font-family:var(--mono); font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:0.12em; margin-bottom:34px;}
+  .nav-list{list-style:none; display:flex; flex-direction:column; gap:2px;}
+  .nav-list a{
+    display:flex; gap:10px; align-items:baseline;
+    font-size:12.5px; color:var(--muted); text-decoration:none;
+    padding:7px 8px; border-radius:6px; transition:.15s;
+  }
+  .nav-list a:hover{color:var(--text); background:rgba(25,15,50,0.05);}
+  .nav-list a .n{font-family:var(--mono); color:var(--accent-2); font-size:10.5px; width:16px; flex-shrink:0;}
+
+  main{padding:0 0 120px 0;}
+  .wrap{padding:0 56px;}
+  @media (max-width:980px){ .wrap{padding:0 24px;} }
+  @media (max-width:560px){ .wrap{padding:0 16px;} }
+
+  .hero{
+    padding:72px 56px 40px;
+    border-bottom:1px solid var(--line);
+    position:relative;
+  }
+  @media (max-width:980px){ .hero{padding:52px 24px 32px;} }
+  .eyebrow{
+    font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--accent-2); margin-bottom:22px; display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow::before{content:''; width:22px; height:1px; background:var(--accent-2);}
+  .mirror-block{position:relative;}
+  h1.title{
+    font-family:'Unbounded',sans-serif; font-weight:700; font-size:clamp(30px,5vw,54px);
+    line-height:1.08; letter-spacing:-0.01em; max-width:16ch;
+  }
+  h1.title .r{color:var(--accent-2); font-weight:300; font-style:normal;}
+  .hero-lead{
+    max-width:660px; color:var(--muted); font-size:16.5px; margin-top:26px;
+  }
+  .hero-lead b{color:var(--text); font-weight:600;}
+  .hero-meta{
+    display:flex; gap:28px; flex-wrap:wrap; margin-top:34px;
+    font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.06em;
+  }
+  .hero-meta span b{color:var(--accent-2); display:block; font-family:'Inter',sans-serif; font-size:20px; text-transform:none; letter-spacing:0; margin-bottom:2px; font-weight:700;}
+
+  section.vol{
+    padding:52px 56px; border-bottom:1px solid var(--line);
+    scroll-margin-top:20px;
+  }
+  @media (max-width:980px){ section.vol{padding:40px 24px;} }
+  .vol-head{display:flex; gap:20px; align-items:flex-start; margin-bottom:26px;}
+  .vol-num{
+    font-family:var(--mono); font-size:13px; color:var(--accent-2);
+    border:1px solid var(--line); border-radius:20px; padding:5px 12px; flex-shrink:0; margin-top:4px;
+  }
+  h2.vol-title{
+    font-family:'Unbounded',sans-serif; font-weight:500; font-size:clamp(22px,3vw,30px); letter-spacing:-0.01em;
+  }
+  .vol-dek{color:var(--muted); font-size:14.5px; max-width:640px; margin-top:6px;}
+  .vol-body{max-width:900px;}
+
+  p{margin-bottom:14px; font-size:15px;}
+  .lead-p{font-size:16.5px; color:var(--text);}
+
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:18px;}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:14px;}
+  @media (max-width:760px){ .grid2,.grid3{grid-template-columns:1fr;} }
+
+  .card{
+    background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:20px 22px;
+  }
+  .card h3{font-size:14px; font-weight:600; margin-bottom:8px; color:var(--text);}
+  .card p{font-size:13.5px; color:var(--muted); margin-bottom:0;}
+  .card .tag{font-family:var(--mono); font-size:10px; color:var(--warn); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px; display:block;}
+
+  ul.bullets{list-style:none; display:flex; flex-direction:column; gap:9px; margin:14px 0;}
+  ul.bullets li{padding-left:18px; position:relative; font-size:14.5px; color:var(--muted);}
+  ul.bullets li::before{content:'—'; position:absolute; left:0; color:var(--accent-2);}
+  ul.bullets li b{color:var(--text); font-weight:600;}
+
+  .reframe{
+    background:linear-gradient(135deg, rgba(123,47,247,0.14), rgba(123,47,247,0.02));
+    border:1px solid rgba(123,47,247,0.35); border-radius:12px; padding:22px 24px; margin-top:18px;
+  }
+  .reframe .tag{font-family:var(--mono); font-size:10px; color:var(--accent-2); text-transform:uppercase; letter-spacing:0.1em; display:block; margin-bottom:10px;}
+  .reframe .old{font-size:13.5px; color:var(--muted); text-decoration:line-through; margin-bottom:10px;}
+  .reframe .new{font-size:15px; color:var(--text); font-weight:500;}
+
+  .warn-box{
+    background:linear-gradient(135deg, rgba(154,85,16,0.10), rgba(154,85,16,0.02));
+    border:1px solid rgba(154,85,16,0.35); border-radius:12px; padding:22px 24px; margin-top:18px;
+  }
+  .warn-box .tag{font-family:var(--mono); font-size:10px; color:var(--warn); text-transform:uppercase; letter-spacing:0.1em; display:block; margin-bottom:10px;}
+  .warn-box p{margin-bottom:0; font-size:15px;}
+  .warn-box p b{color:var(--warn);}
+
+  .risk-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:16px;}
+  @media (max-width:760px){ .risk-grid{grid-template-columns:repeat(2,1fr);} }
+  .risk{
+    font-size:12.5px; padding:11px 13px; border-radius:8px; border:1px solid var(--line); background:var(--panel);
+    color:var(--muted);
+  }
+  .risk b{display:block; color:var(--warn); font-size:11px; font-family:var(--mono); text-transform:uppercase; margin-bottom:4px; letter-spacing:0.04em;}
+
+  .split{display:grid; grid-template-columns:1fr 1fr 1fr; gap:2px; margin-top:16px; border:1px solid var(--line); border-radius:12px; overflow:hidden;}
+  @media (max-width:760px){ .split{grid-template-columns:1fr;} }
+  .split > div{padding:20px 22px; background:var(--panel);}
+  .split h4{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--accent-2); margin-bottom:10px;}
+  .split p{font-size:13.5px; color:var(--muted); margin-bottom:0;}
+
+  .timeline{position:relative; margin-top:24px; padding-left:26px; border-left:2px solid var(--line);}
+  .tl-step{position:relative; padding-bottom:26px;}
+  .tl-step:last-child{padding-bottom:0;}
+  .tl-step::before{
+    content:''; position:absolute; left:-32px; top:3px; width:10px; height:10px; border-radius:50%;
+    background:var(--accent); box-shadow:0 0 0 4px rgba(123,47,247,0.18);
+  }
+  .tl-step h4{font-size:15px; font-weight:600; margin-bottom:3px;}
+  .tl-step h4 .metric{color:var(--accent-2); font-family:var(--mono); font-weight:500; font-size:13px; margin-right:8px;}
+  .tl-step p{font-size:13.5px; color:var(--muted); margin-bottom:0;}
+
+  .metrics{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-top:16px;}
+  @media (max-width:760px){ .metrics{grid-template-columns:repeat(2,1fr);} }
+  .metric-card{padding:16px; border:1px solid var(--line); border-radius:10px; background:var(--panel);}
+  .metric-card .k{font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:0.05em;}
+  .metric-card .v{font-size:14px; color:var(--text); font-weight:600; margin-top:4px;}
+
+  /* visual bar-compare (replaces plain comparison tables) */
+  .stat-bars{display:flex; flex-direction:column; gap:14px; margin-top:22px; max-width:720px;}
+  .stat-bar{padding:14px 16px; background:var(--panel); border:1px solid var(--line); border-radius:10px;}
+  .stat-bar.highlight{border-color:rgba(123,47,247,0.4); background:linear-gradient(135deg, rgba(123,47,247,0.08), transparent);}
+  .stat-bar-head{display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:8px; flex-wrap:wrap;}
+  .stat-bar-head .name{font-weight:600; font-size:14px;}
+  .stat-bar-head .detail{font-family:var(--mono); font-size:11px; color:var(--muted);}
+  .stat-bar-track{height:8px; background:var(--panel-2); border-radius:4px; overflow:hidden;}
+  .stat-bar-fill{height:100%; background:var(--accent); border-radius:4px;}
+  .stat-bar-cagr{font-family:var(--mono); font-size:12px; color:var(--accent-2); margin-top:7px; font-weight:600;}
+
+  /* category cards (replaces the 5000-sellers table) */
+  .cat-grid{display:grid; grid-template-columns:1fr; gap:12px; margin-top:18px;}
+  @media (min-width:640px){ .cat-grid{grid-template-columns:1fr 1fr;} }
+  .cat-card{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px;}
+  .cat-head{display:flex; justify-content:space-between; align-items:baseline; gap:8px; margin-bottom:10px; flex-wrap:wrap;}
+  .cat-name{font-weight:600; font-size:14.5px;}
+  .cat-count{font-family:var(--mono); font-size:11px; color:var(--accent-2);}
+  .cat-stats{display:flex; flex-direction:column; gap:5px; margin-bottom:10px;}
+  .cat-stats div{display:flex; justify-content:space-between; gap:10px; font-size:12.5px;}
+  .cat-stats .cs-k{color:var(--muted);}
+  .cat-stats .cs-v{font-weight:600; color:var(--text); text-align:right;}
+  .cat-stats .cs-v.good{color:var(--accent-2);}
+  .cat-bar-track{height:6px; background:var(--panel-2); border-radius:3px; overflow:hidden;}
+  .cat-bar-fill{height:100%; background:var(--accent); border-radius:3px;}
+
+  /* tariff plan cards */
+  .tariff-grid{display:grid; grid-template-columns:1fr; gap:14px; margin-top:18px;}
+  @media (min-width:640px){ .tariff-grid{grid-template-columns:1fr 1fr;} }
+  .tariff-card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:20px 22px;}
+  .tariff-card.featured{border-color:rgba(123,47,247,0.4); background:linear-gradient(135deg, rgba(123,47,247,0.08), transparent);}
+  .tariff-head{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4px; flex-wrap:wrap; gap:6px;}
+  .tariff-name{font-family:'Unbounded',sans-serif; font-weight:600; font-size:16px;}
+  .tariff-price{font-family:var(--mono); font-size:12.5px; color:var(--accent-2); font-weight:600;}
+  .tariff-dek{font-size:12.5px; color:var(--muted); margin-bottom:12px;}
+  .tariff-list{list-style:none; display:flex; flex-direction:column; gap:6px;}
+  .tariff-list li{padding-left:16px; position:relative; font-size:13px; color:var(--text);}
+  .tariff-list li::before{content:'—'; position:absolute; left:0; color:var(--accent-2);}
+  .tariff-mirror{margin-top:12px; padding:8px 12px; background:var(--panel-2); border-radius:8px; font-size:12px; color:var(--accent-2); font-weight:600;}
+
+  footer{padding:44px 56px 60px; color:var(--muted); font-size:12.5px;}
+  @media (max-width:980px){ footer{padding:36px 24px;} }
+  footer .fline{display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; border-top:1px solid var(--line); padding-top:20px; font-family:var(--mono); font-size:11px;}
+  /* toggle-state cards (ФОП on/off) */
+  .toggle-card{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px 20px;}
+  .toggle-card.on{border-color:rgba(154,85,16,0.4); background:linear-gradient(135deg, rgba(154,85,16,0.08), transparent);}
+  .toggle-state{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:10px; display:inline-block; padding:3px 10px; border-radius:20px;}
+  .toggle-state.off{color:var(--muted); background:var(--panel-2);}
+  .toggle-state.on{color:var(--warn); background:rgba(154,85,16,0.12);}
+  .toggle-card ul{list-style:none; margin-top:10px; display:flex; flex-direction:column; gap:6px;}
+  .toggle-card li{padding-left:16px; position:relative; font-size:13px; color:var(--text);}
+  .toggle-card li::before{content:'—'; position:absolute; left:0; color:var(--accent-2);}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <nav class="nav">
+    <div class="nav-brand">BEROO <span>ДЗЕРКАЛО</span></div>
+    <div class="nav-sub">Архітектура та логіка</div>
+    <ul class="nav-list">
+      <li><a href="#v0"><span class="n">•</span> Монетизація</a></li>
+      <li><a href="#v1"><span class="n">01</span> Домени й ролі</a></li>
+      <li><a href="#v2"><span class="n">02</span> Логіка роботи</a></li>
+      <li><a href="#v3"><span class="n">03</span> GMV і статус ФОП</a></li>
+      <li><a href="#v4"><span class="n">04</span> Тарифна сітка</a></li>
+      <li><a href="#v5"><span class="n">05</span> Дисклеймер</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <div class="eyebrow">Технічна специфікація</div>
+      <div class="mirror-block">
+        <h1 class="title">Функція «Дзеркало»</h1>
+      </div>
+      <p class="hero-lead">Архітектура та покрокова логіка роботи функції — довідник для команди й основа для відеотуторіалів. Кожне формулювання тут зафіксоване й має відтворюватися дослівно.</p>
+    </div>
+
+    <div class="wrap" style="padding:0;">
+
+      <section class="vol" id="v0">
+        <div class="vol-head">
+          <div class="vol-num">•</div>
+          <div><h2 class="vol-title">Дзеркало — частина тарифної монетизації</h2><p class="vol-dek">Не окрема функція, а основа бізнес-моделі платформи</p></div>
+        </div>
+        <div class="vol-body">
+          <p class="lead-p">Дзеркало — одна з функцій, що лімітується в рамках тарифних пакетів. Саме ці ліміти є основою монетизації BEROO — з двох незалежних сторін одночасно.</p>
+
+          <div class="split">
+            <div>
+              <h4>Тарифи продавців</h4>
+              <p>Продавці купують свій тариф — і саме він визначає, скільки дзеркал (партнерів-блогерів) можна підключити: від 1 тестового до безлімітної кількості.</p>
+            </div>
+            <div>
+              <h4>Тарифи блогерів</h4>
+              <p>У блогерів-оглядачів — власна, окрема тарифна сітка: від безкоштовного триалу до пакетів з лімітом на кількість товарів, які можна віддзеркалити.</p>
+            </div>
+            <div>
+              <h4>Реклама й розсилки</h4>
+              <p>Додатково платформа монетизується через таргетовану рекламу на безкоштовних пакетах сайтів і через розсилки ботами.</p>
+            </div>
+          </div>
+
+          <div class="warn-box" style="margin-top:18px;">
+            <span class="tag">Ключовий принцип</span>
+            <p>Дзеркало — не окремий платний додаток, а вбудований у самі тарифи механізм росту доходу платформи: чим активніше продавець і блогер користуються системою, тим вищий тариф їм потрібен.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="vol" id="v1">
+        <div class="vol-head">
+          <div class="vol-num">01</div>
+          <div><h2 class="vol-title">Довідник доменів та ролей</h2><p class="vol-dek">Три домени — три різні функції системи</p></div>
+        </div>
+        <div class="vol-body">
+          <div class="split">
+            <div>
+              <h4>beroo.online</h4>
+              <p>Сайти та інтернет-магазини Продавців.<br>Формат: <code>12345.beroo.online</code></p>
+            </div>
+            <div>
+              <h4>beroo.blog</h4>
+              <p>Сайти та вітрини Блогерів-афіліатів.<br>Формат: <code>63201.beroo.blog</code></p>
+            </div>
+            <div>
+              <h4>app.beroo.space</h4>
+              <p>Єдина CRM та адмін-панель керування для обох ролей.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="vol" id="v2">
+        <div class="vol-head">
+          <div class="vol-num">02</div>
+          <div><h2 class="vol-title">Покрокова логіка роботи</h2><p class="vol-dek">Від налаштування продавця до замовлення в CRM</p></div>
+        </div>
+        <div class="vol-body">
+          <div class="timeline">
+            <div class="tl-step">
+              <h4><span class="metric">Крок 1</span>Налаштування Продавця</h4>
+              <p>Підключення еквайрингу MonoPay або WayForPay у CRM. Встановлення базового % комісії та тумблера авто-дозволу на віддзеркалення.</p>
+            </div>
+            <div class="tl-step">
+              <h4><span class="metric">Крок 2</span>Анкета та заявка Блогера</h4>
+              <p>Блогер заповнює анкету (TikTok, Instagram, YouTube, підписники, охоплення, історія зйомок, контакти) і обирає магазин продавця за кодом.</p>
+            </div>
+            <div class="tl-step">
+              <h4><span class="metric">Крок 3</span>Модерація та вибір асортименту</h4>
+              <p>Продавець отримує сповіщення, переглядає анкету, узгоджує % у чаті та відкриває доступ до товарів — поштучно, за категоріями або на весь асортимент.</p>
+            </div>
+            <div class="tl-step">
+              <h4><span class="metric">Крок 4</span>Автоматична синхронізація</h4>
+              <p>Дозволені товари автоматично з'являються на вітрині блогера (<code>*.beroo.blog</code>).</p>
+            </div>
+            <div class="tl-step">
+              <h4><span class="metric">Крок 5</span>Покупка та передача замовлення</h4>
+              <p>Клієнт оформлює й оплачує товар на вітрині блогера. Оплата проходить через еквайринг Продавця. Замовлення автоматично формується в CRM Продавця для комплектації та відправки.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="vol" id="v3">
+        <div class="vol-head">
+          <div class="vol-num">03</div>
+          <div><h2 class="vol-title">GMV і статус ФОП</h2><p class="vol-dek">Gamification блогера</p></div>
+        </div>
+        <div class="vol-body">
+          <div class="card">
+            <span class="tag">Рейтинг</span>
+            <h3>1 Зірочка = 1 грн GMV</h3>
+            <p>Статистика фіксується окремо по кожному магазину та сумарно за весь час.</p>
+          </div>
+
+          <p class="lead-p" style="margin-top:20px;">Тумблер «Я ФОП / Офіційні продажі»</p>
+          <p>Поля для даних ФОП розташовані одразу під тумблером і <b>завжди відкриті на екрані</b> — не приховуються акордеоном чи випадним списком.</p>
+
+          <div class="grid2" style="margin-top:16px;">
+            <div class="toggle-card">
+              <span class="toggle-state off">Тумблер вимкнено</span>
+              <p style="margin-bottom:0;">Поля ФОП відображаються в сірому, неактивному (disabled) стані. Зірочки GMV — сірі. Розрахунок комісії — приватний, за особистою домовленістю сторін (наприклад, через фіксацію скріншота обороту).</p>
+            </div>
+            <div class="toggle-card on">
+              <span class="toggle-state on">Тумблер увімкнено</span>
+              <p style="margin-bottom:8px;">Поля активні для заповнення. Зірочки GMV — золотисті: сигнал, що з блогером можна працювати офіційно.</p>
+              <ul>
+                <li>Назва ФОП та ПІБ</li>
+                <li>Код ЄДРПОУ / РНОКПП</li>
+                <li>Завантаження витягу з ЄДР</li>
+                <li>Фото документа та селфі блогера з документом</li>
+              </ul>
+            </div>
+          </div>
+
+          <p style="margin-top:16px; font-size:13.5px; color:var(--muted);">Платформа BEROO не перевіряє юридичну справжність цих даних — статус використовується як внутрішній маркер довіри та інструмент для B2B-взаєморозрахунків. Активний ФОП-функціонал: запит на виплату, фіксація відсотків угоди, планування та історія виплат від конкретних продавців.</p>
+        </div>
+      </section>
+
+      <section class="vol" id="v4">
+        <div class="vol-head">
+          <div class="vol-num">04</div>
+          <div><h2 class="vol-title">Тарифна сітка та ліміти</h2><p class="vol-dek">Продавці й блогери — окремі умови</p></div>
+        </div>
+        <div class="vol-body">
+          <p class="lead-p">Продавці</p>
+          <div class="tariff-grid">
+            <div class="tariff-card">
+              <div class="tariff-head"><span class="tariff-name">Без еквайрингу</span><span class="tariff-price">IBAN</span></div>
+              <div class="tariff-dek">1 тестове дзеркало</div>
+              <ul class="tariff-list">
+                <li>Кнопка «Купити» неактивна</li>
+                <li>Формується фіктивне замовлення — перевірка ланцюжка без реальних коштів</li>
+              </ul>
+            </div>
+            <div class="tariff-card">
+              <div class="tariff-head"><span class="tariff-name">«Запуск»</span></div>
+              <div class="tariff-dek">З підключеним еквайрингом (MonoPay / WayForPay)</div>
+              <ul class="tariff-list"><li>До 10 дзеркал</li></ul>
+            </div>
+            <div class="tariff-card">
+              <div class="tariff-head"><span class="tariff-name">«Бізнес»</span></div>
+              <div class="tariff-dek">З підключеним еквайрингом</div>
+              <ul class="tariff-list"><li>До 100 дзеркал</li></ul>
+            </div>
+            <div class="tariff-card featured">
+              <div class="tariff-head"><span class="tariff-name">«Масштаб»</span></div>
+              <div class="tariff-dek">З підключеним еквайрингом</div>
+              <ul class="tariff-list"><li>Безлімітна кількість дзеркал</li></ul>
+            </div>
+          </div>
+
+          <p class="lead-p" style="margin-top:28px;">Блогери</p>
+          <div class="tariff-grid">
+            <div class="tariff-card featured">
+              <div class="tariff-head"><span class="tariff-name">Триал</span><span class="tariff-price">3 місяці, 0₴</span></div>
+              <div class="tariff-dek">Для всіх нових блогерів — за максимальним тарифом «Профік»</div>
+              <ul class="tariff-list"><li>Безлімітна кількість товарів на час триалу</li></ul>
+            </div>
+            <div class="tariff-card">
+              <div class="tariff-head"><span class="tariff-name">«Старт»</span></div>
+              <div class="tariff-dek">Після завершення триалу або обрано напряму</div>
+              <ul class="tariff-list"><li>Віддзеркалення до 10 товарів</li></ul>
+            </div>
+            <div class="tariff-card">
+              <div class="tariff-head"><span class="tariff-name">«Аматор»</span></div>
+              <div class="tariff-dek">Після завершення триалу або обрано напряму</div>
+              <ul class="tariff-list"><li>Віддзеркалення до 50 товарів</li></ul>
+            </div>
+            <div class="tariff-card">
+              <div class="tariff-head"><span class="tariff-name">«Профік»</span></div>
+              <div class="tariff-dek">Після завершення триалу або обрано напряму</div>
+              <ul class="tariff-list"><li>Безлімітна кількість товарів</li></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="vol" id="v5">
+        <div class="vol-head">
+          <div class="vol-num">05</div>
+          <div><h2 class="vol-title">Юридичний та фінансовий дисклеймер</h2><p class="vol-dek">Ключовий акцент платформи</p></div>
+        </div>
+        <div class="vol-body">
+          <div class="warn-box">
+            <span class="tag">Платформа BEROO — виключно обчислювальний оператор</span>
+            <p>Інструмент обліку та інформаційно-технічна система («калькулятор»). <b>Категорична відмова від фінансових взаємодій:</b> платформа НЕ є фінансовою прокладкою, НЕ бере участі в розрахунках між блогером та продавцем і НЕ виступає гарантом угоди.</p>
+          </div>
+          <p style="margin-top:16px;">Вся фінансова, податкова та юридична відповідальність за виплату комісій та виконання замовлень лежить виключно на Продавцеві та Блогері.</p>
+
+          <p class="lead-p" style="margin-top:20px;">Моделі монетизації BEROO</p>
+          <ul class="bullets">
+            <li>Підписки на тарифні плани (для продавців та блогерів)</li>
+            <li>Реклама / таргет на безкоштовних версіях сайтів</li>
+            <li>Розсилки через ботів</li>
+          </ul>
+
+          <p class="lead-p" style="margin-top:28px;">Як команда приймає рішення</p>
+          <p style="margin-bottom:10px;">Рішення (технічні, маркетингові, стратегічні) команда обговорює разом. Діє й відповідає — кожен у своїй зоні:</p>
+          <div class="metrics">
+            <div class="metric-card"><div class="k">Технічна зона</div><div class="v">Архітектура, безпека, код</div></div>
+            <div class="metric-card"><div class="k">Ринок і продукт</div><div class="v">Аналітика, стратегія, тренди</div></div>
+            <div class="metric-card"><div class="k">Клієнтський досвід</div><div class="v">Продажі, комунікація, контроль</div></div>
+            <div class="metric-card"><div class="k">Репутація й реклама</div><div class="v">Творча й рекламна відповідальність</div></div>
+          </div>
+          <div class="warn-box" style="margin-top:14px;">
+            <span class="tag">Взаємодії не повинні переплітатися</span>
+            <p>Переплетення забирає час і вносить проблеми, які потім доведеться переробляти. Кожен напрямок — маркетинг, техніка, продажі, фінанси, юридичні чи бухгалтерські питання — робиться правильно з першого разу тим, хто за нього відповідає.</p>
+          </div>
+
+          <p class="lead-p" style="margin-top:28px;">Чому ризик обману зараз нижчий, ніж здається</p>
+          <p>Негативна взаємодія між блогером і продавцем можлива на будь-якій платформі — так було завжди. Але за сучасних умов вірусного відеомаркетингу кожна людина здатна одним відео про негативний досвід зібрати мільйони переглядів за лічені дні. Це саме те, що робить продавців значно менш схильними до обману, ніж раніше: накопичені бали, бонуси й рейтинг, а також функціонал підтвердження закриття угоди дають вищий рівень безпеки, ніж класичні схеми на кшталт новоствореного акаунту OLX без передоплати Новою Поштою чи накладеного платежу. Такі схеми захисту існували й існуватимуть далі — задача BEROO зараз саме в тому, щоб максимально підготуватися до епохи TikTok Shop.</p>
+
+          <div class="reframe" style="margin-top:14px;">
+            <span class="tag">Важливий нюанс: блогеру хайп на негативі теж вигідний</span>
+            <div class="new"><b>Блогер, який не вклав у товар жодної гривні — лише зняв відеоролик, що «залетів», — має пряму мотивацію публічно висвітлити конфлікт, якщо продавець не розрахувався.</b> Приклад: блогер знімає провокативне відео «продавець Петро не заплатив мені за 25 000₴ проданого товару» — воно набирає 3 мільйони переглядів. Але цей трафік іде не до Петра, а на сторінку блогера, де показані інші віддзеркалені товари інших продавців — і люди купують саме їх, бо відео фактично підтвердило: цей блогер уміє продавати на великі суми. Такий сценарій б'є по репутації конкретного продавця, але не по системі загалом — блогер отримує величезний трафік і продажі на інших магазинах, не вклавши нічого, крім самого відео. Тому це не загроза для екосистеми, а навпаки — додатковий стимул для блогерів активно користуватися «Дзеркалом».</div>
+          </div>
+
+          <p class="lead-p" style="margin-top:28px;">Чому BEROO не буде фінансовим гарантом</p>
+          <div class="reframe">
+            <span class="tag">Причина 1 — масштаб</span>
+            <div class="new">BEROO — не TikTok. Невелика платформа не може виступати гарантом угод так, як це фізично й фінансово може дозволити собі глобальна корпорація.</div>
+          </div>
+          <div class="reframe" style="margin-top:14px;">
+            <span class="tag">Причина 2 — податкове й репутаційне навантаження</span>
+            <div class="new">Якщо блогер — фізособа без статусу ФОП, а BEROO бере на себе виплати, платформі довелося б сплачувати податок (орієнтовно ~36,8%) плюс комісію банку, плюс власну комісію, якщо платформа захоче її брати.</div>
+          </div>
+
+          <p style="margin-top:16px;">Показовий приклад — саме TikTok. В Україні TikTok <b>не сплачує податки за блогерів</b>: він не є податковим агентом і виплачує повну зароблену суму, а декларувати дохід і платити податок блогер має сам. Але це нікого не рятує від репутації «грабіжника» — люди просто не розбираються в математиці розподілу коштів.</p>
+
+          <div class="stat-bars">
+            <div class="stat-bar">
+              <div class="stat-bar-head"><span class="name">App Store / Google Play / еквайринг</span><span class="detail">30₴ з кожних 100₴</span></div>
+              <div class="stat-bar-track"><div class="stat-bar-fill" style="width:30%;"></div></div>
+              <div class="stat-bar-cagr">30%</div>
+            </div>
+            <div class="stat-bar">
+              <div class="stat-bar-head"><span class="name">Комісія TikTok</span><span class="detail">35₴ з кожних 100₴</span></div>
+              <div class="stat-bar-track"><div class="stat-bar-fill" style="width:35%;"></div></div>
+              <div class="stat-bar-cagr">35%</div>
+            </div>
+            <div class="stat-bar highlight">
+              <div class="stat-bar-head"><span class="name">Блогеру (до податків)</span><span class="detail">35₴ з кожних 100₴</span></div>
+              <div class="stat-bar-track"><div class="stat-bar-fill" style="width:35%;"></div></div>
+              <div class="stat-bar-cagr">35% → після податку ФОП (~2,1₴) чистими ~32,9₴</div>
+            </div>
+          </div>
+
+          <div class="warn-box" style="margin-top:16px;">
+            <span class="tag">Ефект «абсолютної ненависті»</span>
+            <p>Люди думають, що TikTok сам забирає 50–70%, бо не бачать, що 30% іде App Store/Google ще до TikTok. Якби TikTok за законом ще й утримував українські податки при виплаті, блогер отримував би на руки лише ~27–33₴ з тих самих 100₴ — і рівень ненависті до платформи сягнув би максимуму, попри те що сума на руках майже не змінилася б. <b>Якщо BEROO одягне на себе роль податкового агента, станеться саме це — тільки для маленької платформи це означає не втрату репутації, а реальний ризик того, що люди її просто покинуть.</b></p>
+          </div>
+
+          <div class="warn-box" style="margin-top:20px; border-color:rgba(123,47,247,0.5); background:linear-gradient(135deg, rgba(123,47,247,0.10), transparent);">
+            <span class="tag" style="color:var(--accent-2);">Критично важливо — без винятків</span>
+            <p>На сторінці «Дзеркало» обов'язково мають бути видимими <b>і сірі, і золотисті зірочки</b> рейтингу — це найважливіший елемент усієї системи. Поля ФОП завжди видимі, але сірі й неактивні до моменту, коли тумблер «Я ФОП / Офіційні продажі» увімкнено. Жодної іншої реалізації цього функціоналу бути не може.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <footer>
+      <p style="margin-bottom:0;"><b>Стандарт команди:</b> кожен рядок, кожне речення, назва кожної кнопки та елементу інтерфейсу на цій сторінці зафіксовані й мають відтворюватися дослівно в туторіалах, відео та скріншотах — будь-яка розбіжність руйнує навчальний процес користувачів.</p>
+      <div class="fline" style="margin-top:16px;">
+        <span>BEROO — функція «Дзеркало»: архітектура та логіка</span>
+        <span>beroo.online · beroo.blog · app.beroo.space</span>
+      </div>
+    </footer>
+  </main>
+</div>
+</body>
+</html>
