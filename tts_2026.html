@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TikTok Shop Global Analytics & Business Insights</title>
+  
+  <!-- Подключение шрифта Montserrat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-main: #f8fafc;
+      --bg-card: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --primary: #2563eb;
+      --primary-light: #eff6ff;
+      --accent-red: #ef4444;
+      --border-color: #e2e8f0;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --radius: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      line-height: 1.6;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 30px;
+      text-align: left;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: var(--text-main);
+    }
+
+    .header p {
+      color: var(--text-muted);
+      font-size: 1rem;
+      margin-top: 6px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--text-main);
+    }
+
+    .card-title .number {
+      background: var(--primary-light);
+      color: var(--primary);
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    /* МЕТРИКИ */
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-top: 15px;
+    }
+
+    .metric-box {
+      background: var(--bg-main);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: left;
+    }
+
+    .metric-box .label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .metric-box .value {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 4px 0;
+    }
+
+    .metric-box .subtext {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ТАБЛИЦЯ */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .data-table th, .data-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .data-table th {
+      background: var(--bg-main);
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* СПИСКИ */
+    .stat-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .stat-list li {
+      position: relative;
+      padding-left: 20px;
+      margin-bottom: 12px;
+      font-size: 0.95rem;
+    }
+
+    .stat-list li::before {
+      content: "•";
+      color: var(--primary);
+      font-weight: bold;
+      font-size: 1.2rem;
+      position: absolute;
+      left: 0;
+      top: -2px;
+    }
+
+    .external-link {
+      color: var(--primary);
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    .external-link:hover {
+      opacity: 0.8;
+    }
+
+    .highlight-box {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      padding: 16px;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      margin-top: 15px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 20px 12px;
+      }
+      .card {
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <div class="header">
+      <h1>TikTok Shop: Глобальна Аналітика</h1>
+      <p>Статистика, конверсії та структура ринку для бізнесу й аналітиків</p>
+    </div>
+
+    <!-- 1. МАКРО-ПОКАЗНИКИ -->
+    <div class="card">
+      <div class="card-title">
+        <div class="number">1</div> Макро-показники та товарообіг (GMV)
+      </div>
+      <p style="font-size: 0.95rem; margin-bottom: 12px;">
+        Трансформація соціо-комерції (Social Commerce) на західних та східних ринках демонструє стрімкий відрив TikTok від традиційних онлайн-майданчиків.
+      </p>
+      
+      <div class="grid-3">
+        <div class="metric-box">
+          <div class="label">Глобальний GMV (2025)</div>
+          <div class="value">$64.3 млрд</div>
+          <div class="subtext">+94% зростання YoY</div>
+        </div>
+        <div class="metric-box">
+          <div class="label">Прогноз GMV (2026)</div>
+          <div class="value">$112–123 млрд</div>
+          <div class="subtext">Джерело: <a href="https://autofaceless.ai/blog/tiktok-shop-statistics-2026" target="_blank" class="external-link">Autofaceless Analytics</a></div>
+        </div>
+        <div class="metric-box">
+          <div class="label">Ринок США (2025)</div>
+          <div class="value">$15.8 млрд</div>
+          <div class="subtext">Прогноз 2026: >$20 млрд</div>
+        </div>
+      </div>
+
+      <div class="highlight-box">
+        <strong>Контекст ринку:</strong> Amazon знадобилося майже 18 років, щоб досягти $100 млрд GMV. TikTok Shop виходить на ці показники на 4-й рік активного функціонування. Крім того, <strong>58% усіх користувачів TikTok</strong> на західних ринках уже здійснили щонайменше одну покупку безпосередньо у додатку.
+      </div>
+    </div>
+
+    <!-- 2. СТРУКТУРА КАНАЛІВ ПРОДАЖІВ -->
+    <div class="card">
+      <div class="card-title">
+        <div class="number">2</div> Структура каналів продажів та конверсія
+      </div>
+      <p style="font-size: 0.95rem; margin-bottom: 15px;">
+        Аналіз розподілу джерел виручки за даними дослідження <a href="https://www.demandsage.com/tiktok-shop-statistics/" target="_blank" class="external-link">DemandSage Benchmarks</a>:
+      </p>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Канал продажів</th>
+            <th>Частка GMV (Захід)</th>
+            <th>Конверсія та особливості</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Короткі відео (Shoppable Videos)</strong></td>
+            <td><strong>58%</strong></td>
+            <td>Основний локомотив. Конверсія: <strong>3.2% – 5.0%</strong>. Візуальні гачки формують імпульсивні покупки.</td>
+          </tr>
+          <tr>
+            <td><strong>Внутрішній каталог (In-App Shop)</strong></td>
+            <td><strong>32%</strong></td>
+            <td>Органічний пошук та повторні покупки через вкладку Shop tab.</td>
+          </tr>
+          <tr>
+            <td><strong>Прямі ефіри (LIVE Shopping)</strong></td>
+            <td><strong>10% (Захід) / 33% (Азія)</strong></td>
+            <td>Найвищий показник конверсії. У Британії проводиться понад <strong>6 000 LIVE-стримів щодня</strong>.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 3. АФІЛІАТНИЙ ЕКОСВІТ -->
+    <div class="card">
+      <div class="card-title">
+        <div class="number">3</div> Афіліатний екосвіт та Creator Economy
+      </div>
+      <ul class="stat-list">
+        <li><strong>Частка продажів:</strong> Афіліатний маркетинг закриває понад <strong>42% усіх продажів у США</strong>.</li>
+        <li><strong>Обсяг творців:</strong> На платформі залучено понад <strong>15.3 млн афіліатів</strong>.</li>
+        <li><strong>Концентрація виручки:</strong> Лише <strong>~5.5% (близько 850 тис.)</strong> афіліатів генерують системні щомісячні продажі.</li>
+        <li>
+          <strong>Парадокс охоплення (Micro > Macro):</strong>
+          <br>— Аудиторія до 50k підписників показує найвищий Engagement Rate (ER) — <strong>30.1%</strong>.
+          <br>— Акаунти 50k–100k мають ER близько <strong>14.5%</strong>.
+          <br>— Великі блогери (>200k) показують ER менше <strong>7%</strong>.
+        </li>
+      </ul>
+    </div>
+
+    <!-- 4. КАТЕГОРІЇ ТА СЕРЕДНІЙ ЧЕК -->
+    <div class="card">
+      <div class="card-title">
+        <div class="number">4</div> Топові категорії та середній чек (AOV)
+      </div>
+      
+      <p style="font-size: 0.95rem; margin-bottom: 10px;"><strong>Частки категорій у загальному обсязі продажів:</strong></p>
+      <ul class="stat-list">
+        <li><strong>Beauty & Personal Care (Краса та догляд):</strong> 42% продажів (найвища щільність GMV).</li>
+        <li><strong>Womenswear & Fashion (Жіночий одяг):</strong> 18%.</li>
+        <li><strong>Menswear (Чоловічий одяг):</strong> 12%.</li>
+        <li><strong>Home & Kitchen (Дім та кухня):</strong> 10%.</li>
+      </ul>
+
+      <p style="font-size: 0.95rem; margin: 15px 0 8px 0;"><strong>Середній чек (AOV):</strong></p>
+      <div class="grid-3">
+        <div class="metric-box">
+          <div class="label">США</div>
+          <div class="value">$35 – $59</div>
+        </div>
+        <div class="metric-box">
+          <div class="label">Великобританія</div>
+          <div class="value">$25 – $40</div>
+        </div>
+        <div class="metric-box">
+          <div class="label">Південно-Східна Азія</div>
+          <div class="value">$5 – $20</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5. ВОРОНКА КОНКУРЕНЦІЇ -->
+    <div class="card">
+      <div class="card-title">
+        <div class="number">5</div> Аналіз конкуренції серед продавців
+      </div>
+      <p style="font-size: 0.95rem; margin-bottom: 12px;">
+        За даними аналітичної платформи <a href="https://www.fastmoss.com/" target="_blank" class="external-link">FastMoss</a>, у США зареєстровано понад 475 000 магазинів, однак реальний розподіл активності показує низьку якість більшості гравців:
+      </p>
+      <ul class="stat-list">
+        <li><strong>>50% зареєстрованих магазинів</strong> мають 0 продажів.</li>
+        <li>Лише <strong>~216 000 продавців</strong> здійснюють хоча б одну продажу на місяць.</li>
+        <li>Лише <strong>~1 000–2 000 магазинів</strong> перетнули поріг у $1 млн річного GMV.</li>
+      </ul>
+
+      <div class="highlight-box">
+        <strong>Висновок для бізнесу:</strong> Ринок не перенасичений якісними продавцями — він перенасичений системним "dropshipping-шумом". Перемагають компанії, які поєднують аналітику швидких трендів, системну роботу з мікро-афіліатами та стабільний випуск контенту за чіткими сценаріями.
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
