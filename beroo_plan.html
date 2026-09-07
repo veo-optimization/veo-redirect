@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#f7f5fb">
+<meta name="supported-color-schemes" content="light">
+<title>BEROO — Profit / Технологія / Помилка / Джерела та деталі</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f7f5fb;
+  --panel: #ffffff;
+  --panel-2: #efe9fb;
+  --accent: #7b2ff7;
+  --accent-2: #5b21b6;
+  --warn: #9a5510;
+  --text: #191325;
+  --muted: #645d78;
+  --line: rgba(25,15,50,0.12);
+  --mono: 'JetBrains Mono', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+  background: #f7f5fb !important;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  background:
+    radial-gradient(ellipse 900px 500px at 85% -5%, rgba(123,47,247,0.10), transparent 60%),
+    radial-gradient(ellipse 700px 500px at -5% 30%, rgba(123,47,247,0.06), transparent 60%),
+    var(--bg) !important;
+  color: var(--text) !important;
+  color-scheme: light;
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+::selection { background: var(--accent); color: #fff; }
+a { color: inherit; text-decoration: none; }
+
+.shell { display: grid; grid-template-columns: 260px 1fr; max-width: 1400px; margin: 0 auto; }
+@media (max-width: 980px) { .shell { grid-template-columns: 1fr; } .nav { display: none; } }
+
+.nav {
+  position: sticky; top: 0; height: 100vh; overflow-y: auto;
+  padding: 38px 22px 40px 32px;
+  border-right: 1px solid var(--line);
+}
+.nav-brand {
+  font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 15px;
+  letter-spacing: 0.02em; margin-bottom: 4px;
+}
+.nav-brand span { color: var(--accent-2); }
+.nav-sub { font-family: var(--mono); font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 34px; }
+.nav-list { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+.nav-list a {
+  display: flex; gap: 10px; align-items: baseline;
+  font-size: 12.5px; color: var(--muted);
+  padding: 7px 8px; border-radius: 6px; transition: .15s;
+}
+.nav-list a:hover { color: var(--text); background: rgba(25,15,50,0.05); }
+.nav-list a .n { font-family: var(--mono); color: var(--accent-2); font-size: 10.5px; width: 16px; flex-shrink: 0; }
+
+main { padding: 0 0 120px 0; }
+
+.hero {
+  padding: 72px 56px 40px;
+  border-bottom: 1px solid var(--line);
+}
+@media (max-width: 980px) { .hero { padding: 52px 24px 32px; } }
+@media (max-width: 560px) { .hero { padding: 40px 16px 24px; } }
+
+.eyebrow {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--accent-2); margin-bottom: 22px; display: flex; align-items: center; gap: 10px;
+}
+.eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--accent-2); }
+h1.title {
+  font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: clamp(30px,5vw,54px);
+  line-height: 1.08; letter-spacing: -0.01em; max-width: 16ch;
+}
+.hero-lead { max-width: 660px; color: var(--muted); font-size: 16.5px; margin-top: 26px; }
+
+section.vol {
+  padding: 52px 56px; border-bottom: 1px solid var(--line);
+  scroll-margin-top: 20px;
+}
+@media (max-width: 980px) { section.vol { padding: 40px 24px; } }
+
+.vol-head { display: flex; gap: 20px; align-items: flex-start; margin-bottom: 26px; }
+.vol-num {
+  font-family: var(--mono); font-size: 13px; color: var(--accent-2);
+  border: 1px solid var(--line); border-radius: 20px; padding: 5px 12px; flex-shrink: 0; margin-top: 4px;
+}
+h2.vol-title { font-family: 'Montserrat', sans-serif; font-weight: 500; font-size: clamp(22px,3vw,30px); letter-spacing: -0.01em; }
+.vol-dek { color: var(--muted); font-size: 14.5px; max-width: 640px; margin-top: 6px; }
+
+p { margin-bottom: 14px; font-size: 15px; }
+.lead-p { font-size: 16.5px; color: var(--text); font-weight: 600; }
+
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.grid3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+@media (max-width: 760px) { .grid2, .grid3 { grid-template-columns: 1fr; } }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 20px 22px; }
+.card h3 { font-size: 14px; font-weight: 600; margin-bottom: 8px; color: var(--text); }
+.card p { font-size: 13.5px; color: var(--muted); margin-bottom: 0; }
+.card .tag { font-family: var(--mono); font-size: 10px; color: var(--warn); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; display: block; }
+
+ul.bullets { list-style: none; display: flex; flex-direction: column; gap: 9px; margin: 14px 0; }
+ul.bullets li { padding-left: 18px; position: relative; font-size: 14.5px; color: var(--muted); }
+ul.bullets li::before { content: '—'; position: absolute; left: 0; color: var(--accent-2); }
+
+.reframe {
+  background: linear-gradient(135deg, rgba(123,47,247,0.14), rgba(123,47,247,0.02));
+  border: 1px solid rgba(123,47,247,0.35); border-radius: 12px; padding: 22px 24px; margin-top: 18px;
+}
+.reframe .tag { font-family: var(--mono); font-size: 10px; color: var(--accent-2); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 10px; }
+.reframe .new { font-size: 15px; color: var(--text); font-weight: 500; }
+
+.warn-box {
+  background: linear-gradient(135deg, rgba(154,85,16,0.10), rgba(154,85,16,0.02));
+  border: 1px solid rgba(154,85,16,0.35); border-radius: 12px; padding: 22px 24px; margin-top: 18px;
+}
+.warn-box .tag { font-family: var(--mono); font-size: 10px; color: var(--warn); text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 10px; }
+.warn-box p { margin-bottom: 0; font-size: 15px; }
+
+.split { display: grid; grid-template-columns: repeat(3,1fr); gap: 2px; margin-top: 16px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+@media (max-width: 760px) { .split { grid-template-columns: 1fr; } }
+.split > div { padding: 20px 22px; background: var(--panel); }
+.split h4 { font-family: var(--mono); font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent-2); margin-bottom: 10px; }
+.split p { font-size: 13.5px; color: var(--muted); margin-bottom: 0; }
+.split code { font-family: var(--mono); font-size: 12px; color: var(--accent-2); background: var(--panel-2); padding: 2px 6px; border-radius: 4px; }
+
+.timeline { position: relative; margin-top: 24px; padding-left: 26px; border-left: 2px solid var(--line); }
+.tl-step { position: relative; padding-bottom: 26px; }
+.tl-step::before {
+  content: ''; position: absolute; left: -32px; top: 3px; width: 10px; height: 10px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 0 4px rgba(123,47,247,0.18);
+}
+.tl-step h4 { font-size: 15px; font-weight: 600; margin-bottom: 3px; }
+.tl-step h4 .metric { color: var(--accent-2); font-family: var(--mono); font-size: 13px; margin-right: 8px; }
+.tl-step p { font-size: 13.5px; color: var(--muted); margin-bottom: 0; }
+
+.metrics { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-top: 16px; }
+@media (max-width: 760px) { .metrics { grid-template-columns: repeat(2,1fr); } }
+.metric-card { padding: 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+.metric-card .k { font-family: var(--mono); font-size: 11px; color: var(--muted); text-transform: uppercase; }
+.metric-card .v { font-size: 14px; color: var(--text); font-weight: 600; margin-top: 4px; }
+
+.stat-bars { display: flex; flex-direction: column; gap: 14px; margin-top: 22px; max-width: 720px; }
+.stat-bar { padding: 14px 16px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; }
+.stat-bar.highlight { border-color: rgba(123,47,247,0.4); background: linear-gradient(135deg, rgba(123,47,247,0.08), transparent); }
+.stat-bar-head { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.stat-bar-track { height: 8px; background: var(--panel-2); border-radius: 4px; overflow: hidden; }
+.stat-bar-fill { height: 100%; background: var(--accent); }
+.stat-bar-cagr { font-family: var(--mono); font-size: 12px; color: var(--accent-2); margin-top: 7px; font-weight: 600; }
+
+.tariff-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 14px; margin-top: 18px; }
+@media (max-width: 640px) { .tariff-grid { grid-template-columns: 1fr; } }
+.tariff-card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; }
+.tariff-card.featured { border-color: rgba(123,47,247,0.4); background: linear-gradient(135deg, rgba(123,47,247,0.08), transparent); }
+.tariff-head { display: flex; justify-content: space-between; margin-bottom: 4px; }
+.tariff-name { font-family: 'Montserrat', sans-serif; font-weight: 600; font-size: 16px; }
+.tariff-price { font-family: var(--mono); font-size: 12.5px; color: var(--accent-2); font-weight: 600; }
+.tariff-dek { font-size: 12.5px; color: var(--muted); margin-bottom: 12px; }
+.tariff-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+.tariff-list li { padding-left: 16px; position: relative; font-size: 13px; color: var(--text); }
+.tariff-list li::before { content: '—'; position: absolute; left: 0; color: var(--accent-2); }
+
+footer { padding: 44px 56px 60px; color: var(--muted); font-size: 12.5px; }
+footer .fline { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 20px; font-family: var(--mono); font-size: 11px; }
+
+.toggle-card { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; }
+.toggle-card.on { border-color: rgba(154,85,16,0.4); background: linear-gradient(135deg, rgba(154,85,16,0.08), transparent); }
+.toggle-state { font-family: var(--mono); font-size: 11px; text-transform: uppercase; margin-bottom: 10px; display: inline-block; padding: 3px 10px; border-radius: 20px; }
+.toggle-state.off { color: var(--muted); background: var(--panel-2); }
+.toggle-state.on { color: var(--warn); background: rgba(154,85,16,0.12); }
+.toggle-card ul { list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 6px; }
+.toggle-card li { padding-left: 16px; position: relative; font-size: 13px; color: var(--text); }
+.toggle-card li::before { content: '—'; position: absolute; left: 0; color: var(--warn); }
+
+.thesis-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 24px; }
+@media (max-width: 760px) { .thesis-row { grid-template-columns: 1fr; } }
+.thesis-chip { background: var(--panel-2); border: 1px solid rgba(123,47,247,0.3); border-radius: 10px; padding: 12px 14px; font-size: 12.5px; font-weight: 600; color: var(--text); }
+.thesis-chip .num { font-family: var(--mono); color: var(--accent-2); margin-right: 6px; }
+
+.quick-label { font-family: var(--mono); font-size: 11px; text-transform: uppercase; color: var(--muted); margin: 20px 0 8px; }
+.quick-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+@media (max-width: 760px) { .quick-grid { grid-template-columns: repeat(2,1fr); } }
+.quick-card { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+.quick-card .name { font-size: 12.5px; font-weight: 600; }
+.quick-card .limit { font-family: var(--mono); font-size: 11px; color: var(--accent-2); margin-top: 3px; }
+
+
+  .topbar{position:sticky; top:0; z-index:60; background:rgba(247,245,251,0.92); backdrop-filter:blur(8px); border-bottom:1px solid var(--line); display:flex; gap:8px; padding:12px 16px; overflow-x:auto; -webkit-overflow-scrolling:touch;}
+  .topbar .tbtn{font-family:"Montserrat",sans-serif; font-weight:700; font-size:13px; padding:9px 18px; border-radius:24px; background:var(--panel); border:1.5px solid var(--line); color:var(--text); white-space:nowrap; flex-shrink:0; display:inline-block; cursor:pointer;}
+  .topbar .tbtn.tb-profit{border-color:rgba(63,125,31,0.45); color:#3f7d1f;}
+  .topbar .tbtn.tb-tech{border-color:rgba(43,95,217,0.45); color:#2b5fd9;}
+  .topbar .tbtn.tb-error{border-color:rgba(220,38,38,0.45); color:#dc2626;}
+  .topbar .tbtn.tb-details{border-color:rgba(123,47,247,0.45); color:var(--accent-2);}
+
+  .blk{max-width:900px; margin:0 auto; padding:44px 20px; scroll-margin-top:70px;}
+  .blk-eyebrow{font-family:var(--mono); font-size:11px; letter-spacing:0.16em; text-transform:uppercase; margin-bottom:14px; display:flex; align-items:center; gap:10px; font-weight:700;}
+  .blk-eyebrow::before{content:""; width:22px; height:2px; border-radius:2px;}
+  .blk.profit .blk-eyebrow{color:#3f7d1f;} .blk.profit .blk-eyebrow::before{background:#3f7d1f;}
+  .blk.tech .blk-eyebrow{color:#2b5fd9;} .blk.tech .blk-eyebrow::before{background:#2b5fd9;}
+  .blk.error .blk-eyebrow{color:#dc2626;} .blk.error .blk-eyebrow::before{background:#dc2626;}
+  .blk h1{font-family:"Montserrat",sans-serif; font-weight:800; font-size:clamp(24px,4.5vw,36px); letter-spacing:-0.01em; margin-bottom:10px;}
+  .blk-lead{color:var(--muted); font-size:15.5px; max-width:640px; margin-bottom:22px;}
+
+  .jump{color:var(--accent-2); font-weight:700; border-bottom:1.5px dotted var(--accent-2); cursor:pointer; text-decoration:none;}
+  .jump:hover{border-bottom-style:solid;}
+
+  .d-section{padding:40px 20px; border-top:1px solid var(--line); max-width:900px; margin:0 auto; scroll-margin-top:70px;}
+  .d-head{display:flex; gap:14px; align-items:flex-start; margin-bottom:20px;}
+  .d-num{font-family:var(--mono); font-size:12px; color:var(--accent-2); border:1px solid var(--line); border-radius:20px; padding:4px 11px; flex-shrink:0; margin-top:3px;}
+  .d-head h2{font-family:"Montserrat",sans-serif; font-weight:700; font-size:clamp(19px,3vw,25px); letter-spacing:-0.01em;}
+  .d-dek{color:var(--muted); font-size:13.5px; margin-top:4px;}
+
+  .details-toc{display:flex; flex-wrap:wrap; gap:8px; max-width:900px; margin:0 auto; padding:0 20px 20px;}
+  .details-toc .tbtn2{font-size:12px; color:var(--muted); background:var(--panel-2); border:1px solid var(--line); padding:6px 12px; border-radius:16px; font-weight:600; display:inline-block; cursor:pointer;}
+
+  .src-card{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin-bottom:10px;}
+  .src-card a{color:var(--accent-2); font-weight:700; font-size:13.5px; word-break:break-word;}
+  .src-card p{margin-top:6px; margin-bottom:0; font-size:12.5px; color:var(--muted);}
+
+  /* vs-bars: paired Model A / Model B comparison */
+  .vs-wrap{display:flex; flex-direction:column; gap:18px; margin-top:18px;}
+  .vs-group{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 20px;}
+  .vs-group-label{font-family:"Montserrat",sans-serif; font-weight:700; font-size:14px; margin-bottom:14px; color:var(--text);}
+  .vs-row{display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+  .vs-row:last-child{margin-bottom:0;}
+  .vs-tag{width:74px; flex-shrink:0; font-family:"Montserrat",sans-serif; font-weight:800; font-size:12px; border-radius:8px; padding:5px 0; text-align:center;}
+  .vs-tag.a{background:rgba(63,125,31,0.14); color:#3f7d1f;}
+  .vs-tag.b{background:rgba(220,38,38,0.12); color:#dc2626;}
+  .vs-track{flex:1; height:14px; background:var(--panel-2); border-radius:7px; overflow:hidden;}
+  .vs-fill{height:100%; border-radius:7px;}
+  .vs-fill.a{background:#3f7d1f;}
+  .vs-fill.b{background:#dc2626;}
+  .vs-val{width:64px; flex-shrink:0; text-align:right; font-family:var(--mono); font-weight:700; font-size:13px; color:var(--text);}
+
+  /* revenue min/optimal chips */
+  .rev-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:10px;}
+  .rev-chip{border-radius:10px; padding:8px 14px; flex:1; min-width:150px;}
+  .rev-chip .rl{font-family:var(--mono); font-size:9.5px; text-transform:uppercase; letter-spacing:0.08em; display:block; margin-bottom:2px;}
+  .rev-chip .rv{font-family:"Montserrat",sans-serif; font-weight:800; font-size:15px;}
+  .rev-chip.min{background:var(--panel-2); border:1px solid var(--line);}
+  .rev-chip.min .rl{color:var(--muted);}
+  .rev-chip.min .rv{color:var(--text);}
+  .rev-chip.opt{background:linear-gradient(135deg, rgba(123,47,247,0.14), rgba(123,47,247,0.04)); border:1px solid rgba(123,47,247,0.4);}
+  .rev-chip.opt .rl{color:var(--accent-2);}
+  .rev-chip.opt .rv{color:var(--accent-2);}
+
+  /* base-unit example cards */
+  .unit-grid{display:grid; grid-template-columns:1fr; gap:12px; margin:18px 0 22px;}
+  @media (min-width:680px){ .unit-grid{grid-template-columns:1fr 1fr;} }
+  .unit-card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:18px 20px;}
+  .unit-card .tag{display:inline-block; font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; padding:4px 10px; border-radius:20px; margin-bottom:10px;}
+  .unit-card.b2b .tag{color:#2b5fd9; background:rgba(43,95,217,0.10);}
+  .unit-card.b2c .tag{color:#3f7d1f; background:rgba(63,125,31,0.10);}
+  .unit-math{display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-family:var(--mono); font-size:12.5px; color:var(--muted); margin:8px 0;}
+  .unit-math b{color:var(--text); font-family:"Montserrat",sans-serif; font-weight:800;}
+  .unit-math .arrow{color:var(--accent-2);}
+  .unit-card p.d{font-size:13px; color:var(--muted); margin-top:6px; margin-bottom:0;}
+</style></head>
+<body>
+
+<div class="topbar">
+  <span class="tbtn tb-profit" data-jump="profit" role="button" tabindex="0">💰 Profit</span>
+  <span class="tbtn tb-tech" data-jump="technology" role="button" tabindex="0">⚙️ Технологія</span>
+  <span class="tbtn tb-error" data-jump="error" role="button" tabindex="0">⚠️ Помилка</span>
+  <span class="tbtn tb-details" data-jump="details" role="button" tabindex="0">📚 Джерела та деталі</span>
+</div>
+
+<!-- ============ BLOCK 1: PROFIT ============ -->
+<section class="blk profit" id="profit">
+  <div class="blk-eyebrow">Блок 1</div>
+  <h1>PROFIT — фінансова модель BEROO Online</h1>
+  <p class="blk-lead">Не абстрактні мільйони переглядів, а дві конкретні одиниці контенту, з яких далі множиться весь прогноз.</p>
+
+  <div class="unit-grid">
+    <div class="unit-card b2b">
+      <span class="tag">B2B-приклад</span>
+      <div class="unit-math"><b>3 ролики</b> × 30–40 сек <span class="arrow">→</span> <b>100 000</b> охоплень <span class="arrow">→</span> <b>1%</b> <span class="arrow">→</span> <b>1 000</b> магазинів</div>
+      <p class="d">Продавці реєструються на довірі до бренду, а не тому, що побачили готовий функціонал. Далі вони очікують на трафік — самі впоратися з TikTok-алгоритмом не можуть, у них із цим проблема.</p>
+    </div>
+    <div class="unit-card b2c">
+      <span class="tag">B2C / афіліат-приклад</span>
+      <div class="unit-math"><b>2 ролики</b> × ~1 хв <span class="arrow">→</span> <b>500 000</b> охоплень <span class="arrow">→</span> <b>5–10%</b> <span class="arrow">→</span> <b>25 000–50 000</b> афіліатів</div>
+      <p class="d">Контент про продаж товарів, ціни, комерцію в TikTok, розрахований на широку масу людей — не на бізнес. Саме такий формат дає найвищу конверсію в реєстрацію афіліата й створення дзеркала.</p>
+    </div>
+  </div>
+
+  <p style="font-size:13px; color:var(--muted); margin-bottom:22px;">Це базові одиниці розрахунку нижче: кожен горизонт — це кратне число таких же роликів і батчів, помножене на вірусний ефект мережі (<span class="jump" data-jump="d-modela" role="button" tabindex="0">чому вірусний ефект спрацьовує →</span>).</p>
+
+  <div class="timeline">
+    <div class="tl-step">
+      <h4><span class="metric">3 місяці</span>Запуск, хайп, перші 1 000 бізнесів</h4>
+      <p>1 B2B-батч дає перші 1 000 «заморожених» бізнесів (приклад вище — рівно ці цифри). 2–3 B2C-батчі дають 25 000–50 000 нових афіліатів, з яких 50 000+ створюють дзеркала. Монетизація мінімальна — навмисно (<span class="jump" data-jump="d-modela" role="button" tabindex="0">чому саме так →</span>).</p>
+      <div class="rev-row">
+        <div class="rev-chip min"><span class="rl">Мінімум</span><span class="rv">~30 000₴/міс</span></div>
+        <div class="rev-chip opt"><span class="rl">Оптимум</span><span class="rv">~150 000₴/міс</span></div>
+      </div>
+    </div>
+    <div class="tl-step">
+      <h4><span class="metric">6 місяців</span>Вірусний ріст, масові дзеркала</h4>
+      <p>100 000+ активних дзеркал в українському TikTok, +3 000–5 000 нових ФОП-магазинів. BEROO — найпотужніша біржа товарів і рейтинг блогерів (<span class="jump" data-jump="d-mirror" role="button" tabindex="0">механіка Дзеркала →</span>).</p>
+      <div class="rev-row">
+        <div class="rev-chip min"><span class="rl">Мінімум</span><span class="rv">~150 000₴/міс</span></div>
+        <div class="rev-chip opt"><span class="rl">Оптимум</span><span class="rv">~400 000₴/міс</span></div>
+      </div>
+    </div>
+    <div class="tl-step">
+      <h4><span class="metric">9 місяців</span>Монополізація даних, підготовка до TikTok Shop</h4>
+      <p>Запуск внутрішнього аналітичного центру (аналог FastMoss) на власних даних BEROO, зростання платних підписок у бік порогу ФОП (<span class="jump" data-jump="d-market" role="button" tabindex="0">світовий контекст →</span>).</p>
+      <div class="rev-row">
+        <div class="rev-chip min"><span class="rl">Мінімум</span><span class="rv">~400 000₴/міс</span></div>
+        <div class="rev-chip opt"><span class="rl">Оптимум</span><span class="rv">~700 000₴/міс</span></div>
+      </div>
+    </div>
+    <div class="tl-step">
+      <h4><span class="metric">12 місяців</span>Вихід на ліміти ФОП 3-ї групи, підготовка ТОВ</h4>
+      <p>800–1 000 постійних платних продавців → ~10 млн грн виручки від SaaS-підписок — межа ФОП 3-ї групи (<span class="jump" data-jump="d-fop" role="button" tabindex="0">розрахунок →</span>). Наближення до фінансового тригера переходу на ТОВ (<span class="jump" data-jump="d-tob" role="button" tabindex="0">тригери →</span>).</p>
+      <div class="rev-row">
+        <div class="rev-chip min"><span class="rl">Мінімум</span><span class="rv">~700 000₴/міс</span></div>
+        <div class="rev-chip opt"><span class="rl">Оптимум</span><span class="rv">~840 000₴/міс</span></div>
+      </div>
+      <p style="margin-top:4px; font-size:11.5px; color:var(--muted);">Оптимум — упритул до ліміту ФОП 3-ї групи</p>
+    </div>
+    <div class="tl-step">
+      <h4><span class="metric">24 місяці</span>MCN-студія, агенція, аналітичний хаб</h4>
+      <p>Три підрозділи — Data & Push, LIVE-студія, TAP Agency — активуються після офіційного входу TikTok Shop в Україну (<span class="jump" data-jump="d-post-launch" role="button" tabindex="0">детально →</span>). Монополія на ринку соціо-комерції України.</p>
+      <div class="rev-row">
+        <div class="rev-chip min"><span class="rl">Мінімум (лише SaaS)</span><span class="rv">~2 000 000₴/міс</span></div>
+        <div class="rev-chip opt"><span class="rl">Оптимум (SaaS+агенція)</span><span class="rv">~9–12 млн₴/міс</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="warn-box" style="margin-top:16px;">
+    <span class="tag">Ключова умова прогнозу</span>
+    <p>Це прогноз, побудований на медіа-охопленні засновника й конверсії «спробувати заробити» (5–10% широкої аудиторії проти ~1% серед B2B-продавців). Повний фінансовий розрахунок і джерела припущень — у блоці <span class="jump" data-jump="details" role="button" tabindex="0">«Джерела та деталі»</span>.</p>
+  </div>
+</section>
+
+<!-- ============ BLOCK 2: TECHNOLOGY ============ -->
+<section class="blk tech" id="technology">
+  <div class="blk-eyebrow">Блок 2</div>
+  <h1>ТЕХНОЛОГІЯ — трансформація світових ринків</h1>
+  <p class="blk-lead">TikTok Shop замінив «пошук» на «Discovery Commerce» — імпульсивну покупку під час перегляду контенту. Ринок за ринком той самий сценарій.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <span class="tag">США</span>
+      <h3>$9 млрд → $15,8 млрд GMV</h3>
+      <p>4 450 → 500 000+ продавців. Понад 42% GMV — через афіліатів, не бренди (<span class="jump" data-jump="d-market" role="button" tabindex="0">детально →</span>).</p>
+    </div>
+    <div class="card">
+      <span class="tag">Британія</span>
+      <h3>300 000+ SME</h3>
+      <p>6 000+ стримів щодня, LIVE Shopping +55% рік до року (<span class="jump" data-jump="d-market" role="button" tabindex="0">детально →</span>).</p>
+    </div>
+    <div class="card">
+      <span class="tag">Континентальна Європа</span>
+      <h3>€500 млн за 90 днів (2026)</h3>
+      <p>~70% продажів у DE/FR/ES — через афіліатних творців, не Marketplace Tab (<span class="jump" data-jump="d-market" role="button" tabindex="0">детально →</span>).</p>
+    </div>
+    <div class="card">
+      <span class="tag">Азія (Douyin)</span>
+      <h3>Еталон закритого циклу</h3>
+      <p>Повний Social Commerce — покупка не виходячи з додатка (<span class="jump" data-jump="d-market" role="button" tabindex="0">детально →</span>).</p>
+    </div>
+  </div>
+
+  <p class="lead-p" style="margin-top:24px;">ДО і ПІСЛЯ: конверсія</p>
+  <div class="stat-bars">
+    <div class="stat-bar">
+      <div class="stat-bar-head"><span class="name">Традиційний сайт</span><span class="detail">1,5–2,5%</span></div>
+      <div class="stat-bar-track"><div class="stat-bar-fill" style="width:20%;"></div></div>
+    </div>
+    <div class="stat-bar">
+      <div class="stat-bar-head"><span class="name">Афіліат-відео</span><span class="detail">3–6%</span></div>
+      <div class="stat-bar-track"><div class="stat-bar-fill" style="width:50%;"></div></div>
+    </div>
+    <div class="stat-bar highlight">
+      <div class="stat-bar-head"><span class="name">LIVE-стрім</span><span class="detail">5–12%</span></div>
+      <div class="stat-bar-track"><div class="stat-bar-fill" style="width:100%;"></div></div>
+    </div>
+  </div>
+
+  <div class="reframe" style="margin-top:20px;">
+    <span class="tag">Чому саме Дзеркало — місток для України</span>
+    <div class="new">Той самий перехід від «пошуку» до «Discovery Commerce», який уже стався в США, Британії та Європі, ще попереду в Україні. Дзеркало відтворює афіліатну модель TikTok Shop ще до його офіційного запуску — щоб український ринок зустрів TikTok Shop уже підготовленим, а не наздоганяв (<span class="jump" data-jump="d-mirror" role="button" tabindex="0">повна механіка →</span>).</div>
+  </div>
+</section>
+
+<!-- ============ BLOCK 3: ERROR ============ -->
+<section class="blk error" id="error">
+  <div class="blk-eyebrow">Блок 3</div>
+  <h1>ПОМИЛКА — чому Модель Б зараз зламає систему</h1>
+  <p class="blk-lead">Модель Б: BEROO виступає гарантом виплат, операційним агентом, створює ТОВ на старті, бере на себе виплати за незареєстрованих афіліатів.</p>
+
+  <div class="warn-box">
+    <span class="tag">Чому це помилка на Етапі 1</span>
+    <p>Транзитний оборот десятків мільйонів гривень через рахунки BEROO означає загрозу банківського фінмоніторингу, податкові перевірки, ліцензійні вимоги до платіжних систем — модель ламається за тиждень (<span class="jump" data-jump="d-modelb" role="button" tabindex="0">повний розбір →</span>).</p>
+  </div>
+
+  <div class="vs-wrap">
+    <div class="vs-group">
+      <div class="vs-group-label">Захоплення ринку (12 міс)</div>
+      <div class="vs-row">
+        <div class="vs-tag a">Модель А</div>
+        <div class="vs-track"><div class="vs-fill a" style="width:85%;"></div></div>
+        <div class="vs-val">70–85%</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-tag b">Модель Б</div>
+        <div class="vs-track"><div class="vs-fill b" style="width:25%;"></div></div>
+        <div class="vs-val">15–25%</div>
+      </div>
+    </div>
+    <div class="vs-group">
+      <div class="vs-group-label">Втрата дрібних блогерів</div>
+      <div class="vs-row">
+        <div class="vs-tag a">Модель А</div>
+        <div class="vs-track"><div class="vs-fill a" style="width:6%;"></div></div>
+        <div class="vs-val">Мінімальна</div>
+      </div>
+      <div class="vs-row">
+        <div class="vs-tag b">Модель Б</div>
+        <div class="vs-track"><div class="vs-fill b" style="width:80%;"></div></div>
+        <div class="vs-val">~80%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="reframe" style="margin-top:18px;">
+    <span class="tag">Показовий кейс: дроблення платежів</span>
+    <div class="new">Пропозиція проводити виплати афіліатам через картки фізосіб, щоб «влізти» під нібито ліміт 400 000 грн, — це схема ухилення від податків, а не легальний обхід (<span class="jump" data-jump="d-cards" role="button" tabindex="0">повний розбір ризиків →</span>).</div>
+  </div>
+</section>
+
+<!-- ============ BLOCK 4: DETAILS ============ -->
+<section class="blk" id="details" style="border-top:3px solid var(--accent); padding-bottom:0;">
+  <div class="blk-eyebrow" style="color:var(--accent-2);"><span></span>Блок 4</div>
+  <h1>ДЖЕРЕЛА ТА ДЕТАЛІ</h1>
+  <p class="blk-lead">Енциклопедія проєкту — повний текст, юридичний розбір, тарифи, аналітика ринку та зовнішні джерела, на які посилаються блоки 1–3.</p>
+</section>
+
+<div class="details-toc">
+  <span class="tbtn2" data-jump="d-tariffs" role="button" tabindex="0">Тарифи</span>
+  <span class="tbtn2" data-jump="d-naming" role="button" tabindex="0">Чому без %</span>
+  <span class="tbtn2" data-jump="d-fop" role="button" tabindex="0">Ліміт ФОП і КВЕД</span>
+  <span class="tbtn2" data-jump="d-tob" role="button" tabindex="0">Тригери ТОВ</span>
+  <span class="tbtn2" data-jump="d-modela" role="button" tabindex="0">Модель А</span>
+  <span class="tbtn2" data-jump="d-modelb" role="button" tabindex="0">Модель Б</span>
+  <span class="tbtn2" data-jump="d-cards" role="button" tabindex="0">Дроблення платежів</span>
+  <span class="tbtn2" data-jump="d-mirror" role="button" tabindex="0">Дзеркало</span>
+  <span class="tbtn2" data-jump="d-market" role="button" tabindex="0">Світовий ринок</span>
+  <span class="tbtn2" data-jump="d-post-launch" role="button" tabindex="0">Після запуску TikTok Shop</span>
+  <span class="tbtn2" data-jump="d-sources" role="button" tabindex="0">Джерела</span>
+</div>
+
+<div class="d-section" id="d-tariffs">
+  <div class="d-head">
+    <div class="d-num">01</div>
+    <div><h2>Тарифна сітка</h2><p class="d-dek">Канонічна версія — продавці і блогери окремо</p></div>
+  </div>
+  <p class="lead-p">Продавці</p>
+  <div class="tariff-grid">
+    <div class="tariff-card">
+      <div class="tariff-head"><span class="tariff-name">«Запуск»</span><span class="tariff-price">0₴/міс</span></div>
+      <div class="tariff-dek">Повний стек одразу: WayForPay/MonoPay, Checkbox, Нова Пошта</div>
+      <ul class="tariff-list">
+        <li>До 30 товарів</li>
+        <li>IBAN без еквайрингу — 1 тестове дзеркало</li>
+        <li>З еквайрингом — до 3 дзеркал із реальними транзакціями</li>
+      </ul>
+    </div>
+    <div class="tariff-card featured">
+      <div class="tariff-head"><span class="tariff-name">«Бізнес»</span><span class="tariff-price">1 200₴/міс</span></div>
+      <div class="tariff-dek">Дзеркало — основний інструмент продажів</div>
+      <ul class="tariff-list"><li>До 500 товарів, до 100 дзеркал з повною автоматизацією</li></ul>
+    </div>
+    <div class="tariff-card">
+      <div class="tariff-head"><span class="tariff-name">«Масштаб»</span><span class="tariff-price">5 500₴/міс</span></div>
+      <div class="tariff-dek">Для гуртовиків і складських комплексів</div>
+      <ul class="tariff-list"><li>Безліміт товарів/дзеркал</li></ul>
+    </div>
+  </div>
+
+  <p class="lead-p" style="margin-top:24px;">Блогери</p>
+  <div class="tariff-grid">
+    <div class="tariff-card featured">
+      <div class="tariff-head"><span class="tariff-name">«Триал»</span><span class="tariff-price">3 міс, 0₴</span></div>
+      <div class="tariff-dek">Максимум «Профік» на 90 днів автоматично</div>
+      <ul class="tariff-list"><li>Безліміт товарів на час триалу</li></ul>
+    </div>
+    <div class="tariff-card">
+      <div class="tariff-head"><span class="tariff-name">«Старт»</span><span class="tariff-price">0₴/міс</span></div>
+      <ul class="tariff-list"><li>До 10 товарів</li></ul>
+    </div>
+    <div class="tariff-card">
+      <div class="tariff-head"><span class="tariff-name">«Аматор»</span><span class="tariff-price">49₴/міс</span></div>
+      <ul class="tariff-list"><li>До 50 товарів</li></ul>
+    </div>
+    <div class="tariff-card">
+      <div class="tariff-head"><span class="tariff-name">«Профік»</span><span class="tariff-price">499₴/міс</span></div>
+      <ul class="tariff-list"><li>Безліміт товарів</li></ul>
+    </div>
+  </div>
+</div>
+
+<div class="d-section" id="d-naming">
+  <div class="d-head">
+    <div class="d-num">02</div>
+    <div><h2>Чому тарифи без відсоткової комісії</h2><p class="d-dek">Виключно фіксована абонплата — без відсотка понад ліміт обороту</p></div>
+  </div>
+  <p>Будь-яка відсоткова складова понад ліміт обороту ризикує викликати запитання податкової щодо посередницької діяльності для ФОП 3-ї групи — платформа свідомо цього уникає.</p>
+  <div class="reframe" style="margin-top:14px;">
+    <span class="tag">Принцип</span>
+    <div class="new">«Масштаб» — фіксовано <b>5 500₴/міс</b>, без жодного відсотка понад ліміт обороту. Це дає великому продавцю передбачуваний рахунок незалежно від обсягу продажів і повністю знімає юридичну напругу навколо назви платежу — це просто фіксована абонплата, що вкладається в Принцип 1 Конституції («виключно тарифні плани фіксованої вартості») без жодних застережень.</div>
+  </div>
+  <p class="muted" style="margin-top:14px; font-size:13px; color:var(--muted);">«Профік» для блогерів — 499₴/міс, також без відсоткової складової понад обсяг продажів.</p>
+</div>
+
+<div class="d-section" id="d-fop">
+  <div class="d-head">
+    <div class="d-num">03</div>
+    <div><h2>Ліміт ФОП 3-ї групи та КВЕДи</h2><p class="d-dek">Юридична основа моделі SaaS</p></div>
+  </div>
+  <p>Річний ліміт доходу ФОП 3-ї групи — 10 091 049 грн (1 167 мінімальних зарплат). Рахується суто з виручки за софт, не з обороту продавців чи комісій.</p>
+  <div class="metrics" style="margin-top:14px;">
+    <div class="metric-card"><div class="k">Місячна межа</div><div class="v">≈840 000 грн/міс</div></div>
+    <div class="metric-card"><div class="k">Поріг при $25/міс</div><div class="v">840 підписок</div></div>
+    <div class="metric-card"><div class="k">Поріг при $40/міс</div><div class="v">525 підписок</div></div>
+    <div class="metric-card"><div class="k">Практично</div><div class="v">800–1 000 постійних продавців</div></div>
+  </div>
+  <div class="note" style="margin-top:16px;">
+    <span class="tag">КВЕД-коди діяльності</span>
+    <p>Юридична позиція BEROO спирається на класифікацію діяльності як софт/обробка даних, а не торгове посередництво: <b>КВЕД 63.11</b> (оброблення даних, розміщення інформації на веб-вузлах) та <b>КВЕД 62.01</b> (комп'ютерне програмування). Це підкріплює позиціонування виручки як плати за SaaS-інфраструктуру, а не за посередництво в продажах.</p>
+  </div>
+</div>
+
+<div class="d-section" id="d-tob">
+  <div class="d-head">
+    <div class="d-num">04</div>
+    <div><h2>Коли переходити на ТОВ</h2><p class="d-dek">Два тригери, не завчасно</p></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <span class="tag">Фінансовий тригер</span>
+      <h3>80–85% від ліміту ФОП</h3>
+      <p>~8–8,5 млн грн доходу — щоб не вискочити на загальну систему оподаткування.</p>
+    </div>
+    <div class="card">
+      <span class="tag">Юридично-модельний тригер</span>
+      <h3>Офіційний вхід TikTok Shop</h3>
+      <p>Момент, коли BEROO починає працювати як офіційна TAP/MCN-агенція й приймати агентські виплати.</p>
+    </div>
+  </div>
+  <p style="margin-top:12px; font-size:13.5px; color:var(--muted);">До цього моменту ТОВ створювати недоцільно — зайве бухгалтерське й податкове навантаження.</p>
+</div>
+
+<div class="d-section" id="d-modela">
+  <div class="d-head">
+    <div class="d-num">05</div>
+    <div><h2>Модель А — легка SaaS-інфраструктура</h2><p class="d-dek">ФОП 3-ї групи, BEROO не торкається грошей</p></div>
+  </div>
+  <ul class="bullets">
+    <li><b>Юридичний статус</b> — ФОП 3-ї групи; не фінансовий агент, не ескроу, не гарант.</li>
+    <li><b>Гнучкість</b> — афіліати працюють як з ФОП, так і без — маркування золотою/сірою зіркою.</li>
+    <li><b>Мінімальне навантаження</b> — без бухобліку виплат тисяч фізосіб.</li>
+    <li><b>Без перевірок</b> — не проводить чужий товарообіг через свої рахунки, тож не під наглядом НБУ як фінпосередник.</li>
+  </ul>
+  <div class="reframe" style="margin-top:14px;">
+    <span class="tag">Стратегічний потенціал</span>
+    <div class="new">Нульові бар'єри на вході → масове захоплення ринку, готова база для монетизації розсилок і таргету, статус «TikTok Shop Агенції №1» до офіційного запуску, власна TikTok-студія, монополія на дані (аналог FastMoss).</div>
+  </div>
+</div>
+
+<div class="d-section" id="d-modelb">
+  <div class="d-head">
+    <div class="d-num">06</div>
+    <div><h2>Модель Б — фінансовий гарант і розрахунковий агент</h2><p class="d-dek">Вимагає ТОВ — чому це помилка на Етапі 1</p></div>
+  </div>
+  <ul class="bullets">
+    <li><b>Юридичний статус</b> — ТОВ на загальній системі + Спліт-платежі.</li>
+    <li><b>Навантаження</b> — штат бухгалтерів/юристів, податковий облік за кожну фізособу (ПДФО 18% + військовий збір).</li>
+    <li><b>Ризики</b> — постійні перевірки податкової й НБУ, блокування рахунків при суперечках.</li>
+  </ul>
+  <div class="warn-box" style="margin-top:14px;">
+    <span class="tag">Негатив і втрата масовості</span>
+    <p>Користувачі скаржаться на «величезні відсотки», не розуміючи, що більшість іде на податки за незареєстрованих фізосіб. Довга верифікація й висока комісія відлякують ~80% дрібних блогерів, зупиняючи вірусне розростання мережі.</p>
+  </div>
+</div>
+
+<div class="d-section" id="d-cards">
+  <div class="d-head">
+    <div class="d-num">07</div>
+    <div><h2>Дроблення платежів через картки фізосіб</h2><p class="d-dek">Чому ця схема — не легальний обхід, а ухилення від податків</p></div>
+  </div>
+  <ul class="bullets">
+    <li><b>Міф про «ліміт 400 000 грн».</b> Це поріг обов'язкового фінмоніторингу (Закон № 361-IX), а не безподатковий ліміт.</li>
+    <li><b>Реальні ліміти банків суворіші.</b> P2P-перекази обмежені ~100 000–150 000 грн/міс на клієнта.</li>
+    <li><b>Систематичність = підприємницька діяльність.</b> Регулярні перекази від BEROO трактуються як незадекларований дохід.</li>
+  </ul>
+  <div class="compare-wrap" style="margin-top:14px;">
+    <div class="compare-head"><div class="label-col">Ризик</div><div class="col-a" style="grid-column:span 2;">Наслідок</div></div>
+    <div class="compare-row"><div class="label-col">Блокування рахунків</div><div class="col-a" style="grid-column:span 2;">Фінмоніторинг виявляє систематичні перекази — рахунки блокуються</div></div>
+    <div class="compare-row"><div class="label-col">Донарахування податків</div><div class="col-a" style="grid-column:span 2;">18% ПДФО + 5% ВЗ + штраф 25–50% + пеня</div></div>
+    <div class="compare-row"><div class="label-col">Кримінальна кваліфікація</div><div class="col-a" style="grid-column:span 2;">Можлива ст. 212 ККУ («ухилення від сплати податків»)</div></div>
+  </div>
+  <p style="margin-top:12px; font-size:13.5px; color:var(--muted);">Правильний підхід: прямі розрахунки продавець → блогер (ФОП/IBAN/Nova Pay/Monobank), BEROO ніколи не торкається грошей.</p>
+</div>
+
+<div class="d-section" id="d-mirror">
+  <div class="d-head">
+    <div class="d-num">08</div>
+    <div><h2>Дзеркало — повна механіка</h2><p class="d-dek">Афіліатна модель, взята з TikTok Shop</p></div>
+  </div>
+  <ul class="bullets">
+    <li>Продавець підключає еквайринг, встановлює % комісії, схвалює заявки блогерів.</li>
+    <li>Блогер подає анкету (соцмережі, охоплення), отримує доступ поштучно/за категорією/на весь каталог.</li>
+    <li>1 зірочка GMV = 1 грн обороту. Тумблер «Я ФОП»: сірі зірочки й приховані поля до активації → золоті зірочки й активні поля ФОП після.</li>
+    <li>Покупець купує на сторінці блогера, оплата йде через еквайринг продавця, замовлення падає в CRM продавця.</li>
+  </ul>
+</div>
+
+<div class="d-section" id="d-market">
+  <div class="d-head">
+    <div class="d-num">09</div>
+    <div><h2>Світовий ринок: повні дані</h2><p class="d-dek">США, Британія, Європа, Азія</p></div>
+  </div>
+  <div class="metrics">
+    <div class="metric-card"><div class="k">США GMV</div><div class="v">$9 млрд (2024) → $15,1–15,8 млрд (2025)</div></div>
+    <div class="metric-card"><div class="k">США продавці</div><div class="v">4 450 (2023) → 500 000+</div></div>
+    <div class="metric-card"><div class="k">Британія</div><div class="v">300 000+ SME, 6 000+ стримів/день</div></div>
+    <div class="metric-card"><div class="k">Європа (2026, 90 днів)</div><div class="v">€500 млн (DE ~35% частки)</div></div>
+  </div>
+  <p style="margin-top:14px;">Топ 0,5% креаторів генерують 38% афіліатного обороту; топ-1% (~12 000 акаунтів) — в середньому $600 000 GMV/рік при 10–20% комісії. Beauty & Personal Care = 42% продажів США, Fashion & Apparel = 18%. Понад 43% Gen-Z шукають товари прямо в TikTok, а не в Google/Amazon.</p>
+</div>
+
+<div class="d-section" id="d-post-launch">
+  <div class="d-head">
+    <div class="d-num">10</div>
+    <div><h2>Три підрозділи після запуску TikTok Shop</h2><p class="d-dek">Data & Push · LIVE Studio · TAP Agency</p></div>
+  </div>
+  <div class="grid3">
+    <div class="card"><span class="tag">Data & Push</span><h3>Аналітика + розсилки</h3><p>FastMoss-подібна аналітика трендів + мультиканальний буст через Telegram/Viber-бази афіліатів.</p></div>
+    <div class="card"><span class="tag">LIVE Studio</span><h3>Контент-завод</h3><p>Власна медіа-інфраструктура для вірусних оглядів і цілодобових LIVE-стримів.</p></div>
+    <div class="card"><span class="tag">TAP Agency</span><h3>Масштабування брендів</h3><p>Консалтинг на основі Big Data BEROO + супровід «під ключ» для національних брендів.</p></div>
+  </div>
+</div>
+
+<div class="d-section" id="d-sources" style="border-bottom:1px solid var(--line); padding-bottom:44px;">
+  <div class="d-head">
+    <div class="d-num">11</div>
+    <div><h2>Зовнішні джерела</h2><p class="d-dek">Офіційна аналітика й галузеві звіти, використані для перевірки цифр</p></div>
+  </div>
+
+  <div class="src-card">
+    <a href="https://newsroom.tiktok.com/?lang=en-150" target="_blank" rel="noopener">TikTok Newsroom (офіційно)</a>
+    <p>Офіційні анонси TikTok — запуск TikTok Shop у нових країнах Європи, прозорість DSA-звітів, дані про охоплення.</p>
+  </div>
+  <div class="src-card">
+    <a href="https://thelowdown.momentum.asia/" target="_blank" rel="noopener">Momentum Works — The Low Down</a>
+    <p>Незалежна аналітика TikTok Shop: GMV США, темпи росту, порівняння ринків Азії й Заходу.</p>
+  </div>
+  <div class="src-card">
+    <a href="https://www.fastmoss.com/" target="_blank" rel="noopener">FastMoss</a>
+    <p>Провідна аналітична платформа для TikTok Shop — тренд-хантинг товарів, статистика афіліатів, дані про LIVE-продажі.</p>
+  </div>
+  <div class="src-card">
+    <a href="https://blog.hootsuite.com/social-media-trends/" target="_blank" rel="noopener">Hootsuite Social Trends</a>
+    <p>Щорічний галузевий звіт про соціальну комерцію й поведінку покупців у соцмережах.</p>
+  </div>
+
+  <p style="margin-top:16px; font-size:12.5px; color:var(--muted);">Усі цифри в документі — орієнтовні оцінки на основі відкритої аналітики й припущень команди, а не гарантований фінансовий прогноз.</p>
+</div>
+
+<footer style="max-width:900px; margin:0 auto; padding:34px 20px 60px; color:var(--muted); font-size:12px;">
+  <div class="fline">
+    <span>BEROO — Profit / Технологія / Помилка / Джерела та деталі</span>
+    <span>beroo.online · beroo.blog · app.beroo.space</span>
+  </div>
+</footer>
+
+<script>
+  document.addEventListener('click', function(e) {
+    try {
+      var el = e.target.closest('[data-jump]');
+      if (!el) return;
+      var id = el.getAttribute('data-jump');
+      var target = document.getElementById(id);
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (err) {
+      // ignore — never let this break the page
+    }
+  });
+  document.addEventListener('keydown', function(e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var el = e.target.closest('[data-jump]');
+    if (!el) return;
+    e.preventDefault();
+    el.click();
+  });
+</script>
+
+</body>
+</html>
