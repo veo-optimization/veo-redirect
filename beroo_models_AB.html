@@ -21,6 +21,9 @@
             --warning-border: #fef3c7;
             --success-green: #16a34a;
             --success-bg: #f0fdf4;
+            --purple-accent: #7e22ce;
+            --purple-bg: #faf5ff;
+            --purple-border: #e9d5ff;
         }
 
         * {
@@ -81,6 +84,11 @@
             color: var(--warning-amber);
         }
 
+        .badge-purple {
+            background-color: var(--purple-border);
+            color: var(--purple-accent);
+        }
+
         h1 {
             font-size: 18px;
             font-weight: 800;
@@ -125,6 +133,14 @@
             color: var(--danger-red);
         }
 
+        .warning-list li::before {
+            color: var(--warning-amber);
+        }
+
+        .purple-list li::before {
+            color: var(--purple-accent);
+        }
+
         li strong {
             color: var(--text-dark);
         }
@@ -156,7 +172,7 @@
             line-height: 1.3;
         }
 
-        /* Mobile Card Comparison (Replaces Table) */
+        /* Mobile Card Comparison */
         .comp-card {
             border: 1px solid var(--border-color);
             border-radius: 10px;
@@ -272,6 +288,14 @@
             color: var(--text-dark);
             margin-bottom: 2px;
         }
+
+        .purple-card {
+            background-color: var(--purple-bg);
+            border: 1.5px solid var(--purple-border);
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: 8px;
+        }
     </style>
 </head>
 <body>
@@ -282,7 +306,7 @@
         <p>Порівняння моделей запуску платформи для оперативного захоплення ринку в умовах обмежених ресурсів (1 бухгалтер, ФОП 3-ї групи, без юридичного штату).</p>
 
         <div class="stat-box" style="background-color: var(--success-bg); border-color: #bbf7d0;">
-            <div class="stat-label" style="color: var(--success-green);">✅ Единственний реалістичний шлях</div>
+            <div class="stat-label" style="color: var(--success-green);">✅ Єдиний життєздатний шлях</div>
             <div class="stat-value" style="color: var(--success-green);">МОДЕЛЬ А (Тарифна)</div>
             <div class="stat-desc" style="color: #14532d;">SaaS-інструмент (передплата за софт, калькулятор та ліміти). Без транзиту грошей.</div>
         </div>
@@ -314,10 +338,46 @@
         </ul>
     </div>
 
-    <!-- БЛОК 3: Mobile First Порівняння -->
+    <!-- БЛОК 3: ФОКУСНИЙ БЛОК - 7-Й КІЛОМЕТР -->
+    <div class="card" style="border-color: var(--purple-border); background-color: #faf5ff;">
+        <h1><span class="badge-number badge-purple">3</span> Стратегічний фактор: "Дяді з 7-го кілометра"</h1>
+        <p style="color: #581c87;"><strong>Утопія Моделі Б (Вороги) vs Потужність Моделі А (Партнери)</strong></p>
+
+        <div class="step-card" style="border-left-color: var(--danger-red); background-color: #fff;">
+            <div class="step-num">Хто такі "Дяді з 7-го кілометра"?</div>
+            <div class="step-title">Реальна сила, яка тримає ринок з 90-х</div>
+            <p style="margin-bottom:0; font-size:12.5px; color: var(--text-dark);">
+                Це не просто орендодавці, а дуже серйозні люди, які пройшли сувору школу з 90-х років. Вони вирішували питання будь-якого рівня: від спалення контейнерів конкурентів до жорстких судових справ, в'язниць, конфіскатів, вивезення контейнерів та блокування цілих митниць. 
+            </p>
+        </div>
+
+        <ul class="purple-list">
+            <li>
+                <strong>Чому Модель Б вбиває BEROO:</strong> За Моделлю Б ми стаємо повноцінним онлайн-майданчиком оренди і гарантом виплат. Ми починаємо забирати у них їхні офлайн-продажі, створюючи пряму шалену конкуренцію власнику 7-го кілометра. Відповідь буде миттєвою — нас множитимуть на нуль силово, юридично або через силовиків.
+            </li>
+            <li>
+                <strong>Рішення за Моделлю А — Позиціонування ПАРТНЕРА:</strong> Ми не конкурент для 7-го кілометра! Ми розгортаємо BEROO як технологічний підсилювач їхніх продажів. Публікуємося в TikTok та виходимо безпосередньо на ринок.
+            </li>
+            <li>
+                <strong>Козирь — Наталя та зв'язки поколінь:</strong> Наталя та її сім'я вже понад 25 років займаються торгівлею. Уся сім'я в цьому бізнесі, сформовані зв'язки передаються в поколіннях. Наталя особисто ходить і домовляється з серйозними крупними оптовиками на 7-му кілометрі, де її знають і поважають.
+            </li>
+            <li>
+                <strong>Механіка масового драйву (Дзеркалення):</strong> Створюється проста й геніальна система. Кожен хлопчик чи дівчинка з телефоном може приїхати на 7-й кілометр, пройтися контейнерами, відбігом "віддзеркалити" товари оптовика в BEROO, взяти готівку за свої послуги прямо на місці, домовитися про зірочки/рейтинг у системі й піти далі.
+            </li>
+        </ul>
+
+        <div class="purple-card">
+            <div style="font-size: 13px; font-weight: 800; color: var(--purple-accent); margin-bottom: 4px;">🚀 Головний стратегічний прорив:</div>
+            <div style="font-size: 12.5px; color: #3b0764;">
+                Завдяки такій системі ми піднімаємо обсяги продажів 7-го кілометра у рази. "Дяді з 7-го" бачать у BEROO свій головний інструмент оцифровки та збагачення. <strong>Ми стаємо їхніми найкращими партнерами, а не ворогами.</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- БЛОК 4: Mobile First Порівняння -->
     <div class="card">
-        <h1><span class="badge-number">3</span> Чому Модель Б — утопія?</h1>
-        <p>Порівняння моделей:</p>
+        <h1><span class="badge-number">4</span> Чому Модель Б — утопія?</h1>
+        <p>Порівняння моделей для мобільного перегляду:</p>
 
         <div class="comp-card">
             <div class="comp-title">Первинна документація</div>
@@ -348,15 +408,15 @@
         </div>
 
         <div class="comp-card">
-            <div class="comp-title">Стійкість до перевірок</div>
+            <div class="comp-title">Взаємини з ринком</div>
             <div class="comp-grid">
                 <div class="comp-box-a">
                     <div class="comp-box-title">Модель А (Тарифи)</div>
-                    <div class="comp-box-text"><strong>100% захист:</strong> IT-сервіс поза зоною уваги фінансового та митного контролю.</div>
+                    <div class="comp-box-text"><strong>ПАРТНЕР 7-ГО КІЛОМЕТРА:</strong> Інструмент оцифровки для оптовиків через зв'язки Наталі.</div>
                 </div>
                 <div class="comp-box-b">
                     <div class="comp-box-title">Модель Б (Відсотки)</div>
-                    <div class="comp-box-text"><strong>Нульова:</strong> Пряме блокування рахунків за ст. 209 (відмивання) та ст. 212 (ухилення від податків).</div>
+                    <div class="comp-box-text"><strong>ВОРОГ 7-ГО КІЛОМЕТРА:</strong> Конкурент за орендні потоки, який підпадає під знищення.</div>
                 </div>
             </div>
         </div>
@@ -367,20 +427,6 @@
                 Ви стаєте прокладкою-калькулятором. Продавці отримують продажі через Monopay, самі розраховуються з блогерами, а BEROO заробляє на передплаті без жодних товарно-фінансових ризиків.
             </div>
         </div>
-    </div>
-
-    <!-- БЛОК 4 -->
-    <div class="card" style="border-color: var(--danger-border);">
-        <h1><span class="badge-number badge-danger">4</span> Прямий конфлікт з 7-м Кілометром</h1>
-
-        <ul class="danger-list">
-            <li>
-                <strong>Загроза від оцифровки офлайн-ринків:</strong> Понад 10–15 років власники Одеського 7-го кілометра та схожих ринків жорстко знищували і множили на нуль будь-які цифрові платформи, що намагалися оцифрувати їхній сірий товаропотік та виступати фінансовими гарантами.
-            </li>
-            <li>
-                <strong>Конкуренція за ринок:</strong> Власники ринків заробляють мільйони на офлайн-оренді. Спроба BEROO за Моделлю Б стати "офіційним гарантом" для сірого (конкурентого 7-ринку) товару ставить проєкт у пряму конкуренцію з цими структурами, що призведе до швидкого силового або юридичного закриття BEROO.
-            </li>
-        </ul>
     </div>
 
     <!-- БЛОК 5 -->
@@ -438,7 +484,7 @@
         <div class="danger-card">
             <div class="danger-title">🛑 Остаточний вердикт:</div>
             <div style="font-size: 12.5px; color: #991b1b;">
-                Запуск Моделі Б — це неперспективна утопія, яка гарантовано призведе BEROO до краху. Єдиний життєздатний шлях для захоплення ринку прямо зараз — це <strong>Модель А (Тарифна SaaS-система)</strong>.
+                Запуск Моделі Б — це неперспективна утопія, яка гарантовано призведе BEROO до краху. Єдиний життєздатний шлях для захоплення ринку прямо зараз — це <strong>Модель А (Тарифна SaaS-система)</strong> у партнерстві з оптовиками 7-го кілометра.
             </div>
         </div>
     </div>
