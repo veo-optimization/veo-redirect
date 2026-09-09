@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аналіз моделей BEROO: Модель А vs Модель Б</title>
+    <style>
+        :root {
+            --primary-blue: #1d4ed8;
+            --light-blue: #eff6ff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+            --bg-light: #f8fafc;
+            --card-bg: #ffffff;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.5;
+            padding: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border: 1px solid var(--border-color);
+        }
+
+        .badge-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background-color: var(--light-blue);
+            color: var(--primary-blue);
+            font-weight: 700;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        h1 {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+        }
+
+        p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        ul {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        li {
+            font-size: 14px;
+            margin-bottom: 12px;
+            padding-left: 20px;
+            position: relative;
+            color: var(--text-muted);
+        }
+
+        li::before {
+            content: "•";
+            color: var(--primary-blue);
+            font-weight: bold;
+            font-size: 18px;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+
+        li strong {
+            color: var(--text-dark);
+        }
+
+        .stat-box {
+            background-color: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary-blue);
+        }
+
+        .stat-desc {
+            font-size: 13px;
+            color: var(--text-dark);
+            margin-top: 4px;
+            font-weight: 600;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin-bottom: 16px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            font-size: 13px;
+        }
+
+        th {
+            background-color: #f8fafc;
+            padding: 12px 8px;
+            font-weight: 700;
+            color: var(--text-dark);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 12px 8px;
+            border-bottom: 1px solid var(--border-color);
+            vertical-align: top;
+            color: var(--text-muted);
+        }
+
+        td strong {
+            color: var(--text-dark);
+        }
+
+        .highlight-card {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+
+        .highlight-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary-blue);
+            margin-bottom: 6px;
+        }
+
+        .highlight-text {
+            font-size: 13px;
+            color: #1e40af;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1><span class="badge-number">1</span> Стратегічний вибір BEROO</h1>
+        <p>Аналіз моделей запуску платформи для оперативного захоплення ринку в умовах обмежених ресурсів (1 бухгалтер, без штату юристів, ФОП 3-ї групи).</p>
+
+        <div class="stat-box">
+            <div class="stat-label">Оптимальний вибір</div>
+            <div class="stat-value">МОДЕЛЬ А (Тарифна)</div>
+            <div class="stat-desc">Продаж тарифів з лімітами + SaaS-функціонал</div>
+        </div>
+
+        <div class="stat-box" style="border-color: #fed7aa; background-color: #fff7ed;">
+            <div class="stat-label" style="color: #c2410c;">Не рекомендовано на старті</div>
+            <div class="stat-value" style="color: #ea580c;">МОДЕЛЬ Б (Відсоткова)</div>
+            <div class="stat-desc" style="color: #9a3412;">Комісії з продажів + гарант виплат + акти</div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h1><span class="badge-number">2</span> Порівняння моделей BEROO</h1>
+        <p>Порівняльний аналіз операційного та юридичного навантаження:</p>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Критерій</th>
+                        <th>Модель А (Тарифи)</th>
+                        <th>Модель Б (Відсотки)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Операційне навантаження</strong></td>
+                        <td><strong>Мінімальне:</strong> 1 чек/акт на місяць за тарифний план.</td>
+                        <td><strong>Пекельне:</strong> Сотні актів щомісяця по кожному продавцю.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Юридичні ризики</strong></td>
+                        <td><strong>Нульові:</strong> Звичайний публічний договор оферти на софт.</td>
+                        <td><strong>Критичні:</strong> Відповідальність за транзит коштів та гарантії.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Виплати блогерам</strong></td>
+                        <td><strong>Прямі:</strong> Продавець розраховується товаром чи грошима.</td>
+                        <td><strong>Складні:</strong> Податковий агент для тисяч фізосіб (ПДФО+ВЗ).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Захоплення ринку</strong></td>
+                        <td><strong>Швидке:</strong> Легкий старт для продавців та блогерів.</td>
+                        <td><strong>Повільне:</strong> Бухгалтер утопне в паперах на 30-му продавцю.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <h1><span class="badge-number">3</span> Чому Модель А забезпечить ріст</h1>
+        
+        <ul>
+            <li>
+                <strong>Бартерний UGC-контент:</strong> Понад 80% контенту в TikTok робиться за Free Samples (безкоштовні зразки). Модель А дозволяє працювати за бартер без податків та бюрократії.
+            </li>
+            <li>
+                <strong>Масштабованість для 1 бухгалтера:</strong> Фіксована підписка дозволяє легко обслуговувати тисячі продавців без додаткового адмін-персоналу.
+            </li>
+            <li>
+                <strong>Фокус на розробці:</strong> Ресурс витрачається на покращення IT-продукту та маркетингу, а не на юридичні процедури.
+            </li>
+        </ul>
+
+        <div class="highlight-card">
+            <div class="highlight-title">🚀 Стратегія захоплення ринку:</div>
+            <div class="highlight-text">
+                Зараз запускати <strong>Модель А</strong> (пакети Basic / Pro з лімітами на дзеркала та обробку замовлень). Після виходу на масштаб — впровадити <strong>Модель Б</strong> як ексклюзивний Enterprise-сервіс для великих брендів.
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
