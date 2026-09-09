@@ -2,14 +2,14 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Аналіз моделей BEROO: Модель А vs Модель Б</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Стратегічний аналіз BEROO: Модель А vs Модель Б</title>
     <style>
         :root {
             --primary-blue: #1d4ed8;
             --light-blue: #eff6ff;
-            --text-dark: #1e293b;
-            --text-muted: #64748b;
+            --text-dark: #0f172a;
+            --text-muted: #475569;
             --bg-light: #f8fafc;
             --card-bg: #ffffff;
             --border-color: #e2e8f0;
@@ -19,6 +19,8 @@
             --warning-amber: #d97706;
             --warning-bg: #fffbeb;
             --warning-border: #fef3c7;
+            --success-green: #16a34a;
+            --success-bg: #f0fdf4;
         }
 
         * {
@@ -26,38 +28,47 @@
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        body {
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
             background-color: var(--bg-light);
             color: var(--text-dark);
             line-height: 1.5;
-            padding: 16px;
-            max-width: 600px;
+            font-size: 14px;
+        }
+
+        body {
+            padding: 12px;
+            max-width: 500px;
             margin: 0 auto;
         }
 
         .card {
             background-color: var(--card-bg);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
             border: 1px solid var(--border-color);
+            width: 100%;
         }
 
         .badge-number {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 28px;
-            height: 28px;
+            width: 26px;
+            height: 26px;
             background-color: var(--light-blue);
             color: var(--primary-blue);
-            font-weight: 700;
+            font-weight: 800;
             border-radius: 8px;
-            font-size: 14px;
+            font-size: 13px;
             margin-right: 8px;
+            flex-shrink: 0;
         }
 
         .badge-danger {
@@ -71,38 +82,40 @@
         }
 
         h1 {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
             margin-bottom: 12px;
-            color: #0f172a;
+            color: var(--text-dark);
             display: flex;
             align-items: center;
+            line-height: 1.3;
         }
 
         p {
-            font-size: 14px;
+            font-size: 13.5px;
             color: var(--text-muted);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
         }
 
         ul {
             list-style: none;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
         }
 
         li {
-            font-size: 14px;
-            margin-bottom: 12px;
-            padding-left: 20px;
+            font-size: 13px;
+            margin-bottom: 10px;
+            padding-left: 18px;
             position: relative;
             color: var(--text-muted);
+            line-height: 1.4;
         }
 
         li::before {
             content: "•";
             color: var(--primary-blue);
             font-weight: bold;
-            font-size: 18px;
+            font-size: 16px;
             position: absolute;
             left: 0;
             top: -2px;
@@ -112,115 +125,134 @@
             color: var(--danger-red);
         }
 
-        .warning-list li::before {
-            color: var(--warning-amber);
-        }
-
         li strong {
             color: var(--text-dark);
         }
 
         .stat-box {
-            background-color: #f8fafc;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 12px;
         }
 
         .stat-label {
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 10px;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: var(--text-muted);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .stat-value {
-            font-size: 20px;
+            font-size: 16px;
             font-weight: 800;
-            color: var(--primary-blue);
+            margin-bottom: 2px;
         }
 
         .stat-desc {
-            font-size: 13px;
-            color: var(--text-dark);
-            margin-top: 4px;
+            font-size: 12px;
             font-weight: 600;
+            line-height: 1.3;
         }
 
-        .table-container {
-            overflow-x: auto;
-            margin-bottom: 16px;
+        /* Mobile Card Comparison (Replaces Table) */
+        .comp-card {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 12px;
+            background-color: #fff;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
+        .comp-title {
+            font-weight: 800;
             font-size: 13px;
-        }
-
-        th {
-            background-color: #f8fafc;
-            padding: 12px 8px;
-            font-weight: 700;
             color: var(--text-dark);
             border-bottom: 1px solid var(--border-color);
+            padding-bottom: 6px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
         }
 
-        td {
-            padding: 12px 8px;
-            border-bottom: 1px solid var(--border-color);
-            vertical-align: top;
-            color: var(--text-muted);
+        .comp-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 8px;
         }
 
-        td strong {
+        .comp-box-a {
+            background-color: var(--success-bg);
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .comp-box-b {
+            background-color: var(--danger-bg);
+            border: 1px solid var(--danger-border);
+            border-radius: 8px;
+            padding: 10px;
+        }
+
+        .comp-box-title {
+            font-size: 11px;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .comp-box-a .comp-box-title { color: var(--success-green); }
+        .comp-box-b .comp-box-title { color: var(--danger-red); }
+
+        .comp-box-text {
+            font-size: 12.5px;
             color: var(--text-dark);
+            line-height: 1.35;
         }
 
         .highlight-card {
-            background-color: #eff6ff;
+            background-color: var(--light-blue);
             border: 1px solid #bfdbfe;
-            border-radius: 12px;
-            padding: 16px;
-            margin-top: 16px;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 12px;
         }
 
         .highlight-title {
-            font-size: 14px;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 800;
             color: var(--primary-blue);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .highlight-text {
-            font-size: 13px;
+            font-size: 12.5px;
             color: #1e40af;
+            line-height: 1.35;
         }
 
         .danger-card {
             background-color: var(--danger-bg);
             border: 1px solid var(--danger-border);
-            border-radius: 12px;
-            padding: 16px;
-            margin-top: 16px;
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 12px;
         }
 
         .danger-title {
-            font-size: 14px;
-            font-weight: 700;
+            font-size: 13px;
+            font-weight: 800;
             color: var(--danger-red);
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .step-card {
             background-color: #ffffff;
-            border-left: 4px solid var(--danger-red);
-            padding: 12px 16px;
-            margin-bottom: 12px;
+            border-left: 3.5px solid var(--danger-red);
+            padding: 10px 12px;
+            margin-bottom: 10px;
             border-top: 1px solid var(--border-color);
             border-right: 1px solid var(--border-color);
             border-bottom: 1px solid var(--border-color);
@@ -228,149 +260,185 @@
         }
 
         .step-num {
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 800;
             color: var(--danger-red);
             text-transform: uppercase;
         }
 
         .step-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             color: var(--text-dark);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
     </style>
 </head>
 <body>
 
+    <!-- БЛОК 1 -->
     <div class="card">
         <h1><span class="badge-number">1</span> Стратегічний вибір BEROO</h1>
-        <p>Аналіз моделей запуску платформи для оперативного захоплення ринку в умовах обмежених ресурсів (1 бухгалтер, без штату юристів, ФОП 3-ї групи).</p>
+        <p>Порівняння моделей запуску платформи для оперативного захоплення ринку в умовах обмежених ресурсів (1 бухгалтер, ФОП 3-ї групи, без юридичного штату).</p>
 
-        <div class="stat-box">
-            <div class="stat-label">Оптимальний вибір</div>
-            <div class="stat-value">МОДЕЛЬ А (Тарифна)</div>
-            <div class="stat-desc">SaaS-інструмент (калькулятор/ліміти) без транзиту коштів</div>
+        <div class="stat-box" style="background-color: var(--success-bg); border-color: #bbf7d0;">
+            <div class="stat-label" style="color: var(--success-green);">✅ Единственний реалістичний шлях</div>
+            <div class="stat-value" style="color: var(--success-green);">МОДЕЛЬ А (Тарифна)</div>
+            <div class="stat-desc" style="color: #14532d;">SaaS-інструмент (передплата за софт, калькулятор та ліміти). Без транзиту грошей.</div>
         </div>
 
-        <div class="stat-box" style="border-color: #fed7aa; background-color: #fff7ed;">
-            <div class="stat-label" style="color: #c2410c;">Смертельна загроза на старті</div>
-            <div class="stat-value" style="color: #ea580c;">МОДЕЛЬ Б (Відсоткова)</div>
-            <div class="stat-desc" style="color: #9a3412;">Гарант виплат, транзит комісій та податкове агентування</div>
+        <div class="stat-box" style="background-color: var(--danger-bg); border-color: var(--danger-border);">
+            <div class="stat-label" style="color: var(--danger-red);">❌ Утопічний та смертельний шлях</div>
+            <div class="stat-value" style="color: var(--danger-red);">МОДЕЛЬ Б (Відсоткова)</div>
+            <div class="stat-desc" style="color: #7f1d1d;">Агентська комісія, гарантія виплат блогерам, транзит коштів та податковий агент.</div>
         </div>
     </div>
 
+    <!-- БЛОК 2 -->
     <div class="card">
         <h1><span class="badge-number">2</span> Реалії ринку та точки входу</h1>
         
         <ul>
             <li>
-                <strong>Реальний портрет продавця в TikTok:</strong> Масовий сегмент — це дрібні торговці без великого бізнес-досвіду, які приймають оплату на IBAN. У них <u>відсутні первинні документи</u> на товар (походження, накладні, імпортні декларації).
+                <strong>Портрет TikTok-продавця:</strong> Дрібні торговці, які працюють через IBAN. У них <u>абсолютно відсутні первинні документи</u> на товар (немає видаткових накладних, імпортних декларацій чи сертифікатів).
             </li>
             <li>
-                <strong>Специфіка асортименту:</strong> Величезна частка масового попиту в TikTok тримається на копіях брендів, репліках та сірому імпорті за низькою ціною. Саме ці товари дають найбільшу вірусність і швидкі обсяги продажів.
+                <strong>Специфіка товаропотоку:</strong> Основна масовість та вірусні перегляди в TikTok будуються на репліках брендів, копіях, секонд-хенді та контрабандній продукції за низькими цінами.
             </li>
             <li>
-                <strong>Аудиторія афіліатів (без ФОП):</strong> 80% контенту створюють звичайні люди за бартер (безкоштовні зразки). Для них вимога реєстрації або офіційних виплат є бар'єром, що вбиває вірусний ефект.
+                <strong>Вхід через Monopay:</strong> Продавці реєструють еквайринг Monopay (який пропускає ці товари, на відміну від WayForPay). Вони прагнуть отримувати виручку напряму на свій IBAN.
+            </li>
+            <li>
+                <strong>Аудиторія афіліатів:</strong> Блогери вимагають гарантій виплат відсотків, але не готові підписувати офіційні договори чи відкривати ФОП.
             </li>
         </ul>
     </div>
 
+    <!-- БЛОК 3: Mobile First Порівняння -->
     <div class="card">
-        <h1><span class="badge-number">3</span> Порівняння моделей BEROO</h1>
+        <h1><span class="badge-number">3</span> Чому Модель Б — утопія?</h1>
+        <p>Порівняння моделей для мобільного перегляду:</p>
 
-        <div class="table-container">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Критерій</th>
-                        <th>Модель А (Тарифи)</th>
-                        <th>Модель Б (Відсотки)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Первинна документація</strong></td>
-                        <td><strong>Не потрібна BEROO.</strong> Ви надаєте софт. Продавець і блогер розраховуються самі (бартер/перекази).</td>
-                        <td><strong>Критично необхідна.</strong> Фінансовий моніторинг вимагатиме документи на походження кожної копії чи репліки.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Адміністрування</strong></td>
-                        <td><strong>Легке:</strong> 1 чек/акт на місяць від BEROO за користування тарифним планом.</td>
-                        <td><strong>Неможливе:</strong> Податковий агент для тисяч фізосіб, тисячі актів, звітність по комісіях.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Стійкість до конкурентів</strong></td>
-                        <td><strong>Максимальна:</strong> IT-сервіс поза зоною уваги фінансового та товарного контролю.</td>
-                        <td><strong>Нульова:</strong> Пряма мішень для закриття, блокування рахунків та досудових претензій.</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="comp-card">
+            <div class="comp-title">Первинна документація</div>
+            <div class="comp-grid">
+                <div class="comp-box-a">
+                    <div class="comp-box-title">Модель А (Тарифи)</div>
+                    <div class="comp-box-text"><strong>Не потрібна BEROO.</strong> Ви продаєте лише софт. Відсутність "первинки" у продавця — це його особистий ризик.</div>
+                </div>
+                <div class="comp-box-b">
+                    <div class="comp-box-title">Модель Б (Відсотки)</div>
+                    <div class="comp-box-text"><strong>Критична вимога.</strong> Ви виступаєте агентом і гарантом. Податкова вимагатиме документи на кожен товар.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="comp-card">
+            <div class="comp-title">Податкова звітність</div>
+            <div class="comp-grid">
+                <div class="comp-box-a">
+                    <div class="comp-box-title">Модель А (Тарифи)</div>
+                    <div class="comp-box-text"><strong>1 чек/акт на місяць</strong> за підписку. Жодного податкового агентування чи виплат фізособам.</div>
+                </div>
+                <div class="comp-box-b">
+                    <div class="comp-box-title">Модель Б (Відсотки)</div>
+                    <div class="comp-box-text"><strong>Пекло адміністрування:</strong> Обов'язок утримувати ПДФО/ВЗ з тисяч блогерів-фізосіб. 1 бухгалтер не впорається.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="comp-card">
+            <div class="comp-title">Стійкість до перевірок</div>
+            <div class="comp-grid">
+                <div class="comp-box-a">
+                    <div class="comp-box-title">Модель А (Тарифи)</div>
+                    <div class="comp-box-text"><strong>100% захист:</strong> IT-сервіс поза зоною уваги фінансового та митного контролю.</div>
+                </div>
+                <div class="comp-box-b">
+                    <div class="comp-box-title">Модель Б (Відсотки)</div>
+                    <div class="comp-box-text"><strong>Нульова:</strong> Пряме блокування рахунків за ст. 209 (відмивання) та ст. 212 (ухилення від податків).</div>
+                </div>
+            </div>
         </div>
 
         <div class="highlight-card">
-            <div class="highlight-title">🚀 Чому виграє Модель А:</div>
+            <div class="highlight-title">💡 Висновок щодо Моделі А:</div>
             <div class="highlight-text">
-                Ви стаєте незалежною технологічною прокладкою-калькулятором. Продавці з IBAN без первинних документів отримують масові продажі, а BEROO заробляє на підписці з лімітами, не несучи жодних товарно-фінансових ризиків.
+                Ви стаєте прокладкою-калькулятором. Продавці отримують продажі через Monopay, самі розраховуються з блогерами, а BEROO заробляє на передплаті без жодних товарно-фінансових ризиків.
             </div>
         </div>
     </div>
 
-    <div class="card" style="border-color: #fecaca;">
-        <h1><span class="badge-number badge-danger">4</span> Критичні мінуси та ризики Моделі Б</h1>
+    <!-- БЛОК 4 -->
+    <div class="card" style="border-color: var(--danger-border);">
+        <h1><span class="badge-number badge-danger">4</span> Прямий конфлікт з 7-м Кілометром</h1>
 
         <ul class="danger-list">
             <li>
-                <strong>Відсутність первинних документів у продавців:</strong> Якщо BEROO стає гарантом виплат та проводитиме гроші через себе, фінмоніторинг і податкова вимагатимуть документи на товар. Оскільки у TikTok-продавців реплік їх немає, BEROO виявляється юридично винною стороною.
+                <strong>Загроза від оцифровки офлайн-ринків:</strong> Понад 10–15 років власники Одеського 7-го кілометра та схожих ринків жорстко знищували і множили на нуль будь-які цифрові платформи, що намагалися оцифрувати їхній сірий товаропотік та виступати фінансовими гарантами.
             </li>
             <li>
-                <strong>Загроза з боку оцифровки 7-го кілометра:</strong> За останні 10–15 років понад десяток компаній намагалися оцифрувати Одеса 7-й кілометр. Власники офлайн-ринків жорстко знищували цифрові прокладки, що намагалися гарантувати виплати та легалізувати сірий товар. Модель Б ставить BEROO під прямий удар цих конкурентів.
-            </li>
-            <li>
-                <strong>Втрата "Вау-ефекту":</strong> Збір даних фізосіб та адміністрування виплат знищує простоту входу та масовість у TikTok.
+                <strong>Конкуренція за ринок:</strong> Власники ринків заробляють мільйони на офлайн-оренді. Спроба BEROO за Моделлю Б стати "офіційним гарантом" для сірого товару ставить проєкт у пряму конкуренцію з цими структурами, що призведе до швидкого силового або юридичного закриття BEROO.
             </li>
         </ul>
     </div>
 
-    <div class="card" style="border-color: #fecaca; background-color: #fff5f5;">
-        <h1><span class="badge-number badge-danger">5</span> Приклад кейсу: Правовий ланцюжок атаки органів (Модель Б)</h1>
-        <p>Сценарій того, як прокурор, БЕБ або ДПС виводять BEROO в нуль при використанні Моделі Б:</p>
+    <!-- БЛОК 5 -->
+    <div class="card" style="border-color: var(--danger-border); background-color: #fff5f5;">
+        <h1><span class="badge-number badge-danger">5</span> Правова атака органів: Кейс Моделі Б</h1>
+        <p>Ланцюжок дій силовиків (БЕБ, ДПС, прокуратура) проти BEROO при відсотковому агентстві:</p>
 
         <div class="step-card">
-            <div class="step-num">Крок 1 • Точка входу та еквайринг</div>
-            <div class="step-title">Продавець підключає Monopay на ФОП</div>
-            <p style="margin-bottom:0; font-size:13px;">ФОП торгує репліками/секондом без первинних документів. Оплата йде через Monopay, BEROO утримує комісію як маркетплейс, дзеркалює товари і гарантує виплату % блогеру (фізособі).</p>
+            <div class="step-num">Крок 1 • Еквайринг продавця</div>
+            <div class="step-title">Продавець підключає Monopay</div>
+            <p style="margin-bottom:0; font-size:12px;">ФОП продає репліки без "первинки". BEROO бере агентський % та нараховує через "систему-дзеркало" комісію блогеру, виступаючи гарантом виплат.</p>
         </div>
 
         <div class="step-card">
-            <div class="step-num">Крок 2 • Сигнал фінмоніторингу</div>
-            <div class="step-title">Анализ Закону № 361-IX (Фінмоніторинг)</div>
-            <p style="margin-bottom:0; font-size:13px;">Банк бачить регулярні виплати з рахунку BEROO на сотні карт фізосіб. Виникає підозра в легалізації доходів (ст. 209 ККУ) та неутриманні податків. Рахунки BEROO блокуються.</p>
+            <div class="step-num">Крок 2 • Фінмоніторинг</div>
+            <div class="step-title">Закон № 361-IX (Легалізація коштів)</div>
+            <p style="margin-bottom:0; font-size:12px;">Банк бачить транзит коштів від BEROO на сотні особистих карток фізосіб (блогерів). Рахунки BEROO блокуються за підозрою у сумнівних операціях.</p>
         </div>
 
         <div class="step-card">
-            <div class="step-num">Крок 3 • Податкова перевірка ДПС</div>
-            <div class="step-title">Стаття 44.1 ПКУ (Первинні документи)</div>
-            <p style="margin-bottom:0; font-size:13px;">ДПС вимагає від BEROO підтвердити законність агентованого товару та комісій (видаткові накладні, митні декларації). Оскільки продавець їх не має, у BEROO виникає неприйняття витрат та донарахування податків.</p>
+            <div class="step-num">Крок 3 • Запит документів</div>
+            <div class="step-title">Ст. 44.1 ПКУ (Первинний облік)</div>
+            <p style="margin-bottom:0; font-size:12px;">ДПС вимагає від BEROO первинні документи на товар (накладні, ВМД). Оскільки у продавців контрабанди їх немає, BEROO звинувачують у фіктивних операціях.</p>
         </div>
 
         <div class="step-card">
-            <div class="step-num">Крок 4 • Статуси та порушення</div>
-            <div class="step-title">Податковий агент та ст. 212 ККУ</div>
-            <p style="margin-bottom:0; font-size:13px;">BEROO звинувачують у неутриманні 18% ПДФО та 1.5% (або 5%) ВЗ за виплати фізособам (ст. 168 ПКУ), а також у сприянні реалізації контрафактної/необлікованої продукції (ст. 229 ККУ).</p>
+            <div class="step-num">Крок 4 • Податкові статті</div>
+            <div class="step-title">Ст. 168, 212, 229 ККУ</div>
+            <p style="margin-bottom:0; font-size:12px;">ДПС шиє BEROO ухилення від сплати податків (неутримання 18% ПДФО та ВЗ з блогерів) та сприяння розповсюдженню контрафакту.</p>
         </div>
 
         <div class="step-card" style="border-left-color: #991b1b;">
-            <div class="step-num" style="color: #991b1b;">Фінал • Блокування бізнесу</div>
-            <div class="step-title">Арешт рахунків, ухвала суду та закриття</div>
-            <p style="margin-bottom:0; font-size:13px;">Ухвала слідчого судді на арешт рахунків BEROO (ст. 170 КПКУ). Залучення правовласників брендів та конкурентів. Проєкт зупиняється на етапі досудового розслідування.</p>
+            <div class="step-num" style="color: #991b1b;">Фінал • Знищення бізнесу</div>
+            <div class="step-title">Арешт рахунків (ст. 170 КПКУ)</div>
+            <p style="margin-bottom:0; font-size:12px;">Слідчий суддя накладає арешт на рахунки. Проєкт повністю зупиняється та закривається.</p>
         </div>
+    </div>
+
+    <!-- БЛОК 6 -->
+    <div class="card" style="border-color: var(--warning-border); background-color: var(--warning-bg);">
+        <h1><span class="badge-number badge-warning">6</span> Реформа ПДВ для ФОП та вимирання ринку</h1>
+
+        <ul class="warning-list">
+            <li>
+                <strong>Впровадження ПДВ для спрощенців:</strong> Вимоги МВФ передбачають запуск спрощеного ПДВ для ФОП. Це означає <u>обов'язкову наявність первинних документів</u> для підтвердження витрат і податкового кредиту.
+            </li>
+            <li>
+                <strong>Масовий ухід продавців:</strong> Торговці копіями та репліками не зможуть працювати в нових умовах ПДВ і додаткових відсоткових навантажень BEROO. Вони втрачатимуть акаунти, охоплення й просто підуть з ринку.
+            </li>
+            <li>
+                <strong>Втрата часу та аудиторії:</strong> Намагаючись побудувати Модель Б для ринку, який прямо зараз затискається регуляторами, BEROO втратить дорогоцінні місяці розробки. Ви втратите і продавців, і кінцевого споживача, на якому BEROO має заробляти надалі.
+            </li>
+        </ul>
 
         <div class="danger-card">
-            <div class="danger-title">🛡️ Чому Модель А повністю захищає від цього сценарію:</div>
-            <div style="font-size: 13px; color: #991b1b;">
-                За <strong>Моделі А</strong> BEROO не проводить кошти за товари та не виплачує гроші блогерам. Ви — SaaS-платформа. Продавець продає через свій Monopay, сам розраховується з блогером (товаром чи грошима), а вам сплачує лише за користування софтом за звичайною офертою. Всі перевірки йдуть повз вас напряму до продавця.
+            <div class="danger-title">🛑 Остаточний вердикт:</div>
+            <div style="font-size: 12.5px; color: #991b1b;">
+                Запуск Моделі Б — це неперспективна утопія, яка гарантовано призведе BEROO до краху. Єдиний життєздатний шлях для захоплення ринку прямо зараз — це <strong>Модель А (Тарифна SaaS-система)</strong>.
             </div>
         </div>
     </div>
