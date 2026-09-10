@@ -709,7 +709,6 @@ const DATA = {
 
   /* ============ КОМІСІЙНІ / ВИПЛАТИ ============ */
 
-  /* Розширені дані виплат, які я маю виплатити (я — продавець) */
   iPay: [
     { id:'#CM-501', blogger:'Марина Костенко', bloggerId:'bl-1', date:'28.06.2026', stars:1537, sum:1537, status:'pending', isFop:true,
       iban:'UA12 3052 9900 0000 0000 0000 001', act:'Є', confirm:'Очікує продавця', method:'IBAN переказ' },
@@ -725,7 +724,6 @@ const DATA = {
       iban:'UA67 3052 9900 0000 0000 0000 002', act:'Є', confirm:'Обидві сторони', method:'IBAN переказ' }
   ],
 
-  /* Розширені виплати, які я маю отримати (я — блогер) */
   iGetPaid: [
     { id:'#FX-201', store:'Shafa Trend', logo:'ST', color:'#FF2D55', stars:2315, sum:2315, label:'жіночий одяг', status:'unfixed', date:'02.07.2026' },
     { id:'#FX-202', store:'Uzory.ua', logo:'UZ', color:'#6D28D9', stars:1840, sum:1840, label:'вишиванки та етно', status:'unfixed', date:'30.06.2026' },
@@ -734,7 +732,6 @@ const DATA = {
     { id:'#FX-205', store:'Kvit Store', logo:'KS', color:'#EC4899', stars:1420, sum:1420, label:'взуття', status:'unfixed', date:'22.06.2026' }
   ],
 
-  /* Журнал фіксацій (для блогера) — розширені дані */
   myFixations: [
     { id:'#FX-101', store:'Linen&Co', stars:900,  sum:900,  date:'15.06.2026', status:'confirmed',
       iban:'UA67 3052 9900 0000 0000 0000 002', act:'Є', method:'IBAN переказ', confirm:'Обидві сторони', orderId:'#ORD-8841' },
@@ -752,9 +749,6 @@ const DATA = {
       iban:'UA67 3052 9900 0000 0000 0000 002', act:'Є', method:'IBAN переказ', confirm:'Обидві сторони', orderId:'#ORD-8270' }
   ],
 
-  /* ============ ЗАПИТИ — дві категорії ============ */
-
-  /* Запити ВІД блогерів (бачить магазин) */
   requestsFromBloggers:[
     { id:'#REQ-B01', name:'Марина Костенко', handle:'@marina.style', city:'Київ', avatarBg:'#FF2D55',
       isFop:true, mirrors:41, experience:'2 роки 4 міс', stars:4820, returnPct:7,
@@ -783,7 +777,6 @@ const DATA = {
       date:'18.06.2026', status:'pending' }
   ],
 
-  /* Запити ВІД магазинів (бачить блогер) */
   requestsFromStores:[
     { id:'#REQ-S01', name:'Shafa Trend', logo:'ST', color:'#FF2D55', city:'Київ',
       rating:4.8, returnPct:7, commissionRange:'10–14%', delivery:['Нова Пошта','Укрпошта'],
@@ -842,8 +835,8 @@ let currentRole = 'blogger';
 let currentView = 'showcase';
 let currentParent = 'dz';
 let profileTab = 'personal';
-let payoutsTab = '';      /* визначається динамічно: 'i-pay' | 'i-get-paid' */
-let requestsTab = '';     /* визначається динамічно: 'from-bloggers' | 'from-stores' */
+let payoutsTab = '';
+let requestsTab = '';
 let activeFilter = 'top-3d';
 let ordersFilterBlogger = 'all';
 let viewHistory = [];
@@ -887,7 +880,6 @@ function riskBar(pct){
   </div>`;
 }
 
-/* ФОП-статус */
 function canUseFixation(){
   return DATA.blogger.isFop && DATA.blogger.fopUploaded && DATA.blogger.fopPhotoUploaded;
 }
@@ -1363,11 +1355,9 @@ function getRequestsTabs(){
   const isSeller = DATA.user.hasStore;
   const isBloggerRole = currentRole === 'blogger' || DATA.user.hasBloggerAccount;
 
-  /* Для продавця — запити від блогерів */
   if (isSeller){
     tabs.push({ key:'from-bloggers', label:'Запити від блогерів' });
   }
-  /* Для блогера — запити від магазинів */
   if (isBloggerRole){
     tabs.push({ key:'from-stores', label:'Запити від магазинів' });
   }
@@ -1377,12 +1367,10 @@ function getRequestsTabs(){
 function renderRequests(){
   const tabs = getRequestsTabs();
 
-  /* Дефолтна вкладка залежно від ролі */
   if (!tabs.find(t=>t.key===requestsTab)){
     if (currentRole === 'seller') requestsTab = 'from-bloggers';
     else requestsTab = 'from-stores';
   }
-  /* Якщо такої вкладки немає — беремо першу */
   if (!tabs.find(t=>t.key===requestsTab)){
     requestsTab = tabs[0]?.key;
   }
@@ -1405,7 +1393,6 @@ function renderRequests(){
 }
 function setRequestsTab(t){ requestsTab = t; renderRequests(); }
 
-/* ---------- Запити ВІД блогерів (бачить магазин) ---------- */
 function renderRequestsFromBloggers(){
   const statusMap = {
     active: `<span class="badge badge-green">● Активний</span>`,
@@ -1480,7 +1467,6 @@ function renderRequestsFromBloggers(){
   `;
 }
 
-/* ---------- Запити ВІД магазинів (бачить блогер) ---------- */
 function renderRequestsFromStores(){
   const statusMap = {
     active: `<span class="badge badge-green">● Активний</span>`,
@@ -1748,14 +1734,7 @@ function getAvailableTabs(){
     tabs.push({ key:'i-pay', label:'Я виплачую', enabled:true, empty:!DATA.store.hasMirrors });
   }
   if (isBloggerRole){
-    const fixationOk = canUseFixation();
-    tabs.push({
-      key:'i-get-paid',
-      label:'Мені виплачують',
-      enabled:fixationOk,
-      empty:false,
-      locked:!fixationOk
-    });
+    tabs.push({ key:'i-get-paid', label:'Мені виплачують', enabled:true, empty:false });
   }
   return tabs;
 }
@@ -1775,21 +1754,13 @@ function renderPayouts(){
 
   const tabsHtml = `
     <div class="tabs">
-      ${tabs.map(t => {
-        const isActive = payoutsTab === t.key;
-        if (!t.enabled && t.locked){
-          return `<button class="tab disabled ${isActive?'active':''}" onclick="showFixationLockedModal()">${t.label}</button>`;
-        }
-        return `<button class="tab ${isActive?'active':''}" onclick="setPayoutsTab('${t.key}')">${t.label}${t.empty?' (порожньо)':''}</button>`;
-      }).join('')}
+      ${tabs.map(t => `<button class="tab ${payoutsTab===t.key?'active':''}" onclick="setPayoutsTab('${t.key}')">${t.label}</button>`).join('')}
     </div>
   `;
 
   let body = '';
-  const activeTab = tabs.find(t=>t.key===payoutsTab);
-  if (activeTab && !activeTab.enabled && activeTab.locked){
-    body = renderFixationLockedBanner();
-  } else if (payoutsTab === 'i-pay'){
+  if (payoutsTab === 'i-pay'){
+    const activeTab = tabs.find(t=>t.key==='i-pay');
     body = renderIPayTab(activeTab && activeTab.empty);
   } else if (payoutsTab === 'i-get-paid'){
     body = renderIGetPaidTab();
@@ -1856,17 +1827,6 @@ function showFixationLockedModal(){
       </div>
     `);
   }
-}
-
-function renderFixationLockedBanner(){
-  const isFop = DATA.blogger.isFop;
-  const reason = !isFop ? 'Ви не ФОП' : 'Дані ФОП неповні';
-  return `
-    <div class="disclaimer" style="background:var(--red-50);border-color:#FFD9E1;color:#8A1B30;">
-      <b>Вкладка «Мені виплачують» заблокована.</b> ${reason}.
-      <a onclick="setProfileTab('blogger');selectView('profile','profile')" style="color:var(--red);font-weight:700;cursor:pointer;text-decoration:underline;">Перейти в профіль блогера →</a>
-    </div>
-  `;
 }
 
 /* ---------- Вкладка «Я виплачую» (продавець) ---------- */
@@ -1946,7 +1906,7 @@ function renderIPayTab(empty){
 
     <div class="card" style="padding:14px 16px;background:var(--bg);border-color:var(--line);margin-bottom:16px;">
       <div style="font-size:12.5px;color:var(--ink-700);line-height:1.6;">
-        <b>Як це працює.</b> Кожна продана одиниця товару через віддзеркалення блогера автоматично створює нарахування за узгодженим відсотком. Ви бачите список і виплачуєте напряму блогеру. Платформа лише фіксує суму та статус.
+        <b>Як це працює.</b> Кожна продана одиниця товару через віддзеркалення блогера автоматично створює нарахування за узгодженим відсотком. Комісія <b>однакова для всіх блогерів</b> — статус ФОП не впливає на її розмір. Функціонал взаєморозрахунків, фіксації виплат і договорів доступний <b>тільки для блогерів з активним ФОП</b>. Платформа виступає <b>виключно місцем для калькуляції, рейтингів і фіксації</b> — усі розрахунки та договірні відносини є відповідальністю сторін.
       </div>
     </div>
 
@@ -1962,17 +1922,27 @@ function renderIGetPaidTab(){
   const totalStars = DATA.iGetPaid.reduce((s,e)=>s+e.stars,0);
   const totalSum = DATA.iGetPaid.reduce((s,e)=>s+e.sum,0);
 
+  /* Банер із поясненням — але баланс і список магазинів завжди видимі нижче */
   let lockBanner = '';
   if (!isFop){
     lockBanner = `
-      <div class="disclaimer" style="background:var(--red-50);border-color:#FFD9E1;color:#8A1B30;">
-        <b>Фіксація недоступна — ви не ФОП.</b> Додайте дані ФОП у <a onclick="setProfileTab('blogger');selectView('profile','profile')" style="color:var(--red);font-weight:700;cursor:pointer;text-decoration:underline;">профілі блогера</a>, щоб отримати можливість фіксувати виплати.
+      <div class="card" style="padding:20px;background:var(--red-50);border-color:#FFD9E1;margin-bottom:16px;">
+        <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;">
+          <div style="font-size:34px;line-height:1;opacity:.8;">🔒</div>
+          <div style="flex:1;min-width:220px;">
+            <div style="font-size:15px;font-weight:800;color:#8A1B30;margin-bottom:6px;">Фіксація виплат недоступна — ви не ФОП</div>
+            <div style="font-size:12.5px;color:#8A1B30;line-height:1.6;margin-bottom:10px;">
+              Нижче — ваш поточний баланс зірочок і магазини, по яких вони нараховані. Це видно завжди. Але щоб <b>зафіксувати виплату</b>, сформувати документи й вести облік — потрібен статус ФОП.
+            </div>
+            <button class="btn btn-primary btn-sm" onclick="setProfileTab('blogger');selectView('profile','profile')">Додати дані ФОП →</button>
+          </div>
+        </div>
       </div>
     `;
   } else if (!canFix){
     lockBanner = `
-      <div class="disclaimer">
-        <b>Дані ФОП неповні.</b> Додайте витяг з ЄДР та фото ФОП з витягом у <a onclick="setProfileTab('blogger');selectView('profile','profile')" style="color:var(--red);font-weight:700;cursor:pointer;text-decoration:underline;">профілі блогера</a>, щоб подати запит на фіксацію.
+      <div class="disclaimer" style="margin-bottom:16px;">
+        <b>Дані ФОП неповні.</b> Додайте витяг з ЄДР та фото ФОП з витягом у <a onclick="setProfileTab('blogger');selectView('profile','profile')" style="color:var(--red);font-weight:700;cursor:pointer;text-decoration:underline;">профілі блогера</a>, щоб активувати фіксацію виплат.
       </div>
     `;
   }
@@ -1982,8 +1952,16 @@ function renderIGetPaidTab(){
     const statusLabel = e.status==='fixed'
       ? `<span class="badge badge-green">✓ Зафіксовано</span>`
       : `<span class="badge badge-warn">⏳ Не зафіксовано</span>`;
+    let actionHtml;
+    if (e.status === 'fixed'){
+      actionHtml = `<button class="btn btn-ghost btn-sm" disabled>✓ Вже зафіксовано</button>`;
+    } else if (canFix){
+      actionHtml = `<button class="btn btn-primary btn-sm" onclick="requestPayout('${e.store}', ${e.stars})">Зафіксувати виплату</button>`;
+    } else {
+      actionHtml = `<button class="btn btn-ghost btn-sm" onclick="showFixationLockedModal()">🔒 Потрібен ФОП для фіксації</button>`;
+    }
     return `
-    <div class="payout-row" style="${!canFix?'opacity:.6;':''}">
+    <div class="payout-row">
       <div class="pr2-head">
         <div class="bs-logo" style="width:40px;height:40px;border-radius:10px;background:${e.color}22;color:${e.color};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;">${e.logo}</div>
         <div class="pr2-main">
@@ -1991,8 +1969,8 @@ function renderIGetPaidTab(){
           <div class="pr2-sub">${e.label} · ${e.id} · ${e.date}</div>
         </div>
         <div class="pr2-amount">
-          <div class="v">${e.sum.toLocaleString('uk-UA')} ₴</div>
-          <div class="l">${e.stars.toLocaleString('uk-UA')} ★</div>
+          <div class="v">${renderStars(e.stars, isFop, '15px')}</div>
+          <div class="l">≈ ${e.sum.toLocaleString('uk-UA')} ₴</div>
         </div>
       </div>
       <div class="pr2-toggle ${isOpen?'open':''}" onclick="togglePayDetail('ig${e.id}')">
@@ -2001,14 +1979,10 @@ function renderIGetPaidTab(){
       <div class="pr2-details ${isOpen?'open':''}">
         <div class="pr2-details-inner">
           <div class="pr2-box"><div class="k">Магазин</div><div class="v">${e.store}</div></div>
-          <div class="pr2-box"><div class="k">Сума</div><div class="v">${e.sum.toLocaleString('uk-UA')} ₴</div></div>
-          <div class="pr2-box"><div class="k">Зірочки</div><div class="v">${e.stars.toLocaleString('uk-UA')} ★</div></div>
+          <div class="pr2-box"><div class="k">Зірочки</div><div class="v">${renderStars(e.stars, isFop)}</div></div>
+          <div class="pr2-box"><div class="k">Еквівалент</div><div class="v">${e.sum.toLocaleString('uk-UA')} ₴</div></div>
           <div class="pr2-box"><div class="k">Дата</div><div class="v">${e.date}</div></div>
-          <div class="pr2-actions">
-            ${e.status==='fixed'
-              ? `<button class="btn btn-ghost btn-sm" disabled>✓ Вже зафіксовано</button>`
-              : `<button class="btn btn-primary btn-sm" onclick="${canFix?`requestPayout('${e.store}', ${e.stars})`:`showFixationLockedModal()`}">Зафіксувати виплату</button>`}
-          </div>
+          <div class="pr2-actions">${actionHtml}</div>
         </div>
       </div>
     </div>
@@ -2051,26 +2025,22 @@ function renderIGetPaidTab(){
   return `
     ${lockBanner}
 
-    <div class="earn-box" style="${!canFix?'opacity:.75;':''}">
+    <div class="earn-box" style="${!canFix?'opacity:.9;':''}">
       <div class="earn-fop-tag ${isFop?'gold':'gray'}">${isFop?'ФОП':'НЕ ФОП'}</div>
-      <div class="earn-label">Мені мають виплатити</div>
-      <div class="earn-amount ${isFop?'gold':'gray'}">${totalSum.toLocaleString('uk-UA')} <span class="star-big">₴</span></div>
-      <div class="earn-sub">≈ ${totalStars.toLocaleString('uk-UA')} ★ · 1★ = 1₴ · ${canFix?'можна фіксувати виплати':'фіксація недоступна без ФОП'}</div>
-    </div>
-
-    <div class="card" style="padding:14px 16px;background:var(--purple-soft);border-color:#E4D9FC;margin-bottom:16px;">
-      <div style="font-size:12.5px;color:var(--purple);line-height:1.6;">
-        <b>Про фіксацію зірочок.</b> Фіксація не обнуляє баланс — вона зберігає поточну кількість зірочок на конкретну дату й додає запис у журнал. Історія зірочок зберігається протягом усього часу вашого перебування на платформі.
-      </div>
+      <div class="earn-label">Мій баланс зірочок</div>
+      <div class="earn-amount ${isFop?'gold':'gray'}">${totalStars.toLocaleString('uk-UA')} <span class="star-big">★</span></div>
+      <div class="earn-sub">≈ ${totalSum.toLocaleString('uk-UA')} ₴ · 1★ = 1₴ · ${canFix ? 'фіксація виплат доступна' : 'фіксація недоступна без ФОП'}</div>
     </div>
 
     <div style="font-size:13.5px;font-weight:700;margin:20px 0 10px;">Розбивка по магазинах (поточний баланс)</div>
     ${stores}
 
     <div style="font-size:13.5px;font-weight:700;margin:24px 0 10px;">Журнал фіксацій</div>
-    ${DATA.myFixations.length === 0
-      ? `<div class="empty"><div class="em-ic">📒</div><div class="em-t">Ще немає фіксацій</div></div>`
-      : fixations
+    ${!canFix
+      ? `<div class="empty"><div class="em-ic">🔒</div><div class="em-t">Журнал доступний тільки після оформлення ФОП</div><div class="em-s">Тут з'являтимуться підтверджені фіксації виплат.</div></div>`
+      : DATA.myFixations.length === 0
+        ? `<div class="empty"><div class="em-ic">📒</div><div class="em-t">Ще немає фіксацій</div></div>`
+        : fixations
     }
   `;
 }
@@ -2129,10 +2099,11 @@ function renderPayoutsLegalBlock(){
     <div class="legal-block">
       <div class="lb-title">⚠ Важливо знати</div>
       <div class="lb-text">
-        <p><b>Фіксація взаєморозрахунків у гривневому еквіваленті доступна лише після оформлення блогером статусу ФОП.</b> Це необхідно, щоб блогер мав правову можливість самостійно сплачувати податки з надходжень, які він веде як блогер.</p>
-        <p>BEROO ONLINE <b>не несе відповідальності</b> за достовірність, повноту або правдивість даних, які надає блогер — витягів з ЄДР, фотографій, реквізитів чи будь-якої іншої інформації. Платформа виступає <b>виключно місцем для збору документів</b> і комунікації між продавцями та блогерами.</p>
+        <p><b>Взаєморозрахунки, фіксація виплат і договірні відносини стосуються виключно блогерів зі статусом ФОП.</b> Функціонал системи — фіксація виплат, формування документів, календар, аналітика та облік — доступний лише тим блогерам, які внесли та підтвердили свої дані ФОП у профілі.</p>
+        <p><b>Комісія однакова для всіх блогерів</b> — статус ФОП не впливає на відсоток винагороди за продаж. ФОП визначає лише можливість користуватися інструментами взаєморозрахунків.</p>
+        <p>BEROO ONLINE <b>не несе відповідальності</b> за достовірність, повноту або правдивість даних, які надає блогер — витягів з ЄДР, фотографій, реквізитів чи будь-якої іншої інформації. Платформа виступає <b>виключно місцем для збору документів, калькуляції та фіксації взаємодії</b> між продавцями та блогерами.</p>
         <p>Відповідальність за роботу з клієнтами, відправлення товарів, повернення, точність і доцільність інформації, а також за <b>взаєморозрахунки повністю й у повному обсязі лежить на сторонах</b> — продавці та блогери вирішують це між собою напряму.</p>
-        <p>BEROO ONLINE <b>не є гарантом виплат</b>, не перевіряє достовірність документів і не вносить у них корективи. Платформа <b>не є стороною угоди та не виступає регулятором</b>. Її роль — надавати інструменти для фіксації порушень, подання скарг, формування рейтингів та обліку взаємодій між сторонами.</p>
+        <p>BEROO ONLINE <b>не є гарантом виплат</b>, не перевіряє достовірність документів і не вносить у них корективи. Платформа <b>не є стороною угоди та не виступає регулятором</b>. Її роль — надавати інструменти для калькуляції, формування рейтингів, подання скарг та фіксації взаємодій між сторонами.</p>
       </div>
     </div>
   `;
