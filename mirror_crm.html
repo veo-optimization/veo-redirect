@@ -632,7 +632,7 @@ const MENU = [
    DATA
    ============================================================ */
 const DATA = {
-  store:{ name:'МАГАЗИН ДАЧНИК', domain:'60787.beroo.online', category:'Ручний інструмент', hasMirrors:true, selfMirrorsEnabled:false },
+  store:{ name:'МАГАЗИН ДАЧНИК', domain:'60787.beroo.online', category:'Ручний інструмент', hasMirrors:true },
   user:{ name:'Марина Костенко', role:'blogger', isFop:true, hasStore:false, hasBloggerAccount:true },
 
   riskZones:{
@@ -688,22 +688,22 @@ const DATA = {
   ],
 
   bloggers:[
-    { id:'bl-1', name:'Марина Костенко', handle:'@marina.style', city:'Київ', isFop:true, stars:4820, mirrors:41, stores:6, avatarBg:'#FF2D55',
+    { id:'bl-1', name:'Марина Костенко', handle:'@marina.style', city:'Київ', isFop:true, stars:4820, mirrors:41, stores:6, avatarBg:'#FF2D55', views:184000,
       reach:'62 400', audience:'Жінки 25–34, Київ', platform:'TikTok, Instagram', rating:4.9, conversion:'6.2%', salesTotal:386, orders:214,
       returnPct:7, disputesOpen:0, disputesTotal:1, experience:'2 роки 4 міс', categories:['Одяг','Аксесуари','Взуття'] },
-    { id:'bl-2', name:'Богдан Северин', handle:'@bogdan.wear', city:'Львів', isFop:false, stars:2210, mirrors:19, stores:3, avatarBg:'#3B82F6',
+    { id:'bl-2', name:'Богдан Северин', handle:'@bogdan.wear', city:'Львів', isFop:false, stars:2210, mirrors:19, stores:3, avatarBg:'#3B82F6', views:96000,
       reach:'38 100', audience:'Чоловіки 25–40, Львів', platform:'TikTok, YouTube', rating:4.6, conversion:'4.8%', salesTotal:142, orders:89,
       returnPct:15, disputesOpen:1, disputesTotal:2, experience:'1 рік 1 міс', categories:['Чоловічий одяг','Аксесуари'] },
-    { id:'bl-3', name:'Софія Ткаченко', handle:'@sofia.dailylook', city:'Одеса', isFop:true, stars:9040, mirrors:88, stores:8, avatarBg:'#22A06B',
+    { id:'bl-3', name:'Софія Ткаченко', handle:'@sofia.dailylook', city:'Одеса', isFop:true, stars:9040, mirrors:88, stores:8, avatarBg:'#22A06B', views:342000,
       reach:'115 000', audience:'Жінки 18–30, вся Україна', platform:'TikTok, Instagram, YouTube', rating:5.0, conversion:'7.4%', salesTotal:812, orders:456,
       returnPct:5, disputesOpen:0, disputesTotal:0, experience:'3 роки 8 міс', categories:['Одяг','Аксесуари','Косметика'] },
-    { id:'bl-4', name:'Дарина Полюга', handle:'@daryna.mode', city:'Тернопіль', isFop:false, stars:640, mirrors:6, stores:1, avatarBg:'#F5B300',
+    { id:'bl-4', name:'Дарина Полюга', handle:'@daryna.mode', city:'Тернопіль', isFop:false, stars:640, mirrors:6, stores:1, avatarBg:'#F5B300', views:21000,
       reach:'9 800', audience:'Жінки 20–28', platform:'Instagram', rating:4.2, conversion:'3.1%', salesTotal:38, orders:24,
       returnPct:38, disputesOpen:2, disputesTotal:3, experience:'4 місяці', categories:['Одяг'] },
-    { id:'bl-5', name:'Роман Дацюк', handle:'@roman.urbanfit', city:'Дніпро', isFop:true, stars:1510, mirrors:14, stores:2, avatarBg:'#8B5CF6',
+    { id:'bl-5', name:'Роман Дацюк', handle:'@roman.urbanfit', city:'Дніпро', isFop:true, stars:1510, mirrors:14, stores:2, avatarBg:'#8B5CF6', views:71000,
       reach:'27 300', audience:'Чоловіки 22–35', platform:'TikTok', rating:4.7, conversion:'5.5%', salesTotal:128, orders:78,
       returnPct:11, disputesOpen:0, disputesTotal:0, experience:'1 рік 9 міс', categories:['Чоловічий одяг','Спорт'] },
-    { id:'bl-6', name:'Настя Гуменюк', handle:'@nastya.trends', city:'Івано-Франківськ', isFop:false, stars:3340, mirrors:27, stores:4, avatarBg:'#EC4899',
+    { id:'bl-6', name:'Настя Гуменюк', handle:'@nastya.trends', city:'Івано-Франківськ', isFop:false, stars:3340, mirrors:27, stores:4, avatarBg:'#EC4899', views:138000,
       reach:'51 900', audience:'Молодь 18–25', platform:'TikTok, Instagram', rating:4.8, conversion:'6.8%', salesTotal:296, orders:174,
       returnPct:9, disputesOpen:0, disputesTotal:1, experience:'11 місяців', categories:['Молодіжний одяг','Аксесуари'] }
   ],
@@ -711,17 +711,17 @@ const DATA = {
   /* ============ КОМІСІЙНІ / ВИПЛАТИ ============ */
 
   iPay: [
-    { id:'#CM-501', blogger:'Марина Костенко', bloggerId:'bl-1', date:'28.06.2026', stars:1537, sum:1537, status:'pending', isFop:true,
+    { id:'#CM-501', blogger:'Марина Костенко', bloggerId:'bl-1', date:'28.06.2026', stars:1537, sum:1537, status:'pending', isFop:true, commissionPct:'12%', hasReturn:false,
       iban:'UA12 3052 9900 0000 0000 0000 001', act:'Є', confirm:'Очікує продавця', method:'IBAN переказ' },
-    { id:'#CM-502', blogger:'Софія Ткаченко', bloggerId:'bl-3', date:'30.06.2026', stars:3060, sum:3060, status:'done', isFop:true,
+    { id:'#CM-502', blogger:'Софія Ткаченко', bloggerId:'bl-3', date:'30.06.2026', stars:3060, sum:3060, status:'done', isFop:true, commissionPct:'10%', hasReturn:false,
       iban:'UA67 3052 9900 0000 0000 0000 002', act:'Є', confirm:'Обидві сторони', method:'IBAN переказ' },
-    { id:'#CM-503', blogger:'Богдан Северин', bloggerId:'bl-2', date:'01.07.2026', stars:640, sum:640, status:'pending', isFop:false,
+    { id:'#CM-503', blogger:'Богдан Северин', bloggerId:'bl-2', date:'01.07.2026', stars:640, sum:640, status:'pending', isFop:false, commissionPct:'—', hasReturn:false,
       iban:'—', act:'Відсутній', confirm:'Заблоковано', method:'—' },
-    { id:'#CM-504', blogger:'Роман Дацюк', bloggerId:'bl-5', date:'02.07.2026', stars:480, sum:480, status:'pending', isFop:true,
+    { id:'#CM-504', blogger:'Роман Дацюк', bloggerId:'bl-5', date:'02.07.2026', stars:480, sum:480, status:'pending', isFop:true, commissionPct:'11%', hasReturn:true,
       iban:'UA55 3052 9900 0000 0000 0000 004', act:'Є', confirm:'Очікує продавця', method:'IBAN переказ' },
-    { id:'#CM-505', blogger:'Марина Костенко', bloggerId:'bl-1', date:'22.06.2026', stars:820, sum:820, status:'done', isFop:true,
+    { id:'#CM-505', blogger:'Марина Костенко', bloggerId:'bl-1', date:'22.06.2026', stars:820, sum:820, status:'done', isFop:true, commissionPct:'12%', hasReturn:false,
       iban:'UA12 3052 9900 0000 0000 0000 001', act:'Є', confirm:'Обидві сторони', method:'IBAN переказ' },
-    { id:'#CM-506', blogger:'Софія Ткаченко', bloggerId:'bl-3', date:'18.06.2026', stars:1240, sum:1240, status:'done', isFop:true,
+    { id:'#CM-506', blogger:'Софія Ткаченко', bloggerId:'bl-3', date:'18.06.2026', stars:1240, sum:1240, status:'done', isFop:true, commissionPct:'10%', hasReturn:false,
       iban:'UA67 3052 9900 0000 0000 0000 002', act:'Є', confirm:'Обидві сторони', method:'IBAN переказ' }
   ],
 
@@ -959,7 +959,6 @@ function toggleTechFop(){
   document.getElementById('topFop').classList.toggle('on', DATA.blogger.isFop);
   document.getElementById('topFopLabel').textContent = DATA.blogger.isFop ? 'Блогер' : 'Оглядач';
   updateUserUI();
-  payoutsTab = '';
   selectView(currentView, currentParent, true);
   showToast(DATA.blogger.isFop ? 'Режим: Блогер (ФОП) — золоті ★' : 'Режим: Оглядач (без ФОП) — сірі ★ вдячності');
 }
@@ -1860,19 +1859,11 @@ function updateZone(zone, field, value){
    КОМІСІЙНІ / ВИПЛАТИ
    ============================================================ */
 function getAvailableTabs(){
-  const tabs = [];
-  if (currentRole === 'seller' && DATA.user.hasStore){
-    tabs.push({ key:'i-pay', label:'Я виплачую' });
-    tabs.push({ key:'store-gets-paid', label:'Мені виплачують' });
-    tabs.push({ key:'store-reviewers', label:'Оглядачі' });
-  } else if (currentRole === 'blogger'){
-    if (DATA.blogger.isFop){
-      tabs.push({ key:'i-get-paid', label:'Мені виплачують' });
-    } else {
-      tabs.push({ key:'my-achievements', label:'Мої досягнення' });
-    }
-  }
-  return tabs;
+  return [
+    { key:'incoming', label: DATA.blogger.isFop ? 'Мені виплачують' : 'Мої досягнення' },
+    { key:'outgoing', label:'Виплата блогерам' },
+    { key:'reviewers-tab', label:'Оглядачі' }
+  ];
 }
 
 function renderPayouts(){
@@ -1880,29 +1871,19 @@ function renderPayouts(){
   const validKeys = tabs.map(t=>t.key);
   if (!validKeys.includes(payoutsTab)) payoutsTab = validKeys[0];
 
-  if (tabs.length === 0){
-    document.getElementById('mainContent').innerHTML = `
-      ${setHeader('Комісійні', 'Взаєморозрахунки між магазинами та блогерами')}
-      <div class="empty"><div class="em-ic">💸</div><div class="em-t">Немає доступних вкладок</div></div>
-    `;
-    return;
-  }
-
-  const tabsHtml = tabs.length > 1 ? `
+  const tabsHtml = `
     <div class="tabs">
       ${tabs.map(t => `<button class="tab ${payoutsTab===t.key?'active':''}" onclick="setPayoutsTab('${t.key}')">${t.label}</button>`).join('')}
     </div>
-  ` : '';
+  `;
 
   let body = '';
-  if (payoutsTab === 'i-pay') body = renderIPayTab();
-  else if (payoutsTab === 'store-gets-paid') body = renderStoreGetsPaidTab();
-  else if (payoutsTab === 'store-reviewers') body = renderStoreReviewersTab();
-  else if (payoutsTab === 'i-get-paid') body = renderIGetPaidTab();
-  else if (payoutsTab === 'my-achievements') body = renderMyAchievementsTab();
+  if (payoutsTab === 'incoming') body = DATA.blogger.isFop ? renderIGetPaidTab() : renderMyAchievementsTab();
+  else if (payoutsTab === 'outgoing') body = renderIPayTab();
+  else if (payoutsTab === 'reviewers-tab') body = renderStoreReviewersTab();
 
   document.getElementById('mainContent').innerHTML = `
-    ${setHeader('Комісійні', 'Взаєморозрахунки між магазинами та блогерами. Виплати = Комісійні — це одна й та сама сторінка')}
+    ${setHeader('Комісійні', 'Єдиний модуль «Фінанси → Комісійні» та «Дзеркало → Виплати»: вхідні нарахування, виплати вашим блогерам, аналітика оглядачів')}
     ${tabsHtml}
     ${body}
     ${renderPayoutsLegalBlock()}
@@ -1967,7 +1948,7 @@ function showFixationLockedModal(){
 /* ---------- Вкладка «Я виплачую» (продавець) ---------- */
 function renderIPayTab(){
   const fopPayouts = DATA.iPay.filter(p=>p.isFop);
-  if (!DATA.store.hasMirrors || fopPayouts.length === 0){
+  if (fopPayouts.length === 0){
     return `
       <div class="empty-state">
         <div class="es-ic">🪞</div>
@@ -1994,7 +1975,9 @@ function renderIPayTab(){
           <div class="pr2-title">
             ${p.blogger}
             ${bloggerIsFop?'<span class="badge badge-gold">ФОП</span>':'<span class="badge badge-gray">без ФОП</span>'}
+            <span class="badge badge-purple">Комісія ${p.commissionPct}</span>
             ${p.status==='done'?'<span class="badge badge-green">✓ Виплачено</span>':'<span class="badge badge-warn">⏳ Очікує</span>'}
+            ${p.hasReturn?'<span class="badge badge-red">↺ Є повернення</span>':''}
           </div>
           <div class="pr2-sub">${p.id} · ${p.date}</div>
         </div>
@@ -2010,15 +1993,19 @@ function renderIPayTab(){
         <div class="pr2-details-inner">
           <div class="pr2-box"><div class="k">Дата</div><div class="v">${p.date}</div></div>
           <div class="pr2-box"><div class="k">Сума</div><div class="v">${p.sum.toLocaleString('uk-UA')} ₴</div></div>
+          <div class="pr2-box"><div class="k">Комісія</div><div class="v">${p.commissionPct}</div></div>
           <div class="pr2-box"><div class="k">Спосіб переказу</div><div class="v">${p.method}</div></div>
           <div class="pr2-box"><div class="k">IBAN</div><div class="v" style="font-size:11px;">${p.iban}</div></div>
           <div class="pr2-box"><div class="k">Акт виконаних робіт</div><div class="v">${p.act}</div></div>
-          <div class="pr2-box"><div class="k">Підтвердження</div><div class="v">${p.confirm}</div></div>
+          <div class="pr2-box"><div class="k">Статус угоди</div><div class="v">${p.confirm}</div></div>
           <div class="pr2-actions">
             ${p.status==='pending'
-              ? `<button class="btn btn-primary btn-sm" onclick="payBlogger('${p.id}')">Підтвердити виплату</button>
+              ? `<button class="btn btn-primary btn-sm" onclick="payBlogger('${p.id}')">Підтвердити та виплатити</button>
+                 <button class="btn btn-ghost btn-sm" onclick="openActModal('${p.blogger}', ${p.sum})">📄 Акт виконаних робіт</button>
+                 ${p.hasReturn?`<button class="btn btn-soft btn-sm" onclick="requestRefund('${p.id}')">↺ Запитувати відшкодування</button>`:''}
                  <button class="btn btn-ghost btn-sm" onclick="showToast('Скаргу на ${p.blogger} подано')">⚠ Скарга</button>`
-              : `<button class="btn btn-ghost btn-sm" disabled>Вже виплачено</button>`}
+              : `<button class="btn btn-ghost btn-sm" disabled>Вже виплачено</button>
+                 <button class="btn btn-ghost btn-sm" onclick="openActModal('${p.blogger}', ${p.sum})">📄 Акт виконаних робіт</button>`}
           </div>
         </div>
       </div>
@@ -2051,44 +2038,29 @@ function renderIPayTab(){
   `;
 }
 
-/* ---------- Вкладка «Мені виплачують» (магазин сам дзеркалить інші бренди) ---------- */
-function renderStoreGetsPaidTab(){
-  if (!DATA.store.selfMirrorsEnabled){
-    return `
-      <div class="empty-state">
-        <div class="es-ic">🛒</div>
-        <div class="es-title">Ви поки не дзеркалите інші бренди</div>
-        <div class="es-text">Якщо ваш магазин почне віддзеркалювати товари інших брендів як партнер (за принципом TikTok Shop), тут з'являться нарахування, які інші магазини мають виплатити вам.</div>
-      </div>
-    `;
-  }
-  const totalStars = DATA.iGetPaid.reduce((s,e)=>s+e.stars,0);
-  const totalSum = DATA.iGetPaid.reduce((s,e)=>s+e.sum,0);
-  const rows = DATA.iGetPaid.map(e => `
-    <div class="payout-row">
-      <div class="pr2-head">
-        <div class="bs-logo" style="width:40px;height:40px;border-radius:10px;background:${e.color}22;color:${e.color};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;">${e.logo}</div>
-        <div class="pr2-main">
-          <div class="pr2-title">${e.store}</div>
-          <div class="pr2-sub">${e.label} · ${e.id} · ${e.date}</div>
-        </div>
-        <div class="pr2-amount">
-          <div class="v">${e.sum.toLocaleString('uk-UA')} ₴</div>
-          <div class="l">${e.stars.toLocaleString('uk-UA')} ★</div>
-        </div>
+function requestRefund(id){
+  const item = DATA.iPay.find(p=>p.id===id);
+  if (!item) return;
+  showToast(`Запит на відшкодування по ${id} (${item.blogger}) надіслано ✓`);
+}
+
+function openActModal(name, sum){
+  openModal(`
+    <div class="modal-head"><div><h3>Акт виконаних робіт</h3><p>${name}</p></div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">
+      <div class="field"><label>Період</label><input value="01.06.2026 – 30.06.2026"></div>
+      <div class="field"><label>Сума послуг</label><input value="${sum.toLocaleString('uk-UA')} ₴"></div>
+      <div class="field"><label>Сторона</label><input value="${name}"></div>
+      <div class="disclaimer">
+        Акт формується як PDF-документ і може бути підписаний Кваліфікованим електронним підписом (КЕП) для юридичної значущості. Платформа не перевіряє достовірність підпису — відповідальність за коректність документа лежить на сторонах.
       </div>
     </div>
-  `).join('');
-  return `
-    <div class="earn-box">
-      <div class="earn-fop-tag gold">МАГАЗИН-ПАРТНЕР</div>
-      <div class="earn-label">Мені мають виплатити інші магазини</div>
-      <div class="earn-amount gold">${totalSum.toLocaleString('uk-UA')} <span class="star-big">₴</span></div>
-      <div class="earn-sub">≈ ${totalStars.toLocaleString('uk-UA')} ★ · за товари, які ваш магазин дзеркалить як партнер</div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal()">Скасувати</button>
+      <button class="btn btn-ghost" onclick="showToast('Акт завантажено як PDF (демо)')">⬇ Завантажити PDF</button>
+      <button class="btn btn-primary" onclick="closeModal();showToast('Акт підписано КЕП (демо) ✓')">Підписати КЕП</button>
     </div>
-    <div style="font-size:13.5px;font-weight:700;margin:20px 0 10px;">Розбивка по брендах-партнерах</div>
-    ${rows}
-  `;
+  `);
 }
 
 /* ---------- Вкладка «Оглядачі» (магазин: хто без ФОП дзеркалить його товари) ---------- */
@@ -2102,7 +2074,7 @@ function renderStoreReviewersTab(){
       <div class="pr2-head">
         <div class="bc-avatar" style="background:${b.avatarBg};width:40px;height:40px;font-size:13px;opacity:.85;">${b.name.split(' ').map(p=>p[0]).join('').slice(0,2)}</div>
         <div class="pr2-main">
-          <div class="pr2-title">${b.name} <span class="badge badge-gray">ОГЛЯДАЧ</span></div>
+          <div class="pr2-title">${b.name} <span class="badge badge-gray">ОГЛЯДАЧ</span> <span class="rating"><span class="star">★</span> ${b.rating}</span></div>
           <div class="pr2-sub">${b.handle} · ${b.city} · охоплення ${b.reach}</div>
         </div>
         <div class="pr2-amount">
@@ -2111,16 +2083,21 @@ function renderStoreReviewersTab(){
         </div>
       </div>
       <div class="pr2-toggle" style="cursor:default;">
-        <span>Дзеркал: ${b.mirrors} · конверсія ${b.conversion} · % повернень ${b.returnPct}%</span>
+        <span>👁 ${(b.views||0).toLocaleString('uk-UA')} переглядів · 🪞 ${b.mirrors} дзеркал · 🛍️ ${b.orders} замовлень · ↺ ${b.returnPct}% повернень</span>
+      </div>
+      <div style="padding:12px 16px;display:flex;gap:8px;flex-wrap:wrap;border-top:1px solid var(--line-soft);">
+        <button class="btn btn-ghost btn-sm" style="flex:1;min-width:140px;" onclick="showBloggerModal('${b.id}')">Профіль та контент</button>
+        <button class="btn btn-primary btn-sm" style="flex:1;min-width:220px;" onclick="showToast('Запрошення «Ставай Блогером (ФОП)» надіслано ${b.name}')">Ставай Блогером (ФОП) для отримання реальних виплат →</button>
       </div>
     </div>
   `).join('');
   return `
     <div class="disclaimer" style="margin-bottom:16px;">
-      Оглядачі без ФОП не отримують грошових виплат — тільки сірі зірочки вдячності та статистику трафіку. Кнопки грошової виплати тут немає навмисно.
+      Оглядачі без ФОП не отримують грошових виплат — тільки сірі зірочки вдячності та статистику трафіку. Жодні виплати тут не формуються.
     </div>
     <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
       <span class="badge badge-dark">${list.length} оглядачів дзеркалять ваші товари</span>
+      <span class="badge badge-gray">Сірі ★ вдячності</span>
     </div>
     ${rows}
   `;
@@ -2150,9 +2127,11 @@ function renderIGetPaidTab(){
       : `<span class="badge badge-warn">⏳ Не зафіксовано</span>`;
     let actionHtml;
     if (e.status === 'fixed'){
-      actionHtml = `<button class="btn btn-ghost btn-sm" disabled>✓ Вже зафіксовано</button>`;
+      actionHtml = `<button class="btn btn-ghost btn-sm" disabled>✓ Вже зафіксовано</button>
+                    <button class="btn btn-ghost btn-sm" onclick="openActModal('${e.store}', ${e.sum})">📄 Акт виконаних робіт</button>`;
     } else if (canFix){
-      actionHtml = `<button class="btn btn-primary btn-sm" onclick="requestPayout('${e.store}', ${e.stars})">Зафіксувати виплату</button>`;
+      actionHtml = `<button class="btn btn-primary btn-sm" onclick="requestPayout('${e.store}', ${e.stars})">Формувати запит на виплату</button>
+                    <button class="btn btn-ghost btn-sm" onclick="openActModal('${e.store}', ${e.sum})">📄 Створити Акт</button>`;
     } else {
       actionHtml = `<button class="btn btn-ghost btn-sm" onclick="showFixationLockedModal()">🔒 Потрібен ФОП для фіксації</button>`;
     }
@@ -2262,15 +2241,15 @@ function renderMyAchievementsTab(){
   `).join('');
 
   return `
-    <div class="card" style="padding:20px;background:var(--bg);border-color:var(--line);margin-bottom:16px;">
+    <div class="card" style="padding:20px;background:var(--red-50);border-color:#FFD9E1;margin-bottom:16px;">
       <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;">
-        <div style="font-size:34px;line-height:1;opacity:.7;">🎓</div>
+        <div style="font-size:34px;line-height:1;opacity:.8;">⚠</div>
         <div style="flex:1;min-width:220px;">
-          <div style="font-size:15px;font-weight:800;color:var(--ink-900);margin-bottom:6px;">Ви в статусі Оглядача</div>
-          <div style="font-size:12.5px;color:var(--ink-700);line-height:1.6;margin-bottom:10px;">
-            Виплати недоступні, оскільки ви не підключили статус ФОП для Блогера. Внесіть окремі документи ФОП у профіль блогера, щоб стати Блогером та отримувати реальні виплати.
+          <div style="font-size:15px;font-weight:800;color:#8A1B30;margin-bottom:8px;">Юридичний дисклеймер</div>
+          <div style="font-size:12.5px;color:#8A1B30;line-height:1.65;margin-bottom:12px;">
+            «Платформа BEROO Online не здійснює фінансових виплат фізичним особам без статусу ФОП Блогера. Ви працюєте в режимі «Оглядач». Нараховані Сірі Зірочки є орієнтиром вашої ефективності (1 сіра зірочка = 1 грн умовного потенціалу). Вони показують, скільки ви могли б отримати як професійний Блогер. Фінансові розрахунки можливі лише за вашими прямими домовленостями з продавцем або після внесення документів ФОП Блогера».
           </div>
-          <button class="btn btn-primary btn-sm" onclick="setProfileTab('blogger');selectView('profile','profile')">Завантажити документи ФОП Блогера →</button>
+          <button class="btn btn-primary btn-sm" onclick="setProfileTab('blogger');selectView('profile','profile')">Внести документи ФОП Блогера та активувати виплати →</button>
         </div>
       </div>
     </div>
@@ -2279,7 +2258,7 @@ function renderMyAchievementsTab(){
       <div class="earn-fop-tag gray">ОГЛЯДАЧ</div>
       <div class="earn-label">Мої зірочки вдячності</div>
       <div class="earn-amount gray">${totalStars.toLocaleString('uk-UA')} <span class="star-big">★</span></div>
-      <div class="earn-sub">Навчальний орієнтир · 1 сіра ★ ≈ 1 ₴ потенціалу · накопичується без обнулення</div>
+      <div class="earn-sub">Навчальний орієнтир · 1 сіра ★ ≈ 1 ₴ умовного потенціалу · накопичується без обнулення</div>
     </div>
 
     <div style="font-size:13.5px;font-weight:700;margin:20px 0 10px;">Магазини, по яких накопичено зірочки вдячності</div>
@@ -2303,7 +2282,7 @@ function payBlogger(id){
 function requestPayout(store, stars){
   if (!canUseFixation()){ showFixationLockedModal(); return; }
   openModal(`
-    <div class="modal-head"><div><h3>Подати запит на фіксацію</h3><p>${store}</p></div><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div class="modal-head"><div><h3>Формувати запит на виплату</h3><p>${store}</p></div><button class="modal-close" onclick="closeModal()">✕</button></div>
     <div class="modal-body">
       <div class="field"><label>Скільки зірочок зафіксувати?</label>
         <div class="row" style="gap:10px;flex-wrap:wrap;margin-top:4px;">
