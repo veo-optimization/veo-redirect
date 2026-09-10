@@ -28,38 +28,43 @@ input,select,textarea{font-family:inherit;font-size:inherit;}
 a{color:inherit;text-decoration:none;}
 ::selection{background:var(--red-soft);}
 
-/* ROLE SWITCHER (fixed top-right) */
-.role-switcher{
+/* ===== UNIFIED TOP SWITCHER (FOP + role) — top-right ===== */
+.top-switcher{
   position:fixed;top:12px;right:12px;z-index:100;
-  display:flex;gap:4px;background:#fff;border:1px solid var(--line);
-  border-radius:99px;padding:4px;box-shadow:0 4px 14px rgba(0,0,0,.08);
+  display:flex;align-items:center;gap:0;
+  background:#fff;border:1px solid var(--line);
+  border-radius:99px;padding:4px;
+  box-shadow:0 4px 14px rgba(0,0,0,.08);
 }
-.role-switcher button{
-  width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-size:16px;transition:all .15s;color:var(--ink-400);
+@media(min-width:900px){ .top-switcher{top:16px;right:20px;} }
+.ts-fop{
+  display:flex;align-items:center;gap:7px;
+  padding:5px 11px 5px 10px;border-radius:99px;
+  font-size:10.5px;font-weight:700;color:var(--ink-500);
+  cursor:pointer;transition:background .15s,color .15s;
+  border-right:1px solid var(--line);
+  margin-right:4px;
 }
-.role-switcher button.active{background:var(--red);color:#fff;}
-.role-switcher button:hover:not(.active){background:var(--bg);}
-@media(min-width:900px){ .role-switcher{top:16px;right:20px;} }
-
-/* TECH TOGGLE (FOP on/off, small top-left) */
-.tech-toggle{
-  position:fixed;top:12px;left:12px;z-index:100;
-  display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);
-  border-radius:99px;padding:5px 10px 5px 8px;box-shadow:0 2px 8px rgba(0,0,0,.06);
-  font-size:10.5px;font-weight:600;color:var(--ink-500);cursor:pointer;
+.ts-fop:hover{background:var(--bg);}
+.ts-fop.on{color:var(--gold-dark);}
+.ts-fop .tog{
+  width:26px;height:15px;background:var(--line);border-radius:99px;position:relative;transition:background .2s;flex-shrink:0;
 }
-.tech-toggle:hover{border-color:var(--ink-300);}
-.tech-toggle .tog{
-  width:30px;height:18px;background:var(--line);border-radius:99px;position:relative;transition:background .2s;
-}
-.tech-toggle.on .tog{background:var(--gold);}
-.tech-toggle .tog::after{
-  content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;background:#fff;
+.ts-fop.on .tog{background:var(--gold);}
+.ts-fop .tog::after{
+  content:"";position:absolute;top:2px;left:2px;width:11px;height:11px;background:#fff;
   border-radius:50%;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.15);
 }
-.tech-toggle.on .tog::after{transform:translateX(12px);}
-@media(min-width:900px){ .tech-toggle{top:16px;left:20px;} }
+.ts-fop.on .tog::after{transform:translateX(11px);}
+.ts-fop.hidden{display:none;}
+.ts-role{display:flex;gap:3px;}
+.ts-role button{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;transition:all .15s;color:var(--ink-400);
+}
+.ts-role button.active{background:var(--red);color:#fff;}
+.ts-role button:hover:not(.active){background:var(--bg);}
 
 /* APP SHELL */
 .app{display:flex;flex-direction:column;min-height:100vh;}
@@ -77,19 +82,10 @@ a{color:inherit;text-decoration:none;}
 .sb-brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;}
 .sb-logo{width:34px;height:34px;border-radius:9px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0;}
 .sb-name{font-weight:700;font-size:16px;letter-spacing:.2px;}
-
-.sb-store{
-  display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg);
-  border-radius:10px;font-size:12.5px;font-weight:600;margin-bottom:14px;color:var(--ink-700);
-}
+.sb-store{display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg);border-radius:10px;font-size:12.5px;font-weight:600;margin-bottom:14px;color:var(--ink-700);}
 .sb-store .ic{color:var(--red);font-size:14px;}
-
 .sb-group{margin-bottom:2px;}
-.sb-item{
-  display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;
-  font-size:13.5px;font-weight:500;color:var(--ink-700);cursor:pointer;
-  transition:background .15s,color .15s;width:100%;text-align:left;
-}
+.sb-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;font-size:13.5px;font-weight:500;color:var(--ink-700);cursor:pointer;transition:background .15s,color .15s;width:100%;text-align:left;}
 .sb-item:hover{background:var(--bg);}
 .sb-item.active{background:var(--red-soft);color:var(--red);font-weight:600;}
 .sb-item .ic{width:18px;display:flex;justify-content:center;font-size:15px;flex-shrink:0;}
@@ -97,17 +93,10 @@ a{color:inherit;text-decoration:none;}
 .sb-item.open .chev{transform:rotate(180deg);}
 .sb-sub{max-height:0;overflow:hidden;transition:max-height .3s ease;padding-left:6px;}
 .sb-sub.open{max-height:500px;}
-.sb-subitem{
-  display:flex;align-items:center;gap:10px;padding:8px 12px 8px 42px;border-radius:9px;
-  font-size:13px;color:var(--ink-500);cursor:pointer;transition:background .15s,color .15s;
-  width:100%;text-align:left;position:relative;
-}
+.sb-subitem{display:flex;align-items:center;gap:10px;padding:8px 12px 8px 42px;border-radius:9px;font-size:13px;color:var(--ink-500);cursor:pointer;transition:background .15s,color .15s;width:100%;text-align:left;position:relative;}
 .sb-subitem:hover{background:var(--bg);color:var(--ink-900);}
 .sb-subitem.active{color:var(--red);font-weight:600;background:var(--red-50);}
-.sb-subitem.active::before{
-  content:"";position:absolute;left:26px;top:50%;transform:translateY(-50%);
-  width:4px;height:4px;border-radius:50%;background:var(--red);
-}
+.sb-subitem.active::before{content:"";position:absolute;left:26px;top:50%;transform:translateY(-50%);width:4px;height:4px;border-radius:50%;background:var(--red);}
 .sb-subitem .shortcut{margin-left:auto;font-size:10px;color:var(--ink-300);}
 .sb-footer{margin-top:auto;padding-top:14px;border-top:1px solid var(--line-soft);}
 .sb-user{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;}
@@ -118,10 +107,7 @@ a{color:inherit;text-decoration:none;}
 .sb-user-info .r{font-size:11px;color:var(--ink-400);}
 
 /* TOPBAR mobile */
-.topbar{
-  display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;
-  border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;
-}
+.topbar{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;}
 @media(min-width:900px){ .topbar{display:none;} }
 .burger{width:24px;height:24px;display:flex;flex-direction:column;justify-content:center;gap:5px;}
 .burger span{height:2px;background:var(--ink-900);border-radius:2px;display:block;}
@@ -132,7 +118,6 @@ a{color:inherit;text-decoration:none;}
 .main{flex:1;min-width:0;display:flex;flex-direction:column;}
 .content{padding:60px 16px 60px;max-width:1240px;width:100%;}
 @media(min-width:900px){ .content{padding:70px 32px 60px;} }
-
 .page-head{margin-bottom:18px;}
 .page-head h1{font-size:22px;font-weight:700;margin-bottom:4px;letter-spacing:-.01em;}
 .page-head p{font-size:13.5px;color:var(--ink-500);line-height:1.5;}
@@ -142,11 +127,7 @@ a{color:inherit;text-decoration:none;}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);}
 
 /* BUTTONS */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:6px;
-  padding:10px 16px;border-radius:11px;font-size:13.5px;font-weight:600;
-  transition:all .15s;white-space:nowrap;
-}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 16px;border-radius:11px;font-size:13.5px;font-weight:600;transition:all .15s;white-space:nowrap;}
 .btn-primary{background:var(--red);color:#fff;box-shadow:var(--shadow-red);}
 .btn-primary:hover{background:var(--red-hover);}
 .btn-ghost{background:#fff;color:var(--ink-700);border:1px solid var(--line);}
@@ -169,7 +150,6 @@ a{color:inherit;text-decoration:none;}
 .product-grid{display:grid;grid-template-columns:1fr;gap:12px;}
 @media(min-width:600px){ .product-grid{grid-template-columns:1fr 1fr;gap:14px;} }
 @media(min-width:1000px){ .product-grid{grid-template-columns:repeat(3,1fr);gap:16px;} }
-
 .product-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .2s,transform .15s;}
 .product-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.08);transform:translateY(-1px);}
 .pc-img{position:relative;aspect-ratio:1/1;background:linear-gradient(135deg,#F4F4F6,#EAEAEE);display:flex;align-items:center;justify-content:center;font-size:38px;color:#C7C7CC;overflow:hidden;}
@@ -192,7 +172,6 @@ a{color:inherit;text-decoration:none;}
 .store-grid{display:grid;grid-template-columns:1fr;gap:12px;}
 @media(min-width:700px){ .store-grid{grid-template-columns:1fr 1fr;gap:14px;} }
 @media(min-width:1100px){ .store-grid{grid-template-columns:repeat(3,1fr);gap:16px;} }
-
 .store-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px;transition:box-shadow .2s;}
 .store-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.08);}
 .sc-head{display:flex;align-items:center;gap:12px;}
@@ -213,7 +192,6 @@ a{color:inherit;text-decoration:none;}
 .blogger-grid{display:grid;grid-template-columns:1fr;gap:12px;}
 @media(min-width:700px){ .blogger-grid{grid-template-columns:1fr 1fr;gap:14px;} }
 @media(min-width:1100px){ .blogger-grid{grid-template-columns:repeat(3,1fr);gap:16px;} }
-
 .blogger-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px;position:relative;transition:box-shadow .2s;}
 .blogger-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.08);}
 .bc-fop-badge{position:absolute;top:14px;right:14px;font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:99px;letter-spacing:.04em;}
@@ -275,11 +253,9 @@ a{color:inherit;text-decoration:none;}
 .role-card .rc-ic{font-size:30px;margin-bottom:10px;}
 .role-card .rc-name{font-size:14px;font-weight:700;}
 .role-card .rc-desc{font-size:11.5px;color:var(--ink-500);margin-top:4px;line-height:1.4;}
-
 .reg-progress{display:flex;gap:6px;margin-bottom:22px;justify-content:center;}
 .reg-dot{width:32px;height:4px;border-radius:99px;background:var(--line);}
 .reg-dot.done,.reg-dot.active{background:var(--red);}
-
 .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line-soft);}
 .toggle-row .lbl{font-size:13.5px;font-weight:600;}
 .toggle{position:relative;width:46px;height:26px;background:var(--line);border-radius:99px;transition:background .2s;cursor:pointer;flex-shrink:0;}
@@ -287,33 +263,21 @@ a{color:inherit;text-decoration:none;}
 .toggle::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.15);}
 .toggle.on::after{transform:translateX(20px);}
 
-/* STAT BOX (Мій заробіток — big amount) */
-.earn-box{
-  background:linear-gradient(135deg,#1A1A1A,#2E2E2E);color:#fff;
-  border-radius:20px;padding:28px 24px;margin-bottom:20px;position:relative;overflow:hidden;
-}
-.earn-box::before{
-  content:"";position:absolute;top:-40px;right:-40px;width:160px;height:160px;
-  border-radius:50%;background:rgba(255,255,255,.04);
-}
+/* EARN BOX */
+.earn-box{background:linear-gradient(135deg,#1A1A1A,#2E2E2E);color:#fff;border-radius:20px;padding:28px 24px;margin-bottom:20px;position:relative;overflow:hidden;}
+.earn-box::before{content:"";position:absolute;top:-40px;right:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.04);}
 .earn-label{font-size:12px;color:rgba(255,255,255,.55);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
 .earn-amount{font-size:36px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
 .earn-amount .star-big{font-size:30px;}
 .earn-amount.gold .star-big{color:var(--gold);}
 .earn-amount.gray .star-big{color:var(--gray-star);}
 .earn-sub{font-size:12.5px;color:rgba(255,255,255,.6);margin-top:10px;}
-.earn-fop-tag{
-  position:absolute;top:20px;right:20px;font-size:10px;font-weight:700;
-  padding:4px 10px;border-radius:99px;letter-spacing:.04em;
-}
+.earn-fop-tag{position:absolute;top:20px;right:20px;font-size:10px;font-weight:700;padding:4px 10px;border-radius:99px;letter-spacing:.04em;}
 .earn-fop-tag.gold{background:rgba(245,179,0,.2);color:var(--gold);}
 .earn-fop-tag.gray{background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);}
 
-/* STORE BREAKDOWN */
-.breakdown-store{
-  display:flex;align-items:center;gap:12px;padding:14px 16px;
-  background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:8px;
-}
+/* BREAKDOWN STORE */
+.breakdown-store{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:8px;}
 .breakdown-store .bs-logo{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;}
 .breakdown-store .bs-info{flex:1;min-width:0;}
 .breakdown-store .bs-name{font-size:13.5px;font-weight:700;}
@@ -329,7 +293,7 @@ a{color:inherit;text-decoration:none;}
   .breakdown-store .bs-action .btn{width:100%;}
 }
 
-/* PAYOUTS TABLE */
+/* PAYOUT TABLE */
 .payout-table{width:100%;border-collapse:collapse;font-size:13px;}
 .payout-table th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-400);font-weight:700;padding:10px 12px;border-bottom:1px solid var(--line);}
 .payout-table td{padding:13px 12px;border-bottom:1px solid var(--line-soft);vertical-align:middle;}
@@ -343,21 +307,14 @@ a{color:inherit;text-decoration:none;}
   .payout-table td::before{content:attr(data-label);position:absolute;left:2px;top:8px;width:44%;text-align:left;font-size:10.5px;font-weight:700;color:var(--ink-500);text-transform:uppercase;letter-spacing:.03em;}
 }
 
-/* FOP PROFILE FORM */
-.fop-upload{
-  border:2px dashed var(--line);border-radius:12px;padding:20px;text-align:center;
-  cursor:pointer;transition:border-color .15s;margin-bottom:12px;
-}
+/* FOP UPLOAD */
+.fop-upload{border:2px dashed var(--line);border-radius:12px;padding:20px;text-align:center;cursor:pointer;transition:border-color .15s;margin-bottom:12px;}
 .fop-upload:hover{border-color:var(--red);}
 .fop-upload.done{border-style:solid;border-color:var(--green);background:var(--green-soft);}
 .fop-upload .fu-ic{font-size:26px;margin-bottom:6px;}
 .fop-upload .fu-label{font-size:13px;font-weight:600;}
 .fop-upload .fu-hint{font-size:11.5px;color:var(--ink-500);margin-top:4px;}
-
-.disclaimer{
-  background:#FFF8E5;border:1px solid #FFE9A8;border-radius:12px;padding:14px 16px;
-  font-size:12px;color:#7A5A00;line-height:1.55;margin-top:16px;
-}
+.disclaimer{background:#FFF8E5;border:1px solid #FFE9A8;border-radius:12px;padding:14px 16px;font-size:12px;color:#7A5A00;line-height:1.55;margin-top:16px;}
 .disclaimer b{color:#5A4300;}
 
 /* UTILS */
@@ -385,27 +342,20 @@ a{color:inherit;text-decoration:none;}
 .mm-head{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);}
 .mm-body{padding:12px;flex:1;}
 .mm-close{width:30px;height:30px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--ink-500);margin-left:auto;}
-
-/* INFO ICON */
-.info-ic{
-  display:inline-flex;width:16px;height:16px;border-radius:50%;
-  background:var(--ink-300);color:#fff;font-size:10px;font-weight:700;
-  align-items:center;justify-content:center;cursor:help;margin-left:4px;flex-shrink:0;
-}
 </style>
 </head>
 <body>
 
-<!-- ==================== TECH TOGGLE (FOP) ==================== -->
-<div class="tech-toggle" id="techToggle" onclick="toggleTechFop()" title="Технічний режим для розробників">
-  <span>ФОП</span>
-  <div class="tog"></div>
-</div>
-
-<!-- ==================== ROLE SWITCHER ==================== -->
-<div class="role-switcher">
-  <button id="roleBtnBlogger" onclick="switchRole('blogger')" title="Блогер">👤</button>
-  <button id="roleBtnSeller" onclick="switchRole('seller')" title="Продавець">🛒</button>
+<!-- ==================== UNIFIED TOP SWITCHER (FOP + role) ==================== -->
+<div class="top-switcher">
+  <div class="ts-fop on" id="tsFop" onclick="toggleTechFop()" title="Технічний режим: ФОП / не ФОП">
+    <span>ФОП</span>
+    <div class="tog"></div>
+  </div>
+  <div class="ts-role">
+    <button id="roleBtnBlogger" onclick="switchRole('blogger')" title="Блогер">👤</button>
+    <button id="roleBtnSeller" onclick="switchRole('seller')" title="Магазин">🛒</button>
+  </div>
 </div>
 
 <!-- ==================== REGISTRATION ==================== -->
@@ -493,7 +443,7 @@ a{color:inherit;text-decoration:none;}
         <div class="sb-avatar" id="sbUserAvatar">МК</div>
         <div class="sb-user-info">
           <div class="n" id="sbUserName">Марина Костенко</div>
-          <div class="r" id="sbUserRole">Продавець</div>
+          <div class="r" id="sbUserRole">Блогер</div>
         </div>
       </div>
     </div>
@@ -623,7 +573,6 @@ const DATA = {
     { id:'bl-5', name:'Роман Дацюк', handle:'@roman.urbanfit', city:'Дніпро', isFop:true, stars:1510, mirrors:14, stores:2, avatarBg:'#8B5CF6' },
     { id:'bl-6', name:'Настя Гуменюк', handle:'@nastya.trends', city:'Івано-Франківськ', isFop:false, stars:3340, mirrors:27, stores:4, avatarBg:'#EC4899' }
   ],
-  // Earnings breakdown — sum must be 8935
   earnings:[
     { store:'Shafa Trend', logo:'ST', color:'#FF2D55', stars:2315, label:'жіночий одяг' },
     { store:'Uzory.ua', logo:'UZ', color:'#6D28D9', stars:1840, label:'вишиванки та етно' },
@@ -631,21 +580,18 @@ const DATA = {
     { store:'MOSAIC studio', logo:'MS', color:'#0EA5E9', stars:1640, label:'дизайнерський одяг' },
     { store:'Kvit Store', logo:'KS', color:'#EC4899', stars:1420, label:'взуття' }
   ],
-  // Payout requests (reimbursements)
   reimbursements:[
     { id:'#RMB-201', store:'Shafa Trend', logo:'ST', color:'#FF2D55', date:'28.06.2026', stars:1537, sum:1844, status:'pending' },
     { id:'#RMB-202', store:'Uzory.ua', logo:'UZ', color:'#6D28D9', date:'30.06.2026', stars:1840, sum:2208, status:'pending' },
     { id:'#RMB-203', store:'Linen&Co', logo:'LC', color:'#22A06B', date:'15.06.2026', stars:900, sum:1080, status:'confirmed' },
     { id:'#RMB-204', store:'Kvit Store', logo:'KS', color:'#EC4899', date:'10.06.2026', stars:420, sum:504, status:'confirmed' }
   ],
-  // Seller payouts to bloggers (вкладка «Виплати блогерам»)
   payoutsToBloggers:[
     { id:'#VP-1042', blogger:'Марина Костенко', date:'28.06.2026', stars:1537, sum:1844, status:'done' },
     { id:'#VP-1043', blogger:'Софія Ткаченко', date:'30.06.2026', stars:3060, sum:3672, status:'done' },
     { id:'#VP-1044', blogger:'Богдан Северин', date:'01.07.2026', stars:640, sum:640, status:'pending' },
     { id:'#VP-1045', blogger:'Роман Дацюк', date:'02.07.2026', stars:480, sum:528, status:'pending' }
   ],
-  // Requests (Запити)
   requests:[
     { id:'#REQ-301', to:'Shafa Trend', logo:'ST', color:'#FF2D55', type:'Магазин', date:'02.07.2026', items:'Сукня міді, Кардиган', status:'active' },
     { id:'#REQ-302', to:'Uzory.ua', logo:'UZ', color:'#6D28D9', type:'Магазин', date:'30.06.2026', items:'Вишиванка чоловіча', status:'pending' },
@@ -723,32 +669,35 @@ function updateUserUI(){
   document.getElementById('sbStoreName').textContent = DATA.user.hasStore ? DATA.store.name : '—';
   document.getElementById('roleBtnBlogger').classList.toggle('active', currentRole==='blogger');
   document.getElementById('roleBtnSeller').classList.toggle('active', currentRole==='seller');
+  updateFopVisibility();
 }
 
 /* ============================================================
-   ROLE SWITCHER (top-right)
+   ROLE SWITCHER
    ============================================================ */
 function switchRole(role){
   currentRole = role;
   updateUserUI();
   renderMenu();
-  // refresh current view
   selectView(currentView, currentParent);
-  showToast(role === 'blogger' ? 'Режим: Блогер' : 'Режим: Продавець');
+  showToast(role === 'blogger' ? 'Режим: Блогер' : 'Режим: Магазин');
 }
 
 /* ============================================================
-   TECH TOGGLE (FOP on/off for demo)
+   TECH FOP TOGGLE
    ============================================================ */
 function toggleTechFop(){
   DATA.blogger.isFop = !DATA.blogger.isFop;
-  document.getElementById('techToggle').classList.toggle('on', DATA.blogger.isFop);
-  // refresh if on earnings tab
+  document.getElementById('tsFop').classList.toggle('on', DATA.blogger.isFop);
   if (currentView === 'payouts') renderPayouts();
   showToast('Тех. режим: ' + (DATA.blogger.isFop ? 'ФОП (золоті ★)' : 'не ФОП (сірі ★)'));
 }
-// init
-document.getElementById('techToggle').classList.toggle('on', DATA.blogger.isFop);
+function updateFopVisibility(){
+  const fopEl = document.getElementById('tsFop');
+  if (!fopEl) return;
+  // ФОП-тумблер видно тільки в режимі Блогер
+  fopEl.classList.toggle('hidden', currentRole !== 'blogger');
+}
 
 /* ============================================================
    MENU RENDERING
@@ -794,7 +743,6 @@ function renderMenu(){
     </div>`;
   }).join('');
 
-  // mobile menu
   document.getElementById('mobileNav').innerHTML = visible.map(item => {
     if (item.views.length === 0){
       return `<button class="sb-item" onclick="selectParent('${item.key}');toggleMobileMenu()"><span class="ic">${item.icon}</span>${item.label}</button>`;
@@ -839,7 +787,6 @@ const VIEW_META = {
   stats:{ title:'Статистика', parent:'analytics' },
   profile:{ title:'Профіль', parent:'profile' }
 };
-
 function selectView(viewKey, parentKey){
   currentView = viewKey;
   if (parentKey) currentParent = parentKey;
@@ -848,20 +795,12 @@ function selectView(viewKey, parentKey){
   renderMenu();
 
   const renderers = {
-    showcase: renderShowcase,
-    stores: renderStores,
-    bloggers: renderBloggers,
-    requests: renderRequests,
-    'i-mirror': renderIMirror,
-    'they-mirror': renderTheyMirror,
-    payouts: renderPayouts,
-    analytics: renderAnalytics,
-    stats: renderAnalytics,
-    profile: renderProfile
+    showcase: renderShowcase, stores: renderStores, bloggers: renderBloggers,
+    requests: renderRequests, 'i-mirror': renderIMirror, 'they-mirror': renderTheyMirror,
+    payouts: renderPayouts, analytics: renderAnalytics, stats: renderAnalytics, profile: renderProfile
   };
   (renderers[viewKey] || renderComingSoon)();
 }
-
 function setHeader(title, sub){
   return `<div class="page-head"><h1>${title}</h1>${sub?`<p>${sub}</p>`:''}</div>`;
 }
@@ -942,7 +881,6 @@ function renderStores(){
       </div>
     </div>
   `).join('');
-
   document.getElementById('mainContent').innerHTML = `
     ${setHeader('Магазини', 'Усі магазини системи з їхніми показниками')}
     <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
@@ -972,10 +910,7 @@ function renderBloggers(){
       </div>
       <div class="bc-stars ${starClass}">
         <span class="star-ic">★</span>
-        <div>
-          <div class="num">${b.stars.toLocaleString('uk-UA')}</div>
-          <div class="lbl">зірочок</div>
-        </div>
+        <div><div class="num">${b.stars.toLocaleString('uk-UA')}</div><div class="lbl">зірочок</div></div>
       </div>
       <div class="bc-stats">
         <div class="bc-stat"><div class="v">${b.mirrors}</div><div class="k">віддзеркалює</div></div>
@@ -987,7 +922,6 @@ function renderBloggers(){
     </div>
   `;
   }).join('');
-
   document.getElementById('mainContent').innerHTML = `
     ${setHeader('Блогери', 'Партнери-блогери: скільки віддзеркалюють і скільки зірочок мають')}
     <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
@@ -1012,7 +946,7 @@ function renderRequests(){
     <div class="card" style="padding:14px 16px;margin-bottom:10px;">
       <div class="row-between" style="flex-wrap:wrap;gap:10px;">
         <div class="row" style="gap:12px;">
-          <div class="bs-logo" style="width:40px;height:40px;border-radius:10px;background:${r.color}22;color:${r.color};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;">${r.logo}</div>
+          <div style="width:40px;height:40px;border-radius:10px;background:${r.color}22;color:${r.color};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;">${r.logo}</div>
           <div>
             <div style="font-weight:700;font-size:14px;">${r.to}</div>
             <div class="muted">${r.id} · ${r.date} · ${r.type}</div>
@@ -1026,7 +960,6 @@ function renderRequests(){
       </div>
     </div>
   `).join('');
-
   document.getElementById('mainContent').innerHTML = `
     ${setHeader('Запити', 'Запити на співпрацю — які я надсилав')}
     <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
@@ -1045,7 +978,7 @@ function renderIMirror(){
   const rows = DATA.earnings.map(e => `
     <div class="card" style="padding:14px 16px;margin-bottom:10px;">
       <div class="row" style="gap:12px;">
-        <div class="bs-logo" style="width:44px;height:44px;border-radius:11px;background:${e.color}22;color:${e.color};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;">${e.logo}</div>
+        <div style="width:44px;height:44px;border-radius:11px;background:${e.color}22;color:${e.color};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;">${e.logo}</div>
         <div style="flex:1;min-width:0;">
           <div style="font-weight:700;font-size:14px;">${e.store}</div>
           <div class="muted">${e.label} · віддзеркалюю</div>
@@ -1057,7 +990,6 @@ function renderIMirror(){
       </div>
     </div>
   `).join('');
-
   document.getElementById('mainContent').innerHTML = `
     ${setHeader('Я віддзеркалюю', 'Магазини, з якими я працюю')}
     <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
@@ -1069,7 +1001,7 @@ function renderIMirror(){
 }
 
 /* ============================================================
-   МЕНЕ ВІДДЗЕРКАЛЮЮТЬ (тільки для продавців)
+   МЕНЕ ВІДДЗЕРКАЛЮЮТЬ
    ============================================================ */
 function renderTheyMirror(){
   if (!DATA.user.hasStore){
@@ -1095,7 +1027,6 @@ function renderTheyMirror(){
       </div>
     </div>
   `).join('');
-
   document.getElementById('mainContent').innerHTML = `
     ${setHeader('Мене віддзеркалюють', 'Блогери, які показують мої товари')}
     <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
@@ -1107,7 +1038,7 @@ function renderTheyMirror(){
 }
 
 /* ============================================================
-   ВИПЛАТИ (з двома вкладками)
+   ВИПЛАТИ
    ============================================================ */
 function renderPayouts(){
   const isSeller = DATA.user.hasStore;
@@ -1117,14 +1048,12 @@ function renderPayouts(){
       ${isSeller?`<button class="tab ${payoutsTab==='to-bloggers'?'active':''}" onclick="setPayoutsTab('to-bloggers')">Виплати блогерам</button>`:''}
     </div>
   `;
-
   let body = '';
   if (payoutsTab === 'earnings'){
     body = renderEarningsTab();
   } else if (payoutsTab === 'to-bloggers' && isSeller){
     body = renderToBloggersTab();
   }
-
   document.getElementById('mainContent').innerHTML = `
     ${setHeader('Виплати', 'Спільний екран для «Дзеркала» та «Фінансів»')}
     ${tabsHtml}
@@ -1138,7 +1067,7 @@ function renderEarningsTab(){
   const total = DATA.earnings.reduce((s,e)=>s+e.stars,0);
   const canRequest = DATA.blogger.fopUploaded && DATA.blogger.fopPhotoUploaded;
 
-  const stores = DATA.earnings.map((e, i) => `
+  const stores = DATA.earnings.map(e => `
     <div class="breakdown-store">
       <div class="bs-logo" style="background:${e.color}22;color:${e.color};">${e.logo}</div>
       <div class="bs-info">
@@ -1175,7 +1104,7 @@ function renderEarningsTab(){
     <tr>
       <td data-label="Магазин">
         <div class="row" style="gap:8px;">
-          <div class="bs-logo" style="width:32px;height:32px;border-radius:9px;background:${r.color}22;color:${r.color};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;">${r.logo}</div>
+          <div style="width:32px;height:32px;border-radius:9px;background:${r.color}22;color:${r.color};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;">${r.logo}</div>
           <div style="font-weight:600;">${r.store}</div>
         </div>
       </td>
@@ -1231,7 +1160,6 @@ function renderToBloggersTab(){
       <td data-label="">${p.status==='pending'?`<button class="btn btn-primary btn-sm" onclick="showToast('Виплату ${p.id} підтверджено')">Виплатити</button>`:''}</td>
     </tr>
   `).join('');
-
   return `
     <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
       <span class="badge badge-dark">${DATA.payoutsToBloggers.length} виплат</span>
@@ -1275,7 +1203,6 @@ function requestPayout(store, stars){
     `);
     return;
   }
-
   if (!canRequest){
     openModal(`
       <div class="modal-head">
@@ -1298,7 +1225,6 @@ function requestPayout(store, stars){
     `);
     return;
   }
-
   openModal(`
     <div class="modal-head">
       <div><h3>Подати запит на відшкодування</h3><p>${store}</p></div>
@@ -1328,11 +1254,9 @@ function requestPayout(store, stars){
     </div>
   `);
 }
-
 function submitReimb(store, stars){
   closeModal();
   showToast(`Запит на відшкодування для «${store}» подано ✓`);
-  // add to list
   const storeInfo = DATA.earnings.find(e=>e.store===store) || {logo:'??',color:'#999'};
   const newId = '#RMB-' + (200 + DATA.reimbursements.length + 1);
   DATA.reimbursements.unshift({
@@ -1342,14 +1266,13 @@ function submitReimb(store, stars){
   });
   renderPayouts();
 }
-
 function confirmReimb(id){
   const r = DATA.reimbursements.find(x=>x.id===id);
   if (r){ r.status = 'confirmed'; showToast(`Відшкодування ${id} підтверджено ✓`); renderPayouts(); }
 }
 
 /* ============================================================
-   АНАЛІТИКА (shared)
+   АНАЛІТИКА
    ============================================================ */
 function renderAnalytics(){
   document.getElementById('mainContent').innerHTML = `
@@ -1380,7 +1303,6 @@ function renderProfile(){
       <button class="tab ${profileTab==='store'?'active':''}" onclick="setProfileTab('store')">Магазин</button>
     </div>
   `;
-
   let body = '';
   if (profileTab === 'personal'){
     body = `
@@ -1411,7 +1333,6 @@ function renderProfile(){
           <div class="bc-stat"><div class="v">${DATA.blogger.mirrors}</div><div class="k">віддзеркалень</div></div>
           <div class="bc-stat"><div class="v">${DATA.blogger.stores}</div><div class="k">магазинів</div></div>
         </div>
-
         <div style="font-size:13.5px;font-weight:700;margin:20px 0 10px;">Дані ФОП</div>
         <div class="fop-upload ${DATA.blogger.fopUploaded?'done':''}" onclick="uploadFop('fopUploaded')">
           <div class="fu-ic">${DATA.blogger.fopUploaded?'✓':'📄'}</div>
@@ -1423,7 +1344,6 @@ function renderProfile(){
           <div class="fu-label">${DATA.blogger.fopPhotoUploaded?'Фото ФОП з витягом завантажено':'Завантажити фото ФОП з витягом'}</div>
           <div class="fu-hint">${DATA.blogger.fopPhotoUploaded?'Натисніть, щоб замінити':'Селфі з витягом ЄДР — обличчя має бути видно'}</div>
         </div>
-
         <div class="disclaimer">
           <b>Важливо.</b> Платформа <b>не перевіряє достовірність даних</b> та <b>не є гарантом виплат</b>. BEROO виступає виключно як CRM-система обліку — розрахунки між блогером і продавцем відбуваються напряму між сторонами.
         </div>
@@ -1476,7 +1396,6 @@ function renderProfile(){
       `;
     }
   }
-
   document.getElementById('mainContent').innerHTML = `
     ${setHeader('Профіль', 'Особисті дані, статус блогера та магазин')}
     ${tabsHtml}
@@ -1530,7 +1449,6 @@ function showProductModal(id){
     </div>
   `);
 }
-
 function showBloggerModal(id){
   const b = DATA.bloggers.find(x=>x.id===id);
   openModal(`
