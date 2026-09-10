@@ -6,27 +6,13 @@
 <title>BEROO — Дзеркало</title>
 <style>
 :root{
-  --red:#FF2D55;
-  --red-hover:#E6244A;
-  --red-soft:#FFE8ED;
-  --red-50:#FFF5F7;
-  --ink-900:#1A1A1A;
-  --ink-700:#333333;
-  --ink-500:#737373;
-  --ink-400:#999999;
-  --ink-300:#B3B3B3;
-  --line:#EAEAEA;
-  --line-soft:#F2F2F2;
-  --bg:#F7F7F8;
-  --card:#FFFFFF;
-  --green:#22A06B;
-  --green-soft:#E3F6EC;
-  --gold:#F5B300;
-  --gold-soft:#FFF3D1;
+  --red:#FF2D55;--red-hover:#E6244A;--red-soft:#FFE8ED;--red-50:#FFF5F7;
+  --ink-900:#1A1A1A;--ink-700:#333;--ink-500:#737373;--ink-400:#999;--ink-300:#B3B3B3;
+  --line:#EAEAEA;--line-soft:#F2F2F2;--bg:#F7F7F8;--card:#fff;
+  --green:#22A06B;--green-soft:#E3F6EC;
+  --gold:#F5B300;--gold-soft:#FFF3D1;--gold-dark:#8A6500;
   --gray-star:#C7C7CC;
-  --radius:14px;
-  --radius-sm:10px;
-  --radius-lg:20px;
+  --radius:14px;--radius-sm:10px;--radius-lg:20px;
   --shadow:0 1px 3px rgba(0,0,0,.04), 0 4px 14px rgba(0,0,0,.04);
   --shadow-red:0 4px 16px rgba(255,45,85,.28);
 }
@@ -34,8 +20,7 @@
 html,body{height:100%;}
 body{
   font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
-  background:var(--bg);color:var(--ink-900);
-  -webkit-font-smoothing:antialiased;
+  background:var(--bg);color:var(--ink-900);-webkit-font-smoothing:antialiased;
   min-height:100vh;font-size:14px;
 }
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit;}
@@ -43,33 +28,63 @@ input,select,textarea{font-family:inherit;font-size:inherit;}
 a{color:inherit;text-decoration:none;}
 ::selection{background:var(--red-soft);}
 
-/* ============ APP SHELL ============ */
+/* ROLE SWITCHER (fixed top-right) */
+.role-switcher{
+  position:fixed;top:12px;right:12px;z-index:100;
+  display:flex;gap:4px;background:#fff;border:1px solid var(--line);
+  border-radius:99px;padding:4px;box-shadow:0 4px 14px rgba(0,0,0,.08);
+}
+.role-switcher button{
+  width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:16px;transition:all .15s;color:var(--ink-400);
+}
+.role-switcher button.active{background:var(--red);color:#fff;}
+.role-switcher button:hover:not(.active){background:var(--bg);}
+@media(min-width:900px){ .role-switcher{top:16px;right:20px;} }
+
+/* TECH TOGGLE (FOP on/off, small top-left) */
+.tech-toggle{
+  position:fixed;top:12px;left:12px;z-index:100;
+  display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);
+  border-radius:99px;padding:5px 10px 5px 8px;box-shadow:0 2px 8px rgba(0,0,0,.06);
+  font-size:10.5px;font-weight:600;color:var(--ink-500);cursor:pointer;
+}
+.tech-toggle:hover{border-color:var(--ink-300);}
+.tech-toggle .tog{
+  width:30px;height:18px;background:var(--line);border-radius:99px;position:relative;transition:background .2s;
+}
+.tech-toggle.on .tog{background:var(--gold);}
+.tech-toggle .tog::after{
+  content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;background:#fff;
+  border-radius:50%;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.15);
+}
+.tech-toggle.on .tog::after{transform:translateX(12px);}
+@media(min-width:900px){ .tech-toggle{top:16px;left:20px;} }
+
+/* APP SHELL */
 .app{display:flex;flex-direction:column;min-height:100vh;}
 @media(min-width:900px){ .app{flex-direction:row;} }
 
-/* ============ SIDEBAR (desktop) ============ */
+/* SIDEBAR */
 .sidebar{display:none;}
 @media(min-width:900px){
   .sidebar{
-    width:260px;flex-shrink:0;background:#fff;border-right:1px solid var(--line);
+    width:264px;flex-shrink:0;background:#fff;border-right:1px solid var(--line);
     display:flex;flex-direction:column;padding:16px 12px;
     position:sticky;top:0;height:100vh;overflow-y:auto;
   }
 }
-.sb-brand{display:flex;align-items:center;gap:10px;padding:8px 10px 20px;}
-.sb-logo{
-  width:34px;height:34px;border-radius:9px;background:var(--red);color:#fff;
-  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0;
-}
+.sb-brand{display:flex;align-items:center;gap:10px;padding:8px 10px 18px;}
+.sb-logo{width:34px;height:34px;border-radius:9px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0;}
 .sb-name{font-weight:700;font-size:16px;letter-spacing:.2px;}
 
 .sb-store{
   display:flex;align-items:center;gap:8px;padding:10px 12px;background:var(--bg);
   border-radius:10px;font-size:12.5px;font-weight:600;margin-bottom:14px;color:var(--ink-700);
 }
-.sb-store .ic{color:var(--red);}
+.sb-store .ic{color:var(--red);font-size:14px;}
 
-.sb-group{margin-bottom:4px;}
+.sb-group{margin-bottom:2px;}
 .sb-item{
   display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:10px;
   font-size:13.5px;font-weight:500;color:var(--ink-700);cursor:pointer;
@@ -80,8 +95,8 @@ a{color:inherit;text-decoration:none;}
 .sb-item .ic{width:18px;display:flex;justify-content:center;font-size:15px;flex-shrink:0;}
 .sb-item .chev{margin-left:auto;font-size:10px;color:var(--ink-400);transition:transform .2s;}
 .sb-item.open .chev{transform:rotate(180deg);}
-.sb-sub{max-height:0;overflow:hidden;transition:max-height .25s ease;padding-left:6px;}
-.sb-sub.open{max-height:400px;}
+.sb-sub{max-height:0;overflow:hidden;transition:max-height .3s ease;padding-left:6px;}
+.sb-sub.open{max-height:500px;}
 .sb-subitem{
   display:flex;align-items:center;gap:10px;padding:8px 12px 8px 42px;border-radius:9px;
   font-size:13px;color:var(--ink-500);cursor:pointer;transition:background .15s,color .15s;
@@ -93,18 +108,16 @@ a{color:inherit;text-decoration:none;}
   content:"";position:absolute;left:26px;top:50%;transform:translateY(-50%);
   width:4px;height:4px;border-radius:50%;background:var(--red);
 }
+.sb-subitem .shortcut{margin-left:auto;font-size:10px;color:var(--ink-300);}
 .sb-footer{margin-top:auto;padding-top:14px;border-top:1px solid var(--line-soft);}
 .sb-user{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;}
 .sb-user:hover{background:var(--bg);}
-.sb-avatar{
-  width:34px;height:34px;border-radius:50%;background:var(--red-soft);color:var(--red);
-  display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;
-}
+.sb-avatar{width:34px;height:34px;border-radius:50%;background:var(--red-soft);color:var(--red);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;}
 .sb-user-info{flex:1;min-width:0;}
 .sb-user-info .n{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .sb-user-info .r{font-size:11px;color:var(--ink-400);}
 
-/* ============ TOPBAR (mobile) ============ */
+/* TOPBAR mobile */
 .topbar{
   display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;
   border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;
@@ -115,20 +128,20 @@ a{color:inherit;text-decoration:none;}
 .topbar-logo{display:flex;align-items:center;gap:8px;margin:0 auto;font-weight:700;font-size:15px;}
 .tb-logo-mark{width:26px;height:26px;border-radius:7px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;}
 
-/* ============ MAIN ============ */
+/* MAIN */
 .main{flex:1;min-width:0;display:flex;flex-direction:column;}
-.content{padding:18px 16px 60px;max-width:1240px;width:100%;}
-@media(min-width:900px){ .content{padding:26px 32px 60px;} }
+.content{padding:60px 16px 60px;max-width:1240px;width:100%;}
+@media(min-width:900px){ .content{padding:70px 32px 60px;} }
 
 .page-head{margin-bottom:18px;}
 .page-head h1{font-size:22px;font-weight:700;margin-bottom:4px;letter-spacing:-.01em;}
 .page-head p{font-size:13.5px;color:var(--ink-500);line-height:1.5;}
 @media(min-width:900px){ .page-head h1{font-size:26px;} }
 
-/* ============ CARDS ============ */
+/* CARDS */
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);}
 
-/* ============ BUTTONS ============ */
+/* BUTTONS */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:6px;
   padding:10px 16px;border-radius:11px;font-size:13.5px;font-weight:600;
@@ -141,42 +154,27 @@ a{color:inherit;text-decoration:none;}
 .btn-soft{background:var(--red-soft);color:var(--red);}
 .btn-soft:hover{background:#FFD9E1;}
 .btn-sm{padding:7px 12px;font-size:12.5px;border-radius:9px;}
-.btn:disabled{opacity:.5;cursor:not-allowed;}
+.btn:disabled{opacity:.45;cursor:not-allowed;}
 
-/* ============ BADGES ============ */
+/* BADGES */
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:99px;font-size:11px;font-weight:600;line-height:1.5;}
 .badge-green{background:var(--green-soft);color:var(--green);}
 .badge-red{background:var(--red-soft);color:var(--red);}
-.badge-gold{background:var(--gold-soft);color:#8A6500;}
+.badge-gold{background:var(--gold-soft);color:var(--gold-dark);}
 .badge-gray{background:var(--line-soft);color:var(--ink-500);}
 .badge-dark{background:var(--ink-900);color:#fff;}
+.badge-warn{background:#FFF1CC;color:#8A6500;}
 
-/* ============ PRODUCT CARD (Вітрина, стиль товарів BEROO) ============ */
-.product-grid{
-  display:grid;grid-template-columns:1fr;gap:12px;
-}
+/* PRODUCT GRID */
+.product-grid{display:grid;grid-template-columns:1fr;gap:12px;}
 @media(min-width:600px){ .product-grid{grid-template-columns:1fr 1fr;gap:14px;} }
 @media(min-width:1000px){ .product-grid{grid-template-columns:repeat(3,1fr);gap:16px;} }
 
-.product-card{
-  background:#fff;border:1px solid var(--line);border-radius:var(--radius);
-  overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .2s,transform .15s;
-}
+.product-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .2s,transform .15s;}
 .product-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.08);transform:translateY(-1px);}
-.pc-img{
-  position:relative;aspect-ratio:1/1;background:linear-gradient(135deg,#F4F4F6,#EAEAEE);
-  display:flex;align-items:center;justify-content:center;font-size:38px;color:#C7C7CC;
-  overflow:hidden;
-}
-.pc-img .brand-tag{
-  position:absolute;top:10px;left:10px;background:rgba(0,0,0,.7);color:#fff;
-  font-size:9px;font-weight:700;letter-spacing:.05em;padding:3px 7px;border-radius:5px;
-}
-.pc-fav{
-  position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;
-  background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;
-  font-size:14px;color:var(--ink-400);
-}
+.pc-img{position:relative;aspect-ratio:1/1;background:linear-gradient(135deg,#F4F4F6,#EAEAEE);display:flex;align-items:center;justify-content:center;font-size:38px;color:#C7C7CC;overflow:hidden;}
+.pc-img .brand-tag{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.7);color:#fff;font-size:9px;font-weight:700;letter-spacing:.05em;padding:3px 7px;border-radius:5px;}
+.pc-fav{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--ink-400);}
 .pc-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1;}
 .pc-title{font-size:13.5px;font-weight:600;line-height:1.35;color:var(--ink-900);}
 .pc-meta{font-size:11.5px;color:var(--ink-500);display:flex;gap:10px;flex-wrap:wrap;}
@@ -187,14 +185,10 @@ a{color:inherit;text-decoration:none;}
 .pc-actions .btn{flex:1;}
 .pc-mirrorers{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-500);}
 .pc-mirrorers .dots{display:flex;}
-.pc-mirrorers .dot{
-  width:18px;height:18px;border-radius:50%;border:2px solid #fff;margin-left:-6px;
-  background:var(--red-soft);color:var(--red);font-size:8px;font-weight:700;
-  display:flex;align-items:center;justify-content:center;
-}
+.pc-mirrorers .dot{width:18px;height:18px;border-radius:50%;border:2px solid #fff;margin-left:-6px;background:var(--red-soft);color:var(--red);font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;}
 .pc-mirrorers .dot:first-child{margin-left:0;}
 
-/* ============ STORE CARD (Магазини) ============ */
+/* STORE GRID */
 .store-grid{display:grid;grid-template-columns:1fr;gap:12px;}
 @media(min-width:700px){ .store-grid{grid-template-columns:1fr 1fr;gap:14px;} }
 @media(min-width:1100px){ .store-grid{grid-template-columns:repeat(3,1fr);gap:16px;} }
@@ -202,51 +196,38 @@ a{color:inherit;text-decoration:none;}
 .store-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px;transition:box-shadow .2s;}
 .store-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.08);}
 .sc-head{display:flex;align-items:center;gap:12px;}
-.sc-logo{
-  width:48px;height:48px;border-radius:12px;background:var(--red-soft);color:var(--red);
-  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex-shrink:0;
-}
+.sc-logo{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0;}
 .sc-name{font-size:14.5px;font-weight:700;line-height:1.3;}
 .sc-cat{font-size:11.5px;color:var(--ink-500);margin-top:2px;}
 .sc-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.sc-stats-3{grid-template-columns:1fr 1fr 1fr;}
 .sc-stat{background:var(--bg);border-radius:10px;padding:9px 11px;}
 .sc-stat .k{font-size:10.5px;color:var(--ink-500);font-weight:600;text-transform:uppercase;letter-spacing:.03em;margin-bottom:3px;}
 .sc-stat .v{font-size:15px;font-weight:700;}
-.sc-stats-3{grid-template-columns:1fr 1fr 1fr;}
 .sc-foot{display:flex;gap:8px;padding-top:4px;border-top:1px solid var(--line-soft);margin-top:2px;}
 .sc-foot .btn{flex:1;}
-
 .rating{display:inline-flex;align-items:center;gap:3px;font-size:12.5px;font-weight:600;color:var(--ink-700);}
 .rating .star{color:var(--gold);font-size:13px;}
 
-/* ============ BLOGGER CARD ============ */
+/* BLOGGER GRID */
 .blogger-grid{display:grid;grid-template-columns:1fr;gap:12px;}
 @media(min-width:700px){ .blogger-grid{grid-template-columns:1fr 1fr;gap:14px;} }
 @media(min-width:1100px){ .blogger-grid{grid-template-columns:repeat(3,1fr);gap:16px;} }
 
 .blogger-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px;position:relative;transition:box-shadow .2s;}
 .blogger-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.08);}
-.bc-fop-badge{
-  position:absolute;top:14px;right:14px;font-size:9.5px;font-weight:700;
-  padding:3px 8px;border-radius:99px;letter-spacing:.04em;
-}
-.bc-fop{background:var(--gold-soft);color:#8A6500;}
+.bc-fop-badge{position:absolute;top:14px;right:14px;font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:99px;letter-spacing:.04em;}
+.bc-fop{background:var(--gold-soft);color:var(--gold-dark);}
 .bc-nofop{background:var(--line-soft);color:var(--ink-500);}
 .bc-head{display:flex;align-items:center;gap:12px;}
-.bc-avatar{
-  width:52px;height:52px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;
-  color:#fff;flex-shrink:0;
-}
+.bc-avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#fff;flex-shrink:0;}
 .bc-name{font-size:14.5px;font-weight:700;line-height:1.3;}
 .bc-handle{font-size:11.5px;color:var(--ink-500);margin-top:2px;}
-.bc-stars{
-  display:flex;align-items:center;gap:6px;background:var(--bg);border-radius:10px;padding:9px 12px;
-}
-.bc-stars .star-ic{font-size:18px;}
+.bc-stars{display:flex;align-items:center;gap:10px;background:var(--bg);border-radius:10px;padding:10px 12px;}
+.bc-stars .star-ic{font-size:20px;}
 .bc-stars.gold .star-ic{color:var(--gold);}
 .bc-stars.gray .star-ic{color:var(--gray-star);}
-.bc-stars .num{font-size:16px;font-weight:800;}
+.bc-stars .num{font-size:17px;font-weight:800;}
 .bc-stars .lbl{font-size:10.5px;color:var(--ink-500);font-weight:600;margin-top:1px;}
 .bc-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
 .bc-stat{background:var(--bg);border-radius:10px;padding:9px 11px;text-align:center;}
@@ -254,17 +235,10 @@ a{color:inherit;text-decoration:none;}
 .bc-stat .k{font-size:10.5px;color:var(--ink-500);margin-top:2px;font-weight:600;}
 .bc-foot{padding-top:8px;border-top:1px solid var(--line-soft);}
 
-/* ============ MODAL ============ */
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;padding:20px;
-  display:none;align-items:center;justify-content:center;
-}
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;padding:20px;display:none;align-items:center;justify-content:center;}
 .modal-overlay.active{display:flex;}
-.modal{
-  background:#fff;border-radius:var(--radius-lg);width:100%;max-width:520px;
-  max-height:88vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);
-  animation:modalIn .2s ease;
-}
+.modal{background:#fff;border-radius:var(--radius-lg);width:100%;max-width:520px;max-height:88vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:modalIn .2s ease;}
 @keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(8px);}to{opacity:1;transform:scale(1) translateY(0);}}
 .modal-head{padding:20px 22px 14px;border-bottom:1px solid var(--line-soft);display:flex;align-items:flex-start;gap:12px;}
 .modal-head h3{font-size:17px;font-weight:700;}
@@ -273,30 +247,20 @@ a{color:inherit;text-decoration:none;}
 .modal-body{padding:20px 22px;}
 .modal-foot{padding:14px 22px;border-top:1px solid var(--line-soft);display:flex;gap:10px;justify-content:flex-end;}
 
-/* ============ TABS ============ */
-.tabs{display:flex;border-bottom:1px solid var(--line);overflow-x:auto;}
-.tab{
-  padding:13px 16px;font-size:13.5px;font-weight:600;color:var(--ink-500);white-space:nowrap;
-  border-bottom:2px solid transparent;transition:color .15s,border-color .15s;
-}
+/* TABS */
+.tabs{display:flex;border-bottom:1px solid var(--line);overflow-x:auto;margin-bottom:18px;}
+.tab{padding:13px 16px;font-size:13.5px;font-weight:600;color:var(--ink-500);white-space:nowrap;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;}
 .tab.active{color:var(--red);border-bottom-color:var(--red);}
 
-/* ============ FORMS ============ */
+/* FORMS */
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
 .field label{font-size:12.5px;font-weight:600;color:var(--ink-700);}
-.field input,.field select,.field textarea{
-  padding:11px 13px;border-radius:10px;border:1px solid var(--line);
-  font-size:13.5px;background:#fff;transition:border-color .15s;
-}
+.field input,.field select,.field textarea{padding:11px 13px;border-radius:10px;border:1px solid var(--line);font-size:13.5px;background:#fff;transition:border-color .15s;width:100%;}
 .field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--red);}
 .field textarea{resize:vertical;min-height:80px;}
 
-/* ============ REGISTRATION ============ */
-.reg-screen{
-  position:fixed;inset:0;background:#fff;z-index:300;display:none;
-  flex-direction:column;align-items:center;justify-content:center;padding:24px;
-  overflow-y:auto;
-}
+/* REGISTRATION */
+.reg-screen{position:fixed;inset:0;background:#fff;z-index:300;display:none;flex-direction:column;align-items:center;justify-content:center;padding:24px;overflow-y:auto;}
 .reg-screen.active{display:flex;}
 .reg-box{width:100%;max-width:440px;}
 .reg-logo{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:28px;}
@@ -305,10 +269,7 @@ a{color:inherit;text-decoration:none;}
 .reg-title{font-size:22px;font-weight:700;text-align:center;margin-bottom:6px;}
 .reg-sub{font-size:13.5px;color:var(--ink-500);text-align:center;margin-bottom:28px;line-height:1.5;}
 .role-choice{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:22px;}
-.role-card{
-  padding:20px 14px;border-radius:14px;border:2px solid var(--line);text-align:center;
-  transition:all .15s;cursor:pointer;background:#fff;
-}
+.role-card{padding:20px 14px;border-radius:14px;border:2px solid var(--line);text-align:center;transition:all .15s;cursor:pointer;background:#fff;}
 .role-card:hover{border-color:var(--ink-300);}
 .role-card.selected{border-color:var(--red);background:var(--red-50);}
 .role-card .rc-ic{font-size:30px;margin-bottom:10px;}
@@ -317,54 +278,135 @@ a{color:inherit;text-decoration:none;}
 
 .reg-progress{display:flex;gap:6px;margin-bottom:22px;justify-content:center;}
 .reg-dot{width:32px;height:4px;border-radius:99px;background:var(--line);}
-.reg-dot.done{background:var(--red);}
-.reg-dot.active{background:var(--red);}
+.reg-dot.done,.reg-dot.active{background:var(--red);}
 
 .toggle-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--line-soft);}
 .toggle-row .lbl{font-size:13.5px;font-weight:600;}
-.toggle{position:relative;width:46px;height:26px;background:var(--line);border-radius:99px;transition:background .2s;cursor:pointer;}
+.toggle{position:relative;width:46px;height:26px;background:var(--line);border-radius:99px;transition:background .2s;cursor:pointer;flex-shrink:0;}
 .toggle.on{background:var(--red);}
-.toggle::after{
-  content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;background:#fff;
-  border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.15);
-}
+.toggle::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;background:#fff;border-radius:50%;transition:transform .2s;box-shadow:0 1px 3px rgba(0,0,0,.15);}
 .toggle.on::after{transform:translateX(20px);}
 
-/* ============ UTILS ============ */
+/* STAT BOX (Мій заробіток — big amount) */
+.earn-box{
+  background:linear-gradient(135deg,#1A1A1A,#2E2E2E);color:#fff;
+  border-radius:20px;padding:28px 24px;margin-bottom:20px;position:relative;overflow:hidden;
+}
+.earn-box::before{
+  content:"";position:absolute;top:-40px;right:-40px;width:160px;height:160px;
+  border-radius:50%;background:rgba(255,255,255,.04);
+}
+.earn-label{font-size:12px;color:rgba(255,255,255,.55);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;}
+.earn-amount{font-size:36px;font-weight:800;letter-spacing:-.02em;display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;}
+.earn-amount .star-big{font-size:30px;}
+.earn-amount.gold .star-big{color:var(--gold);}
+.earn-amount.gray .star-big{color:var(--gray-star);}
+.earn-sub{font-size:12.5px;color:rgba(255,255,255,.6);margin-top:10px;}
+.earn-fop-tag{
+  position:absolute;top:20px;right:20px;font-size:10px;font-weight:700;
+  padding:4px 10px;border-radius:99px;letter-spacing:.04em;
+}
+.earn-fop-tag.gold{background:rgba(245,179,0,.2);color:var(--gold);}
+.earn-fop-tag.gray{background:rgba(255,255,255,.1);color:rgba(255,255,255,.6);}
+
+/* STORE BREAKDOWN */
+.breakdown-store{
+  display:flex;align-items:center;gap:12px;padding:14px 16px;
+  background:#fff;border:1px solid var(--line);border-radius:12px;margin-bottom:8px;
+}
+.breakdown-store .bs-logo{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;}
+.breakdown-store .bs-info{flex:1;min-width:0;}
+.breakdown-store .bs-name{font-size:13.5px;font-weight:700;}
+.breakdown-store .bs-sub{font-size:11.5px;color:var(--ink-500);margin-top:2px;}
+.breakdown-store .bs-stars{display:flex;align-items:center;gap:5px;font-size:14px;font-weight:700;flex-shrink:0;}
+.breakdown-store .bs-stars .star-ic{font-size:15px;}
+.breakdown-store .bs-stars.gold .star-ic{color:var(--gold);}
+.breakdown-store .bs-stars.gray .star-ic{color:var(--gray-star);}
+.breakdown-store .bs-action{flex-shrink:0;}
+@media(max-width:640px){
+  .breakdown-store{flex-wrap:wrap;}
+  .breakdown-store .bs-action{width:100%;}
+  .breakdown-store .bs-action .btn{width:100%;}
+}
+
+/* PAYOUTS TABLE */
+.payout-table{width:100%;border-collapse:collapse;font-size:13px;}
+.payout-table th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-400);font-weight:700;padding:10px 12px;border-bottom:1px solid var(--line);}
+.payout-table td{padding:13px 12px;border-bottom:1px solid var(--line-soft);vertical-align:middle;}
+.payout-table tr:last-child td{border-bottom:none;}
+@media(max-width:640px){
+  .payout-table thead{display:none;}
+  .payout-table, .payout-table tbody, .payout-table tr, .payout-table td{display:block;width:100%;}
+  .payout-table tr{border:1px solid var(--line);border-radius:12px;margin-bottom:10px;padding:10px 12px;}
+  .payout-table td{border-bottom:1px dashed var(--line-soft);padding:8px 2px 8px 46%;position:relative;text-align:right;}
+  .payout-table td:last-child{border-bottom:none;}
+  .payout-table td::before{content:attr(data-label);position:absolute;left:2px;top:8px;width:44%;text-align:left;font-size:10.5px;font-weight:700;color:var(--ink-500);text-transform:uppercase;letter-spacing:.03em;}
+}
+
+/* FOP PROFILE FORM */
+.fop-upload{
+  border:2px dashed var(--line);border-radius:12px;padding:20px;text-align:center;
+  cursor:pointer;transition:border-color .15s;margin-bottom:12px;
+}
+.fop-upload:hover{border-color:var(--red);}
+.fop-upload.done{border-style:solid;border-color:var(--green);background:var(--green-soft);}
+.fop-upload .fu-ic{font-size:26px;margin-bottom:6px;}
+.fop-upload .fu-label{font-size:13px;font-weight:600;}
+.fop-upload .fu-hint{font-size:11.5px;color:var(--ink-500);margin-top:4px;}
+
+.disclaimer{
+  background:#FFF8E5;border:1px solid #FFE9A8;border-radius:12px;padding:14px 16px;
+  font-size:12px;color:#7A5A00;line-height:1.55;margin-top:16px;
+}
+.disclaimer b{color:#5A4300;}
+
+/* UTILS */
 .row{display:flex;align-items:center;gap:10px;}
 .row-between{display:flex;align-items:center;justify-content:space-between;gap:10px;}
 .muted{color:var(--ink-500);font-size:12.5px;}
-.mt-8{margin-top:8px;} .mt-12{margin-top:12px;} .mt-16{margin-top:16px;} .mt-20{margin-top:20px;}
-.mb-12{margin-bottom:12px;} .mb-16{margin-bottom:16px;}
+.mt-8{margin-top:8px;}.mt-12{margin-top:12px;}.mt-16{margin-top:16px;}.mt-20{margin-top:20px;}
+.mb-12{margin-bottom:12px;}.mb-16{margin-bottom:16px;}
 .hidden{display:none !important;}
 
-/* ============ TOAST ============ */
+/* TOAST */
 .toast-wrap{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:999;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;}
-.toast{
-  background:var(--ink-900);color:#fff;padding:11px 18px;border-radius:11px;
-  font-size:13px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.2);
-  animation:toastIn .2s ease;max-width:90vw;
-}
+.toast{background:var(--ink-900);color:#fff;padding:11px 18px;border-radius:11px;font-size:13px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.2);animation:toastIn .2s ease;max-width:90vw;text-align:center;}
 @keyframes toastIn{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 
-/* ============ EMPTY ============ */
+/* EMPTY */
 .empty{text-align:center;padding:60px 20px;color:var(--ink-400);}
 .empty .em-ic{font-size:48px;margin-bottom:14px;opacity:.4;}
 .empty .em-t{font-size:14.5px;font-weight:600;color:var(--ink-500);margin-bottom:6px;}
 .empty .em-s{font-size:12.5px;line-height:1.5;}
 
-/* ============ MOBILE MENU DRAWER ============ */
-.mobile-menu{
-  position:fixed;inset:0;background:#fff;z-index:150;display:none;flex-direction:column;
-  overflow-y:auto;
-}
+/* MOBILE MENU */
+.mobile-menu{position:fixed;inset:0;background:#fff;z-index:250;display:none;flex-direction:column;overflow-y:auto;}
 .mobile-menu.active{display:flex;}
 .mm-head{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);}
 .mm-body{padding:12px;flex:1;}
 .mm-close{width:30px;height:30px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--ink-500);margin-left:auto;}
+
+/* INFO ICON */
+.info-ic{
+  display:inline-flex;width:16px;height:16px;border-radius:50%;
+  background:var(--ink-300);color:#fff;font-size:10px;font-weight:700;
+  align-items:center;justify-content:center;cursor:help;margin-left:4px;flex-shrink:0;
+}
 </style>
 </head>
 <body>
+
+<!-- ==================== TECH TOGGLE (FOP) ==================== -->
+<div class="tech-toggle" id="techToggle" onclick="toggleTechFop()" title="Технічний режим для розробників">
+  <span>ФОП</span>
+  <div class="tog"></div>
+</div>
+
+<!-- ==================== ROLE SWITCHER ==================== -->
+<div class="role-switcher">
+  <button id="roleBtnBlogger" onclick="switchRole('blogger')" title="Блогер">👤</button>
+  <button id="roleBtnSeller" onclick="switchRole('seller')" title="Продавець">🛒</button>
+</div>
 
 <!-- ==================== REGISTRATION ==================== -->
 <div class="reg-screen active" id="regScreen">
@@ -374,10 +416,9 @@ a{color:inherit;text-decoration:none;}
       <div class="reg-logo-name">BEROO</div>
     </div>
 
-    <!-- Step 1: role -->
     <div id="regStep1">
       <div class="reg-title">Хто ви?</div>
-      <div class="reg-sub">Оберіть тип акаунта — від цього залежить набір функцій системи.</div>
+      <div class="reg-sub">Оберіть тип акаунта. Демо-дані вже підготовлені — ви зможете перемикати роль у будь-який момент.</div>
       <div class="role-choice">
         <div class="role-card" id="roleSeller" onclick="pickRole('seller')">
           <div class="rc-ic">🏬</div>
@@ -393,101 +434,49 @@ a{color:inherit;text-decoration:none;}
       <button class="btn btn-primary" style="width:100%;" id="regContinue1" onclick="regNext1()" disabled>Продовжити</button>
     </div>
 
-    <!-- Step 2: seller onboarding -->
     <div id="regStep2" class="hidden">
-      <div class="reg-progress">
-        <div class="reg-dot active" id="pd1"></div>
-        <div class="reg-dot" id="pd2"></div>
-        <div class="reg-dot" id="pd3"></div>
-        <div class="reg-dot" id="pd4"></div>
-      </div>
+      <div class="reg-progress"><div class="reg-dot active"></div><div class="reg-dot"></div><div class="reg-dot"></div><div class="reg-dot"></div></div>
       <div class="reg-title">Назва магазину</div>
-      <div class="reg-sub">Як вас бачитимуть покупці та блогери.</div>
-      <div class="field">
-        <label>Назва магазину</label>
-        <input id="regStoreName" placeholder="напр. МАГАЗИН ДАЧНИК" value="МАГАЗИН ДАЧНИК">
-      </div>
+      <div class="reg-sub">Демо: вже заповнено.</div>
+      <div class="field"><label>Назва магазину</label><input id="regStoreName" value="МАГАЗИН ДАЧНИК"></div>
       <button class="btn btn-primary" style="width:100%;" onclick="regNext2()">Далі</button>
     </div>
 
     <div id="regStep3" class="hidden">
-      <div class="reg-progress">
-        <div class="reg-dot done"></div><div class="reg-dot active"></div>
-        <div class="reg-dot"></div><div class="reg-dot"></div>
-      </div>
+      <div class="reg-progress"><div class="reg-dot done"></div><div class="reg-dot active"></div><div class="reg-dot"></div><div class="reg-dot"></div></div>
       <div class="reg-title">Категорія магазину</div>
-      <div class="reg-sub">Оберіть основну категорію товарів.</div>
-      <div class="field">
-        <label>Категорія</label>
+      <div class="reg-sub">Демо: вже обрано.</div>
+      <div class="field"><label>Категорія</label>
         <select id="regCategory">
-          <option>Ручний інструмент</option>
-          <option>Жіночий одяг та аксесуари</option>
-          <option>Електроінструмент</option>
-          <option>Побутова техніка</option>
-          <option>Товари для дому</option>
+          <option>Ручний інструмент</option><option>Жіночий одяг та аксесуари</option>
+          <option>Електроінструмент</option><option>Побутова техніка</option>
         </select>
-      </div>
-      <div class="field">
-        <label>Оберіть 3 категорії товару</label>
-        <div class="role-choice" style="grid-template-columns:1fr 1fr 1fr;gap:8px;">
-          <div class="role-card" onclick="this.classList.toggle('selected')" style="padding:12px 6px;">
-            <div class="rc-name" style="font-size:12px;">Електроінструмент</div>
-          </div>
-          <div class="role-card" onclick="this.classList.toggle('selected')" style="padding:12px 6px;">
-            <div class="rc-name" style="font-size:12px;">Ручний інструмент</div>
-          </div>
-          <div class="role-card" onclick="this.classList.toggle('selected')" style="padding:12px 6px;">
-            <div class="rc-name" style="font-size:12px;">Запчастини</div>
-          </div>
-        </div>
       </div>
       <button class="btn btn-primary" style="width:100%;" onclick="regNext3()">Далі</button>
     </div>
 
     <div id="regStep4" class="hidden">
-      <div class="reg-progress">
-        <div class="reg-dot done"></div><div class="reg-dot done"></div>
-        <div class="reg-dot active"></div><div class="reg-dot"></div>
-      </div>
+      <div class="reg-progress"><div class="reg-dot done"></div><div class="reg-dot done"></div><div class="reg-dot active"></div><div class="reg-dot"></div></div>
       <div class="reg-title">Тестовий товар</div>
-      <div class="reg-sub">Запустіть тестовий товар, щоб перевірити систему.</div>
-      <div class="field">
-        <label>Назва тестового товару</label>
-        <input id="regTestProduct" value="Генератор дизельний тестовий">
-      </div>
-      <div class="field">
-        <label>Ціна</label>
-        <input id="regTestPrice" type="number" value="15000">
-      </div>
-      <button class="btn btn-primary" style="width:100%;" onclick="regNext4()">Запустити та зареєструвати магазин</button>
+      <div class="reg-sub">Демо: вже заповнено.</div>
+      <div class="field"><label>Назва</label><input value="Генератор дизельний RO-CRAFT DP35"></div>
+      <div class="field"><label>Ціна, ₴</label><input type="number" value="45000"></div>
+      <button class="btn btn-primary" style="width:100%;" onclick="regNext4()">Запустити та зареєструвати</button>
     </div>
 
     <div id="regStep5" class="hidden">
-      <div class="reg-progress">
-        <div class="reg-dot done"></div><div class="reg-dot done"></div>
-        <div class="reg-dot done"></div><div class="reg-dot done"></div>
-      </div>
+      <div class="reg-progress"><div class="reg-dot done"></div><div class="reg-dot done"></div><div class="reg-dot done"></div><div class="reg-dot done"></div></div>
       <div class="reg-title">Магазин зареєстровано!</div>
-      <div class="reg-sub">Вітаємо в BEROO. Ваш магазин <b>МАГАЗИН ДАЧНИК</b> готовий до роботи.</div>
+      <div class="reg-sub">Вітаємо в BEROO. Магазин <b>МАГАЗИН ДАЧНИК</b> готовий до роботи.</div>
       <button class="btn btn-primary" style="width:100%;" onclick="finishReg()">Увійти в систему</button>
     </div>
 
-    <!-- Step 2B: blogger -->
     <div id="regBloggerBox" class="hidden">
       <div class="reg-title">Реєстрація блогера</div>
-      <div class="reg-sub">Створіть акаунт — вам відкриється спрощена модель CRM.</div>
-      <div class="field">
-        <label>Імʼя</label>
-        <input id="regBloggerName" value="Марина Костенко">
-      </div>
-      <div class="field">
-        <label>Нікнейм</label>
-        <input id="regBloggerHandle" value="@marina.style">
-      </div>
-      <div class="field">
-        <label>Місто</label>
-        <input id="regBloggerCity" value="Київ">
-      </div>
+      <div class="reg-sub">Демо-дані вже заповнені. Ви зможете пізніше активувати магазин у профілі.</div>
+      <div class="field"><label>Імʼя</label><input id="regBloggerName" value="Марина Костенко"></div>
+      <div class="field"><label>Нікнейм</label><input id="regBloggerHandle" value="@marina.style"></div>
+      <div class="field"><label>Місто</label><input id="regBloggerCity" value="Київ"></div>
       <button class="btn btn-primary" style="width:100%;" onclick="finishRegBlogger()">Зареєструватись</button>
     </div>
   </div>
@@ -495,21 +484,10 @@ a{color:inherit;text-decoration:none;}
 
 <!-- ==================== APP ==================== -->
 <div class="app" id="app" style="display:none;">
-
-  <!-- SIDEBAR -->
   <aside class="sidebar">
-    <div class="sb-brand">
-      <div class="sb-logo">B</div>
-      <div class="sb-name">BEROO</div>
-    </div>
-
-    <div class="sb-store">
-      <span class="ic">🏬</span>
-      <span id="sbStoreName">МАГАЗИН ДАЧНИК</span>
-    </div>
-
+    <div class="sb-brand"><div class="sb-logo">B</div><div class="sb-name">BEROO</div></div>
+    <div class="sb-store"><span class="ic">🏬</span><span id="sbStoreName">МАГАЗИН ДАЧНИК</span></div>
     <div id="sidebarNav"></div>
-
     <div class="sb-footer">
       <div class="sb-user">
         <div class="sb-avatar" id="sbUserAvatar">МК</div>
@@ -521,25 +499,19 @@ a{color:inherit;text-decoration:none;}
     </div>
   </aside>
 
-  <!-- MAIN -->
   <div class="main">
     <div class="topbar">
       <button class="burger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
       <div class="topbar-logo"><div class="tb-logo-mark">B</div>BEROO</div>
       <div style="width:24px;"></div>
     </div>
-
     <div class="content" id="mainContent"></div>
   </div>
 </div>
 
-<!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
-  <div class="mm-head">
-    <div class="sb-logo">B</div>
-    <div class="sb-name">BEROO</div>
-    <button class="mm-close" onclick="toggleMobileMenu()">✕</button>
-  </div>
+  <div class="mm-head"><div class="sb-logo">B</div><div class="sb-name">BEROO</div>
+  <button class="mm-close" onclick="toggleMobileMenu()">✕</button></div>
   <div class="mm-body" id="mobileNav"></div>
 </div>
 
@@ -557,6 +529,11 @@ const MENU = [
     { key:'showcase', label:'Вітрина' },
     { key:'stores', label:'Магазини' },
     { key:'bloggers', label:'Блогери' },
+    { key:'connections', label:'Звʼязки', sub:[
+      { key:'requests', label:'Запити' },
+      { key:'i-mirror', label:'Я віддзеркалюю' },
+      { key:'they-mirror', label:'Мене віддзеркалюють', sellerOnly:true }
+    ]},
     { key:'payouts', label:'Виплати', shortcut:true },
     { key:'analytics', label:'Аналітика', shortcut:true },
     { key:'profile', label:'Профіль', shortcut:true }
@@ -579,7 +556,7 @@ const MENU = [
     { key:'cash', label:'Каса' },
     { key:'income', label:'Надходження' },
     { key:'expenses', label:'Витрати' },
-    { key:'payouts', label:'Виплати' },
+    { key:'payouts', label:'Виплати', shortcut:true },
     { key:'docs', label:'Документи' },
     { key:'templates', label:'Шаблони документів' },
     { key:'pnl', label:'Звіт P&L' }
@@ -598,9 +575,7 @@ const MENU = [
     { key:'mirroring', label:'Віддзеркалення' },
     { key:'target', label:'Таргет' }
   ]},
-  { key:'analytics', label:'Аналітика', icon:'📈', views:[
-    { key:'stats', label:'Статистика' }
-  ]},
+  { key:'analytics', label:'Аналітика', icon:'📈', views:[{ key:'stats', label:'Статистика' }]},
   { key:'manage', label:'Керування', icon:'⚙️', views:[
     { key:'tasks', label:'Задачі' },
     { key:'team', label:'Команда' },
@@ -617,14 +592,14 @@ const MENU = [
    DATA
    ============================================================ */
 const DATA = {
-  store: { name:'МАГАЗИН ДАЧНИК', code:'60787', category:'Ручний інструмент' },
-  user: { name:'Марина Костенко', role:'seller', fop:true },
-  blogger: {
+  store:{ name:'МАГАЗИН ДАЧНИК', code:'60787', category:'Ручний інструмент' },
+  user:{ name:'Марина Костенко', role:'blogger', isFop:true, hasStore:false },
+  blogger:{
     name:'Марина Костенко', handle:'@marina.style', city:'Київ',
-    isFop:true, stars:4820, mirrors:41, stores:6, avatarBg:'#FF2D55',
-    canBeStore:true, isStore:false
+    isFop:true, stars:8935, mirrors:41, stores:6, avatarBg:'#FF2D55',
+    fopUploaded:false, fopPhotoUploaded:false
   },
-  products: [
+  products:[
     { id:1, name:'Генератор дизельний RO-CRAFT DP35', brand:'RO-CRAFT', art:'BR3254', code:'164', cat:'Ручний інструмент', price:45000, qty:1, mirrorers:12, stars:1537 },
     { id:2, name:'Генератор дизельний RO-CRAFT DP35', brand:'RO-CRAFT', art:'BR3253', code:'163', cat:'Ручний інструмент', price:45000, qty:1, mirrorers:8, stars:980 },
     { id:3, name:'Перфоратор Makita HR2470', brand:'Makita', art:'MK2470', code:'201', cat:'Електроінструмент', price:6290, qty:3, mirrorers:24, stars:2210 },
@@ -632,7 +607,7 @@ const DATA = {
     { id:5, name:'Набір ключів 24 предмети', brand:'TOPEX', art:'TX-24', code:'310', cat:'Ручний інструмент', price:1290, qty:12, mirrorers:6, stars:420 },
     { id:6, name:'Компресор повітряний 50л', brand:'AIR-TECH', art:'AT-50', code:'402', cat:'Електроінструмент', price:8900, qty:2, mirrorers:11, stars:1130 }
   ],
-  stores: [
+  stores:[
     { id:'ST-2291', name:'МАГАЗИН ДАЧНИК', cat:'Ручний інструмент', products:65, rating:4.7, mirrors:120, totalStars:18420, logo:'МД', color:'#FF2D55' },
     { id:'ST-3012', name:'Uzory.ua', cat:'Вишиванки та етно', products:96, rating:4.6, mirrors:34, totalStars:6420, logo:'UZ', color:'#6D28D9' },
     { id:'ST-1187', name:'Linen&Co', cat:'Одяг з льону', products:58, rating:4.9, mirrors:52, totalStars:9870, logo:'LC', color:'#22A06B' },
@@ -640,7 +615,7 @@ const DATA = {
     { id:'ST-2733', name:'MOSAIC studio', cat:'Дизайнерський одяг', products:47, rating:4.7, mirrors:19, totalStars:2340, logo:'MS', color:'#0EA5E9' },
     { id:'ST-5510', name:'Kvit Store', cat:'Взуття', products:180, rating:4.3, mirrors:41, totalStars:5620, logo:'KS', color:'#EC4899' }
   ],
-  bloggers: [
+  bloggers:[
     { id:'bl-1', name:'Марина Костенко', handle:'@marina.style', city:'Київ', isFop:true, stars:4820, mirrors:41, stores:6, avatarBg:'#FF2D55' },
     { id:'bl-2', name:'Богдан Северин', handle:'@bogdan.wear', city:'Львів', isFop:false, stars:2210, mirrors:19, stores:3, avatarBg:'#3B82F6' },
     { id:'bl-3', name:'Софія Ткаченко', handle:'@sofia.dailylook', city:'Одеса', isFop:true, stars:9040, mirrors:88, stores:8, avatarBg:'#22A06B' },
@@ -648,24 +623,50 @@ const DATA = {
     { id:'bl-5', name:'Роман Дацюк', handle:'@roman.urbanfit', city:'Дніпро', isFop:true, stars:1510, mirrors:14, stores:2, avatarBg:'#8B5CF6' },
     { id:'bl-6', name:'Настя Гуменюк', handle:'@nastya.trends', city:'Івано-Франківськ', isFop:false, stars:3340, mirrors:27, stores:4, avatarBg:'#EC4899' }
   ],
-  payouts: [
-    { id:'#VP-1042', blogger:'Марина Костенко', stars:1537, sum:1844, date:'28.06.2026', status:'done' },
-    { id:'#VP-1043', blogger:'Софія Ткаченко', stars:3060, sum:3672, date:'30.06.2026', status:'done' },
-    { id:'#VP-1044', blogger:'Богдан Северин', stars:640, sum:640, date:'01.07.2026', status:'pending' },
-    { id:'#VP-1045', blogger:'Роман Дацюк', stars:480, sum:528, date:'02.07.2026', status:'pending' }
+  // Earnings breakdown — sum must be 8935
+  earnings:[
+    { store:'Shafa Trend', logo:'ST', color:'#FF2D55', stars:2315, label:'жіночий одяг' },
+    { store:'Uzory.ua', logo:'UZ', color:'#6D28D9', stars:1840, label:'вишиванки та етно' },
+    { store:'Linen&Co', logo:'LC', color:'#22A06B', stars:1720, label:'одяг з льону' },
+    { store:'MOSAIC studio', logo:'MS', color:'#0EA5E9', stars:1640, label:'дизайнерський одяг' },
+    { store:'Kvit Store', logo:'KS', color:'#EC4899', stars:1420, label:'взуття' }
+  ],
+  // Payout requests (reimbursements)
+  reimbursements:[
+    { id:'#RMB-201', store:'Shafa Trend', logo:'ST', color:'#FF2D55', date:'28.06.2026', stars:1537, sum:1844, status:'pending' },
+    { id:'#RMB-202', store:'Uzory.ua', logo:'UZ', color:'#6D28D9', date:'30.06.2026', stars:1840, sum:2208, status:'pending' },
+    { id:'#RMB-203', store:'Linen&Co', logo:'LC', color:'#22A06B', date:'15.06.2026', stars:900, sum:1080, status:'confirmed' },
+    { id:'#RMB-204', store:'Kvit Store', logo:'KS', color:'#EC4899', date:'10.06.2026', stars:420, sum:504, status:'confirmed' }
+  ],
+  // Seller payouts to bloggers (вкладка «Виплати блогерам»)
+  payoutsToBloggers:[
+    { id:'#VP-1042', blogger:'Марина Костенко', date:'28.06.2026', stars:1537, sum:1844, status:'done' },
+    { id:'#VP-1043', blogger:'Софія Ткаченко', date:'30.06.2026', stars:3060, sum:3672, status:'done' },
+    { id:'#VP-1044', blogger:'Богдан Северин', date:'01.07.2026', stars:640, sum:640, status:'pending' },
+    { id:'#VP-1045', blogger:'Роман Дацюк', date:'02.07.2026', stars:480, sum:528, status:'pending' }
+  ],
+  // Requests (Запити)
+  requests:[
+    { id:'#REQ-301', to:'Shafa Trend', logo:'ST', color:'#FF2D55', type:'Магазин', date:'02.07.2026', items:'Сукня міді, Кардиган', status:'active' },
+    { id:'#REQ-302', to:'Uzory.ua', logo:'UZ', color:'#6D28D9', type:'Магазин', date:'30.06.2026', items:'Вишиванка чоловіча', status:'pending' },
+    { id:'#REQ-303', to:'Linen&Co', logo:'LC', color:'#22A06B', type:'Магазин', date:'28.06.2026', items:'Сукня лляна, Сорочка', status:'active' },
+    { id:'#REQ-304', to:'Kvit Store', logo:'KS', color:'#EC4899', type:'Магазин', date:'20.06.2026', items:'Кросівки текстильні', status:'pending' },
+    { id:'#REQ-305', to:'MOSAIC studio', logo:'MS', color:'#0EA5E9', type:'Магазин', date:'15.06.2026', items:'Сукня дизайнерська', status:'rejected' }
   ]
 };
 
 /* ============================================================
    STATE
    ============================================================ */
-let currentRole = 'seller';
+let currentRole = 'blogger';
 let currentView = 'showcase';
 let currentParent = 'dz';
-const expandedMenu = { dz:true };
+let profileTab = 'personal';
+let payoutsTab = 'earnings';
+const expandedMenu = {};
 
 /* ============================================================
-   REGISTRATION FLOW
+   REGISTRATION
    ============================================================ */
 let pickedRole = null;
 function pickRole(r){
@@ -682,14 +683,8 @@ function regNext1(){
     document.getElementById('regBloggerBox').classList.remove('hidden');
   }
 }
-function regNext2(){
-  document.getElementById('regStep2').classList.add('hidden');
-  document.getElementById('regStep3').classList.remove('hidden');
-}
-function regNext3(){
-  document.getElementById('regStep3').classList.add('hidden');
-  document.getElementById('regStep4').classList.remove('hidden');
-}
+function regNext2(){ document.getElementById('regStep2').classList.add('hidden'); document.getElementById('regStep3').classList.remove('hidden'); }
+function regNext3(){ document.getElementById('regStep3').classList.add('hidden'); document.getElementById('regStep4').classList.remove('hidden'); }
 function regNext4(){
   document.getElementById('regStep4').classList.add('hidden');
   document.getElementById('regStep5').classList.remove('hidden');
@@ -698,12 +693,15 @@ function regNext4(){
 }
 function finishReg(){
   currentRole = 'seller';
+  DATA.user.role = 'seller';
+  DATA.user.hasStore = true;
   startApp();
 }
 function finishRegBlogger(){
   currentRole = 'blogger';
   DATA.user.name = document.getElementById('regBloggerName').value;
   DATA.user.role = 'blogger';
+  DATA.user.hasStore = false;
   DATA.blogger.name = document.getElementById('regBloggerName').value;
   DATA.blogger.handle = document.getElementById('regBloggerHandle').value;
   DATA.blogger.city = document.getElementById('regBloggerCity').value;
@@ -712,35 +710,81 @@ function finishRegBlogger(){
 function startApp(){
   document.getElementById('regScreen').classList.remove('active');
   document.getElementById('app').style.display = 'flex';
-  document.getElementById('sbUserName').textContent = DATA.user.name;
-  document.getElementById('sbUserRole').textContent = currentRole === 'seller' ? 'Продавець' : 'Блогер';
-  document.getElementById('sbUserAvatar').textContent = DATA.user.name.split(' ').map(p=>p[0]).join('').slice(0,2);
-  document.getElementById('sbStoreName').textContent = currentRole === 'seller' ? DATA.store.name : '—';
+  updateUserUI();
   renderMenu();
   selectView('showcase');
 }
-
-/* ============================================================
-   MENU
-   ============================================================ */
-function isMenuVisible(item){
-  if (currentRole === 'blogger' && item.sellerOnly) return false;
-  return true;
+function updateUserUI(){
+  document.getElementById('sbUserName').textContent = DATA.user.name;
+  document.getElementById('sbUserRole').textContent =
+    currentRole === 'seller' ? 'Продавець' :
+    DATA.user.hasStore ? 'Блогер + Продавець' : 'Блогер';
+  document.getElementById('sbUserAvatar').textContent = DATA.user.name.split(' ').map(p=>p[0]).join('').slice(0,2);
+  document.getElementById('sbStoreName').textContent = DATA.user.hasStore ? DATA.store.name : '—';
+  document.getElementById('roleBtnBlogger').classList.toggle('active', currentRole==='blogger');
+  document.getElementById('roleBtnSeller').classList.toggle('active', currentRole==='seller');
 }
 
+/* ============================================================
+   ROLE SWITCHER (top-right)
+   ============================================================ */
+function switchRole(role){
+  currentRole = role;
+  updateUserUI();
+  renderMenu();
+  // refresh current view
+  selectView(currentView, currentParent);
+  showToast(role === 'blogger' ? 'Режим: Блогер' : 'Режим: Продавець');
+}
+
+/* ============================================================
+   TECH TOGGLE (FOP on/off for demo)
+   ============================================================ */
+function toggleTechFop(){
+  DATA.blogger.isFop = !DATA.blogger.isFop;
+  document.getElementById('techToggle').classList.toggle('on', DATA.blogger.isFop);
+  // refresh if on earnings tab
+  if (currentView === 'payouts') renderPayouts();
+  showToast('Тех. режим: ' + (DATA.blogger.isFop ? 'ФОП (золоті ★)' : 'не ФОП (сірі ★)'));
+}
+// init
+document.getElementById('techToggle').classList.toggle('on', DATA.blogger.isFop);
+
+/* ============================================================
+   MENU RENDERING
+   ============================================================ */
+function isSubVisible(sub){
+  if (sub.sellerOnly && !DATA.user.hasStore) return false;
+  return true;
+}
+function isMenuVisible(item){
+  if (item.sellerOnly && !DATA.user.hasStore) return false;
+  return true;
+}
 function renderMenu(){
   const visible = MENU.filter(isMenuVisible);
-  const html = visible.map(item => {
+  document.getElementById('sidebarNav').innerHTML = visible.map(item => {
     if (item.views.length === 0){
-      return `<button class="sb-item ${item.key==='dz'&&currentParent==='dz'?'':''} ${(item.key==='analytics'&&currentView==='stats')||(item.key==='profile'&&currentView==='profile')?'active':''}" onclick="selectParent('${item.key}')">
+      const isActive = (item.key==='profile'&&currentView==='profile');
+      return `<button class="sb-item ${isActive?'active':''}" onclick="selectParent('${item.key}')">
         <span class="ic">${item.icon}</span>${item.label}
       </button>`;
     }
     const isOpen = expandedMenu[item.key];
-    const subs = item.views.map(v => 
-      `<button class="sb-subitem ${currentView===v.key?'active':''}" onclick="event.stopPropagation();selectView('${v.key}','${item.key}')">${v.label}${v.shortcut?' ↗':''}</button>`
-    ).join('');
-    const isActive = item.views.some(v=>v.key===currentView);
+    const subs = item.views.map(v => {
+      if (v.sub){
+        const visibleSubs = v.sub.filter(isSubVisible);
+        if (visibleSubs.length === 0) return '';
+        return visibleSubs.map(s =>
+          `<button class="sb-subitem ${currentView===s.key?'active':''}" onclick="event.stopPropagation();selectView('${s.key}','${item.key}')">${s.label}</button>`
+        ).join('');
+      }
+      return `<button class="sb-subitem ${currentView===v.key?'active':''}" onclick="event.stopPropagation();selectView('${v.key}','${item.key}')">${v.label}${v.shortcut?'<span class="shortcut">↗</span>':''}</button>`;
+    }).join('');
+    const isActive = item.views.some(v=>{
+      if (v.sub) return v.sub.some(s=>s.key===currentView);
+      return v.key === currentView;
+    });
     return `<div class="sb-group">
       <button class="sb-item ${isOpen?'open':''} ${isActive?'active':''}" onclick="toggleMenu('${item.key}')">
         <span class="ic">${item.icon}</span>${item.label}
@@ -749,28 +793,27 @@ function renderMenu(){
       <div class="sb-sub ${isOpen?'open':''}">${subs}</div>
     </div>`;
   }).join('');
-  document.getElementById('sidebarNav').innerHTML = html;
 
-  // Mobile menu — flat list
-  const mobileHtml = visible.map(item => {
+  // mobile menu
+  document.getElementById('mobileNav').innerHTML = visible.map(item => {
     if (item.views.length === 0){
       return `<button class="sb-item" onclick="selectParent('${item.key}');toggleMobileMenu()"><span class="ic">${item.icon}</span>${item.label}</button>`;
     }
-    const subs = item.views.map(v => 
-      `<button class="sb-subitem" onclick="selectView('${v.key}','${item.key}');toggleMobileMenu()">${v.label}</button>`
-    ).join('');
+    const subs = item.views.map(v => {
+      if (v.sub){
+        return v.sub.filter(isSubVisible).map(s =>
+          `<button class="sb-subitem" onclick="selectView('${s.key}','${item.key}');toggleMobileMenu()">${s.label}</button>`
+        ).join('');
+      }
+      return `<button class="sb-subitem" onclick="selectView('${v.key}','${item.key}');toggleMobileMenu()">${v.label}</button>`;
+    }).join('');
     return `<div class="sb-group">
       <button class="sb-item open" onclick="toggleMenu('${item.key}')"><span class="ic">${item.icon}</span>${item.label}<span class="chev">▼</span></button>
       <div class="sb-sub open">${subs}</div>
     </div>`;
   }).join('');
-  document.getElementById('mobileNav').innerHTML = mobileHtml;
 }
-
-function toggleMenu(key){
-  expandedMenu[key] = !expandedMenu[key];
-  renderMenu();
-}
+function toggleMenu(key){ expandedMenu[key] = !expandedMenu[key]; renderMenu(); }
 function selectParent(key){
   if (key === 'dashboard'){ showToast('Дашборд (демо)'); return; }
   if (key === 'ai'){ showToast('AI-асистент (демо)'); return; }
@@ -788,14 +831,13 @@ const VIEW_META = {
   showcase:{ title:'Вітрина', parent:'dz' },
   stores:{ title:'Магазини', parent:'dz' },
   bloggers:{ title:'Блогери', parent:'dz' },
+  requests:{ title:'Запити', parent:'dz' },
+  'i-mirror':{ title:'Я віддзеркалюю', parent:'dz' },
+  'they-mirror':{ title:'Мене віддзеркалюють', parent:'dz' },
   payouts:{ title:'Виплати', parent:'finance' },
   analytics:{ title:'Аналітика', parent:'analytics' },
-  profile:{ title:'Профіль', parent:'profile' },
   stats:{ title:'Статистика', parent:'analytics' },
-  mirroring:{ title:'Віддзеркалення', parent:'marketing' },
-  target:{ title:'Таргет', parent:'marketing' },
-  products:{ title:'Товари/Послуги', parent:'catalog' },
-  cash:{ title:'Каса', parent:'finance' }
+  profile:{ title:'Профіль', parent:'profile' }
 };
 
 function selectView(viewKey, parentKey){
@@ -805,20 +847,17 @@ function selectView(viewKey, parentKey){
   expandedMenu[currentParent] = true;
   renderMenu();
 
-  // Deduplication logic: "payouts" opens same screen whether from Dz or Finance
-  // "analytics" opens same as Analytics, "profile" opens same as Profile
   const renderers = {
     showcase: renderShowcase,
     stores: renderStores,
     bloggers: renderBloggers,
+    requests: renderRequests,
+    'i-mirror': renderIMirror,
+    'they-mirror': renderTheyMirror,
     payouts: renderPayouts,
     analytics: renderAnalytics,
     stats: renderAnalytics,
-    profile: renderProfile,
-    mirroring: renderComingSoon,
-    target: renderComingSoon,
-    products: renderComingSoon,
-    cash: renderComingSoon
+    profile: renderProfile
   };
   (renderers[viewKey] || renderComingSoon)();
 }
@@ -828,7 +867,7 @@ function setHeader(title, sub){
 }
 
 /* ============================================================
-   VIEW: ВІТРИНА
+   ВІТРИНА
    ============================================================ */
 function renderShowcase(){
   const cards = DATA.products.map(p => `
@@ -840,14 +879,11 @@ function renderShowcase(){
       </div>
       <div class="pc-body">
         <div class="pc-title">${p.name}</div>
-        <div class="pc-meta">
-          <span>Арт.: ${p.art}</span>
-          <span>Код: ${p.code}</span>
-        </div>
+        <div class="pc-meta"><span>Арт.: ${p.art}</span><span>Код: ${p.code}</span></div>
         <div style="font-size:11.5px;color:var(--ink-500);">${p.cat}</div>
         <div class="pc-mirrorers">
           <div class="dots">${[1,2,3].map(i=>`<div class="dot">★</div>`).join('')}</div>
-          <span>${p.mirrorers} блогерів віддзеркалюють</span>
+          <span>${p.mirrorers} блогерів</span>
         </div>
         <div class="pc-price-row">
           <div class="pc-price">${p.price.toLocaleString('uk-UA')} ₴</div>
@@ -879,7 +915,7 @@ function renderShowcase(){
 }
 
 /* ============================================================
-   VIEW: МАГАЗИНИ
+   МАГАЗИНИ
    ============================================================ */
 function renderStores(){
   const cards = DATA.stores.map(s => `
@@ -892,18 +928,9 @@ function renderStores(){
         </div>
       </div>
       <div class="sc-stats sc-stats-3">
-        <div class="sc-stat">
-          <div class="k">Товарів</div>
-          <div class="v">${s.products}</div>
-        </div>
-        <div class="sc-stat">
-          <div class="k">Дзеркал</div>
-          <div class="v">${s.mirrors}</div>
-        </div>
-        <div class="sc-stat">
-          <div class="k">Зірочок</div>
-          <div class="v">${s.totalStars.toLocaleString('uk-UA')}★</div>
-        </div>
+        <div class="sc-stat"><div class="k">Товарів</div><div class="v">${s.products}</div></div>
+        <div class="sc-stat"><div class="k">Дзеркал</div><div class="v">${s.mirrors}</div></div>
+        <div class="sc-stat"><div class="k">Зірочок</div><div class="v">${s.totalStars.toLocaleString('uk-UA')}★</div></div>
       </div>
       <div class="row-between">
         <div class="rating"><span class="star">★</span> ${s.rating.toFixed(1)}</div>
@@ -928,7 +955,7 @@ function renderStores(){
 }
 
 /* ============================================================
-   VIEW: БЛОГЕРИ
+   БЛОГЕРИ
    ============================================================ */
 function renderBloggers(){
   const cards = DATA.bloggers.map(b => {
@@ -973,41 +1000,356 @@ function renderBloggers(){
 }
 
 /* ============================================================
-   VIEW: ВИПЛАТИ (shared between Dz and Finance)
+   ЗАПИТИ
    ============================================================ */
-function renderPayouts(){
-  const rows = DATA.payouts.map(p => `
+function renderRequests(){
+  const statusMap = {
+    active: `<span class="badge badge-green">● Активний</span>`,
+    pending: `<span class="badge badge-warn">⏳ В очікуванні</span>`,
+    rejected: `<span class="badge badge-red">Відхилено</span>`
+  };
+  const rows = DATA.requests.map(r => `
     <div class="card" style="padding:14px 16px;margin-bottom:10px;">
       <div class="row-between" style="flex-wrap:wrap;gap:10px;">
-        <div>
-          <div style="font-weight:700;font-size:14px;">${p.blogger}</div>
-          <div class="muted">${p.id} · ${p.date}</div>
+        <div class="row" style="gap:12px;">
+          <div class="bs-logo" style="width:40px;height:40px;border-radius:10px;background:${r.color}22;color:${r.color};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;flex-shrink:0;">${r.logo}</div>
+          <div>
+            <div style="font-weight:700;font-size:14px;">${r.to}</div>
+            <div class="muted">${r.id} · ${r.date} · ${r.type}</div>
+            <div style="font-size:12px;color:var(--ink-500);margin-top:2px;">${r.items}</div>
+          </div>
         </div>
-        <div style="text-align:right;">
-          <div style="font-weight:700;font-size:15px;">${p.sum.toLocaleString('uk-UA')} ₴</div>
-          <div class="muted">${p.stars.toLocaleString('uk-UA')} ★</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          ${statusMap[r.status]}
+          <button class="btn btn-ghost btn-sm" onclick="showToast('Запит ${r.id}')">Відкрити</button>
         </div>
-        <span class="badge ${p.status==='done'?'badge-green':'badge-gold'}">${p.status==='done'?'Виплачено':'В обробці'}</span>
       </div>
     </div>
   `).join('');
 
   document.getElementById('mainContent').innerHTML = `
-    ${setHeader('Виплати', 'Спільний екран для «Дзеркала» та «Фінансів» — той самий список виплат блогерам')}
-    <div class="card" style="padding:14px;background:var(--red-50);border-color:#FFD9E1;margin-bottom:16px;">
-      <div class="row" style="gap:8px;">
-        <span style="font-size:18px;">🔗</span>
-        <div style="font-size:12.5px;color:var(--ink-700);line-height:1.5;">
-          Це <b>той самий екран</b>, що й «Фінанси → Виплати». У «Дзеркалі» він продубльований для комфорту.
-        </div>
-      </div>
+    ${setHeader('Запити', 'Запити на співпрацю — які я надсилав')}
+    <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
+      <span class="badge badge-green">${DATA.requests.filter(r=>r.status==='active').length} активних</span>
+      <span class="badge badge-warn">${DATA.requests.filter(r=>r.status==='pending').length} в очікуванні</span>
+      <span class="badge badge-red">${DATA.requests.filter(r=>r.status==='rejected').length} відхилено</span>
     </div>
     ${rows}
   `;
 }
 
 /* ============================================================
-   VIEW: АНАЛІТИКА (shared)
+   Я ВІДДЗЕРКАЛЮЮ
+   ============================================================ */
+function renderIMirror(){
+  const rows = DATA.earnings.map(e => `
+    <div class="card" style="padding:14px 16px;margin-bottom:10px;">
+      <div class="row" style="gap:12px;">
+        <div class="bs-logo" style="width:44px;height:44px;border-radius:11px;background:${e.color}22;color:${e.color};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;flex-shrink:0;">${e.logo}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:700;font-size:14px;">${e.store}</div>
+          <div class="muted">${e.label} · віддзеркалюю</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-weight:700;font-size:14px;"><span style="color:${DATA.blogger.isFop?'var(--gold)':'var(--gray-star)'};">★</span> ${e.stars.toLocaleString('uk-UA')}</div>
+          <div class="muted">заробіток</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('mainContent').innerHTML = `
+    ${setHeader('Я віддзеркалюю', 'Магазини, з якими я працюю')}
+    <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
+      <span class="badge badge-dark">${DATA.earnings.length} магазинів</span>
+      <span class="badge ${DATA.blogger.isFop?'badge-gold':'badge-gray'}">${DATA.blogger.isFop?'ФОП — золоті ★':'без ФОП — сірі ★'}</span>
+    </div>
+    ${rows}
+  `;
+}
+
+/* ============================================================
+   МЕНЕ ВІДДЗЕРКАЛЮЮТЬ (тільки для продавців)
+   ============================================================ */
+function renderTheyMirror(){
+  if (!DATA.user.hasStore){
+    document.getElementById('mainContent').innerHTML = `
+      ${setHeader('Мене віддзеркалюють', 'Доступно тільки продавцям з власним товаром')}
+      <div class="empty"><div class="em-ic">🔒</div><div class="em-t">Немає власного товару</div>
+      <div class="em-s">Цей розділ показує блогерів, які віддзеркалюють ваші товари.<br>Активуйте магазин у профілі, щоб отримати доступ.</div></div>
+    `;
+    return;
+  }
+  const rows = DATA.bloggers.slice(0,5).map(b => `
+    <div class="card" style="padding:14px 16px;margin-bottom:10px;">
+      <div class="row" style="gap:12px;">
+        <div class="bc-avatar" style="background:${b.avatarBg};width:44px;height:44px;font-size:15px;">${b.name.split(' ').map(p=>p[0]).join('').slice(0,2)}</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-weight:700;font-size:14px;">${b.name}</div>
+          <div class="muted">${b.handle} · ${b.city} · ${b.isFop?'ФОП':'без ФОП'}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-weight:700;font-size:14px;"><span style="color:${b.isFop?'var(--gold)':'var(--gray-star)'};">★</span> ${b.stars.toLocaleString('uk-UA')}</div>
+          <div class="muted">зірочок</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('mainContent').innerHTML = `
+    ${setHeader('Мене віддзеркалюють', 'Блогери, які показують мої товари')}
+    <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
+      <span class="badge badge-dark">${DATA.bloggers.slice(0,5).length} блогерів</span>
+      <span class="badge badge-red">120 дзеркал</span>
+    </div>
+    ${rows}
+  `;
+}
+
+/* ============================================================
+   ВИПЛАТИ (з двома вкладками)
+   ============================================================ */
+function renderPayouts(){
+  const isSeller = DATA.user.hasStore;
+  const tabsHtml = `
+    <div class="tabs">
+      <button class="tab ${payoutsTab==='earnings'?'active':''}" onclick="setPayoutsTab('earnings')">Мій заробіток</button>
+      ${isSeller?`<button class="tab ${payoutsTab==='to-bloggers'?'active':''}" onclick="setPayoutsTab('to-bloggers')">Виплати блогерам</button>`:''}
+    </div>
+  `;
+
+  let body = '';
+  if (payoutsTab === 'earnings'){
+    body = renderEarningsTab();
+  } else if (payoutsTab === 'to-bloggers' && isSeller){
+    body = renderToBloggersTab();
+  }
+
+  document.getElementById('mainContent').innerHTML = `
+    ${setHeader('Виплати', 'Спільний екран для «Дзеркала» та «Фінансів»')}
+    ${tabsHtml}
+    ${body}
+  `;
+}
+function setPayoutsTab(t){ payoutsTab = t; renderPayouts(); }
+
+function renderEarningsTab(){
+  const isFop = DATA.blogger.isFop;
+  const total = DATA.earnings.reduce((s,e)=>s+e.stars,0);
+  const canRequest = DATA.blogger.fopUploaded && DATA.blogger.fopPhotoUploaded;
+
+  const stores = DATA.earnings.map((e, i) => `
+    <div class="breakdown-store">
+      <div class="bs-logo" style="background:${e.color}22;color:${e.color};">${e.logo}</div>
+      <div class="bs-info">
+        <div class="bs-name">${e.store}</div>
+        <div class="bs-sub">${e.label}</div>
+      </div>
+      <div class="bs-stars ${isFop?'gold':'gray'}">
+        <span class="star-ic">★</span>${e.stars.toLocaleString('uk-UA')}
+      </div>
+      <div class="bs-action">
+        <button class="btn btn-soft btn-sm" onclick="requestPayout('${e.store}', ${e.stars})" ${!isFop || !canRequest ? 'disabled' : ''}>
+          Зафіксувати
+        </button>
+      </div>
+    </div>
+  `).join('');
+
+  let warnBanner = '';
+  if (!isFop){
+    warnBanner = `
+      <div class="disclaimer" style="background:var(--red-50);border-color:#FFD9E1;color:#8A1B30;">
+        <b>Потрібен статус ФОП.</b> Щоб зафіксувати виплату та обнулити рахунок, додайте дані ФОП у <a onclick="setProfileTab('blogger');selectView('profile','profile')" style="color:var(--red);font-weight:700;cursor:pointer;">профілі блогера</a>.
+      </div>
+    `;
+  } else if (!canRequest){
+    warnBanner = `
+      <div class="disclaimer">
+        <b>Дані ФОП неповні.</b> Додайте витяг з ЄДР та фото ФОП з витягом у <a onclick="setProfileTab('blogger');selectView('profile','profile')" style="color:var(--red);font-weight:700;cursor:pointer;">профілі блогера</a>, щоб подати запит.
+      </div>
+    `;
+  }
+
+  const reimbursements = DATA.reimbursements.map(r => `
+    <tr>
+      <td data-label="Магазин">
+        <div class="row" style="gap:8px;">
+          <div class="bs-logo" style="width:32px;height:32px;border-radius:9px;background:${r.color}22;color:${r.color};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;">${r.logo}</div>
+          <div style="font-weight:600;">${r.store}</div>
+        </div>
+      </td>
+      <td data-label="Дата">${r.date}</td>
+      <td data-label="Зірочки">${r.stars.toLocaleString('uk-UA')} ★</td>
+      <td data-label="Сума">${r.sum.toLocaleString('uk-UA')} ₴</td>
+      <td data-label="Статус">
+        ${r.status==='confirmed'
+          ? `<span class="badge badge-green">✓ Підтверджено обома</span>`
+          : `<span class="badge badge-warn">⏳ Очікує вас</span>`}
+      </td>
+      <td data-label="">
+        ${r.status==='pending'?`<button class="btn btn-primary btn-sm" onclick="confirmReimb('${r.id}')">Підтвердити</button>`:''}
+      </td>
+    </tr>
+  `).join('');
+
+  return `
+    <div class="earn-box">
+      <div class="earn-fop-tag ${isFop?'gold':'gray'}">${isFop?'ФОП':'НЕ ФОП'}</div>
+      <div class="earn-label">Нараховано · моя комісія</div>
+      <div class="earn-amount ${isFop?'gold':'gray'}">
+        ${total.toLocaleString('uk-UA')} <span class="star-big">★</span>
+      </div>
+      <div class="earn-sub">${isFop?'Золоті зірочки — можна подати запит на відшкодування':'Сірі зірочки — потрібен ФОП для фіксації виплати'}</div>
+    </div>
+
+    ${warnBanner}
+
+    <div style="font-size:13.5px;font-weight:700;margin:20px 0 10px;">Розбивка по магазинах</div>
+    ${stores}
+
+    <div style="font-size:13.5px;font-weight:700;margin:24px 0 10px;">Відшкодування</div>
+    ${DATA.reimbursements.length === 0
+      ? `<div class="empty"><div class="em-ic">💸</div><div class="em-t">Поки що немає відшкодувань</div></div>`
+      : `<div class="card" style="overflow:auto;padding:6px 0 4px;"><table class="payout-table">
+          <thead><tr><th>Магазин</th><th>Дата</th><th>Зірочки</th><th>Сума</th><th>Статус</th><th></th></tr></thead>
+          <tbody>${reimbursements}</tbody>
+        </table></div>`
+    }
+  `;
+}
+
+function renderToBloggersTab(){
+  const rows = DATA.payoutsToBloggers.map(p => `
+    <tr>
+      <td data-label="Блогер" style="font-weight:600;">${p.blogger}</td>
+      <td data-label="ID">${p.id}</td>
+      <td data-label="Дата">${p.date}</td>
+      <td data-label="Зірочки">${p.stars.toLocaleString('uk-UA')} ★</td>
+      <td data-label="Сума" style="font-weight:700;">${p.sum.toLocaleString('uk-UA')} ₴</td>
+      <td data-label="Статус">${p.status==='done'?'<span class="badge badge-green">Виплачено</span>':'<span class="badge badge-warn">В обробці</span>'}</td>
+      <td data-label="">${p.status==='pending'?`<button class="btn btn-primary btn-sm" onclick="showToast('Виплату ${p.id} підтверджено')">Виплатити</button>`:''}</td>
+    </tr>
+  `).join('');
+
+  return `
+    <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
+      <span class="badge badge-dark">${DATA.payoutsToBloggers.length} виплат</span>
+      <span class="badge badge-green">${DATA.payoutsToBloggers.filter(p=>p.status==='done').length} виплачено</span>
+      <span class="badge badge-warn">${DATA.payoutsToBloggers.filter(p=>p.status==='pending').length} в обробці</span>
+    </div>
+    <div class="card" style="overflow:auto;padding:6px 0 4px;">
+      <table class="payout-table">
+        <thead><tr><th>Блогер</th><th>ID</th><th>Дата</th><th>Зірочки</th><th>Сума</th><th>Статус</th><th></th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function requestPayout(store, stars){
+  const isFop = DATA.blogger.isFop;
+  const canRequest = DATA.blogger.fopUploaded && DATA.blogger.fopPhotoUploaded;
+
+  if (!isFop){
+    openModal(`
+      <div class="modal-head">
+        <div><h3>Потрібен статус ФОП</h3><p>${store}</p></div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size:13.5px;line-height:1.6;color:var(--ink-700);">
+          Будь ласка, залиште дані ФОП відповідно до українського законодавства, щоб мати можливість:
+          <ul style="margin:12px 0 0 18px;">
+            <li>зафіксувати виплату</li>
+            <li>записати в календар виплат</li>
+            <li>обнулити свій рахунок по магазину</li>
+            <li>вести облік по конкретному магазину</li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" onclick="closeModal()">Пізніше</button>
+        <button class="btn btn-primary" onclick="closeModal();setProfileTab('blogger');selectView('profile','profile')">Додати ФОП</button>
+      </div>
+    `);
+    return;
+  }
+
+  if (!canRequest){
+    openModal(`
+      <div class="modal-head">
+        <div><h3>Дані ФОП неповні</h3><p>${store}</p></div>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="font-size:13.5px;line-height:1.6;color:var(--ink-700);">
+          Додайте у профілі блогера:
+          <ul style="margin:12px 0 0 18px;">
+            <li>витяг з ЄДР (файл)</li>
+            <li>фото ФОП з витягом, де видно обличчя</li>
+          </ul>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" onclick="closeModal()">Пізніше</button>
+        <button class="btn btn-primary" onclick="closeModal();setProfileTab('blogger');selectView('profile','profile')">Заповнити</button>
+      </div>
+    `);
+    return;
+  }
+
+  openModal(`
+    <div class="modal-head">
+      <div><h3>Подати запит на відшкодування</h3><p>${store}</p></div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label>Скільки зірочок списати?</label>
+        <div class="row" style="gap:10px;flex-wrap:wrap;margin-top:4px;">
+          <label class="row" style="gap:6px;font-size:13px;cursor:pointer;">
+            <input type="radio" name="reimb-amount" value="all" checked onchange="document.getElementById('customStars').disabled=true"> Усі зірочки
+          </label>
+          <label class="row" style="gap:6px;font-size:13px;cursor:pointer;">
+            <input type="radio" name="reimb-amount" value="part" onchange="document.getElementById('customStars').disabled=false"> Частину
+          </label>
+        </div>
+      </div>
+      <div class="field">
+        <label>Кількість зірочок (якщо частина)</label>
+        <input type="number" id="customStars" placeholder="напр. 500" disabled>
+      </div>
+      <div class="muted">Доступно: <b>${stars.toLocaleString('uk-UA')} ★</b> · <b>${store}</b></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeModal()">Скасувати</button>
+      <button class="btn btn-primary" onclick="submitReimb('${store}', ${stars})">Подати запит</button>
+    </div>
+  `);
+}
+
+function submitReimb(store, stars){
+  closeModal();
+  showToast(`Запит на відшкодування для «${store}» подано ✓`);
+  // add to list
+  const storeInfo = DATA.earnings.find(e=>e.store===store) || {logo:'??',color:'#999'};
+  const newId = '#RMB-' + (200 + DATA.reimbursements.length + 1);
+  DATA.reimbursements.unshift({
+    id:newId, store, logo:storeInfo.logo, color:storeInfo.color,
+    date:new Date().toLocaleDateString('uk-UA'),
+    stars, sum: Math.round(stars*1.2), status:'pending'
+  });
+  renderPayouts();
+}
+
+function confirmReimb(id){
+  const r = DATA.reimbursements.find(x=>x.id===id);
+  if (r){ r.status = 'confirmed'; showToast(`Відшкодування ${id} підтверджено ✓`); renderPayouts(); }
+}
+
+/* ============================================================
+   АНАЛІТИКА (shared)
    ============================================================ */
 function renderAnalytics(){
   document.getElementById('mainContent').innerHTML = `
@@ -1015,37 +1357,24 @@ function renderAnalytics(){
     <div class="card" style="padding:14px;background:var(--red-50);border-color:#FFD9E1;margin-bottom:16px;">
       <div class="row" style="gap:8px;">
         <span style="font-size:18px;">📈</span>
-        <div style="font-size:12.5px;color:var(--ink-700);line-height:1.5;">Той самий екран аналітики, доступний з двох місць.</div>
+        <div style="font-size:12.5px;color:var(--ink-700);line-height:1.5;">Той самий екран, доступний з двох місць.</div>
       </div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-      <div class="card" style="padding:16px;">
-        <div class="muted" style="font-weight:600;margin-bottom:6px;">Продажі через блогерів</div>
-        <div style="font-size:22px;font-weight:700;">128 400 ₴</div>
-      </div>
-      <div class="card" style="padding:16px;">
-        <div class="muted" style="font-weight:600;margin-bottom:6px;">Віддзеркалень</div>
-        <div style="font-size:22px;font-weight:700;">120</div>
-      </div>
-      <div class="card" style="padding:16px;">
-        <div class="muted" style="font-weight:600;margin-bottom:6px;">Активних блогерів</div>
-        <div style="font-size:22px;font-weight:700;">6</div>
-      </div>
-      <div class="card" style="padding:16px;">
-        <div class="muted" style="font-weight:600;margin-bottom:6px;">Нараховано зірочок</div>
-        <div style="font-size:22px;font-weight:700;">18 420 ★</div>
-      </div>
+      <div class="card" style="padding:16px;"><div class="muted" style="font-weight:600;margin-bottom:6px;">Продажі через блогерів</div><div style="font-size:22px;font-weight:700;">128 400 ₴</div></div>
+      <div class="card" style="padding:16px;"><div class="muted" style="font-weight:600;margin-bottom:6px;">Віддзеркалень</div><div style="font-size:22px;font-weight:700;">120</div></div>
+      <div class="card" style="padding:16px;"><div class="muted" style="font-weight:600;margin-bottom:6px;">Активних блогерів</div><div style="font-size:22px;font-weight:700;">6</div></div>
+      <div class="card" style="padding:16px;"><div class="muted" style="font-weight:600;margin-bottom:6px;">Нараховано зірочок</div><div style="font-size:22px;font-weight:700;">18 420 ★</div></div>
     </div>
   `;
 }
 
 /* ============================================================
-   VIEW: ПРОФІЛЬ (with tabs — Особисті дані / Блогер / Магазин)
+   ПРОФІЛЬ
    ============================================================ */
-let profileTab = 'personal';
 function renderProfile(){
   const tabsHtml = `
-    <div class="tabs" style="margin-bottom:18px;">
+    <div class="tabs">
       <button class="tab ${profileTab==='personal'?'active':''}" onclick="setProfileTab('personal')">Особисті дані</button>
       <button class="tab ${profileTab==='blogger'?'active':''}" onclick="setProfileTab('blogger')">Блогер</button>
       <button class="tab ${profileTab==='store'?'active':''}" onclick="setProfileTab('store')">Магазин</button>
@@ -1064,6 +1393,7 @@ function renderProfile(){
       </div>
     `;
   } else if (profileTab === 'blogger'){
+    const isFop = DATA.blogger.isFop;
     body = `
       <div class="card" style="padding:20px;">
         <div class="row mb-16" style="gap:12px;">
@@ -1073,42 +1403,56 @@ function renderProfile(){
             <div class="muted">${DATA.blogger.handle} · ${DATA.blogger.city}</div>
           </div>
         </div>
-        <div class="bc-stars gold" style="margin-bottom:14px;">
+        <div class="bc-stars ${isFop?'gold':'gray'}" style="margin-bottom:14px;">
           <span class="star-ic">★</span>
-          <div>
-            <div class="num">${DATA.blogger.stars.toLocaleString('uk-UA')}</div>
-            <div class="lbl">загальних зірочок</div>
-          </div>
+          <div><div class="num">${DATA.blogger.stars.toLocaleString('uk-UA')}</div><div class="lbl">загальних зірочок</div></div>
         </div>
-        <div class="bc-stats">
+        <div class="bc-stats mb-16">
           <div class="bc-stat"><div class="v">${DATA.blogger.mirrors}</div><div class="k">віддзеркалень</div></div>
           <div class="bc-stat"><div class="v">${DATA.blogger.stores}</div><div class="k">магазинів</div></div>
+        </div>
+
+        <div style="font-size:13.5px;font-weight:700;margin:20px 0 10px;">Дані ФОП</div>
+        <div class="fop-upload ${DATA.blogger.fopUploaded?'done':''}" onclick="uploadFop('fopUploaded')">
+          <div class="fu-ic">${DATA.blogger.fopUploaded?'✓':'📄'}</div>
+          <div class="fu-label">${DATA.blogger.fopUploaded?'Витяг з ЄДР завантажено':'Завантажити витяг з ЄДР'}</div>
+          <div class="fu-hint">${DATA.blogger.fopUploaded?'Натисніть, щоб замінити':'PDF або фото документа'}</div>
+        </div>
+        <div class="fop-upload ${DATA.blogger.fopPhotoUploaded?'done':''}" onclick="uploadFop('fopPhotoUploaded')">
+          <div class="fu-ic">${DATA.blogger.fopPhotoUploaded?'✓':'🤳'}</div>
+          <div class="fu-label">${DATA.blogger.fopPhotoUploaded?'Фото ФОП з витягом завантажено':'Завантажити фото ФОП з витягом'}</div>
+          <div class="fu-hint">${DATA.blogger.fopPhotoUploaded?'Натисніть, щоб замінити':'Селфі з витягом ЄДР — обличчя має бути видно'}</div>
+        </div>
+
+        <div class="disclaimer">
+          <b>Важливо.</b> Платформа <b>не перевіряє достовірність даних</b> та <b>не є гарантом виплат</b>. BEROO виступає виключно як CRM-система обліку — розрахунки між блогером і продавцем відбуваються напряму між сторонами.
         </div>
       </div>
     `;
   } else if (profileTab === 'store'){
-    if (!DATA.blogger.isStore){
+    if (!DATA.user.hasStore){
       body = `
         <div class="card" style="padding:20px;">
           <div class="row-between mb-16">
             <div>
               <div style="font-weight:700;font-size:15px;">Стати магазином</div>
-              <div class="muted">Активуйте, щоб зареєструватися як повноцінний магазин і розгорнути повну структуру CRM.</div>
+              <div class="muted">Активуйте, щоб розгорнути повну структуру CRM.</div>
             </div>
+          </div>
+          <div class="row" style="gap:10px;padding:12px;background:var(--gold-soft);border-radius:10px;margin-bottom:14px;">
+            <span style="font-size:16px;">✓</span>
+            <div style="font-size:12.5px;color:var(--gold-dark);font-weight:600;">Демо-дані вже введені — просто підтвердіть магазин</div>
           </div>
           <div class="toggle-row">
             <span class="lbl">Активувати магазин</span>
             <div class="toggle" id="storeToggle" onclick="toggleStore(this)"></div>
           </div>
           <div id="storeActivation" class="hidden mt-16">
-            <div class="field"><label>Назва магазину</label><input placeholder="напр. МАГАЗИН ДАЧНИК"></div>
-            <div class="field"><label>Категорія магазину</label>
-              <select><option>Ручний інструмент</option><option>Жіночий одяг</option><option>Товари для дому</option></select>
-            </div>
-            <div class="field"><label>IBAN</label><input placeholder="UA00 0000 0000 0000 0000 0000 000"></div>
-            <div class="field"><label>ФОП / ТОВ</label><input placeholder="ФОП Салецький М.В."></div>
-            <div class="field"><label>Юридична адреса</label><input placeholder="м. Київ, вул. ..."></div>
-            <button class="btn btn-primary" style="width:100%;" onclick="activateStore()">Зареєструвати магазин</button>
+            <div class="field"><label>Назва магазину</label><input value="МАГАЗИН ДАЧНИК"></div>
+            <div class="field"><label>Категорія</label><select><option>Ручний інструмент</option><option>Жіночий одяг</option></select></div>
+            <div class="field"><label>IBAN</label><input value="UA00 3052 9900 0000 0000 0000 000"></div>
+            <div class="field"><label>ФОП / ТОВ</label><input value="ФОП Салецький М.В."></div>
+            <button class="btn btn-primary" style="width:100%;" onclick="activateStore()">Підтвердити магазин</button>
           </div>
         </div>
       `;
@@ -1124,8 +1468,8 @@ function renderProfile(){
             <div class="row" style="gap:6px;flex-wrap:wrap;">
               <span class="badge badge-red">Каталог</span>
               <span class="badge badge-red">Продажі</span>
-              <span class="badge badge-red">Закупівлі</span>
               <span class="badge badge-red">Маркетинг</span>
+              <span class="badge badge-red">Мене віддзеркалюють</span>
             </div>
           </div>
         </div>
@@ -1142,38 +1486,33 @@ function renderProfile(){
 function setProfileTab(tab){ profileTab = tab; renderProfile(); }
 function toggleStore(el){ el.classList.toggle('on'); document.getElementById('storeActivation').classList.toggle('hidden'); }
 function activateStore(){
-  DATA.blogger.isStore = true;
-  DATA.store.name = 'МАГАЗИН ДАЧНИК';
-  showToast('Магазин зареєстровано ✓ Розгорнуто повну структуру CRM');
+  DATA.user.hasStore = true;
+  showToast('Магазин активовано ✓ Розгорнуто повну структуру CRM');
+  updateUserUI();
+  renderMenu();
   renderProfile();
 }
-
-/* ============================================================
-   VIEW: COMING SOON
-   ============================================================ */
-function renderComingSoon(){
-  const meta = VIEW_META[currentView] || { title:'Розділ' };
-  document.getElementById('mainContent').innerHTML = `
-    ${setHeader(meta.title, 'Цей розділ у розробці — буде наповнений у наступних ітераціях')}
-    <div class="empty">
-      <div class="em-ic">🛠️</div>
-      <div class="em-t">${meta.title}</div>
-      <div class="em-s">Тут зʼявиться функціонал цього розділу.</div>
-    </div>
-  `;
+function uploadFop(field){
+  DATA.blogger[field] = true;
+  showToast(field === 'fopUploaded' ? 'Витяг з ЄДР завантажено' : 'Фото ФОП завантажено');
+  renderProfile();
 }
 
 /* ============================================================
    MODALS
    ============================================================ */
+function openModal(html){
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modal').classList.add('active');
+}
+function closeModal(){ document.getElementById('modal').classList.remove('active'); }
+document.getElementById('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
+
 function showProductModal(id){
   const p = DATA.products.find(x=>x.id===id);
-  document.getElementById('modalContent').innerHTML = `
+  openModal(`
     <div class="modal-head">
-      <div>
-        <h3>${p.name}</h3>
-        <p>Арт. ${p.art} · Код ${p.code}</p>
-      </div>
+      <div><h3>${p.name}</h3><p>Арт. ${p.art} · Код ${p.code}</p></div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body">
@@ -1189,27 +1528,20 @@ function showProductModal(id){
       <button class="btn btn-ghost" onclick="closeModal()">Закрити</button>
       <button class="btn btn-primary" onclick="closeModal();showToast('Віддзеркалено: ${p.name}')">Віддзеркалити</button>
     </div>
-  `;
-  document.getElementById('modal').classList.add('active');
+  `);
 }
 
 function showBloggerModal(id){
   const b = DATA.bloggers.find(x=>x.id===id);
-  document.getElementById('modalContent').innerHTML = `
+  openModal(`
     <div class="modal-head">
-      <div>
-        <h3>${b.name}</h3>
-        <p>${b.handle} · ${b.city}</p>
-      </div>
+      <div><h3>${b.name}</h3><p>${b.handle} · ${b.city}</p></div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body">
       <div class="bc-stars ${b.isFop?'gold':'gray'}" style="margin-bottom:14px;">
         <span class="star-ic">★</span>
-        <div>
-          <div class="num">${b.stars.toLocaleString('uk-UA')}</div>
-          <div class="lbl">зірочок ${b.isFop?'(ФОП — золоті)':'(без ФОП — сірі)'}</div>
-        </div>
+        <div><div class="num">${b.stars.toLocaleString('uk-UA')}</div><div class="lbl">зірочок ${b.isFop?'(ФОП)':'(без ФОП)'}</div></div>
       </div>
       <div class="bc-stats">
         <div class="bc-stat"><div class="v">${b.mirrors}</div><div class="k">віддзеркалює</div></div>
@@ -1220,26 +1552,17 @@ function showBloggerModal(id){
       <button class="btn btn-ghost" onclick="closeModal()">Закрити</button>
       <button class="btn btn-primary" onclick="closeModal();showToast('Запрошення надіслано')">Запросити до співпраці</button>
     </div>
-  `;
-  document.getElementById('modal').classList.add('active');
+  `);
 }
 
-function closeModal(){ document.getElementById('modal').classList.remove('active'); }
-document.getElementById('modal').addEventListener('click', e=>{ if(e.target.id==='modal') closeModal(); });
-
 /* ============================================================
-   MOBILE MENU
+   MOBILE MENU + TOAST
    ============================================================ */
 function toggleMobileMenu(){ document.getElementById('mobileMenu').classList.toggle('active'); }
-
-/* ============================================================
-   TOAST
-   ============================================================ */
 function showToast(msg){
   const w = document.getElementById('toastWrap');
   const t = document.createElement('div');
-  t.className = 'toast';
-  t.textContent = msg;
+  t.className = 'toast'; t.textContent = msg;
   w.appendChild(t);
   setTimeout(()=>{ t.style.transition='opacity .3s'; t.style.opacity='0'; setTimeout(()=>t.remove(),300); }, 2500);
 }
