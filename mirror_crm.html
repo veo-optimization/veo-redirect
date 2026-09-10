@@ -28,44 +28,55 @@ input,select,textarea{font-family:inherit;font-size:inherit;}
 a{color:inherit;text-decoration:none;}
 ::selection{background:var(--red-soft);}
 
-/* ===== SWITCHER PANEL (inside sidebar / mobile menu) ===== */
-.switcher-panel{
-  display:flex;align-items:center;gap:8px;
-  background:var(--bg);border-radius:12px;padding:8px 10px;
-  margin-bottom:14px;
+/* ===== TOPBAR (mobile+desktop) — logo + switchers ===== */
+.topbar{
+  display:flex;align-items:center;gap:10px;padding:10px 14px;background:#fff;
+  border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;
 }
-.sp-fop{
+.burger{width:26px;height:26px;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:2px;flex-shrink:0;}
+.burger span{height:2.5px;background:var(--ink-900);border-radius:2px;display:block;}
+@media(min-width:900px){ .burger{display:none;} }
+
+.topbar-logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;flex-shrink:0;}
+.tb-logo-mark{width:28px;height:28px;border-radius:8px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:14px;}
+
+.topbar-switchers{
+  display:flex;align-items:center;gap:6px;margin-left:auto;
+}
+.topbar-role{
+  display:flex;gap:3px;background:var(--bg);border:1px solid var(--line);border-radius:99px;padding:3px;
+}
+.topbar-role button{
+  width:32px;height:32px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:15px;transition:all .15s;color:var(--ink-400);
+}
+.topbar-role button.active{background:var(--red);color:#fff;}
+.topbar-role button:hover:not(.active){background:#fff;}
+
+.topbar-fop{
   display:flex;align-items:center;gap:6px;
   padding:5px 10px 5px 9px;border-radius:99px;
   font-size:11px;font-weight:700;color:var(--ink-500);
-  cursor:pointer;transition:background .15s,color .15s;
-  background:#fff;border:1px solid var(--line);
+  cursor:pointer;transition:background .15s,color .15s,border-color .15s;
+  background:var(--bg);border:1px solid var(--line);
   flex-shrink:0;
 }
-.sp-fop:hover{border-color:var(--ink-300);}
-.sp-fop.on{color:var(--gold-dark);border-color:var(--gold);background:var(--gold-soft);}
-.sp-fop .tog{
+.topbar-fop:hover{border-color:var(--ink-300);}
+.topbar-fop.on{color:var(--gold-dark);border-color:var(--gold);background:var(--gold-soft);}
+.topbar-fop .tog{
   width:24px;height:14px;background:var(--line);border-radius:99px;position:relative;transition:background .2s;flex-shrink:0;
 }
-.sp-fop.on .tog{background:var(--gold);}
-.sp-fop .tog::after{
+.topbar-fop.on .tog{background:var(--gold);}
+.topbar-fop .tog::after{
   content:"";position:absolute;top:2px;left:2px;width:10px;height:10px;background:#fff;
   border-radius:50%;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.15);
 }
-.sp-fop.on .tog::after{transform:translateX(10px);}
-.sp-fop.hidden{display:none;}
-
-.sp-role{
-  margin-left:auto;display:flex;gap:3px;background:#fff;
-  border:1px solid var(--line);border-radius:99px;padding:3px;
+.topbar-fop.on .tog::after{transform:translateX(10px);}
+.topbar-fop.hidden{display:none;}
+@media(max-width:420px){
+  .topbar-fop span:first-child{display:none;} /* ховаємо напис ФОП, лишаємо тумблер */
 }
-.sp-role button{
-  width:30px;height:30px;border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-size:14px;transition:all .15s;color:var(--ink-400);
-}
-.sp-role button.active{background:var(--red);color:#fff;}
-.sp-role button:hover:not(.active){background:var(--bg);}
 
 /* APP SHELL */
 .app{display:flex;flex-direction:column;min-height:100vh;}
@@ -120,19 +131,26 @@ a{color:inherit;text-decoration:none;}
 .sb-user-info .n{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .sb-user-info .r{font-size:11px;color:var(--ink-400);}
 
-/* TOPBAR mobile */
-.topbar{display:flex;align-items:center;gap:12px;padding:12px 16px;background:#fff;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;}
-@media(min-width:900px){ .topbar{display:none;} }
-.burger{width:26px;height:26px;display:flex;flex-direction:column;justify-content:center;gap:5px;padding:2px;background:none;border:none;}
-.burger span{height:2.5px;background:var(--ink-900);border-radius:2px;display:block;}
-.topbar-logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;margin-left:4px;}
-.tb-logo-mark{width:26px;height:26px;border-radius:7px;background:var(--red);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;}
-
 /* MAIN */
 .main{flex:1;min-width:0;display:flex;flex-direction:column;}
-.content{padding:20px 16px 60px;max-width:1240px;width:100%;}
-@media(min-width:900px){ .content{padding:26px 32px 60px;} }
-.page-head{margin-bottom:18px;}
+.content{padding:16px 14px 60px;max-width:1240px;width:100%;}
+@media(min-width:900px){ .content{padding:22px 32px 60px;} }
+
+/* BACK BUTTON */
+.back-btn{
+  display:inline-flex;align-items:center;gap:8px;
+  background:var(--red);color:#fff;
+  padding:10px 18px;border-radius:11px;
+  font-size:13.5px;font-weight:700;
+  box-shadow:var(--shadow-red);
+  transition:background .15s,transform .1s;
+  margin-bottom:14px;
+}
+.back-btn:hover{background:var(--red-hover);}
+.back-btn:active{transform:scale(.98);}
+.back-btn .arr{font-size:15px;line-height:1;}
+
+.page-head{margin-bottom:16px;}
 .page-head h1{font-size:22px;font-weight:700;margin-bottom:4px;letter-spacing:-.01em;}
 .page-head p{font-size:13.5px;color:var(--ink-500);line-height:1.5;}
 @media(min-width:900px){ .page-head h1{font-size:26px;} }
@@ -160,33 +178,89 @@ a{color:inherit;text-decoration:none;}
 .badge-dark{background:var(--ink-900);color:#fff;}
 .badge-warn{background:#FFF1CC;color:#8A6500;}
 
-/* PRODUCT GRID */
-.product-grid{display:grid;grid-template-columns:1fr;gap:12px;}
-@media(min-width:600px){ .product-grid{grid-template-columns:1fr 1fr;gap:14px;} }
-@media(min-width:1000px){ .product-grid{grid-template-columns:repeat(3,1fr);gap:16px;} }
-.product-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:box-shadow .2s,transform .15s;}
-.product-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.08);transform:translateY(-1px);}
-.pc-img{position:relative;aspect-ratio:1/1;background:linear-gradient(135deg,#F4F4F6,#EAEAEE);display:flex;align-items:center;justify-content:center;font-size:38px;color:#C7C7CC;overflow:hidden;}
-.pc-img .brand-tag{position:absolute;top:10px;left:10px;background:rgba(0,0,0,.7);color:#fff;font-size:9px;font-weight:700;letter-spacing:.05em;padding:3px 7px;border-radius:5px;}
-.pc-fav{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--ink-400);}
-.pc-body{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px;flex:1;}
-.pc-title{font-size:13.5px;font-weight:600;line-height:1.35;color:var(--ink-900);}
-.pc-meta{font-size:11.5px;color:var(--ink-500);display:flex;gap:10px;flex-wrap:wrap;}
-.pc-price-row{display:flex;justify-content:space-between;align-items:flex-end;margin-top:auto;padding-top:6px;}
-.pc-price{font-size:16px;font-weight:700;color:var(--ink-900);}
-.pc-stock{font-size:11.5px;color:var(--ink-400);}
-.pc-actions{display:flex;gap:6px;padding-top:6px;}
-.pc-actions .btn{flex:1;}
-.pc-mirrorers{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--ink-500);}
-.pc-mirrorers .dots{display:flex;}
-.pc-mirrorers .dot{width:18px;height:18px;border-radius:50%;border:2px solid #fff;margin-left:-6px;background:var(--red-soft);color:var(--red);font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;}
-.pc-mirrorers .dot:first-child{margin-left:0;}
+/* PRODUCT LIST — row cards on mobile, grid cards on desktop */
+.product-list{display:flex;flex-direction:column;gap:10px;}
+
+/* --- Mobile: compact rows --- */
+.product-row{
+  display:flex;gap:12px;padding:10px;
+  background:#fff;border:1px solid var(--line);border-radius:14px;
+  cursor:pointer;transition:box-shadow .2s,transform .15s,border-color .15s;
+  align-items:stretch;
+}
+.product-row:hover{box-shadow:0 6px 20px rgba(0,0,0,.07);border-color:#DEDEDE;}
+.product-row:active{transform:scale(.995);}
+
+.pr-photo{
+  width:110px;min-height:110px;flex-shrink:0;
+  border-radius:11px;background:linear-gradient(135deg,#F4F4F6,#EAEAEE);
+  display:flex;align-items:center;justify-content:center;
+  font-size:48px;line-height:1;position:relative;
+  overflow:hidden;
+}
+.pr-photo .brand-tag{
+  position:absolute;top:6px;left:6px;
+  background:rgba(0,0,0,.72);color:#fff;
+  font-size:8.5px;font-weight:700;letter-spacing:.04em;
+  padding:2px 6px;border-radius:4px;
+}
+.pr-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;padding:2px 0;}
+.pr-title{
+  font-size:14px;font-weight:700;line-height:1.3;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.pr-meta{font-size:11.5px;color:var(--ink-500);display:flex;gap:10px;flex-wrap:wrap;}
+.pr-cat{font-size:11.5px;color:var(--ink-400);}
+.pr-mirrorers{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-500);margin-top:auto;}
+.pr-mirrorers .dots{display:flex;}
+.pr-mirrorers .dot{
+  width:18px;height:18px;border-radius:50%;border:2px solid #fff;margin-left:-6px;
+  background:var(--red-soft);color:var(--red);font-size:8px;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+}
+.pr-mirrorers .dot:first-child{margin-left:0;}
+.pr-bottom{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  padding-top:6px;margin-top:auto;
+}
+.pr-price{font-size:16px;font-weight:800;letter-spacing:-.01em;}
+.pr-stock{font-size:11.5px;color:var(--ink-400);}
+.pr-fav{
+  position:absolute;top:6px;right:6px;width:26px;height:26px;border-radius:50%;
+  background:rgba(255,255,255,.92);display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:var(--ink-400);
+}
+
+/* --- Desktop: grid of big cards (photo on top) --- */
+@media(min-width:900px){
+  .product-list{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+  }
+  .product-row{
+    display:flex;flex-direction:column;
+    padding:0;border-radius:var(--radius);
+    overflow:hidden;gap:0;
+  }
+  .pr-photo{
+    width:100%;min-height:0;aspect-ratio:1/1;
+    border-radius:0;font-size:64px;
+  }
+  .pr-photo .brand-tag{top:10px;left:10px;font-size:9px;padding:3px 7px;border-radius:5px;}
+  .pr-fav{top:8px;right:8px;width:30px;height:30px;font-size:14px;}
+  .pr-info{padding:12px 14px 14px;gap:6px;}
+  .pr-title{font-size:13.5px;font-weight:600;}
+  .pr-meta{font-size:11.5px;}
+  .pr-mirrorers{margin-top:0;}
+  .pr-bottom{padding-top:6px;}
+}
 
 /* STORE GRID */
 .store-grid{display:grid;grid-template-columns:1fr;gap:12px;}
 @media(min-width:700px){ .store-grid{grid-template-columns:1fr 1fr;gap:14px;} }
 @media(min-width:1100px){ .store-grid{grid-template-columns:repeat(3,1fr);gap:16px;} }
-.store-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px;transition:box-shadow .2s;}
+.store-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px;transition:box-shadow .2s;cursor:pointer;}
 .store-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.08);}
 .sc-head{display:flex;align-items:center;gap:12px;}
 .sc-logo{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;flex-shrink:0;}
@@ -206,7 +280,7 @@ a{color:inherit;text-decoration:none;}
 .blogger-grid{display:grid;grid-template-columns:1fr;gap:12px;}
 @media(min-width:700px){ .blogger-grid{grid-template-columns:1fr 1fr;gap:14px;} }
 @media(min-width:1100px){ .blogger-grid{grid-template-columns:repeat(3,1fr);gap:16px;} }
-.blogger-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px;position:relative;transition:box-shadow .2s;}
+.blogger-card{background:#fff;border:1px solid var(--line);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:12px;position:relative;transition:box-shadow .2s;cursor:pointer;}
 .blogger-card:hover{box-shadow:0 8px 24px rgba(0,0,0,.08);}
 .bc-fop-badge{position:absolute;top:14px;right:14px;font-size:9.5px;font-weight:700;padding:3px 8px;border-radius:99px;letter-spacing:.04em;}
 .bc-fop{background:var(--gold-soft);color:var(--gold-dark);}
@@ -228,16 +302,32 @@ a{color:inherit;text-decoration:none;}
 .bc-foot{padding-top:8px;border-top:1px solid var(--line-soft);}
 
 /* MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;padding:20px;display:none;align-items:center;justify-content:center;}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;padding:16px;display:none;align-items:flex-start;justify-content:center;overflow-y:auto;}
 .modal-overlay.active{display:flex;}
-.modal{background:#fff;border-radius:var(--radius-lg);width:100%;max-width:520px;max-height:88vh;overflow:auto;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:modalIn .2s ease;}
+.modal{background:#fff;border-radius:var(--radius-lg);width:100%;max-width:560px;margin:20px 0;box-shadow:0 20px 60px rgba(0,0,0,.25);animation:modalIn .2s ease;}
 @keyframes modalIn{from{opacity:0;transform:scale(.96) translateY(8px);}to{opacity:1;transform:scale(1) translateY(0);}}
-.modal-head{padding:20px 22px 14px;border-bottom:1px solid var(--line-soft);display:flex;align-items:flex-start;gap:12px;}
-.modal-head h3{font-size:17px;font-weight:700;}
+.modal-head{padding:18px 20px 14px;border-bottom:1px solid var(--line-soft);display:flex;align-items:flex-start;gap:12px;}
+.modal-head h3{font-size:17px;font-weight:700;line-height:1.35;}
 .modal-head p{font-size:12.5px;color:var(--ink-500);margin-top:3px;}
 .modal-close{margin-left:auto;width:30px;height:30px;border-radius:50%;background:var(--bg);display:flex;align-items:center;justify-content:center;color:var(--ink-500);flex-shrink:0;font-size:14px;}
 .modal-body{padding:20px 22px;}
 .modal-foot{padding:14px 22px;border-top:1px solid var(--line-soft);display:flex;gap:10px;justify-content:flex-end;}
+
+/* Full product modal — big photo on top */
+.pm-photo{
+  width:100%;aspect-ratio:1/1;max-height:340px;border-radius:14px;
+  background:linear-gradient(135deg,#F4F4F6,#EAEAEE);
+  display:flex;align-items:center;justify-content:center;
+  font-size:100px;line-height:1;margin-bottom:16px;position:relative;
+}
+.pm-photo .brand-tag{
+  position:absolute;top:12px;left:12px;background:rgba(0,0,0,.72);color:#fff;
+  font-size:10px;font-weight:700;letter-spacing:.05em;padding:4px 9px;border-radius:6px;
+}
+.pm-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0;}
+.pm-info-box{background:var(--bg);border-radius:11px;padding:11px 13px;}
+.pm-info-box .k{font-size:10.5px;color:var(--ink-500);font-weight:600;text-transform:uppercase;letter-spacing:.03em;margin-bottom:3px;}
+.pm-info-box .v{font-size:15px;font-weight:700;}
 
 /* TABS */
 .tabs{display:flex;border-bottom:1px solid var(--line);overflow-x:auto;margin-bottom:18px;}
@@ -438,19 +528,6 @@ a{color:inherit;text-decoration:none;}
 <div class="app" id="app" style="display:none;">
   <aside class="sidebar">
     <div class="sb-brand"><div class="sb-logo">B</div><div class="sb-name">BEROO</div></div>
-
-    <!-- SWITCHER PANEL (desktop) -->
-    <div class="switcher-panel">
-      <div class="sp-fop on" id="spFopDesktop" onclick="toggleTechFop()" title="Технічний режим: ФОП / не ФОП">
-        <span>ФОП</span>
-        <div class="tog"></div>
-      </div>
-      <div class="sp-role">
-        <button id="roleBtnBloggerDesktop" onclick="switchRole('blogger')" title="Блогер">👤</button>
-        <button id="roleBtnSellerDesktop" onclick="switchRole('seller')" title="Магазин">🛒</button>
-      </div>
-    </div>
-
     <div class="sb-store"><span class="ic">🏬</span><span id="sbStoreName">МАГАЗИН ДАЧНИК</span></div>
     <div id="sidebarNav"></div>
     <div class="sb-footer">
@@ -468,6 +545,16 @@ a{color:inherit;text-decoration:none;}
     <div class="topbar">
       <button class="burger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
       <div class="topbar-logo"><div class="tb-logo-mark">B</div>BEROO</div>
+      <div class="topbar-switchers">
+        <div class="topbar-fop on" id="topFop" onclick="toggleTechFop()" title="Технічний режим: ФОП / не ФОП">
+          <span>ФОП</span>
+          <div class="tog"></div>
+        </div>
+        <div class="topbar-role">
+          <button id="roleBtnBlogger" onclick="switchRole('blogger')" title="Блогер">👤</button>
+          <button id="roleBtnSeller" onclick="switchRole('seller')" title="Магазин">🛒</button>
+        </div>
+      </div>
     </div>
     <div class="content" id="mainContent"></div>
   </div>
@@ -480,20 +567,7 @@ a{color:inherit;text-decoration:none;}
     <div class="sb-name">BEROO</div>
     <button class="mm-close" onclick="toggleMobileMenu()">✕</button>
   </div>
-  <div class="mm-body">
-    <!-- SWITCHER PANEL (mobile) -->
-    <div class="switcher-panel" style="margin-bottom:14px;">
-      <div class="sp-fop on" id="spFopMobile" onclick="toggleTechFop()" title="Технічний режим: ФОП / не ФОП">
-        <span>ФОП</span>
-        <div class="tog"></div>
-      </div>
-      <div class="sp-role">
-        <button id="roleBtnBloggerMobile" onclick="switchRole('blogger')" title="Блогер">👤</button>
-        <button id="roleBtnSellerMobile" onclick="switchRole('seller')" title="Магазин">🛒</button>
-      </div>
-    </div>
-    <div id="mobileNav"></div>
-  </div>
+  <div class="mm-body"><div id="mobileNav"></div></div>
 </div>
 
 <div class="toast-wrap" id="toastWrap"></div>
@@ -581,12 +655,16 @@ const DATA = {
     fopUploaded:false, fopPhotoUploaded:false
   },
   products:[
-    { id:1, name:'Генератор дизельний RO-CRAFT DP35', brand:'RO-CRAFT', art:'BR3254', code:'164', cat:'Ручний інструмент', price:45000, qty:1, mirrorers:12, stars:1537 },
-    { id:2, name:'Генератор дизельний RO-CRAFT DP35', brand:'RO-CRAFT', art:'BR3253', code:'163', cat:'Ручний інструмент', price:45000, qty:1, mirrorers:8, stars:980 },
-    { id:3, name:'Перфоратор Makita HR2470', brand:'Makita', art:'MK2470', code:'201', cat:'Електроінструмент', price:6290, qty:3, mirrorers:24, stars:2210 },
-    { id:4, name:'Шурупокрут Bosch GSR 12V', brand:'Bosch', art:'BS12V', code:'205', cat:'Електроінструмент', price:3890, qty:5, mirrorers:17, stars:1640 },
-    { id:5, name:'Набір ключів 24 предмети', brand:'TOPEX', art:'TX-24', code:'310', cat:'Ручний інструмент', price:1290, qty:12, mirrorers:6, stars:420 },
-    { id:6, name:'Компресор повітряний 50л', brand:'AIR-TECH', art:'AT-50', code:'402', cat:'Електроінструмент', price:8900, qty:2, mirrorers:11, stars:1130 }
+    { id:1, emoji:'⚡', name:'Генератор дизельний RO-CRAFT DP35', brand:'RO-CRAFT', art:'BR3254', code:'164', cat:'Ручний інструмент', price:45000, qty:1, mirrorers:12, stars:1537 },
+    { id:2, emoji:'🔧', name:'Генератор дизельний RO-CRAFT DP35', brand:'RO-CRAFT', art:'BR3253', code:'163', cat:'Ручний інструмент', price:45000, qty:1, mirrorers:8, stars:980 },
+    { id:3, emoji:'🔨', name:'Перфоратор Makita HR2470', brand:'Makita', art:'MK2470', code:'201', cat:'Електроінструмент', price:6290, qty:3, mirrorers:24, stars:2210 },
+    { id:4, emoji:'🪛', name:'Шурупокрут Bosch GSR 12V', brand:'Bosch', art:'BS12V', code:'205', cat:'Електроінструмент', price:3890, qty:5, mirrorers:17, stars:1640 },
+    { id:5, emoji:'🧰', name:'Набір ключів 24 предмети', brand:'TOPEX', art:'TX-24', code:'310', cat:'Ручний інструмент', price:1290, qty:12, mirrorers:6, stars:420 },
+    { id:6, emoji:'💨', name:'Компресор повітряний 50л', brand:'AIR-TECH', art:'AT-50', code:'402', cat:'Електроінструмент', price:8900, qty:2, mirrorers:11, stars:1130 },
+    { id:7, emoji:'💻', name:'Ноутбук Lenovo IdeaPad 3', brand:'Lenovo', art:'LN-IP3', code:'501', cat:'Електроніка', price:18900, qty:4, mirrorers:9, stars:720 },
+    { id:8, emoji:'📷', name:'Фотоапарат Canon EOS 250D', brand:'Canon', art:'CN-250D', code:'502', cat:'Електроніка', price:24500, qty:2, mirrorers:15, stars:1280 },
+    { id:9, emoji:'🧵', name:'Котушка ниток для шиття, 100м', brand:'Coats', art:'CT-100', code:'601', cat:'Рукоділля', price:120, qty:48, mirrorers:4, stars:210 },
+    { id:10, emoji:'🎧', name:'Навушники Sony WH-1000XM5', brand:'Sony', art:'SN-XM5', code:'503', cat:'Електроніка', price:12900, qty:6, mirrorers:21, stars:1840 }
   ],
   stores:[
     { id:'ST-2291', name:'МАГАЗИН ДАЧНИК', cat:'Ручний інструмент', products:65, rating:4.7, mirrors:120, totalStars:18420, logo:'МД', color:'#FF2D55' },
@@ -640,6 +718,7 @@ let currentView = 'showcase';
 let currentParent = 'dz';
 let profileTab = 'personal';
 let payoutsTab = 'earnings';
+let viewHistory = [];
 const expandedMenu = {};
 
 /* ============================================================
@@ -689,7 +768,7 @@ function startApp(){
   document.getElementById('app').style.display = 'flex';
   updateUserUI();
   renderMenu();
-  selectView('showcase');
+  selectView('showcase', 'dz', true);
 }
 function updateUserUI(){
   document.getElementById('sbUserName').textContent = DATA.user.name;
@@ -699,40 +778,32 @@ function updateUserUI(){
   document.getElementById('sbUserAvatar').textContent = DATA.user.name.split(' ').map(p=>p[0]).join('').slice(0,2);
   document.getElementById('sbStoreName').textContent = DATA.user.hasStore ? DATA.store.name : '—';
 
-  // Оновлюємо обидва перемикачі (desktop + mobile)
-  ['roleBtnBlogger','roleBtnBloggerMobile'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.classList.toggle('active', currentRole==='blogger');
-  });
-  ['roleBtnSeller','roleBtnSellerMobile'].forEach(id => {
-    const el = document.getElementById(id); if (el) el.classList.toggle('active', currentRole==='seller');
-  });
+  document.getElementById('roleBtnBlogger').classList.toggle('active', currentRole==='blogger');
+  document.getElementById('roleBtnSeller').classList.toggle('active', currentRole==='seller');
   updateFopVisibility();
 }
 
 /* ============================================================
-   ROLE SWITCHER
+   ROLE + FOP SWITCHERS (topbar)
    ============================================================ */
 function switchRole(role){
   currentRole = role;
   updateUserUI();
   renderMenu();
-  selectView(currentView, currentParent);
+  selectView(currentView, currentParent, true);
   showToast(role === 'blogger' ? 'Режим: Блогер' : 'Режим: Магазин');
 }
-
-/* ============================================================
-   TECH FOP TOGGLE
-   ============================================================ */
 function toggleTechFop(){
   DATA.blogger.isFop = !DATA.blogger.isFop;
-  document.querySelectorAll('.sp-fop').forEach(el => el.classList.toggle('on', DATA.blogger.isFop));
+  document.getElementById('topFop').classList.toggle('on', DATA.blogger.isFop);
   if (currentView === 'payouts') renderPayouts();
   showToast('Тех. режим: ' + (DATA.blogger.isFop ? 'ФОП (золоті ★)' : 'не ФОП (сірі ★)'));
 }
 function updateFopVisibility(){
+  const fopEl = document.getElementById('topFop');
+  if (!fopEl) return;
   // ФОП-тумблер видно тільки в режимі Блогер
-  const hide = currentRole !== 'blogger';
-  document.querySelectorAll('.sp-fop').forEach(el => el.classList.toggle('hidden', hide));
+  fopEl.classList.toggle('hidden', currentRole !== 'blogger');
 }
 
 /* ============================================================
@@ -751,18 +822,14 @@ function renderMenu(){
   document.getElementById('sidebarNav').innerHTML = visible.map(item => renderMenuItem(item, true)).join('');
   document.getElementById('mobileNav').innerHTML = visible.map(item => renderMenuItem(item, false)).join('');
 }
-
 function renderMenuItem(item, isDesktop){
   if (item.views.length === 0){
     const isActive = (item.key==='profile'&&currentView==='profile');
-    const onclick = isDesktop
-      ? `selectParent('${item.key}')`
-      : `selectParent('${item.key}');toggleMobileMenu()`;
+    const onclick = isDesktop ? `selectParent('${item.key}')` : `selectParent('${item.key}');toggleMobileMenu()`;
     return `<button class="sb-item ${isActive?'active':''}" onclick="${onclick}">
       <span class="ic">${item.icon}</span>${item.label}
     </button>`;
   }
-
   const isOpen = expandedMenu[item.key];
   const subs = item.views.map(v => {
     if (v.sub){
@@ -774,13 +841,10 @@ function renderMenuItem(item, isDesktop){
     }
     return `<button class="sb-subitem ${currentView===v.key?'active':''}" onclick="event.stopPropagation();selectView('${v.key}','${item.key}')${isDesktop?'':';toggleMobileMenu()'}">${v.label}${v.shortcut?'<span class="shortcut">↗</span>':''}</button>`;
   }).join('');
-
   const isActive = item.views.some(v=>{
     if (v.sub) return v.sub.some(s=>s.key===currentView);
     return v.key === currentView;
   });
-
-  // Аккордеон: клік на кореневий пункт → toggleMenu
   return `<div class="sb-group">
     <button class="sb-item ${isOpen?'open':''} ${isActive?'active':''}" onclick="toggleMenu('${item.key}')">
       <span class="ic">${item.icon}</span>${item.label}
@@ -789,15 +853,11 @@ function renderMenuItem(item, isDesktop){
     <div class="sb-sub ${isOpen?'open':''}">${subs}</div>
   </div>`;
 }
-
-function toggleMenu(key){
-  expandedMenu[key] = !expandedMenu[key];
-  renderMenu();
-}
+function toggleMenu(key){ expandedMenu[key] = !expandedMenu[key]; renderMenu(); }
 function selectParent(key){
   if (key === 'dashboard'){ showToast('Дашборд (демо)'); return; }
   if (key === 'ai'){ showToast('AI-асистент (демо)'); return; }
-  if (key === 'profile'){ currentView='profile'; currentParent='profile'; renderMenu(); renderProfile(); return; }
+  if (key === 'profile'){ selectView('profile','profile', true); return; }
   if (key === 'support'){ showToast('Підтримка (демо)'); return; }
   if (key === 'plan'){ showToast('Тарифний план (демо)'); return; }
   expandedMenu[key] = !expandedMenu[key];
@@ -805,7 +865,7 @@ function selectParent(key){
 }
 
 /* ============================================================
-   VIEW ROUTER
+   VIEW ROUTER + BACK BUTTON
    ============================================================ */
 const VIEW_META = {
   showcase:{ title:'Вітрина', parent:'dz' },
@@ -819,7 +879,13 @@ const VIEW_META = {
   stats:{ title:'Статистика', parent:'analytics' },
   profile:{ title:'Профіль', parent:'profile' }
 };
-function selectView(viewKey, parentKey){
+
+function selectView(viewKey, parentKey, skipHistory){
+  // save previous into history
+  if (!skipHistory && currentView && currentView !== viewKey){
+    viewHistory.push({ view: currentView, parent: currentParent });
+    if (viewHistory.length > 30) viewHistory.shift();
+  }
   currentView = viewKey;
   if (parentKey) currentParent = parentKey;
   else if (VIEW_META[viewKey]) currentParent = VIEW_META[viewKey].parent;
@@ -833,36 +899,52 @@ function selectView(viewKey, parentKey){
   };
   (renderers[viewKey] || renderComingSoon)();
 }
+
+function goBack(){
+  if (viewHistory.length === 0){
+    // fallback — на вітрину
+    selectView('showcase', 'dz', true);
+    return;
+  }
+  const prev = viewHistory.pop();
+  selectView(prev.view, prev.parent, true);
+}
+
+function renderBackBtn(label){
+  if (viewHistory.length === 0) return '';
+  return `<button class="back-btn" onclick="goBack()">
+    <span class="arr">←</span> ${label || 'Назад'}
+  </button>`;
+}
 function setHeader(title, sub){
-  return `<div class="page-head"><h1>${title}</h1>${sub?`<p>${sub}</p>`:''}</div>`;
+  return `${renderBackBtn()}<div class="page-head"><h1>${title}</h1>${sub?`<p>${sub}</p>`:''}</div>`;
 }
 
 /* ============================================================
-   ВІТРИНА
+   ВІТРИНА — list of product rows
    ============================================================ */
 function renderShowcase(){
-  const cards = DATA.products.map(p => `
-    <div class="product-card">
-      <div class="pc-img">
+  const rows = DATA.products.map(p => `
+    <div class="product-row" onclick="showProductModal(${p.id})">
+      <div class="pr-photo">
         <span class="brand-tag">${p.brand}</span>
-        <button class="pc-fav" onclick="event.stopPropagation();this.textContent=this.textContent==='☆'?'★':'☆'">☆</button>
-        🖼️
+        ${p.emoji}
+        <button class="pr-fav" onclick="event.stopPropagation();this.textContent=this.textContent==='☆'?'★':'☆'">☆</button>
       </div>
-      <div class="pc-body">
-        <div class="pc-title">${p.name}</div>
-        <div class="pc-meta"><span>Арт.: ${p.art}</span><span>Код: ${p.code}</span></div>
-        <div style="font-size:11.5px;color:var(--ink-500);">${p.cat}</div>
-        <div class="pc-mirrorers">
+      <div class="pr-info">
+        <div class="pr-title">${p.name}</div>
+        <div class="pr-meta">
+          <span>Арт.: ${p.art}</span>
+          <span>Код: ${p.code}</span>
+        </div>
+        <div class="pr-cat">${p.cat}</div>
+        <div class="pr-mirrorers">
           <div class="dots">${[1,2,3].map(i=>`<div class="dot">★</div>`).join('')}</div>
           <span>${p.mirrorers} блогерів</span>
         </div>
-        <div class="pc-price-row">
-          <div class="pc-price">${p.price.toLocaleString('uk-UA')} ₴</div>
-          <div class="pc-stock">${p.qty} шт</div>
-        </div>
-        <div class="pc-actions">
-          <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();showProductModal(${p.id})">Деталі</button>
-          <button class="btn btn-soft btn-sm" onclick="event.stopPropagation();showToast('Віддзеркалено: ${p.name}')">Віддзеркалити</button>
+        <div class="pr-bottom">
+          <div class="pr-price">${p.price.toLocaleString('uk-UA')} ₴</div>
+          <div class="pr-stock">${p.qty} шт</div>
         </div>
       </div>
     </div>
@@ -881,7 +963,7 @@ function renderShowcase(){
         <button class="btn btn-ghost btn-sm">↻</button>
       </div>
     </div>
-    <div class="product-grid">${cards}</div>
+    <div class="product-list">${rows}</div>
   `;
 }
 
@@ -890,7 +972,7 @@ function renderShowcase(){
    ============================================================ */
 function renderStores(){
   const cards = DATA.stores.map(s => `
-    <div class="store-card">
+    <div class="store-card" onclick="showToast('Магазин ${s.name}')">
       <div class="sc-head">
         <div class="sc-logo" style="background:${s.color}22;color:${s.color};">${s.logo}</div>
         <div style="flex:1;min-width:0;">
@@ -908,8 +990,8 @@ function renderStores(){
         <span class="badge badge-gray">ID ${s.id}</span>
       </div>
       <div class="sc-foot">
-        <button class="btn btn-ghost btn-sm" onclick="showToast('Магазин ${s.name}')">Профіль</button>
-        <button class="btn btn-soft btn-sm" onclick="showToast('Запит до ${s.name} надіслано')">Подати запит</button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();showToast('Магазин ${s.name}')">Профіль</button>
+        <button class="btn btn-soft btn-sm" onclick="event.stopPropagation();showToast('Запит до ${s.name} надіслано')">Подати запит</button>
       </div>
     </div>
   `).join('');
@@ -931,7 +1013,7 @@ function renderBloggers(){
   const cards = DATA.bloggers.map(b => {
     const starClass = b.isFop ? 'gold' : 'gray';
     return `
-    <div class="blogger-card">
+    <div class="blogger-card" onclick="showBloggerModal('${b.id}')">
       <span class="bc-fop-badge ${b.isFop?'bc-fop':'bc-nofop'}">${b.isFop?'ФОП':'БЕЗ ФОП'}</span>
       <div class="bc-head">
         <div class="bc-avatar" style="background:${b.avatarBg};">${b.name.split(' ').map(p=>p[0]).join('').slice(0,2)}</div>
@@ -947,9 +1029,6 @@ function renderBloggers(){
       <div class="bc-stats">
         <div class="bc-stat"><div class="v">${b.mirrors}</div><div class="k">віддзеркалює</div></div>
         <div class="bc-stat"><div class="v">${b.stores}</div><div class="k">магазинів</div></div>
-      </div>
-      <div class="bc-foot">
-        <button class="btn btn-ghost btn-sm" style="width:100%;" onclick="showBloggerModal('${b.id}')">Переглянути профіль</button>
       </div>
     </div>
   `;
@@ -1081,11 +1160,8 @@ function renderPayouts(){
     </div>
   `;
   let body = '';
-  if (payoutsTab === 'earnings'){
-    body = renderEarningsTab();
-  } else if (payoutsTab === 'to-bloggers' && isSeller){
-    body = renderToBloggersTab();
-  }
+  if (payoutsTab === 'earnings') body = renderEarningsTab();
+  else if (payoutsTab === 'to-bloggers' && isSeller) body = renderToBloggersTab();
   document.getElementById('mainContent').innerHTML = `
     ${setHeader('Виплати', 'Спільний екран для «Дзеркала» та «Фінансів»')}
     ${tabsHtml}
@@ -1455,10 +1531,12 @@ function uploadFop(field){
 function openModal(html){
   document.getElementById('modalContent').innerHTML = html;
   document.getElementById('modal').classList.add('active');
+  document.getElementById('modal').scrollTop = 0;
 }
 function closeModal(){ document.getElementById('modal').classList.remove('active'); }
 document.getElementById('modal').addEventListener('click', e => { if (e.target.id === 'modal') closeModal(); });
 
+/* Full product modal — big photo on top */
 function showProductModal(id){
   const p = DATA.products.find(x=>x.id===id);
   openModal(`
@@ -1467,12 +1545,19 @@ function showProductModal(id){
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
     <div class="modal-body">
-      <div style="font-size:12.5px;color:var(--ink-500);margin-bottom:10px;">${p.cat}</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
-        <div class="card" style="padding:12px;"><div class="muted">Ціна</div><div style="font-weight:700;font-size:16px;">${p.price.toLocaleString('uk-UA')} ₴</div></div>
-        <div class="card" style="padding:12px;"><div class="muted">В наявності</div><div style="font-weight:700;font-size:16px;">${p.qty} шт</div></div>
-        <div class="card" style="padding:12px;"><div class="muted">Віддзеркалюють</div><div style="font-weight:700;font-size:16px;">${p.mirrorers} блогерів</div></div>
-        <div class="card" style="padding:12px;"><div class="muted">Зірочок</div><div style="font-weight:700;font-size:16px;">${p.stars.toLocaleString('uk-UA')} ★</div></div>
+      <div class="pm-photo">
+        <span class="brand-tag">${p.brand}</span>
+        ${p.emoji}
+      </div>
+      <div style="font-size:12.5px;color:var(--ink-500);">${p.cat}</div>
+      <div class="pm-info-grid">
+        <div class="pm-info-box"><div class="k">Ціна</div><div class="v">${p.price.toLocaleString('uk-UA')} ₴</div></div>
+        <div class="pm-info-box"><div class="k">В наявності</div><div class="v">${p.qty} шт</div></div>
+        <div class="pm-info-box"><div class="k">Віддзеркалюють</div><div class="v">${p.mirrorers} блогерів</div></div>
+        <div class="pm-info-box"><div class="k">Зірочок</div><div class="v">${p.stars.toLocaleString('uk-UA')} ★</div></div>
+      </div>
+      <div style="font-size:12.5px;color:var(--ink-500);line-height:1.6;">
+        Цей товар доступний для віддзеркалення блогерами. Додайте його у свою вітрину, зніміть відео-огляд та отримуйте зірочки за кожне замовлення покупця за вашим посиланням.
       </div>
     </div>
     <div class="modal-foot">
