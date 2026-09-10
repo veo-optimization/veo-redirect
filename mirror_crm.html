@@ -1096,7 +1096,10 @@ function renderStores(){
         </div>
         <div class="row-between" style="flex-wrap:wrap;gap:8px;">
           <div class="rating"><span class="star">★</span> ${s.rating.toFixed(1)} <span style="color:var(--ink-400);font-weight:500;">(${s.reviews})</span></div>
-          <span class="badge ${s.selfMirrors?'badge-red':'badge-gray'}">${s.selfMirrors?'🪞 Дзеркалить':'Тільки продає'}</span>
+          ${s.selfMirrors 
+            ? `<span class="badge" style="background:var(--green-soft);color:var(--green);font-weight:700;">🛒+🪞 Свої продажі + Дзеркала</span>`
+            : `<span class="badge" style="background:#F1EAFE;color:#6D28D9;font-weight:700;">🪞 Тільки Дзеркала</span>`
+          }
         </div>
         <div class="sc-stats sc-stats-3">
           <div class="sc-stat"><div class="k">Товарів</div><div class="v">${s.products}</div></div>
@@ -1135,7 +1138,7 @@ function renderStores(){
       </div>
     </div>
   `}).join('');
-
+  
   document.getElementById('mainContent').innerHTML = `
     ${setHeader('Магазини', 'Каталог магазинів для оцінки надійності та вигідності співпраці')}
     <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
