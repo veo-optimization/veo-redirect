@@ -535,8 +535,8 @@ a{color:inherit;text-decoration:none;}
       <button class="burger" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
       <div class="topbar-logo"><div class="tb-logo-mark">B</div>BEROO</div>
       <div class="topbar-switchers">
-        <div class="topbar-fop on" id="topFop" onclick="toggleTechFop()" title="Технічний режим: ФОП / не ФОП">
-          <span>ФОП</span><div class="tog"></div>
+        <div class="topbar-fop on" id="topFop" onclick="toggleTechFop()" title="Статус для ролі Блогера: Блогер (ФОП) / Оглядач (без ФОП) — незалежний від ФОП магазину">
+          <span id="topFopLabel">Блогер</span><div class="tog"></div>
         </div>
         <div class="topbar-role">
           <button id="roleBtnBlogger" onclick="switchRole('blogger')" title="Блогер">👤</button>
@@ -569,6 +569,7 @@ const MENU = [
     { key:'showcase', label:'Вітрина', bloggerVisible:true },
     { key:'stores', label:'Магазини', bloggerVisible:true },
     { key:'bloggers', label:'Блогери', bloggerVisible:true },
+    { key:'reviewers', label:'Оглядачі', bloggerVisible:true },
     { key:'requests', label:'Запити', bloggerVisible:true },
     { key:'payouts', label:'Виплати', shortcut:true, bloggerVisible:true },
     { key:'analytics', label:'Аналітика', shortcut:true, bloggerVisible:true },
@@ -631,12 +632,12 @@ const MENU = [
    DATA
    ============================================================ */
 const DATA = {
-  store:{ name:'МАГАЗИН ДАЧНИК', domain:'60787.beroo.online', category:'Ручний інструмент', hasMirrors:true },
+  store:{ name:'МАГАЗИН ДАЧНИК', domain:'60787.beroo.online', category:'Ручний інструмент', hasMirrors:true, selfMirrorsEnabled:false },
   user:{ name:'Марина Костенко', role:'blogger', isFop:true, hasStore:false, hasBloggerAccount:true },
 
   riskZones:{
     green:{ min:0, max:10 },
-    orange:{ min:11, max:29 },
+    orange:{ min:11, max:20 },
     red:{ min:30, max:100 }
   },
 
@@ -929,8 +930,14 @@ function startApp(){
 }
 function updateUserUI(){
   document.getElementById('sbUserName').textContent = DATA.user.name;
-  document.getElementById('sbUserRole').textContent =
-    currentRole==='seller' ? 'Продавець' : DATA.user.hasStore ? 'Блогер + Продавець' : 'Блогер';
+  let roleLabel;
+  if (currentRole === 'seller'){
+    roleLabel = 'Продавець';
+  } else {
+    roleLabel = DATA.blogger.isFop ? 'Блогер' : 'Оглядач';
+  }
+  if (DATA.user.hasStore && currentRole === 'blogger') roleLabel += ' + Магазин';
+  document.getElementById('sbUserRole').textContent = roleLabel;
   document.getElementById('sbUserAvatar').textContent = DATA.user.name.split(' ').map(p=>p[0]).join('').slice(0,2);
   document.getElementById('sbStoreName').textContent = DATA.user.hasStore ? DATA.store.name : '—';
   document.getElementById('roleBtnBlogger').classList.toggle('active', currentRole==='blogger');
@@ -950,8 +957,11 @@ function switchRole(role){
 function toggleTechFop(){
   DATA.blogger.isFop = !DATA.blogger.isFop;
   document.getElementById('topFop').classList.toggle('on', DATA.blogger.isFop);
-  if (currentView==='payouts'){ payoutsTab = ''; renderPayouts(); }
-  showToast('Тех. режим: ' + (DATA.blogger.isFop ? 'ФОП (золоті ★)' : 'не ФОП (сірі ★)'));
+  document.getElementById('topFopLabel').textContent = DATA.blogger.isFop ? 'Блогер' : 'Оглядач';
+  updateUserUI();
+  payoutsTab = '';
+  selectView(currentView, currentParent, true);
+  showToast(DATA.blogger.isFop ? 'Режим: Блогер (ФОП) — золоті ★' : 'Режим: Оглядач (без ФОП) — сірі ★ вдячності');
 }
 function updateFopVisibility(){
   const el = document.getElementById('topFop');
@@ -1006,7 +1016,9 @@ const VIEW_META = {
   showcase:{ title:'Вітрина', parent:'dz' },
   stores:{ title:'Магазини', parent:'dz' },
   bloggers:{ title:'Блогери', parent:'dz' },
+  reviewers:{ title:'Оглядачі', parent:'dz' },
   requests:{ title:'Запити', parent:'dz' },
+  clients:{ title:'Клієнти', parent:'clients' },
   payouts:{ title:'Комісійні', parent:'finance' },
   analytics:{ title:'Аналітика', parent:'analytics' },
   stats:{ title:'Статистика', parent:'analytics' },
@@ -1028,6 +1040,7 @@ function selectView(viewKey, parentKey, skipHistory){
   renderMenu();
   const renderers = {
     showcase: renderShowcase, stores: renderStores, bloggers: renderBloggers,
+    reviewers: renderReviewers, clients: renderClients,
     requests: renderRequests, payouts: renderPayouts, analytics: renderAnalytics,
     stats: renderAnalytics, profile: renderProfile,
     orders: renderOrders, returns: renderReturns,
@@ -1263,13 +1276,13 @@ function toggleStoreDetail(id){
    БЛОГЕРИ
    ============================================================ */
 function renderBloggers(){
-  const cards = DATA.bloggers.map(b => {
-    const starClass = b.isFop ? 'gold' : 'gray';
+  const list = DATA.bloggers.filter(b=>b.isFop);
+  const cards = list.map(b => {
     const isOpen = !!expandedDetails['b'+b.id];
     const blogDisputes = DATA.disputes.filter(d => d.to === b.name && d.against === 'blogger');
     return `
     <div class="blogger-card">
-      <span class="bc-fop-badge ${b.isFop?'bc-fop':'bc-nofop'}">${b.isFop?'ФОП':'БЕЗ ФОП'}</span>
+      <span class="bc-fop-badge bc-fop">ФОП · БЛОГЕР</span>
       <div class="bc-body">
         <div class="bc-head">
           <div class="bc-avatar" style="background:${b.avatarBg};">${b.name.split(' ').map(p=>p[0]).join('').slice(0,2)}</div>
@@ -1278,7 +1291,7 @@ function renderBloggers(){
             <div class="bc-handle">${b.handle} · ${b.city}</div>
           </div>
         </div>
-        <div class="bc-stars ${starClass}">
+        <div class="bc-stars gold">
           <span class="star-ic">★</span>
           <div><div class="num">${b.stars.toLocaleString('uk-UA')}</div><div class="lbl">зірочок · рейтинг ⭐ ${b.rating}</div></div>
         </div>
@@ -1331,20 +1344,139 @@ function renderBloggers(){
   `}).join('');
 
   document.getElementById('mainContent').innerHTML = `
-    ${setHeader('Блогери', 'Партнери-блогери: рейтинг, охоплення, % повернень, скарги')}
+    ${setHeader('Блогери', 'Офіційні партнери з підтвердженим ФОП — золоті зірочки, реальні грошові виплати')}
     <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
-      <span class="badge badge-dark">${DATA.bloggers.length} блогерів</span>
-      <span class="badge badge-gold">${DATA.bloggers.filter(b=>b.isFop).length} з ФОП ★</span>
-      <span class="risk-badge risk-green"><span class="risk-dot"></span>${DATA.bloggers.filter(b=>getRiskZone(b.returnPct)==='green').length} безпечних</span>
-      <span class="risk-badge risk-orange"><span class="risk-dot"></span>${DATA.bloggers.filter(b=>getRiskZone(b.returnPct)==='orange').length} увага</span>
-      <span class="risk-badge risk-red"><span class="risk-dot"></span>${DATA.bloggers.filter(b=>getRiskZone(b.returnPct)==='red').length} критичних</span>
+      <span class="badge badge-dark">${list.length} блогерів</span>
+      <span class="badge badge-gold">Усі з ФОП ★</span>
+      <span class="risk-badge risk-green"><span class="risk-dot"></span>${list.filter(b=>getRiskZone(b.returnPct)==='green').length} безпечних</span>
+      <span class="risk-badge risk-orange"><span class="risk-dot"></span>${list.filter(b=>getRiskZone(b.returnPct)==='orange').length} увага</span>
+      <span class="risk-badge risk-red"><span class="risk-dot"></span>${list.filter(b=>getRiskZone(b.returnPct)==='red').length} критичних</span>
     </div>
-    <div class="blogger-grid">${cards}</div>
+    ${list.length === 0 ? `<div class="empty"><div class="em-ic">🎥</div><div class="em-t">Поки що немає партнерів з ФОП</div></div>` : `<div class="blogger-grid">${cards}</div>`}
   `;
 }
 function toggleBloggerDetail(id){
   expandedDetails['b'+id] = !expandedDetails['b'+id];
   renderBloggers();
+}
+
+/* ============================================================
+   ОГЛЯДАЧІ (контент-мейкери без ФОП — сірі зірочки вдячності)
+   ============================================================ */
+function renderReviewers(){
+  const list = DATA.bloggers.filter(b=>!b.isFop);
+  const cards = list.map(b => {
+    const isOpen = !!expandedDetails['rv'+b.id];
+    return `
+    <div class="blogger-card">
+      <span class="bc-fop-badge bc-nofop">ОГЛЯДАЧ · БЕЗ ФОП</span>
+      <div class="bc-body">
+        <div class="bc-head">
+          <div class="bc-avatar" style="background:${b.avatarBg};opacity:.85;">${b.name.split(' ').map(p=>p[0]).join('').slice(0,2)}</div>
+          <div style="flex:1;min-width:0;">
+            <div class="bc-name">${b.name}</div>
+            <div class="bc-handle">${b.handle} · ${b.city}</div>
+          </div>
+        </div>
+        <div class="bc-stars gray">
+          <span class="star-ic">★</span>
+          <div><div class="num">${b.stars.toLocaleString('uk-UA')}</div><div class="lbl">зірочок вдячності · рейтинг ⭐ ${b.rating}</div></div>
+        </div>
+        <div class="bc-stats">
+          <div class="bc-stat"><div class="v">${b.mirrors}</div><div class="k">дзеркал</div></div>
+          <div class="bc-stat"><div class="v">${b.stores}</div><div class="k">магазинів</div></div>
+          <div class="bc-stat"><div class="v">${b.reach}</div><div class="k">охоплення</div></div>
+          <div class="bc-stat"><div class="v">${b.conversion}</div><div class="k">конверсія</div></div>
+        </div>
+        <div style="background:var(--bg);border-radius:10px;padding:10px 12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;flex-wrap:wrap;gap:6px;">
+            <span style="font-size:10.5px;font-weight:600;color:var(--ink-500);text-transform:uppercase;">% повернень (середнє)</span>
+            ${riskBadge(b.returnPct)}
+          </div>
+          ${riskBar(b.returnPct)}
+          ${b.disputesOpen > 0 ? `<div style="margin-top:8px;"><span class="risk-badge risk-red"><span class="risk-dot"></span>${b.disputesOpen} активних скарг</span></div>` : ''}
+        </div>
+      </div>
+      <div class="bc-toggle ${isOpen?'open':''}" onclick="toggleReviewerDetail('${b.id}')">
+        <span>${isOpen?'Згорнути':'Детальніше'}</span><span class="chev">▼</span>
+      </div>
+      <div class="bc-details ${isOpen?'open':''}">
+        <div class="bc-details-inner">
+          <div class="fact"><span>Аудиторія</span><b>${b.audience}</b></div>
+          <div class="fact"><span>Платформи</span><b>${b.platform}</b></div>
+          <div class="fact"><span>Досвід</span><b>${b.experience || '—'}</b></div>
+          <div class="fact"><span>Категорії</span><b>${(b.categories||[]).join(', ') || '—'}</b></div>
+          <div class="fact"><span>Продажів всього</span><b>${b.salesTotal} шт</b></div>
+          <div class="fact"><span>Замовлень</span><b>${b.orders}</b></div>
+          <div class="fact"><span>Всього скарг</span><b>${b.disputesTotal} (відкритих: ${b.disputesOpen})</b></div>
+          <div style="background:#fff;border-radius:10px;padding:10px 12px;font-size:11.5px;color:var(--ink-700);line-height:1.6;">
+            Сірі зірочки — навчальний орієнтир (1 сіра ★ ≈ 1 ₴ потенціалу). Реальні грошові виплати недоступні, поки оглядач не оформить ФОП у профілі блогера.
+          </div>
+          <div class="row" style="gap:8px;margin-top:6px;flex-wrap:wrap;">
+            <button class="btn btn-ghost btn-sm" style="flex:1;" onclick="event.stopPropagation();showBloggerModal('${b.id}')">Профіль</button>
+            <button class="btn btn-soft btn-sm" style="flex:1;" onclick="event.stopPropagation();showToast('Запрошення до ${b.name} надіслано')">Запросити</button>
+            <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();openDisputeModal('blogger','${b.name}')">⚠ Скарга</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `}).join('');
+
+  document.getElementById('mainContent').innerHTML = `
+    ${setHeader('Оглядачі', 'Контент-мейкери без ФОП: створюють сайти, знімають контент, дзеркалять товари й навчаються')}
+    <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
+      <span class="badge badge-dark">${list.length} оглядачів</span>
+      <span class="badge badge-gray">Сірі ★ вдячності</span>
+      <span class="risk-badge risk-green"><span class="risk-dot"></span>${list.filter(b=>getRiskZone(b.returnPct)==='green').length} безпечних</span>
+      <span class="risk-badge risk-orange"><span class="risk-dot"></span>${list.filter(b=>getRiskZone(b.returnPct)==='orange').length} увага</span>
+      <span class="risk-badge risk-red"><span class="risk-dot"></span>${list.filter(b=>getRiskZone(b.returnPct)==='red').length} критичних</span>
+    </div>
+    <div class="disclaimer" style="margin-bottom:16px;">
+      Оглядачам виплати недоступні, оскільки вони не підключили статус ФОП для ролі Блогера. Оглядач може внести окремі документи ФОП у профіль блогера, щоб стати Блогером і отримувати реальні виплати.
+    </div>
+    ${list.length === 0 ? `<div class="empty"><div class="em-ic">🎬</div><div class="em-t">Поки що немає оглядачів</div></div>` : `<div class="blogger-grid">${cards}</div>`}
+  `;
+}
+function toggleReviewerDetail(id){
+  expandedDetails['rv'+id] = !expandedDetails['rv'+id];
+  renderReviewers();
+}
+
+/* ============================================================
+   КЛІЄНТИ
+   ============================================================ */
+function renderClients(){
+  const buyers = {};
+  DATA.orders.forEach(o=>{
+    if (!buyers[o.buyer]) buyers[o.buyer] = { name:o.buyer, orders:[], total:0 };
+    buyers[o.buyer].orders.push(o);
+    buyers[o.buyer].total += o.sum;
+  });
+  const list = Object.values(buyers);
+  const zoneColor = z => z==='green' ? 'var(--green)' : z==='orange' ? 'var(--orange)' : 'var(--red)';
+  const rows = list.map(c => {
+    const lastOrder = c.orders[0];
+    const blogger = DATA.bloggers.find(b=>b.name===lastOrder.mirrorBlogger);
+    const zone = blogger ? getRiskZone(blogger.returnPct) : 'green';
+    return `
+    <div class="card" style="padding:14px 16px;margin-bottom:10px;">
+      <div class="row-between" style="flex-wrap:wrap;gap:10px;">
+        <div>
+          <div style="font-weight:700;font-size:14px;">${c.name}</div>
+          <div class="muted">${c.orders.length} замовлень · ${c.total.toLocaleString('uk-UA')} ₴</div>
+        </div>
+        <span class="mirror-tag"><span class="mirror-tag-av" style="background:${zoneColor(zone)};">${lastOrder.mirrorBlogger.split(' ').map(p=>p[0]).join('').slice(0,2)}</span>Дзеркало: ${lastOrder.mirrorBlogger}</span>
+      </div>
+    </div>
+    `;
+  }).join('');
+  document.getElementById('mainContent').innerHTML = `
+    ${setHeader('Клієнти', "Покупці з атрибуцією до дзеркала, яке привело замовлення, та зоною ризику")}
+    <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
+      <span class="badge badge-dark">${list.length} клієнтів</span>
+    </div>
+    ${rows}
+  `;
 }
 
 /* ============================================================
@@ -1562,6 +1694,7 @@ function renderOrders(){
     ${bloggers.map(b=>`<button class="filter-chip ${ordersFilterBlogger===b?'active':''}" onclick="setOrdersFilter('${b}')">${b}</button>`).join('')}
   `;
   const filtered = ordersFilterBlogger === 'all' ? DATA.orders : DATA.orders.filter(o=>o.mirrorBlogger===ordersFilterBlogger);
+  const zoneColorO = z => z==='green' ? 'var(--green)' : z==='orange' ? 'var(--orange)' : 'var(--red)';
   const rows = filtered.map(o => {
     const blogger = DATA.bloggers.find(b=>b.name===o.mirrorBlogger);
     const zone = blogger ? getRiskZone(blogger.returnPct) : 'green';
@@ -1570,7 +1703,7 @@ function renderOrders(){
       <td data-label="Замовлення" style="font-weight:700;">${o.id}</td>
       <td data-label="Покупець">${o.buyer}<br><span class="muted">${o.date}</span></td>
       <td data-label="Товар" style="font-size:12px;">${o.product}</td>
-      <td data-label="Дзеркало"><span class="mirror-tag"><span class="mirror-tag-av">${o.mirrorBlogger.split(' ').map(p=>p[0]).join('').slice(0,2)}</span>${o.mirrorBlogger}</span></td>
+      <td data-label="Дзеркало"><span class="mirror-tag"><span class="mirror-tag-av" style="background:${zoneColorO(zone)};">${o.mirrorBlogger.split(' ').map(p=>p[0]).join('').slice(0,2)}</span>Дзеркало: ${o.mirrorBlogger}</span></td>
       <td data-label="Сума" style="font-weight:700;">${o.sum.toLocaleString('uk-UA')} ₴</td>
       <td data-label="Ризик">${blogger ? `<span class="risk-badge risk-${zone}"><span class="risk-dot"></span>${blogger.returnPct}%</span>` : '—'}</td>
       <td data-label="Повернення">${o.returnStatus==='returned' ? `<span class="badge badge-red">↺ Повернуто</span>` : `<span class="badge badge-green">Без повернення</span>`}</td>
@@ -1609,6 +1742,7 @@ function setOrdersFilter(name){
    ============================================================ */
 function renderReturns(){
   const returned = DATA.orders.filter(o=>o.returnStatus==='returned');
+  const zoneColorR = z => z==='green' ? 'var(--green)' : z==='orange' ? 'var(--orange)' : 'var(--red)';
   const rows = returned.map(o => {
     const blogger = DATA.bloggers.find(b=>b.name===o.mirrorBlogger);
     const zone = blogger ? getRiskZone(blogger.returnPct) : 'green';
@@ -1617,7 +1751,7 @@ function renderReturns(){
       <td data-label="Замовлення" style="font-weight:700;">${o.id}</td>
       <td data-label="Покупець">${o.buyer}</td>
       <td data-label="Товар" style="font-size:12px;">${o.product}</td>
-      <td data-label="Дзеркало"><span class="mirror-tag"><span class="mirror-tag-av">${o.mirrorBlogger.split(' ').map(p=>p[0]).join('').slice(0,2)}</span>${o.mirrorBlogger}</span></td>
+      <td data-label="Дзеркало"><span class="mirror-tag"><span class="mirror-tag-av" style="background:${zoneColorR(zone)};">${o.mirrorBlogger.split(' ').map(p=>p[0]).join('').slice(0,2)}</span>Дзеркало: ${o.mirrorBlogger}</span></td>
       <td data-label="Сума" style="font-weight:700;">${o.sum.toLocaleString('uk-UA')} ₴</td>
       <td data-label="Ризик">${blogger ? `<span class="risk-badge risk-${zone}"><span class="risk-dot"></span>${blogger.returnPct}%</span>` : '—'}</td>
     </tr>
@@ -1727,14 +1861,16 @@ function updateZone(zone, field, value){
    ============================================================ */
 function getAvailableTabs(){
   const tabs = [];
-  const isSeller = DATA.user.hasStore;
-  const isBloggerRole = currentRole === 'blogger' || DATA.user.hasBloggerAccount;
-
-  if (isSeller){
-    tabs.push({ key:'i-pay', label:'Я виплачую', enabled:true, empty:!DATA.store.hasMirrors });
-  }
-  if (isBloggerRole){
-    tabs.push({ key:'i-get-paid', label:'Мені виплачують', enabled:true, empty:false });
+  if (currentRole === 'seller' && DATA.user.hasStore){
+    tabs.push({ key:'i-pay', label:'Я виплачую' });
+    tabs.push({ key:'store-gets-paid', label:'Мені виплачують' });
+    tabs.push({ key:'store-reviewers', label:'Оглядачі' });
+  } else if (currentRole === 'blogger'){
+    if (DATA.blogger.isFop){
+      tabs.push({ key:'i-get-paid', label:'Мені виплачують' });
+    } else {
+      tabs.push({ key:'my-achievements', label:'Мої досягнення' });
+    }
   }
   return tabs;
 }
@@ -1752,19 +1888,18 @@ function renderPayouts(){
     return;
   }
 
-  const tabsHtml = `
+  const tabsHtml = tabs.length > 1 ? `
     <div class="tabs">
       ${tabs.map(t => `<button class="tab ${payoutsTab===t.key?'active':''}" onclick="setPayoutsTab('${t.key}')">${t.label}</button>`).join('')}
     </div>
-  `;
+  ` : '';
 
   let body = '';
-  if (payoutsTab === 'i-pay'){
-    const activeTab = tabs.find(t=>t.key==='i-pay');
-    body = renderIPayTab(activeTab && activeTab.empty);
-  } else if (payoutsTab === 'i-get-paid'){
-    body = renderIGetPaidTab();
-  }
+  if (payoutsTab === 'i-pay') body = renderIPayTab();
+  else if (payoutsTab === 'store-gets-paid') body = renderStoreGetsPaidTab();
+  else if (payoutsTab === 'store-reviewers') body = renderStoreReviewersTab();
+  else if (payoutsTab === 'i-get-paid') body = renderIGetPaidTab();
+  else if (payoutsTab === 'my-achievements') body = renderMyAchievementsTab();
 
   document.getElementById('mainContent').innerHTML = `
     ${setHeader('Комісійні', 'Взаєморозрахунки між магазинами та блогерами. Виплати = Комісійні — це одна й та сама сторінка')}
@@ -1830,23 +1965,24 @@ function showFixationLockedModal(){
 }
 
 /* ---------- Вкладка «Я виплачую» (продавець) ---------- */
-function renderIPayTab(empty){
-  if (empty || !DATA.store.hasMirrors){
+function renderIPayTab(){
+  const fopPayouts = DATA.iPay.filter(p=>p.isFop);
+  if (!DATA.store.hasMirrors || fopPayouts.length === 0){
     return `
       <div class="empty-state">
         <div class="es-ic">🪞</div>
-        <div class="es-title">Поки що немає дзеркал</div>
-        <div class="es-text">Як тільки блогери почнуть віддзеркалювати ваші товари й продаватимуть через свої відео — тут з'являться комісійні для виплат.</div>
-        <button class="btn btn-primary" onclick="selectView('bloggers','dz')">Знайти блогерів</button>
+        <div class="es-title">Поки що немає нарахувань блогерам з ФОП</div>
+        <div class="es-text">Тут — розрахунки лише з офіційними партнерами-блогерами (ФОП). Оглядачі без ФОП показані на вкладці «Оглядачі» — без грошових виплат.</div>
+        <button class="btn btn-primary" onclick="selectView('bloggers','dz')">Знайти блогерів з ФОП</button>
       </div>
     `;
   }
 
-  const totalPending = DATA.iPay.filter(p=>p.status==='pending').reduce((s,p)=>s+p.sum,0);
-  const totalDone = DATA.iPay.filter(p=>p.status==='done').reduce((s,p)=>s+p.sum,0);
-  const totalStars = DATA.iPay.reduce((s,p)=>s+p.stars,0);
+  const totalPending = fopPayouts.filter(p=>p.status==='pending').reduce((s,p)=>s+p.sum,0);
+  const totalDone = fopPayouts.filter(p=>p.status==='done').reduce((s,p)=>s+p.sum,0);
+  const totalStars = fopPayouts.reduce((s,p)=>s+p.stars,0);
 
-  const rows = DATA.iPay.map(p => {
+  const rows = fopPayouts.map(p => {
     const isOpen = !!expandedDetails['ip'+p.id];
     const blogger = DATA.bloggers.find(b=>b.name===p.blogger);
     const bloggerIsFop = blogger ? blogger.isFop : p.isFop;
@@ -1892,25 +2028,100 @@ function renderIPayTab(empty){
 
   return `
     <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
-      <span class="badge badge-dark">${DATA.iPay.length} нарахувань</span>
-      <span class="badge badge-warn">${DATA.iPay.filter(p=>p.status==='pending').length} очікують</span>
-      <span class="badge badge-green">${DATA.iPay.filter(p=>p.status==='done').length} виплачено</span>
+      <span class="badge badge-dark">${fopPayouts.length} нарахувань (ФОП)</span>
+      <span class="badge badge-warn">${fopPayouts.filter(p=>p.status==='pending').length} очікують</span>
+      <span class="badge badge-green">${fopPayouts.filter(p=>p.status==='done').length} виплачено</span>
     </div>
 
     <div class="earn-box">
       <div class="earn-fop-tag gold">МАГАЗИН</div>
-      <div class="earn-label">Я маю виплатити блогерам</div>
+      <div class="earn-label">Я маю виплатити блогерам (ФОП)</div>
       <div class="earn-amount gold">${totalPending.toLocaleString('uk-UA')} <span class="star-big">₴</span></div>
       <div class="earn-sub">Очікує виплати · всього нараховано ${totalStars.toLocaleString('uk-UA')} ★ · виплачено ${totalDone.toLocaleString('uk-UA')} ₴</div>
     </div>
 
     <div class="card" style="padding:14px 16px;background:var(--bg);border-color:var(--line);margin-bottom:16px;">
       <div style="font-size:12.5px;color:var(--ink-700);line-height:1.6;">
-        <b>Як це працює.</b> Кожна продана одиниця товару через віддзеркалення блогера автоматично створює нарахування за узгодженим відсотком. Комісія <b>однакова для всіх блогерів</b> — статус ФОП не впливає на її розмір. Функціонал взаєморозрахунків, фіксації виплат і договорів доступний <b>тільки для блогерів з активним ФОП</b>. Платформа виступає <b>виключно місцем для калькуляції, рейтингів і фіксації</b> — усі розрахунки та договірні відносини є відповідальністю сторін.
+        <b>Як це працює.</b> Кожна продана одиниця товару через віддзеркалення блогера з ФОП автоматично створює нарахування за узгодженим відсотком. Комісія <b>однакова для всіх</b> — і блогерів, і оглядачів; статус ФОП не впливає на її розмір. Функціонал взаєморозрахунків, фіксації виплат і договорів доступний <b>тільки для блогерів з активним ФОП</b>. Оглядачі без ФОП показані на вкладці «Оглядачі» — вони накопичують зірочки вдячності без грошових виплат. Платформа виступає <b>виключно місцем для калькуляції, рейтингів і фіксації</b> — усі розрахунки та договірні відносини є відповідальністю сторін.
       </div>
     </div>
 
-    <div style="font-size:13.5px;font-weight:700;margin:20px 0 10px;">Нарахування по блогерах</div>
+    <div style="font-size:13.5px;font-weight:700;margin:20px 0 10px;">Нарахування по блогерах (ФОП)</div>
+    ${rows}
+  `;
+}
+
+/* ---------- Вкладка «Мені виплачують» (магазин сам дзеркалить інші бренди) ---------- */
+function renderStoreGetsPaidTab(){
+  if (!DATA.store.selfMirrorsEnabled){
+    return `
+      <div class="empty-state">
+        <div class="es-ic">🛒</div>
+        <div class="es-title">Ви поки не дзеркалите інші бренди</div>
+        <div class="es-text">Якщо ваш магазин почне віддзеркалювати товари інших брендів як партнер (за принципом TikTok Shop), тут з'являться нарахування, які інші магазини мають виплатити вам.</div>
+      </div>
+    `;
+  }
+  const totalStars = DATA.iGetPaid.reduce((s,e)=>s+e.stars,0);
+  const totalSum = DATA.iGetPaid.reduce((s,e)=>s+e.sum,0);
+  const rows = DATA.iGetPaid.map(e => `
+    <div class="payout-row">
+      <div class="pr2-head">
+        <div class="bs-logo" style="width:40px;height:40px;border-radius:10px;background:${e.color}22;color:${e.color};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;">${e.logo}</div>
+        <div class="pr2-main">
+          <div class="pr2-title">${e.store}</div>
+          <div class="pr2-sub">${e.label} · ${e.id} · ${e.date}</div>
+        </div>
+        <div class="pr2-amount">
+          <div class="v">${e.sum.toLocaleString('uk-UA')} ₴</div>
+          <div class="l">${e.stars.toLocaleString('uk-UA')} ★</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+  return `
+    <div class="earn-box">
+      <div class="earn-fop-tag gold">МАГАЗИН-ПАРТНЕР</div>
+      <div class="earn-label">Мені мають виплатити інші магазини</div>
+      <div class="earn-amount gold">${totalSum.toLocaleString('uk-UA')} <span class="star-big">₴</span></div>
+      <div class="earn-sub">≈ ${totalStars.toLocaleString('uk-UA')} ★ · за товари, які ваш магазин дзеркалить як партнер</div>
+    </div>
+    <div style="font-size:13.5px;font-weight:700;margin:20px 0 10px;">Розбивка по брендах-партнерах</div>
+    ${rows}
+  `;
+}
+
+/* ---------- Вкладка «Оглядачі» (магазин: хто без ФОП дзеркалить його товари) ---------- */
+function renderStoreReviewersTab(){
+  const list = DATA.bloggers.filter(b=>!b.isFop);
+  if (list.length === 0){
+    return `<div class="empty"><div class="em-ic">🎬</div><div class="em-t">Оглядачі ще не дзеркалять ваші товари</div></div>`;
+  }
+  const rows = list.map(b => `
+    <div class="payout-row">
+      <div class="pr2-head">
+        <div class="bc-avatar" style="background:${b.avatarBg};width:40px;height:40px;font-size:13px;opacity:.85;">${b.name.split(' ').map(p=>p[0]).join('').slice(0,2)}</div>
+        <div class="pr2-main">
+          <div class="pr2-title">${b.name} <span class="badge badge-gray">ОГЛЯДАЧ</span></div>
+          <div class="pr2-sub">${b.handle} · ${b.city} · охоплення ${b.reach}</div>
+        </div>
+        <div class="pr2-amount">
+          <div class="v">${renderStars(b.stars, false, '15px')}</div>
+          <div class="l">вдячності</div>
+        </div>
+      </div>
+      <div class="pr2-toggle" style="cursor:default;">
+        <span>Дзеркал: ${b.mirrors} · конверсія ${b.conversion} · % повернень ${b.returnPct}%</span>
+      </div>
+    </div>
+  `).join('');
+  return `
+    <div class="disclaimer" style="margin-bottom:16px;">
+      Оглядачі без ФОП не отримують грошових виплат — тільки сірі зірочки вдячності та статистику трафіку. Кнопки грошової виплати тут немає навмисно.
+    </div>
+    <div class="row mb-12" style="gap:8px;flex-wrap:wrap;">
+      <span class="badge badge-dark">${list.length} оглядачів дзеркалять ваші товари</span>
+    </div>
     ${rows}
   `;
 }
@@ -1924,22 +2135,7 @@ function renderIGetPaidTab(){
 
   /* Банер із поясненням — але баланс і список магазинів завжди видимі нижче */
   let lockBanner = '';
-  if (!isFop){
-    lockBanner = `
-      <div class="card" style="padding:20px;background:var(--red-50);border-color:#FFD9E1;margin-bottom:16px;">
-        <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;">
-          <div style="font-size:34px;line-height:1;opacity:.8;">🔒</div>
-          <div style="flex:1;min-width:220px;">
-            <div style="font-size:15px;font-weight:800;color:#8A1B30;margin-bottom:6px;">Фіксація виплат недоступна — ви не ФОП</div>
-            <div style="font-size:12.5px;color:#8A1B30;line-height:1.6;margin-bottom:10px;">
-              Нижче — ваш поточний баланс зірочок і магазини, по яких вони нараховані. Це видно завжди. Але щоб <b>зафіксувати виплату</b>, сформувати документи й вести облік — потрібен статус ФОП.
-            </div>
-            <button class="btn btn-primary btn-sm" onclick="setProfileTab('blogger');selectView('profile','profile')">Додати дані ФОП →</button>
-          </div>
-        </div>
-      </div>
-    `;
-  } else if (!canFix){
+  if (!canFix){
     lockBanner = `
       <div class="disclaimer" style="margin-bottom:16px;">
         <b>Дані ФОП неповні.</b> Додайте витяг з ЄДР та фото ФОП з витягом у <a onclick="setProfileTab('blogger');selectView('profile','profile')" style="color:var(--red);font-weight:700;cursor:pointer;text-decoration:underline;">профілі блогера</a>, щоб активувати фіксацію виплат.
@@ -2042,6 +2238,52 @@ function renderIGetPaidTab(){
         ? `<div class="empty"><div class="em-ic">📒</div><div class="em-t">Ще немає фіксацій</div></div>`
         : fixations
     }
+  `;
+}
+
+/* ---------- «Мої досягнення» (Оглядач — блогер без ФОП) ---------- */
+function renderMyAchievementsTab(){
+  const totalStars = DATA.iGetPaid.reduce((s,e)=>s+e.stars,0);
+
+  const stores = DATA.iGetPaid.map(e => `
+    <div class="payout-row">
+      <div class="pr2-head">
+        <div class="bs-logo" style="width:40px;height:40px;border-radius:10px;background:${e.color}22;color:${e.color};display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;">${e.logo}</div>
+        <div class="pr2-main">
+          <div class="pr2-title">${e.store}</div>
+          <div class="pr2-sub">${e.label} · ${e.date}</div>
+        </div>
+        <div class="pr2-amount">
+          <div class="v">${renderStars(e.stars, false, '15px')}</div>
+          <div class="l">≈ ${e.sum.toLocaleString('uk-UA')} ₴ потенціалу</div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="card" style="padding:20px;background:var(--bg);border-color:var(--line);margin-bottom:16px;">
+      <div style="display:flex;gap:14px;align-items:flex-start;flex-wrap:wrap;">
+        <div style="font-size:34px;line-height:1;opacity:.7;">🎓</div>
+        <div style="flex:1;min-width:220px;">
+          <div style="font-size:15px;font-weight:800;color:var(--ink-900);margin-bottom:6px;">Ви в статусі Оглядача</div>
+          <div style="font-size:12.5px;color:var(--ink-700);line-height:1.6;margin-bottom:10px;">
+            Виплати недоступні, оскільки ви не підключили статус ФОП для Блогера. Внесіть окремі документи ФОП у профіль блогера, щоб стати Блогером та отримувати реальні виплати.
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="setProfileTab('blogger');selectView('profile','profile')">Завантажити документи ФОП Блогера →</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="earn-box">
+      <div class="earn-fop-tag gray">ОГЛЯДАЧ</div>
+      <div class="earn-label">Мої зірочки вдячності</div>
+      <div class="earn-amount gray">${totalStars.toLocaleString('uk-UA')} <span class="star-big">★</span></div>
+      <div class="earn-sub">Навчальний орієнтир · 1 сіра ★ ≈ 1 ₴ потенціалу · накопичується без обнулення</div>
+    </div>
+
+    <div style="font-size:13.5px;font-weight:700;margin:20px 0 10px;">Магазини, по яких накопичено зірочки вдячності</div>
+    ${stores}
   `;
 }
 
@@ -2174,7 +2416,7 @@ function renderProfile(){
           <div class="fu-hint">${DATA.blogger.fopPhotoUploaded?'Натисніть, щоб замінити':'Селфі з витягом ЄДР — обличчя має бути видно'}</div>
         </div>
         <div class="disclaimer">
-          <b>Важливо.</b> Платформа <b>не перевіряє достовірність даних</b> та <b>не є гарантом виплат</b>. BEROO виступає виключно як CRM-система обліку — розрахунки між блогером і продавцем відбуваються напряму між сторонами.
+          <b>Важливо.</b> Статус ФОП для ролі Блогера є <b>юридично незалежним</b> від статусу ФОП вашого магазину — навіть якщо магазин оформлений як ФОП, для дзеркалювання потрібно внести окремі документи саме в цей профіль. Платформа <b>не перевіряє достовірність даних</b> та <b>не є гарантом виплат</b>. BEROO виступає виключно як CRM-система обліку — розрахунки між блогером і продавцем відбуваються напряму між сторонами.
         </div>
       </div>
     `;
