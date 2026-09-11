@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Редактор Налаштувань BEROO</title>
+    <title>Редактор Налаштувань BEROO (Розширений)</title>
     <style>
         :root {
             --bg-color: #f4f5f7;
@@ -23,7 +23,7 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
@@ -34,7 +34,7 @@
         }
 
         .section {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.5);
             border: 2px dashed #cbd5e1;
             border-radius: 12px;
             padding: 15px;
@@ -47,21 +47,41 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 15px;
+            gap: 10px;
+        }
+
+        .section-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-grow: 1;
+        }
+
+        .label-old {
+            font-size: 11px;
+            background: #e2e8f0;
+            color: #475569;
+            padding: 2px 6px;
+            border-radius: 4px;
+            white-space: nowrap;
         }
 
         .section-title {
             font-weight: 700;
-            font-size: 14px;
+            font-size: 15px;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: #64748b;
+            color: #1e293b;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 4px 8px;
+            background: #fff;
+            width: 50%;
         }
 
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
             gap: 15px;
-            min-height: 50px;
         }
 
         .card {
@@ -72,55 +92,54 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             cursor: grab;
             position: relative;
-            transition: all 0.2s ease;
         }
 
         .card:active {
             cursor: grabbing;
         }
 
-        .card.dragging {
-            opacity: 0.5;
-            border-color: var(--accent);
-        }
-
-        .card-header {
+        .card-row {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            gap: 8px;
             margin-bottom: 8px;
         }
 
         .card-title-input {
             font-weight: 700;
-            font-size: 16px;
-            border: 1px solid transparent;
+            font-size: 15px;
+            border: 1px solid var(--border);
             border-radius: 4px;
-            padding: 2px 6px;
-            width: 70%;
+            padding: 4px 8px;
+            width: 100%;
             color: var(--text);
         }
 
-        .card-title-input:hover, .card-title-input:focus {
-            border-color: var(--border);
-            background: #f8fafc;
-        }
-
-        .card-desc-textarea {
+        .card-desc-textarea, .card-notes-textarea {
             width: 100%;
             font-size: 13px;
-            color: #6b7280;
-            border: 1px solid transparent;
+            color: #374151;
+            border: 1px solid var(--border);
             border-radius: 4px;
-            padding: 4px 6px;
+            padding: 6px 8px;
             resize: vertical;
             box-sizing: border-box;
             font-family: inherit;
+            margin-bottom: 8px;
         }
 
-        .card-desc-textarea:hover, .card-desc-textarea:focus {
-            border-color: var(--border);
-            background: #f8fafc;
+        .card-notes-textarea {
+            background: #fffbeb;
+            border-color: #fef3c7;
+            color: #92400e;
+        }
+
+        .icon-select {
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            font-size: 14px;
+            background: #fff;
         }
 
         .actions {
@@ -137,21 +156,16 @@
             font-size: 12px;
             font-weight: 600;
             cursor: pointer;
-            transition: background 0.2s;
         }
 
-        .btn:hover {
-            background: #cbd5e1;
-        }
+        .btn:hover { background: #cbd5e1; }
 
         .btn-danger {
             background: #fee2e2;
             color: var(--danger);
         }
 
-        .btn-danger:hover {
-            background: #fecaca;
-        }
+        .btn-danger:hover { background: #fecaca; }
 
         .btn-add {
             background: #dbeafe;
@@ -159,11 +173,8 @@
             margin-bottom: 15px;
         }
 
-        .btn-add:hover {
-            background: #bfdbfe;
-        }
+        .btn-add:hover { background: #bfdbfe; }
 
-        /* Log Box Area */
         .log-section {
             margin-top: 40px;
             background: #0f172a;
@@ -179,14 +190,9 @@
             margin-bottom: 10px;
         }
 
-        .log-title {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
         textarea#log-output {
             width: 100%;
-            height: 250px;
+            height: 350px;
             background: #1e293b;
             color: #38bdf8;
             border: 1px solid #334155;
@@ -203,151 +209,190 @@
             color: white;
         }
 
-        .btn-copy:hover {
-            background: #16a34a;
-        }
+        .btn-copy:hover { background: #16a34a; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Конструктор та Редактор Сторінки «Налаштування»</h1>
+    <h1>Редактор та Перепакувальник Налаштувань BEROO</h1>
     
     <button class="btn btn-add" onclick="addNewSection()">+ Додати нову секцію</button>
 
     <div id="builder">
         <!-- Секція 1 -->
-        <div class="section" data-section-id="ОСНОВНЕ">
+        <div class="section" data-old-title="ОСНОВНЕ">
             <div class="section-header">
-                <span class="section-title" contenteditable="true" onblur="updateLog()">ОСНОВНЕ</span>
+                <div class="section-title-wrapper">
+                    <span class="label-old">Старе: ОСНОВНЕ</span>
+                    <input type="text" class="section-title" value="ОСНОВНЕ" oninput="updateLog()">
+                </div>
                 <button class="btn btn-add" onclick="addNewCard(this)">+ Додати картку</button>
             </div>
             <div class="cards-grid" ondragover="allowDrop(event)" ondrop="drop(event)">
-                <div class="card" draggable="true" ondragstart="drag(event)" id="card-1">
-                    <div class="card-header">
-                        <input type="text" class="card-title-input" value="Дані компанії" oninput="updateLog()">
-                        <div class="actions">
-                            <button class="btn btn-danger" onclick="deleteCard(this)">✕</button>
-                        </div>
+                
+                <!-- Картка 1 -->
+                <div class="card" draggable="true" ondragstart="drag(event)" id="card-1" 
+                     data-old-title="Дані компанії" 
+                     data-old-desc="Назва, контакти, адреса, соцмережі, реквізити"
+                     data-old-icon="🏛️">
+                    
+                    <div class="card-row">
+                        <span class="label-old">Старе: 🏛️ Дані компанії</span>
+                        <button class="btn btn-danger" style="margin-left:auto;" onclick="deleteCard(this)">✕</button>
                     </div>
-                    <textarea class="card-desc-textarea" rows="2" oninput="updateLog()">Назва, контакти, адреса, соцмережі, реквізити</textarea>
+
+                    <div class="card-row">
+                        <select class="icon-select" onchange="updateLog()">
+                            <option value="🏛️" selected>🏛️ Компанія</option>
+                            <option value="📋">📋 Умови</option>
+                            <option value="🔗">🔗 Соцмережі</option>
+                            <option value="📹">📹 Ефіри</option>
+                            <option value="⚠️">⚠️ Ризики</option>
+                            <option value="🌐">🌐 Сайт</option>
+                            <option value="🤖">🤖 Бот</option>
+                            <option value="🚚">🚚 Доставка</option>
+                            <option value="💳">💳 Оплата</option>
+                            <option value="📈">📈 Маркетинг</option>
+                            <option value="⚙️">⚙️ Налаштування</option>
+                        </select>
+                        <input type="text" class="card-title-input" value="Дані компанії" oninput="updateLog()">
+                    </div>
+
+                    <div class="card-row">
+                        <span class="label-old">Старий опис: Назва, контакти, адреса, соцмережі, реквізити</span>
+                    </div>
+                    <textarea class="card-desc-textarea" rows="2" placeholder="Новий опис..." oninput="updateLog()">Назва, контакти, адреса, соцмережі, реквізити</textarea>
+
+                    <textarea class="card-notes-textarea" rows="2" placeholder="Примітки / Особливості роботи (що, чому, як відкривається)..." oninput="updateLog()"></textarea>
                 </div>
 
-                <div class="card" draggable="true" ondragstart="drag(event)" id="card-2">
-                    <div class="card-header">
+                <!-- Картка 2 -->
+                <div class="card" draggable="true" ondragstart="drag(event)" id="card-2"
+                     data-old-title="Умови співпраці"
+                     data-old-desc="Обмін, повернення, публічна оферта, тексти сторінок вітрини"
+                     data-old-icon="📋">
+                    
+                    <div class="card-row">
+                        <span class="label-old">Старе: 📋 Умови співпраці</span>
+                        <button class="btn btn-danger" style="margin-left:auto;" onclick="deleteCard(this)">✕</button>
+                    </div>
+
+                    <div class="card-row">
+                        <select class="icon-select" onchange="updateLog()">
+                            <option value="🏛️">🏛️ Компанія</option>
+                            <option value="📋" selected>📋 Умови</option>
+                            <option value="🔗">🔗 Соцмережі</option>
+                            <option value="📹">📹 Ефіри</option>
+                            <option value="⚠️">⚠️ Ризики</option>
+                            <option value="🌐">🌐 Сайт</option>
+                            <option value="🤖">🤖 Бот</option>
+                            <option value="🚚">🚚 Доставка</option>
+                            <option value="💳">💳 Оплата</option>
+                            <option value="📈">📈 Маркетинг</option>
+                        </select>
                         <input type="text" class="card-title-input" value="Умови співпраці" oninput="updateLog()">
-                        <div class="actions">
-                            <button class="btn btn-danger" onclick="deleteCard(this)">✕</button>
-                        </div>
+                    </div>
+
+                    <div class="card-row">
+                        <span class="label-old">Старий опис: Обмін, повернення, публічна оферта...</span>
                     </div>
                     <textarea class="card-desc-textarea" rows="2" oninput="updateLog()">Обмін, повернення, публічна оферта, тексти сторінок вітрини</textarea>
+
+                    <textarea class="card-notes-textarea" rows="2" placeholder="Примітки / Особливості роботи..." oninput="updateLog()"></textarea>
                 </div>
 
-                <div class="card" draggable="true" ondragstart="drag(event)" id="card-3">
-                    <div class="card-header">
-                        <input type="text" class="card-title-input" value="Соціальні мережі" oninput="updateLog()">
-                        <div class="actions">
-                            <button class="btn btn-danger" onclick="deleteCard(this)">✕</button>
-                        </div>
-                    </div>
-                    <textarea class="card-desc-textarea" rows="2" oninput="updateLog()">Кнопки соцмереж на публічній сторінці: іконки, тексти, порядок</textarea>
-                </div>
-
-                <div class="card" draggable="true" ondragstart="drag(event)" id="card-4">
-                    <div class="card-header">
-                        <input type="text" class="card-title-input" value="Прямі ефіри" oninput="updateLog()">
-                        <div class="actions">
-                            <button class="btn btn-danger" onclick="deleteCard(this)">✕</button>
-                        </div>
-                    </div>
-                    <textarea class="card-desc-textarea" rows="2" oninput="updateLog()">Текст і посилання для оголошень про ефіри</textarea>
-                </div>
-
-                <div class="card" draggable="true" ondragstart="drag(event)" id="card-5">
-                    <div class="card-header">
-                        <input type="text" class="card-title-input" value="Дзеркало / Ризики" oninput="updateLog()">
-                        <div class="actions">
-                            <button class="btn btn-danger" onclick="deleteCard(this)">✕</button>
-                        </div>
-                    </div>
-                    <textarea class="card-desc-textarea" rows="2" oninput="updateLog()">Пороги зон ризику за % повернень для Вітрини, Магазинів і Замовлень</textarea>
-                </div>
             </div>
         </div>
 
         <!-- Секція 2 -->
-        <div class="section" data-section-id="САЙТ / БОТ">
+        <div class="section" data-old-title="САЙТ / БОТ">
             <div class="section-header">
-                <span class="section-title" contenteditable="true" onblur="updateLog()">САЙТ / БОТ</span>
+                <div class="section-title-wrapper">
+                    <span class="label-old">Старе: САЙТ / БОТ</span>
+                    <input type="text" class="section-title" value="САЙТ / БОТ" oninput="updateLog()">
+                </div>
                 <button class="btn btn-add" onclick="addNewCard(this)">+ Додати картку</button>
             </div>
             <div class="cards-grid" ondragover="allowDrop(event)" ondrop="drop(event)">
-                <div class="card" draggable="true" ondragstart="drag(event)" id="card-6">
-                    <div class="card-header">
+                
+                <div class="card" draggable="true" ondragstart="drag(event)" id="card-6"
+                     data-old-title="Налаштування сайту"
+                     data-old-desc="Блоки та контент вітрини"
+                     data-old-icon="🌐">
+                    
+                    <div class="card-row">
+                        <span class="label-old">Старе: 🌐 Налаштування сайту</span>
+                        <button class="btn btn-danger" style="margin-left:auto;" onclick="deleteCard(this)">✕</button>
+                    </div>
+
+                    <div class="card-row">
+                        <select class="icon-select" onchange="updateLog()">
+                            <option value="🌐" selected>🌐 Сайт</option>
+                            <option value="🤖">🤖 Бот</option>
+                            <option value="⚙️">⚙️ Налаштування</option>
+                        </select>
                         <input type="text" class="card-title-input" value="Налаштування сайту" oninput="updateLog()">
-                        <div class="actions">
-                            <button class="btn btn-danger" onclick="deleteCard(this)">✕</button>
-                        </div>
+                    </div>
+
+                    <div class="card-row">
+                        <span class="label-old">Старий опис: Блоки та контент вітрини</span>
                     </div>
                     <textarea class="card-desc-textarea" rows="2" oninput="updateLog()">Блоки та контент вітрини</textarea>
+
+                    <textarea class="card-notes-textarea" rows="2" placeholder="Примітки / Особливості роботи..." oninput="updateLog()"></textarea>
                 </div>
 
-                <div class="card" draggable="true" ondragstart="drag(event)" id="card-7">
-                    <div class="card-header">
-                        <input type="text" class="card-title-input" value="Налаштування бота" oninput="updateLog()">
-                        <div class="actions">
-                            <button class="btn btn-danger" onclick="deleteCard(this)">✕</button>
-                        </div>
-                    </div>
-                    <textarea class="card-desc-textarea" rows="2" oninput="updateLog()">Telegram-бот магазину</textarea>
-                </div>
             </div>
         </div>
 
         <!-- Секція 3 -->
-        <div class="section" data-section-id="ІНТЕГРАЦІЇ">
+        <div class="section" data-old-title="ІНТЕГРАЦІЇ">
             <div class="section-header">
-                <span class="section-title" contenteditable="true" onblur="updateLog()">ІНТЕГРАЦІЇ</span>
+                <div class="section-title-wrapper">
+                    <span class="label-old">Старе: ІНТЕГРАЦІЇ</span>
+                    <input type="text" class="section-title" value="ІНТЕГРАЦІЇ" oninput="updateLog()">
+                </div>
                 <button class="btn btn-add" onclick="addNewCard(this)">+ Додати картку</button>
             </div>
             <div class="cards-grid" ondragover="allowDrop(event)" ondrop="drop(event)">
-                <div class="card" draggable="true" ondragstart="drag(event)" id="card-8">
-                    <div class="card-header">
+                
+                <div class="card" draggable="true" ondragstart="drag(event)" id="card-8"
+                     data-old-title="Доставка"
+                     data-old-desc="Нова Пошта та інші служби доставки"
+                     data-old-icon="🚚">
+                    
+                    <div class="card-row">
+                        <span class="label-old">Старе: 🚚 Доставка</span>
+                        <button class="btn btn-danger" style="margin-left:auto;" onclick="deleteCard(this)">✕</button>
+                    </div>
+
+                    <div class="card-row">
+                        <select class="icon-select" onchange="updateLog()">
+                            <option value="🚚" selected>🚚 Доставка</option>
+                            <option value="💳">💳 Оплата</option>
+                            <option value="📈">📈 Маркетинг</option>
+                        </select>
                         <input type="text" class="card-title-input" value="Доставка" oninput="updateLog()">
-                        <div class="actions">
-                            <button class="btn btn-danger" onclick="deleteCard(this)">✕</button>
-                        </div>
+                    </div>
+
+                    <div class="card-row">
+                        <span class="label-old">Старий опис: Нова Пошта та інші служби доставки</span>
                     </div>
                     <textarea class="card-desc-textarea" rows="2" oninput="updateLog()">Нова Пошта та інші служби доставки</textarea>
+
+                    <textarea class="card-notes-textarea" rows="2" placeholder="Примітки / Особливості роботи..." oninput="updateLog()"></textarea>
                 </div>
 
-                <div class="card" draggable="true" ondragstart="drag(event)" id="card-9">
-                    <div class="card-header">
-                        <input type="text" class="card-title-input" value="Оплата" oninput="updateLog()">
-                        <div class="actions">
-                            <button class="btn btn-danger" onclick="deleteCard(this)">✕</button>
-                        </div>
-                    </div>
-                    <textarea class="card-desc-textarea" rows="2" oninput="updateLog()">WayForPay та прийом платежів</textarea>
-                </div>
-
-                <div class="card" draggable="true" ondragstart="drag(event)" id="card-10">
-                    <div class="card-header">
-                        <input type="text" class="card-title-input" value="Маркетинг і вітрина" oninput="updateLog()">
-                        <div class="actions">
-                            <button class="btn btn-danger" onclick="deleteCard(this)">✕</button>
-                        </div>
-                    </div>
-                    <textarea class="card-desc-textarea" rows="2" oninput="updateLog()">Аналітика, Tag Manager, фід Merchant i sitemap</textarea>
-                </div>
             </div>
         </div>
+
     </div>
 
     <!-- Вікно логування змін -->
     <div class="log-section">
         <div class="log-header">
-            <span class="log-title">Динамічний текстовий лог конфігурації</span>
+            <span class="log-title">Динамічне порівняльне вікно внесених змін (Старе / Нове)</span>
             <button class="btn btn-copy" onclick="copyLog()">Скопіювати конфігурацію</button>
         </div>
         <textarea id="log-output" readonly></textarea>
@@ -357,28 +402,17 @@
 <script>
     let cardCounter = 100;
 
-    // Drag and Drop Logic
-    function allowDrop(ev) {
-        ev.preventDefault();
-    }
+    function allowDrop(ev) { ev.preventDefault(); }
 
     function drag(ev) {
         ev.dataTransfer.setData("text", ev.target.id);
-        ev.target.classList.add('dragging');
     }
 
     function drop(ev) {
         ev.preventDefault();
         const data = ev.dataTransfer.getData("text");
         const draggedElement = document.getElementById(data);
-        draggedElement.classList.remove('dragging');
-        
-        let dropTarget = ev.target;
-        
-        // Знаходимо найближчу сітку
-        if (!dropTarget.classList.contains('cards-grid')) {
-            dropTarget = dropTarget.closest('.cards-grid');
-        }
+        let dropTarget = ev.target.closest('.cards-grid');
         
         if (dropTarget) {
             dropTarget.appendChild(draggedElement);
@@ -386,7 +420,6 @@
         }
     }
 
-    // CRUD Operations
     function deleteCard(btn) {
         btn.closest('.card').remove();
         updateLog();
@@ -398,14 +431,39 @@
         const cardId = 'card-' + cardCounter;
         
         const cardHTML = `
-            <div class="card" draggable="true" ondragstart="drag(event)" id="${cardId}">
-                <div class="card-header">
-                    <input type="text" class="card-title-input" value="Нова картка" oninput="updateLog()">
-                    <div class="actions">
-                        <button class="btn btn-danger" onclick="deleteCard(this)">✕</button>
-                    </div>
+            <div class="card" draggable="true" ondragstart="drag(event)" id="${cardId}"
+                 data-old-title="Нова картка"
+                 data-old-desc="Відсутній"
+                 data-old-icon="⚙️">
+                
+                <div class="card-row">
+                    <span class="label-old">Старе: ⚙️ Нова картка (Створено)</span>
+                    <button class="btn btn-danger" style="margin-left:auto;" onclick="deleteCard(this)">✕</button>
                 </div>
-                <textarea class="card-desc-textarea" rows="2" oninput="updateLog()">Опис нової картки...</textarea>
+
+                <div class="card-row">
+                    <select class="icon-select" onchange="updateLog()">
+                        <option value="🏛️">🏛️ Компанія</option>
+                        <option value="📋">📋 Умови</option>
+                        <option value="🔗">🔗 Соцмережі</option>
+                        <option value="📹">📹 Ефіри</option>
+                        <option value="⚠️">⚠️ Ризики</option>
+                        <option value="🌐">🌐 Сайт</option>
+                        <option value="🤖">🤖 Бот</option>
+                        <option value="🚚">🚚 Доставка</option>
+                        <option value="💳">💳 Оплата</option>
+                        <option value="📈">📈 Маркетинг</option>
+                        <option value="⚙️" selected>⚙️ Нова</option>
+                    </select>
+                    <input type="text" class="card-title-input" value="Нова картка" oninput="updateLog()">
+                </div>
+
+                <div class="card-row">
+                    <span class="label-old">Старий опис: Відсутній</span>
+                </div>
+                <textarea class="card-desc-textarea" rows="2" placeholder="Опис..." oninput="updateLog()">Новий опис картки</textarea>
+
+                <textarea class="card-notes-textarea" rows="2" placeholder="Примітки / Особливості роботи..." oninput="updateLog()"></textarea>
             </div>
         `;
         grid.insertAdjacentHTML('beforeend', cardHTML);
@@ -415,9 +473,12 @@
     function addNewSection() {
         const builder = document.getElementById('builder');
         const sectionHTML = `
-            <div class="section">
+            <div class="section" data-old-title="Нова секція">
                 <div class="section-header">
-                    <span class="section-title" contenteditable="true" onblur="updateLog()">НОВА СЕКЦІЯ</span>
+                    <div class="section-title-wrapper">
+                        <span class="label-old">Старе: Створена нова секція</span>
+                        <input type="text" class="section-title" value="НОВА СЕКЦІЯ" oninput="updateLog()">
+                    </div>
                     <button class="btn btn-add" onclick="addNewCard(this)">+ Додати картку</button>
                 </div>
                 <div class="cards-grid" ondragover="allowDrop(event)" ondrop="drop(event)"></div>
@@ -427,27 +488,56 @@
         updateLog();
     }
 
-    // Dynamic Log Generator
     function updateLog() {
         const sections = document.querySelectorAll('.section');
-        let output = `=== ОНОВЛЕНА СТРУКТУРА СТОРІНКИ "НАЛАШТУВАННЯ" ===\n`;
-        output += `Дата згенерованого документу: ${new Date().toLocaleString('uk-UA')}\n\n`;
+        let output = `====================================================\n`;
+        output += `   ПОРІВНЯЛЬНИЙ ЛОГ РЕДАГУВАННЯ "НАЛАШТУВАНЬ"\n`;
+        output += `   Дата створення: ${new Date().toLocaleString('uk-UA')}\n`;
+        output += `====================================================\n\n`;
 
-        sections.forEach((sec, index) => {
-            const title = sec.querySelector('.section-title').innerText.trim();
-            output += `【 ${title} 】\n`;
+        sections.forEach((sec, sIdx) => {
+            const oldSecTitle = sec.getAttribute('data-old-title') || 'Створена секція';
+            const newSecTitle = sec.querySelector('.section-title').value.trim();
+
+            output += `----------------------------------------------------\n`;
+            output += `РОЗДІЛ СЕКЦІЇ:\n`;
+            output += `Старе: ${oldSecTitle}\n`;
+            output += `Нове:  ${newSecTitle}\n`;
+            output += `----------------------------------------------------\n`;
 
             const cards = sec.querySelectorAll('.card');
             if (cards.length === 0) {
-                output += `  (порожня секція)\n`;
+                output += `  (Немає карток у даній секції)\n\n`;
             }
 
-            cards.forEach((card) => {
-                const cardTitle = card.querySelector('.card-title-input').value.trim();
-                const cardDesc = card.querySelector('.card-desc-textarea').value.trim();
-                output += `  • ${cardTitle}\n    Опис: ${cardDesc}\n`;
-            });
+            cards.forEach((card, cIdx) => {
+                const oldTitle = card.getAttribute('data-old-title') || 'Нова картка';
+                const oldDesc = card.getAttribute('data-old-desc') || 'Відсутній';
+                const oldIcon = card.getAttribute('data-old-icon') || '⚙️';
 
+                const newTitle = card.querySelector('.card-title-input').value.trim();
+                const newDesc = card.querySelector('.card-desc-textarea').value.trim();
+                const newIcon = card.querySelector('.icon-select').value;
+                const notes = card.querySelector('.card-notes-textarea').value.trim();
+
+                output += `  [Картка #${cIdx + 1}]\n`;
+                output += `  • Назва:\n`;
+                output += `     Старе: ${oldTitle}\n`;
+                output += `     Нове:  ${newTitle}\n`;
+                output += `  • Іконка:\n`;
+                output += `     Старе: ${oldIcon}\n`;
+                output += `     Нове:  ${newIcon}\n`;
+                output += `  • Опис:\n`;
+                output += `     Старе: ${oldDesc}\n`;
+                output += `     Нове:  ${newDesc}\n`;
+                if (notes !== "") {
+                    output += `  • Примітки та особливості роботи:\n`;
+                    output += `     ${notes.replace(/\n/g, '\n     ')}\n`;
+                } else {
+                    output += `  • Примітки: (не вказано)\n`;
+                }
+                output += `\n`;
+            });
             output += `\n`;
         });
 
@@ -458,10 +548,9 @@
         const logTextarea = document.getElementById('log-output');
         logTextarea.select();
         document.execCommand('copy');
-        alert('Текстову конфігурацію успішно скопійовано в буфер обміну!');
+        alert('Порівняльний лог змін успішно скопійовано!');
     }
 
-    // Initialize log on first load
     document.addEventListener('DOMContentLoaded', updateLog);
 </script>
 
