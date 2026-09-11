@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEROO · Візуальний редактор налаштувань</title>
+<style>
+  :root{
+    --bg:#F3F5F8;
+    --panel:#FFFFFF;
+    --border:#E7E9EE;
+    --text:#161A22;
+    --muted:#8A90A0;
+    --chip-bg:#FDEBEC;
+    --chip-icon:#E0384A;
+    --accent:#161A22;
+    --accent-soft:#EFF1F5;
+    --danger:#E0384A;
+    --console-bg:#12141A;
+    --console-text:#D7E0DE;
+    --console-accent:#6FE3B4;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    padding:40px 32px 80px;
+  }
+  .wrap{max-width:1120px;margin:0 auto;}
+  header.top{margin-bottom:34px;}
+  header.top h1{font-size:23px;margin:0 0 6px;letter-spacing:-0.01em;}
+  header.top p{margin:0;color:var(--muted);font-size:14px;line-height:1.5;max-width:640px;}
+  .hint{
+    margin-top:14px;display:inline-flex;gap:8px;align-items:center;
+    background:var(--accent-soft);border:1px solid var(--border);
+    padding:9px 14px;border-radius:10px;font-size:12.5px;color:#4A5063;
+  }
+  .hint b{color:var(--text);}
+
+  .section{margin-bottom:30px;}
+  .section-head{
+    display:flex;align-items:center;gap:10px;margin-bottom:12px;
+  }
+  .section-label{
+    font-size:12px;font-weight:700;color:var(--muted);
+    letter-spacing:0.04em;
+  }
+  .section-label[contenteditable="true"]{
+    outline:none;border-bottom:1px dashed transparent;cursor:text;
+  }
+  .section-label[contenteditable="true"]:hover,
+  .section-label[contenteditable="true"]:focus{
+    border-bottom:1px dashed var(--muted);
+  }
+  .section-actions{margin-left:auto;display:flex;gap:8px;}
+
+  .grid{
+    display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  }
+  @media (max-width:760px){.grid{grid-template-columns:1fr;}}
+
+  .card{
+    background:var(--panel);border:1px solid var(--border);border-radius:16px;
+    padding:18px;position:relative;
+  }
+  .card.is-new{border-color:#BFE9D5;background:#F5FDF9;}
+  .card.is-editing{border-color:#C7CCDA;box-shadow:0 0 0 3px rgba(22,26,34,0.05);}
+
+  .card-top{display:flex;gap:13px;align-items:flex-start;}
+  .icon-chip{
+    width:42px;height:42px;min-width:42px;border-radius:12px;
+    background:var(--chip-bg);color:var(--chip-icon);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .icon-chip svg{width:20px;height:20px;}
+  .card-body{flex:1;min-width:0;}
+  .card-title{font-size:15px;font-weight:700;margin:2px 0 4px;}
+  .card-desc{font-size:13px;color:var(--muted);line-height:1.4;}
+
+  .card-tools{
+    position:absolute;top:14px;right:14px;display:flex;gap:6px;
+  }
+  .icon-btn{
+    width:28px;height:28px;border-radius:8px;border:1px solid var(--border);
+    background:#fff;color:#6B7180;cursor:pointer;display:flex;align-items:center;
+    justify-content:center;font-size:13px;line-height:1;
+  }
+  .icon-btn:hover{background:var(--accent-soft);color:var(--text);}
+  .icon-btn:disabled{opacity:0.3;cursor:not-allowed;}
+  .icon-btn.danger:hover{background:#FDEBEC;color:var(--danger);border-color:#F3C6CB;}
+
+  .edit-form{display:flex;flex-direction:column;gap:10px;margin-top:6px;}
+  .edit-row{display:flex;flex-direction:column;gap:4px;}
+  .edit-row label{font-size:11px;color:var(--muted);font-weight:600;}
+  .edit-row input[type=text], .edit-row textarea, .edit-row select{
+    font-family:inherit;font-size:13.5px;padding:8px 10px;border-radius:9px;
+    border:1px solid var(--border);background:#FBFBFD;color:var(--text);
+  }
+  .edit-row textarea{resize:vertical;min-height:52px;}
+  .icon-picker{display:flex;gap:8px;align-items:center;}
+  .icon-picker .icon-chip{width:36px;height:36px;min-width:36px;}
+  .icon-picker .icon-chip svg{width:17px;height:17px;}
+  .icon-old-new{font-size:11px;color:var(--muted);margin-top:2px;}
+  .edit-btns{display:flex;gap:8px;margin-top:2px;}
+  .btn{
+    font-family:inherit;font-size:13px;font-weight:600;padding:8px 14px;
+    border-radius:9px;border:1px solid var(--border);background:#fff;
+    color:var(--text);cursor:pointer;
+  }
+  .btn:hover{background:var(--accent-soft);}
+  .btn.primary{background:var(--text);color:#fff;border-color:var(--text);}
+  .btn.primary:hover{opacity:0.88;}
+  .btn.ghost{border-style:dashed;color:#5C6376;}
+
+  .add-card-btn{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    border:1.5px dashed #C9CEDA;border-radius:16px;color:#6B7180;
+    background:transparent;font-size:13.5px;font-weight:600;cursor:pointer;
+    min-height:96px;
+  }
+  .add-card-btn:hover{background:#fff;border-color:#A9B0C2;}
+
+  .add-section-row{margin:36px 0 44px;}
+  .add-section-row .btn{border-style:dashed;}
+
+  .console-wrap{
+    margin-top:46px;border-radius:18px;overflow:hidden;border:1px solid #262A33;
+  }
+  .console-head{
+    background:#191C24;color:#C9CFDA;padding:14px 18px;
+    display:flex;align-items:center;gap:12px;
+  }
+  .console-head .dot{width:9px;height:9px;border-radius:50%;}
+  .console-head .dots{display:flex;gap:6px;}
+  .console-title{font-size:13px;font-weight:600;margin-right:auto;}
+  .console-badge{
+    font-size:11.5px;background:#262A33;color:var(--console-accent);
+    padding:4px 9px;border-radius:20px;font-weight:600;
+  }
+  .copy-btn{
+    background:var(--console-accent);color:#0B1611;border:none;
+    font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:8px;
+    cursor:pointer;
+  }
+  .copy-btn:hover{opacity:0.9;}
+  .copy-btn.copied{background:#fff;}
+  pre#output{
+    background:var(--console-bg);color:var(--console-text);
+    margin:0;padding:20px 22px;font-family:"SF Mono",Menlo,Consolas,monospace;
+    font-size:12.5px;line-height:1.65;white-space:pre-wrap;word-break:break-word;
+    max-height:520px;overflow:auto;
+  }
+  .out-added{color:#7CE3A8;}
+  .out-removed{color:#F08290;}
+  .out-changed{color:#F2C572;}
+  .out-moved{color:#7FB8F5;}
+  .out-head{color:#9AA3B8;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>Візуальний редактор налаштувань</h1>
+    <p>Це поточна структура сторінки «Налаштування». Редагуй картки — назви, описи, іконки, порядок і розділи — прямо тут. Знизу автоматично формується технічний опис усіх змін.</p>
+    <div class="hint">💡 <span><b>Як користуватись:</b> натисни олівець на картці, щоб редагувати. Стрілки міняють порядок картки в межах розділу. Розділ картки можна змінити прямо у формі редагування.</span></div>
+  </header>
+
+  <div id="sections"></div>
+
+  <div class="add-section-row">
+    <button class="btn ghost" id="addSectionBtn">+ Додати розділ</button>
+  </div>
+
+  <div class="console-wrap">
+    <div class="console-head">
+      <div class="dots">
+        <div class="dot" style="background:#EB6259"></div>
+        <div class="dot" style="background:#F4BF50"></div>
+        <div class="dot" style="background:#5FC258"></div>
+      </div>
+      <div class="console-title">Технічний опис змін — стара версія / зміни / нова версія</div>
+      <div class="console-badge" id="changeCount">0 змін</div>
+      <button class="copy-btn" id="copyBtn">Скопіювати</button>
+    </div>
+    <pre id="output"></pre>
+  </div>
+
+</div>
+
+<script>
+// ---------- ICON LIBRARY ----------
+const ICONS = {
+  bank:  {label:'Банк / компанія', path:'<rect x="3" y="10" width="18" height="9" rx="1"/><path d="M3 10 12 4 21 10"/><line x1="3" y1="21" x2="21" y2="21"/>'},
+  shield:{label:'Щит', path:'<path d="M12 3l7 3v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/>'},
+  share: {label:'Поширити', path:'<circle cx="6" cy="12" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><line x1="8" y1="11" x2="16" y2="7"/><line x1="8" y1="13" x2="16" y2="17"/>'},
+  video: {label:'Відео', path:'<rect x="3" y="6" width="12" height="12" rx="2"/><path d="M15 10l6-3v10l-6-3z"/>'},
+  alert: {label:'Попередження', path:'<path d="M12 3 22 20H2z"/><line x1="12" y1="9" x2="12" y2="14"/><circle cx="12" cy="17" r="0.6" fill="currentColor" stroke="none"/>'},
+  globe: {label:'Глобус', path:'<circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/>'},
+  phone: {label:'Телефон', path:'<rect x="7" y="2" width="10" height="20" rx="2"/><line x1="11" y1="18" x2="13" y2="18"/>'},
+  truck: {label:'Вантажівка', path:'<rect x="1" y="7" width="13" height="10" rx="1"/><path d="M14 10h4l3 3v4h-7z"/><circle cx="6" cy="19" r="1.6"/><circle cx="17" cy="19" r="1.6"/>'},
+  card:  {label:'Картка / оплата', path:'<rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>'},
+  chart: {label:'Графік', path:'<polyline points="3,17 9,11 13,15 21,6"/><polyline points="15,6 21,6 21,12"/>'},
+  box:   {label:'Коробка', path:'<path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><line x1="12" y1="13" x2="12" y2="21"/>'},
+  lock:  {label:'Замок', path:'<rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/>'},
+  gear:  {label:'Шестерня', path:'<circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 00-.2-1.6l2-1.5-2-3.4-2.3 1a7 7 0 00-2.8-1.6L13 2h-4l-.7 2.9a7 7 0 00-2.8 1.6l-2.3-1-2 3.4 2 1.5A7 7 0 003 12c0 .5 0 1.1.2 1.6l-2 1.5 2 3.4 2.3-1a7 7 0 002.8 1.6L9 22h4l.7-2.9a7 7 0 002.8-1.6l2.3 1 2-3.4-2-1.5c.2-.5.2-1.1.2-1.6z"/>'},
+  users: {label:'Люди', path:'<circle cx="9" cy="8" r="3"/><path d="M2 20c0-3.5 3-6 7-6s7 2.5 7 6"/><circle cx="18" cy="9" r="2.3"/><path d="M16 14c2.8 0 5 1.8 6 4.5"/>'},
+  doc:   {label:'Документ', path:'<path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><line x1="9" y1="13" x2="17" y2="13"/><line x1="9" y1="17" x2="17" y2="17"/>'},
+  tag:   {label:'Тег', path:'<path d="M20 12l-8 8-10-10V2h8z"/><circle cx="6.5" cy="6.5" r="1.3" fill="currentColor" stroke="none"/>'},
+  gift:  {label:'Подарунок', path:'<rect x="3" y="9" width="18" height="12" rx="1"/><line x1="12" y1="9" x2="12" y2="21"/><path d="M3 9h18v4H3z"/><path d="M12 9c-2-4-6-4-6-1s3 1 6 1zM12 9c2-4 6-4 6-1s-3 1-6 1z"/>'}
+};
+function iconSvg(key){
+  const def = ICONS[key] || ICONS.box;
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+def.path+'</svg>';
+}
+function iconLabel(key){ return (ICONS[key]||ICONS.box).label; }
+
+// ---------- INITIAL DATA (= поточна сторінка на скріні) ----------
+const SECTIONS_INIT = [
+  {key:'osnovne', label:'ОСНОВНЕ'},
+  {key:'saitbot', label:'САЙТ / БОТ'},
+  {key:'integr',  label:'ІНТЕГРАЦІЇ'}
+];
+const CARDS_INIT = [
+  {id:'c1',  section:'osnovne', icon:'bank',  title:'Дані компанії',      desc:'Назва, контакти, адреса, соцмережі, реквізити'},
+  {id:'c2',  section:'osnovne', icon:'shield',title:'Умови співпраці',    desc:'Обмін, повернення, публічна оферта, тексти сторінок вітрини'},
+  {id:'c3',  section:'osnovne', icon:'share', title:'Соціальні мережі',   desc:'Кнопки соцмереж на публічній сторінці: іконки, тексти, порядок'},
+  {id:'c4',  section:'osnovne', icon:'video', title:'Прямі ефіри',        desc:'Текст і посилання для оголошень про ефіри'},
+  {id:'c5',  section:'osnovne', icon:'alert', title:'Дзеркало / Ризики',  desc:'Пороги зон ризику за % повернень для Вітрини, Магазинів і Замовлень'},
+  {id:'c6',  section:'saitbot', icon:'globe', title:'Налаштування сайту', desc:'Блоки та контент вітрини'},
+  {id:'c7',  section:'saitbot', icon:'phone', title:'Налаштування бота',  desc:'Telegram-бот магазину'},
+  {id:'c8',  section:'integr',  icon:'truck', title:'Доставка',           desc:'Нова Пошта та інші служби доставки'},
+  {id:'c9',  section:'integr',  icon:'card',  title:'Оплата',             desc:'WayForPay та прийом платежів'},
+  {id:'c10', section:'integr',  icon:'chart', title:'Маркетинг і вітрина',desc:'Аналітика, Tag Manager, фід Merchant і sitemap'}
+];
+
+function clone(x){ return JSON.parse(JSON.stringify(x)); }
+
+const original = { sections: clone(SECTIONS_INIT), cards: clone(CARDS_INIT) };
+let sections = clone(SECTIONS_INIT);
+let cards = clone(CARDS_INIT);
+let editingId = null;
+let newIds = new Set();
+
+function uid(){ return 'n' + Math.random().toString(36).slice(2,8); }
+
+// ---------- RENDER ----------
+function render(){
+  const root = document.getElementById('sections');
+  root.innerHTML = '';
+  sections.forEach(sec => {
+    const secCards = cards.filter(c => c.section === sec.key);
+    const wrap = document.createElement('div');
+    wrap.className = 'section';
+    wrap.innerHTML = `
+      <div class="section-head">
+        <div class="section-label" contenteditable="true" data-sec="${sec.key}">${escapeHtml(sec.label)}</div>
+        <div class="section-actions">
+          ${secCards.length===0 ? `<button class="icon-btn danger" data-del-sec="${sec.key}" title="Видалити порожній розділ">✕</button>` : ''}
+        </div>
+      </div>
+      <div class="grid" id="grid-${sec.key}"></div>
+    `;
+    root.appendChild(wrap);
+    const grid = wrap.querySelector('.grid');
+    secCards.forEach((c, idx) => grid.appendChild(renderCard(c, idx, secCards.length)));
+    const addBtn = document.createElement('button');
+    addBtn.className = 'add-card-btn';
+    addBtn.textContent = '+ Додати картку';
+    addBtn.addEventListener('click', () => addCard(sec.key));
+    grid.appendChild(addBtn);
+  });
+
+  root.querySelectorAll('.section-label').forEach(el=>{
+    el.addEventListener('blur', ()=>{
+      const key = el.dataset.sec;
+      const s = sections.find(s=>s.key===key);
+      const val = el.textContent.trim() || s.label;
+      s.label = val;
+      updateOutput();
+    });
+  });
+  root.querySelectorAll('[data-del-sec]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const key = btn.dataset.delSec;
+      if(sections.length<=1){ alert('Має лишитись хоча б один розділ.'); return; }
+      sections = sections.filter(s=>s.key!==key);
+      render(); updateOutput();
+    });
+  });
+
+  updateOutput();
+}
+
+function renderCard(c, idx, total){
+  const el = document.createElement('div');
+  el.className = 'card' + (editingId===c.id ? ' is-editing':'') + (newIds.has(c.id) ? ' is-new':'');
+
+  if(editingId === c.id){
+    el.innerHTML = `
+      <div class="edit-form">
+        <div class="icon-picker">
+          <div class="icon-chip">${iconSvg(c.icon)}</div>
+          <select data-field="icon">
+            ${Object.keys(ICONS).map(k=>`<option value="${k}" ${k===c.icon?'selected':''}>${ICONS[k].label}</option>`).join('')}
+          </select>
+        </div>
+        <div class="icon-old-new">Поточна іконка: <b>${iconLabel(c.icon)}</b></div>
+        <div class="edit-row">
+          <label>Назва картки</label>
+          <input type="text" data-field="title" value="${escapeAttr(c.title)}">
+        </div>
+        <div class="edit-row">
+          <label>Короткий опис (підпис під назвою)</label>
+          <textarea data-field="desc">${escapeHtml(c.desc)}</textarea>
+        </div>
+        <div class="edit-row">
+          <label>Розділ</label>
+          <select data-field="section">
+            ${sections.map(s=>`<option value="${s.key}" ${s.key===c.section?'selected':''}>${escapeHtml(s.label)}</option>`).join('')}
+          </select>
+        </div>
+        <div class="edit-btns">
+          <button class="btn primary" data-save="${c.id}">Готово</button>
+          <button class="btn" data-cancel="${c.id}">Скасувати</button>
+        </div>
+      </div>
+    `;
+  } else {
+    el.innerHTML = `
+      <div class="card-tools">
+        <button class="icon-btn" data-up="${c.id}" ${idx===0?'disabled':''} title="Вище">↑</button>
+        <button class="icon-btn" data-down="${c.id}" ${idx===total-1?'disabled':''} title="Нижче">↓</button>
+        <button class="icon-btn" data-edit="${c.id}" title="Редагувати">✎</button>
+        <button class="icon-btn danger" data-remove="${c.id}" title="Видалити">🗑</button>
+      </div>
+      <div class="card-top">
+        <div class="icon-chip">${iconSvg(c.icon)}</div>
+        <div class="card-body">
+          <div class="card-title">${escapeHtml(c.title)}</div>
+          <div class="card-desc">${escapeHtml(c.desc)}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  el.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click', ()=>{editingId=c.id; render();}));
+  el.querySelectorAll('[data-cancel]').forEach(b=>b.addEventListener('click', ()=>{editingId=null; render();}));
+  el.querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click', ()=>{
+    if(confirm('Видалити картку «'+c.title+'»?')){
+      cards = cards.filter(x=>x.id!==c.id);
+      newIds.delete(c.id);
+      render();
+    }
+  }));
+  el.querySelectorAll('[data-up]').forEach(b=>b.addEventListener('click', ()=>moveCard(c.id,-1)));
+  el.querySelectorAll('[data-down]').forEach(b=>b.addEventListener('click', ()=>moveCard(c.id,1)));
+  el.querySelectorAll('[data-save]').forEach(b=>b.addEventListener('click', ()=>{
+    const form = el.querySelector('.edit-form');
+    c.title = form.querySelector('[data-field=title]').value.trim() || c.title;
+    c.desc = form.querySelector('[data-field=desc]').value.trim();
+    c.icon = form.querySelector('[data-field=icon]').value;
+    c.section = form.querySelector('[data-field=section]').value;
+    editingId = null;
+    render();
+  }));
+
+  return el;
+}
+
+function moveCard(id, dir){
+  const c = cards.find(x=>x.id===id);
+  const siblings = cards.filter(x=>x.section===c.section);
+  const posInSiblings = siblings.indexOf(c);
+  const targetSibling = siblings[posInSiblings+dir];
+  if(!targetSibling) return;
+  const i1 = cards.indexOf(c);
+  const i2 = cards.indexOf(targetSibling);
+  cards[i1] = targetSibling; cards[i2] = c;
+  render();
+}
+
+function addCard(sectionKey){
+  const id = uid();
+  newIds.add(id);
+  const newCard = {id, section:sectionKey, icon:'box', title:'Нова картка', desc:'Опис ще не заповнено'};
+  const lastIdxInSection = (()=>{
+    for(let i=cards.length-1;i>=0;i--){ if(cards[i].section===sectionKey) return i; }
+    return -1;
+  })();
+  if(lastIdxInSection===-1) cards.push(newCard);
+  else cards.splice(lastIdxInSection+1,0,newCard);
+  editingId = id;
+  render();
+}
+
+document.getElementById('addSectionBtn').addEventListener('click', ()=>{
+  const label = prompt('Назва нового розділу:', 'НОВИЙ РОЗДІЛ');
+  if(!label) return;
+  const key = 'sec_' + uid();
+  sections.push({key, label: label.toUpperCase()});
+  render();
+});
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+}
+function escapeAttr(s){ return escapeHtml(s); }
+
+// ---------- DIFF / OUTPUT ----------
+function sectionLabel(list, key){
+  const s = list.find(s=>s.key===key);
+  return s ? s.label : key;
+}
+
+function buildDiffLines(){
+  const lines = [];
+  let count = 0;
+
+  // sections: renamed / added / removed
+  original.sections.forEach(os=>{
+    const cs = sections.find(s=>s.key===os.key);
+    if(!cs){ lines.push(`[РОЗДІЛ ВИДАЛЕНО] «${os.label}»`); count++; }
+    else if(cs.label !== os.label){ lines.push(`[РОЗДІЛ ПЕРЕЙМЕНОВАНО] «${os.label}» → «${cs.label}»`); count++; }
+  });
+  sections.forEach(cs=>{
+    if(!original.sections.find(os=>os.key===cs.key)){ lines.push(`[РОЗДІЛ ДОДАНО] «${cs.label}»`); count++; }
+  });
+
+  // cards
+  const origById = {}; original.cards.forEach(c=>origById[c.id]=c);
+  const curById = {}; cards.forEach(c=>curById[c.id]=c);
+
+  // per-section order lists (original & current)
+  function orderList(list, sec){ return list.filter(c=>c.section===sec).map(c=>c.id); }
+
+  original.cards.forEach(oc=>{
+    const cc = curById[oc.id];
+    if(!cc){
+      lines.push(`[КАРТКУ ВИДАЛЕНО] «${oc.title}» (була у розділі «${sectionLabel(original.sections, oc.section)}»)`);
+      count++;
+      return;
+    }
+    if(cc.title !== oc.title){
+      lines.push(`[ПЕРЕЙМЕНОВАНО] «${oc.title}» → «${cc.title}»`);
+      count++;
+    }
+    if(cc.desc !== oc.desc){
+      lines.push(`[ОПИС ЗМІНЕНО] «${cc.title}»: "${oc.desc}" → "${cc.desc}"`);
+      count++;
+    }
+    if(cc.icon !== oc.icon){
+      lines.push(`[ІКОНКУ ЗМІНЕНО] «${cc.title}»: ${iconLabel(oc.icon)} → ${iconLabel(cc.icon)}`);
+      count++;
+    }
+    if(cc.section !== oc.section){
+      lines.push(`[ПЕРЕНЕСЕНО В ІНШИЙ РОЗДІЛ] «${cc.title}»: «${sectionLabel(original.sections, oc.section)}» → «${sectionLabel(sections, cc.section)}»`);
+      count++;
+    } else {
+      const oList = orderList(original.cards, oc.section);
+      const cList = orderList(cards, cc.section);
+      const oPos = oList.indexOf(oc.id);
+      const cPos = cList.indexOf(cc.id);
+      if(oPos !== cPos){
+        lines.push(`[ПОРЯДОК ЗМІНЕНО] «${cc.title}»: позиція ${oPos+1} → ${cPos+1} (розділ «${sectionLabel(sections, cc.section)}»)`);
+        count++;
+      }
+    }
+  });
+
+  cards.forEach(cc=>{
+    if(!origById[cc.id]){
+      const pos = orderList(cards, cc.section).indexOf(cc.id) + 1;
+      lines.push(`[КАРТКУ ДОДАНО] «${cc.title}» — розділ «${sectionLabel(sections, cc.section)}», позиція ${pos}, іконка: ${iconLabel(cc.icon)}, опис: "${cc.desc}"`);
+      count++;
+    }
+  });
+
+  if(lines.length===0) lines.push('Змін поки немає.');
+  return {lines, count};
+}
+
+function specText(){
+  const {lines, count} = buildDiffLines();
+  const oldJson = JSON.stringify({sections: original.sections, cards: original.cards}, null, 2);
+  const newJson = JSON.stringify({sections, cards}, null, 2);
+  return [
+    '=== СТАРА ВЕРСІЯ (JSON) ===',
+    oldJson,
+    '',
+    '=== ЗМІНИ (' + count + ') ===',
+    lines.map((l,i)=>(i+1)+'. '+l).join('\n'),
+    '',
+    '=== НОВА ВЕРСІЯ (JSON) ===',
+    newJson
+  ].join('\n');
+}
+
+function updateOutput(){
+  const {count} = buildDiffLines();
+  document.getElementById('changeCount').textContent = count + (count===1?' зміна': (count>=2&&count<=4?' зміни':' змін'));
+  document.getElementById('output').textContent = specText();
+}
+
+document.getElementById('copyBtn').addEventListener('click', ()=>{
+  const text = specText();
+  const btn = document.getElementById('copyBtn');
+  const done = ()=>{ btn.textContent='Скопійовано ✓'; btn.classList.add('copied'); setTimeout(()=>{btn.textContent='Скопіювати'; btn.classList.remove('copied');},1600); };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text,done));
+  } else {
+    fallbackCopy(text, done);
+  }
+});
+function fallbackCopy(text, done){
+  const ta = document.createElement('textarea');
+  ta.value = text; document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); done(); }catch(e){ alert('Не вдалось скопіювати автоматично — виділи текст вручну.'); }
+  document.body.removeChild(ta);
+}
+
+render();
+</script>
+</body>
+</html>
