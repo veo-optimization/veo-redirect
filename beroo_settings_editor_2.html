@@ -264,6 +264,7 @@ function render(){
       <div class="section-head">
         <div class="section-label" contenteditable="true" data-sec="${sec.key}">${escapeHtml(sec.label)}</div>
         <div class="section-actions">
+          <button class="icon-btn" data-rename-sec="${sec.key}" title="Перейменувати розділ">✎</button>
           ${secCards.length===0 ? `<button class="icon-btn danger" data-del-sec="${sec.key}" title="Видалити порожній розділ">✕</button>` : ''}
         </div>
       </div>
@@ -280,12 +281,28 @@ function render(){
   });
 
   root.querySelectorAll('.section-label').forEach(el=>{
+    el.addEventListener('keydown', (e)=>{
+      if(e.key==='Enter'){ e.preventDefault(); el.blur(); }
+    });
     el.addEventListener('blur', ()=>{
       const key = el.dataset.sec;
       const s = sections.find(s=>s.key===key);
       const val = el.textContent.trim() || s.label;
       s.label = val;
       updateOutput();
+    });
+  });
+  root.querySelectorAll('[data-rename-sec]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const key = btn.dataset.renameSec;
+      const label = root.querySelector(`.section-label[data-sec="${key}"]`);
+      if(!label) return;
+      label.focus();
+      const range = document.createRange();
+      range.selectNodeContents(label);
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
     });
   });
   root.querySelectorAll('[data-del-sec]').forEach(btn=>{
