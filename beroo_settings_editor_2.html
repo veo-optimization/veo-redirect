@@ -75,9 +75,11 @@
     display:flex;align-items:center;justify-content:center;
   }
   .icon-chip svg{width:20px;height:20px;}
+  .icon-chip.none{background:#EEF0F4;color:#9AA1B0;}
   .card-body{flex:1;min-width:0;}
   .card-title{font-size:15px;font-weight:700;margin:2px 0 4px;}
   .card-desc{font-size:13px;color:var(--muted);line-height:1.4;}
+  .card-note{font-size:12px;color:#B08A2E;line-height:1.4;margin-top:6px;font-style:italic;}
 
   .card-tools{
     position:absolute;top:14px;right:14px;display:flex;gap:6px;
@@ -165,7 +167,7 @@
   <header class="top">
     <h1>Візуальний редактор налаштувань</h1>
     <p>Це поточна структура сторінки «Налаштування». Редагуй картки — назви, описи, іконки, порядок і розділи — прямо тут. Знизу автоматично формується технічний опис усіх змін.</p>
-    <div class="hint">💡 <span><b>Як користуватись:</b> натисни олівець на картці, щоб редагувати. Стрілки міняють порядок картки в межах розділу. Розділ картки можна змінити прямо у формі редагування.</span></div>
+    <div class="hint">💡 <span><b>Як користуватись:</b> натисни олівець на картці, щоб редагувати. Стрілки міняють порядок картки в межах розділу. Розділ картки можна змінити прямо у формі редагування. Іконку можна лишити «Без іконки» — нехай розробник запропонує варіант. У полі «Примітка» можна написати завдання щодо внутрішньої роботи картки.</span></div>
   </header>
 
   <div id="sections"></div>
@@ -193,6 +195,7 @@
 <script>
 // ---------- ICON LIBRARY ----------
 const ICONS = {
+  none:  {label:'Без іконки (визначить розробник)', path:''},
   bank:  {label:'Банк / компанія', path:'<rect x="3" y="10" width="18" height="9" rx="1"/><path d="M3 10 12 4 21 10"/><line x1="3" y1="21" x2="21" y2="21"/>'},
   shield:{label:'Щит', path:'<path d="M12 3l7 3v6c0 5-3.5 7.5-7 9-3.5-1.5-7-4-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/>'},
   share: {label:'Поширити', path:'<circle cx="6" cy="12" r="2.2"/><circle cx="18" cy="6" r="2.2"/><circle cx="18" cy="18" r="2.2"/><line x1="8" y1="11" x2="16" y2="7"/><line x1="8" y1="13" x2="16" y2="17"/>'},
@@ -212,6 +215,9 @@ const ICONS = {
   gift:  {label:'Подарунок', path:'<rect x="3" y="9" width="18" height="12" rx="1"/><line x1="12" y1="9" x2="12" y2="21"/><path d="M3 9h18v4H3z"/><path d="M12 9c-2-4-6-4-6-1s3 1 6 1zM12 9c2-4 6-4 6-1s-3 1-6 1z"/>'}
 };
 function iconSvg(key){
+  if(!key || key==='none'){
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="12" cy="12" r="8.5" stroke-dasharray="2.5 3"/><text x="12" y="15.5" font-size="9" text-anchor="middle" fill="currentColor" stroke="none">?</text></svg>';
+  }
   const def = ICONS[key] || ICONS.box;
   return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+def.path+'</svg>';
 }
@@ -224,16 +230,16 @@ const SECTIONS_INIT = [
   {key:'integr',  label:'ІНТЕГРАЦІЇ'}
 ];
 const CARDS_INIT = [
-  {id:'c1',  section:'osnovne', icon:'bank',  title:'Дані компанії',      desc:'Назва, контакти, адреса, соцмережі, реквізити'},
-  {id:'c2',  section:'osnovne', icon:'shield',title:'Умови співпраці',    desc:'Обмін, повернення, публічна оферта, тексти сторінок вітрини'},
-  {id:'c3',  section:'osnovne', icon:'share', title:'Соціальні мережі',   desc:'Кнопки соцмереж на публічній сторінці: іконки, тексти, порядок'},
-  {id:'c4',  section:'osnovne', icon:'video', title:'Прямі ефіри',        desc:'Текст і посилання для оголошень про ефіри'},
-  {id:'c5',  section:'osnovne', icon:'alert', title:'Дзеркало / Ризики',  desc:'Пороги зон ризику за % повернень для Вітрини, Магазинів і Замовлень'},
-  {id:'c6',  section:'saitbot', icon:'globe', title:'Налаштування сайту', desc:'Блоки та контент вітрини'},
-  {id:'c7',  section:'saitbot', icon:'phone', title:'Налаштування бота',  desc:'Telegram-бот магазину'},
-  {id:'c8',  section:'integr',  icon:'truck', title:'Доставка',           desc:'Нова Пошта та інші служби доставки'},
-  {id:'c9',  section:'integr',  icon:'card',  title:'Оплата',             desc:'WayForPay та прийом платежів'},
-  {id:'c10', section:'integr',  icon:'chart', title:'Маркетинг і вітрина',desc:'Аналітика, Tag Manager, фід Merchant і sitemap'}
+  {id:'c1',  section:'osnovne', icon:'bank',  title:'Дані компанії',      desc:'Назва, контакти, адреса, соцмережі, реквізити', note:''},
+  {id:'c2',  section:'osnovne', icon:'shield',title:'Умови співпраці',    desc:'Обмін, повернення, публічна оферта, тексти сторінок вітрини', note:''},
+  {id:'c3',  section:'osnovne', icon:'share', title:'Соціальні мережі',   desc:'Кнопки соцмереж на публічній сторінці: іконки, тексти, порядок', note:''},
+  {id:'c4',  section:'osnovne', icon:'video', title:'Прямі ефіри',        desc:'Текст і посилання для оголошень про ефіри', note:''},
+  {id:'c5',  section:'osnovne', icon:'alert', title:'Дзеркало / Ризики',  desc:'Пороги зон ризику за % повернень для Вітрини, Магазинів і Замовлень', note:''},
+  {id:'c6',  section:'saitbot', icon:'globe', title:'Налаштування сайту', desc:'Блоки та контент вітрини', note:''},
+  {id:'c7',  section:'saitbot', icon:'phone', title:'Налаштування бота',  desc:'Telegram-бот магазину', note:''},
+  {id:'c8',  section:'integr',  icon:'truck', title:'Доставка',           desc:'Нова Пошта та інші служби доставки', note:''},
+  {id:'c9',  section:'integr',  icon:'card',  title:'Оплата',             desc:'WayForPay та прийом платежів', note:''},
+  {id:'c10', section:'integr',  icon:'chart', title:'Маркетинг і вітрина',desc:'Аналітика, Tag Manager, фід Merchant і sitemap', note:''}
 ];
 
 function clone(x){ return JSON.parse(JSON.stringify(x)); }
@@ -302,7 +308,7 @@ function renderCard(c, idx, total){
     el.innerHTML = `
       <div class="edit-form">
         <div class="icon-picker">
-          <div class="icon-chip">${iconSvg(c.icon)}</div>
+          <div class="icon-chip${c.icon==='none'?' none':''}">${iconSvg(c.icon)}</div>
           <select data-field="icon">
             ${Object.keys(ICONS).map(k=>`<option value="${k}" ${k===c.icon?'selected':''}>${ICONS[k].label}</option>`).join('')}
           </select>
@@ -322,6 +328,10 @@ function renderCard(c, idx, total){
             ${sections.map(s=>`<option value="${s.key}" ${s.key===c.section?'selected':''}>${escapeHtml(s.label)}</option>`).join('')}
           </select>
         </div>
+        <div class="edit-row">
+          <label>Примітка для розробника (що саме змінити всередині картки/її роботи)</label>
+          <textarea data-field="note" placeholder="Напр.: додати поле «телефон підтримки», прибрати блок X, змінити логіку Y...">${escapeHtml(c.note||'')}</textarea>
+        </div>
         <div class="edit-btns">
           <button class="btn primary" data-save="${c.id}">Готово</button>
           <button class="btn" data-cancel="${c.id}">Скасувати</button>
@@ -337,10 +347,11 @@ function renderCard(c, idx, total){
         <button class="icon-btn danger" data-remove="${c.id}" title="Видалити">🗑</button>
       </div>
       <div class="card-top">
-        <div class="icon-chip">${iconSvg(c.icon)}</div>
+        <div class="icon-chip${c.icon==='none'?' none':''}">${iconSvg(c.icon)}</div>
         <div class="card-body">
           <div class="card-title">${escapeHtml(c.title)}</div>
           <div class="card-desc">${escapeHtml(c.desc)}</div>
+          ${c.note ? `<div class="card-note">📝 ${escapeHtml(c.note)}</div>` : ''}
         </div>
       </div>
     `;
@@ -363,6 +374,7 @@ function renderCard(c, idx, total){
     c.desc = form.querySelector('[data-field=desc]').value.trim();
     c.icon = form.querySelector('[data-field=icon]').value;
     c.section = form.querySelector('[data-field=section]').value;
+    c.note = form.querySelector('[data-field=note]').value.trim();
     editingId = null;
     render();
   }));
@@ -385,7 +397,7 @@ function moveCard(id, dir){
 function addCard(sectionKey){
   const id = uid();
   newIds.add(id);
-  const newCard = {id, section:sectionKey, icon:'box', title:'Нова картка', desc:'Опис ще не заповнено'};
+  const newCard = {id, section:sectionKey, icon:'none', title:'Нова картка', desc:'Опис ще не заповнено', note:''};
   const lastIdxInSection = (()=>{
     for(let i=cards.length-1;i>=0;i--){ if(cards[i].section===sectionKey) return i; }
     return -1;
@@ -415,11 +427,15 @@ function sectionLabel(list, key){
   return s ? s.label : key;
 }
 
+function orderList(list, sec){ return list.filter(c=>c.section===sec).map(c=>c.id); }
+const NA = '(немає)';
+const DELETED = '(видалено)';
+
+// short human summary — only fields that actually changed
 function buildDiffLines(){
   const lines = [];
   let count = 0;
 
-  // sections: renamed / added / removed
   original.sections.forEach(os=>{
     const cs = sections.find(s=>s.key===os.key);
     if(!cs){ lines.push(`[РОЗДІЛ ВИДАЛЕНО] «${os.label}»`); count++; }
@@ -429,57 +445,88 @@ function buildDiffLines(){
     if(!original.sections.find(os=>os.key===cs.key)){ lines.push(`[РОЗДІЛ ДОДАНО] «${cs.label}»`); count++; }
   });
 
-  // cards
   const origById = {}; original.cards.forEach(c=>origById[c.id]=c);
   const curById = {}; cards.forEach(c=>curById[c.id]=c);
 
-  // per-section order lists (original & current)
-  function orderList(list, sec){ return list.filter(c=>c.section===sec).map(c=>c.id); }
-
   original.cards.forEach(oc=>{
     const cc = curById[oc.id];
-    if(!cc){
-      lines.push(`[КАРТКУ ВИДАЛЕНО] «${oc.title}» (була у розділі «${sectionLabel(original.sections, oc.section)}»)`);
-      count++;
-      return;
-    }
-    if(cc.title !== oc.title){
-      lines.push(`[ПЕРЕЙМЕНОВАНО] «${oc.title}» → «${cc.title}»`);
-      count++;
-    }
-    if(cc.desc !== oc.desc){
-      lines.push(`[ОПИС ЗМІНЕНО] «${cc.title}»: "${oc.desc}" → "${cc.desc}"`);
-      count++;
-    }
-    if(cc.icon !== oc.icon){
-      lines.push(`[ІКОНКУ ЗМІНЕНО] «${cc.title}»: ${iconLabel(oc.icon)} → ${iconLabel(cc.icon)}`);
-      count++;
-    }
+    if(!cc){ lines.push(`[КАРТКУ ВИДАЛЕНО] «${oc.title}» (була у розділі «${sectionLabel(original.sections, oc.section)}»)`); count++; return; }
+    if(cc.title !== oc.title){ lines.push(`[ПЕРЕЙМЕНОВАНО] «${oc.title}» → «${cc.title}»`); count++; }
+    if(cc.desc !== oc.desc){ lines.push(`[ОПИС ЗМІНЕНО] «${cc.title}»: "${oc.desc}" → "${cc.desc}"`); count++; }
+    if(cc.icon !== oc.icon){ lines.push(`[ІКОНКУ ЗМІНЕНО] «${cc.title}»: ${iconLabel(oc.icon)} → ${iconLabel(cc.icon)}`); count++; }
+    if((cc.note||'') !== ''){ lines.push(`[ПРИМІТКА ДОДАНА] «${cc.title}»: "${cc.note}"`); count++; }
     if(cc.section !== oc.section){
-      lines.push(`[ПЕРЕНЕСЕНО В ІНШИЙ РОЗДІЛ] «${cc.title}»: «${sectionLabel(original.sections, oc.section)}» → «${sectionLabel(sections, cc.section)}»`);
-      count++;
+      lines.push(`[ПЕРЕНЕСЕНО В ІНШИЙ РОЗДІЛ] «${cc.title}»: «${sectionLabel(original.sections, oc.section)}» → «${sectionLabel(sections, cc.section)}»`); count++;
     } else {
-      const oList = orderList(original.cards, oc.section);
-      const cList = orderList(cards, cc.section);
-      const oPos = oList.indexOf(oc.id);
-      const cPos = cList.indexOf(cc.id);
-      if(oPos !== cPos){
-        lines.push(`[ПОРЯДОК ЗМІНЕНО] «${cc.title}»: позиція ${oPos+1} → ${cPos+1} (розділ «${sectionLabel(sections, cc.section)}»)`);
-        count++;
-      }
+      const oPos = orderList(original.cards, oc.section).indexOf(oc.id);
+      const cPos = orderList(cards, cc.section).indexOf(cc.id);
+      if(oPos !== cPos){ lines.push(`[ПОРЯДОК ЗМІНЕНО] «${cc.title}»: позиція ${oPos+1} → ${cPos+1} (розділ «${sectionLabel(sections, cc.section)}»)`); count++; }
     }
   });
-
   cards.forEach(cc=>{
     if(!origById[cc.id]){
       const pos = orderList(cards, cc.section).indexOf(cc.id) + 1;
-      lines.push(`[КАРТКУ ДОДАНО] «${cc.title}» — розділ «${sectionLabel(sections, cc.section)}», позиція ${pos}, іконка: ${iconLabel(cc.icon)}, опис: "${cc.desc}"`);
-      count++;
+      lines.push(`[КАРТКУ ДОДАНО] «${cc.title}» — розділ «${sectionLabel(sections, cc.section)}», позиція ${pos}, іконка: ${iconLabel(cc.icon)}, опис: "${cc.desc}"${cc.note?`, примітка: "${cc.note}"`:''}`); count++;
     }
   });
 
   if(lines.length===0) lines.push('Змін поки немає.');
   return {lines, count};
+}
+
+// full record — every field of every section and card, always as two lines (Старе / Нове), whether changed or not
+function buildFullFieldLog(){
+  const out = [];
+  const origSecById = {}; original.sections.forEach(s=>origSecById[s.key]=s);
+  const curSecById = {}; sections.forEach(s=>curSecById[s.key]=s);
+  const allSecKeys = [...sections.map(s=>s.key), ...original.sections.filter(s=>!curSecById[s.key]).map(s=>s.key)];
+  const seenSec = new Set();
+
+  allSecKeys.forEach(key=>{
+    if(seenSec.has(key)) return; seenSec.add(key);
+    const os = origSecById[key], cs = curSecById[key];
+    const oPos = os ? original.sections.findIndex(s=>s.key===key)+1 : null;
+    const cPos = cs ? sections.findIndex(s=>s.key===key)+1 : null;
+    out.push(`--- РОЗДІЛ: ${cs ? cs.label : os.label} ---`);
+    out.push(`Назва розділу — Старе: ${os ? '"'+os.label+'"' : NA}`);
+    out.push(`Назва розділу — Нове: ${cs ? '"'+cs.label+'"' : DELETED}`);
+    out.push(`Позиція розділу — Старе: ${oPos ?? NA}`);
+    out.push(`Позиція розділу — Нове: ${cPos ?? DELETED}`);
+    out.push('');
+  });
+
+  const origById = {}; original.cards.forEach(c=>origById[c.id]=c);
+  const curById = {}; cards.forEach(c=>curById[c.id]=c);
+  const allCardIds = [...cards.map(c=>c.id), ...original.cards.filter(c=>!curById[c.id]).map(c=>c.id)];
+  const seenCard = new Set();
+
+  allCardIds.forEach(id=>{
+    if(seenCard.has(id)) return; seenCard.add(id);
+    const oc = origById[id], cc = curById[id];
+    const oSecLabel = oc ? sectionLabel(original.sections, oc.section) : null;
+    const cSecLabel = cc ? sectionLabel(sections, cc.section) : null;
+    const oPos = oc ? orderList(original.cards, oc.section).indexOf(oc.id)+1 : null;
+    const cPos = cc ? orderList(cards, cc.section).indexOf(cc.id)+1 : null;
+    const status = !oc ? 'ДОДАНО' : !cc ? 'ВИДАЛЕНО' : (
+      oc.title!==cc.title || oc.desc!==cc.desc || oc.icon!==cc.icon || oc.section!==cc.section || oPos!==cPos || (cc.note||'')!=='' ? 'ЗМІНЕНО' : 'БЕЗ ЗМІН'
+    );
+    out.push(`--- КАРТКА: ${cc ? cc.title : oc.title} [${status}] ---`);
+    out.push(`Назва — Старе: ${oc ? '"'+oc.title+'"' : NA}`);
+    out.push(`Назва — Нове: ${cc ? '"'+cc.title+'"' : DELETED}`);
+    out.push(`Опис — Старе: ${oc ? '"'+oc.desc+'"' : NA}`);
+    out.push(`Опис — Нове: ${cc ? '"'+cc.desc+'"' : DELETED}`);
+    out.push(`Іконка — Старе: ${oc ? iconLabel(oc.icon) : NA}`);
+    out.push(`Іконка — Нове: ${cc ? iconLabel(cc.icon) : DELETED}`);
+    out.push(`Розділ — Старе: ${oSecLabel ?? NA}`);
+    out.push(`Розділ — Нове: ${cSecLabel ?? DELETED}`);
+    out.push(`Позиція в розділі — Старе: ${oPos ?? NA}`);
+    out.push(`Позиція в розділі — Нове: ${cPos ?? DELETED}`);
+    out.push(`Примітка для розробника — Старе: ${NA}`);
+    out.push(`Примітка для розробника — Нове: ${cc && cc.note ? '"'+cc.note+'"' : NA}`);
+    out.push('');
+  });
+
+  return out.join('\n');
 }
 
 function specText(){
@@ -490,7 +537,9 @@ function specText(){
     '=== СТАРА ВЕРСІЯ (JSON) ===',
     oldJson,
     '',
-    '=== ЗМІНИ (' + count + ') ===',
+    '=== ПОВНИЙ ЖУРНАЛ ПОЛІВ (кожен пункт: старе / нове) ===',
+    buildFullFieldLog(),
+    '=== КОРОТКИЙ ПІДСУМОК ЗМІН (' + count + ') ===',
     lines.map((l,i)=>(i+1)+'. '+l).join('\n'),
     '',
     '=== НОВА ВЕРСІЯ (JSON) ===',
