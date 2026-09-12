@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BEROO QA Audit & Feedback Generator</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-color: #f1f5f9;
+            --card-bg: #ffffff;
+            --text-color: #0f172a;
+            --border-color: #cbd5e1;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        p.subtitle {
+            color: #64748b;
+            font-size: 1.05rem;
+        }
+        .zone-section {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .zone-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 12px;
+            margin-bottom: 20px;
+        }
+        .zone-header h2 {
+            margin: 0;
+            color: #1e293b;
+            font-size: 1.3rem;
+        }
+        .item-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        .item-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+        @media (max-width: 768px) {
+            .item-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+            color: #475569;
+        }
+        input[type="text"], select, textarea {
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-family: inherit;
+        }
+        textarea {
+            resize: vertical;
+            min-height: 70px;
+        }
+        .actions-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+        button.danger {
+            background-color: var(--danger);
+        }
+        button.danger:hover {
+            background-color: #dc2626;
+        }
+        button.success {
+            background-color: var(--success);
+        }
+        button.success:hover {
+            background-color: #059669;
+        }
+        .global-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+        .output-section {
+            background: #0f172a;
+            color: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+        }
+        .output-section h2 {
+            color: #38bdf8;
+            margin-top: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        pre {
+            background: #1e293b;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #34d399;
+            font-family: monospace;
+            max-height: 450px;
+            font-size: 0.85rem;
+        }
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            background: #d1fae5;
+            color: #065f46;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>BEROO QA Audit & Feedback System</h1>
+        <p class="subtitle">Інтерактивний опитувальник та генератор архітектурного JSON для тестувальників</p>
+    </header>
+
+    <!-- ЗОНА 1: Пункти меню та функціонал CRM -->
+    <div class="zone-section" id="zone-crm">
+        <div class="zone-header">
+            <h2>🗂️ Зона 1: Пункти меню та кнопки CRM-системи</h2>
+            <button class="success" onclick="addItem('crm')">+ Додати пункт меню / кнопок</button>
+        </div>
+        <div class="items-container">
+            <!-- Початковий приклад -->
+            <div class="item-card">
+                <div class="item-grid">
+                    <div class="form-group">
+                        <label>Назва пункту меню / кнопки:</label>
+                        <input type="text" class="field-name" value="Налаштування / Реквізити">
+                    </div>
+                    <div class="form-group">
+                        <label>Статус зрозумілості:</label>
+                        <select class="field-status">
+                            <option value="clear">✅ Зрозуміло</option>
+                            <option value="confusing" selected>⚠️ Потребує покращення</option>
+                            <option value="unclear">❌ Зовсім незрозуміло</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Пріоритет виправлення:</label>
+                        <select class="field-priority">
+                            <option value="low">Низький</option>
+                            <option value="medium" selected>Середній</option>
+                            <option value="high">Високий</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label>Детальний опис функціоналу та зауваження тестувальника:</label>
+                    <textarea class="field-desc">Потрібно уточнити логіку введення IBAN та автоматичної перевірки формату єдрпоу.</textarea>
+                </div>
+                <div class="actions-row">
+                    <button class="danger" onclick="removeItem(this)">Видалити блок</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ЗОНА 2: Візуал та функціонал сайту-каталогу -->
+    <div class="zone-section" id="zone-storefront">
+        <div class="zone-header">
+            <h2>🛍️ Зона 2: Візуальне та функціональне оформлення сайтів (Каталог)</h2>
+            <button class="success" onclick="addItem('storefront')">+ Додати елемент каталогу</button>
+        </div>
+        <div class="items-container">
+            <div class="item-card">
+                <div class="item-grid">
+                    <div class="form-group">
+                        <label>Елемент інтерфейсу сайту:</label>
+                        <input type="text" class="field-name" value="Картка товару / Фільтри ціни">
+                    </div>
+                    <div class="form-group">
+                        <label>Статус зрозумілості:</label>
+                        <select class="field-status">
+                            <option value="clear" selected>✅ Зрозуміло</option>
+                            <option value="confusing">⚠️ Потребує покращення</option>
+                            <option value="unclear">❌ Зовсім незрозуміло</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Пріоритет виправлення:</label>
+                        <select class="field-priority">
+                            <option value="low" selected>Низький</option>
+                            <option value="medium">Середній</option>
+                            <option value="high">Високий</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label>Детальний опис функціоналу та зауваження тестувальника:</label>
+                    <textarea class="field-desc">Сітка з 3 колонок працює коректно, обов'язкова демонстраційна плашка на місці.</textarea>
+                </div>
+                <div class="actions-row">
+                    <button class="danger" onclick="removeItem(this)">Видалити блок</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ЗОНА 3: Міні-сайти (TikTok трафік / соцмережі) -->
+    <div class="zone-section" id="zone-minisite">
+        <div class="zone-header">
+            <h2>📱 Зона 3: Міні-сайти для TikTok та соцмереж</h2>
+            <button class="success" onclick="addItem('minisite')">+ Додати елемент міні-сайту</button>
+        </div>
+        <div class="items-container">
+            <div class="item-card">
+                <div class="item-grid">
+                    <div class="form-group">
+                        <label>Блок / Кнопка міні-сайту:</label>
+                        <input type="text" class="field-name" value="Швидкі посилання на месенджери">
+                    </div>
+                    <div class="form-group">
+                        <label>Статус зрозумілості:</label>
+                        <select class="field-status">
+                            <option value="clear">✅ Зрозуміло</option>
+                            <option value="confusing" selected>⚠️ Потребує покращення</option>
+                            <option value="unclear">❌ Зовсім незрозуміло</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Пріоритет виправлення:</label>
+                        <select class="field-priority">
+                            <option value="low">Низький</option>
+                            <option value="medium">Середній</option>
+                            <option value="high" selected>Високий</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group" style="margin-bottom: 10px;">
+                    <label>Детальний опис функціоналу та зауваження тестувальника:</label>
+                    <textarea class="field-desc">Потрібно оптимізувати мобільну версію кнопок редиректу на Telegram/Viber для швидкого завантаження з реклами.</textarea>
+                </div>
+                <div class="actions-row">
+                    <button class="danger" onclick="removeItem(this)">Видалити блок</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="global-actions">
+        <button onclick="compileJSON()" style="padding: 12px 24px; font-size: 1rem;">⚙️ Згенерувати фінальний JSON</button>
+        <button class="success" onclick="copyJSON()" style="padding: 12px 24px; font-size: 1rem;">📋 Копіювати JSON у буфер</button>
+    </div>
+
+    <div class="output-section">
+        <h2>
+            <span>Фінальний звіт у форматі JSON (для Claude AI)</span>
+            <span class="status-badge" id="json-status">Готово до генерації</span>
+        </h2>
+        <pre id="json-output">Натисніть кнопку генерації вище, щоб зібрати всі дані з оновлених форм...</pre>
+    </div>
+</div>
+
+<script>
+    // Функція додавання нового блоку в обрану зону
+    function addItem(zoneKey) {
+        const zoneElement = document.getElementById(`zone-${zoneKey}`);
+        const container = zoneElement.querySelector('.items-container');
+
+        const card = document.createElement('div');
+        card.className = 'item-card';
+        card.innerHTML = `
+            <div class="item-grid">
+                <div class="form-group">
+                    <label>Назва елемента / пункту:</label>
+                    <input type="text" class="field-name" placeholder="Введіть назву...">
+                </div>
+                <div class="form-group">
+                    <label>Статус зрозумілості:</label>
+                    <select class="field-status">
+                        <option value="clear">✅ Зрозуміло</option>
+                        <option value="confusing">⚠️ Потребує покращення</option>
+                        <option value="unclear">❌ Зовсім незрозуміло</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Пріоритет виправлення:</label>
+                    <select class="field-priority">
+                        <option value="low">Низький</option>
+                        <option value="medium" selected>Середній</option>
+                        <option value="high">Високий</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 10px;">
+                <label>Детальний опис функціоналу та зауваження тестувальника:</label>
+                <textarea class="field-desc" placeholder="Опишіть логіку, зауваження або побажання щодо покращення..."></textarea>
+            </div>
+            <div class="actions-row">
+                <button class="danger" onclick="removeItem(this)">Видалити блок</button>
+            </div>
+        `;
+        container.appendChild(card);
+        compileJSON();
+    }
+
+    // Функція видалення блоку
+    function removeItem(button) {
+        const card = button.closest('.item-card');
+        card.remove();
+        compileJSON();
+    }
+
+    // Генерація єдиного JSON з усіх зон
+    function compileJSON() {
+        const report = {
+            platform: "BEROO",
+            report_type: "QA Audit & Functional Feedback",
+            generated_at: new Date().toISOString(),
+            zones: {
+                crm_menu_and_buttons: parseZone('zone-crm'),
+                storefront_catalog: parseZone('zone-storefront'),
+                minisites_tiktok: parseZone('zone-minisite')
+            }
+        };
+
+        const jsonString = JSON.stringify(report, null, 2);
+        document.getElementById('json-output').textContent = jsonString;
+        document.getElementById('json-status').textContent = "Оновлено успішно";
+    }
+
+    // Допоміжна функція для парсингу конкретної зони
+    function parseZone(zoneId) {
+        const zoneElement = document.getElementById(zoneId);
+        const cards = zoneElement.querySelectorAll('.item-card');
+        const items = [];
+
+        cards.forEach((card, index) => {
+            items.push({
+                index: index + 1,
+                item_name: card.querySelector('.field-name').value,
+                clarity_status: card.querySelector('.field-status').value,
+                priority: card.querySelector('.field-priority').value,
+                tester_feedback: card.querySelector('.field-desc').value
+            });
+        });
+
+        return items;
+    }
+
+    // Копіювання в буфер
+    function copyJSON() {
+        compileJSON();
+        const text = document.getElementById('json-output').textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            alert('Звіт успішно скопійовано у буфер обміну у форматі JSON!');
+        });
+    }
+
+    // Автоматична генерація при завантаженні сторінки
+    window.onload = compileJSON;
+</script>
+
+</body>
+</html>
