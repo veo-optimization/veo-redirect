@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BEROO System Architecture & JSON Builder</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-color: #1e293b;
+            --border-color: #cbd5e1;
+            --success: #10b981;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        p.subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+        textarea {
+            min-height: 120px;
+        }
+        .actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+        button.secondary {
+            background-color: #64748b;
+        }
+        button.secondary:hover {
+            background-color: #475569;
+        }
+        .output-section {
+            background: #1e293b;
+            color: #f8fafc;
+            border-radius: 12px;
+            padding: 24px;
+        }
+        .output-section h2 {
+            color: #38bdf8;
+            margin-top: 0;
+        }
+        pre {
+            background: #0f172a;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            color: #34d399;
+            font-family: monospace;
+            max-height: 400px;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            background: #e2e8f0;
+            color: #475569;
+        }
+        .status-badge.valid {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status-badge.invalid {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>BEROO System Builder & JSON Architect</h1>
+        <p class="subtitle">Візуальна панель для формування загальної архітектури платформи під Claude AI</p>
+    </header>
+
+    <div class="grid">
+        <!-- Модуль 1 -->
+        <div class="card" id="module-1">
+            <h3>🗂️ Модуль 1: Меню CRM-системи та навігація</h3>
+            <div class="form-group">
+                <label>Опис блоку та логіка (текст):</label>
+                <input type="text" class="module-title" value="Menu and Navigation Logic" placeholder="Назва блоку">
+            </div>
+            <div class="form-group">
+                <label>JSON Конфігурація (структура сайдбару, ролі, перейменування "Вітрина"):</label>
+                <textarea class="module-json">{
+  "module_name": "crm_menu",
+  "navigation": {
+    "sidebar": [
+      { "id": "home", "label": "Вітрина", "renamed_from": "Головна" },
+      { "id": "orders", "label": "Замовлення" },
+      { "id": "catalog", "label": "Товари" }
+    ],
+    "roles_access": ["admin", "manager"]
+  }
+}</textarea>
+            </div>
+        </div>
+
+        <!-- Модуль 2 -->
+        <div class="card" id="module-2">
+            <h3>⚙️ Модуль 2: Система налаштувань (Перший крок)</h3>
+            <div class="form-group">
+                <label>Опис блоку та логіка (текст):</label>
+                <input type="text" class="module-title" value="Initial Setup & Onboarding" placeholder="Назва блоку">
+            </div>
+            <div class="form-group">
+                <label>JSON Конфігурація (реквізити магазину, піддомен, платежі/доставка):</label>
+                <textarea class="module-json">{
+  "module_name": "settings_system",
+  "onboarding_steps": {
+    "store_details": ["brand_name", "subdomain_prefix"],
+    "logistics": ["NovaPost", "Ukrposhta"],
+    "payments": ["IBAN", "MonoPay", "WayForPay"]
+  }
+}</textarea>
+            </div>
+        </div>
+
+        <!-- Модуль 3 -->
+        <div class="card" id="module-3">
+            <h3>🛍️ Модуль 3: Візуал та логіка сайту-каталогу (Вітрина)</h3>
+            <div class="form-group">
+                <label>Опис блоку та логіка (текст):</label>
+                <input type="text" class="module-title" value="Storefront Catalog Logic" placeholder="Назва блоку">
+            </div>
+            <div class="form-group">
+                <label>JSON Конфігурація (категорії, картки, фільтри):</label>
+                <textarea class="module-json">{
+  "module_name": "storefront_catalog",
+  "layout_options": {
+    "grid_columns": 3,
+    "filters": ["price", "availability", "category"],
+    "demonstration_mode": true
+  }
+}</textarea>
+            </div>
+        </div>
+
+        <!-- Модуль 4 -->
+        <div class="card" id="module-4">
+            <h3>📱 Модуль 4: Візуал та логіка міні-сайту (TikTok / соцмережі)</h3>
+            <div class="form-group">
+                <label>Опис блоку та логіка (текст):</label>
+                <input type="text" class="module-title" value="Mini-site / TikTok Traffic Landing" placeholder="Назва блоку">
+            </div>
+            <div class="form-group">
+                <label>JSON Конфігурація (лендінги, лінки на месенджери):</label>
+                <textarea class="module-json">{
+  "module_name": "mini_site_tiktok",
+  "redirect_links": {
+    "telegram": "https://t.me/beroo_test_bot",
+    "viber": "viber://chat?number=..."
+  }
+}</textarea>
+            </div>
+        </div>
+
+        <!-- Модуль 5 -->
+        <div class="card" id="module-5">
+            <h3>🛒 Модуль 5: Логіка оформлення та обробки замовлень</h3>
+            <div class="form-group">
+                <label>Опис блоку та логіка (текст):</label>
+                <input type="text" class="module-title" value="Checkout and Order Lifecycle" placeholder="Назва блоку">
+            </div>
+            <div class="form-group">
+                <label>JSON Конфігурація (кроки кошика, статуси замовлень в CRM):</label>
+                <textarea class="module-json">{
+  "module_name": "order_lifecycle",
+  "statuses": ["New", "Processing", "Shipped", "Completed", "Canceled"],
+  "policy_disclaimers": "Mandatory demo warning on all checkout steps"
+}</textarea>
+            </div>
+        </div>
+
+        <!-- Модуль 6 -->
+        <div class="card" id="module-6">
+            <h3>🔄 Модуль 6: Система "Дзеркало" (Синхронізація / Інтеграції)</h3>
+            <div class="form-group">
+                <label>Опис блоку та логіка (текст):</label>
+                <input type="text" class="module-title" value="Mirror System Synchronization" placeholder="Назва блоку">
+            </div>
+            <div class="form-group">
+                <label>JSON Конфігурація (правила дублювання та синхронізації):</label>
+                <textarea class="module-json">{
+  "module_name": "mirror_system",
+  "sync_parameters": {
+    "catalog_sync": true,
+    "inventory_update_interval_min": 15
+  }
+}</textarea>
+            </div>
+        </div>
+    </div>
+
+    <div class="actions">
+        <button id="generate-btn">⚙️ Згенерувати загальний JSON</button>
+        <button class="secondary" id="copy-btn">📋 Копіювати в буфер обміну</button>
+    </div>
+
+    <div class="output-section">
+        <h2>Загальний підсумковий JSON файл системи <span id="json-status" class="status-badge valid">Valid JSON</span></h2>
+        <pre id="json-output">Тут з'явиться об'єднаний JSON код усіх модулів після натискання кнопки генерації...</pre>
+    </div>
+</div>
+
+<script>
+    function compileJSON() {
+        const cards = document.querySelectorAll('.card');
+        const masterObject = {
+            platform: "BEROO",
+            generated_at: new Date().toISOString(),
+            modules: {}
+        };
+
+        let isValid = true;
+
+        cards.forEach((card, index) => {
+            const title = card.querySelector('.module-title').value;
+            const jsonText = card.querySelector('.module-json').value;
+            const moduleId = `module_${index + 1}`;
+
+            try {
+                const parsedJson = JSON.parse(jsonText);
+                masterObject.modules[moduleId] = {
+                    title: title,
+                    data: parsedJson
+                };
+                card.style.borderColor = "#cbd5e1";
+            } catch (e) {
+                isValid = false;
+                card.style.borderColor = "#ef4444";
+                masterObject.modules[moduleId] = {
+                    title: title,
+                    error: "Invalid JSON format in this block!"
+                };
+            }
+        });
+
+        const outputElem = document.getElementById('json-output');
+        const statusElem = document.getElementById('json-status');
+
+        outputElem.textContent = JSON.stringify(masterObject, null, 2);
+
+        if (isValid) {
+            statusElem.textContent = "Valid JSON";
+            statusElem.className = "status-badge valid";
+        } else {
+            statusElem.textContent = "Syntax Error in modules (marked red)";
+            statusElem.className = "status-badge invalid";
+        }
+    }
+
+    document.getElementById('generate-btn').addEventListener('click', compileJSON);
+
+    document.getElementById('copy-btn').addEventListener('click', () => {
+        compileJSON();
+        const textToCopy = document.getElementById('json-output').textContent;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            alert('Загальний JSON успішно скопійовано у буфер обміну!');
+        });
+    });
+
+    // Автоматична генерація при завантаженні
+    window.onload = compileJSON;
+</script>
+
+</body>
+</html>
