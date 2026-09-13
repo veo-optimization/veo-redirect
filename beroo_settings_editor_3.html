@@ -263,7 +263,7 @@ function renderCards(){
     wrap.className = 'section';
     wrap.innerHTML = `
       <div class="section-head">
-        <div class="section-label" contenteditable="true" data-sec="${sec.key}">${escapeHtml(sec.label)}</div>
+        <div class="section-label" contenteditable="true" data-sec="${sec.key}" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(sec.label)}</div>
         <div class="section-actions">
           <button class="icon-btn" data-rename-sec="${sec.key}" title="Перейменувати розділ">✎</button>
           ${secCards.length===0 ? `<button class="icon-btn danger" data-del-sec="${sec.key}" title="Видалити порожній розділ">✕</button>` : ''}
@@ -323,10 +323,10 @@ function renderCard(c, idx, total){
           <select data-field="icon">${Object.keys(ICONS).map(k=>`<option value="${k}" ${k===c.icon?'selected':''}>${ICONS[k].label}</option>`).join('')}</select>
         </div>
         <div class="icon-old-new">Поточна іконка: <b>${iconLabel(c.icon)}</b></div>
-        <div class="edit-row"><label>Назва картки</label><input type="text" data-field="title" value="${escapeHtml(c.title)}"></div>
-        <div class="edit-row"><label>Короткий опис (підпис під назвою)</label><textarea data-field="desc">${escapeHtml(c.desc)}</textarea></div>
+        <div class="edit-row"><label>Назва картки</label><input type="text" data-field="title" value="${escapeHtml(c.title)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+        <div class="edit-row"><label>Короткий опис (підпис під назвою)</label><textarea data-field="desc" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(c.desc)}</textarea></div>
         <div class="edit-row"><label>Розділ</label><select data-field="section">${cardSections.map(s=>`<option value="${s.key}" ${s.key===c.section?'selected':''}>${escapeHtml(s.label)}</option>`).join('')}</select></div>
-        <div class="edit-row"><label>Примітка для розробника (що саме змінити всередині картки/її роботи)</label><textarea data-field="note" placeholder="Напр.: додати поле «телефон підтримки», прибрати блок X, змінити логіку Y...">${escapeHtml(c.note||'')}</textarea></div>
+        <div class="edit-row"><label>Примітка для розробника (що саме змінити всередині картки/її роботи)</label><textarea data-field="note" placeholder="Напр.: додати поле «телефон підтримки», прибрати блок X, змінити логіку Y..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(c.note||'')}</textarea></div>
         <div class="edit-btns">
           <button class="btn primary" data-save="${c.id}">Готово</button>
           <button class="btn" data-cancel="${c.id}">Скасувати</button>
@@ -524,19 +524,19 @@ function renderNotebook(){
         ${entries.length===0 ? '<div class="empty-note">Записів ще немає.</div>' : entries.map(e=>`
           <div class="note-entry" data-entry="${e.id}">
             <div class="note-row cols3">
-              <div class="note-field"><label>Пункт меню</label><input type="text" data-f="menuItem" value="${escapeHtml(e.menuItem)}"></div>
-              <div class="note-field"><label>Підпункт меню</label><input type="text" data-f="subMenuItem" value="${escapeHtml(e.subMenuItem)}"></div>
-              <div class="note-field"><label>Функція / елемент</label><input type="text" data-f="func" value="${escapeHtml(e.func)}"></div>
+              <div class="note-field"><label>Пункт меню</label><input type="text" data-f="menuItem" value="${escapeHtml(e.menuItem)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+              <div class="note-field"><label>Підпункт меню</label><input type="text" data-f="subMenuItem" value="${escapeHtml(e.subMenuItem)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+              <div class="note-field"><label>Функція / елемент</label><input type="text" data-f="func" value="${escapeHtml(e.func)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
             </div>
             <div class="note-row cols3">
               <div class="note-field"><label>Тип елементу</label><select data-f="type">${TYPE_OPTIONS.map(t=>`<option ${t===e.type?'selected':''}>${t}</option>`).join('')}</select></div>
             </div>
             <div class="note-row cols2">
-              <div class="note-field old"><label>Стара версія</label><textarea data-f="old">${escapeHtml(e.old)}</textarea></div>
-              <div class="note-field new"><label>Нова версія</label><textarea data-f="new">${escapeHtml(e.new)}</textarea></div>
+              <div class="note-field old"><label>Стара версія</label><textarea data-f="old" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(e.old)}</textarea></div>
+              <div class="note-field new"><label>Нова версія</label><textarea data-f="new" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(e.new)}</textarea></div>
             </div>
             <div class="note-row">
-              <div class="note-field"><label>Примітка</label><textarea data-f="note">${escapeHtml(e.note)}</textarea></div>
+              <div class="note-field"><label>Примітка</label><textarea data-f="note" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(e.note)}</textarea></div>
             </div>
             <div class="note-entry-foot"><button class="icon-btn danger" data-del-entry="${e.id}" title="Видалити запис">🗑</button></div>
           </div>
