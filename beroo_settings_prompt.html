@@ -1248,6 +1248,7 @@ document.getElementById('saveCloudBtn').addEventListener('click', async ()=>{
   setSyncStatus('Зберігаю…');
   try{
     const r = await cloudSave(CURRENT_DOC_ID);
+    if(!r.ok){ setSyncStatus('Сервер відхилив збереження: ' + (r.error||'невідома помилка'), false); return; }
     if(!HAD_DOC_IN_URL){ const url = new URL(location.href); url.searchParams.set('doc', CURRENT_DOC_ID); history.replaceState(null,'',url); }
     setSyncStatus('Збережено · ' + new Date(r.updatedAt).toLocaleString('uk-UA'));
     renderCopiesList();
@@ -1423,9 +1424,12 @@ document.getElementById('createCopyBtn').addEventListener('click', async ()=>{
   btn.textContent = 'Створюю…'; btn.disabled = true;
   try{
     const r = await cloudCreateCopy(CURRENT_DOC_ID, name);
-    nameInput.value = '';
-    await renderCopiesList();
-    setSyncStatus('Копію «' + name + '» створено');
+    if(!r.ok){ setSyncStatus('Сервер відхилив створення копії: ' + (r.error||'невідома помилка'), false); }
+    else{
+      nameInput.value = '';
+      await renderCopiesList();
+      setSyncStatus('Копію «' + name + '» створено');
+    }
   }catch(err){ setSyncStatus('Не вдалось створити копію — перевір деплой Apps Script', false); }
   btn.textContent = orig; btn.disabled = false;
 });
