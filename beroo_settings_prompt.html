@@ -445,6 +445,10 @@ function renderTree(){
   wireEvents(root);
   autosizeAll(root);
   updateOutput();
+  if(typeof updateFilterLabel === 'function' && document.getElementById('filterStatusLabel')) updateFilterLabel();
+}
+function countVisible(nodes){
+  return nodes.filter(subtreeVisible).reduce((sum,node)=> sum + 1 + countVisible(node.children), 0);
 }
 
 function renderNode(node){
@@ -892,10 +896,13 @@ function renderFilterStatusOptions(){
 }
 function updateFilterLabel(){
   const label = document.getElementById('filterStatusLabel');
-  if(!activeFilterRole){ label.textContent = 'Показано: Всі ролі'; return; }
+  const total = countNodes(ROOT_NODES);
+  if(!activeFilterRole){ label.textContent = `Показано: Всі ролі (${total})`; return; }
   const role = TERMS.find(t=>t.id===activeFilterRole);
   const status = TERMS.find(t=>t.id===activeFilterStatus);
-  label.textContent = 'Показано: ' + (role?role.term:'') + (status ? ' · '+status.term : '');
+  const visible = countVisible(ROOT_NODES);
+  const hidden = total - visible;
+  label.textContent = (role?role.term:'') + (status ? ' · '+status.term : '') + ` — показано ${visible}, приховано ${hidden}`;
 }
 document.getElementById('filterRole').addEventListener('change', (e)=>{
   activeFilterRole = e.target.value;
