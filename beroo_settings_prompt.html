@@ -130,6 +130,19 @@
   .copy-btn{background:var(--console-accent);color:#0B1611;border:none;font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:8px;cursor:pointer;}
   .copy-btn:hover{opacity:0.9;}
   pre#finalOutput{background:var(--console-bg);color:var(--console-text);margin:0;padding:20px 22px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;white-space:pre-wrap;word-break:break-word;max-height:600px;overflow:auto;}
+  @media (max-width:640px){
+    body{padding:18px 14px 60px;}
+    h1{font-size:19px;}
+    input[type=text], textarea, select{font-size:16px !important;}
+    .term-card-head{flex-wrap:wrap;}
+    .term-name-input{min-width:120px;}
+    .node-block > summary{padding:12px 12px;font-size:13px;flex-wrap:wrap;}
+    .node-body{padding:0 12px 12px;}
+    .section-collapse-body{padding:0 14px 16px;}
+    .children-wrap{padding-left:10px;}
+    .toolbar-row{flex-wrap:wrap;}
+    .console-head{flex-wrap:wrap;row-gap:8px;}
+  }
 </style>
 </head>
 <body>
@@ -844,41 +857,94 @@ function renderSimForm(){
   });
 }
 
+let confirmingDeleteSimId = null;
+
 function renderSimList(){
   const root = document.getElementById('simList');
   const flat = flatten(ROOT_NODES);
-  const titleById = {}; flat.forEach(f=>titleById[f.id]=f.title);
   document.getElementById('simCount').textContent = simEntries.length + (simEntries.length===1?' запис':' записів');
   if(simEntries.length===0){ root.innerHTML = '<div class="empty">Записів ще немає.</div>'; return; }
   const visible = simEntries.filter(simEntryVisible);
   if(visible.length===0){ root.innerHTML = '<div class="empty">Немає записів для обраного фільтра.</div>'; return; }
   root.innerHTML = visible.slice().reverse().map(e=>{
-    const role = TERMS.find(t=>t.id===e.roleId);
-    const status = TERMS.find(t=>t.id===e.statusId);
+    const roles = TERMS.filter(t=>t.funcType==='Роль');
+    const statuses = TERMS.filter(t=>t.funcType==='Статус' && t.parentRole===e.roleId);
     return `
-    <div class="sim-card" data-sim="${e.id}">
-      <div class="sim-head">
-        ${role ? `<span class="sim-tag">${escapeHtml(role.term)}</span>` : ''}
-        ${status ? `<span class="sim-tag">${escapeHtml(status.term)}</span>` : ''}
-        <span class="sim-tag">${escapeHtml(e.objectType)}</span>
-        ${e.blockId && titleById[e.blockId] ? `<span class="sim-tag">🔗 ${escapeHtml(titleById[e.blockId])}</span>` : ''}
-        <button class="icon-btn" style="margin-left:auto;" data-del-sim="${e.id}" title="Видалити">🗑</button>
+    <div class="sim-card" data-entry="${e.id}">
+      <div class="two">
+        <div class="field"><label>Роль</label>
+          <select data-sf="roleId">
+            <option value="">—</option>
+            ${roles.map(r=>`<option value="${r.id}" ${e.roleId===r.id?'selected':''}>${escapeHtml(r.term)}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field"><label>Статус</label>
+          <select data-sf="statusId">
+            <option value="">—</option>
+            ${statuses.map(s=>`<option value="${s.id}" ${e.statusId===s.id?'selected':''}>${escapeHtml(s.term)}</option>`).join('')}
+          </select>
+        </div>
       </div>
-      <div class="sim-ratings">
-        ${e.mood?`<span>Настрій: ${escapeHtml(e.mood)}</span>`:''}
-        ${e.benefit?`<span>Вигода: ${escapeHtml(e.benefit)}</span>`:''}
-        ${e.comfort?`<span>Комфорт: ${escapeHtml(e.comfort)}</span>`:''}
-        ${e.clarity?`<span>Зрозумілість: ${escapeHtml(e.clarity)}</span>`:''}
+      <div class="two">
+        <div class="field"><label>Тип об'єкта обговорення</label>
+          <select data-sf="objectType">${OBJECT_TYPES.map(o=>`<option ${e.objectType===o?'selected':''}>${o}</option>`).join('')}</select>
+        </div>
+        <div class="field"><label>Прив'язаний блок</label>
+          <select data-sf="blockId">
+            <option value="">— без прив'язки —</option>
+            ${flat.map(f=>`<option value="${f.id}" ${e.blockId===f.id?'selected':''}>${'— '.repeat(f.depth)}${escapeHtml(f.title)}</option>`).join('')}
+          </select>
+        </div>
       </div>
-      ${e.comment ? `<div class="sim-comment">${escapeHtml(e.comment)}</div>` : ''}
+      ${SCALES.map(s=>`
+        <div class="rating-group">
+          <label class="g-label">${s.label}</label>
+          <div class="rating-opts">
+            ${s.opts.map(o=>`<label><input type="radio" name="${e.id}_${s.key}" value="${o}" data-sf="${s.key}" ${e[s.key]===o?'checked':''}> ${o}</label>`).join('')}
+          </div>
+        </div>
+      `).join('')}
+      <div class="field"><label>Враження текстом</label><textarea data-sf="comment" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(e.comment)}</textarea></div>
+      <div class="node-foot">
+        <span></span>
+        <button class="icon-btn${confirmingDeleteSimId===e.id?' confirming':''}" data-del-sim="${e.id}" title="Видалити запис">${confirmingDeleteSimId===e.id?'Підтвердити?':'🗑'}</button>
+      </div>
     </div>`;
   }).join('');
-  root.querySelectorAll('[data-del-sim]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      simEntries = simEntries.filter(x=>x.id!==btn.dataset.delSim);
-      renderSimList(); updateOutput();
+
+  root.querySelectorAll('[data-entry]').forEach(card=>{
+    const entry = simEntries.find(x=>x.id===card.dataset.entry);
+    card.querySelectorAll('[data-sf]').forEach(input=>{
+      if(input.type==='radio'){
+        input.addEventListener('change', ()=>{ entry[input.dataset.sf] = input.value; updateOutput(); });
+      } else {
+        input.addEventListener('input', ()=>{
+          entry[input.dataset.sf] = input.value;
+          if(input.tagName==='TEXTAREA') autosize(input);
+          updateOutput();
+        });
+        input.addEventListener('change', ()=>{
+          if(input.dataset.sf==='roleId'){ entry.statusId=''; renderSimList(); }
+        });
+      }
     });
   });
+  root.querySelectorAll('[data-del-sim]').forEach(btn=>{
+    btn.addEventListener('click', (ev)=>{
+      ev.preventDefault();
+      const id = btn.dataset.delSim;
+      if(confirmingDeleteSimId === id){
+        simEntries = simEntries.filter(x=>x.id!==id);
+        confirmingDeleteSimId = null;
+        renderSimList(); updateOutput();
+      } else {
+        confirmingDeleteSimId = id;
+        renderSimList();
+        setTimeout(()=>{ if(confirmingDeleteSimId===id){ confirmingDeleteSimId=null; renderSimList(); } }, 4000);
+      }
+    });
+  });
+  autosizeAll(root);
 }
 
 function renderFilterOptions(){
