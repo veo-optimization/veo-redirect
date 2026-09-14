@@ -85,6 +85,14 @@
   .sim-comment{font-size:13px;line-height:1.5;white-space:pre-wrap;}
   .icon-btn.confirming{background:#FDEBEC;color:#E0384A;border-color:#F3C6CB;font-size:10px;width:auto;padding:0 8px;}
   .empty{color:var(--muted);font-size:12.5px;font-style:italic;padding:8px 2px;}
+  .copy-logs{background:var(--console-bg);color:var(--console-text);border-radius:10px;padding:10px 12px;margin-top:10px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:11.5px;max-height:220px;overflow:auto;}
+  .log-line{padding:3px 0;border-bottom:1px solid #262A33;}
+  .log-line:last-child{border-bottom:none;}
+  .copy-perms{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:flex;flex-direction:column;gap:12px;}
+  .node-ro-desc{color:#3A3F4B;font-size:13.5px;line-height:1.55;white-space:pre-wrap;margin:2px 0 8px;}
+  .node-ro-elements{margin:0 0 8px;}
+  .ro-el-item{font-size:12.5px;color:#4A5063;padding:3px 0;line-height:1.5;}
+  .node-ro-links{font-size:12px;color:var(--muted);margin-bottom:4px;}
 
   .subhead{display:flex;align-items:center;gap:8px;margin:14px 0 8px;}
   .subhead b{font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);}
@@ -130,7 +138,14 @@
   .copy-btn{background:var(--console-accent);color:#0B1611;border:none;font-size:12.5px;font-weight:700;padding:8px 14px;border-radius:8px;cursor:pointer;}
   .copy-btn:hover{opacity:0.9;}
   pre#finalOutput{background:var(--console-bg);color:var(--console-text);margin:0;padding:20px 22px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;white-space:pre-wrap;word-break:break-word;max-height:600px;overflow:auto;}
+
+  #autosaveBar{position:fixed;top:16px;right:16px;z-index:50;background:#fff;border:1px solid var(--border);border-radius:12px;padding:8px 10px;box-shadow:0 4px 16px rgba(20,20,40,.10);display:flex;align-items:center;gap:8px;}
+  #autosaveBar label{font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap;}
+  #autosaveBar select{font-size:12px;padding:5px 7px;border-radius:7px;border:1px solid var(--border);background:#fff;}
+  #autosaveBar .btn{padding:6px 10px;font-size:12px;white-space:nowrap;}
+
   @media (max-width:640px){
+    #autosaveBar{position:static;width:100%;justify-content:space-between;margin:0 0 16px;box-shadow:none;flex-wrap:wrap;}
     body{padding:18px 14px 60px;}
     h1{font-size:19px;}
     input[type=text], textarea, select{font-size:16px !important;}
@@ -146,6 +161,19 @@
 </style>
 </head>
 <body>
+<div id="autosaveBar">
+  <label>Автозбереження</label>
+  <select id="autosaveSelect">
+    <option value="0">Вимкн.</option>
+    <option value="60000">1 хв</option>
+    <option value="300000">5 хв</option>
+    <option value="600000">10 хв</option>
+    <option value="1800000">30 хв</option>
+  </select>
+  <button class="btn" id="saveNowBtn">💾 Зберегти зараз</button>
+  <span id="autosaveTick" style="font-size:10.5px;color:var(--muted);"></span>
+</div>
+
 <div class="wrap">
   <header class="top">
     <h1>BEROO · Блоковий редактор структури</h1>
@@ -162,9 +190,44 @@
       <button class="btn" id="saveCloudBtn">💾 Зберегти</button>
       <button class="btn" id="loadCloudBtn">⤓ Завантажити з хмари</button>
       <button class="btn" id="copyLinkBtn">🔗 Копіювати посилання на цю версію</button>
-      <button class="btn ghost" id="copyForColleagueBtn">👥 Створити копію для колеги</button>
     </div>
   </div>
+
+  <div id="readonlyBanner" style="display:none;background:#FDEBEC;border:1px solid #F3C6CB;color:#B3324A;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;font-weight:600;">
+    ⚠️ Цю копію вимкнено власником — перегляд без можливості редагування.
+  </div>
+
+  <details class="section-collapse" id="copiesSection" open>
+    <summary class="section-summary">
+      <span class="section-summary-icon">👥</span>
+      <span class="section-title-inline">Керування копіями</span>
+      <span class="section-count" id="copiesCount"></span>
+      <span class="section-caret">▸</span>
+    </summary>
+    <div class="section-collapse-body">
+      <p class="section-desc">Створюй іменовані копії для колег, вмикай/вимикай їх, обмежуй ролі та блоки редагування, дивись лог дій по кожній копії.</p>
+      <div class="panel" style="margin-bottom:14px;">
+        <div class="field"><label>Імʼя нової копії</label><input type="text" id="newCopyName" placeholder="напр. Копія для Олексія" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+        <button class="btn" id="createCopyBtn">+ Створити копію поточної версії</button>
+      </div>
+      <div id="copiesList"></div>
+      <button class="btn ghost" id="refreshCopiesBtn" style="margin-top:8px;">↻ Оновити список</button>
+    </div>
+  </details>
+
+  <details class="section-collapse" id="teamImpressionsSection" style="display:none;">
+    <summary class="section-summary">
+      <span class="section-summary-icon">🗂️</span>
+      <span class="section-title-inline">Враження колег (усі копії)</span>
+      <span class="section-count" id="teamImpressionsCount"></span>
+      <span class="section-caret">▸</span>
+    </summary>
+    <div class="section-collapse-body">
+      <p class="section-desc">Записи з режиму ІМІТАЦІЯ, зроблені в копіях колег — згруповано по імені. Оновлюється автоматично, поки колеги працюють.</p>
+      <button class="btn ghost" id="refreshTeamBtn" style="margin-bottom:10px;">↻ Оновити</button>
+      <div id="teamImpressionsList"></div>
+    </div>
+  </details>
 
   <div class="panel filter-panel" id="filterPanel">
     <div class="filter-head">
@@ -208,19 +271,20 @@
     </summary>
     <div class="section-collapse-body">
       <p class="section-desc">Обери роль і статус, тип обговорюваного об'єкта, познач враження і опиши текстом — так формується журнал вражень.</p>
+      <div class="field" style="max-width:320px;"><label>Ваше ім'я (для журналу вражень)</label><input type="text" id="myNameInput" placeholder="напр. Олексій" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
       <div class="panel" id="simForm"></div>
       <div id="simList"></div>
     </div>
   </details>
 
   <div class="section-title">Структура блоків</div>
-  <div class="toolbar-row">
+  <div class="toolbar-row" id="treeToolbarRow">
     <button class="btn" id="sortColorBtn">🎨 Сортувати за кольором</button>
     <button class="btn" id="restoreOrderBtn">↺ Початковий порядок</button>
     <span style="font-size:12px;color:var(--muted);">Фіолетовий = моє бачення/припущення (можна перефарбувати)</span>
   </div>
   <div class="tree" id="tree"></div>
-  <div class="add-root-row"><button class="btn ghost" id="addRootBtn">+ Додати новий кореневий блок</button></div>
+  <div class="add-root-row" id="treeAddRootRow"><button class="btn ghost" id="addRootBtn">+ Додати новий кореневий блок</button></div>
 
   <div class="console-wrap">
     <div class="console-head">
@@ -426,6 +490,8 @@ ROOT_NODES.forEach(r => openNodes.add(r.id));
 let confirmingDeleteId = null;
 let activeFilterRole = '';
 let activeFilterStatus = '';
+let IS_OWNER = true; // optimistic default until registry lookup resolves
+let myName = localStorage.getItem('beroo_my_name') || '';
 
 function nodeMatchesFilter(node){
   if(!activeFilterRole) return true;
@@ -467,11 +533,45 @@ function removeNode(id, nodes){
 
 function renderTree(){
   const root = document.getElementById('tree');
-  root.innerHTML = ROOT_NODES.filter(subtreeVisible).map(node => renderNode(node)).join('');
-  wireEvents(root);
+  const nodesToRender = ROOT_NODES.filter(subtreeVisible);
+  if(IS_OWNER){
+    root.innerHTML = nodesToRender.map(node => renderNode(node)).join('');
+    wireEvents(root);
+  } else {
+    root.innerHTML = nodesToRender.map(node => renderNodeReadonly(node)).join('');
+    root.querySelectorAll('details.node-block').forEach(det=>{
+      det.addEventListener('toggle', ()=>{
+        const id = det.dataset.id;
+        if(det.open) openNodes.add(id); else openNodes.delete(id);
+      });
+    });
+  }
   autosizeAll(root);
   updateOutput();
   if(typeof updateFilterLabel === 'function' && document.getElementById('filterStatusLabel')) updateFilterLabel();
+}
+function renderNodeReadonly(node){
+  const childrenHtml = node.children.filter(subtreeVisible).map(renderNodeReadonly).join('');
+  const links = node.links.filter(l=>l.targetId).map(l=>{
+    const t = findNode(l.targetId);
+    return escapeHtml(t?t.title:'?') + (l.reason ? ' ('+escapeHtml(l.reason)+')' : '');
+  });
+  return `
+    <details class="node-block${node.color?' c-'+node.color:''}" data-id="${node.id}" ${openNodes.has(node.id)?'open':''}>
+      <summary>
+        ${node.color ? `<span class="color-dot" style="background:${COLOR_DOT[node.color]}"></span>` : ''}
+        <span>${escapeHtml(node.title || '(без назви)')}</span>
+        ${node.roles ? `<span class="node-role-tag">${escapeHtml(node.roles)}</span>` : ''}
+        <span class="node-caret">▸</span>
+      </summary>
+      <div class="node-body">
+        ${node.description ? `<div class="node-ro-desc">${escapeHtml(node.description)}</div>` : ''}
+        ${node.elements.length ? `<div class="node-ro-elements">${node.elements.map(e=>`<div class="ro-el-item">• <b>${escapeHtml(e.name||'—')}</b>${e.type?` <i>(${escapeHtml(e.type)})</i>`:''}${e.desc?' — '+escapeHtml(e.desc):''}</div>`).join('')}</div>` : ''}
+        ${links.length ? `<div class="node-ro-links">Пов'язано з: ${links.join('; ')}</div>` : ''}
+        <div class="children-wrap">${childrenHtml}</div>
+      </div>
+    </details>
+  `;
 }
 function countVisible(nodes){
   return nodes.filter(subtreeVisible).reduce((sum,node)=> sum + 1 + countVisible(node.children), 0);
@@ -721,6 +821,21 @@ let TERMS = [
 function renderTerms(){
   const root = document.getElementById('termsList');
   document.getElementById('termsCount').textContent = TERMS.length + (TERMS.length===1?' термін':' термінів');
+  document.getElementById('addTermBtn').style.display = IS_OWNER ? '' : 'none';
+  if(!IS_OWNER){
+    root.innerHTML = TERMS.map(t=>{
+      const color = FUNC_COLORS[t.funcType] || FUNC_COLORS['Інше'];
+      return `<div class="term-card" style="border-left:4px solid ${color};">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-weight:700;font-size:14px;">${escapeHtml(t.term)}</span>
+          <span style="font-size:10.5px;font-weight:600;color:#3A3550;background:${color}33;border-radius:999px;padding:3px 9px;">${escapeHtml(t.funcType)}</span>
+        </div>
+        ${(t.synonyms||[]).length ? `<div style="font-size:12px;color:var(--muted);margin-top:5px;">Синоніми: ${t.synonyms.map(escapeHtml).join(', ')}</div>` : ''}
+        ${t.explanation ? `<div style="font-size:13px;margin-top:7px;line-height:1.5;color:#3A3F4B;">${escapeHtml(t.explanation)}</div>` : ''}
+      </div>`;
+    }).join('');
+    return;
+  }
   root.innerHTML = TERMS.map(t=>{
     const roleOptions = TERMS.filter(x=>x.funcType==='Роль' && x.id!==t.id).map(r=>`<option value="${r.id}" ${t.parentRole===r.id?'selected':''}>${escapeHtml(r.term)}</option>`).join('');
     const color = FUNC_COLORS[t.funcType] || FUNC_COLORS['Інше'];
@@ -864,9 +979,10 @@ function renderSimForm(){
   autosize(commentEl);
 
   document.getElementById('simAddBtn').addEventListener('click', ()=>{
-    simEntries.push({id:uid('s'), ...simDraft});
+    simEntries.push({id:uid('s'), author: myName, ...simDraft});
     simDraft = { roleId:simDraft.roleId, statusId:simDraft.statusId, objectType:simDraft.objectType, blockId:'', mood:'', benefit:'', comfort:'', clarity:'', comment:'' };
     renderSimForm(); renderSimList(); updateOutput();
+    syncSimEntriesToCloud();
   });
 }
 
@@ -929,15 +1045,17 @@ function renderSimList(){
     const entry = simEntries.find(x=>x.id===card.dataset.entry);
     card.querySelectorAll('[data-sf]').forEach(input=>{
       if(input.type==='radio'){
-        input.addEventListener('change', ()=>{ entry[input.dataset.sf] = input.value; updateOutput(); });
+        input.addEventListener('change', ()=>{ entry[input.dataset.sf] = input.value; updateOutput(); scheduleSimSync(); });
       } else {
         input.addEventListener('input', ()=>{
           entry[input.dataset.sf] = input.value;
           if(input.tagName==='TEXTAREA') autosize(input);
           updateOutput();
+          scheduleSimSync();
         });
         input.addEventListener('change', ()=>{
           if(input.dataset.sf==='roleId'){ entry.statusId=''; renderSimList(); }
+          scheduleSimSync();
         });
       }
     });
@@ -1048,7 +1166,7 @@ document.getElementById('copyAllBtn').addEventListener('click', ()=>{
 /* ======================================================================
    ХМАРНА СИНХРОНІЗАЦІЯ (Google Apps Script Web App)
 ====================================================================== */
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzJsTKOGu_PjPRNHaoF-KPB5IJOHhTBIuOg88jTRK4PBEMo2YqPMt61kbn2ZvHyvO74/exec';
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz97bPog0qrx7xHnDALL56IxciPa0mMZpZpnnk56IeTFNGHfZvGhpGzGs1NDmjoHH21/exec';
 
 function getDocIdFromUrl(){ return new URLSearchParams(location.search).get('doc'); }
 let CURRENT_DOC_ID = getDocIdFromUrl();
@@ -1089,16 +1207,41 @@ function loadState(obj){
   renderTerms(); renderSimForm(); renderSimList(); renderTree();
 }
 
-async function cloudSave(docId){
-  const payload = {doc: docId, data: JSON.stringify(exportState())};
-  const res = await fetch(APPS_SCRIPT_URL, {method:'POST', body: JSON.stringify(payload)});
-  if(!res.ok) throw new Error('HTTP ' + res.status);
-  return res.json();
+async function cloudCall(method, params){
+  if(method==='GET'){
+    const qs = new URLSearchParams(params).toString();
+    const res = await fetch(APPS_SCRIPT_URL + '?' + qs);
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  } else {
+    const res = await fetch(APPS_SCRIPT_URL, {method:'POST', body: JSON.stringify(params)});
+    if(!res.ok) throw new Error('HTTP ' + res.status);
+    return res.json();
+  }
+}
+async function cloudSave(docId, name){
+  return cloudCall('POST', {action:'save', doc: docId, name: name||undefined, data: JSON.stringify(exportState())});
 }
 async function cloudLoad(docId){
-  const res = await fetch(APPS_SCRIPT_URL + '?doc=' + encodeURIComponent(docId));
-  if(!res.ok) throw new Error('HTTP ' + res.status);
-  return res.json();
+  return cloudCall('GET', {action:'load', doc: docId});
+}
+async function cloudList(){
+  return cloudCall('GET', {action:'list'});
+}
+async function cloudCreateCopy(sourceDocId, name){
+  return cloudCall('POST', {action:'createCopy', sourceDoc: sourceDocId, name: name, data: JSON.stringify(exportState())});
+}
+async function cloudToggle(docId, enabled){
+  return cloudCall('POST', {action:'toggle', doc: docId, enabled: enabled});
+}
+async function cloudRename(docId, name){
+  return cloudCall('POST', {action:'rename', doc: docId, name: name});
+}
+async function cloudUpdatePermissions(docId, allowedRoles, editableBlocks){
+  return cloudCall('POST', {action:'updatePermissions', doc: docId, allowedRoles: allowedRoles, editableBlocks: editableBlocks});
+}
+async function cloudGetLogs(docId){
+  return cloudCall('GET', {action:'logs', doc: docId});
 }
 
 document.getElementById('saveCloudBtn').addEventListener('click', async ()=>{
@@ -1107,6 +1250,7 @@ document.getElementById('saveCloudBtn').addEventListener('click', async ()=>{
     const r = await cloudSave(CURRENT_DOC_ID);
     if(!HAD_DOC_IN_URL){ const url = new URL(location.href); url.searchParams.set('doc', CURRENT_DOC_ID); history.replaceState(null,'',url); }
     setSyncStatus('Збережено · ' + new Date(r.updatedAt).toLocaleString('uk-UA'));
+    renderCopiesList();
   }catch(err){ setSyncStatus('Помилка збереження — перевір деплой Apps Script', false); }
 });
 
@@ -1125,31 +1269,314 @@ document.getElementById('copyLinkBtn').addEventListener('click', ()=>{
   copyText(shareLink(CURRENT_DOC_ID), btn, '🔗 Копіювати посилання на цю версію');
 });
 
-document.getElementById('copyForColleagueBtn').addEventListener('click', async ()=>{
-  setSyncStatus('Створюю копію для колеги…');
-  const newId = 'd' + Math.random().toString(36).slice(2,10);
+/* ======================================================================
+   КЕРУВАННЯ КОПІЯМИ
+====================================================================== */
+let COPIES = [];
+let openCopyPanels = new Set(); // 'logs:docId' / 'perms:docId'
+
+function fmtDate(iso){ try{ return new Date(iso).toLocaleString('uk-UA'); }catch(e){ return iso; } }
+
+async function renderCopiesList(){
+  const root = document.getElementById('copiesList');
   try{
-    await cloudSave(newId);
-    const link = shareLink(newId);
-    const btn = document.getElementById('copyForColleagueBtn');
-    copyText(link, btn, '👥 Створити копію для колеги');
-    setSyncStatus('Копію створено й посилання скопійовано в буфер');
+    const r = await cloudList();
+    COPIES = r.items || [];
+  }catch(err){
+    root.innerHTML = '<div class="empty">Не вдалось завантажити список копій — перевір деплой Apps Script.</div>';
+    return;
+  }
+  document.getElementById('copiesCount').textContent = COPIES.length + (COPIES.length===1?' копія':' копій');
+  if(COPIES.length===0){ root.innerHTML = '<div class="empty">Копій ще немає.</div>'; return; }
+
+  const roleTerms = TERMS.filter(t=>t.funcType==='Роль');
+  const flat = flatten(ROOT_NODES);
+
+  root.innerHTML = COPIES.map(c=>{
+    const showLogs = openCopyPanels.has('logs:'+c.docId);
+    const showPerms = openCopyPanels.has('perms:'+c.docId);
+    return `
+    <div class="term-card" data-copy="${c.docId}">
+      <div class="term-card-head">
+        <span class="term-color-bar" style="background:${c.enabled?'#A9E0BE':'#F3AAB4'}"></span>
+        <input type="text" class="term-name-input" data-copy-f="name" value="${escapeHtml(c.name)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);white-space:nowrap;">
+          <input type="checkbox" data-copy-toggle ${c.enabled?'checked':''}> Увімкнено
+        </label>
+      </div>
+      <div class="term-card-body">
+        <div style="font-size:11px;color:var(--muted);">ID: ${escapeHtml(c.docId)}${c.docId===CURRENT_DOC_ID?' · це поточна копія':''} · створено ${fmtDate(c.createdAt)}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn" data-copy-link="${c.docId}">🔗 Посилання</button>
+          <button class="btn" data-toggle-logs="${c.docId}">📜 Логи${showLogs?' ▾':' ▸'}</button>
+          <button class="btn" data-toggle-perms="${c.docId}">🔒 Права доступу${showPerms?' ▾':' ▸'}</button>
+        </div>
+        ${showLogs ? `<div class="copy-logs" data-logs-body="${c.docId}"><div class="empty">Завантаження…</div></div>` : ''}
+        ${showPerms ? `
+          <div class="copy-perms">
+            <div class="synonyms-block">
+              <label>Дозволені ролі (порожньо = усі ролі)</label>
+              <div class="synonyms-row" data-role-perm-wrap="${c.docId}">
+                ${(c.allowedRoles||[]).map(rn=>`<span class="syn-chip">${escapeHtml(rn)}<button type="button" data-del-role-perm="${escapeHtml(rn)}" data-copy-id="${c.docId}">×</button></span>`).join('')}
+                <select data-add-role-perm="${c.docId}">
+                  <option value="">+ додати роль</option>
+                  ${roleTerms.filter(t=>!(c.allowedRoles||[]).includes(t.term)).map(t=>`<option value="${escapeHtml(t.term)}">${escapeHtml(t.term)}</option>`).join('')}
+                </select>
+              </div>
+            </div>
+            <div class="synonyms-block">
+              <label>Блоки, доступні для редагування (порожньо = усі блоки)</label>
+              <div class="synonyms-row" data-block-perm-wrap="${c.docId}">
+                ${(c.editableBlocks||[]).map(bn=>`<span class="syn-chip">${escapeHtml(bn)}<button type="button" data-del-block-perm="${escapeHtml(bn)}" data-copy-id="${c.docId}">×</button></span>`).join('')}
+                <select data-add-block-perm="${c.docId}">
+                  <option value="">+ додати блок</option>
+                  ${flat.filter(f=>!(c.editableBlocks||[]).includes(f.title)).map(f=>`<option value="${escapeHtml(f.title)}">${'— '.repeat(f.depth)}${escapeHtml(f.title)}</option>`).join('')}
+                </select>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+      </div>
+    </div>`;
+  }).join('');
+
+  root.querySelectorAll('[data-copy-f="name"]').forEach(input=>{
+    input.addEventListener('change', async ()=>{
+      const docId = input.closest('[data-copy]').dataset.copy;
+      await cloudRename(docId, input.value);
+    });
+  });
+  root.querySelectorAll('[data-copy-toggle]').forEach(cb=>{
+    cb.addEventListener('change', async ()=>{
+      const docId = cb.closest('[data-copy]').dataset.copy;
+      await cloudToggle(docId, cb.checked);
+      renderCopiesList();
+    });
+  });
+  root.querySelectorAll('[data-copy-link]').forEach(btn=>{
+    btn.addEventListener('click', ()=> copyText(shareLink(btn.dataset.copyLink), btn, '🔗 Посилання'));
+  });
+  root.querySelectorAll('[data-toggle-logs]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const key = 'logs:'+btn.dataset.toggleLogs;
+      if(openCopyPanels.has(key)) openCopyPanels.delete(key); else openCopyPanels.add(key);
+      renderCopiesList();
+      if(openCopyPanels.has(key)){
+        try{
+          const r = await cloudGetLogs(btn.dataset.toggleLogs);
+          const body = document.querySelector(`[data-logs-body="${btn.dataset.toggleLogs}"]`);
+          if(body){
+            body.innerHTML = (r.items||[]).length ? r.items.map(l=>`<div class="log-line"><b>${fmtDate(l.timestamp)}</b> — ${escapeHtml(l.action)}${l.details?': '+escapeHtml(l.details):''}</div>`).join('') : '<div class="empty">Логів ще немає.</div>';
+          }
+        }catch(err){}
+      }
+    });
+  });
+  root.querySelectorAll('[data-toggle-perms]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const key = 'perms:'+btn.dataset.togglePerms;
+      if(openCopyPanels.has(key)) openCopyPanels.delete(key); else openCopyPanels.add(key);
+      renderCopiesList();
+    });
+  });
+  root.querySelectorAll('[data-add-role-perm]').forEach(sel=>{
+    sel.addEventListener('change', async ()=>{
+      if(!sel.value) return;
+      const c = COPIES.find(x=>x.docId===sel.dataset.addRolePerm);
+      c.allowedRoles = [...(c.allowedRoles||[]), sel.value];
+      await cloudUpdatePermissions(c.docId, c.allowedRoles, c.editableBlocks||[]);
+      renderCopiesList();
+    });
+  });
+  root.querySelectorAll('[data-del-role-perm]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const c = COPIES.find(x=>x.docId===btn.dataset.copyId);
+      c.allowedRoles = (c.allowedRoles||[]).filter(r=>r!==btn.dataset.delRolePerm);
+      await cloudUpdatePermissions(c.docId, c.allowedRoles, c.editableBlocks||[]);
+      renderCopiesList();
+    });
+  });
+  root.querySelectorAll('[data-add-block-perm]').forEach(sel=>{
+    sel.addEventListener('change', async ()=>{
+      if(!sel.value) return;
+      const c = COPIES.find(x=>x.docId===sel.dataset.addBlockPerm);
+      c.editableBlocks = [...(c.editableBlocks||[]), sel.value];
+      await cloudUpdatePermissions(c.docId, c.allowedRoles||[], c.editableBlocks);
+      renderCopiesList();
+    });
+  });
+  root.querySelectorAll('[data-del-block-perm]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const c = COPIES.find(x=>x.docId===btn.dataset.copyId);
+      c.editableBlocks = (c.editableBlocks||[]).filter(b=>b!==btn.dataset.delBlockPerm);
+      await cloudUpdatePermissions(c.docId, c.allowedRoles||[], c.editableBlocks);
+      renderCopiesList();
+    });
+  });
+}
+
+document.getElementById('createCopyBtn').addEventListener('click', async ()=>{
+  const nameInput = document.getElementById('newCopyName');
+  const name = nameInput.value.trim() || 'Без назви';
+  const btn = document.getElementById('createCopyBtn');
+  const orig = btn.textContent;
+  btn.textContent = 'Створюю…'; btn.disabled = true;
+  try{
+    const r = await cloudCreateCopy(CURRENT_DOC_ID, name);
+    nameInput.value = '';
+    await renderCopiesList();
+    setSyncStatus('Копію «' + name + '» створено');
   }catch(err){ setSyncStatus('Не вдалось створити копію — перевір деплой Apps Script', false); }
+  btn.textContent = orig; btn.disabled = false;
 });
+document.getElementById('refreshCopiesBtn').addEventListener('click', renderCopiesList);
+
+/* ======================================================================
+   ЗАСТОСУВАННЯ ПРАВ ПОТОЧНОЇ КОПІЇ (readonly / дозволені ролі / блоки)
+====================================================================== */
+let READONLY_MODE = false;
+let MY_EDITABLE_BLOCKS = [];
+
+function applyOwnerGating(entry){
+  IS_OWNER = !entry || !entry.sourceDocId;
+  document.getElementById('copiesSection').style.display = IS_OWNER ? '' : 'none';
+  document.getElementById('teamImpressionsSection').style.display = IS_OWNER ? '' : 'none';
+  document.getElementById('treeToolbarRow').style.display = IS_OWNER ? '' : 'none';
+  document.getElementById('treeAddRootRow').style.display = IS_OWNER ? '' : 'none';
+  renderTerms();
+  renderTree();
+  if(IS_OWNER) renderTeamImpressions();
+
+  if(entry && entry.enabled === false){
+    READONLY_MODE = true;
+    document.getElementById('readonlyBanner').style.display = 'block';
+    document.querySelectorAll('#simForm input, #simForm select, #simForm textarea, #simForm button, #saveCloudBtn, #loadCloudBtn').forEach(el=> el.disabled = true);
+  }
+
+  if(entry && (entry.allowedRoles||[]).length > 0){
+    const sel = document.getElementById('filterRole');
+    if(sel){
+      [...sel.options].forEach(opt=>{
+        if(opt.value===''){ opt.disabled = true; return; }
+        const t = TERMS.find(x=>x.id===opt.value);
+        if(t && !entry.allowedRoles.includes(t.term)) opt.disabled = true;
+      });
+      if(!activeFilterRole){
+        const firstAllowed = TERMS.find(t=>t.funcType==='Роль' && entry.allowedRoles.includes(t.term));
+        if(firstAllowed){ activeFilterRole = firstAllowed.id; sel.value = firstAllowed.id; renderFilterStatusOptions(); updateFilterLabel(); renderTree(); }
+      }
+    }
+  }
+}
+
+/* ======================================================================
+   СИНХРОНІЗАЦІЯ ВРАЖЕНЬ КОЛЕГ (спільний журнал, видимий власнику)
+====================================================================== */
+let simSyncTimer = null;
+function scheduleSimSync(){
+  clearTimeout(simSyncTimer);
+  simSyncTimer = setTimeout(syncSimEntriesToCloud, 1200);
+}
+async function syncSimEntriesToCloud(){
+  if(!simEntries.length) return;
+  const flat = flatten(ROOT_NODES);
+  const payloadEntries = simEntries.map(e=>{
+    const role = TERMS.find(t=>t.id===e.roleId);
+    const status = TERMS.find(t=>t.id===e.statusId);
+    const block = flat.find(f=>f.id===e.blockId);
+    return {
+      id: e.id, author: e.author || myName || '', roleName: role?role.term:'', statusName: status?status.term:'',
+      objectType: e.objectType, blockTitle: block?block.title:'',
+      mood:e.mood, benefit:e.benefit, comfort:e.comfort, clarity:e.clarity, comment:e.comment
+    };
+  });
+  try{ await cloudCall('POST', {action:'syncSimEntries', doc: CURRENT_DOC_ID, entries: payloadEntries}); }catch(err){}
+}
+
+function fmtDate2(iso){ try{ return new Date(iso).toLocaleString('uk-UA'); }catch(e){ return iso; } }
+
+async function renderTeamImpressions(){
+  const root = document.getElementById('teamImpressionsList');
+  root.innerHTML = '<div class="empty">Завантаження…</div>';
+  try{
+    const r = await cloudCall('GET', {action:'listSimEntries'});
+    const items = r.items || [];
+    document.getElementById('teamImpressionsCount').textContent = items.length + (items.length===1?' запис':' записів');
+    if(!items.length){ root.innerHTML = '<div class="empty">Поки немає записів від колег.</div>'; return; }
+    const byAuthor = {};
+    items.forEach(it=>{ const key = it.author || '(без імені)'; (byAuthor[key]=byAuthor[key]||[]).push(it); });
+    root.innerHTML = Object.keys(byAuthor).sort().map(author=>`
+      <div class="term-card">
+        <div style="font-weight:700;font-size:14px;margin-bottom:8px;">👤 ${escapeHtml(author)} <span class="node-role-tag">${byAuthor[author].length}</span></div>
+        ${byAuthor[author].map(it=>`
+          <div class="sim-card" style="margin-bottom:8px;">
+            <div class="sim-head">
+              ${it.role?`<span class="sim-tag">${escapeHtml(it.role)}</span>`:''}
+              ${it.status?`<span class="sim-tag">${escapeHtml(it.status)}</span>`:''}
+              <span class="sim-tag">${escapeHtml(it.objectType||'')}</span>
+              ${it.block?`<span class="sim-tag">🔗 ${escapeHtml(it.block)}</span>`:''}
+              <span style="margin-left:auto;font-size:10.5px;color:var(--muted);">${fmtDate2(it.timestamp)}</span>
+            </div>
+            <div class="sim-ratings">
+              ${it.mood?`<span>Настрій: ${escapeHtml(it.mood)}</span>`:''}
+              ${it.benefit?`<span>Вигода: ${escapeHtml(it.benefit)}</span>`:''}
+              ${it.comfort?`<span>Комфорт: ${escapeHtml(it.comfort)}</span>`:''}
+              ${it.clarity?`<span>Зрозумілість: ${escapeHtml(it.clarity)}</span>`:''}
+            </div>
+            ${it.comment?`<div class="sim-comment">${escapeHtml(it.comment)}</div>`:''}
+          </div>
+        `).join('')}
+      </div>
+    `).join('');
+  }catch(err){ root.innerHTML = '<div class="empty">Не вдалось завантажити — перевір деплой Apps Script.</div>'; }
+}
+document.getElementById('refreshTeamBtn').addEventListener('click', renderTeamImpressions);
+
+/* ======================================================================
+   АВТОЗБЕРЕЖЕННЯ
+====================================================================== */
+let autosaveTimer = null;
+function setAutosave(ms){
+  clearInterval(autosaveTimer);
+  localStorage.setItem('beroo_autosave_ms', String(ms));
+  if(ms > 0){
+    autosaveTimer = setInterval(()=>{ document.getElementById('saveCloudBtn').click(); }, ms);
+    document.getElementById('autosaveTick').textContent = 'наступне збереження через ' + Math.round(ms/60000) + ' хв';
+  } else {
+    document.getElementById('autosaveTick').textContent = '';
+  }
+}
+const autosaveSelect = document.getElementById('autosaveSelect');
+const savedAutosaveMs = parseInt(localStorage.getItem('beroo_autosave_ms') || '0', 10);
+autosaveSelect.value = String(savedAutosaveMs);
+setAutosave(savedAutosaveMs);
+autosaveSelect.addEventListener('change', ()=> setAutosave(parseInt(autosaveSelect.value, 10)));
+document.getElementById('saveNowBtn').addEventListener('click', ()=> document.getElementById('saveCloudBtn').click());
 
 renderTerms();
 renderSimForm();
 renderSimList();
 renderTree();
+renderCopiesList();
+
+const myNameInput = document.getElementById('myNameInput');
+myNameInput.value = myName;
+myNameInput.addEventListener('input', ()=>{ myName = myNameInput.value; localStorage.setItem('beroo_my_name', myName); });
 
 if(HAD_DOC_IN_URL){
   setSyncStatus('Завантажую збережену версію…');
   cloudLoad(CURRENT_DOC_ID).then(r=>{
     if(r.found){ loadState(JSON.parse(r.data)); setSyncStatus('Завантажено · ' + new Date(r.updatedAt).toLocaleString('uk-UA')); }
     else setSyncStatus('Новий документ — ще не збережено в хмарі');
+    return cloudList();
+  }).then(r=>{
+    const entry = (r.items||[]).find(x=>x.docId===CURRENT_DOC_ID);
+    applyOwnerGating(entry);
   }).catch(()=> setSyncStatus('Не вдалось зʼєднатися з Apps Script', false));
 } else {
   setSyncStatus('Новий документ — тисни «Зберегти», щоб отримати посилання');
+  document.getElementById('teamImpressionsSection').style.display = '';
+  renderTeamImpressions();
 }
 </script>
 </body>
