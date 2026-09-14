@@ -117,6 +117,11 @@
 
   .add-root-row{margin:16px 0 40px;}
 
+  .filter-panel{border:1px solid #DDE8FB;background:linear-gradient(180deg,#FAFCFF,#F3F8FF);margin-top:22px;}
+  .filter-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .filter-head b{font-size:14px;}
+  .filter-status{margin-left:auto;font-size:11.5px;font-weight:600;color:#3B6FC9;background:#E7F0FE;border-radius:999px;padding:4px 10px;}
+
   .console-wrap{border-radius:18px;overflow:hidden;border:1px solid #262A33;}
   .console-head{background:#191C24;color:#C9CFDA;padding:14px 18px;display:flex;align-items:center;gap:12px;}
   .console-head .dots{display:flex;gap:6px;} .console-head .dot{width:9px;height:9px;border-radius:50%;}
@@ -135,6 +140,25 @@
     <div class="hint">💡 <span><b>Як користуватись:</b> клік по заголовку розкриває блок. «+ Додати дочірній блок» — вкладений підпункт. «+ Додати елемент» — кнопка/поле з описом. «+ Додати зв'язок» — посилання на інший блок з поясненням, чому вони пов'язані.</span></div>
   </header>
 
+  <div class="panel filter-panel" id="filterPanel">
+    <div class="filter-head">
+      <b>Перегляд за роллю</b>
+      <span class="filter-status" id="filterStatusLabel">Показано: Всі ролі</span>
+    </div>
+    <div class="two">
+      <div class="field"><label>Роль</label>
+        <select id="filterRole">
+          <option value="">Всі</option>
+        </select>
+      </div>
+      <div class="field"><label>Статус</label>
+        <select id="filterStatus">
+          <option value="">Усі статуси</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
   <details class="section-collapse" id="termsSection" open>
     <summary class="section-summary">
       <span class="section-summary-icon">📖</span>
@@ -149,10 +173,19 @@
     </div>
   </details>
 
-  <div class="section-title">Режим ІМІТАЦІЯ</div>
-  <p class="section-desc">Обери роль і статус, тип обговорюваного об'єкта, познач враження і опиши текстом — так формується журнал вражень.</p>
-  <div class="panel" id="simForm"></div>
-  <div id="simList"></div>
+  <details class="section-collapse" id="simSection" open>
+    <summary class="section-summary">
+      <span class="section-summary-icon">🎭</span>
+      <span class="section-title-inline">Режим ІМІТАЦІЯ</span>
+      <span class="section-count" id="simCount"></span>
+      <span class="section-caret">▸</span>
+    </summary>
+    <div class="section-collapse-body">
+      <p class="section-desc">Обери роль і статус, тип обговорюваного об'єкта, познач враження і опиши текстом — так формується журнал вражень.</p>
+      <div class="panel" id="simForm"></div>
+      <div id="simList"></div>
+    </div>
+  </details>
 
   <div class="section-title">Структура блоків</div>
   <div class="toolbar-row">
@@ -195,7 +228,7 @@ const COLOR_DOT = {red:'#F3AAB4', orange:'#F5C08A', yellow:'#E7D06B', green:'#A9
 let ORDER_COUNTER = 0;
 
 function n(title, roles, description, elements, children, color){
-  return {id:uid('b'), title, roles: roles||'', description: description||'', elements: elements||[], links:[], children: children||[], color: color||'', order: ORDER_COUNTER++};
+  return {id:uid('b'), title, roles: roles||'', roleIds: [], description: description||'', elements: elements||[], links:[], children: children||[], color: color||'', order: ORDER_COUNTER++};
 }
 function el(name, type, desc){ return {id:uid('e'), name, type: type||EL_TYPES[0], desc: desc||''}; }
 
@@ -365,6 +398,21 @@ let openNodes = new Set(['ROOT_ALWAYS_OPEN_PLACEHOLDER']); // populated below af
 // open first level by default
 ROOT_NODES.forEach(r => openNodes.add(r.id));
 let confirmingDeleteId = null;
+let activeFilterRole = '';
+let activeFilterStatus = '';
+
+function nodeMatchesFilter(node){
+  if(!activeFilterRole) return true;
+  const ids = node.roleIds || [];
+  if(ids.length === 0) return true; // no roles assigned = universal, always shown
+  if(ids.includes(activeFilterRole)) return true;
+  if(activeFilterStatus && ids.includes(activeFilterStatus)) return true;
+  return false;
+}
+function subtreeVisible(node){
+  if(nodeMatchesFilter(node)) return true;
+  return node.children.some(subtreeVisible);
+}
 
 function flatten(nodes, depth, out){
   out = out || [];
@@ -393,7 +441,7 @@ function removeNode(id, nodes){
 
 function renderTree(){
   const root = document.getElementById('tree');
-  root.innerHTML = ROOT_NODES.map(node => renderNode(node)).join('');
+  root.innerHTML = ROOT_NODES.filter(subtreeVisible).map(node => renderNode(node)).join('');
   wireEvents(root);
   autosizeAll(root);
   updateOutput();
@@ -415,10 +463,18 @@ function renderNode(node){
           ${COLORS.map(c=>`<button type="button" class="color-swatch${node.color===c?' active':''}" data-set-color="${c}" style="background:${COLOR_DOT[c]}" title="${c}"></button>`).join('')}
           <button type="button" class="color-swatch none-swatch${!node.color?' active':''}" data-set-color="" title="Без кольору">×</button>
         </div>
-        <div class="two">
-          <div class="field"><label>Назва блоку</label><input type="text" data-f="title" data-id="${node.id}" value="${escapeHtml(node.title)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
-          <div class="field"><label>Ролі / доступ</label><input type="text" data-f="roles" data-id="${node.id}" value="${escapeHtml(node.roles)}" placeholder="напр.: Магазин IBAN, Оглядач..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+        <div class="field"><label>Назва блоку</label><input type="text" data-f="title" data-id="${node.id}" value="${escapeHtml(node.title)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+        <div class="field">
+          <label>Ролі / доступ (з Термінології)</label>
+          <div class="synonyms-row" data-role-wrap="${node.id}">
+            ${(node.roleIds||[]).map(rid=>{ const t = TERMS.find(x=>x.id===rid); if(!t) return ''; return `<span class="syn-chip role-chip">${escapeHtml(t.term)}<button type="button" data-del-role="${rid}" data-node="${node.id}" title="Прибрати">×</button></span>`; }).join('')}
+            <select data-add-role="${node.id}" class="role-add-select">
+              <option value="">+ додати роль/статус</option>
+              ${TERMS.filter(t=>(t.funcType==='Роль'||t.funcType==='Статус') && !(node.roleIds||[]).includes(t.id)).map(t=>`<option value="${t.id}">${escapeHtml(t.term)}${t.funcType==='Статус'?' (статус)':''}</option>`).join('')}
+            </select>
+          </div>
         </div>
+        <div class="field"><label>Примітка щодо доступу (вільний текст)</label><input type="text" data-f="roles" data-id="${node.id}" value="${escapeHtml(node.roles)}" placeholder="напр.: функціонал обмежений для..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
         <div class="field"><label>Опис — що це і як працює</label><textarea data-f="description" data-id="${node.id}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(node.description)}</textarea></div>
 
         <div class="subhead"><b>Кнопки / поля цього блоку</b><button class="btn" data-add-el="${node.id}">+ Додати елемент</button></div>
@@ -444,7 +500,7 @@ function renderNode(node){
         `).join('')}
 
         <div class="children-wrap">
-          ${node.children.map(c=>renderNode(c)).join('')}
+          ${node.children.filter(subtreeVisible).map(c=>renderNode(c)).join('')}
         </div>
 
         <div class="node-foot">
@@ -505,6 +561,25 @@ function wireEvents(root){
       const wrap = btn.closest('[data-color-for]');
       const node = findNode(wrap.dataset.colorFor);
       node.color = btn.dataset.setColor;
+      renderTree();
+    });
+  });
+
+  root.querySelectorAll('[data-add-role]').forEach(sel=>{
+    sel.addEventListener('change', ()=>{
+      if(!sel.value) return;
+      const node = findNode(sel.dataset.addRole);
+      node.roleIds = node.roleIds || [];
+      if(!node.roleIds.includes(sel.value)) node.roleIds.push(sel.value);
+      openNodes.add(node.id);
+      renderTree();
+    });
+  });
+  root.querySelectorAll('[data-del-role]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const node = findNode(btn.dataset.node);
+      node.roleIds = (node.roleIds||[]).filter(id=>id!==btn.dataset.delRole);
+      openNodes.add(node.id);
       renderTree();
     });
   });
@@ -684,6 +759,7 @@ function renderTerms(){
     });
   });
   autosizeAll(root);
+  if(typeof renderFilterOptions === 'function' && document.getElementById('filterRole')) renderFilterOptions();
 }
 document.getElementById('addTermBtn').addEventListener('click', ()=>{
   TERMS.push(term('', FUNC_TYPES[0], ''));
@@ -768,8 +844,11 @@ function renderSimList(){
   const root = document.getElementById('simList');
   const flat = flatten(ROOT_NODES);
   const titleById = {}; flat.forEach(f=>titleById[f.id]=f.title);
+  document.getElementById('simCount').textContent = simEntries.length + (simEntries.length===1?' запис':' записів');
   if(simEntries.length===0){ root.innerHTML = '<div class="empty">Записів ще немає.</div>'; return; }
-  root.innerHTML = simEntries.slice().reverse().map(e=>{
+  const visible = simEntries.filter(simEntryVisible);
+  if(visible.length===0){ root.innerHTML = '<div class="empty">Немає записів для обраного фільтра.</div>'; return; }
+  root.innerHTML = visible.slice().reverse().map(e=>{
     const role = TERMS.find(t=>t.id===e.roleId);
     const status = TERMS.find(t=>t.id===e.statusId);
     return `
@@ -798,12 +877,54 @@ function renderSimList(){
   });
 }
 
+function renderFilterOptions(){
+  const roleSel = document.getElementById('filterRole');
+  const roles = TERMS.filter(t=>t.funcType==='Роль');
+  roleSel.innerHTML = '<option value="">Всі</option>' + roles.map(r=>`<option value="${r.id}" ${activeFilterRole===r.id?'selected':''}>${escapeHtml(r.term)}</option>`).join('');
+  renderFilterStatusOptions();
+  updateFilterLabel();
+}
+function renderFilterStatusOptions(){
+  const statusSel = document.getElementById('filterStatus');
+  const statuses = TERMS.filter(t=>t.funcType==='Статус' && t.parentRole===activeFilterRole);
+  statusSel.innerHTML = '<option value="">Усі статуси</option>' + statuses.map(s=>`<option value="${s.id}" ${activeFilterStatus===s.id?'selected':''}>${escapeHtml(s.term)}</option>`).join('');
+  statusSel.disabled = !activeFilterRole;
+}
+function updateFilterLabel(){
+  const label = document.getElementById('filterStatusLabel');
+  if(!activeFilterRole){ label.textContent = 'Показано: Всі ролі'; return; }
+  const role = TERMS.find(t=>t.id===activeFilterRole);
+  const status = TERMS.find(t=>t.id===activeFilterStatus);
+  label.textContent = 'Показано: ' + (role?role.term:'') + (status ? ' · '+status.term : '');
+}
+document.getElementById('filterRole').addEventListener('change', (e)=>{
+  activeFilterRole = e.target.value;
+  activeFilterStatus = '';
+  renderFilterStatusOptions();
+  updateFilterLabel();
+  renderTree();
+  renderSimList();
+});
+document.getElementById('filterStatus').addEventListener('change', (e)=>{
+  activeFilterStatus = e.target.value;
+  updateFilterLabel();
+  renderTree();
+  renderSimList();
+});
+function simEntryVisible(e){
+  if(!activeFilterRole) return true;
+  if(e.roleId !== activeFilterRole) return false;
+  if(activeFilterStatus) return e.statusId === activeFilterStatus;
+  return true;
+}
+
 function serializeNode(node){
   const flat = flatten(ROOT_NODES);
   const titleById = {}; flat.forEach(f=>titleById[f.id]=f.title);
   return {
     title: node.title,
-    roles: node.roles,
+    rolesNote: node.roles,
+    rolesFromTerminology: (node.roleIds||[]).map(rid=>{ const t = TERMS.find(x=>x.id===rid); return t ? t.term : rid; }),
     color: node.color || null,
     description: node.description,
     elements: node.elements.map(e=>({name:e.name, type:e.type, description:e.desc})),
