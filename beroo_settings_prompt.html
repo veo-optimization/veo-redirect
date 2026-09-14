@@ -88,6 +88,50 @@ textarea.full{width:100%;height:100%;resize:none;border:1px solid var(--line);bo
  .bottom{height:300px}.bottom-body{padding:10px}.toolbar{flex-wrap:nowrap}
  .sidepanel{top:8px;right:8px;width:calc(100% - 16px);max-height:55vh}
 }
+
+/* --- BEROO map editor v2 --- */
+.map-controls{position:absolute;left:14px;top:14px;z-index:12;display:flex;flex-direction:column;gap:5px}
+.map-controls .btn{width:38px;height:38px;padding:0;font-size:17px;box-shadow:0 5px 16px rgba(24,31,48,.10)}
+.zoom-label{font-size:10px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 2px;color:#7d8697}
+.canvas{touch-action:none}
+.canvas-inner{position:absolute;left:0;top:0;transform-origin:0 0}
+.node{user-select:none}
+.node .magnet{position:absolute;top:50%;width:10px;height:38px;transform:translateY(-50%);border-radius:5px;background:#f7d76b;box-shadow:0 0 0 2px rgba(255,255,255,.95),0 0 0 3px rgba(222,190,62,.55);z-index:4}
+.node .magnet.left{left:-7px}.node .magnet.right{right:-7px}
+.node .magnet.connected{background:#3c7fe8;box-shadow:0 0 0 2px rgba(255,255,255,.95),0 0 0 3px rgba(60,127,232,.55)}
+.node .magnet-label{position:absolute;top:calc(50% + 23px);font-size:8px;color:#9ca4b2;white-space:nowrap;opacity:.7}
+.node .magnet-label.left{left:-15px}.node .magnet-label.right{right:-15px}
+.edge{stroke:#cbd1dc;stroke-width:2.5;fill:none}
+.edge.pending{stroke:#e0bb43;stroke-dasharray:5 5}
+.edge.active{stroke:#3c7fe8;stroke-width:3}
+.edge.hit{stroke:#ff3158;stroke-width:3}
+.edge-dot{fill:#e0bb43;stroke:#fff;stroke-width:2}
+.edge-dot.connected{fill:#3c7fe8}
+.node.conflict{box-shadow:0 0 0 2px rgba(255,174,0,.24),var(--shadow)}
+.node .conflict-badge{position:absolute;right:12px;bottom:11px;font-size:9px;border-radius:999px;padding:4px 7px;background:#fff4d9;color:#9a6b00;font-weight:800}
+.node .source-badge{position:absolute;left:12px;bottom:11px;font-size:9px;border-radius:999px;padding:4px 7px;background:#eef3ff;color:#4a6dc7;font-weight:800}
+.quickbar{display:flex;gap:7px;align-items:center;overflow:auto}
+.quickbar .btn{white-space:nowrap}
+.bottom.collapsed{height:42px}
+.bottom.collapsed .tabs,.bottom.collapsed .bottom-body{display:none}
+.bottom-toggle{margin-left:auto}
+.drawer{position:absolute;z-index:30;left:14px;top:14px;width:360px;max-width:calc(100% - 28px);max-height:calc(100% - 28px);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 20px 70px rgba(20,27,40,.2);display:none;padding:14px}
+.drawer.open{display:block}
+.drawer h3{margin:0 0 10px;font-size:14px}
+.template-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.template{border:1px solid var(--line);border-radius:12px;background:#fff;padding:10px;text-align:left}
+.template:hover{border-color:#ff9caf;background:#fff8f9}
+.template strong{font-size:11px;display:block}.template span{font-size:9px;color:#929bab}
+.list-node{padding-bottom:11px}
+.list-node .list-items{margin-top:10px;border-top:1px solid var(--line);padding-top:7px}
+.list-node .list-item{font-size:10px;padding:5px 0;border-bottom:1px dashed #edf0f3;color:#677185}
+@media(max-width:600px){
+ .map-controls{left:8px;top:8px}
+ .map-controls .btn{width:34px;height:34px}
+ .drawer{left:8px;top:8px;width:calc(100% - 16px)}
+ .template-grid{grid-template-columns:1fr}
+}
+
 </style>
 </head>
 <body>
@@ -124,16 +168,42 @@ textarea.full{width:100%;height:100%;resize:none;border:1px solid var(--line);bo
     <section class="workspace">
       <div class="toolbar">
         <input id="search" class="search" placeholder="Пошук по карті…">
-        <button class="btn" id="fitBtn">Вміст</button>
-        <button class="btn" id="resetBtn">Скинути карту</button>
-        <button class="btn" id="commentBtn">💬 Коментар</button>
-        <button class="btn" id="promptBtn">Prompt</button>
+        <div class="quickbar">
+          <button class="btn primary" id="quickAddBtn">＋ Швидко додати</button>
+          <button class="btn" id="addListBtn">▤ Блок-список</button>
+          <button class="btn" id="fitBtn">Вміст</button>
+          <button class="btn" id="resetBtn">Скинути</button>
+          <button class="btn" id="commentBtn">💬 Коментар</button>
+          <button class="btn" id="promptBtn">Prompt</button>
+        </div>
       </div>
 
       <div class="canvas-wrap">
+        <div class="map-controls">
+          <button class="btn" id="zoomIn" title="Збільшити">＋</button>
+          <div class="zoom-label" id="zoomLabel">100%</div>
+          <button class="btn" id="zoomOut" title="Зменшити">−</button>
+          <button class="btn" id="zoomFit" title="Підігнати">⌂</button>
+        </div>
         <div id="canvas" class="canvas">
-          <div id="graph" class="graph">
-            <svg id="edges" class="edges"></svg>
+          <div id="canvasInner" class="canvas-inner">
+            <div id="graph" class="graph">
+              <svg id="edges" class="edges"></svg>
+            </div>
+          </div>
+        </div>
+        <div id="quickDrawer" class="drawer">
+          <h3>Швидке додавання</h3>
+          <div class="template-grid">
+            <button class="template" data-template="module"><strong>Модуль</strong><span>Звичайний функціональний блок</span></button>
+            <button class="template" data-template="entity"><strong>Сутність</strong><span>Користувач, магазин, блогер тощо</span></button>
+            <button class="template" data-template="list"><strong>Блок-список</strong><span>Комод із тумбочками / підрозділами</span></button>
+            <button class="template" data-template="analytics"><strong>Аналітика</strong><span>Метрики, рейтинг, BI</span></button>
+            <button class="template" data-template="risk"><strong>Ризик / конфлікт</strong><span>Суперечність або OPEN DECISION</span></button>
+            <button class="template" data-template="decision"><strong>OPEN DECISION</strong><span>Питання, яке потребує бізнес-рішення</span></button>
+          </div>
+          <div style="margin-top:12px;color:#8b94a4;font-size:10px;line-height:1.45">
+            Перетягуй блоки по полотну. Натискай на жовтий магніт, щоб створити непід'єднаний провідок, або на синій/інший магніт — щоб сформувати зв'язок.
           </div>
         </div>
 
@@ -150,6 +220,7 @@ textarea.full{width:100%;height:100%;resize:none;border:1px solid var(--line);bo
           <button class="tab" data-tab="notes">Примітки</button>
           <button class="tab" data-tab="comments">Коментарі</button>
           <button class="tab" data-tab="changes">Зміни</button>
+          <button class="btn bottom-toggle" id="bottomToggle">⌄ Згорнути</button>
         </div>
         <div class="bottom-body" id="bottomBody"></div>
       </section>
@@ -177,6 +248,7 @@ const seed = {
    project:"BEROO",
    version:"1.0",
    purpose:"Візуальна карта великої CRM + creator marketplace + marketplace + аналітичний центр",
+   attached_source:"beroo_settings_prompt.json — логіка статусів, меню, еквайрингу, дзеркал, Оглядача та Blogger PRO",
    principle:"Оглядач = базовий непрофесійний статус; Blogger Pro = повний професійний профіль з ФОП/документами та фінансовим функціоналом.",
    platform_role:"BEROO не є гарантом виплат, доставки, правдивості документів чи виконання домовленостей; платформа надає інструменти обліку, калькуляції, аналітики, запитів і взаємодії."
  },
@@ -184,13 +256,13 @@ const seed = {
   {id:"platform",title:"BEROO",type:"entity",x:600,y:40,desc:"Єдина екосистема CRM, магазинів, блогерів, дзеркал, біржі, аналітики та сайтів.",tags:["ядро","marketplace","CRM"]},
   {id:"seller",title:"Продавець",type:"entity",x:210,y:190,desc:"Керує товарами, магазином, сайтом, еквайрингом, запитами блогерів та аналітикою.",tags:["сутність"]},
   {id:"blogger",title:"Блогер",type:"entity",x:990,y:190,desc:"Може бути Оглядачем або Blogger Pro; може одночасно бути продавцем.",tags:["сутність"]},
-  {id:"store",title:"Магазин",type:"module",x:40,y:390,desc:"Має статус без еквайрингу або з активованим еквайрингом. Ручна оплата через IBAN доступна без еквайрингу.",tags:["магазин"]},
-  {id:"reviewer",title:"Оглядач",type:"module",x:770,y:390,desc:"Базовий, неповний профіль. Соцмережі, досвід і 3 успішні TikTok-відео. Без професійних фінансових інструментів.",tags:["база","обмеження"]},
-  {id:"pro",title:"Blogger Pro",type:"module",x:1160,y:390,desc:"Повний професійний профіль після внесення/перевірки документів ФОП у вкладці Оплата.",tags:["PRO","ФОП"]},
-  {id:"mirror",title:"Дзеркало",type:"module",x:440,y:555,desc:"Механіка копіювання товарів/магазину блогером. Джерело: Магазини, Вітрина або реферальне посилання продавця.",tags:["mirror"]},
+  {id:"store",source:"attached-json",title:"Магазин",type:"module",x:40,y:390,desc:"Має статус без еквайрингу або з активованим еквайрингом. Ручна оплата через IBAN доступна без еквайрингу.",tags:["магазин"]},
+  {id:"reviewer",source:"attached-json",title:"Оглядач",type:"module",x:770,y:390,desc:"Базовий, неповний профіль. Соцмережі, досвід і 3 успішні TikTok-відео. Без професійних фінансових інструментів.",tags:["база","обмеження"]},
+  {id:"pro",source:"attached-json",title:"Blogger Pro",type:"module",x:1160,y:390,desc:"Повний професійний профіль після внесення/перевірки документів ФОП у вкладці Оплата.",tags:["PRO","ФОП"]},
+  {id:"mirror",source:"attached-json",title:"Дзеркало",type:"module",x:440,y:555,desc:"Механіка копіювання товарів/магазину блогером. Джерело: Магазини, Вітрина або реферальне посилання продавця.",tags:["mirror"]},
   {id:"showcase",title:"Вітрина",type:"module",x:40,y:700,desc:"Великий каталог товарів усіх магазинів. Оглядачі й Pro бачать товари, купують та можуть подавати запит на віддзеркалення.",tags:["marketplace"]},
   {id:"stores",title:"Дзеркало → Магазини",type:"module",x:300,y:700,desc:"Оглядачі та Pro можуть переглядати магазини, рейтинг і подавати запити на віддзеркалення.",tags:["discovery"]},
-  {id:"exchange",title:"Дзеркало → Блогери",type:"module",x:1030,y:570,desc:"Публічна біржа Blogger Pro. Магазини з активним режимом та хоча б одним товаром можуть шукати Pro-блогерів і надсилати запити.",tags:["біржа","PRO"]},
+  {id:"exchange",source:"attached-json",title:"Дзеркало → Блогери",type:"module",x:1030,y:570,desc:"Публічна біржа Blogger Pro. Магазини з активним режимом та хоча б одним товаром можуть шукати Pro-блогерів і надсилати запити.",tags:["біржа","PRO"]},
   {id:"reviewers",title:"Магазин → Оглядачі",type:"module",x:790,y:720,desc:"Не публічна біржа. Відображаються лише оглядачі-підписники магазину: через запит + підтвердження або запрошувальне посилання.",tags:["закрито"]},
   {id:"invite",title:"Запрошення продавця",type:"module",x:1060,y:745,desc:"Унікальне реферальне посилання. Перехід відкриває реєстрацію блогера та після генерації автоматично розгортає товари оригінального магазину.",tags:["referral"]},
   {id:"payment",title:"Оплата / Фінанси",type:"module",x:1370,y:390,desc:"IBAN ФОП, еквайринг, комісії, запити на виплату та фінансова аналітика. Розширюється для Blogger Pro.",tags:["finance"]},
@@ -217,6 +289,7 @@ const seed = {
 
 let state = load();
 let activeTab="json", selectedId=null, modalMode=null;
+let zoom=1, panX=0, panY=0, wireStart=null, draggingCanvas=false, lastPointer=null;
 
 function load(){
   try{
@@ -224,6 +297,44 @@ function load(){
     return x && x.nodes ? x : structuredClone(seed);
   }catch(e){return structuredClone(seed)}
 }
+
+function applyProjectLogic(){
+  // Logic from the attached BEROO settings JSON is represented as overlays.
+  // Conflicts are intentionally visible rather than silently merged.
+  const overlay = {
+    seller:["Еквайринг","Лише дзеркала","Без еквайрингу = лише картка магазину","Оглядачі магазину"],
+    reviewer:["Базова анкета","Обмежені фінанси","Запити до магазинів","Не публічна біржа"],
+    pro:["ФОП / верифікація","Повний професійний функціонал","Публічна біржа","Виплати"],
+    exchange:["Blogger PRO only","Магазин має мати активний режим + ≥1 товар"],
+    mirror:["Еквайринг → товари/категорії/магазин","Без еквайрингу → лише картка магазину"],
+    sites:["Три режими нижнього меню сайту залежать від ролей"],
+    risk:["BEROO не гарант виплати/доставку/правдивість документів"]
+  };
+  state.nodes.forEach(n=>n.logic=overlay[n.id]||n.logic||[]);
+  // Attached JSON introduces a strong constraint that can conflict with an earlier broad rule:
+  // "Оглядач can mirror products from any store" vs "store without acquiring = only store card".
+  const conflictId="conflict_acquiring";
+  if(!state.nodes.some(n=>n.id===conflictId)){
+    state.nodes.push({
+      id:conflictId,title:"⚠ Конфлікт: Віддзеркалення без еквайрингу",type:"risk",
+      x:430,y:410,
+      desc:"Базова карта допускає дзеркалення товарів, але прикріплений JSON уточнює: магазин без еквайрингу може віддавати лише картку магазину. Потрібне єдине правило.",
+      tags:["CONFLICT","OPEN DECISION","еквайринг"]
+    });
+    state.edges.push(["store",conflictId],["reviewer",conflictId],["pro",conflictId]);
+  }
+  const decisionId="decision_public_reviewers";
+  if(!state.nodes.some(n=>n.id===decisionId)){
+    state.nodes.push({
+      id:decisionId,title:"OPEN DECISION: Оглядачі / публічність",type:"risk",
+      x:790,y:545,
+      desc:"JSON підтверджує: Оглядачі не входять у публічну біржу, але можуть бачити Pro-блогерів і рейтинги. Треба зафіксувати правила видимості назавжди.",
+      tags:["OPEN DECISION","visibility"]
+    });
+    state.edges.push(["reviewer",decisionId],["exchange",decisionId],["reviewers",decisionId]);
+  }
+}
+applyProjectLogic();
 function save(){localStorage.setItem(KEY,JSON.stringify(state));render();toast("Збережено");}
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function toast(t){const e=document.getElementById("toast");e.textContent=t;e.style.display="block";clearTimeout(window.tt);window.tt=setTimeout(()=>e.style.display="none",1800)}
@@ -236,42 +347,58 @@ function render(){
   const q=document.getElementById("search").value.trim().toLowerCase();
   state.nodes.forEach(n=>{
     const el=document.createElement("div");
-    el.className="node"+(n.id===selectedId?" selected":"");
+    el.className="node"+(n.id===selectedId?" selected":"")+(n.tags||[]).some(t=>/CONFLICT|OPEN DECISION/i.test(t))?" conflict":"";
     el.dataset.type=n.type;el.dataset.id=n.id;
     const match=!q || (n.title+" "+n.desc+" "+(n.tags||[]).join(" ")).toLowerCase().includes(q);
     el.style.opacity=match?"1":".18";
     el.style.left=n.x+"px";el.style.top=n.y+"px";
-    el.innerHTML=`<div class="dots">⋮</div><div class="head"><div class="icon">${n.type==="entity"?"◆":n.type==="analytics"?"◒":n.type==="risk"?"!":"□"}</div><h3>${esc(n.title)}</h3></div>
-      <p>${esc(n.desc)}</p><div class="meta">${(n.tags||[]).map(t=>`<span class="tag ${tagClass(t)}">${esc(t)}</span>`).join("")}</div>`;
-    el.addEventListener("click",e=>{e.stopPropagation();selectNode(n.id)});
+    const inCount=state.edges.filter(e=>e[1]===n.id).length;
+    const outCount=state.edges.filter(e=>e[0]===n.id).length;
+    el.innerHTML=`<div class="magnet left ${inCount?'connected':''}" data-side="left" title="Магніт"></div>
+      <div class="magnet right ${outCount?'connected':''}" data-side="right" title="Магніт"></div>
+      <div class="dots">⋮</div><div class="head"><div class="icon">${n.type==="entity"?"◆":n.type==="analytics"?"◒":n.type==="risk"?"!":"□"}</div><h3>${esc(n.title)}</h3></div>
+      <p>${esc(n.desc)}</p><div class="meta">${(n.tags||[]).map(t=>`<span class="tag ${tagClass(t)}">${esc(t)}</span>`).join("")}</div>
+      ${(n.tags||[]).some(t=>/CONFLICT|OPEN DECISION/i.test(t))?`<div class="conflict-badge">⚠ ${n.tags.some(t=>/CONFLICT/i.test(t))?"КОНФЛІКТ":"OPEN DECISION"}</div>`:""}
+      ${n.source?"<div class='source-badge'>JSON</div>":""}`;
+    el.addEventListener("click",e=>{ if(e.target.classList.contains("magnet")) return; e.stopPropagation();selectNode(n.id)});
+    el.querySelectorAll(".magnet").forEach(m=>m.addEventListener("click",e=>{
+      e.stopPropagation(); handleMagnet(n.id,m.dataset.side);
+    }));
     makeDraggable(el,n);
     graph.appendChild(el);
   });
-  // SVG connectors
-  edges.innerHTML="";
-  const marker=document.createElementNS("http://www.w3.org/2000/svg","defs");
-  marker.innerHTML='<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#cbd1dc"/></marker>';
-  edges.appendChild(marker);
-  state.edges.forEach(([a,b])=>{
-    const A=nodeBy(a),B=nodeBy(b); if(!A||!B)return;
-    const x1=A.x+122.5,y1=A.y+55,x2=B.x+122.5,y2=B.y+55;
-    const dx=Math.max(50,Math.abs(x2-x1)*.45);
-    const p=document.createElementNS("http://www.w3.org/2000/svg","path");
-    p.setAttribute("d",`M ${x1} ${y1} C ${x1+dx} ${y1}, ${x2-dx} ${y2}, ${x2} ${y2}`);
-    p.setAttribute("class","edge"+(selectedId&&(a===selectedId||b===selectedId)?" active":""));
-    p.setAttribute("marker-end","url(#arrow)");edges.appendChild(p);
-  });
+  drawEdgesOnly();
+  document.getElementById("canvasInner").style.transform=`translate(${panX}px,${panY}px) scale(${zoom})`;
+  document.getElementById("zoomLabel").textContent=Math.round(zoom*100)+"%";
   renderBottom();
   if(selectedId) renderPanel(selectedId);
+}
+function handleMagnet(nodeId,side){
+  if(!wireStart){
+    wireStart={nodeId,side};
+    toast("Оберіть другий магніт для під'єднання провідка");
+    render();
+    return;
+  }
+  if(wireStart.nodeId===nodeId){wireStart=null;toast("Провідок скасовано");render();return}
+  const from=wireStart.side==="right"?wireStart.nodeId:nodeId;
+  const to=wireStart.side==="right"?nodeId:wireStart.nodeId;
+  const exists=state.edges.some(e=>e[0]===from&&e[1]===to);
+  if(!exists){
+    state.edges.push([from,to]);
+    state.changes.push({at:new Date().toISOString(),action:"connect_wire",node:from,summary:`Під'єднано провідок: ${nodeBy(from)?.title} → ${nodeBy(to)?.title}`});
+  }
+  wireStart=null;save();
 }
 function makeDraggable(el,n){
   let down=false,sx=0,sy=0,ox=0,oy=0;
   el.addEventListener("pointerdown",e=>{
-    if(e.button!==0)return;down=true;el.setPointerCapture(e.pointerId);
+    if(e.button!==0 || e.target.classList.contains("magnet"))return;
+    down=true;el.setPointerCapture(e.pointerId);
     sx=e.clientX;sy=e.clientY;ox=n.x;oy=n.y;
   });
   el.addEventListener("pointermove",e=>{
-    if(!down)return;n.x=Math.max(0,ox+e.clientX-sx);n.y=Math.max(0,oy+e.clientY-sy);
+    if(!down)return;n.x=Math.max(0,ox+(e.clientX-sx)/zoom);n.y=Math.max(0,oy+(e.clientY-sy)/zoom);
     el.style.left=n.x+"px";el.style.top=n.y+"px";drawEdgesOnly();
   });
   el.addEventListener("pointerup",()=>{if(down){down=false;save();}});
@@ -279,16 +406,32 @@ function makeDraggable(el,n){
 function drawEdgesOnly(){
   const edges=document.getElementById("edges");edges.innerHTML="";
   const marker=document.createElementNS("http://www.w3.org/2000/svg","defs");
-  marker.innerHTML='<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#cbd1dc"/></marker>';
+  marker.innerHTML='<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#3c7fe8"/></marker>';
   edges.appendChild(marker);
   state.edges.forEach(([a,b])=>{
     const A=nodeBy(a),B=nodeBy(b);if(!A||!B)return;
-    const x1=A.x+122.5,y1=A.y+55,x2=B.x+122.5,y2=B.y+55,dx=Math.max(50,Math.abs(x2-x1)*.45);
+    const x1=A.x+245,y1=A.y+55,x2=B.x,y2=B.y+55;
+    const dx=Math.max(60,Math.abs(x2-x1)*.45);
     const p=document.createElementNS("http://www.w3.org/2000/svg","path");
     p.setAttribute("d",`M ${x1} ${y1} C ${x1+dx} ${y1}, ${x2-dx} ${y2}, ${x2} ${y2}`);
     p.setAttribute("class","edge"+(selectedId&&(a===selectedId||b===selectedId)?" active":""));
     p.setAttribute("marker-end","url(#arrow)");edges.appendChild(p);
+    const dot=document.createElementNS("http://www.w3.org/2000/svg","circle");
+    dot.setAttribute("cx",(x1+x2)/2);dot.setAttribute("cy",(y1+y2)/2);dot.setAttribute("r","5");
+    dot.setAttribute("class","edge-dot connected");edges.appendChild(dot);
   });
+  // A selected starting magnet creates a temporary yellow, unconnected wire.
+  if(wireStart){
+    const N=nodeBy(wireStart.nodeId);
+    if(N){
+      const x=wireStart.side==="right"?N.x+245:N.x, y=N.y+55;
+      const p=document.createElementNS("http://www.w3.org/2000/svg","path");
+      p.setAttribute("d",`M ${x} ${y} C ${x+(wireStart.side==="right"?90:-90)} ${y}, ${x+(wireStart.side==="right"?140:-140)} ${y}, ${x+(wireStart.side==="right"?180:-180)} ${y}`);
+      p.setAttribute("class","edge pending");edges.appendChild(p);
+      const dot=document.createElementNS("http://www.w3.org/2000/svg","circle");
+      dot.setAttribute("cx",x+(wireStart.side==="right"?90:-90));dot.setAttribute("cy",y);dot.setAttribute("r","5");dot.setAttribute("class","edge-dot");edges.appendChild(dot);
+    }
+  }
 }
 function selectNode(id){
   selectedId=id;document.getElementById("panel").classList.add("open");render();renderPanel(id);
@@ -419,6 +562,65 @@ document.getElementById("fitBtn").onclick=()=>{
 };
 document.getElementById("canvas").addEventListener("click",e=>{if(e.target.id==="canvas"){selectedId=null;document.getElementById("panel").classList.remove("open");render()}});
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+
+function addTemplate(template){
+  const names={
+    module:["Новий модуль","Функціональний блок BEROO"],
+    entity:["Нова сутність","Сутність проєкту"],
+    list:["Новий блок-список","Комод із підрозділами"],
+    analytics:["Нова аналітика","Метрики / KPI / BI"],
+    risk:["Новий ризик","Конфлікт або зона ризику"],
+    decision:["OPEN DECISION","Бізнес-рішення потребує уточнення"]
+  };
+  const [title,desc]=names[template]||names.module;
+  const id="n_"+Date.now();
+  const type=template==="entity"?"entity":template==="analytics"?"analytics":(template==="risk"||template==="decision")?"risk":"module";
+  const tags=template==="decision"?["OPEN DECISION"]:template==="risk"?["CONFLICT"]:template==="list"?["LIST","структура"]:[];
+  const n={id,title,type,x:350+Math.random()*750,y:240+Math.random()*560,desc,tags,logic:[]};
+  state.nodes.push(n);
+  state.changes.push({at:new Date().toISOString(),action:"quick_add",node:id,summary:`Швидко додано ${title}`});
+  closeQuickDrawer();selectNode(id);save();
+}
+function closeQuickDrawer(){document.getElementById("quickDrawer").classList.remove("open")}
+document.getElementById("quickAddBtn").onclick=()=>document.getElementById("quickDrawer").classList.toggle("open");
+document.getElementById("addListBtn").onclick=()=>addTemplate("list");
+document.querySelectorAll(".template").forEach(b=>b.onclick=()=>addTemplate(b.dataset.template));
+
+/* Canvas pan + wheel zoom */
+const canvas=document.getElementById("canvas");
+canvas.addEventListener("pointerdown",e=>{
+  if(e.target.closest(".node") || e.target.closest(".map-controls") || e.target.closest(".drawer"))return;
+  draggingCanvas=true;lastPointer={x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId);
+});
+canvas.addEventListener("pointermove",e=>{
+  if(!draggingCanvas)return;
+  panX+=e.clientX-lastPointer.x;panY+=e.clientY-lastPointer.y;lastPointer={x:e.clientX,y:e.clientY};
+  document.getElementById("canvasInner").style.transform=`translate(${panX}px,${panY}px) scale(${zoom})`;
+});
+canvas.addEventListener("pointerup",()=>draggingCanvas=false);
+canvas.addEventListener("pointercancel",()=>draggingCanvas=false);
+canvas.addEventListener("wheel",e=>{
+  e.preventDefault();
+  const rect=canvas.getBoundingClientRect(), mx=e.clientX-rect.left, my=e.clientY-rect.top;
+  const old=zoom, factor=e.deltaY<0?1.1:.9, next=Math.min(2.5,Math.max(.35,zoom*factor));
+  // Keep cursor point stable while zooming.
+  panX=mx-(mx-panX)*(next/old);panY=my-(my-panY)*(next/old);zoom=next;
+  document.getElementById("canvasInner").style.transform=`translate(${panX}px,${panY}px) scale(${zoom})`;
+  document.getElementById("zoomLabel").textContent=Math.round(zoom*100)+"%";
+},{passive:false});
+function setZoom(next){
+  zoom=Math.min(2.5,Math.max(.35,next));
+  document.getElementById("canvasInner").style.transform=`translate(${panX}px,${panY}px) scale(${zoom})`;
+  document.getElementById("zoomLabel").textContent=Math.round(zoom*100)+"%";
+}
+document.getElementById("zoomIn").onclick=()=>setZoom(zoom*1.15);
+document.getElementById("zoomOut").onclick=()=>setZoom(zoom*.87);
+document.getElementById("zoomFit").onclick=()=>{zoom=.72;panX=40;panY=20;setZoom(zoom)};
+document.getElementById("bottomToggle").onclick=()=>{
+  const b=document.querySelector(".bottom");b.classList.toggle("collapsed");
+  document.getElementById("bottomToggle").textContent=b.classList.contains("collapsed")?"⌃ Розгорнути":"⌄ Згорнути";
+};
+
 render();
 </script>
 </body>
