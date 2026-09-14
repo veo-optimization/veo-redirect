@@ -153,6 +153,19 @@
     <div class="hint">💡 <span><b>Як користуватись:</b> клік по заголовку розкриває блок. «+ Додати дочірній блок» — вкладений підпункт. «+ Додати елемент» — кнопка/поле з описом. «+ Додати зв'язок» — посилання на інший блок з поясненням, чому вони пов'язані.</span></div>
   </header>
 
+  <div class="panel filter-panel" id="syncPanel" style="border-color:#DCEFE1;background:linear-gradient(180deg,#FAFFFB,#F2FBF5);">
+    <div class="filter-head">
+      <b>☁️ Синхронізація</b>
+      <span class="filter-status" id="syncStatusLabel" style="background:#E5F5E9;color:#2E9D6C;">Ініціалізація…</span>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn" id="saveCloudBtn">💾 Зберегти</button>
+      <button class="btn" id="loadCloudBtn">⤓ Завантажити з хмари</button>
+      <button class="btn" id="copyLinkBtn">🔗 Копіювати посилання на цю версію</button>
+      <button class="btn ghost" id="copyForColleagueBtn">👥 Створити копію для колеги</button>
+    </div>
+  </div>
+
   <div class="panel filter-panel" id="filterPanel">
     <div class="filter-head">
       <b>Перегляд за роллю</b>
@@ -1032,10 +1045,112 @@ document.getElementById('copyAllBtn').addEventListener('click', ()=>{
   copyText(document.getElementById('finalOutput').textContent, btn, 'Скопіювати JSON');
 });
 
+/* ======================================================================
+   ХМАРНА СИНХРОНІЗАЦІЯ (Google Apps Script Web App)
+====================================================================== */
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzJsTKOGu_PjPRNHaoF-KPB5IJOHhTBIuOg88jTRK4PBEMo2YqPMt61kbn2ZvHyvO74/exec';
+
+function getDocIdFromUrl(){ return new URLSearchParams(location.search).get('doc'); }
+let CURRENT_DOC_ID = getDocIdFromUrl();
+const HAD_DOC_IN_URL = !!CURRENT_DOC_ID;
+if(!CURRENT_DOC_ID){ CURRENT_DOC_ID = 'd' + Math.random().toString(36).slice(2,10); }
+
+function shareLink(id){
+  const url = new URL(location.href);
+  url.searchParams.set('doc', id);
+  return url.toString();
+}
+function setSyncStatus(text, ok){
+  const el = document.getElementById('syncStatusLabel');
+  el.textContent = text;
+  el.style.background = ok===false ? '#FDEBEC' : '#E5F5E9';
+  el.style.color = ok===false ? '#C6414F' : '#2E9D6C';
+}
+
+function exportState(){
+  return {
+    rootNodes: ROOT_NODES,
+    terms: TERMS,
+    simEntries: simEntries,
+    orderCounter: ORDER_COUNTER,
+    openNodes: [...openNodes],
+    activeFilterRole, activeFilterStatus
+  };
+}
+function loadState(obj){
+  ROOT_NODES.length = 0;
+  (obj.rootNodes || []).forEach(nd => ROOT_NODES.push(nd));
+  TERMS = obj.terms || TERMS;
+  simEntries = obj.simEntries || [];
+  ORDER_COUNTER = obj.orderCounter || ORDER_COUNTER;
+  openNodes = new Set(obj.openNodes || []);
+  activeFilterRole = obj.activeFilterRole || '';
+  activeFilterStatus = obj.activeFilterStatus || '';
+  renderTerms(); renderSimForm(); renderSimList(); renderTree();
+}
+
+async function cloudSave(docId){
+  const payload = {doc: docId, data: JSON.stringify(exportState())};
+  const res = await fetch(APPS_SCRIPT_URL, {method:'POST', body: JSON.stringify(payload)});
+  if(!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+async function cloudLoad(docId){
+  const res = await fetch(APPS_SCRIPT_URL + '?doc=' + encodeURIComponent(docId));
+  if(!res.ok) throw new Error('HTTP ' + res.status);
+  return res.json();
+}
+
+document.getElementById('saveCloudBtn').addEventListener('click', async ()=>{
+  setSyncStatus('Зберігаю…');
+  try{
+    const r = await cloudSave(CURRENT_DOC_ID);
+    if(!HAD_DOC_IN_URL){ const url = new URL(location.href); url.searchParams.set('doc', CURRENT_DOC_ID); history.replaceState(null,'',url); }
+    setSyncStatus('Збережено · ' + new Date(r.updatedAt).toLocaleString('uk-UA'));
+  }catch(err){ setSyncStatus('Помилка збереження — перевір деплой Apps Script', false); }
+});
+
+document.getElementById('loadCloudBtn').addEventListener('click', async ()=>{
+  setSyncStatus('Завантажую…');
+  try{
+    const r = await cloudLoad(CURRENT_DOC_ID);
+    if(!r.found){ setSyncStatus('Для цього документа ще нема збереженої версії', false); return; }
+    loadState(JSON.parse(r.data));
+    setSyncStatus('Завантажено · ' + new Date(r.updatedAt).toLocaleString('uk-UA'));
+  }catch(err){ setSyncStatus('Помилка завантаження — перевір деплой Apps Script', false); }
+});
+
+document.getElementById('copyLinkBtn').addEventListener('click', ()=>{
+  const btn = document.getElementById('copyLinkBtn');
+  copyText(shareLink(CURRENT_DOC_ID), btn, '🔗 Копіювати посилання на цю версію');
+});
+
+document.getElementById('copyForColleagueBtn').addEventListener('click', async ()=>{
+  setSyncStatus('Створюю копію для колеги…');
+  const newId = 'd' + Math.random().toString(36).slice(2,10);
+  try{
+    await cloudSave(newId);
+    const link = shareLink(newId);
+    const btn = document.getElementById('copyForColleagueBtn');
+    copyText(link, btn, '👥 Створити копію для колеги');
+    setSyncStatus('Копію створено й посилання скопійовано в буфер');
+  }catch(err){ setSyncStatus('Не вдалось створити копію — перевір деплой Apps Script', false); }
+});
+
 renderTerms();
 renderSimForm();
 renderSimList();
 renderTree();
+
+if(HAD_DOC_IN_URL){
+  setSyncStatus('Завантажую збережену версію…');
+  cloudLoad(CURRENT_DOC_ID).then(r=>{
+    if(r.found){ loadState(JSON.parse(r.data)); setSyncStatus('Завантажено · ' + new Date(r.updatedAt).toLocaleString('uk-UA')); }
+    else setSyncStatus('Новий документ — ще не збережено в хмарі');
+  }).catch(()=> setSyncStatus('Не вдалось зʼєднатися з Apps Script', false));
+} else {
+  setSyncStatus('Новий документ — тисни «Зберегти», щоб отримати посилання');
+}
 </script>
 </body>
 </html>
