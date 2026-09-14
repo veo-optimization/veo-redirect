@@ -38,11 +38,11 @@ button{cursor:pointer}
  radial-gradient(circle at 1px 1px, #e3e6eb 1px, transparent 1px);
  background-size:24px 24px;padding:36px;cursor:grab}
 .canvas.dragging{cursor:grabbing}
-.graph{position:relative;min-width:1450px;min-height:920px}
+.graph{position:absolute;left:0;top:0;width:1700px;height:1100px}
 .edges{position:absolute;inset:0;pointer-events:none;overflow:visible}
 .edge{stroke:#cbd1dc;stroke-width:2;fill:none}
 .edge.active{stroke:var(--red)}
-.node{position:absolute;width:245px;background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);padding:14px;user-select:none}
+.node{position:absolute;box-sizing:border-box;width:245px;background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);padding:14px;user-select:none}
 .node.selected{border:2px solid var(--red);padding:13px}
 .node .head{display:flex;align-items:center;gap:9px}
 .icon{width:34px;height:34px;border-radius:10px;background:#fff0f3;color:var(--red);display:grid;place-items:center;font-weight:900;flex:none}
@@ -94,7 +94,7 @@ textarea.full{width:100%;height:100%;resize:none;border:1px solid var(--line);bo
 .map-controls .btn{width:38px;height:38px;padding:0;font-size:17px;box-shadow:0 5px 16px rgba(24,31,48,.10)}
 .zoom-label{font-size:10px;text-align:center;background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 2px;color:#7d8697}
 .canvas{touch-action:none}
-.canvas-inner{position:absolute;left:0;top:0;transform-origin:0 0}
+.canvas-inner{position:absolute;left:0;top:0;width:1700px;height:1100px;transform-origin:0 0;will-change:transform}
 .node{user-select:none}
 .node .magnet{position:absolute;top:50%;width:10px;height:38px;transform:translateY(-50%);border-radius:5px;background:#f7d76b;box-shadow:0 0 0 2px rgba(255,255,255,.95),0 0 0 3px rgba(222,190,62,.55);z-index:4}
 .node .magnet.left{left:-7px}.node .magnet.right{right:-7px}
@@ -241,7 +241,7 @@ textarea.full{width:100%;height:100%;resize:none;border:1px solid var(--line);bo
 <div class="toast" id="toast"></div>
 
 <script>
-const KEY="beroo_project_map_v1";
+const KEY="beroo_project_map_v2";
 
 const seed = {
  meta:{
@@ -347,7 +347,7 @@ function render(){
   const q=document.getElementById("search").value.trim().toLowerCase();
   state.nodes.forEach(n=>{
     const el=document.createElement("div");
-    el.className="node"+(n.id===selectedId?" selected":"")+(n.tags||[]).some(t=>/CONFLICT|OPEN DECISION/i.test(t))?" conflict":"";
+    el.className="node"+(n.id===selectedId?" selected":"")+((n.tags||[]).some(t=>/CONFLICT|OPEN DECISION/i.test(t))?" conflict":"");
     el.dataset.type=n.type;el.dataset.id=n.id;
     const match=!q || (n.title+" "+n.desc+" "+(n.tags||[]).join(" ")).toLowerCase().includes(q);
     el.style.opacity=match?"1":".18";
@@ -404,32 +404,43 @@ function makeDraggable(el,n){
   el.addEventListener("pointerup",()=>{if(down){down=false;save();}});
 }
 function drawEdgesOnly(){
-  const edges=document.getElementById("edges");edges.innerHTML="";
-  const marker=document.createElementNS("http://www.w3.org/2000/svg","defs");
-  marker.innerHTML='<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#3c7fe8"/></marker>';
-  edges.appendChild(marker);
+  const edges=document.getElementById("edges"); edges.innerHTML="";
+  edges.setAttribute("width","1700"); edges.setAttribute("height","1100");
+  const defs=document.createElementNS("http://www.w3.org/2000/svg","defs");
+  defs.innerHTML='<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#3c7fe8"/></marker>';
+  edges.appendChild(defs);
+
   state.edges.forEach(([a,b])=>{
-    const A=nodeBy(a),B=nodeBy(b);if(!A||!B)return;
-    const x1=A.x+245,y1=A.y+55,x2=B.x,y2=B.y+55;
-    const dx=Math.max(60,Math.abs(x2-x1)*.45);
+    const A=nodeBy(a), B=nodeBy(b); if(!A||!B) return;
+    // Always attach to the physically nearest left/right magnet.
+    const AonLeft = B.x < A.x;
+    const x1=A.x+(AonLeft?0:245), y1=A.y+55;
+    const x2=B.x+(AonLeft?245:0), y2=B.y+55;
+    const dir=AonLeft?-1:1;
+    const dx=Math.max(55,Math.min(180,Math.abs(x2-x1)*0.42));
     const p=document.createElementNS("http://www.w3.org/2000/svg","path");
-    p.setAttribute("d",`M ${x1} ${y1} C ${x1+dx} ${y1}, ${x2-dx} ${y2}, ${x2} ${y2}`);
+    p.setAttribute("d",`M ${x1} ${y1} C ${x1+dir*dx} ${y1}, ${x2-dir*dx} ${y2}, ${x2} ${y2}`);
     p.setAttribute("class","edge"+(selectedId&&(a===selectedId||b===selectedId)?" active":""));
-    p.setAttribute("marker-end","url(#arrow)");edges.appendChild(p);
+    p.setAttribute("marker-end","url(#arrow)");
+    edges.appendChild(p);
+
+    // Blue dot = connected.
     const dot=document.createElementNS("http://www.w3.org/2000/svg","circle");
-    dot.setAttribute("cx",(x1+x2)/2);dot.setAttribute("cy",(y1+y2)/2);dot.setAttribute("r","5");
-    dot.setAttribute("class","edge-dot connected");edges.appendChild(dot);
+    dot.setAttribute("cx",x1); dot.setAttribute("cy",y1); dot.setAttribute("r","5");
+    dot.setAttribute("class","edge-dot connected"); edges.appendChild(dot);
   });
-  // A selected starting magnet creates a temporary yellow, unconnected wire.
+
   if(wireStart){
     const N=nodeBy(wireStart.nodeId);
     if(N){
-      const x=wireStart.side==="right"?N.x+245:N.x, y=N.y+55;
+      const x=N.x+(wireStart.side==="right"?245:0), y=N.y+55;
+      const dir=wireStart.side==="right"?1:-1;
       const p=document.createElementNS("http://www.w3.org/2000/svg","path");
-      p.setAttribute("d",`M ${x} ${y} C ${x+(wireStart.side==="right"?90:-90)} ${y}, ${x+(wireStart.side==="right"?140:-140)} ${y}, ${x+(wireStart.side==="right"?180:-180)} ${y}`);
-      p.setAttribute("class","edge pending");edges.appendChild(p);
+      p.setAttribute("d",`M ${x} ${y} C ${x+dir*70} ${y}, ${x+dir*150} ${y}, ${x+dir*210} ${y}`);
+      p.setAttribute("class","edge pending"); edges.appendChild(p);
       const dot=document.createElementNS("http://www.w3.org/2000/svg","circle");
-      dot.setAttribute("cx",x+(wireStart.side==="right"?90:-90));dot.setAttribute("cy",y);dot.setAttribute("r","5");dot.setAttribute("class","edge-dot");edges.appendChild(dot);
+      dot.setAttribute("cx",x+dir*70); dot.setAttribute("cy",y); dot.setAttribute("r","5");
+      dot.setAttribute("class","edge-dot"); edges.appendChild(dot);
     }
   }
 }
@@ -588,40 +599,46 @@ document.querySelectorAll(".template").forEach(b=>b.onclick=()=>addTemplate(b.da
 
 /* Canvas pan + wheel zoom */
 const canvas=document.getElementById("canvas");
+const inner=document.getElementById("canvasInner");
+function applyTransform(){
+  inner.style.transform=`translate(${panX}px,${panY}px) scale(${zoom})`;
+  document.getElementById("zoomLabel").textContent=Math.round(zoom*100)+"%";
+}
 canvas.addEventListener("pointerdown",e=>{
-  if(e.target.closest(".node") || e.target.closest(".map-controls") || e.target.closest(".drawer"))return;
-  draggingCanvas=true;lastPointer={x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId);
+  if(e.target.closest(".node") || e.target.closest(".map-controls") || e.target.closest(".drawer")) return;
+  draggingCanvas=true; lastPointer={x:e.clientX,y:e.clientY}; canvas.classList.add("dragging");
+  canvas.setPointerCapture(e.pointerId);
 });
 canvas.addEventListener("pointermove",e=>{
   if(!draggingCanvas)return;
-  panX+=e.clientX-lastPointer.x;panY+=e.clientY-lastPointer.y;lastPointer={x:e.clientX,y:e.clientY};
-  document.getElementById("canvasInner").style.transform=`translate(${panX}px,${panY}px) scale(${zoom})`;
+  panX+=e.clientX-lastPointer.x; panY+=e.clientY-lastPointer.y;
+  lastPointer={x:e.clientX,y:e.clientY}; applyTransform();
 });
-canvas.addEventListener("pointerup",()=>draggingCanvas=false);
-canvas.addEventListener("pointercancel",()=>draggingCanvas=false);
+function stopPan(){draggingCanvas=false;canvas.classList.remove("dragging")}
+canvas.addEventListener("pointerup",stopPan);canvas.addEventListener("pointercancel",stopPan);
 canvas.addEventListener("wheel",e=>{
   e.preventDefault();
   const rect=canvas.getBoundingClientRect(), mx=e.clientX-rect.left, my=e.clientY-rect.top;
-  const old=zoom, factor=e.deltaY<0?1.1:.9, next=Math.min(2.5,Math.max(.35,zoom*factor));
-  // Keep cursor point stable while zooming.
-  panX=mx-(mx-panX)*(next/old);panY=my-(my-panY)*(next/old);zoom=next;
-  document.getElementById("canvasInner").style.transform=`translate(${panX}px,${panY}px) scale(${zoom})`;
-  document.getElementById("zoomLabel").textContent=Math.round(zoom*100)+"%";
+  const old=zoom, next=Math.min(2.5,Math.max(.35,zoom*(e.deltaY<0?1.12:.89)));
+  panX=mx-(mx-panX)*(next/old); panY=my-(my-panY)*(next/old); zoom=next; applyTransform();
 },{passive:false});
-function setZoom(next){
-  zoom=Math.min(2.5,Math.max(.35,next));
-  document.getElementById("canvasInner").style.transform=`translate(${panX}px,${panY}px) scale(${zoom})`;
-  document.getElementById("zoomLabel").textContent=Math.round(zoom*100)+"%";
-}
+function setZoom(next){zoom=Math.min(2.5,Math.max(.35,next));applyTransform()}
 document.getElementById("zoomIn").onclick=()=>setZoom(zoom*1.15);
 document.getElementById("zoomOut").onclick=()=>setZoom(zoom*.87);
-document.getElementById("zoomFit").onclick=()=>{zoom=.72;panX=40;panY=20;setZoom(zoom)};
+document.getElementById("zoomFit").onclick=()=>{
+  const xs=state.nodes.map(n=>n.x), ys=state.nodes.map(n=>n.y);
+  const minX=Math.min(...xs), maxX=Math.max(...xs)+245, minY=Math.min(...ys), maxY=Math.max(...ys)+120;
+  const cw=canvas.clientWidth-60,ch=canvas.clientHeight-60;
+  zoom=Math.min(1.1,Math.max(.45,Math.min(cw/(maxX-minX),ch/(maxY-minY))));
+  panX=30-minX*zoom; panY=30-minY*zoom; applyTransform();
+};
 document.getElementById("bottomToggle").onclick=()=>{
   const b=document.querySelector(".bottom");b.classList.toggle("collapsed");
   document.getElementById("bottomToggle").textContent=b.classList.contains("collapsed")?"⌃ Розгорнути":"⌄ Згорнути";
 };
 
 render();
+document.getElementById("zoomFit").click();
 </script>
 </body>
 </html>
