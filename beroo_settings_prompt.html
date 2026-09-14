@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover">
+<title>BEROO — Візуальна карта проєкту</title>
+<style>
+:root{
+  --bg:#f6f7f9;--panel:#fff;--line:#e7e9ee;--text:#202735;--muted:#8d96a8;
+  --red:#ff3158;--red2:#ffebef;--blue:#4b7bec;--green:#25a56a;--amber:#d89a20;
+  --shadow:0 8px 30px rgba(24,31,48,.07);--radius:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text);background:var(--bg)}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+.app{height:100vh;display:flex;overflow:hidden}
+.sidebar{width:235px;background:#fff;border-right:1px solid var(--line);padding:18px 12px;flex:none}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:18px;padding:4px 10px 20px}
+.logo{width:28px;height:28px;border-radius:7px;background:var(--red);color:#fff;display:grid;place-items:center;font-weight:900}
+.nav-title{font-size:11px;text-transform:uppercase;color:#a0a8b8;font-weight:800;margin:20px 10px 8px}
+.nav button{width:100%;border:0;background:transparent;text-align:left;padding:10px;border-radius:10px;color:#667084}
+.nav button.active,.nav button:hover{background:#fff1f4;color:var(--red)}
+.main{min-width:0;flex:1;display:flex;flex-direction:column}
+.topbar{height:62px;background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 18px;gap:12px}
+.topbar .title{font-size:17px;font-weight:800}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.btn{border:1px solid var(--line);background:#fff;color:#4d5668;border-radius:10px;padding:8px 11px;font-weight:700;font-size:12px}
+.btn:hover{border-color:#cfd4de}
+.btn.primary{background:var(--red);color:#fff;border-color:var(--red)}
+.btn.ghost{background:#f7f8fa}
+.workspace{min-height:0;flex:1;display:flex;flex-direction:column}
+.toolbar{background:#fff;border-bottom:1px solid var(--line);padding:10px 14px;display:flex;gap:8px;align-items:center;overflow:auto}
+.search{min-width:220px;max-width:340px;flex:1;border:1px solid var(--line);border-radius:10px;padding:9px 12px;outline:none}
+.search:focus{border-color:#ff9caf}
+.canvas-wrap{position:relative;min-height:0;flex:1;overflow:hidden}
+.canvas{position:absolute;inset:0;overflow:auto;background:
+ radial-gradient(circle at 1px 1px, #e3e6eb 1px, transparent 1px);
+ background-size:24px 24px;padding:36px;cursor:grab}
+.canvas.dragging{cursor:grabbing}
+.graph{position:relative;min-width:1450px;min-height:920px}
+.edges{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.edge{stroke:#cbd1dc;stroke-width:2;fill:none}
+.edge.active{stroke:var(--red)}
+.node{position:absolute;width:245px;background:#fff;border:1px solid var(--line);border-radius:15px;box-shadow:var(--shadow);padding:14px;user-select:none}
+.node.selected{border:2px solid var(--red);padding:13px}
+.node .head{display:flex;align-items:center;gap:9px}
+.icon{width:34px;height:34px;border-radius:10px;background:#fff0f3;color:var(--red);display:grid;place-items:center;font-weight:900;flex:none}
+.node h3{margin:0;font-size:14px;line-height:1.2}
+.node p{margin:8px 0 0;color:#8b94a4;font-size:11px;line-height:1.45}
+.node .meta{margin-top:10px;display:flex;gap:5px;flex-wrap:wrap}
+.tag{font-size:10px;border-radius:999px;padding:4px 7px;background:#f1f3f6;color:#697386}
+.tag.pro{background:#fff0d9;color:#a66b00}.tag.review{background:#eef3ff;color:#4a6dc7}.tag.core{background:#edf8f2;color:#238359}
+.node .dots{position:absolute;right:8px;top:8px;color:#adb4c0}
+.node[data-type="entity"]{border-top:3px solid var(--red)}
+.node[data-type="module"]{border-top:3px solid var(--blue)}
+.node[data-type="analytics"]{border-top:3px solid var(--green)}
+.node[data-type="risk"]{border-top:3px solid var(--amber)}
+.bottom{height:310px;background:#fff;border-top:1px solid var(--line);display:flex;flex-direction:column}
+.tabs{display:flex;border-bottom:1px solid var(--line);padding:0 14px;overflow:auto}
+.tab{border:0;background:none;padding:11px 14px;color:#8992a2;font-size:12px;font-weight:800;white-space:nowrap}
+.tab.active{color:var(--red);border-bottom:2px solid var(--red)}
+.bottom-body{min-height:0;flex:1;overflow:auto;padding:12px 14px}
+pre{margin:0;white-space:pre-wrap;word-break:break-word;font:11px/1.55 ui-monospace,SFMono-Regular,Menlo,monospace;color:#445064}
+textarea.full{width:100%;height:100%;resize:none;border:1px solid var(--line);border-radius:10px;padding:12px;outline:none}
+.sidepanel{position:absolute;z-index:20;right:14px;top:14px;width:330px;max-width:calc(100% - 28px);max-height:calc(100% - 28px);background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 18px 55px rgba(20,27,40,.18);display:none;flex-direction:column}
+.sidepanel.open{display:flex}
+.panel-head{padding:14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px}
+.panel-head strong{font-size:14px}.panel-body{padding:14px;overflow:auto}
+.field{margin-bottom:12px}.field label{display:block;font-size:10px;color:#7c8698;font-weight:800;text-transform:uppercase;margin-bottom:5px}
+.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 9px;outline:none;background:#fff}
+.field textarea{min-height:70px;resize:vertical}
+.list{display:flex;flex-direction:column;gap:8px}.item{border:1px solid var(--line);border-radius:10px;padding:9px;font-size:11px}.item small{display:block;color:#9aa2b1;margin-top:3px}
+.empty{color:#9aa2b1;font-size:11px;padding:12px 0}
+.toast{position:fixed;right:18px;bottom:18px;background:#202735;color:#fff;padding:10px 13px;border-radius:10px;font-size:12px;display:none;z-index:100}
+.modal{position:fixed;inset:0;background:rgba(20,27,40,.35);display:none;align-items:center;justify-content:center;padding:16px;z-index:90}
+.modal.open{display:flex}.modal-card{width:560px;max-width:100%;background:#fff;border-radius:18px;box-shadow:0 30px 90px rgba(20,27,40,.25);padding:18px}
+.modal-card h2{font-size:16px;margin:0 0 14px}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.kpi{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.kpi span{padding:6px 8px;background:#f5f6f8;border-radius:8px;font-size:10px;color:#667084}
+@media(max-width:900px){
+ .sidebar{display:none}.topbar{height:56px;padding:0 10px}.topbar .title{font-size:15px}
+ .toolbar{padding:8px}.canvas{padding:20px}.bottom{height:270px}
+ .node{width:220px}
+ .graph{min-width:1250px}
+}
+@media(max-width:600px){
+ .actions .hide-mobile{display:none}.search{min-width:145px}
+ .bottom{height:300px}.bottom-body{padding:10px}.toolbar{flex-wrap:nowrap}
+ .sidepanel{top:8px;right:8px;width:calc(100% - 16px);max-height:55vh}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand"><div class="logo">B</div> BEROO</div>
+    <div class="nav-title">Проєкт</div>
+    <div class="nav">
+      <button class="active">Візуальна карта</button>
+      <button>Сутності</button>
+      <button>Модулі CRM</button>
+      <button>Біржа</button>
+      <button>Аналітика</button>
+      <button>Рекомендації</button>
+    </div>
+    <div class="nav-title">Документація</div>
+    <div class="nav">
+      <button>Prompt / JSON</button>
+      <button>Коментарі</button>
+      <button>Зміни</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="title">Візуальна карта BEROO · Marketplace / CRM / Analytics</div>
+      <div class="actions">
+        <button class="btn ghost hide-mobile" id="addNoteBtn">+ Примітка</button>
+        <button class="btn ghost hide-mobile" id="addNodeBtn">+ Підрозділ</button>
+        <button class="btn primary" id="exportBtn">Експорт JSON</button>
+      </div>
+    </header>
+
+    <section class="workspace">
+      <div class="toolbar">
+        <input id="search" class="search" placeholder="Пошук по карті…">
+        <button class="btn" id="fitBtn">Вміст</button>
+        <button class="btn" id="resetBtn">Скинути карту</button>
+        <button class="btn" id="commentBtn">💬 Коментар</button>
+        <button class="btn" id="promptBtn">Prompt</button>
+      </div>
+
+      <div class="canvas-wrap">
+        <div id="canvas" class="canvas">
+          <div id="graph" class="graph">
+            <svg id="edges" class="edges"></svg>
+          </div>
+        </div>
+
+        <aside id="panel" class="sidepanel">
+          <div class="panel-head"><strong id="panelTitle">Деталі</strong><button class="btn" id="closePanel">×</button></div>
+          <div class="panel-body" id="panelBody"></div>
+        </aside>
+      </div>
+
+      <section class="bottom">
+        <div class="tabs">
+          <button class="tab active" data-tab="json">Динамічний JSON</button>
+          <button class="tab" data-tab="prompt">Prompt</button>
+          <button class="tab" data-tab="notes">Примітки</button>
+          <button class="tab" data-tab="comments">Коментарі</button>
+          <button class="tab" data-tab="changes">Зміни</button>
+        </div>
+        <div class="bottom-body" id="bottomBody"></div>
+      </section>
+    </section>
+  </main>
+</div>
+
+<div class="modal" id="modal">
+ <div class="modal-card">
+  <h2 id="modalTitle">Додати</h2>
+  <div id="modalContent"></div>
+  <div class="modal-actions">
+   <button class="btn" id="modalCancel">Скасувати</button>
+   <button class="btn primary" id="modalSave">Зберегти</button>
+  </div>
+ </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const KEY="beroo_project_map_v1";
+
+const seed = {
+ meta:{
+   project:"BEROO",
+   version:"1.0",
+   purpose:"Візуальна карта великої CRM + creator marketplace + marketplace + аналітичний центр",
+   principle:"Оглядач = базовий непрофесійний статус; Blogger Pro = повний професійний профіль з ФОП/документами та фінансовим функціоналом.",
+   platform_role:"BEROO не є гарантом виплат, доставки, правдивості документів чи виконання домовленостей; платформа надає інструменти обліку, калькуляції, аналітики, запитів і взаємодії."
+ },
+ nodes:[
+  {id:"platform",title:"BEROO",type:"entity",x:600,y:40,desc:"Єдина екосистема CRM, магазинів, блогерів, дзеркал, біржі, аналітики та сайтів.",tags:["ядро","marketplace","CRM"]},
+  {id:"seller",title:"Продавець",type:"entity",x:210,y:190,desc:"Керує товарами, магазином, сайтом, еквайрингом, запитами блогерів та аналітикою.",tags:["сутність"]},
+  {id:"blogger",title:"Блогер",type:"entity",x:990,y:190,desc:"Може бути Оглядачем або Blogger Pro; може одночасно бути продавцем.",tags:["сутність"]},
+  {id:"store",title:"Магазин",type:"module",x:40,y:390,desc:"Має статус без еквайрингу або з активованим еквайрингом. Ручна оплата через IBAN доступна без еквайрингу.",tags:["магазин"]},
+  {id:"reviewer",title:"Оглядач",type:"module",x:770,y:390,desc:"Базовий, неповний профіль. Соцмережі, досвід і 3 успішні TikTok-відео. Без професійних фінансових інструментів.",tags:["база","обмеження"]},
+  {id:"pro",title:"Blogger Pro",type:"module",x:1160,y:390,desc:"Повний професійний профіль після внесення/перевірки документів ФОП у вкладці Оплата.",tags:["PRO","ФОП"]},
+  {id:"mirror",title:"Дзеркало",type:"module",x:440,y:555,desc:"Механіка копіювання товарів/магазину блогером. Джерело: Магазини, Вітрина або реферальне посилання продавця.",tags:["mirror"]},
+  {id:"showcase",title:"Вітрина",type:"module",x:40,y:700,desc:"Великий каталог товарів усіх магазинів. Оглядачі й Pro бачать товари, купують та можуть подавати запит на віддзеркалення.",tags:["marketplace"]},
+  {id:"stores",title:"Дзеркало → Магазини",type:"module",x:300,y:700,desc:"Оглядачі та Pro можуть переглядати магазини, рейтинг і подавати запити на віддзеркалення.",tags:["discovery"]},
+  {id:"exchange",title:"Дзеркало → Блогери",type:"module",x:1030,y:570,desc:"Публічна біржа Blogger Pro. Магазини з активним режимом та хоча б одним товаром можуть шукати Pro-блогерів і надсилати запити.",tags:["біржа","PRO"]},
+  {id:"reviewers",title:"Магазин → Оглядачі",type:"module",x:790,y:720,desc:"Не публічна біржа. Відображаються лише оглядачі-підписники магазину: через запит + підтвердження або запрошувальне посилання.",tags:["закрито"]},
+  {id:"invite",title:"Запрошення продавця",type:"module",x:1060,y:745,desc:"Унікальне реферальне посилання. Перехід відкриває реєстрацію блогера та після генерації автоматично розгортає товари оригінального магазину.",tags:["referral"]},
+  {id:"payment",title:"Оплата / Фінанси",type:"module",x:1370,y:390,desc:"IBAN ФОП, еквайринг, комісії, запити на виплату та фінансова аналітика. Розширюється для Blogger Pro.",tags:["finance"]},
+  {id:"analytics",title:"Аналітичний центр",type:"analytics",x:1370,y:570,desc:"GMV, продажі, кількість товарів, суми, кліки, конверсії, повернення, рейтинг, статистика по магазинах/товарах/блогерах.",tags:["data","BI"]},
+  {id:"rating",title:"Рейтинги / Репутація",type:"analytics",x:1370,y:745,desc:"Рейтинг блогера: зйомка, кліки, конверсія, продажі, повернення/обміни, виконання. Рейтинг магазинів і товарів. Публічні скарги/сигнали — напрям для уточнення.",tags:["trust"]},
+  {id:"sites",title:"Сайти / Міні-сайти",type:"module",x:390,y:830,desc:"Кожен зареєстрований користувач може створити сайт. Продавець розгортає магазин; блогер — власну вітрину/контент.",tags:["site-builder"]},
+  {id:"marketing",title:"Просування / Реклама / Таргет",type:"module",x:720,y:880,desc:"Пізніше: просування в топ біржі, Вітрини, Магазинів, таргет, рекламні інструменти, платні опції.",tags:["growth"]},
+  {id:"plans",title:"Тарифи",type:"module",x:1030,y:900,desc:"Планується по 3 типи тарифів для блогерів і магазинів + окремі платні фішки просування.",tags:["monetization"]},
+  {id:"delivery",title:"Доставка",type:"module",x:70,y:895,desc:"Відправкою товару займається магазин. Інтеграції доставки — окремий модуль.",tags:["fulfillment"]},
+  {id:"risk",title:"Ризики / Юридична модель",type:"risk",x:1310,y:900,desc:"BEROO — інструмент взаємодії та аналітики, не гарант виплат, доставки, правдивості документів чи домовленостей. Потрібні оферта, правила, політика скарг і відповідальності.",tags:["legal","risk"]}
+ ],
+ edges:[
+  ["platform","seller"],["platform","blogger"],["seller","store"],["blogger","reviewer"],["blogger","pro"],
+  ["reviewer","showcase"],["reviewer","stores"],["pro","exchange"],["seller","exchange"],["seller","reviewers"],
+  ["seller","invite"],["invite","reviewer"],["stores","mirror"],["showcase","mirror"],["invite","mirror"],
+  ["mirror","store"],["pro","payment"],["seller","payment"],["reviewer","analytics"],["pro","analytics"],
+  ["seller","analytics"],["blogger","rating"],["seller","rating"],["platform","sites"],["platform","marketing"],
+  ["platform","plans"],["store","delivery"],["platform","risk"],["payment","analytics"],["rating","analytics"]
+ ],
+ notes:[],
+ comments:[],
+ changes:[]
+};
+
+let state = load();
+let activeTab="json", selectedId=null, modalMode=null;
+
+function load(){
+  try{
+    const x=JSON.parse(localStorage.getItem(KEY));
+    return x && x.nodes ? x : structuredClone(seed);
+  }catch(e){return structuredClone(seed)}
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));render();toast("Збережено");}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function toast(t){const e=document.getElementById("toast");e.textContent=t;e.style.display="block";clearTimeout(window.tt);window.tt=setTimeout(()=>e.style.display="none",1800)}
+function nodeBy(id){return state.nodes.find(n=>n.id===id)}
+function tagClass(t){return /PRO|ФОП/i.test(t)?"pro":/база|обмеж/i.test(t)?"review":/ядро|data/i.test(t)?"core":""}
+
+function render(){
+  const graph=document.getElementById("graph"), edges=document.getElementById("edges");
+  graph.querySelectorAll(".node").forEach(e=>e.remove());
+  const q=document.getElementById("search").value.trim().toLowerCase();
+  state.nodes.forEach(n=>{
+    const el=document.createElement("div");
+    el.className="node"+(n.id===selectedId?" selected":"");
+    el.dataset.type=n.type;el.dataset.id=n.id;
+    const match=!q || (n.title+" "+n.desc+" "+(n.tags||[]).join(" ")).toLowerCase().includes(q);
+    el.style.opacity=match?"1":".18";
+    el.style.left=n.x+"px";el.style.top=n.y+"px";
+    el.innerHTML=`<div class="dots">⋮</div><div class="head"><div class="icon">${n.type==="entity"?"◆":n.type==="analytics"?"◒":n.type==="risk"?"!":"□"}</div><h3>${esc(n.title)}</h3></div>
+      <p>${esc(n.desc)}</p><div class="meta">${(n.tags||[]).map(t=>`<span class="tag ${tagClass(t)}">${esc(t)}</span>`).join("")}</div>`;
+    el.addEventListener("click",e=>{e.stopPropagation();selectNode(n.id)});
+    makeDraggable(el,n);
+    graph.appendChild(el);
+  });
+  // SVG connectors
+  edges.innerHTML="";
+  const marker=document.createElementNS("http://www.w3.org/2000/svg","defs");
+  marker.innerHTML='<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#cbd1dc"/></marker>';
+  edges.appendChild(marker);
+  state.edges.forEach(([a,b])=>{
+    const A=nodeBy(a),B=nodeBy(b); if(!A||!B)return;
+    const x1=A.x+122.5,y1=A.y+55,x2=B.x+122.5,y2=B.y+55;
+    const dx=Math.max(50,Math.abs(x2-x1)*.45);
+    const p=document.createElementNS("http://www.w3.org/2000/svg","path");
+    p.setAttribute("d",`M ${x1} ${y1} C ${x1+dx} ${y1}, ${x2-dx} ${y2}, ${x2} ${y2}`);
+    p.setAttribute("class","edge"+(selectedId&&(a===selectedId||b===selectedId)?" active":""));
+    p.setAttribute("marker-end","url(#arrow)");edges.appendChild(p);
+  });
+  renderBottom();
+  if(selectedId) renderPanel(selectedId);
+}
+function makeDraggable(el,n){
+  let down=false,sx=0,sy=0,ox=0,oy=0;
+  el.addEventListener("pointerdown",e=>{
+    if(e.button!==0)return;down=true;el.setPointerCapture(e.pointerId);
+    sx=e.clientX;sy=e.clientY;ox=n.x;oy=n.y;
+  });
+  el.addEventListener("pointermove",e=>{
+    if(!down)return;n.x=Math.max(0,ox+e.clientX-sx);n.y=Math.max(0,oy+e.clientY-sy);
+    el.style.left=n.x+"px";el.style.top=n.y+"px";drawEdgesOnly();
+  });
+  el.addEventListener("pointerup",()=>{if(down){down=false;save();}});
+}
+function drawEdgesOnly(){
+  const edges=document.getElementById("edges");edges.innerHTML="";
+  const marker=document.createElementNS("http://www.w3.org/2000/svg","defs");
+  marker.innerHTML='<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#cbd1dc"/></marker>';
+  edges.appendChild(marker);
+  state.edges.forEach(([a,b])=>{
+    const A=nodeBy(a),B=nodeBy(b);if(!A||!B)return;
+    const x1=A.x+122.5,y1=A.y+55,x2=B.x+122.5,y2=B.y+55,dx=Math.max(50,Math.abs(x2-x1)*.45);
+    const p=document.createElementNS("http://www.w3.org/2000/svg","path");
+    p.setAttribute("d",`M ${x1} ${y1} C ${x1+dx} ${y1}, ${x2-dx} ${y2}, ${x2} ${y2}`);
+    p.setAttribute("class","edge"+(selectedId&&(a===selectedId||b===selectedId)?" active":""));
+    p.setAttribute("marker-end","url(#arrow)");edges.appendChild(p);
+  });
+}
+function selectNode(id){
+  selectedId=id;document.getElementById("panel").classList.add("open");render();renderPanel(id);
+}
+function renderPanel(id){
+  const n=nodeBy(id);if(!n)return;
+  document.getElementById("panelTitle").textContent=n.title;
+  const incoming=state.edges.filter(e=>e[1]===id).map(e=>nodeBy(e[0])?.title).filter(Boolean);
+  const outgoing=state.edges.filter(e=>e[0]===id).map(e=>nodeBy(e[1])?.title).filter(Boolean);
+  document.getElementById("panelBody").innerHTML=`
+    <div class="field"><label>Назва</label><input id="pTitle" value="${esc(n.title)}"></div>
+    <div class="field"><label>Тип</label><select id="pType">
+      ${["entity","module","analytics","risk"].map(t=>`<option ${n.type===t?"selected":""}>${t}</option>`).join("")}
+    </select></div>
+    <div class="field"><label>Опис</label><textarea id="pDesc">${esc(n.desc)}</textarea></div>
+    <div class="field"><label>Теги</label><input id="pTags" value="${esc((n.tags||[]).join(", "))}"></div>
+    <div class="field"><label>Зв'язки</label>
+      <div class="item"><b>Вхідні:</b> ${esc(incoming.join(", ")||"—")}</div>
+      <div class="item"><b>Вихідні:</b> ${esc(outgoing.join(", ")||"—")}</div>
+    </div>
+    <div class="actions"><button class="btn primary" id="saveNode">Зберегти зміни</button>
+      <button class="btn" id="commentSelected">Коментувати</button>
+      <button class="btn" id="deleteNode">Видалити</button></div>`;
+  document.getElementById("saveNode").onclick=()=>{
+    n.title=document.getElementById("pTitle").value.trim()||n.title;
+    n.type=document.getElementById("pType").value;
+    n.desc=document.getElementById("pDesc").value.trim();
+    n.tags=document.getElementById("pTags").value.split(",").map(x=>x.trim()).filter(Boolean);
+    state.changes.push({at:new Date().toISOString(),action:"edit_node",node:id,summary:`Змінено ${n.title}`});save();
+  };
+  document.getElementById("commentSelected").onclick=()=>openModal("comment",id);
+  document.getElementById("deleteNode").onclick=()=>{
+    if(!confirm("Видалити цей підрозділ?"))return;
+    state.nodes=state.nodes.filter(x=>x.id!==id);state.edges=state.edges.filter(e=>e[0]!==id&&e[1]!==id);selectedId=null;save();
+    document.getElementById("panel").classList.remove("open");
+  };
+}
+function promptText(){
+ return `Ти працюєш над продуктом BEROO — великою CRM + marketplace платформою.
+
+КОНТЕКСТ:
+- Є сутності Продавець, Блогер та Магазин.
+- Кожен користувач може мати сайт/міні-сайт і може бути одночасно продавцем і блогером.
+- Продавець керує товарами, магазином, CRM, аналітикою та еквайрингом.
+- Блогер має статус Оглядач або Blogger Pro.
+- Оглядач — базовий непрофесійний рівень: базові дані, посилання на соцмережі, досвід, 3 поля для успішних TikTok-відео. Без професійного фінансового функціоналу.
+- Blogger Pro — повний професійний профіль, ФОП-документи, IBAN, професійні параметри, комісії, виплати, розширена аналітика та публічна біржа Pro.
+- Для Pro документи та платіжні дані вводяться у вкладці Оплата; після виконання вимог розширена частина Анкети активується.
+- Вітрина містить товари всіх магазинів. Через Вітрину, Магазини або реферальне запрошення можна розгорнути Дзеркало.
+- Оглядачі можуть дивитися Вітрину, магазини, рейтинги та дзеркалити товари, але не потрапляють у публічну біржу блогерів.
+- Магазин бачить Оглядачів лише серед своїх підписників/запрошених.
+- Blogger Pro доступний у публічній біржі для магазинів, які активували режим магазину та мають хоча б один товар.
+- Магазин відправляє товар. Платформа не гарантує виплати, доставку, правдивість документів чи виконання домовленостей; вона надає інструменти обліку, калькуляції, аналітики та взаємодії.
+- Для Оглядача комісія є довідковою/середньою і не редагується; виплати недоступні.
+- Для Pro доступні професійні комісії, фінансові запити та розширена аналітика.
+- У перспективі: рейтинги, повернення, GMV, кліки, конверсії, реклама, таргет, просування, тарифи, API, аналітичний центр.
+
+ЗАВДАННЯ:
+1. Не ламати існуючу логіку.
+2. Будь-яку нову функцію додавати як окремий модуль/підрозділ із залежностями.
+3. Чітко розділяти права Оглядача, Blogger Pro та Продавця.
+4. Враховувати мобільний UX, фільтри, аналітику, аудити, статуси, ризики та масштабування.
+5. Виявляти місця, де потрібне бізнес-рішення, і позначати їх як OPEN DECISION.
+6. Вихід: структурований JSON з entities, modules, permissions, workflows, metrics, risks, open_decisions, changes та notes.`;
+}
+function renderBottom(){
+ const b=document.getElementById("bottomBody");
+ if(activeTab==="json"){
+   const output={meta:state.meta,nodes:state.nodes,edges:state.edges,notes:state.notes,comments:state.comments,changes:state.changes,prompt:promptText()};
+   b.innerHTML=`<div class="kpi"><span>${state.nodes.length} підрозділів</span><span>${state.edges.length} зв'язків</span><span>${state.comments.length} коментарів</span><span>${state.notes.length} приміток</span></div><pre>${esc(JSON.stringify(output,null,2))}</pre>`;
+ } else if(activeTab==="prompt"){
+   b.innerHTML=`<textarea class="full" id="promptArea">${esc(promptText())}</textarea>`;
+ } else {
+   const arr=state[activeTab]||[];
+   b.innerHTML=arr.length?`<div class="list">${arr.slice().reverse().map((x,i)=>`<div class="item"><b>${esc(x.title||x.text||x.summary||x.action||"Запис")}</b><small>${esc(x.at||"")}</small>${x.node?`<small>Підрозділ: ${esc(nodeBy(x.node)?.title||x.node)}</small>`:""}</div>`).join("")}</div>`:`<div class="empty">Поки немає записів.</div>`;
+ }
+}
+function openModal(mode,nodeId=null){
+ modalMode=mode;document.getElementById("modal").classList.add("open");
+ const c=document.getElementById("modalContent");
+ if(mode==="node"){
+   document.getElementById("modalTitle").textContent="Новий підрозділ";
+   c.innerHTML=`<div class="field"><label>Назва</label><input id="mTitle" placeholder="Наприклад: Повернення / Скарги"></div>
+   <div class="field"><label>Тип</label><select id="mType"><option>module</option><option>entity</option><option>analytics</option><option>risk</option></select></div>
+   <div class="field"><label>Опис</label><textarea id="mDesc" placeholder="Що робить цей модуль?"></textarea></div>
+   <div class="field"><label>Теги</label><input id="mTags" placeholder="growth, open decision"></div>`;
+ } else if(mode==="note"){
+   document.getElementById("modalTitle").textContent="Нова примітка";
+   c.innerHTML=`<div class="field"><label>Текст</label><textarea id="mText" placeholder="Ідея, рекомендація або бізнес-правило…"></textarea></div>`;
+ } else {
+   document.getElementById("modalTitle").textContent="Новий коментар";
+   c.innerHTML=`<div class="field"><label>Коментар до</label><input value="${esc(nodeBy(nodeId)?.title||"проєкту")}" disabled></div>
+   <div class="field"><label>Коментар</label><textarea id="mText" placeholder="Що змінити / уточнити / перевірити?"></textarea></div>`;
+ }
+ window.modalNodeId=nodeId;
+}
+function closeModal(){document.getElementById("modal").classList.remove("open");modalMode=null}
+document.getElementById("modalCancel").onclick=closeModal;
+document.getElementById("modalSave").onclick=()=>{
+ const now=new Date().toISOString();
+ if(modalMode==="node"){
+   const title=document.getElementById("mTitle").value.trim();if(!title)return;
+   const id="n_"+Date.now();const n={id,title,type:document.getElementById("mType").value,x:500+Math.random()*600,y:250+Math.random()*500,desc:document.getElementById("mDesc").value.trim(),tags:document.getElementById("mTags").value.split(",").map(x=>x.trim()).filter(Boolean)};
+   state.nodes.push(n);state.changes.push({at:now,action:"add_node",node:id,summary:`Додано ${title}`});
+ }else if(modalMode==="note"){
+   const text=document.getElementById("mText").value.trim();if(!text)return;
+   state.notes.push({at:now,text});
+ }else{
+   const text=document.getElementById("mText").value.trim();if(!text)return;
+   state.comments.push({at:now,node:window.modalNodeId,text});
+ }
+ closeModal();save();
+};
+document.getElementById("addNodeBtn").onclick=()=>openModal("node");
+document.getElementById("addNoteBtn").onclick=()=>openModal("note");
+document.getElementById("commentBtn").onclick=()=>openModal("comment",selectedId);
+document.getElementById("promptBtn").onclick=()=>{activeTab="prompt";document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.tab==="prompt"));renderBottom()};
+document.getElementById("closePanel").onclick=()=>{selectedId=null;document.getElementById("panel").classList.remove("open");render()};
+document.getElementById("search").addEventListener("input",render);
+document.querySelectorAll(".tab").forEach(t=>t.onclick=()=>{activeTab=t.dataset.tab;document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===t));renderBottom()});
+document.getElementById("exportBtn").onclick=()=>{
+ const data=JSON.stringify({meta:state.meta,nodes:state.nodes,edges:state.edges,notes:state.notes,comments:state.comments,changes:state.changes,prompt:promptText()},null,2);
+ const blob=new Blob([data],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="beroo-project-map.json";a.click();URL.revokeObjectURL(a.href);toast("JSON експортовано");
+};
+document.getElementById("resetBtn").onclick=()=>{if(confirm("Скинути всі локальні зміни до початкової карти?")){state=structuredClone(seed);selectedId=null;save();}};
+document.getElementById("fitBtn").onclick=()=>{
+ const c=document.getElementById("canvas");c.scrollLeft=0;c.scrollTop=0;toast("Показано початок карти");
+};
+document.getElementById("canvas").addEventListener("click",e=>{if(e.target.id==="canvas"){selectedId=null;document.getElementById("panel").classList.remove("open");render()}});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+render();
+</script>
+</body>
+</html>
