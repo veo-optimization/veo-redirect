@@ -37,6 +37,9 @@
     width:100%;font-family:inherit;font-size:13px;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:#fff;color:var(--text);
   }
   .field textarea{resize:none;overflow:hidden;min-height:38px;}
+  .code-toggle-btn{font-size:10.5px;padding:3px 9px;margin-top:5px;border-radius:7px;border:1px dashed #C9CEDA;background:#fff;color:#5C6376;cursor:pointer;}
+  .code-toggle-btn:hover{background:var(--accent-soft);}
+  .code-box{display:none;width:100%;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:11.5px;line-height:1.55;background:#12141A;color:#D7E0DE;border:1px solid #262A33;border-radius:9px;padding:10px 12px;min-height:112px;resize:none;overflow:hidden;margin-top:6px;}
   .two{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   @media (max-width:640px){.two{grid-template-columns:1fr;}}
 
@@ -374,9 +377,9 @@ const BLOCK_TYPE_LABEL = {}; BLOCK_TYPES.forEach(bt=>BLOCK_TYPE_LABEL[bt.key]=bt
 let ORDER_COUNTER = 0;
 
 function n(title, roles, description, elements, children, color){
-  return {id:uid('b'), title, roles: roles||'', roleIds: [], description: description||'', elements: elements||[], links:[], children: children||[], color: color||'', order: ORDER_COUNTER++, blockType:'', blockTypeComment:''};
+  return {id:uid('b'), title, roles: roles||'', roleIds: [], description: description||'', code:'', elements: elements||[], links:[], children: children||[], color: color||'', order: ORDER_COUNTER++, blockType:'', blockTypeComment:''};
 }
-function el(name, type, desc, roleIds){ return {id:uid('e'), name, type: type||EL_TYPES[0], desc: desc||'', roleIds: roleIds ? roleIds.slice() : []}; }
+function el(name, type, desc, roleIds){ return {id:uid('e'), name, type: type||EL_TYPES[0], desc: desc||'', code:'', roleIds: roleIds ? roleIds.slice() : []}; }
 
 /* ======================================================================
    SEED TREE — актуальне меню (5 ролей), сайт, майбутні напрямки
@@ -730,6 +733,7 @@ function renderNodeReadonly(node){
       <div class="node-body">
         ${node.blockTypeComment ? `<div class="node-ro-links">Коментар до типу: ${escapeHtml(node.blockTypeComment)}</div>` : ''}
         ${node.description ? `<div class="node-ro-desc">${escapeHtml(node.description)}</div>` : ''}
+        ${node.code ? `<details style="margin-bottom:8px;"><summary style="cursor:pointer;font-size:11.5px;color:var(--muted);">Код-приклад</summary><pre class="code-box" style="display:block;">${escapeHtml(node.code)}</pre></details>` : ''}
         ${visibleElements.length ? `<div class="node-ro-elements">${visibleElements.map(e=>`<div class="ro-el-item">• <b>${escapeHtml(e.name||'—')}</b>${e.type?` <i>(${escapeHtml(e.type)})</i>`:''}${e.desc?' — '+escapeHtml(e.desc):''}</div>`).join('')}</div>` : ''}
         ${links.length ? `<div class="node-ro-links">Пов'язано з: ${links.join('; ')}</div>` : ''}
         <div class="children-wrap">${childrenHtml}</div>
@@ -770,7 +774,12 @@ function renderNode(node){
           <div class="role-pills">${roleCheckboxesHtml(node.roleIds||[], 'node', node.id, null)}</div>
         </div>
         <div class="field"><label>Примітка щодо доступу (вільний текст)</label><input type="text" data-f="roles" data-id="${node.id}" value="${escapeHtml(node.roles)}" placeholder="напр.: функціонал обмежений для..." autocomplete="off"></div>
-        <div class="field"><label>Опис — що це і як працює</label><textarea data-f="description" data-id="${node.id}" autocomplete="off">${escapeHtml(node.description)}</textarea></div>
+        <div class="field">
+          <label>Опис — що це і як працює</label>
+          <textarea data-f="description" data-id="${node.id}" autocomplete="off">${escapeHtml(node.description)}</textarea>
+          <button type="button" class="code-toggle-btn" data-code-toggle>${node.code?'Код −':'Код +'}</button>
+          <textarea class="code-box" data-f="code" data-id="${node.id}" placeholder="HTML / JSON приклад розмітки чи функціоналу..." style="${node.code?'display:block;':''}" autocomplete="off">${escapeHtml(node.code||'')}</textarea>
+        </div>
 
         <div class="subhead"><b>Кнопки / поля цього блоку</b><button class="btn" data-add-el="${node.id}">+ Додати елемент</button></div>
         ${node.elements.filter(itemMatchesFilter).map(e=>`
@@ -780,6 +789,10 @@ function renderNode(node){
             <textarea data-ef="desc" placeholder="Опис функціоналу" autocomplete="off">${escapeHtml(e.desc)}</textarea>
             <button class="icon-btn" data-del-el="${e.id}" data-node="${node.id}" title="Видалити">🗑</button>
             <div class="role-pills small" style="grid-column:1/-1;">${roleCheckboxesHtml(e.roleIds||[], 'el', node.id, e.id, expandRoleScope(node.roleIds))}</div>
+            <div style="grid-column:1/-1;">
+              <button type="button" class="code-toggle-btn" data-code-toggle>${e.code?'Код −':'Код +'}</button>
+              <textarea class="code-box" data-ef="code" placeholder="HTML / JSON приклад..." style="${e.code?'display:block;':''}" autocomplete="off">${escapeHtml(e.code||'')}</textarea>
+            </div>
           </div>
         `).join('')}
 
@@ -793,6 +806,10 @@ function renderNode(node){
             <textarea data-lf="reason" placeholder="Чому/як пов'язані?" autocomplete="off">${escapeHtml(l.reason||'')}</textarea>
             <button class="icon-btn" data-del-link="${l.id}" data-node="${node.id}" title="Видалити">🗑</button>
             <div class="role-pills small" style="grid-column:1/-1;">${roleCheckboxesHtml(l.roleIds||[], 'link', node.id, l.id, expandRoleScope(node.roleIds))}</div>
+            <div style="grid-column:1/-1;">
+              <button type="button" class="code-toggle-btn" data-code-toggle>${l.code?'Код −':'Код +'}</button>
+              <textarea class="code-box" data-lf="code" placeholder="HTML / JSON приклад..." style="${l.code?'display:block;':''}" autocomplete="off">${escapeHtml(l.code||'')}</textarea>
+            </div>
           </div>
         `).join('')}
 
@@ -860,6 +877,17 @@ function wireEvents(root){
     const item = node.links.find(l=>l.id===row.dataset.link);
     row.querySelectorAll('[data-lf]').forEach(input=>{
       input.addEventListener('input', ()=>{ item[input.dataset.lf] = input.value; if(input.tagName==='TEXTAREA') autosize(input); updateOutput(); });
+    });
+  });
+
+  root.querySelectorAll('[data-code-toggle]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const box = btn.nextElementSibling;
+      if(!box) return;
+      const open = box.style.display === 'block';
+      box.style.display = open ? 'none' : 'block';
+      btn.textContent = open ? 'Код +' : 'Код −';
+      if(!open) autosize(box);
     });
   });
 
@@ -933,7 +961,7 @@ function wireEvents(root){
   root.querySelectorAll('[data-add-link]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const node = findNode(btn.dataset.addLink);
-      node.links.push({id:uid('l'), targetId:'', reason:'', roleIds:(node.roleIds||[]).slice()});
+      node.links.push({id:uid('l'), targetId:'', reason:'', code:'', roleIds:(node.roleIds||[]).slice()});
       openNodes.add(node.id);
       renderTree();
     });
@@ -1338,8 +1366,9 @@ function serializeNode(node){
     rolesFromTerminology: (node.roleIds||[]).map(rid=>{ const t = TERMS.find(x=>x.id===rid); return t ? t.term : rid; }),
     color: node.color || null,
     description: node.description,
-    elements: node.elements.map(e=>({name:e.name, type:e.type, description:e.desc, rolesFromTerminology:(e.roleIds||[]).map(rid=>{ const t=TERMS.find(x=>x.id===rid); return t?t.term:rid; })})),
-    links: node.links.filter(l=>l.targetId).map(l=>({target: titleById[l.targetId] || l.targetId, reason: l.reason, rolesFromTerminology:(l.roleIds||[]).map(rid=>{ const t=TERMS.find(x=>x.id===rid); return t?t.term:rid; })})),
+    codeExample: node.code || null,
+    elements: node.elements.map(e=>({name:e.name, type:e.type, description:e.desc, codeExample:e.code||null, rolesFromTerminology:(e.roleIds||[]).map(rid=>{ const t=TERMS.find(x=>x.id===rid); return t?t.term:rid; })})),
+    links: node.links.filter(l=>l.targetId).map(l=>({target: titleById[l.targetId] || l.targetId, reason: l.reason, codeExample:l.code||null, rolesFromTerminology:(l.roleIds||[]).map(rid=>{ const t=TERMS.find(x=>x.id===rid); return t?t.term:rid; })})),
     children: node.children.map(serializeNode)
   };
 }
