@@ -97,7 +97,7 @@
   .role-pills.small{margin-top:2px;gap:5px;}
   .role-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;background:var(--el-bg);border:1px solid var(--el-border);border-radius:999px;padding:4px 10px;cursor:pointer;color:#4A5063;}
   .role-pill input{accent-color:#8558C9;cursor:pointer;}
-  .role-pill.sub{background:#F1F6FE;border-color:#D9E6FB;font-size:10.5px;padding:3px 9px;}
+  .role-pill.sub{background:#F1F6FE;border-color:#D9E6FB;}
   .role-pills.small .role-pill{font-size:10px;padding:3px 8px;}
 
   .subhead{display:flex;align-items:center;gap:8px;margin:14px 0 8px;}
@@ -321,10 +321,18 @@ function autosizeAll(root){ root.querySelectorAll('textarea').forEach(autosize);
 const EL_TYPES = ['Кнопка','Поле введення','Перемикач (toggle)','Випадаючий список','Текст / напис','Іконка / зображення','Інше'];
 const COLORS = ['red','orange','yellow','green','purple'];
 const COLOR_DOT = {red:'#F3AAB4', orange:'#F5C08A', yellow:'#E7D06B', green:'#A9E0BE', purple:'#CBB2F0'};
+const BLOCK_TYPES = [
+  {key:'crm', label:'CRM-кабінет'},
+  {key:'site', label:'Сайт-магазин'},
+  {key:'minisite', label:'Міні-сайт'},
+  {key:'online', label:'Основа Online'},
+  {key:'space', label:'Основа SPACE'}
+];
+const BLOCK_TYPE_LABEL = {}; BLOCK_TYPES.forEach(bt=>BLOCK_TYPE_LABEL[bt.key]=bt.label);
 let ORDER_COUNTER = 0;
 
 function n(title, roles, description, elements, children, color){
-  return {id:uid('b'), title, roles: roles||'', roleIds: [], description: description||'', elements: elements||[], links:[], children: children||[], color: color||'', order: ORDER_COUNTER++};
+  return {id:uid('b'), title, roles: roles||'', roleIds: [], description: description||'', elements: elements||[], links:[], children: children||[], color: color||'', order: ORDER_COUNTER++, blockType:'', blockTypeComment:''};
 }
 function el(name, type, desc, roleIds){ return {id:uid('e'), name, type: type||EL_TYPES[0], desc: desc||'', roleIds: roleIds ? roleIds.slice() : []}; }
 
@@ -490,6 +498,11 @@ const ROOT_NODES = [
   ], 'purple')
 ];
 
+function setAllBlockType(nodes, type){
+  nodes.forEach(nd=>{ nd.blockType = type; setAllBlockType(nd.children, type); });
+}
+setAllBlockType(ROOT_NODES, 'crm');
+
 let openNodes = new Set(['ROOT_ALWAYS_OPEN_PLACEHOLDER']); // populated below after ids exist
 // open first level by default
 ROOT_NODES.forEach(r => openNodes.add(r.id));
@@ -515,13 +528,29 @@ function itemMatchesFilter(item){
   if(activeFilterStatus && ids.includes(activeFilterStatus)) return true;
   return false;
 }
-function roleCheckboxesHtml(selectedIds, targetType, nodeId, itemId){
+function expandRoleScope(ids){
+  if(!ids || ids.length===0) return null; // null = unrestricted (all roles/statuses allowed)
+  const set = new Set(ids);
+  ids.forEach(id=>{
+    const t = TERMS.find(x=>x.id===id);
+    if(t && t.funcType==='Роль'){
+      TERMS.filter(s=>s.funcType==='Статус' && s.parentRole===id).forEach(s=>set.add(s.id));
+    }
+  });
+  return set;
+}
+function roleCheckboxesHtml(selectedIds, targetType, nodeId, itemId, scopeIds){
   selectedIds = selectedIds || [];
-  const roles = TERMS.filter(t=>t.funcType==='Роль');
+  let roles = TERMS.filter(t=>t.funcType==='Роль');
   const itemAttr = itemId ? `data-item-id="${itemId}"` : '';
+  if(scopeIds){
+    roles = roles.filter(r=>scopeIds.has(r.id) || TERMS.some(s=>s.funcType==='Статус' && s.parentRole===r.id && scopeIds.has(s.id)));
+  }
   return roles.map(r=>{
-    const statuses = TERMS.filter(t=>t.funcType==='Статус' && t.parentRole===r.id);
-    return `<label class="role-pill"><input type="checkbox" data-role-target="${targetType}" data-node-id="${nodeId}" ${itemAttr} data-term-id="${r.id}" ${selectedIds.includes(r.id)?'checked':''}>${escapeHtml(r.term)}</label>` +
+    let statuses = TERMS.filter(t=>t.funcType==='Статус' && t.parentRole===r.id);
+    if(scopeIds) statuses = statuses.filter(s=>scopeIds.has(s.id));
+    const roleCheckable = !scopeIds || scopeIds.has(r.id);
+    return (roleCheckable ? `<label class="role-pill"><input type="checkbox" data-role-target="${targetType}" data-node-id="${nodeId}" ${itemAttr} data-term-id="${r.id}" ${selectedIds.includes(r.id)?'checked':''}>${escapeHtml(r.term)}</label>` : '') +
       statuses.map(s=>`<label class="role-pill sub"><input type="checkbox" data-role-target="${targetType}" data-node-id="${nodeId}" ${itemAttr} data-term-id="${s.id}" ${selectedIds.includes(s.id)?'checked':''}>${escapeHtml(s.term)}</label>`).join('');
   }).join('');
 }
@@ -586,10 +615,12 @@ function renderNodeReadonly(node){
       <summary>
         ${node.color ? `<span class="color-dot" style="background:${COLOR_DOT[node.color]}"></span>` : ''}
         <span>${escapeHtml(node.title || '(без назви)')}</span>
+        ${node.blockType ? `<span class="node-role-tag">${escapeHtml(BLOCK_TYPE_LABEL[node.blockType]||node.blockType)}</span>` : ''}
         ${node.roles ? `<span class="node-role-tag">${escapeHtml(node.roles)}</span>` : ''}
         <span class="node-caret">▸</span>
       </summary>
       <div class="node-body">
+        ${node.blockTypeComment ? `<div class="node-ro-links">Коментар до типу: ${escapeHtml(node.blockTypeComment)}</div>` : ''}
         ${node.description ? `<div class="node-ro-desc">${escapeHtml(node.description)}</div>` : ''}
         ${visibleElements.length ? `<div class="node-ro-elements">${visibleElements.map(e=>`<div class="ro-el-item">• <b>${escapeHtml(e.name||'—')}</b>${e.type?` <i>(${escapeHtml(e.type)})</i>`:''}${e.desc?' — '+escapeHtml(e.desc):''}</div>`).join('')}</div>` : ''}
         ${links.length ? `<div class="node-ro-links">Пов'язано з: ${links.join('; ')}</div>` : ''}
@@ -620,6 +651,13 @@ function renderNode(node){
         </div>
         <div class="field"><label>Назва блоку</label><input type="text" data-f="title" data-id="${node.id}" value="${escapeHtml(node.title)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
         <div class="field">
+          <label>Тип блоку (обери один)${!node.blockType?' — ще не обрано':''}</label>
+          <div class="role-pills" data-blocktype-wrap="${node.id}">
+            ${BLOCK_TYPES.map(bt=>`<label class="role-pill"><input type="checkbox" data-block-type="${bt.key}" data-node-id="${node.id}" ${node.blockType===bt.key?'checked':''}>${escapeHtml(bt.label)}</label>`).join('')}
+          </div>
+          <input type="text" data-f="blockTypeComment" data-id="${node.id}" value="${escapeHtml(node.blockTypeComment||'')}" placeholder="Коментар до типу блоку" style="margin-top:7px;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        </div>
+        <div class="field">
           <label>Ролі / доступ (з Термінології)</label>
           <div class="role-pills">${roleCheckboxesHtml(node.roleIds||[], 'node', node.id, null)}</div>
         </div>
@@ -633,7 +671,7 @@ function renderNode(node){
             <select data-ef="type">${EL_TYPES.map(t=>`<option ${t===e.type?'selected':''}>${t}</option>`).join('')}</select>
             <textarea data-ef="desc" placeholder="Опис функціоналу" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(e.desc)}</textarea>
             <button class="icon-btn" data-del-el="${e.id}" data-node="${node.id}" title="Видалити">🗑</button>
-            <div class="role-pills small" style="grid-column:1/-1;">${roleCheckboxesHtml(e.roleIds||[], 'el', node.id, e.id)}</div>
+            <div class="role-pills small" style="grid-column:1/-1;">${roleCheckboxesHtml(e.roleIds||[], 'el', node.id, e.id, expandRoleScope(node.roleIds))}</div>
           </div>
         `).join('')}
 
@@ -646,7 +684,7 @@ function renderNode(node){
             </select>
             <textarea data-lf="reason" placeholder="Чому/як пов'язані?" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(l.reason||'')}</textarea>
             <button class="icon-btn" data-del-link="${l.id}" data-node="${node.id}" title="Видалити">🗑</button>
-            <div class="role-pills small" style="grid-column:1/-1;">${roleCheckboxesHtml(l.roleIds||[], 'link', node.id, l.id)}</div>
+            <div class="role-pills small" style="grid-column:1/-1;">${roleCheckboxesHtml(l.roleIds||[], 'link', node.id, l.id, expandRoleScope(node.roleIds))}</div>
           </div>
         `).join('')}
 
@@ -716,6 +754,22 @@ function wireEvents(root){
     });
   });
 
+  root.querySelectorAll('[data-block-type]').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      const node = findNode(cb.dataset.nodeId);
+      if(!node) return;
+      if(cb.checked){
+        node.blockType = cb.dataset.blockType;
+        root.querySelectorAll(`[data-block-type][data-node-id="${node.id}"]`).forEach(other=>{
+          if(other !== cb) other.checked = false;
+        });
+      } else {
+        node.blockType = '';
+      }
+      updateOutput();
+    });
+  });
+
   root.querySelectorAll('[data-role-target]').forEach(cb=>{
     cb.addEventListener('change', ()=>{
       const node = findNode(cb.dataset.nodeId);
@@ -729,6 +783,14 @@ function wireEvents(root){
       if(cb.checked){ if(!arr.includes(termId)) arr.push(termId); }
       else{ const i = arr.indexOf(termId); if(i>-1) arr.splice(i,1); }
       updateOutput();
+      if(cb.dataset.roleTarget==='node'){
+        const scope = expandRoleScope(node.roleIds);
+        if(scope){
+          node.elements.forEach(e=>{ e.roleIds = (e.roleIds||[]).filter(id=>scope.has(id)); });
+          node.links.forEach(l=>{ l.roleIds = (l.roleIds||[]).filter(id=>scope.has(id)); });
+        }
+        renderTree();
+      }
     });
   });
 
@@ -1145,12 +1207,14 @@ function serializeNode(node){
   const titleById = {}; flat.forEach(f=>titleById[f.id]=f.title);
   return {
     title: node.title,
+    blockType: node.blockType ? BLOCK_TYPE_LABEL[node.blockType] || node.blockType : null,
+    blockTypeComment: node.blockTypeComment || '',
     rolesNote: node.roles,
     rolesFromTerminology: (node.roleIds||[]).map(rid=>{ const t = TERMS.find(x=>x.id===rid); return t ? t.term : rid; }),
     color: node.color || null,
     description: node.description,
-    elements: node.elements.map(e=>({name:e.name, type:e.type, description:e.desc})),
-    links: node.links.filter(l=>l.targetId).map(l=>({target: titleById[l.targetId] || l.targetId, reason: l.reason})),
+    elements: node.elements.map(e=>({name:e.name, type:e.type, description:e.desc, rolesFromTerminology:(e.roleIds||[]).map(rid=>{ const t=TERMS.find(x=>x.id===rid); return t?t.term:rid; })})),
+    links: node.links.filter(l=>l.targetId).map(l=>({target: titleById[l.targetId] || l.targetId, reason: l.reason, rolesFromTerminology:(l.roleIds||[]).map(rid=>{ const t=TERMS.find(x=>x.id===rid); return t?t.term:rid; })})),
     children: node.children.map(serializeNode)
   };
 }
