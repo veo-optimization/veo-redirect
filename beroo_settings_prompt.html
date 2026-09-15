@@ -145,7 +145,8 @@
   .copy-btn:hover{opacity:0.9;}
   pre#finalOutput{background:var(--console-bg);color:var(--console-text);margin:0;padding:20px 22px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:12.5px;line-height:1.6;white-space:pre-wrap;word-break:break-word;max-height:600px;overflow:auto;}
 
-  #autosaveBar{position:fixed;top:16px;right:16px;z-index:50;background:#fff;border:1px solid var(--border);border-radius:12px;padding:8px 10px;box-shadow:0 4px 16px rgba(20,20,40,.10);display:flex;align-items:center;gap:8px;}
+  #autosaveBar{position:fixed;top:16px;right:16px;z-index:50;background:#fff;border:1px solid var(--border);border-radius:12px;padding:8px 10px;box-shadow:0 4px 16px rgba(20,20,40,.10);display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end;}
+  #autosaveBar .status-row{flex-basis:100%;display:flex;justify-content:flex-end;}
   #autosaveBar label{font-size:11px;color:var(--muted);font-weight:600;white-space:nowrap;}
   #autosaveBar select{font-size:12px;padding:5px 7px;border-radius:7px;border:1px solid var(--border);background:#fff;}
   #autosaveBar .btn{padding:6px 10px;font-size:12px;white-space:nowrap;}
@@ -178,6 +179,9 @@
   </select>
   <button class="btn" id="saveNowBtn">💾 Зберегти зараз</button>
   <span id="autosaveTick" style="font-size:10.5px;color:var(--muted);"></span>
+  <div class="status-row">
+    <span class="filter-status" id="syncStatusLabelCorner" style="background:#E5F5E9;color:#2E9D6C;">Ініціалізація…</span>
+  </div>
 </div>
 
 <div class="wrap">
@@ -1445,7 +1449,7 @@ function shareLink(id){
   return url.toString();
 }
 function setSyncStatus(text, ok){
-  [document.getElementById('syncStatusLabel'), document.getElementById('syncStatusLabelBottom')].forEach(el=>{
+  [document.getElementById('syncStatusLabel'), document.getElementById('syncStatusLabelBottom'), document.getElementById('syncStatusLabelCorner')].forEach(el=>{
     if(!el) return;
     el.textContent = text;
     el.style.background = ok===false ? '#FDEBEC' : '#E5F5E9';
