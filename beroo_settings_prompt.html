@@ -1263,32 +1263,46 @@ let TERMS = [
   term('Реєстрація','Сценарій','Процес створення облікового запису — окремі шляхи для Магазину (категорії → дані ФОП → перший товар → кабінет) і Блогера (категорії → анкета → кабінет); новий блогер за замовчуванням отримує статус Оглядач.')
 ];
 
-(function addSettingsCrossLinks(){
-  function findByTitle(nodes, title){
-    for(const nd of nodes){
-      if(nd.title === title) return nd;
-      const found = findByTitle(nd.children, title);
-      if(found) return found;
-    }
-    return null;
+const SETTINGS_CROSS_LINKS = [
+  ['Інфо магазину', 'Кнопка «Купити на оригінальному сайті магазину»', 'Тумблер «Лише дзеркала» в Інфо магазину керує видимістю цієї кнопки на сайті продавця.'],
+  ['Міні-сайт', 'Умови магазину', 'Блок «Головні документи Магазину» в Міні-сайті відкриває цю картку для редагування.'],
+  ['Міні-сайт', 'Умови блогера', 'Блок «Умови блогера» в Міні-сайті відкриває цю картку для редагування.'],
+  ['Оплата', 'Надходження', 'Підключені способи оплати визначають, які надходження фіксуються в Фінансах.'],
+  ['Доставка', 'Відправлення', 'Налаштовані служби доставки використовуються при створенні відправлення в Продажах.'],
+  ['Сповіщення', 'Бот каталогу', 'Обидві картки керують підключенням Telegram-ботів — сповіщення і каталог це різні боти.'],
+  ['Рейтинги', 'Магазини', 'Пороги ризиків з Рейтингів впливають на те, як магазин виглядає для блогерів у Дзеркалі.'],
+  ['Анкета блогера', 'Розрахунки PRO', 'Вкладка «Блогер PRO» в Анкеті блогера відкривається лише після підтвердження ФОП/ТОВ у Розрахунках PRO.'],
+  ['Контакти магазину', 'Міні-сайт', 'Раніше ці контакти показувались у вкладці «Соціальні мережі» (тепер «Міні-сайт») — тепер окрема картка.']
+];
+function findByTitleInTree(nodes, title){
+  for(const nd of nodes){
+    if(nd.title === title) return nd;
+    const found = findByTitleInTree(nd.children, title);
+    if(found) return found;
   }
-  function link(fromTitle, toTitle, reason){
-    const from = findByTitle(ROOT_NODES, fromTitle);
-    const to = findByTitle(ROOT_NODES, toTitle);
-    if(from && to && from !== to){
+  return null;
+}
+// Resolves every pair by CURRENT title in the live tree (not by stored id, which
+// gets regenerated every page load) — safe to call repeatedly, fixes stale ids,
+// never creates duplicates.
+function applySettingsCrossLinks(){
+  let added = 0, fixed = 0;
+  SETTINGS_CROSS_LINKS.forEach(([fromTitle, toTitle, reason])=>{
+    const from = findByTitleInTree(ROOT_NODES, fromTitle);
+    const to = findByTitleInTree(ROOT_NODES, toTitle);
+    if(!from || !to || from === to) return;
+    from.links = from.links || [];
+    const existing = from.links.find(l => l.reason === reason);
+    if(existing){
+      if(existing.targetId !== to.id){ existing.targetId = to.id; fixed += 1; }
+    } else {
       from.links.push({id: uid('l'), targetId: to.id, reason: reason, roleIds: []});
+      added += 1;
     }
-  }
-  link('Інфо магазину', 'Кнопка «Купити на оригінальному сайті магазину»', 'Тумблер «Лише дзеркала» в Інфо магазину керує видимістю цієї кнопки на сайті продавця.');
-  link('Міні-сайт', 'Умови магазину', 'Блок «Головні документи Магазину» в Міні-сайті відкриває цю картку для редагування.');
-  link('Міні-сайт', 'Умови блогера', 'Блок «Умови блогера» в Міні-сайті відкриває цю картку для редагування.');
-  link('Оплата', 'Надходження', 'Підключені способи оплати визначають, які надходження фіксуються в Фінансах.');
-  link('Доставка', 'Відправлення', 'Налаштовані служби доставки використовуються при створенні відправлення в Продажах.');
-  link('Сповіщення', 'Бот каталогу', 'Обидві картки керують підключенням Telegram-ботів — сповіщення і каталог це різні боти.');
-  link('Рейтинги', 'Магазини', 'Пороги ризиків з Рейтингів впливають на те, як магазин виглядає для блогерів у Дзеркалі.');
-  link('Анкета блогера', 'Розрахунки PRO', 'Вкладка «Блогер PRO» в Анкеті блогера відкривається лише після підтвердження ФОП/ТОВ у Розрахунках PRO.');
-  link('Контакти магазину', 'Міні-сайт', 'Раніше ці контакти показувались у вкладці «Соціальні мережі» (тепер «Міні-сайт») — тепер окрема картка.');
-})();
+  });
+  return {added, fixed};
+}
+applySettingsCrossLinks();
 
 const CODE_SEED_TREE = clone(ROOT_NODES);
 const CODE_SEED_TERMS = clone(TERMS);
@@ -1334,31 +1348,7 @@ function mergeMissingTerms(seedTerms, liveTerms){
   });
   return added;
 }
-function fixupBrokenLinkTargets(){
-  // Merging clones subtrees with fresh ids, so any link whose targetId pointed
-  // at a seed-tree id (its own or a sibling's) goes stale. Resolve by title instead.
-  const seedFlat = flatten(CODE_SEED_TREE);
-  const seedIdToTitle = {}; seedFlat.forEach(f=>{ seedIdToTitle[f.id] = f.title; });
-  const liveFlat = flatten(ROOT_NODES);
-  const liveTitleToId = {}; liveFlat.forEach(f=>{ if(!(f.title in liveTitleToId)) liveTitleToId[f.title] = f.id; });
-  let fixed = 0;
-  function walk(nodes){
-    nodes.forEach(nd=>{
-      (nd.links||[]).forEach(l=>{
-        if(l.targetId && !findNode(l.targetId)){
-          const seedTitle = seedIdToTitle[l.targetId];
-          if(seedTitle && liveTitleToId[seedTitle] !== undefined){
-            l.targetId = liveTitleToId[seedTitle];
-            fixed += 1;
-          }
-        }
-      });
-      walk(nd.children);
-    });
-  }
-  walk(ROOT_NODES);
-  return fixed;
-}
+
 
 function renderTerms(){
   const root = document.getElementById('termsList');
@@ -2050,16 +2040,16 @@ document.getElementById('copyLinkBtn').addEventListener('click', ()=>{
 document.getElementById('mergeSeedBtn').addEventListener('click', ()=>{
   const addedNodes = mergeMissingNodes(CODE_SEED_TREE, ROOT_NODES);
   const addedTerms = mergeMissingTerms(CODE_SEED_TERMS, TERMS);
-  const fixedLinks = fixupBrokenLinkTargets();
-  if(addedNodes === 0 && addedTerms === 0 && fixedLinks === 0){
+  const linksResult = applySettingsCrossLinks();
+  if(addedNodes === 0 && addedTerms === 0 && linksResult.added === 0 && linksResult.fixed === 0){
     setSyncStatus('Нового з коду немає — усе вже є в документі');
   } else {
     renderTree();
     renderTerms();
     renderScalesManage();
     renderSimForm();
-    logAction(`Підтягнуто з коду: ${addedNodes} блоків, ${addedTerms} термінів, виправлено ${fixedLinks} зв'язків`);
-    setSyncStatus(`Додано ${addedNodes} блоків, ${addedTerms} термінів, виправлено ${fixedLinks} зв'язків — тепер тисни «Зберегти»`);
+    logAction(`Підтягнуто з коду: ${addedNodes} блоків, ${addedTerms} термінів, ${linksResult.added} нових зв'язків, ${linksResult.fixed} виправлено`);
+    setSyncStatus(`Додано ${addedNodes} блоків, ${addedTerms} термінів, ${linksResult.added} нових і ${linksResult.fixed} виправлених зв'язків — тепер тисни «Зберегти»`);
   }
 });
 
