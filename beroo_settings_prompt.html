@@ -205,6 +205,13 @@
       <input type="text" id="newDeviceName" placeholder="Назва нового пристрою" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
       <button class="btn" id="addDeviceBtn">Додати</button>
     </div>
+    <div class="field" style="margin-top:10px;max-width:520px;">
+      <label>Відкрити інший документ (встав посилання або ID, якщо потрапив на сторінку без правильного ?doc=)</label>
+      <div style="display:flex;gap:6px;">
+        <input type="text" id="openDocInput" placeholder="Посилання або ID документа" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="flex:1;">
+        <button class="btn" id="openDocBtn">Відкрити</button>
+      </div>
+    </div>
   </div>
 
   <div id="readonlyBanner" style="display:none;background:#FDEBEC;border:1px solid #F3C6CB;color:#B3324A;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;font-weight:600;">
@@ -582,6 +589,21 @@ document.getElementById('addDeviceBtn').addEventListener('click', ()=>{
   renderDeviceSelect();
 });
 renderDeviceSelect();
+
+document.getElementById('openDocBtn').addEventListener('click', ()=>{
+  const raw = document.getElementById('openDocInput').value.trim();
+  if(!raw) return;
+  let docId = raw;
+  try{
+    if(raw.indexOf('doc=') !== -1){
+      const parsed = new URL(raw, location.href);
+      docId = parsed.searchParams.get('doc') || raw;
+    }
+  }catch(e){ /* raw wasn't a full URL — treat it as a bare ID */ }
+  const url = new URL(location.href);
+  url.searchParams.set('doc', docId);
+  location.href = url.toString();
+});
 
 function nodeMatchesFilter(node){
   if(!activeFilterRole) return true;
