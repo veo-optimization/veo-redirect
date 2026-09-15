@@ -87,6 +87,9 @@
   .rating-opts label{display:flex;align-items:center;gap:5px;font-size:12.5px;background:var(--el-bg);border:1px solid var(--el-border);border-radius:999px;padding:6px 12px;cursor:pointer;}
   .rating-opts input{accent-color:#CBB2F0;}
   .sim-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:9px;}
+  .sim-card > summary{list-style:none;}
+  .sim-card > summary::-webkit-details-marker{display:none;}
+  .sim-card[open] > summary .node-caret{transform:rotate(90deg);}
   .sim-card .sim-head{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px;}
   .sim-tag{font-size:10.5px;font-weight:600;background:var(--accent-soft);border-radius:999px;padding:3px 9px;color:#5C6376;}
   .sim-ratings{display:flex;gap:6px;flex-wrap:wrap;font-size:11px;color:var(--muted);margin-bottom:8px;}
@@ -315,14 +318,21 @@
   <details class="section-collapse" id="simSection" open>
     <summary class="section-summary">
       <span class="section-summary-icon">🎭</span>
-      <span class="section-title-inline">Режим ІМІТАЦІЯ</span>
+      <span class="section-title-inline">Режим ІМІТАЦІЯ — нотатник команди</span>
       <span class="section-count" id="simCount"></span>
       <span class="section-caret">▸</span>
     </summary>
     <div class="section-collapse-body">
-      <p class="section-desc">Обери роль і статус, тип обговорюваного об'єкта, познач враження і опиши текстом — так формується журнал вражень.</p>
+      <p class="section-desc">Це записник для ідей і вражень команди — не частина структури системи. У JSON-експорті цей блок позначений як такий, що НЕ підлягає аналізу при розробці; він лише зберігає нотатки в одному місці, щоб не губились.</p>
       <div class="field" style="max-width:320px;"><label>Ваше ім'я (для журналу вражень)</label><input type="text" id="myNameInput" placeholder="напр. Олексій" autocomplete="off"></div>
       <div class="panel" id="simForm"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 10px;align-items:flex-end;">
+        <button class="btn ghost" id="expandAllSimBtn">Розгорнути все</button>
+        <button class="btn ghost" id="collapseAllSimBtn">Згорнути все</button>
+        <div class="field" style="margin:0;"><label>Фільтр: роль</label><select id="simFilterRole"><option value="">Усі</option></select></div>
+        <div class="field" style="margin:0;"><label>Фільтр: тип об'єкта</label><select id="simFilterObjectType"><option value="">Усі</option></select></div>
+        <div class="field" style="margin:0;flex:1;min-width:160px;"><label>Пошук у тексті</label><input type="text" id="simFilterSearch" placeholder="пошук у враженні..." autocomplete="off"></div>
+      </div>
       <div id="simList"></div>
     </div>
   </details>
@@ -568,6 +578,10 @@ let activeFilterStatus = '';
 let IS_OWNER = true; // optimistic default until registry lookup resolves
 let myName = localStorage.getItem('beroo_my_name') || '';
 let openTermIds = new Set();
+let openSimIds = new Set();
+let simFilterRoleId = '';
+let simFilterObjectType = '';
+let simFilterSearchText = '';
 let actionLog = [];
 let DEVICE_LIST = JSON.parse(localStorage.getItem('beroo_device_list') || '["iPhone","MacBook"]');
 let myDevice = localStorage.getItem('beroo_device_name') || DEVICE_LIST[0] || '';
@@ -1280,7 +1294,9 @@ function renderSimForm(){
   autosize(commentEl);
 
   document.getElementById('simAddBtn').addEventListener('click', ()=>{
-    simEntries.push({id:uid('s'), author: myName, ...simDraft});
+    const newEntry = {id:uid('s'), author: myName, ...simDraft};
+    simEntries.push(newEntry);
+    openSimIds.add(newEntry.id);
     simDraft = { roleId:simDraft.roleId, statusId:simDraft.statusId, objectType:simDraft.objectType, blockId:'', mood:'', benefit:'', comfort:'', clarity:'', comment:'' };
     renderSimForm(); renderSimList(); updateOutput();
     syncSimEntriesToCloud();
@@ -1293,55 +1309,72 @@ function renderSimList(){
   const root = document.getElementById('simList');
   const flat = flatten(ROOT_NODES);
   document.getElementById('simCount').textContent = simEntries.length + (simEntries.length===1?' запис':' записів');
+  populateSimFilterOptions();
   if(simEntries.length===0){ root.innerHTML = '<div class="empty">Записів ще немає.</div>'; return; }
-  const visible = simEntries.filter(simEntryVisible);
+  const visible = simEntries.filter(simEntryVisible).filter(simMatchesLocalFilter);
   if(visible.length===0){ root.innerHTML = '<div class="empty">Немає записів для обраного фільтра.</div>'; return; }
   root.innerHTML = visible.slice().reverse().map(e=>{
     const roles = TERMS.filter(t=>t.funcType==='Роль');
     const statuses = TERMS.filter(t=>t.funcType==='Статус' && t.parentRole===e.roleId);
+    const roleName = (TERMS.find(t=>t.id===e.roleId)||{}).term;
+    const statusName = (TERMS.find(t=>t.id===e.statusId)||{}).term;
     return `
-    <div class="sim-card" data-entry="${e.id}">
-      <div class="two">
-        <div class="field"><label>Роль</label>
-          <select data-sf="roleId">
-            <option value="">—</option>
-            ${roles.map(r=>`<option value="${r.id}" ${e.roleId===r.id?'selected':''}>${escapeHtml(r.term)}</option>`).join('')}
-          </select>
-        </div>
-        <div class="field"><label>Статус</label>
-          <select data-sf="statusId">
-            <option value="">—</option>
-            ${statuses.map(s=>`<option value="${s.id}" ${e.statusId===s.id?'selected':''}>${escapeHtml(s.term)}</option>`).join('')}
-          </select>
-        </div>
-      </div>
-      <div class="two">
-        <div class="field"><label>Тип об'єкта обговорення</label>
-          <select data-sf="objectType">${OBJECT_TYPES.map(o=>`<option ${e.objectType===o?'selected':''}>${o}</option>`).join('')}</select>
-        </div>
-        <div class="field"><label>Прив'язаний блок</label>
-          <select data-sf="blockId">
-            <option value="">— без прив'язки —</option>
-            ${flat.map(f=>`<option value="${f.id}" ${e.blockId===f.id?'selected':''}>${'— '.repeat(f.depth)}${escapeHtml(f.title)}</option>`).join('')}
-          </select>
-        </div>
-      </div>
-      ${SCALES.map(s=>`
-        <div class="rating-group">
-          <label class="g-label">${s.label}</label>
-          <div class="rating-opts">
-            ${s.opts.map(o=>`<label><input type="radio" name="${e.id}_${s.key}" value="${o}" data-sf="${s.key}" ${e[s.key]===o?'checked':''}> ${o}</label>`).join('')}
+    <details class="sim-card" data-entry="${e.id}" ${openSimIds.has(e.id)?'open':''}>
+      <summary style="cursor:pointer;display:flex;align-items:center;gap:7px;flex-wrap:wrap;">
+        ${roleName?`<span class="sim-tag">${escapeHtml(roleName)}</span>`:'<span class="sim-tag">без ролі</span>'}
+        ${statusName?`<span class="sim-tag">${escapeHtml(statusName)}</span>`:''}
+        <span class="sim-tag">${escapeHtml(e.objectType||'')}</span>
+        ${e.author?`<span class="sim-tag">👤 ${escapeHtml(e.author)}</span>`:''}
+        <span class="node-caret" style="margin-left:auto;">▸</span>
+      </summary>
+      <div style="margin-top:10px;">
+        <div class="two">
+          <div class="field"><label>Роль</label>
+            <select data-sf="roleId">
+              <option value="">—</option>
+              ${roles.map(r=>`<option value="${r.id}" ${e.roleId===r.id?'selected':''}>${escapeHtml(r.term)}</option>`).join('')}
+            </select>
+          </div>
+          <div class="field"><label>Статус</label>
+            <select data-sf="statusId">
+              <option value="">—</option>
+              ${statuses.map(s=>`<option value="${s.id}" ${e.statusId===s.id?'selected':''}>${escapeHtml(s.term)}</option>`).join('')}
+            </select>
           </div>
         </div>
-      `).join('')}
-      <div class="field"><label>Враження текстом</label><textarea data-sf="comment" autocomplete="off">${escapeHtml(e.comment)}</textarea></div>
-      <div class="node-foot">
-        <span></span>
-        <button class="icon-btn${confirmingDeleteSimId===e.id?' confirming':''}" data-del-sim="${e.id}" title="Видалити запис">${confirmingDeleteSimId===e.id?'Підтвердити?':'🗑'}</button>
+        <div class="two">
+          <div class="field"><label>Тип об'єкта обговорення</label>
+            <select data-sf="objectType">${OBJECT_TYPES.map(o=>`<option ${e.objectType===o?'selected':''}>${o}</option>`).join('')}</select>
+          </div>
+          <div class="field"><label>Прив'язаний блок</label>
+            <select data-sf="blockId">
+              <option value="">— без прив'язки —</option>
+              ${flat.map(f=>`<option value="${f.id}" ${e.blockId===f.id?'selected':''}>${'— '.repeat(f.depth)}${escapeHtml(f.title)}</option>`).join('')}
+            </select>
+          </div>
+        </div>
+        ${SCALES.map(s=>`
+          <div class="rating-group">
+            <label class="g-label">${s.label}</label>
+            <div class="rating-opts">
+              ${s.opts.map(o=>`<label><input type="radio" name="${e.id}_${s.key}" value="${o}" data-sf="${s.key}" ${e[s.key]===o?'checked':''}> ${o}</label>`).join('')}
+            </div>
+          </div>
+        `).join('')}
+        <div class="field"><label>Враження текстом</label><textarea data-sf="comment" autocomplete="off">${escapeHtml(e.comment)}</textarea></div>
+        <div class="node-foot">
+          <span></span>
+          <button class="icon-btn${confirmingDeleteSimId===e.id?' confirming':''}" data-del-sim="${e.id}" title="Видалити запис">${confirmingDeleteSimId===e.id?'Підтвердити?':'🗑'}</button>
+        </div>
       </div>
-    </div>`;
+    </details>`;
   }).join('');
 
+  root.querySelectorAll('details.sim-card').forEach(det=>{
+    det.addEventListener('toggle', ()=>{
+      if(det.open) openSimIds.add(det.dataset.entry); else openSimIds.delete(det.dataset.entry);
+    });
+  });
   root.querySelectorAll('[data-entry]').forEach(card=>{
     const entry = simEntries.find(x=>x.id===card.dataset.entry);
     card.querySelectorAll('[data-sf]').forEach(input=>{
@@ -1367,6 +1400,7 @@ function renderSimList(){
       const id = btn.dataset.delSim;
       if(confirmingDeleteSimId === id){
         simEntries = simEntries.filter(x=>x.id!==id);
+        openSimIds.delete(id);
         confirmingDeleteSimId = null;
         renderSimList(); updateOutput();
       } else {
@@ -1378,6 +1412,39 @@ function renderSimList(){
   });
   autosizeAll(root);
 }
+function simMatchesLocalFilter(e){
+  if(simFilterRoleId && e.roleId !== simFilterRoleId) return false;
+  if(simFilterObjectType && e.objectType !== simFilterObjectType) return false;
+  if(simFilterSearchText){
+    const hay = ((e.comment||'') + ' ' + (e.author||'')).toLowerCase();
+    if(hay.indexOf(simFilterSearchText.toLowerCase()) === -1) return false;
+  }
+  return true;
+}
+function populateSimFilterOptions(){
+  const roleSel = document.getElementById('simFilterRole');
+  const objSel = document.getElementById('simFilterObjectType');
+  if(roleSel && !roleSel.dataset.filled){
+    const roles = TERMS.filter(t=>t.funcType==='Роль');
+    roleSel.innerHTML = '<option value="">Усі</option>' + roles.map(r=>`<option value="${r.id}">${escapeHtml(r.term)}</option>`).join('');
+    roleSel.dataset.filled = '1';
+  }
+  if(objSel && !objSel.dataset.filled){
+    objSel.innerHTML = '<option value="">Усі</option>' + OBJECT_TYPES.map(o=>`<option>${escapeHtml(o)}</option>`).join('');
+    objSel.dataset.filled = '1';
+  }
+}
+document.getElementById('simFilterRole').addEventListener('change', (e)=>{ simFilterRoleId = e.target.value; renderSimList(); });
+document.getElementById('simFilterObjectType').addEventListener('change', (e)=>{ simFilterObjectType = e.target.value; renderSimList(); });
+document.getElementById('simFilterSearch').addEventListener('input', (e)=>{ simFilterSearchText = e.target.value; renderSimList(); });
+document.getElementById('expandAllSimBtn').addEventListener('click', ()=>{
+  openSimIds = new Set(simEntries.map(e=>e.id));
+  renderSimList();
+});
+document.getElementById('collapseAllSimBtn').addEventListener('click', ()=>{
+  openSimIds = new Set();
+  renderSimList();
+});
 
 function renderFilterOptions(){
   const roleSel = document.getElementById('filterRole');
@@ -1451,12 +1518,15 @@ function updateOutput(){
       const role = TERMS.find(x=>x.id===t.parentRole);
       return {term:t.term, synonyms: t.synonyms||[], function:t.funcType, explanation:t.explanation, role: role?role.term:null};
     }),
-    simulationLog: simEntries.map(e=>{
-      const role = TERMS.find(t=>t.id===e.roleId), status = TERMS.find(t=>t.id===e.statusId);
-      const flat = flatten(ROOT_NODES); const block = flat.find(f=>f.id===e.blockId);
-      return {role: role?role.term:null, status: status?status.term:null, objectType:e.objectType, block: block?block.title:null,
-        mood:e.mood, benefit:e.benefit, comfort:e.comfort, clarity:e.clarity, comment:e.comment};
-    })
+    simulationNotebook: {
+      _note: "ЦЕ НОТАТНИК КОМАНДИ — НЕ АНАЛІЗУВАТИ ЯК ЧАСТИНУ СТРУКТУРИ СИСТЕМИ. Це чернетка ідей, вражень і зауважень, зроблених у розділі «Режим ІМІТАЦІЯ» для внутрішнього користування командою (зокрема Termінологія тут використана лише для довідки — Роль/Статус). НЕ враховувати ці записи при розробці, аналізі логіки чи прийнятті архітектурних рішень. Джерело істини — виключно розділ «structure» вище.",
+      entries: simEntries.map(e=>{
+        const role = TERMS.find(t=>t.id===e.roleId), status = TERMS.find(t=>t.id===e.statusId);
+        const flat = flatten(ROOT_NODES); const block = flat.find(f=>f.id===e.blockId);
+        return {author:e.author||null, role: role?role.term:null, status: status?status.term:null, objectType:e.objectType, block: block?block.title:null,
+          mood:e.mood, benefit:e.benefit, comfort:e.comfort, clarity:e.clarity, comment:e.comment};
+      })
+    }
   };
   document.getElementById('finalOutput').textContent = JSON.stringify(data, null, 2);
   document.getElementById('statsBadge').textContent = countNodes(ROOT_NODES) + ' блоків · ' + TERMS.length + ' термінів · ' + simEntries.length + ' вражень';
