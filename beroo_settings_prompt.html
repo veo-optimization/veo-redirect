@@ -40,6 +40,12 @@
   .code-toggle-btn{font-size:10.5px;padding:3px 9px;margin-top:5px;border-radius:7px;border:1px dashed #C9CEDA;background:#fff;color:#5C6376;cursor:pointer;}
   .code-toggle-btn:hover{background:var(--accent-soft);}
   .code-box{display:none;width:100%;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:11.5px;line-height:1.55;background:#12141A;color:#D7E0DE;border:1px solid #262A33;border-radius:9px;padding:10px 12px;min-height:112px;resize:none;overflow:hidden;margin-top:6px;}
+  .term-buttons-row{display:flex;flex-direction:column;gap:9px;margin-bottom:16px;}
+  .term-btn-group{display:flex;flex-wrap:wrap;gap:7px;align-items:center;}
+  .term-btn-group-label{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;min-width:64px;}
+  .term-btn{font-size:12.5px;font-weight:600;padding:6px 13px;border-radius:999px;border:1.5px solid var(--tcolor,#ccc);background:#fff;color:#3A3550;cursor:pointer;}
+  .term-btn:hover{background:color-mix(in srgb, var(--tcolor,#ccc) 15%, #fff);}
+  .term-btn.active{background:var(--tcolor,#8558C9);color:#fff;}
   .two{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   @media (max-width:640px){.two{grid-template-columns:1fr;}}
 
@@ -246,6 +252,8 @@
 
   <div class="section-title">Структура блоків</div>
   <div class="toolbar-row" id="treeToolbarRow">
+    <button class="btn" id="expandAllTreeBtn">Розгорнути все</button>
+    <button class="btn" id="collapseAllTreeBtn">Згорнути все</button>
     <button class="btn" id="sortColorBtn">🎨 Сортувати за кольором</button>
     <button class="btn" id="restoreOrderBtn">↺ Початковий порядок</button>
     <span style="font-size:12px;color:var(--muted);">Фіолетовий = моє бачення/припущення (можна перефарбувати)</span>
@@ -294,6 +302,11 @@
     </summary>
     <div class="section-collapse-body">
       <p class="section-desc">Довідник термінів системи — використовується і для загального словника, і як джерело ролей/статусів для режиму ІМІТАЦІЯ нижче.</p>
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <button class="btn ghost" id="expandAllTermsBtn">Розгорнути все</button>
+        <button class="btn ghost" id="collapseAllTermsBtn">Згорнути все</button>
+      </div>
+      <div id="termButtonsRow" class="term-buttons-row"></div>
       <div id="termsList"></div>
       <div class="add-root-row"><button class="btn ghost" id="addTermBtn">+ Додати термін</button></div>
     </div>
@@ -548,14 +561,13 @@ function setAllBlockType(nodes, type){
 }
 setAllBlockType(ROOT_NODES, 'crm');
 
-let openNodes = new Set(['ROOT_ALWAYS_OPEN_PLACEHOLDER']); // populated below after ids exist
-// open first level by default
-ROOT_NODES.forEach(r => openNodes.add(r.id));
+let openNodes = new Set(); // everything collapsed on load
 let confirmingDeleteId = null;
 let activeFilterRole = '';
 let activeFilterStatus = '';
 let IS_OWNER = true; // optimistic default until registry lookup resolves
 let myName = localStorage.getItem('beroo_my_name') || '';
+let openTermIds = new Set();
 let actionLog = [];
 let DEVICE_LIST = JSON.parse(localStorage.getItem('beroo_device_list') || '["iPhone","MacBook"]');
 let myDevice = localStorage.getItem('beroo_device_name') || DEVICE_LIST[0] || '';
@@ -1055,6 +1067,9 @@ function renderTerms(){
   const root = document.getElementById('termsList');
   document.getElementById('termsCount').textContent = TERMS.length + (TERMS.length===1?' термін':' термінів');
   document.getElementById('addTermBtn').style.display = IS_OWNER ? '' : 'none';
+  document.getElementById('termButtonsRow').style.display = IS_OWNER ? '' : 'none';
+  document.getElementById('expandAllTermsBtn').style.display = IS_OWNER ? '' : 'none';
+  document.getElementById('collapseAllTermsBtn').style.display = IS_OWNER ? '' : 'none';
   if(!IS_OWNER){
     root.innerHTML = TERMS.map(t=>{
       const color = FUNC_COLORS[t.funcType] || FUNC_COLORS['Інше'];
@@ -1069,7 +1084,7 @@ function renderTerms(){
     }).join('');
     return;
   }
-  root.innerHTML = TERMS.map(t=>{
+  root.innerHTML = TERMS.filter(t=>openTermIds.has(t.id)).map(t=>{
     const roleOptions = TERMS.filter(x=>x.funcType==='Роль' && x.id!==t.id).map(r=>`<option value="${r.id}" ${t.parentRole===r.id?'selected':''}>${escapeHtml(r.term)}</option>`).join('');
     const color = FUNC_COLORS[t.funcType] || FUNC_COLORS['Інше'];
     return `
@@ -1079,6 +1094,7 @@ function renderTerms(){
         <input type="text" class="term-name-input" data-tf="term" placeholder="Термін" value="${escapeHtml(t.term)}" autocomplete="off">
         <select class="term-func-select" data-tf="funcType" style="background:${color}22;border-color:${color};color:#3A3550;">${FUNC_TYPES.map(f=>`<option ${f===t.funcType?'selected':''}>${f}</option>`).join('')}</select>
         <button class="icon-btn" data-del-term="${t.id}" title="Видалити">🗑</button>
+        <button class="icon-btn" data-collapse-term="${t.id}" title="Згорнути">▴</button>
       </div>
       <div class="term-card-body">
         ${t.funcType==='Статус' ? `
@@ -1096,8 +1112,16 @@ function renderTerms(){
         <div class="field term-explain"><label>Пояснення</label><textarea data-tf="explanation" placeholder="Пояснення" autocomplete="off">${escapeHtml(t.explanation)}</textarea></div>
       </div>
     </div>`;
-  }).join('');
+  }).join('') || (TERMS.length ? '' : '<div class="empty">Термінів ще немає.</div>');
 
+  renderTermButtons();
+
+  root.querySelectorAll('[data-collapse-term]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      openTermIds.delete(btn.dataset.collapseTerm);
+      renderTerms();
+    });
+  });
   root.querySelectorAll('[data-tf]').forEach(input=>{
     input.addEventListener('input', ()=>{
       const t = TERMS.find(x=>x.id===input.closest('[data-term]').dataset.term);
@@ -1111,6 +1135,7 @@ function renderTerms(){
   });
   root.querySelectorAll('[data-del-term]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
+      openTermIds.delete(btn.dataset.delTerm);
       TERMS = TERMS.filter(x=>x.id!==btn.dataset.delTerm);
       renderTerms(); renderSimForm(); updateOutput();
     });
@@ -1139,8 +1164,39 @@ function renderTerms(){
   autosizeAll(root);
   if(typeof renderFilterOptions === 'function' && document.getElementById('filterRole')) renderFilterOptions();
 }
+function renderTermButtons(){
+  const row = document.getElementById('termButtonsRow');
+  const grouped = {};
+  TERMS.forEach(t=>{ (grouped[t.funcType] = grouped[t.funcType]||[]).push(t); });
+  row.innerHTML = FUNC_TYPES.map(ft=>{
+    const list = grouped[ft] || [];
+    if(!list.length) return '';
+    const color = FUNC_COLORS[ft] || FUNC_COLORS['Інше'];
+    return `<div class="term-btn-group">
+      <span class="term-btn-group-label">${escapeHtml(ft)}</span>
+      ${list.map(t=>`<button type="button" class="term-btn${openTermIds.has(t.id)?' active':''}" data-term-toggle="${t.id}" style="--tcolor:${color};">${escapeHtml(t.term || '(без назви)')}</button>`).join('')}
+    </div>`;
+  }).join('');
+  row.querySelectorAll('[data-term-toggle]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.dataset.termToggle;
+      if(openTermIds.has(id)) openTermIds.delete(id); else openTermIds.add(id);
+      renderTerms();
+    });
+  });
+}
 document.getElementById('addTermBtn').addEventListener('click', ()=>{
-  TERMS.push(term('', FUNC_TYPES[0], ''));
+  const t = term('', FUNC_TYPES[0], '');
+  TERMS.push(t);
+  openTermIds.add(t.id);
+  renderTerms();
+});
+document.getElementById('expandAllTermsBtn').addEventListener('click', ()=>{
+  openTermIds = new Set(TERMS.map(t=>t.id));
+  renderTerms();
+});
+document.getElementById('collapseAllTermsBtn').addEventListener('click', ()=>{
+  openTermIds = new Set();
   renderTerms();
 });
 
