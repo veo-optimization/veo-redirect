@@ -216,6 +216,7 @@
       <button class="btn" id="saveCloudBtn">💾 Зберегти</button>
       <button class="btn" id="loadCloudBtn">⤓ Завантажити з хмари</button>
       <button class="btn" id="copyLinkBtn">🔗 Копіювати посилання на цю версію</button>
+      <button class="btn" id="mergeSeedBtn" title="Додає нові блоки, яких немає в поточному документі, з коду сторінки — нічого наявного не чіпає">🔄 Підтягнути нові блоки з коду</button>
       <div style="margin-left:auto;">
         <label style="display:block;font-size:11px;color:var(--muted);font-weight:600;margin-bottom:4px;">Пристрій</label>
         <select id="deviceSelect" style="font-size:12px;padding:6px 8px;border-radius:7px;border:1px solid var(--border);"></select>
@@ -383,6 +384,7 @@
 <script>
 function escapeHtml(s){ return String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
 function uid(p){ return (p||'b') + Math.random().toString(36).slice(2,8); }
+function clone(x){ return JSON.parse(JSON.stringify(x)); }
 function copyText(text, btn, resetLabel){
   const done = ()=>{ const o=btn.textContent; btn.textContent='Скопійовано ✓'; setTimeout(()=>{btn.textContent=resetLabel||o;},1400); };
   if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text).then(done).catch(()=>fallbackCopy(text,done)); }
@@ -1288,6 +1290,29 @@ let TERMS = [
   link('Контакти магазину', 'Міні-сайт', 'Раніше ці контакти показувались у вкладці «Соціальні мережі» (тепер «Міні-сайт») — тепер окрема картка.');
 })();
 
+const CODE_SEED_TREE = clone(ROOT_NODES);
+function reassignIds(node){
+  node.id = uid('b');
+  (node.elements||[]).forEach(e=>{ e.id = uid('e'); });
+  (node.links||[]).forEach(l=>{ l.id = uid('l'); });
+  (node.children||[]).forEach(reassignIds);
+}
+function mergeMissingNodes(seedNodes, liveNodes){
+  let added = 0;
+  seedNodes.forEach(seedNode=>{
+    const match = liveNodes.find(n=>n.title === seedNode.title);
+    if(!match){
+      const copy = clone(seedNode);
+      reassignIds(copy);
+      liveNodes.push(copy);
+      added += 1 + countNodes(copy.children);
+    } else {
+      added += mergeMissingNodes(seedNode.children, match.children);
+    }
+  });
+  return added;
+}
+
 function renderTerms(){
   const root = document.getElementById('termsList');
   document.getElementById('termsCount').textContent = TERMS.length + (TERMS.length===1?' термін':' термінів');
@@ -1973,6 +1998,17 @@ document.getElementById('loadCloudBtnBottom').addEventListener('click', ()=> doc
 document.getElementById('copyLinkBtn').addEventListener('click', ()=>{
   const btn = document.getElementById('copyLinkBtn');
   copyText(shareLink(CURRENT_DOC_ID), btn, '🔗 Копіювати посилання на цю версію');
+});
+
+document.getElementById('mergeSeedBtn').addEventListener('click', ()=>{
+  const added = mergeMissingNodes(CODE_SEED_TREE, ROOT_NODES);
+  if(added === 0){
+    setSyncStatus('Нових блоків з коду немає — усе вже є в документі');
+  } else {
+    renderTree();
+    logAction(`Підтягнуто нових блоків з коду: ${added}`);
+    setSyncStatus(`Додано ${added} нових блоків з коду — тепер тисни «Зберегти»`);
+  }
 });
 
 /* ======================================================================
