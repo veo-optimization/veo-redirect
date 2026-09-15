@@ -206,13 +206,13 @@
       </div>
     </div>
     <div id="newDeviceRow" style="display:none;gap:6px;margin-top:8px;">
-      <input type="text" id="newDeviceName" placeholder="Назва нового пристрою" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <input type="text" id="newDeviceName" placeholder="Назва нового пристрою" autocomplete="off">
       <button class="btn" id="addDeviceBtn">Додати</button>
     </div>
     <div class="field" style="margin-top:10px;max-width:520px;">
       <label>Відкрити інший документ (встав посилання або ID, якщо потрапив на сторінку без правильного ?doc=)</label>
       <div style="display:flex;gap:6px;">
-        <input type="text" id="openDocInput" placeholder="Посилання або ID документа" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" style="flex:1;">
+        <input type="text" id="openDocInput" placeholder="Посилання або ID документа" autocomplete="off" style="flex:1;">
         <button class="btn" id="openDocBtn">Відкрити</button>
       </div>
     </div>
@@ -221,6 +221,34 @@
   <div id="readonlyBanner" style="display:none;background:#FDEBEC;border:1px solid #F3C6CB;color:#B3324A;border-radius:12px;padding:12px 16px;margin-bottom:16px;font-size:13px;font-weight:600;">
     ⚠️ Цю копію вимкнено власником — перегляд без можливості редагування.
   </div>
+
+  <div class="panel filter-panel" id="filterPanel">
+    <div class="filter-head">
+      <b>Перегляд за роллю</b>
+      <span class="filter-status" id="filterStatusLabel">Показано: Всі ролі</span>
+    </div>
+    <div class="two">
+      <div class="field"><label>Роль</label>
+        <select id="filterRole">
+          <option value="">Всі</option>
+        </select>
+      </div>
+      <div class="field"><label>Статус</label>
+        <select id="filterStatus">
+          <option value="">Усі статуси</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-title">Структура блоків</div>
+  <div class="toolbar-row" id="treeToolbarRow">
+    <button class="btn" id="sortColorBtn">🎨 Сортувати за кольором</button>
+    <button class="btn" id="restoreOrderBtn">↺ Початковий порядок</button>
+    <span style="font-size:12px;color:var(--muted);">Фіолетовий = моє бачення/припущення (можна перефарбувати)</span>
+  </div>
+  <div class="tree" id="tree"></div>
+  <div class="add-root-row" id="treeAddRootRow"><button class="btn ghost" id="addRootBtn">+ Додати новий кореневий блок</button></div>
 
   <details class="section-collapse" id="copiesSection" open>
     <summary class="section-summary">
@@ -232,7 +260,7 @@
     <div class="section-collapse-body">
       <p class="section-desc">Створюй іменовані копії для колег, вмикай/вимикай їх, обмежуй ролі та блоки редагування, дивись лог дій по кожній копії.</p>
       <div class="panel" style="margin-bottom:14px;">
-        <div class="field"><label>Імʼя нової копії</label><input type="text" id="newCopyName" placeholder="напр. Копія для Олексія" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+        <div class="field"><label>Імʼя нової копії</label><input type="text" id="newCopyName" placeholder="напр. Копія для Олексія" autocomplete="off"></div>
         <button class="btn" id="createCopyBtn">+ Створити копію поточної версії</button>
       </div>
       <div id="copiesList"></div>
@@ -253,25 +281,6 @@
       <div id="teamImpressionsList"></div>
     </div>
   </details>
-
-  <div class="panel filter-panel" id="filterPanel">
-    <div class="filter-head">
-      <b>Перегляд за роллю</b>
-      <span class="filter-status" id="filterStatusLabel">Показано: Всі ролі</span>
-    </div>
-    <div class="two">
-      <div class="field"><label>Роль</label>
-        <select id="filterRole">
-          <option value="">Всі</option>
-        </select>
-      </div>
-      <div class="field"><label>Статус</label>
-        <select id="filterStatus">
-          <option value="">Усі статуси</option>
-        </select>
-      </div>
-    </div>
-  </div>
 
   <details class="section-collapse" id="termsSection" open>
     <summary class="section-summary">
@@ -296,20 +305,11 @@
     </summary>
     <div class="section-collapse-body">
       <p class="section-desc">Обери роль і статус, тип обговорюваного об'єкта, познач враження і опиши текстом — так формується журнал вражень.</p>
-      <div class="field" style="max-width:320px;"><label>Ваше ім'я (для журналу вражень)</label><input type="text" id="myNameInput" placeholder="напр. Олексій" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+      <div class="field" style="max-width:320px;"><label>Ваше ім'я (для журналу вражень)</label><input type="text" id="myNameInput" placeholder="напр. Олексій" autocomplete="off"></div>
       <div class="panel" id="simForm"></div>
       <div id="simList"></div>
     </div>
   </details>
-
-  <div class="section-title">Структура блоків</div>
-  <div class="toolbar-row" id="treeToolbarRow">
-    <button class="btn" id="sortColorBtn">🎨 Сортувати за кольором</button>
-    <button class="btn" id="restoreOrderBtn">↺ Початковий порядок</button>
-    <span style="font-size:12px;color:var(--muted);">Фіолетовий = моє бачення/припущення (можна перефарбувати)</span>
-  </div>
-  <div class="tree" id="tree"></div>
-  <div class="add-root-row" id="treeAddRootRow"><button class="btn ghost" id="addRootBtn">+ Додати новий кореневий блок</button></div>
 
   <div class="console-wrap">
     <div class="console-head">
@@ -757,27 +757,27 @@ function renderNode(node){
           ${COLORS.map(c=>`<button type="button" class="color-swatch${node.color===c?' active':''}" data-set-color="${c}" style="background:${COLOR_DOT[c]}" title="${c}"></button>`).join('')}
           <button type="button" class="color-swatch none-swatch${!node.color?' active':''}" data-set-color="" title="Без кольору">×</button>
         </div>
-        <div class="field"><label>Назва блоку</label><input type="text" data-f="title" data-id="${node.id}" value="${escapeHtml(node.title)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
+        <div class="field"><label>Назва блоку</label><input type="text" data-f="title" data-id="${node.id}" value="${escapeHtml(node.title)}" autocomplete="off"></div>
         <div class="field">
           <label>Тип блоку (обери один)${!node.blockType?' — ще не обрано':''}</label>
           <div class="role-pills" data-blocktype-wrap="${node.id}">
             ${BLOCK_TYPES.map(bt=>`<label class="role-pill"><input type="checkbox" data-block-type="${bt.key}" data-node-id="${node.id}" ${node.blockType===bt.key?'checked':''}>${escapeHtml(bt.label)}</label>`).join('')}
           </div>
-          <input type="text" data-f="blockTypeComment" data-id="${node.id}" value="${escapeHtml(node.blockTypeComment||'')}" placeholder="Коментар до типу блоку" style="margin-top:7px;" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+          <input type="text" data-f="blockTypeComment" data-id="${node.id}" value="${escapeHtml(node.blockTypeComment||'')}" placeholder="Коментар до типу блоку" style="margin-top:7px;" autocomplete="off">
         </div>
         <div class="field">
           <label>Ролі / доступ (з Термінології)</label>
           <div class="role-pills">${roleCheckboxesHtml(node.roleIds||[], 'node', node.id, null)}</div>
         </div>
-        <div class="field"><label>Примітка щодо доступу (вільний текст)</label><input type="text" data-f="roles" data-id="${node.id}" value="${escapeHtml(node.roles)}" placeholder="напр.: функціонал обмежений для..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
-        <div class="field"><label>Опис — що це і як працює</label><textarea data-f="description" data-id="${node.id}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(node.description)}</textarea></div>
+        <div class="field"><label>Примітка щодо доступу (вільний текст)</label><input type="text" data-f="roles" data-id="${node.id}" value="${escapeHtml(node.roles)}" placeholder="напр.: функціонал обмежений для..." autocomplete="off"></div>
+        <div class="field"><label>Опис — що це і як працює</label><textarea data-f="description" data-id="${node.id}" autocomplete="off">${escapeHtml(node.description)}</textarea></div>
 
         <div class="subhead"><b>Кнопки / поля цього блоку</b><button class="btn" data-add-el="${node.id}">+ Додати елемент</button></div>
         ${node.elements.filter(itemMatchesFilter).map(e=>`
           <div class="el-row" data-el="${e.id}" data-node="${node.id}">
-            <input type="text" data-ef="name" placeholder="Назва елемента" value="${escapeHtml(e.name)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <input type="text" data-ef="name" placeholder="Назва елемента" value="${escapeHtml(e.name)}" autocomplete="off">
             <select data-ef="type">${EL_TYPES.map(t=>`<option ${t===e.type?'selected':''}>${t}</option>`).join('')}</select>
-            <textarea data-ef="desc" placeholder="Опис функціоналу" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(e.desc)}</textarea>
+            <textarea data-ef="desc" placeholder="Опис функціоналу" autocomplete="off">${escapeHtml(e.desc)}</textarea>
             <button class="icon-btn" data-del-el="${e.id}" data-node="${node.id}" title="Видалити">🗑</button>
             <div class="role-pills small" style="grid-column:1/-1;">${roleCheckboxesHtml(e.roleIds||[], 'el', node.id, e.id, expandRoleScope(node.roleIds))}</div>
           </div>
@@ -790,7 +790,7 @@ function renderNode(node){
               <option value="">— обрати блок —</option>
               ${linkOptions}
             </select>
-            <textarea data-lf="reason" placeholder="Чому/як пов'язані?" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(l.reason||'')}</textarea>
+            <textarea data-lf="reason" placeholder="Чому/як пов'язані?" autocomplete="off">${escapeHtml(l.reason||'')}</textarea>
             <button class="icon-btn" data-del-link="${l.id}" data-node="${node.id}" title="Видалити">🗑</button>
             <div class="role-pills small" style="grid-column:1/-1;">${roleCheckboxesHtml(l.roleIds||[], 'link', node.id, l.id, expandRoleScope(node.roleIds))}</div>
           </div>
@@ -1048,7 +1048,7 @@ function renderTerms(){
     <div class="term-card" data-term="${t.id}">
       <div class="term-card-head">
         <span class="term-color-bar" style="background:${color}"></span>
-        <input type="text" class="term-name-input" data-tf="term" placeholder="Термін" value="${escapeHtml(t.term)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <input type="text" class="term-name-input" data-tf="term" placeholder="Термін" value="${escapeHtml(t.term)}" autocomplete="off">
         <select class="term-func-select" data-tf="funcType" style="background:${color}22;border-color:${color};color:#3A3550;">${FUNC_TYPES.map(f=>`<option ${f===t.funcType?'selected':''}>${f}</option>`).join('')}</select>
         <button class="icon-btn" data-del-term="${t.id}" title="Видалити">🗑</button>
       </div>
@@ -1062,10 +1062,10 @@ function renderTerms(){
           <label>Синоніми</label>
           <div class="synonyms-row" data-syn-wrap="${t.id}">
             ${(t.synonyms||[]).map((s,i)=>`<span class="syn-chip">${escapeHtml(s)}<button type="button" data-del-syn="${i}" title="Прибрати">×</button></span>`).join('')}
-            <input type="text" class="syn-input" data-syn-add="${t.id}" placeholder="+ синонім (Enter)" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            <input type="text" class="syn-input" data-syn-add="${t.id}" placeholder="+ синонім (Enter)" autocomplete="off">
           </div>
         </div>
-        <div class="field term-explain"><label>Пояснення</label><textarea data-tf="explanation" placeholder="Пояснення" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(t.explanation)}</textarea></div>
+        <div class="field term-explain"><label>Пояснення</label><textarea data-tf="explanation" placeholder="Пояснення" autocomplete="off">${escapeHtml(t.explanation)}</textarea></div>
       </div>
     </div>`;
   }).join('');
@@ -1168,7 +1168,7 @@ function renderSimForm(){
         </div>
       </div>
     `).join('')}
-    <div class="field"><label>Враження текстом</label><textarea id="simComment" placeholder="Опиши своє враження..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(simDraft.comment)}</textarea></div>
+    <div class="field"><label>Враження текстом</label><textarea id="simComment" placeholder="Опиши своє враження..." autocomplete="off">${escapeHtml(simDraft.comment)}</textarea></div>
     <button class="btn primary" id="simAddBtn" style="background:#161A22;color:#fff;border-color:#161A22;">+ Додати запис</button>
   `;
 
@@ -1238,7 +1238,7 @@ function renderSimList(){
           </div>
         </div>
       `).join('')}
-      <div class="field"><label>Враження текстом</label><textarea data-sf="comment" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(e.comment)}</textarea></div>
+      <div class="field"><label>Враження текстом</label><textarea data-sf="comment" autocomplete="off">${escapeHtml(e.comment)}</textarea></div>
       <div class="node-foot">
         <span></span>
         <button class="icon-btn${confirmingDeleteSimId===e.id?' confirming':''}" data-del-sim="${e.id}" title="Видалити запис">${confirmingDeleteSimId===e.id?'Підтвердити?':'🗑'}</button>
@@ -1579,7 +1579,7 @@ async function renderCopiesList(){
     <div class="term-card" data-copy="${c.docId}">
       <div class="term-card-head">
         <span class="term-color-bar" style="background:${c.enabled?'#A9E0BE':'#F3AAB4'}"></span>
-        <input type="text" class="term-name-input" data-copy-f="name" value="${escapeHtml(c.name)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <input type="text" class="term-name-input" data-copy-f="name" value="${escapeHtml(c.name)}" autocomplete="off">
         <label style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);white-space:nowrap;">
           <input type="checkbox" data-copy-toggle ${c.enabled?'checked':''}> Увімкнено
         </label>
