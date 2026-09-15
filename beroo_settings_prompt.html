@@ -93,6 +93,12 @@
   .node-ro-elements{margin:0 0 8px;}
   .ro-el-item{font-size:12.5px;color:#4A5063;padding:3px 0;line-height:1.5;}
   .node-ro-links{font-size:12px;color:var(--muted);margin-bottom:4px;}
+  .role-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+  .role-pills.small{margin-top:2px;gap:5px;}
+  .role-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;background:var(--el-bg);border:1px solid var(--el-border);border-radius:999px;padding:4px 10px;cursor:pointer;color:#4A5063;}
+  .role-pill input{accent-color:#8558C9;cursor:pointer;}
+  .role-pill.sub{background:#F1F6FE;border-color:#D9E6FB;font-size:10.5px;padding:3px 9px;}
+  .role-pills.small .role-pill{font-size:10px;padding:3px 8px;}
 
   .subhead{display:flex;align-items:center;gap:8px;margin:14px 0 8px;}
   .subhead b{font-size:12px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);}
@@ -320,7 +326,7 @@ let ORDER_COUNTER = 0;
 function n(title, roles, description, elements, children, color){
   return {id:uid('b'), title, roles: roles||'', roleIds: [], description: description||'', elements: elements||[], links:[], children: children||[], color: color||'', order: ORDER_COUNTER++};
 }
-function el(name, type, desc){ return {id:uid('e'), name, type: type||EL_TYPES[0], desc: desc||''}; }
+function el(name, type, desc, roleIds){ return {id:uid('e'), name, type: type||EL_TYPES[0], desc: desc||'', roleIds: roleIds ? roleIds.slice() : []}; }
 
 /* ======================================================================
    SEED TREE — актуальне меню (5 ролей), сайт, майбутні напрямки
@@ -501,6 +507,24 @@ function nodeMatchesFilter(node){
   if(activeFilterStatus && ids.includes(activeFilterStatus)) return true;
   return false;
 }
+function itemMatchesFilter(item){
+  if(!activeFilterRole) return true;
+  const ids = item.roleIds || [];
+  if(ids.length === 0) return true;
+  if(ids.includes(activeFilterRole)) return true;
+  if(activeFilterStatus && ids.includes(activeFilterStatus)) return true;
+  return false;
+}
+function roleCheckboxesHtml(selectedIds, targetType, nodeId, itemId){
+  selectedIds = selectedIds || [];
+  const roles = TERMS.filter(t=>t.funcType==='Роль');
+  const itemAttr = itemId ? `data-item-id="${itemId}"` : '';
+  return roles.map(r=>{
+    const statuses = TERMS.filter(t=>t.funcType==='Статус' && t.parentRole===r.id);
+    return `<label class="role-pill"><input type="checkbox" data-role-target="${targetType}" data-node-id="${nodeId}" ${itemAttr} data-term-id="${r.id}" ${selectedIds.includes(r.id)?'checked':''}>${escapeHtml(r.term)}</label>` +
+      statuses.map(s=>`<label class="role-pill sub"><input type="checkbox" data-role-target="${targetType}" data-node-id="${nodeId}" ${itemAttr} data-term-id="${s.id}" ${selectedIds.includes(s.id)?'checked':''}>${escapeHtml(s.term)}</label>`).join('');
+  }).join('');
+}
 function subtreeVisible(node){
   if(nodeMatchesFilter(node)) return true;
   return node.children.some(subtreeVisible);
@@ -552,7 +576,8 @@ function renderTree(){
 }
 function renderNodeReadonly(node){
   const childrenHtml = node.children.filter(subtreeVisible).map(renderNodeReadonly).join('');
-  const links = node.links.filter(l=>l.targetId).map(l=>{
+  const visibleElements = node.elements.filter(itemMatchesFilter);
+  const links = node.links.filter(l=>l.targetId).filter(itemMatchesFilter).map(l=>{
     const t = findNode(l.targetId);
     return escapeHtml(t?t.title:'?') + (l.reason ? ' ('+escapeHtml(l.reason)+')' : '');
   });
@@ -566,7 +591,7 @@ function renderNodeReadonly(node){
       </summary>
       <div class="node-body">
         ${node.description ? `<div class="node-ro-desc">${escapeHtml(node.description)}</div>` : ''}
-        ${node.elements.length ? `<div class="node-ro-elements">${node.elements.map(e=>`<div class="ro-el-item">• <b>${escapeHtml(e.name||'—')}</b>${e.type?` <i>(${escapeHtml(e.type)})</i>`:''}${e.desc?' — '+escapeHtml(e.desc):''}</div>`).join('')}</div>` : ''}
+        ${visibleElements.length ? `<div class="node-ro-elements">${visibleElements.map(e=>`<div class="ro-el-item">• <b>${escapeHtml(e.name||'—')}</b>${e.type?` <i>(${escapeHtml(e.type)})</i>`:''}${e.desc?' — '+escapeHtml(e.desc):''}</div>`).join('')}</div>` : ''}
         ${links.length ? `<div class="node-ro-links">Пов'язано з: ${links.join('; ')}</div>` : ''}
         <div class="children-wrap">${childrenHtml}</div>
       </div>
@@ -596,29 +621,24 @@ function renderNode(node){
         <div class="field"><label>Назва блоку</label><input type="text" data-f="title" data-id="${node.id}" value="${escapeHtml(node.title)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
         <div class="field">
           <label>Ролі / доступ (з Термінології)</label>
-          <div class="synonyms-row" data-role-wrap="${node.id}">
-            ${(node.roleIds||[]).map(rid=>{ const t = TERMS.find(x=>x.id===rid); if(!t) return ''; return `<span class="syn-chip role-chip">${escapeHtml(t.term)}<button type="button" data-del-role="${rid}" data-node="${node.id}" title="Прибрати">×</button></span>`; }).join('')}
-            <select data-add-role="${node.id}" class="role-add-select">
-              <option value="">+ додати роль/статус</option>
-              ${TERMS.filter(t=>(t.funcType==='Роль'||t.funcType==='Статус') && !(node.roleIds||[]).includes(t.id)).map(t=>`<option value="${t.id}">${escapeHtml(t.term)}${t.funcType==='Статус'?' (статус)':''}</option>`).join('')}
-            </select>
-          </div>
+          <div class="role-pills">${roleCheckboxesHtml(node.roleIds||[], 'node', node.id, null)}</div>
         </div>
         <div class="field"><label>Примітка щодо доступу (вільний текст)</label><input type="text" data-f="roles" data-id="${node.id}" value="${escapeHtml(node.roles)}" placeholder="напр.: функціонал обмежений для..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></div>
         <div class="field"><label>Опис — що це і як працює</label><textarea data-f="description" data-id="${node.id}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(node.description)}</textarea></div>
 
         <div class="subhead"><b>Кнопки / поля цього блоку</b><button class="btn" data-add-el="${node.id}">+ Додати елемент</button></div>
-        ${node.elements.map(e=>`
+        ${node.elements.filter(itemMatchesFilter).map(e=>`
           <div class="el-row" data-el="${e.id}" data-node="${node.id}">
             <input type="text" data-ef="name" placeholder="Назва елемента" value="${escapeHtml(e.name)}" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
             <select data-ef="type">${EL_TYPES.map(t=>`<option ${t===e.type?'selected':''}>${t}</option>`).join('')}</select>
             <textarea data-ef="desc" placeholder="Опис функціоналу" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(e.desc)}</textarea>
             <button class="icon-btn" data-del-el="${e.id}" data-node="${node.id}" title="Видалити">🗑</button>
+            <div class="role-pills small" style="grid-column:1/-1;">${roleCheckboxesHtml(e.roleIds||[], 'el', node.id, e.id)}</div>
           </div>
         `).join('')}
 
         <div class="subhead"><b>Пов'язані блоки</b><button class="btn" data-add-link="${node.id}">+ Додати зв'язок</button></div>
-        ${node.links.map(l=>`
+        ${node.links.filter(itemMatchesFilter).map(l=>`
           <div class="link-row" data-link="${l.id}" data-node="${node.id}">
             <select data-lf="targetId">
               <option value="">— обрати блок —</option>
@@ -626,6 +646,7 @@ function renderNode(node){
             </select>
             <textarea data-lf="reason" placeholder="Чому/як пов'язані?" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">${escapeHtml(l.reason||'')}</textarea>
             <button class="icon-btn" data-del-link="${l.id}" data-node="${node.id}" title="Видалити">🗑</button>
+            <div class="role-pills small" style="grid-column:1/-1;">${roleCheckboxesHtml(l.roleIds||[], 'link', node.id, l.id)}</div>
           </div>
         `).join('')}
 
@@ -695,29 +716,26 @@ function wireEvents(root){
     });
   });
 
-  root.querySelectorAll('[data-add-role]').forEach(sel=>{
-    sel.addEventListener('change', ()=>{
-      if(!sel.value) return;
-      const node = findNode(sel.dataset.addRole);
-      node.roleIds = node.roleIds || [];
-      if(!node.roleIds.includes(sel.value)) node.roleIds.push(sel.value);
-      openNodes.add(node.id);
-      renderTree();
-    });
-  });
-  root.querySelectorAll('[data-del-role]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      const node = findNode(btn.dataset.node);
-      node.roleIds = (node.roleIds||[]).filter(id=>id!==btn.dataset.delRole);
-      openNodes.add(node.id);
-      renderTree();
+  root.querySelectorAll('[data-role-target]').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      const node = findNode(cb.dataset.nodeId);
+      if(!node) return;
+      let arr;
+      if(cb.dataset.roleTarget==='node'){ node.roleIds = node.roleIds || []; arr = node.roleIds; }
+      else if(cb.dataset.roleTarget==='el'){ const item = node.elements.find(x=>x.id===cb.dataset.itemId); if(!item) return; item.roleIds = item.roleIds || []; arr = item.roleIds; }
+      else if(cb.dataset.roleTarget==='link'){ const item = node.links.find(x=>x.id===cb.dataset.itemId); if(!item) return; item.roleIds = item.roleIds || []; arr = item.roleIds; }
+      if(!arr) return;
+      const termId = cb.dataset.termId;
+      if(cb.checked){ if(!arr.includes(termId)) arr.push(termId); }
+      else{ const i = arr.indexOf(termId); if(i>-1) arr.splice(i,1); }
+      updateOutput();
     });
   });
 
   root.querySelectorAll('[data-add-el]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const node = findNode(btn.dataset.addEl);
-      node.elements.push(el('', EL_TYPES[0], ''));
+      node.elements.push(el('', EL_TYPES[0], '', node.roleIds));
       openNodes.add(node.id);
       renderTree();
     });
@@ -732,7 +750,7 @@ function wireEvents(root){
   root.querySelectorAll('[data-add-link]').forEach(btn=>{
     btn.addEventListener('click', ()=>{
       const node = findNode(btn.dataset.addLink);
-      node.links.push({id:uid('l'), targetId:'', reason:''});
+      node.links.push({id:uid('l'), targetId:'', reason:'', roleIds:(node.roleIds||[]).slice()});
       openNodes.add(node.id);
       renderTree();
     });
