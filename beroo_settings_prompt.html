@@ -216,7 +216,7 @@
       <button class="btn" id="saveCloudBtn">💾 Зберегти</button>
       <button class="btn" id="loadCloudBtn">⤓ Завантажити з хмари</button>
       <button class="btn" id="copyLinkBtn">🔗 Копіювати посилання на цю версію</button>
-      <button class="btn" id="mergeSeedBtn" title="Додає нові блоки, яких немає в поточному документі, з коду сторінки — нічого наявного не чіпає">🔄 Підтягнути нові блоки з коду</button>
+      <button class="btn" id="mergeSeedBtn" title="Додає нові блоки і терміни, яких немає в поточному документі, з коду сторінки — нічого наявного не чіпає">🔄 Підтягнути нове з коду</button>
       <div style="margin-left:auto;">
         <label style="display:block;font-size:11px;color:var(--muted);font-weight:600;margin-bottom:4px;">Пристрій</label>
         <select id="deviceSelect" style="font-size:12px;padding:6px 8px;border-radius:7px;border:1px solid var(--border);"></select>
@@ -1291,6 +1291,7 @@ let TERMS = [
 })();
 
 const CODE_SEED_TREE = clone(ROOT_NODES);
+const CODE_SEED_TERMS = clone(TERMS);
 function reassignIds(node){
   node.id = uid('b');
   (node.elements||[]).forEach(e=>{ e.id = uid('e'); });
@@ -1311,6 +1312,52 @@ function mergeMissingNodes(seedNodes, liveNodes){
     }
   });
   return added;
+}
+function mergeMissingTerms(seedTerms, liveTerms){
+  let added = 0;
+  seedTerms.forEach(seedTerm=>{
+    const match = liveTerms.find(t=>t.term === seedTerm.term);
+    if(!match){
+      const copy = clone(seedTerm);
+      copy.id = uid('t');
+      // re-link parentRole (Статус → Роль) by matching the seed's role NAME, not its old id
+      if(seedTerm.parentRole){
+        const seedRole = seedTerms.find(t=>t.id === seedTerm.parentRole);
+        if(seedRole){
+          const liveRole = liveTerms.find(t=>t.term === seedRole.term && t.funcType === 'Роль');
+          copy.parentRole = liveRole ? liveRole.id : '';
+        }
+      }
+      liveTerms.push(copy);
+      added += 1;
+    }
+  });
+  return added;
+}
+function fixupBrokenLinkTargets(){
+  // Merging clones subtrees with fresh ids, so any link whose targetId pointed
+  // at a seed-tree id (its own or a sibling's) goes stale. Resolve by title instead.
+  const seedFlat = flatten(CODE_SEED_TREE);
+  const seedIdToTitle = {}; seedFlat.forEach(f=>{ seedIdToTitle[f.id] = f.title; });
+  const liveFlat = flatten(ROOT_NODES);
+  const liveTitleToId = {}; liveFlat.forEach(f=>{ if(!(f.title in liveTitleToId)) liveTitleToId[f.title] = f.id; });
+  let fixed = 0;
+  function walk(nodes){
+    nodes.forEach(nd=>{
+      (nd.links||[]).forEach(l=>{
+        if(l.targetId && !findNode(l.targetId)){
+          const seedTitle = seedIdToTitle[l.targetId];
+          if(seedTitle && liveTitleToId[seedTitle] !== undefined){
+            l.targetId = liveTitleToId[seedTitle];
+            fixed += 1;
+          }
+        }
+      });
+      walk(nd.children);
+    });
+  }
+  walk(ROOT_NODES);
+  return fixed;
 }
 
 function renderTerms(){
@@ -2001,13 +2048,18 @@ document.getElementById('copyLinkBtn').addEventListener('click', ()=>{
 });
 
 document.getElementById('mergeSeedBtn').addEventListener('click', ()=>{
-  const added = mergeMissingNodes(CODE_SEED_TREE, ROOT_NODES);
-  if(added === 0){
-    setSyncStatus('Нових блоків з коду немає — усе вже є в документі');
+  const addedNodes = mergeMissingNodes(CODE_SEED_TREE, ROOT_NODES);
+  const addedTerms = mergeMissingTerms(CODE_SEED_TERMS, TERMS);
+  const fixedLinks = fixupBrokenLinkTargets();
+  if(addedNodes === 0 && addedTerms === 0 && fixedLinks === 0){
+    setSyncStatus('Нового з коду немає — усе вже є в документі');
   } else {
     renderTree();
-    logAction(`Підтягнуто нових блоків з коду: ${added}`);
-    setSyncStatus(`Додано ${added} нових блоків з коду — тепер тисни «Зберегти»`);
+    renderTerms();
+    renderScalesManage();
+    renderSimForm();
+    logAction(`Підтягнуто з коду: ${addedNodes} блоків, ${addedTerms} термінів, виправлено ${fixedLinks} зв'язків`);
+    setSyncStatus(`Додано ${addedNodes} блоків, ${addedTerms} термінів, виправлено ${fixedLinks} зв'язків — тепер тисни «Зберегти»`);
   }
 });
 
