@@ -320,6 +320,17 @@
     <pre id="finalOutput" style="display:none;"></pre>
   </div>
 
+  <div class="panel filter-panel" style="border-color:#DCEFE1;background:linear-gradient(180deg,#FAFFFB,#F2FBF5);margin-top:20px;">
+    <div class="filter-head">
+      <b>☁️ Статус синхронізації</b>
+      <span class="filter-status" id="syncStatusLabelBottom" style="background:#E5F5E9;color:#2E9D6C;">Ініціалізація…</span>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn" id="saveCloudBtnBottom">💾 Зберегти</button>
+      <button class="btn" id="loadCloudBtnBottom">⤓ Завантажити з хмари</button>
+    </div>
+  </div>
+
   <div class="part-title" style="display:flex;align-items:center;gap:10px;margin:34px 0 12px;">
     <div style="width:26px;height:26px;min-width:26px;border-radius:8px;background:#191C24;color:var(--console-accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">📋</div>
     <h2 style="font-size:16px;margin:0;">Лог дій і збережень</h2>
@@ -1434,10 +1445,12 @@ function shareLink(id){
   return url.toString();
 }
 function setSyncStatus(text, ok){
-  const el = document.getElementById('syncStatusLabel');
-  el.textContent = text;
-  el.style.background = ok===false ? '#FDEBEC' : '#E5F5E9';
-  el.style.color = ok===false ? '#C6414F' : '#2E9D6C';
+  [document.getElementById('syncStatusLabel'), document.getElementById('syncStatusLabelBottom')].forEach(el=>{
+    if(!el) return;
+    el.textContent = text;
+    el.style.background = ok===false ? '#FDEBEC' : '#E5F5E9';
+    el.style.color = ok===false ? '#C6414F' : '#2E9D6C';
+  });
 }
 
 function exportState(){
@@ -1523,6 +1536,9 @@ document.getElementById('loadCloudBtn').addEventListener('click', async ()=>{
     logAction('⤓ Завантажено з хмари');
   }catch(err){ setSyncStatus('Помилка завантаження — перевір деплой Apps Script', false); }
 });
+
+document.getElementById('saveCloudBtnBottom').addEventListener('click', ()=> document.getElementById('saveCloudBtn').click());
+document.getElementById('loadCloudBtnBottom').addEventListener('click', ()=> document.getElementById('loadCloudBtn').click());
 
 document.getElementById('copyLinkBtn').addEventListener('click', ()=>{
   const btn = document.getElementById('copyLinkBtn');
