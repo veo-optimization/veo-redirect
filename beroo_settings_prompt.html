@@ -192,10 +192,18 @@
       <b>☁️ Синхронізація</b>
       <span class="filter-status" id="syncStatusLabel" style="background:#E5F5E9;color:#2E9D6C;">Ініціалізація…</span>
     </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end;">
       <button class="btn" id="saveCloudBtn">💾 Зберегти</button>
       <button class="btn" id="loadCloudBtn">⤓ Завантажити з хмари</button>
       <button class="btn" id="copyLinkBtn">🔗 Копіювати посилання на цю версію</button>
+      <div style="margin-left:auto;">
+        <label style="display:block;font-size:11px;color:var(--muted);font-weight:600;margin-bottom:4px;">Пристрій</label>
+        <select id="deviceSelect" style="font-size:12px;padding:6px 8px;border-radius:7px;border:1px solid var(--border);"></select>
+      </div>
+    </div>
+    <div id="newDeviceRow" style="display:none;gap:6px;margin-top:8px;">
+      <input type="text" id="newDeviceName" placeholder="Назва нового пристрою" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <button class="btn" id="addDeviceBtn">Додати</button>
     </div>
   </div>
 
@@ -297,10 +305,22 @@
       <div class="dots"><div class="dot" style="background:#EB6259"></div><div class="dot" style="background:#F4BF50"></div><div class="dot" style="background:#5FC258"></div></div>
       <div class="console-title">Структура (JSON)</div>
       <div class="console-badge" id="statsBadge">0 блоків</div>
-      <button class="copy-btn" id="copyAllBtn">Скопіювати JSON</button>
+      <button class="btn ghost" id="jsonToggleBtn" style="background:transparent;border-color:#3A3F4B;color:#C9CFDA;">▸ Розгорнути</button>
+      <button class="copy-btn" id="copyAllBtn">Скопіювати</button>
+      <button class="copy-btn" id="saveJsonFileBtn" style="background:#4A6FD4;color:#fff;">💾 Зберегти файл</button>
+      <button class="copy-btn" id="shareJsonFileBtn" style="background:#8558C9;color:#fff;">📤 Надіслати</button>
     </div>
-    <pre id="finalOutput"></pre>
+    <pre id="finalOutput" style="display:none;"></pre>
   </div>
+
+  <div class="part-title" style="display:flex;align-items:center;gap:10px;margin:34px 0 12px;">
+    <div style="width:26px;height:26px;min-width:26px;border-radius:8px;background:#191C24;color:var(--console-accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">📋</div>
+    <h2 style="font-size:16px;margin:0;">Лог дій і збережень</h2>
+    <span class="section-count" id="actionLogCount" style="margin-left:8px;"></span>
+    <button class="btn ghost" id="clearActionLogBtn" style="margin-left:auto;">Очистити лог</button>
+  </div>
+  <p class="section-desc">Хто, з якого пристрою і що саме змінював — синхронізується разом з документом, тож видно з будь-якого пристрою після завантаження з хмари.</p>
+  <div class="copy-logs" id="actionLogView" style="max-height:340px;"></div>
 </div>
 
 <script>
@@ -511,6 +531,57 @@ let activeFilterRole = '';
 let activeFilterStatus = '';
 let IS_OWNER = true; // optimistic default until registry lookup resolves
 let myName = localStorage.getItem('beroo_my_name') || '';
+let actionLog = [];
+let DEVICE_LIST = JSON.parse(localStorage.getItem('beroo_device_list') || '["iPhone","MacBook"]');
+let myDevice = localStorage.getItem('beroo_device_name') || DEVICE_LIST[0] || '';
+
+function logAction(action){
+  actionLog.push({ts: new Date().toISOString(), device: myDevice || '(пристрій не вказано)', action});
+  if(actionLog.length > 400) actionLog = actionLog.slice(-400);
+  renderActionLog();
+}
+function fmtLogDate(iso){ try{ return new Date(iso).toLocaleString('uk-UA'); }catch(e){ return iso; } }
+function renderActionLog(){
+  const root = document.getElementById('actionLogView');
+  const countEl = document.getElementById('actionLogCount');
+  if(countEl) countEl.textContent = actionLog.length + (actionLog.length===1?' запис':' записів');
+  if(!root) return;
+  if(!actionLog.length){ root.innerHTML = '<div class="empty" style="color:#7A8399;">Поки немає записів у логу.</div>'; return; }
+  root.innerHTML = actionLog.slice().reverse().map(l=>
+    `<div class="log-line"><b>${fmtLogDate(l.ts)}</b> · <span style="color:#7FB8F5;">${escapeHtml(l.device)}</span> — ${escapeHtml(l.action)}</div>`
+  ).join('');
+}
+document.getElementById('clearActionLogBtn').addEventListener('click', ()=>{
+  actionLog = [];
+  renderActionLog();
+});
+
+function renderDeviceSelect(){
+  const sel = document.getElementById('deviceSelect');
+  sel.innerHTML = DEVICE_LIST.map(d=>`<option value="${escapeHtml(d)}" ${myDevice===d?'selected':''}>${escapeHtml(d)}</option>`).join('') + `<option value="__new__">+ Додати новий пристрій</option>`;
+}
+document.getElementById('deviceSelect').addEventListener('change', (e)=>{
+  if(e.target.value === '__new__'){
+    document.getElementById('newDeviceRow').style.display = 'flex';
+    renderDeviceSelect();
+  } else {
+    myDevice = e.target.value;
+    localStorage.setItem('beroo_device_name', myDevice);
+    document.getElementById('newDeviceRow').style.display = 'none';
+  }
+});
+document.getElementById('addDeviceBtn').addEventListener('click', ()=>{
+  const name = document.getElementById('newDeviceName').value.trim();
+  if(!name) return;
+  if(!DEVICE_LIST.includes(name)) DEVICE_LIST.push(name);
+  localStorage.setItem('beroo_device_list', JSON.stringify(DEVICE_LIST));
+  myDevice = name;
+  localStorage.setItem('beroo_device_name', myDevice);
+  document.getElementById('newDeviceName').value = '';
+  document.getElementById('newDeviceRow').style.display = 'none';
+  renderDeviceSelect();
+});
+renderDeviceSelect();
 
 function nodeMatchesFilter(node){
   if(!activeFilterRole) return true;
@@ -721,6 +792,7 @@ function wireEvents(root){
     });
   });
 
+  const FIELD_LOG_LABELS = {title:'назву', description:'опис', roles:'примітку доступу', blockTypeComment:'коментар типу блоку'};
   root.querySelectorAll('[data-f]').forEach(input=>{
     input.addEventListener('input', ()=>{
       const node = findNode(input.dataset.id);
@@ -728,6 +800,15 @@ function wireEvents(root){
       if(input.tagName==='TEXTAREA') autosize(input);
       updateOutput();
     });
+    if(FIELD_LOG_LABELS[input.dataset.f]){
+      input.addEventListener('focus', ()=>{ input.dataset.prevVal = input.value; });
+      input.addEventListener('blur', ()=>{
+        if(input.dataset.prevVal !== undefined && input.dataset.prevVal !== input.value){
+          const node = findNode(input.dataset.id);
+          logAction(`Змінено ${FIELD_LOG_LABELS[input.dataset.f]} блоку «${node ? node.title : '?'}»`);
+        }
+      });
+    }
   });
 
   root.querySelectorAll('.el-row').forEach(row=>{
@@ -750,6 +831,7 @@ function wireEvents(root){
       const wrap = btn.closest('[data-color-for]');
       const node = findNode(wrap.dataset.colorFor);
       node.color = btn.dataset.setColor;
+      logAction(`Колір блоку «${node.title}» → ${btn.dataset.setColor || 'без кольору'}`);
       renderTree();
     });
   });
@@ -763,8 +845,10 @@ function wireEvents(root){
         root.querySelectorAll(`[data-block-type][data-node-id="${node.id}"]`).forEach(other=>{
           if(other !== cb) other.checked = false;
         });
+        logAction(`Тип блоку «${node.title}» → ${BLOCK_TYPE_LABEL[node.blockType]}`);
       } else {
         node.blockType = '';
+        logAction(`Тип блоку «${node.title}» знято`);
       }
       updateOutput();
     });
@@ -830,6 +914,7 @@ function wireEvents(root){
       const child = n('Новий блок', '', '');
       node.children.push(child);
       openNodes.add(node.id); openNodes.add(child.id);
+      logAction(`Додано дочірній блок у «${node.title}»`);
       renderTree();
     });
   });
@@ -838,6 +923,8 @@ function wireEvents(root){
       ev.preventDefault();
       const id = btn.dataset.delNode;
       if(confirmingDeleteId === id){
+        const node = findNode(id);
+        logAction(`Видалено блок «${node ? node.title : id}»`);
         removeNode(id);
         confirmingDeleteId = null;
         renderTree();
@@ -854,6 +941,7 @@ document.getElementById('addRootBtn').addEventListener('click', ()=>{
   const node = n('Новий блок', '', '');
   ROOT_NODES.push(node);
   openNodes.add(node.id);
+  logAction(`Додано новий кореневий блок`);
   renderTree();
 });
 
@@ -1242,7 +1330,70 @@ function updateOutput(){
 
 document.getElementById('copyAllBtn').addEventListener('click', ()=>{
   const btn = document.getElementById('copyAllBtn');
-  copyText(document.getElementById('finalOutput').textContent, btn, 'Скопіювати JSON');
+  copyText(document.getElementById('finalOutput').textContent, btn, 'Скопіювати');
+});
+
+document.getElementById('jsonToggleBtn').addEventListener('click', ()=>{
+  const pre = document.getElementById('finalOutput');
+  const btn = document.getElementById('jsonToggleBtn');
+  const open = pre.style.display !== 'none';
+  pre.style.display = open ? 'none' : 'block';
+  btn.textContent = open ? '▸ Розгорнути' : '▾ Згорнути';
+});
+
+/* ---- версійна назва файлу експорту ---- */
+function simpleHash(str){
+  let h = 0;
+  for(let i=0;i<str.length;i++){ h = ((h<<5)-h) + str.charCodeAt(i); h |= 0; }
+  return String(h);
+}
+function getExportVersion(){
+  const key = 'beroo_export_meta_' + CURRENT_DOC_ID;
+  const currentHash = simpleHash(document.getElementById('finalOutput').textContent);
+  let meta;
+  try{ meta = JSON.parse(localStorage.getItem(key) || '{}'); }catch(e){ meta = {}; }
+  if(!meta.version || meta.hash !== currentHash){
+    meta = {version: (meta.version||0) + 1, hash: currentHash};
+    localStorage.setItem(key, JSON.stringify(meta));
+  }
+  return meta.version;
+}
+function buildExportFilename(){
+  const version = getExportVersion();
+  const d = new Date();
+  const pad = x => String(x).padStart(2,'0');
+  return `v${version}_beroo_system_${pad(d.getDate())}_${pad(d.getMonth()+1)}_${d.getFullYear()}_${pad(d.getHours())}_${pad(d.getMinutes())}.json`;
+}
+function downloadJsonFile(filename, content){
+  const blob = new Blob([content], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(a.href);
+}
+
+document.getElementById('saveJsonFileBtn').addEventListener('click', ()=>{
+  const content = document.getElementById('finalOutput').textContent;
+  const filename = buildExportFilename();
+  downloadJsonFile(filename, content);
+  logAction(`Збережено файл «${filename}»`);
+});
+
+document.getElementById('shareJsonFileBtn').addEventListener('click', async ()=>{
+  const content = document.getElementById('finalOutput').textContent;
+  const filename = buildExportFilename();
+  const file = new File([content], filename, {type:'application/json'});
+  if(navigator.canShare && navigator.canShare({files:[file]})){
+    try{
+      await navigator.share({files:[file], title: filename});
+      logAction(`Надіслано файл «${filename}»`);
+    }catch(err){ /* користувач скасував — нічого не робимо */ }
+  } else {
+    downloadJsonFile(filename, content);
+    logAction(`Збережено файл «${filename}» (надсилання файлів не підтримується цим браузером)`);
+    alert('Цей браузер не підтримує пряме надсилання файлів — файл збережено на пристрій, прикріпи його вручну в месенджері чи соцмережі.');
+  }
 });
 
 /* ======================================================================
@@ -1274,7 +1425,8 @@ function exportState(){
     simEntries: simEntries,
     orderCounter: ORDER_COUNTER,
     openNodes: [...openNodes],
-    activeFilterRole, activeFilterStatus
+    activeFilterRole, activeFilterStatus,
+    actionLog: actionLog.slice(-300)
   };
 }
 function loadState(obj){
@@ -1286,7 +1438,8 @@ function loadState(obj){
   openNodes = new Set(obj.openNodes || []);
   activeFilterRole = obj.activeFilterRole || '';
   activeFilterStatus = obj.activeFilterStatus || '';
-  renderTerms(); renderSimForm(); renderSimList(); renderTree();
+  actionLog = obj.actionLog || [];
+  renderTerms(); renderSimForm(); renderSimList(); renderTree(); renderActionLog();
 }
 
 async function cloudCall(method, params){
@@ -1333,6 +1486,7 @@ document.getElementById('saveCloudBtn').addEventListener('click', async ()=>{
     if(!r.ok){ setSyncStatus('Сервер відхилив збереження: ' + (r.error||'невідома помилка'), false); return; }
     if(!HAD_DOC_IN_URL){ const url = new URL(location.href); url.searchParams.set('doc', CURRENT_DOC_ID); history.replaceState(null,'',url); }
     setSyncStatus('Збережено · ' + new Date(r.updatedAt).toLocaleString('uk-UA'));
+    logAction('💾 Збережено в хмару');
     renderCopiesList();
   }catch(err){ setSyncStatus('Помилка збереження — перевір деплой Apps Script', false); }
 });
@@ -1344,6 +1498,7 @@ document.getElementById('loadCloudBtn').addEventListener('click', async ()=>{
     if(!r.found){ setSyncStatus('Для цього документа ще нема збереженої версії', false); return; }
     loadState(JSON.parse(r.data));
     setSyncStatus('Завантажено · ' + new Date(r.updatedAt).toLocaleString('uk-UA'));
+    logAction('⤓ Завантажено з хмари');
   }catch(err){ setSyncStatus('Помилка завантаження — перевір деплой Apps Script', false); }
 });
 
@@ -1432,7 +1587,9 @@ async function renderCopiesList(){
   root.querySelectorAll('[data-copy-toggle]').forEach(cb=>{
     cb.addEventListener('change', async ()=>{
       const docId = cb.closest('[data-copy]').dataset.copy;
+      const c = COPIES.find(x=>x.docId===docId);
       await cloudToggle(docId, cb.checked);
+      logAction(`Копію «${c?c.name:docId}» ${cb.checked?'увімкнено':'вимкнено'}`);
       renderCopiesList();
     });
   });
@@ -1653,7 +1810,7 @@ if(HAD_DOC_IN_URL){
   setSyncStatus('Завантажую збережену версію…');
   cloudLoad(CURRENT_DOC_ID).then(r=>{
     if(r.found){ loadState(JSON.parse(r.data)); setSyncStatus('Завантажено · ' + new Date(r.updatedAt).toLocaleString('uk-UA')); }
-    else setSyncStatus('Новий документ — ще не збережено в хмарі');
+    else { setSyncStatus('Новий документ — ще не збережено в хмарі'); renderActionLog(); }
     return cloudList();
   }).then(r=>{
     const entry = (r.items||[]).find(x=>x.docId===CURRENT_DOC_ID);
@@ -1663,6 +1820,7 @@ if(HAD_DOC_IN_URL){
   setSyncStatus('Новий документ — тисни «Зберегти», щоб отримати посилання');
   document.getElementById('teamImpressionsSection').style.display = '';
   renderTeamImpressions();
+  renderActionLog();
 }
 </script>
 </body>
