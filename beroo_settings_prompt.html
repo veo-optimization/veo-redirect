@@ -1027,6 +1027,14 @@ function sortByColor(nodes){
   nodes.sort((a,b)=> colorRank(a.color)-colorRank(b.color));
   nodes.forEach(nd=>sortByColor(nd.children));
 }
+document.getElementById('expandAllTreeBtn').addEventListener('click', ()=>{
+  openNodes = new Set(flatten(ROOT_NODES).map(f=>f.id));
+  renderTree();
+});
+document.getElementById('collapseAllTreeBtn').addEventListener('click', ()=>{
+  openNodes = new Set();
+  renderTree();
+});
 document.getElementById('sortColorBtn').addEventListener('click', ()=>{
   sortByColor(ROOT_NODES);
   renderTree();
@@ -1043,10 +1051,14 @@ document.getElementById('restoreOrderBtn').addEventListener('click', ()=>{
 /* ======================================================================
    ТЕРМІНОЛОГІЯ
 ====================================================================== */
-const FUNC_TYPES = ['Дія','Запис','Зміна','Фільтр','Роль','Статус','Показник','Подія','Інше'];
+const FUNC_TYPES = ['Дія','Запис','Зміна','Фільтр','Роль','Статус','Показник','Подія','Блок','Тип','Логіка','Компонент','Параметр','Правило','Сценарій','Обмеження','Інтеграція','Дозвіл','Інше'];
 const FUNC_COLORS = {
   'Дія':'#A8C8F0','Запис':'#8FE0C9','Зміна':'#F5C08A','Фільтр':'#E7D06B',
-  'Роль':'#CBB2F0','Статус':'#A9E0BE','Показник':'#F3AAB4','Подія':'#B4B8F0','Інше':'#C9CEDA'
+  'Роль':'#CBB2F0','Статус':'#A9E0BE','Показник':'#F3AAB4','Подія':'#B4B8F0',
+  'Блок':'#F0B8D8','Тип':'#B8E0F0','Логіка':'#D8C8F5','Компонент':'#C8E8B8',
+  'Параметр':'#F5D8A8','Правило':'#F0A8A8','Сценарій':'#A8E0D8','Обмеження':'#E0A8C8',
+  'Інтеграція':'#B8C8F0','Дозвіл':'#D0E0A0',
+  'Інше':'#C9CEDA'
 };
 function term(t, funcType, explanation, parentRole){ return {id:uid('t'), term:t, funcType, explanation: explanation||'', parentRole: parentRole||'', synonyms: []}; }
 
