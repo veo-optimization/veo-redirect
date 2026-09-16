@@ -1243,16 +1243,16 @@ document.getElementById('applyDefaultRolesBtn').addEventListener('click', ()=>{
 /* ======================================================================
    ТЕРМІНОЛОГІЯ
 ====================================================================== */
-const FUNC_TYPES = ['Дія','Запис','Зміна','Фільтр','Роль','Статус','Показник','Подія','Блок','Тип','Логіка','Компонент','Параметр','Правило','Сценарій','Обмеження','Інтеграція','Дозвіл','Інше'];
+const FUNC_TYPES = ['Дія','Запис','Зміна','Фільтр','Роль','Статус','Показник','Подія','Блок','Тип','Логіка','Компонент','Параметр','Правило','Сценарій','Обмеження','Інтеграція','Дозвіл','Сторінка','Інше'];
 const FUNC_COLORS = {
   'Дія':'#A8C8F0','Запис':'#8FE0C9','Зміна':'#F5C08A','Фільтр':'#E7D06B',
   'Роль':'#CBB2F0','Статус':'#A9E0BE','Показник':'#F3AAB4','Подія':'#B4B8F0',
   'Блок':'#F0B8D8','Тип':'#B8E0F0','Логіка':'#D8C8F5','Компонент':'#C8E8B8',
   'Параметр':'#F5D8A8','Правило':'#F0A8A8','Сценарій':'#A8E0D8','Обмеження':'#E0A8C8',
-  'Інтеграція':'#B8C8F0','Дозвіл':'#D0E0A0',
+  'Інтеграція':'#B8C8F0','Дозвіл':'#D0E0A0','Сторінка':'#9FD8D0',
   'Інше':'#C9CEDA'
 };
-function term(t, funcType, explanation, parentRole, synonyms){ return {id:uid('t'), term:t, funcType, explanation: explanation||'', parentRole: parentRole||'', synonyms: synonyms||[]}; }
+function term(t, funcType, explanation, parentRole, synonyms){ return {id:uid('t'), term:t, funcType, explanation: explanation||'', parentRole: parentRole||'', synonyms: synonyms||[], code:''}; }
 
 const roleSeller = term('Продавець','Роль', `Магазин (Продавець у контексті нашої платформи) — це зареєстрований у системі суб'єкт (користувач, мерчант або партнер), який виступає як магазин, продавець, оригінальний магазин з товарами, обробник замовлень і відправник товарів та надавач послуг, той хто приймає оплату.
 
@@ -1470,6 +1470,7 @@ function renderTerms(){
         </div>
         ${(t.synonyms||[]).length ? `<div style="font-size:12px;color:var(--muted);margin-top:5px;">Синоніми: ${t.synonyms.map(escapeHtml).join(', ')}</div>` : ''}
         ${t.explanation ? `<div style="font-size:13px;margin-top:7px;line-height:1.5;color:#3A3F4B;">${escapeHtml(t.explanation)}</div>` : ''}
+        ${t.code ? `<details style="margin-top:7px;"><summary style="cursor:pointer;font-size:11.5px;color:var(--muted);">Код-приклад</summary><pre class="code-box" style="display:block;">${escapeHtml(t.code)}</pre></details>` : ''}
       </div>`;
     }).join('');
     return;
@@ -1500,6 +1501,8 @@ function renderTerms(){
           </div>
         </div>
         <div class="field term-explain"><label>Пояснення</label><textarea data-tf="explanation" placeholder="Пояснення" autocomplete="off">${escapeHtml(t.explanation)}</textarea></div>
+        <button type="button" class="code-toggle-btn" data-code-toggle>${t.code?'Код −':'Код +'}</button>
+        <textarea class="code-box" data-tf="code" placeholder="HTML / JSON приклад..." style="${t.code?'display:block;':''}" autocomplete="off">${escapeHtml(t.code||'')}</textarea>
       </div>
     </div>`;
   }).join('') || (TERMS.length ? '' : '<div class="empty">Термінів ще немає.</div>');
@@ -1521,6 +1524,16 @@ function renderTerms(){
     });
     input.addEventListener('change', ()=>{
       if(input.dataset.tf==='funcType'){ renderTerms(); renderSimForm(); }
+    });
+  });
+  root.querySelectorAll('[data-code-toggle]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const box = btn.nextElementSibling;
+      if(!box) return;
+      const open = box.style.display === 'block';
+      box.style.display = open ? 'none' : 'block';
+      btn.textContent = open ? 'Код +' : 'Код −';
+      if(!open) autosize(box);
     });
   });
   root.querySelectorAll('[data-del-term]').forEach(btn=>{
@@ -1934,7 +1947,7 @@ function updateOutput(){
     structure: ROOT_NODES.map(serializeNode),
     terminology: TERMS.map(t=>{
       const role = TERMS.find(x=>x.id===t.parentRole);
-      return {term:t.term, synonyms: t.synonyms||[], function:t.funcType, explanation:t.explanation, role: role?role.term:null};
+      return {term:t.term, synonyms: t.synonyms||[], function:t.funcType, explanation:t.explanation, codeExample: t.code||null, role: role?role.term:null};
     }),
     simulationNotebook: {
       _note: "ЦЕ НОТАТНИК КОМАНДИ — НЕ АНАЛІЗУВАТИ ЯК ЧАСТИНУ СТРУКТУРИ СИСТЕМИ. Це чернетка ідей, вражень і зауважень, зроблених у розділі «Режим ІМІТАЦІЯ» для внутрішнього користування командою (зокрема Termінологія тут використана лише для довідки — Роль/Статус). НЕ враховувати ці записи при розробці, аналізі логіки чи прийнятті архітектурних рішень. Джерело істини — виключно розділ «structure» вище.",
