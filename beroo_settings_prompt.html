@@ -46,6 +46,9 @@
   .term-btn{font-size:12.5px;font-weight:600;padding:6px 13px;border-radius:999px;border:1.5px solid var(--tcolor,#ccc);background:#fff;color:#3A3550;cursor:pointer;}
   .term-btn:hover{background:color-mix(in srgb, var(--tcolor,#ccc) 15%, #fff);}
   .term-btn.active{background:var(--tcolor,#8558C9);color:#fff;}
+  .type-chip{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;padding:6px 8px 6px 12px;border-radius:999px;background:var(--tcolor);color:#3A3550;}
+  .type-del-btn{border:none;background:rgba(255,255,255,.55);border-radius:999px;min-width:20px;height:20px;padding:0 6px;font-size:11px;cursor:pointer;color:#5C3030;line-height:1;}
+  .type-del-btn:hover{background:#fff;}
   .two{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   @media (max-width:640px){.two{grid-template-columns:1fr;}}
 
@@ -311,6 +314,14 @@
     </summary>
     <div class="section-collapse-body">
       <p class="section-desc">Довідник термінів системи — використовується і для загального словника, і як джерело ролей/статусів для режиму ІМІТАЦІЯ нижче.</p>
+      <div class="field" style="max-width:640px;margin-bottom:14px;">
+        <label>Типи термінів (можна додавати й видаляти)</label>
+        <div id="typesManageList" style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:8px;"></div>
+        <div style="display:flex;gap:6px;">
+          <input type="text" id="newTypeName" placeholder="Нова назва типу" autocomplete="off">
+          <button class="btn" id="addTypeBtn">+ Додати тип</button>
+        </div>
+      </div>
       <div style="display:flex;gap:8px;margin-bottom:12px;">
         <button class="btn ghost" id="expandAllTermsBtn">Розгорнути все</button>
         <button class="btn ghost" id="collapseAllTermsBtn">Згорнути все</button>
@@ -1243,15 +1254,16 @@ document.getElementById('applyDefaultRolesBtn').addEventListener('click', ()=>{
 /* ======================================================================
    ТЕРМІНОЛОГІЯ
 ====================================================================== */
-const FUNC_TYPES = ['Дія','Запис','Зміна','Фільтр','Роль','Статус','Показник','Подія','Блок','Тип','Логіка','Компонент','Параметр','Правило','Сценарій','Обмеження','Інтеграція','Дозвіл','Сторінка','Інше'];
+let FUNC_TYPES = ['Дія','Запис','Зміна','Фільтр','Роль','Статус','Показник','Подія','Блок','Тип','Логіка','Компонент','Параметр','Правило','Сценарій','Обмеження','Інтеграція','Дозвіл','Сторінка','Інше','Невизначений тип'];
 const FUNC_COLORS = {
   'Дія':'#A8C8F0','Запис':'#8FE0C9','Зміна':'#F5C08A','Фільтр':'#E7D06B',
   'Роль':'#CBB2F0','Статус':'#A9E0BE','Показник':'#F3AAB4','Подія':'#B4B8F0',
   'Блок':'#F0B8D8','Тип':'#B8E0F0','Логіка':'#D8C8F5','Компонент':'#C8E8B8',
   'Параметр':'#F5D8A8','Правило':'#F0A8A8','Сценарій':'#A8E0D8','Обмеження':'#E0A8C8',
   'Інтеграція':'#B8C8F0','Дозвіл':'#D0E0A0','Сторінка':'#9FD8D0',
-  'Інше':'#C9CEDA'
+  'Інше':'#C9CEDA','Невизначений тип':'#DADFE6'
 };
+const PROTECTED_FUNC_TYPES = ['Невизначений тип'];
 function term(t, funcType, explanation, parentRole, synonyms){ return {id:uid('t'), term:t, funcType, explanation: explanation||'', parentRole: parentRole||'', synonyms: synonyms||[], code:''}; }
 
 const roleSeller = term('Продавець','Роль', `Магазин (Продавець у контексті нашої платформи) — це зареєстрований у системі суб'єкт (користувач, мерчант або партнер), який виступає як магазин, продавець, оригінальний магазин з товарами, обробник замовлень і відправник товарів та надавач послуг, той хто приймає оплату.
@@ -1460,6 +1472,9 @@ function renderTerms(){
   document.getElementById('termButtonsRow').style.display = IS_OWNER ? '' : 'none';
   document.getElementById('expandAllTermsBtn').style.display = IS_OWNER ? '' : 'none';
   document.getElementById('collapseAllTermsBtn').style.display = IS_OWNER ? '' : 'none';
+  const typesPanel = document.getElementById('newTypeName').closest('.field');
+  if(typesPanel) typesPanel.style.display = IS_OWNER ? '' : 'none';
+  renderTypesManage();
   if(!IS_OWNER){
     root.innerHTML = TERMS.map(t=>{
       const color = FUNC_COLORS[t.funcType] || FUNC_COLORS['Інше'];
@@ -1588,6 +1603,51 @@ function renderTermButtons(){
     });
   });
 }
+
+let confirmingDeleteType = null;
+function renderTypesManage(){
+  const root = document.getElementById('typesManageList');
+  if(!root) return;
+  root.innerHTML = FUNC_TYPES.map(ft=>{
+    const color = FUNC_COLORS[ft] || FUNC_COLORS['Інше'];
+    const count = TERMS.filter(t=>t.funcType===ft).length;
+    const isProtected = PROTECTED_FUNC_TYPES.includes(ft);
+    return `<span class="type-chip" style="--tcolor:${color};">
+      ${escapeHtml(ft)} <span style="opacity:.6;">(${count})</span>
+      ${isProtected ? '' : `<button type="button" class="type-del-btn" data-del-type="${escapeHtml(ft)}" title="Видалити тип">${confirmingDeleteType===ft?'Підтвердити?':'×'}</button>`}
+    </span>`;
+  }).join('');
+  root.querySelectorAll('[data-del-type]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const ft = btn.dataset.delType;
+      if(confirmingDeleteType === ft){
+        FUNC_TYPES = FUNC_TYPES.filter(x=>x!==ft);
+        delete FUNC_COLORS[ft];
+        let moved = 0;
+        TERMS.forEach(t=>{ if(t.funcType===ft){ t.funcType='Невизначений тип'; moved++; } });
+        confirmingDeleteType = null;
+        renderTypesManage();
+        renderTerms();
+        logAction(`Видалено тип терміна «${ft}» — ${moved} термінів переміщено в «Невизначений тип»`);
+      } else {
+        confirmingDeleteType = ft;
+        renderTypesManage();
+        setTimeout(()=>{ if(confirmingDeleteType===ft){ confirmingDeleteType=null; renderTypesManage(); } }, 4000);
+      }
+    });
+  });
+}
+document.getElementById('addTypeBtn').addEventListener('click', ()=>{
+  const input = document.getElementById('newTypeName');
+  const name = input.value.trim();
+  if(!name || FUNC_TYPES.includes(name)){ input.value=''; return; }
+  FUNC_TYPES.splice(FUNC_TYPES.length - 1, 0, name); // insert before the protected 'Невизначений тип' at the end
+  FUNC_COLORS[name] = `hsl(${Math.floor(Math.random()*360)}, 55%, 78%)`;
+  input.value = '';
+  renderTypesManage();
+  logAction(`Додано новий тип терміна «${name}»`);
+});
+
 document.getElementById('addTermBtn').addEventListener('click', ()=>{
   const t = term('', FUNC_TYPES[0], '');
   TERMS.push(t);
