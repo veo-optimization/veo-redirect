@@ -3,22 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BEROO — Візуальний конструктор карток (Зошит & Multi-select)</title>
+    <title>BEROO — Візуальний конструктор карток (Pro Edition)</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Стиль сітки зошита на весь екран */
         .notebook-grid {
             display: grid;
             grid-template-columns: repeat(24, 28px);
             grid-template-rows: repeat(36, 28px);
             background-color: #ffffff;
-            /* Ефект клітинок зошита */
+            /* Вдвічі менш насичені лінії сітки (напівпрозорі) */
             background-image: 
-                linear-gradient(to right, #f1f3f5 1px, transparent 1px),
-                linear-gradient(to bottom, #f1f3f5 1px, transparent 1px);
+                linear-gradient(to right, rgba(241, 243, 245, 0.5) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(241, 243, 245, 0.5) 1px, transparent 1px);
             background-size: 28px 28px;
-            border: 1px solid #4b5563; /* Тоненька темно-сіра рамка по периметру */
+            border: 1px solid #4b5563;
             position: relative;
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
             transform-origin: top center;
@@ -28,34 +27,54 @@
             width: 28px;
             height: 28px;
             box-sizing: border-box;
-            border-right: 1px solid rgba(226, 232, 240, 0.4);
-            border-bottom: 1px solid rgba(226, 232, 240, 0.4);
+            border-right: 1px solid rgba(226, 232, 240, 0.15);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.15);
         }
         .notebook-cell.selected-preview {
-            background-color: rgba(239, 68, 68, 0.2) !important;
+            background-color: rgba(239, 68, 68, 0.15) !important;
             border: 1px dashed #ef4444 !important;
         }
         .placed-element {
             position: absolute;
-            background-color: #ffffff;
-            border: 1px solid #cbd5e1;
+            border: 1px dashed #cbd5e1;
             border-radius: 4px;
-            padding: 4px 6px;
+            padding: 4px;
             font-size: 11px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             overflow: hidden;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
+            cursor: pointer;
+            transition: border-color 0.2s;
+        }
+        .placed-element:hover, .placed-element.active-edit {
+            border: 2px solid #ef4444;
+            z-index: 10;
+        }
+        /* Плаваючий лічильник біля курсора */
+        #drag-tooltip {
+            position: fixed;
+            pointer-events: none;
+            background: rgba(15, 23, 42, 0.9);
+            color: white;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-family: monospace;
+            border-radius: 4px;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
     </style>
 </head>
 <body class="bg-gray-100 font-sans text-gray-900 h-screen flex overflow-hidden">
 
-    <!-- ЗЛІВА: Гамбургер-меню (Виїжджаюча панель) -->
+    <!-- Лічильник біля курсора -->
+    <div id="drag-tooltip">1 × 1</div>
+
+    <!-- ЗЛІВА: Гамбургер-меню -->
     <div id="sidebar" class="w-72 bg-white border-r border-gray-200 flex flex-col justify-between z-30 transition-all duration-300">
         <div>
-            <!-- Шапка меню -->
             <div class="p-4 border-b border-gray-200 flex items-center justify-between bg-gray-50">
                 <div class="flex items-center space-x-2">
                     <div class="w-7 h-7 bg-red-500 rounded flex items-center justify-center text-white font-bold text-sm">B</div>
@@ -63,15 +82,16 @@
                 </div>
             </div>
 
-            <!-- Список карток -->
             <div class="p-4">
                 <div class="flex items-center justify-between mb-3">
                     <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500">Картки</h3>
-                    <button onclick="createNewCard()" class="text-xs bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded font-medium transition">+ Додати</button>
+                    <div class="space-x-1">
+                        <button onclick="createNewCard()" class="text-xs bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded font-medium transition" title="Нова картка">+ Додати</button>
+                        <button onclick="promptCopyCard()" class="text-xs bg-gray-800 hover:bg-black text-white px-2 py-1 rounded font-medium transition" title="Копіювати поточну картку">📄 Копіювати</button>
+                    </div>
                 </div>
                 <div id="cards-list" class="space-y-1 mb-6 max-h-48 overflow-y-auto"></div>
 
-                <!-- Меню Версій -->
                 <div class="mb-6">
                     <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Версії</h3>
                     <div id="versions-list" class="space-y-1 text-sm text-gray-700 max-h-40 overflow-y-auto">
@@ -81,7 +101,6 @@
             </div>
         </div>
 
-        <!-- Останній пункт меню: Перегляд JSON -->
         <div class="p-4 border-t border-gray-200 bg-gray-50 space-y-2">
             <button onclick="openJsonModal()" class="w-full text-left text-sm font-medium text-gray-700 hover:text-red-600 flex items-center justify-between py-1">
                 <span>📦 Переглянути JSON</span>
@@ -93,9 +112,8 @@
         </div>
     </div>
 
-    <!-- ЦЕНТР: Робоча зона конструктора -->
+    <!-- ЦЕНТР: Робоча зона -->
     <div class="flex-1 flex flex-col h-full overflow-hidden">
-        <!-- Верхня панель навігації -->
         <header class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-6 z-20">
             <div class="flex items-center space-x-4">
                 <button onclick="toggleSidebar()" class="text-gray-500 hover:text-gray-700 focus:outline-none">
@@ -103,7 +121,6 @@
                 </button>
                 <h1 id="current-card-title" class="text-base font-semibold text-gray-800">Розгорнута картка #1</h1>
             </div>
-            <!-- Зум робочої області -->
             <div class="flex items-center space-x-2">
                 <span class="text-xs text-gray-500 font-medium">Зум:</span>
                 <button onclick="adjustZoom(-0.1)" class="bg-gray-200 hover:bg-gray-300 px-2.5 py-1 rounded text-xs font-bold">-</button>
@@ -113,32 +130,30 @@
             </div>
         </header>
 
-        <!-- Основний контейнер із сіткою на весь екран -->
         <div class="flex-1 flex overflow-hidden">
-            <!-- Сітка зошита -->
             <div id="canvas-container" class="flex-1 bg-slate-50 flex items-center justify-center p-8 overflow-auto relative select-none">
-                <div id="notebook-grid" class="notebook-grid">
-                    <!-- Клітинки генеруються через JS -->
-                </div>
+                <div id="notebook-grid" class="notebook-grid"></div>
             </div>
 
-            <!-- ПРАВОРУЧ: Операційний блок управління -->
+            <!-- ПРАВОРУЧ: Операційний блок -->
             <div class="w-96 bg-white border-l border-gray-200 flex flex-col h-full z-20 shadow-sm">
-                <div class="p-4 border-b border-gray-200 bg-gray-50">
-                    <h2 class="text-sm font-bold uppercase tracking-wider text-gray-700">Операційний блок</h2>
-                    <p class="text-xs text-gray-500">Налаштування виділеного блоку</p>
+                <div class="p-4 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
+                    <div>
+                        <h2 class="text-sm font-bold uppercase tracking-wider text-gray-700">Операційний блок</h2>
+                        <p id="panel-subtitle" class="text-xs text-gray-500">Виділіть клітинки на сітці</p>
+                    </div>
+                    <button id="cancel-edit-btn" onclick="resetActiveBlock()" class="hidden text-xs text-red-500 hover:underline font-medium">Скинути</button>
                 </div>
 
-                <!-- Форма наповнення блоку -->
-                <div class="flex-1 p-4 overflow-y-auto space-y-4">
+                <div class="flex-1 p-4 overflow-y-auto space-y-3">
                     <div id="selection-info" class="text-xs bg-amber-50 border border-amber-200 text-amber-800 p-2.5 rounded">
-                        Виділіть клітинки на сітці мишею, щоб створити блок.
+                        Виділіть область на сітці або клікніть на існуючий блок для редагування.
                     </div>
 
                     <div class="space-y-3 opacity-60 pointer-events-none" id="block-form">
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">Тип елемента</label>
-                            <select id="elem-type" onchange="onTypeChange()" class="w-full text-sm border border-gray-300 rounded px-2.5 py-1.5 bg-white focus:ring-1 focus:ring-red-500 focus:outline-none">
+                            <select id="elem-type" class="w-full text-sm border border-gray-300 rounded px-2.5 py-1.5 bg-white focus:ring-1 focus:ring-red-500 focus:outline-none">
                                 <option value="text">Текст</option>
                                 <option value="number">Цифри</option>
                                 <option value="image">Картинка (URL)</option>
@@ -149,17 +164,72 @@
                             </select>
                         </div>
 
+                        <!-- Нові поля дії -->
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[11px] font-semibold text-gray-600 mb-1">Термін</label>
+                                <input type="text" id="action-term" class="w-full text-xs border border-gray-300 rounded px-2 py-1" placeholder="напр. 3 дні">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-semibold text-gray-600 mb-1">Меню</label>
+                                <input type="text" id="action-menu" class="w-full text-xs border border-gray-300 rounded px-2 py-1" placeholder="Розділ">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-[11px] font-semibold text-gray-600 mb-1">Підменю</label>
+                                <input type="text" id="action-submenu" class="w-full text-xs border border-gray-300 rounded px-2 py-1" placeholder="Підрозділ">
+                            </div>
+                            <div>
+                                <label class="block text-[11px] font-semibold text-gray-600 mb-1">Елемент</label>
+                                <input type="text" id="action-item" class="w-full text-xs border border-gray-300 rounded px-2 py-1" placeholder="Об'єкт">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-gray-600 mb-1">Пояснення</label>
+                            <textarea id="action-explanation" rows="2" class="w-full text-xs border border-gray-300 rounded px-2 py-1" placeholder="Опис функції блоку..."></textarea>
+                        </div>
+
+                        <!-- Заливка та Емодзі -->
+                        <div class="border-t pt-2 space-y-2">
+                            <div class="flex items-center space-x-2">
+                                <input type="checkbox" id="enable-fill" onchange="toggleFillSettings()" class="rounded text-red-500 focus:ring-red-400">
+                                <label for="enable-fill" class="text-xs font-semibold text-gray-700">Увімкнути заливку блоку</label>
+                            </div>
+                            <div id="fill-options" class="hidden space-y-2 bg-gray-50 p-2 rounded border">
+                                <div class="flex space-x-4">
+                                    <label class="text-xs flex items-center space-x-1 cursor-pointer">
+                                        <input type="radio" name="fill-mode" value="color" checked onchange="toggleFillMode()"> <span>Колір</span>
+                                    </label>
+                                    <label class="text-xs flex items-center space-x-1 cursor-pointer">
+                                        <input type="radio" name="fill-mode" value="emoji" onchange="toggleFillMode()"> <span>Емодзі</span>
+                                    </label>
+                                </div>
+                                <div id="fill-color-wrap">
+                                    <input type="color" id="fill-color-val" value="#fee2e2" class="w-full h-7 rounded border cursor-pointer">
+                                </div>
+                                <div id="fill-emoji-wrap" class="hidden flex items-center space-x-2">
+                                    <select id="fill-emoji-val" class="w-full text-xs border rounded p-1">
+                                        <option value="👤">👤 Людина (бюст)</option>
+                                        <option value="🏠">🏠 Будиночок</option>
+                                        <option value="🏪">🏪 Магазин</option>
+                                        <option value="🍬">🍬 Цукерка (товар)</option>
+                                        <option value="🧥">🧥 Кофта / Пальто</option>
+                                        <option value="⭐">⭐ Зірка</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">Кількість рядків у блоці</label>
                             <input type="number" id="elem-rows-count" value="1" min="1" max="5" onchange="renderRowsInputs()" class="w-full text-sm border border-gray-300 rounded px-3 py-1.5">
                         </div>
 
-                        <!-- Динамічні рядки -->
+                        <!-- Динамічні рядки з налаштуванням шрифтів та стилів -->
                         <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1">Наповнення рядків</label>
-                            <div id="rows-container" class="space-y-2">
-                                <!-- Динамічні інпути для рядків -->
-                            </div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Наповнення та стилі рядків</label>
+                            <div id="rows-container" class="space-y-2"></div>
                         </div>
 
                         <div>
@@ -167,17 +237,14 @@
                             <input type="text" id="elem-link" placeholder="https://..." class="w-full text-sm border border-gray-300 rounded px-3 py-1.5">
                         </div>
 
-                        <button onclick="confirmCreateBlock()" class="w-full bg-red-500 hover:bg-red-600 text-white text-sm py-2 rounded font-medium transition shadow-sm">
-                            ✨ Створити блок у сітці
+                        <button id="save-block-btn" onclick="saveBlockToGrid()" class="w-full bg-red-500 hover:bg-red-600 text-white text-sm py-2 rounded font-medium transition shadow-sm">
+                            ✨ Зберегти блок у сітці
                         </button>
                     </div>
 
-                    <!-- Список вже створених блоків на картці -->
                     <div class="border-t pt-4 mt-4">
                         <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Блоки на картці</h3>
-                        <div id="placed-blocks-list" class="space-y-2">
-                            <!-- Список елементів -->
-                        </div>
+                        <div id="placed-blocks-list" class="space-y-2"></div>
                     </div>
                 </div>
             </div>
@@ -199,7 +266,6 @@
         </div>
     </div>
 
-    <!-- СКРИПТ ЛОГІКИ -->
     <script>
         const COLS = 24;
         const ROWS = 36;
@@ -213,11 +279,11 @@
             versions: []
         };
 
-        // Тимчасові дані виділення мишею
         let isMouseDown = false;
         let startCell = null;
         let endCell = null;
         let activeSelection = null;
+        let editingBlockId = null; // ID блоку, який редагується
 
         window.onload = function() {
             initGrid();
@@ -225,7 +291,6 @@
             renderRowsInputs();
         };
 
-        // Генерація сітки зошита
         function initGrid() {
             const grid = document.getElementById('notebook-grid');
             grid.innerHTML = '';
@@ -237,43 +302,48 @@
                     cell.dataset.row = r;
                     cell.dataset.col = c;
 
-                    // Події для виділення мишею
                     cell.onmousedown = (e) => startSelection(r, c, e);
-                    cell.onmouseenter = (e) => updateSelection(r, c);
+                    cell.onmouseenter = (e) => updateSelection(r, c, e);
 
                     grid.appendChild(cell);
                 }
             }
 
-            // Загальна подія відпускання миші на документі
             document.onmouseup = endSelection;
             renderPlacedElements();
         }
 
-        // Початок виділення
         function startSelection(r, c, e) {
+            if (editingBlockId) return; // Якщо редагуємо блок, нове виділення сітки заблоковано
             isMouseDown = true;
             startCell = { r, c };
             endCell = { r, c };
             updatePreview();
+            showTooltip(e, 1, 1);
             e.preventDefault();
         }
 
-        // Оновлення при проведенні мишею
-        function updateSelection(r, c) {
+        function updateSelection(r, c, e) {
             if (!isMouseDown) return;
             endCell = { r, c };
             updatePreview();
+
+            const minR = Math.min(startCell.r, endCell.r);
+            const maxR = Math.max(startCell.r, endCell.r);
+            const minC = Math.min(startCell.c, endCell.c);
+            const maxC = Math.max(startCell.c, endCell.c);
+            const w = maxC - minC + 1;
+            const h = maxR - minR + 1;
+
+            showTooltip(e, w, h);
         }
 
-        // Кінець виділення
         function endSelection() {
+            hideTooltip();
             if (!isMouseDown) return;
             isMouseDown = false;
-
             if (!startCell || !endCell) return;
 
-            // Вираховуємо прямокутник
             const minR = Math.min(startCell.r, endCell.r);
             const maxR = Math.max(startCell.r, endCell.r);
             const minC = Math.min(startCell.c, endCell.c);
@@ -286,18 +356,28 @@
                 h: maxR - minR + 1
             };
 
-            // Активуємо форму в операційному блоці
-            document.getElementById('selection-info').innerHTML = `✅ Виділено область: <b>${activeSelection.w}×${activeSelection.h}</b> клітинок (Координати: X:${minC}, Y:${minR})`;
+            document.getElementById('selection-info').innerHTML = `✅ Виділено область: <b>${activeSelection.w}×${activeSelection.h}</b> клітинок`;
             document.getElementById('block-form').classList.remove('opacity-60', 'pointer-events-none');
+            document.getElementById('panel-subtitle').innerText = 'Створення нового блоку';
             renderRowsInputs();
         }
 
-        // Візуальний перегляд виділення на сітці
+        function showTooltip(e, w, h) {
+            const tip = document.getElementById('drag-tooltip');
+            tip.style.display = 'block';
+            tip.style.left = (e.clientX + 12) + 'px';
+            tip.style.top = (e.clientY + 12) + 'px';
+            tip.innerText = `${w} × ${h}`;
+        }
+
+        function hideTooltip() {
+            document.getElementById('drag-tooltip').style.display = 'none';
+        }
+
         function updatePreview() {
             document.querySelectorAll('.notebook-cell').forEach(cell => {
                 cell.classList.remove('selected-preview');
             });
-
             if (!isMouseDown || !startCell || !endCell) return;
 
             const minR = Math.min(startCell.r, endCell.r);
@@ -313,73 +393,219 @@
             }
         }
 
-        // Рендер полів для рядків залежно від кількості
-        function renderRowsInputs() {
-            const count = parseInt(document.getElementById('elem-rows-count').value) || 1;
-            const container = document.getElementById('rows-container');
-            container.innerHTML = '';
+        function toggleFillSettings() {
+            const enabled = document.getElementById('enable-fill').checked;
+            const wrap = document.getElementById('fill-options');
+            if (enabled) wrap.classList.remove('hidden');
+            else wrap.classList.add('hidden');
+        }
 
-            for (let i = 0; i < count; i++) {
-                const input = document.createElement('input');
-                input.type = 'text';
-                input.className = 'row-input w-full text-xs border border-gray-300 rounded px-2.5 py-1.5 focus:ring-1 focus:ring-red-500 focus:outline-none';
-                input.placeholder = `Рядок ${i + 1} вміст...`;
-                container.appendChild(input);
+        function toggleFillMode() {
+            const mode = document.querySelector('input[name="fill-mode"]:checked').value;
+            if (mode === 'color') {
+                document.getElementById('fill-color-wrap').classList.remove('hidden');
+                document.getElementById('fill-emoji-wrap').classList.add('hidden');
+            } else {
+                document.getElementById('fill-color-wrap').classList.add('hidden');
+                document.getElementById('fill-emoji-wrap').classList.remove('hidden');
             }
         }
 
-        function onTypeChange() {
-            // Можна додати специфічну логіку під тип зірочок чи картинок
+        function renderRowsInputs() {
+            const count = parseInt(document.getElementById('elem-rows-count').value) || 1;
+            const container = document.getElementById('rows-container');
+            
+            // Зберігаємо вже введені дані, якщо вони є
+            const existingRows = Array.from(container.querySelectorAll('.row-item-wrap')).map(wrap => ({
+                text: wrap.querySelector('.row-text').value,
+                size: wrap.querySelector('.row-size').value,
+                bold: wrap.querySelector('.style-bold').checked,
+                italic: wrap.querySelector('.style-italic').checked,
+                underline: wrap.querySelector('.style-underline').checked,
+                strike: wrap.querySelector('.style-strike').checked,
+            }));
+
+            container.innerHTML = '';
+
+            for (let i = 0; i < count; i++) {
+                const data = existingRows[i] || { text: '', size: '11px', bold: false, italic: false, underline: false, strike: false };
+                const div = document.createElement('div');
+                div.className = 'row-item-wrap border p-2 rounded bg-gray-50 space-y-1.5';
+                div.innerHTML = `
+                    <div class="flex space-x-2">
+                        <input type="text" class="row-text flex-1 text-xs border rounded px-2 py-1" placeholder="Рядок ${i + 1}..." value="${data.text}">
+                        <select class="row-size text-[11px] border rounded px-1">
+                            <option value="9px" ${data.size==='9px'?'selected':''}>9px</option>
+                            <option value="11px" ${data.size==='11px'?'selected':''}>11px</option>
+                            <option value="14px" ${data.size==='14px'?'selected':''}>14px</option>
+                            <option value="18px" ${data.size==='18px'?'selected':''}>18px</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center space-x-3 text-[11px] text-gray-600">
+                        <label><input type="checkbox" class="style-bold" ${data.bold?'checked':''}> <b>B</b></label>
+                        <label><input type="checkbox" class="style-italic" ${data.italic?'checked':''}> <i>I</i></label>
+                        <label><input type="checkbox" class="style-underline" ${data.underline?'checked':''}> <u>U</u></label>
+                        <label><input type="checkbox" class="style-strike" ${data.strike?'checked':''}> <strike>S</strike></label>
+                    </div>
+                `;
+                container.appendChild(div);
+            }
         }
 
-        // Підтвердження створення блоку
-        function confirmCreateBlock() {
-            if (!activeSelection) return;
+        function saveBlockToGrid() {
+            if (!activeSelection && !editingBlockId) return;
 
             const type = document.getElementById('elem-type').value;
             const link = document.getElementById('elem-link').value.trim();
-            const rowInputs = document.querySelectorAll('.row-input');
-            const rowsData = Array.from(rowInputs).map(inp => inp.value.trim());
+            const term = document.getElementById('action-term').value.trim();
+            const menu = document.getElementById('action-menu').value.trim();
+            const submenu = document.getElementById('action-submenu').value.trim();
+            const item = document.getElementById('action-item').value.trim();
+            const explanation = document.getElementById('action-explanation').value.trim();
 
-            const newBlock = {
-                id: 'el-' + Date.now(),
-                type,
-                x: activeSelection.x,
-                y: activeSelection.y,
-                w: activeSelection.w,
-                h: activeSelection.h,
-                link,
-                rows: rowsData
-            };
+            const enableFill = document.getElementById('enable-fill').checked;
+            const fillMode = document.querySelector('input[name="fill-mode"]:checked').value;
+            const fillColor = document.getElementById('fill-color-val').value;
+            const fillEmoji = document.getElementById('fill-emoji-val').value;
+
+            const rowWraps = document.querySelectorAll('.row-item-wrap');
+            const rowsData = Array.from(rowWraps).map(wrap => ({
+                text: wrap.querySelector('.row-text').value.trim(),
+                size: wrap.querySelector('.row-size').value,
+                bold: wrap.querySelector('.style-bold').checked,
+                italic: wrap.querySelector('.style-italic').checked,
+                underline: wrap.querySelector('.style-underline').checked,
+                strike: wrap.querySelector('.style-strike').checked,
+            }));
 
             const card = state.cards.find(c => c.id === state.currentCardId);
-            card.elements.push(newBlock);
 
-            // Скидання виділення
-            activeSelection = null;
-            document.getElementById('block-form').classList.add('opacity-60', 'pointer-events-none');
-            document.getElementById('selection-info').innerHTML = `Виділіть клітинки на сітці мишею, щоб створити блок.`;
-            
+            if (editingBlockId) {
+                // Оновлення існуючого блоку
+                const block = card.elements.find(el => el.id === editingBlockId);
+                if (block) {
+                    block.type = type;
+                    block.link = link;
+                    block.action = { term, menu, submenu, item, explanation };
+                    block.fill = { enabled: enableFill, mode: fillMode, color: fillColor, emoji: fillEmoji };
+                    block.rows = rowsData;
+                }
+            } else {
+                // Створення нового блоку
+                const newBlock = {
+                    id: 'el-' + Date.now(),
+                    type,
+                    x: activeSelection.x,
+                    y: activeSelection.y,
+                    w: activeSelection.w,
+                    h: activeSelection.h,
+                    link,
+                    action: { term, menu, submenu, item, explanation },
+                    fill: { enabled: enableFill, mode: fillMode, color: fillColor, emoji: fillEmoji },
+                    rows: rowsData
+                };
+                card.elements.push(newBlock);
+            }
+
+            resetActiveBlock();
             initGrid();
-            renderPlacedBlocksList();
         }
 
-        // Рендер блоків на самій сітці
+        function resetActiveBlock() {
+            editingBlockId = null;
+            activeSelection = null;
+            document.getElementById('block-form').classList.add('opacity-60', 'pointer-events-none');
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
+            document.getElementById('selection-info').innerHTML = `Виділіть область на сітці або клікніть на існуючий блок для редагування.`;
+            document.getElementById('panel-subtitle').innerText = 'Виділіть клітинки на сітці';
+            document.querySelectorAll('.notebook-cell').forEach(c => c.classList.remove('selected-preview'));
+            
+            // Очищення форм
+            document.getElementById('action-term').value = '';
+            document.getElementById('action-menu').value = '';
+            document.getElementById('action-submenu').value = '';
+            document.getElementById('action-item').value = '';
+            document.getElementById('action-explanation').value = '';
+            document.getElementById('enable-fill').checked = false;
+            toggleFillSettings();
+        }
+
+        function editBlock(id) {
+            const card = state.cards.find(c => c.id === state.currentCardId);
+            const block = card.elements.find(el => el.id === id);
+            if (!block) return;
+
+            editingBlockId = block.id;
+            activeSelection = { x: block.x, y: block.y, w: block.w, h: block.h };
+
+            document.getElementById('elem-type').value = block.type;
+            document.getElementById('action-term').value = block.action?.term || '';
+            document.getElementById('action-menu').value = block.action?.menu || '';
+            document.getElementById('action-submenu').value = block.action?.submenu || '';
+            document.getElementById('action-item').value = block.action?.item || '';
+            document.getElementById('action-explanation').value = block.action?.explanation || '';
+
+            const fill = block.fill || { enabled: false };
+            document.getElementById('enable-fill').checked = fill.enabled;
+            toggleFillSettings();
+            if (fill.enabled) {
+                if (fill.mode === 'emoji') {
+                    document.querySelector('input[name="fill-mode"][value="emoji"]').checked = true;
+                    document.getElementById('fill-emoji-val').value = fill.emoji || '👤';
+                } else {
+                    document.querySelector('input[name="fill-mode"][value="color"]').checked = true;
+                    document.getElementById('fill-color-val').value = fill.color || '#fee2e2';
+                }
+                toggleFillMode();
+            }
+
+            document.getElementById('elem-rows-count').value = block.rows.length || 1;
+            renderRowsInputs();
+
+            // Заповнення стилів рядків
+            const rowWraps = document.querySelectorAll('.row-item-wrap');
+            block.rows.forEach((rData, idx) => {
+                if (rowWraps[idx]) {
+                    rowWraps[idx].querySelector('.row-text').value = rData.text;
+                    rowWraps[idx].querySelector('.row-size').value = rData.size;
+                    rowWraps[idx].querySelector('.style-bold').checked = rData.bold;
+                    rowWraps[idx].querySelector('.style-italic').checked = rData.italic;
+                    rowWraps[idx].querySelector('.style-underline').checked = rData.underline;
+                    rowWraps[idx].querySelector('.style-strike').checked = rData.strike;
+                }
+            });
+
+            document.getElementById('elem-link').value = block.link || '';
+            document.getElementById('block-form').classList.remove('opacity-60', 'pointer-events-none');
+            document.getElementById('cancel-edit-btn').classList.remove('hidden');
+            document.getElementById('panel-subtitle').innerText = `Редагування блоку (${block.w}x${block.h})`;
+            document.getElementById('selection-info').innerHTML = `✏️ Редагується блок на координатах X:${block.x}, Y:${block.y}`;
+        }
+
         function renderPlacedElements() {
             const grid = document.getElementById('notebook-grid');
-            // Видаляємо старі відмальовані блоки
             grid.querySelectorAll('.placed-element').forEach(el => el.remove());
 
             const card = state.cards.find(c => c.id === state.currentCardId);
-            const CELL_SIZE = 28; // розмір клітинки в пікселях
+            const CELL_SIZE = 28;
 
             card.elements.forEach(el => {
                 const div = document.createElement('div');
-                div.className = 'placed-element';
+                div.className = `placed-element ${editingBlockId === el.id ? 'active-edit' : ''}`;
                 div.style.left = `${el.x * CELL_SIZE}px`;
                 div.style.top = `${el.y * CELL_SIZE}px`;
                 div.style.width = `${el.w * CELL_SIZE - 1}px`;
                 div.style.height = `${el.h * CELL_SIZE - 1}px`;
+
+                // Заливка
+                if (el.fill && el.fill.enabled) {
+                    if (el.fill.mode === 'color') {
+                        div.style.backgroundColor = el.fill.color;
+                    } else {
+                        // Емодзі на всю площу максимально розтягнуте
+                        div.innerHTML = `<div class="absolute inset-0 flex items-center justify-center text-4xl opacity-25 select-none pointer-events-none">${el.fill.emoji}</div>`;
+                    }
+                }
 
                 let iconSymbol = '';
                 if (el.type === 'star-yellow') iconSymbol = '⭐ ';
@@ -387,25 +613,30 @@
                 if (el.type === 'star-empty-yellow') iconSymbol = '🩵 ';
                 if (el.type === 'star-empty-gray') iconSymbol = '◻ ';
 
-                let rowsHtml = el.rows.map(r => `<div class="truncate font-medium text-gray-800">${iconSymbol}${r}</div>`).join('');
-                if (el.type === 'image') {
-                    rowsHtml = `<div class="text-[10px] text-blue-500 truncate">[Картинка: ${el.rows[0] || 'не вказано'}]</div>`;
-                }
+                let rowsHtml = el.rows.map(r => {
+                    let styleAttr = `font-size: ${r.size || '11px'};`;
+                    if (r.bold) styleAttr += ' font-weight: bold;';
+                    if (r.italic) styleAttr += ' font-style: italic;';
+                    if (r.underline) styleAttr += ' text-decoration: underline;';
+                    if (r.strike) styleAttr += ' text-decoration: line-through;';
+                    return `<div class="truncate text-gray-800 relative z-10" style="${styleAttr}">${iconSymbol}${r.text}</div>`;
+                }).join('');
 
-                div.innerHTML = `
-                    <div class="flex justify-between items-center border-b pb-0.5 mb-1">
+                div.innerHTML += `
+                    <div class="flex justify-between items-center border-b border-gray-200 pb-0.5 mb-0.5 relative z-10">
                         <span class="text-[9px] uppercase font-bold text-gray-400">${el.type}</span>
-                        <button onclick="removeBlock('${el.id}')" class="text-red-500 hover:font-bold text-xs">&times;</button>
+                        <button onclick="event.stopPropagation(); removeBlock('${el.id}')" class="text-red-500 hover:font-bold text-xs">&times;</button>
                     </div>
-                    <div class="flex-1 overflow-hidden space-y-0.5">${rowsHtml}</div>
+                    <div class="flex-1 overflow-hidden space-y-0.5 relative z-10">${rowsHtml}</div>
                 `;
+
+                div.onclick = () => editBlock(el.id);
                 grid.appendChild(div);
             });
 
             renderPlacedBlocksList();
         }
 
-        // Рендер списку блоків справа у списку
         function renderPlacedBlocksList() {
             const listEl = document.getElementById('placed-blocks-list');
             listEl.innerHTML = '';
@@ -424,7 +655,10 @@
                         <span class="font-bold text-gray-700">${el.type}</span> 
                         <span class="text-gray-400">(${el.w}x${el.h})</span>
                     </div>
-                    <button onclick="removeBlock('${el.id}')" class="text-red-500 hover:underline">Видалити</button>
+                    <div class="space-x-2">
+                        <button onclick="editBlock('${el.id}')" class="text-blue-500 hover:underline">Змінити</button>
+                        <button onclick="removeBlock('${el.id}')" class="text-red-500 hover:underline">Видалити</button>
+                    </div>
                 `;
                 listEl.appendChild(div);
             });
@@ -433,10 +667,32 @@
         function removeBlock(id) {
             const card = state.cards.find(c => c.id === state.currentCardId);
             card.elements = card.elements.filter(e => e.id !== id);
+            if (editingBlockId === id) resetActiveBlock();
             initGrid();
         }
 
-        // Управління зумом
+        // Копіювання картки із запитом імені
+        function promptCopyCard() {
+            const currentCard = state.cards.find(c => c.id === state.currentCardId);
+            const defaultName = `${currentCard.name} копія`;
+            
+            const newName = prompt("Введіть назву нової копії картки:", defaultName);
+            if (newName === null) return; // Скасовано
+
+            const newId = Math.max(...state.cards.map(c => c.id)) + 1;
+            const copiedCard = {
+                id: newId,
+                name: newName.trim() || defaultName,
+                elements: JSON.parse(JSON.stringify(currentCard.elements))
+            };
+
+            state.cards.push(copiedCard);
+            state.currentCardId = newId;
+            renderCardsList();
+            initGrid();
+            resetActiveBlock();
+        }
+
         function adjustZoom(delta) {
             currentZoom = Math.max(0.6, Math.min(1.6, currentZoom + delta));
             applyZoom();
@@ -452,14 +708,12 @@
             document.getElementById('zoom-level').innerText = `${Math.round(currentZoom * 100)}%`;
         }
 
-        // Управління сайдбаром
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             sidebar.classList.toggle('w-72');
             sidebar.classList.toggle('w-16');
         }
 
-        // Робота з картками та версіями
         function renderCardsList() {
             const listEl = document.getElementById('cards-list');
             listEl.innerHTML = '';
@@ -467,17 +721,23 @@
                 const btn = document.createElement('button');
                 btn.className = `w-full text-left px-3 py-1.5 rounded text-sm font-medium flex items-center justify-between transition ${card.id === state.currentCardId ? 'bg-red-50 text-red-600 border border-red-200' : 'text-gray-700 hover:bg-gray-100'}`;
                 btn.innerHTML = `<span>📄 ${card.name}</span>`;
-                btn.onclick = () => { state.currentCardId = card.id; initGrid(); renderCardsList(); };
+                btn.onclick = () => { 
+                    state.currentCardId = card.id; 
+                    initGrid(); 
+                    renderCardsList(); 
+                    resetActiveBlock();
+                };
                 listEl.appendChild(btn);
             });
         }
 
         function createNewCard() {
-            const newId = state.cards.length + 1;
+            const newId = Math.max(...state.cards.map(c => c.id)) + 1;
             state.cards.push({ id: newId, name: `Картка #${newId}`, elements: [] });
             state.currentCardId = newId;
             initGrid();
             renderCardsList();
+            resetActiveBlock();
         }
 
         function saveCurrentVersion() {
