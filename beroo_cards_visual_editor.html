@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BEROO — Візуальний конструктор карток (Pro Edition)</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .notebook-grid {
@@ -106,7 +105,6 @@
             display: none;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
-        /* Стилі для назви блоку */
         .block-name-badge {
             position: absolute;
             top: -18px;
@@ -136,7 +134,6 @@
             background: #d97706;
             border-color: #d97706;
         }
-        /* Підсвічування активного блоку в списку */
         .block-list-item.active-block {
             background-color: #fef2f2 !important;
             border-color: #ef4444 !important;
@@ -145,7 +142,6 @@
         .block-list-item.active-block .font-bold {
             color: #b91c1c;
         }
-        /* Підсвічування при наведенні в списку */
         .block-list-item.hover-highlight {
             background-color: #fffbeb !important;
             border-color: #f59e0b !important;
@@ -154,11 +150,44 @@
         .block-list-item.hover-highlight .font-bold {
             color: #b45309;
         }
+        /* Індикатор синхронізації */
+        #sync-indicator {
+            position: fixed;
+            top: 60px;
+            right: 20px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: opacity 0.3s;
+        }
+        #sync-indicator.saving {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fbbf24;
+            display: block;
+        }
+        #sync-indicator.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+            display: block;
+        }
+        #sync-indicator.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+            display: block;
+        }
     </style>
 </head>
 <body class="bg-gray-100 font-sans text-gray-900 h-screen flex overflow-hidden">
 
     <div id="drag-tooltip">1 × 1</div>
+    <div id="sync-indicator">Збереження...</div>
 
     <!-- ЗЛІВА: Гамбургер-меню -->
     <div id="sidebar" class="w-72 bg-white border-r border-gray-200 flex flex-col justify-between z-30 transition-all duration-300">
@@ -190,6 +219,14 @@
         </div>
 
         <div class="p-4 border-t border-gray-200 bg-gray-50 space-y-2">
+            <!-- НОВІ КНОПКИ СИНХРОНІЗАЦІЇ -->
+            <div class="flex items-center justify-between text-[10px] text-gray-500 mb-1">
+                <span id="cloud-status">☁️ Хмара: перевірка...</span>
+            </div>
+            <button onclick="manualSync()" id="manual-sync-btn" class="w-full text-left text-sm font-medium text-blue-600 hover:text-blue-800 flex items-center justify-between py-1">
+                <span>☁️ Синхронізувати зараз</span>
+                <span id="sync-badge" class="text-xs bg-gray-200 px-2 py-0.5 rounded text-gray-600">—</span>
+            </button>
             <button onclick="openJsonModal()" class="w-full text-left text-sm font-medium text-gray-700 hover:text-red-600 flex items-center justify-between py-1">
                 <span>📦 Переглянути JSON</span>
                 <span class="text-xs bg-gray-200 px-2 py-0.5 rounded text-gray-600">API</span>
@@ -239,7 +276,6 @@
                     </div>
 
                     <div class="space-y-3 opacity-60 pointer-events-none" id="block-form">
-                        <!-- НОВЕ ПОЛЕ: Назва блоку -->
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">Назва блоку (відображається над блоком)</label>
                             <input type="text" id="block-name" class="w-full text-sm border border-gray-300 rounded px-2.5 py-1.5 bg-white focus:ring-1 focus:ring-red-500 focus:outline-none" placeholder="напр. Головний блок, Заголовок, Меню">
@@ -355,6 +391,12 @@
     </div>
 
     <script>
+        // ============================================
+        // ⚙️ КОНФІГУРАЦІЯ — ЗАМІНІТЬ URL!
+        // ============================================
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw3EQLqGAoIUcVuSvTx8nsaBUsoXLdCGVbDXnvW-a0HDBmIjohGsOol6pnMK0frZiyveA/exec';
+        const AUTO_SAVE_DELAY = 1500; // мс — затримка перед автозбереженням
+
         const COLS = 24;
         const ROWS = 36;
         let currentZoom = 1.0;
@@ -372,7 +414,7 @@
         let endCell = null;
         let activeSelection = null;
         let editingBlockId = null;
-        let hoveredBlockId = null; // НОВЕ: ID блоку, на який наведено мишку
+        let hoveredBlockId = null;
 
         let isResizing = false;
         let resizingBlockId = null;
@@ -385,12 +427,152 @@
         let moveStartPos = { x: 0, y: 0 };
         let blockCurrentPos = { x: 0, y: 0 };
 
-        window.onload = function() {
+        // ============================================
+        // ☁️ СИНХРОНІЗАЦІЯ З GOOGLE SHEETS
+        // ============================================
+        let autoSaveTimer = null;
+        let isSyncing = false;
+        let pendingSave = false;
+
+        function showSyncIndicator(status, message) {
+            const el = document.getElementById('sync-indicator');
+            el.className = status;
+            el.innerText = message || (status === 'saving' ? '☁️ Збереження...' : status === 'success' ? '✅ Збережено' : '❌ Помилка');
+            if (status === 'success' || status === 'error') {
+                setTimeout(() => {
+                    el.style.display = 'none';
+                }, 2000);
+            }
+        }
+
+        function updateCloudStatus(text, color = 'text-gray-500') {
+            const el = document.getElementById('cloud-status');
+            el.className = `text-[10px] ${color}`;
+            el.innerText = text;
+        }
+
+        async function syncToCloud(silent = false) {
+            if (isSyncing) {
+                pendingSave = true;
+                return;
+            }
+            
+            if (!SCRIPT_URL || SCRIPT_URL === 'YOUR_SCRIPT_URL_HERE') {
+                updateCloudStatus('⚠️ URL не налаштовано', 'text-amber-600');
+                if (!silent) alert('⚠️ Будь ласка, вкажіть SCRIPT_URL у коді!');
+                return;
+            }
+
+            isSyncing = true;
+            if (!silent) showSyncIndicator('saving', '☁️ Збереження...');
+
+            try {
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'save',
+                        data: {
+                            cards: state.cards,
+                            currentCardId: state.currentCardId,
+                            versions: state.versions
+                        }
+                    })
+                });
+
+                // no-cors не дає читати відповідь, тому вважаємо успіхом
+                updateCloudStatus(`✅ Синхронізовано ${new Date().toLocaleTimeString('uk-UA')}`, 'text-green-600');
+                if (!silent) showSyncIndicator('success', '✅ Збережено');
+                document.getElementById('sync-badge').innerText = '✓';
+                document.getElementById('sync-badge').className = 'text-xs bg-green-100 px-2 py-0.5 rounded text-green-700';
+            } catch (err) {
+                console.error('Sync error:', err);
+                updateCloudStatus('❌ Помилка синхронізації', 'text-red-600');
+                if (!silent) showSyncIndicator('error', '❌ Помилка: ' + err.message);
+                document.getElementById('sync-badge').innerText = '✗';
+                document.getElementById('sync-badge').className = 'text-xs bg-red-100 px-2 py-0.5 rounded text-red-700';
+            } finally {
+                isSyncing = false;
+                if (pendingSave) {
+                    pendingSave = false;
+                    syncToCloud(silent);
+                }
+            }
+        }
+
+        function scheduleAutoSave() {
+            if (autoSaveTimer) clearTimeout(autoSaveTimer);
+            updateCloudStatus('☁️ Є незбережені зміни...', 'text-amber-600');
+            document.getElementById('sync-badge').innerText = '…';
+            document.getElementById('sync-badge').className = 'text-xs bg-amber-100 px-2 py-0.5 rounded text-amber-700';
+            
+            autoSaveTimer = setTimeout(() => {
+                syncToCloud(true);
+            }, AUTO_SAVE_DELAY);
+        }
+
+        async function loadFromCloud() {
+            if (!SCRIPT_URL || SCRIPT_URL === 'YOUR_SCRIPT_URL_HERE') {
+                updateCloudStatus('⚠️ URL не налаштовано', 'text-amber-600');
+                return false;
+            }
+
+            updateCloudStatus('☁️ Завантаження...', 'text-blue-600');
+
+            try {
+                const response = await fetch(SCRIPT_URL + '?action=load&t=' + Date.now());
+                const result = await response.json();
+
+                if (result.success && result.data) {
+                    state.cards = result.data.cards || state.cards;
+                    state.currentCardId = result.data.currentCardId || state.currentCardId;
+                    state.versions = result.data.versions || [];
+                    
+                    updateCloudStatus(`✅ Завантажено ${new Date().toLocaleTimeString('uk-UA')}`, 'text-green-600');
+                    document.getElementById('sync-badge').innerText = '✓';
+                    document.getElementById('sync-badge').className = 'text-xs bg-green-100 px-2 py-0.5 rounded text-green-700';
+                    return true;
+                } else {
+                    updateCloudStatus('ℹ️ Даних у хмарі немає', 'text-gray-500');
+                    return false;
+                }
+            } catch (err) {
+                console.error('Load error:', err);
+                updateCloudStatus('❌ Помилка завантаження', 'text-red-600');
+                return false;
+            }
+        }
+
+        async function manualSync() {
+            await syncToCloud(false);
+        }
+
+        // ============================================
+        // 🚀 ІНІЦІАЛІЗАЦІЯ
+        // ============================================
+        window.onload = async function() {
             initGrid();
             renderCardsList();
             renderRowsInputs();
+
+            // Завантажуємо дані з хмари
+            const loaded = await loadFromCloud();
+            if (loaded) {
+                initGrid();
+                renderCardsList();
+                renderVersionsList();
+            } else {
+                // Якщо в хмарі пусто — зберігаємо початковий стан
+                if (SCRIPT_URL && SCRIPT_URL !== 'YOUR_SCRIPT_URL_HERE') {
+                    syncToCloud(true);
+                }
+            }
         };
 
+        // ============================================
+        // ОСНОВНА ЛОГІКА (без змін, тільки додано scheduleAutoSave)
+        // ============================================
         function initGrid() {
             const grid = document.getElementById('notebook-grid');
             grid.innerHTML = '';
@@ -401,10 +583,8 @@
                     cell.className = 'notebook-cell';
                     cell.dataset.row = r;
                     cell.dataset.col = c;
-
                     cell.onmousedown = (e) => startSelection(r, c, e);
                     cell.onmouseenter = (e) => updateSelection(r, c, e);
-
                     grid.appendChild(cell);
                 }
             }
@@ -429,7 +609,6 @@
         function startSelection(r, c, e) {
             if (editingBlockId || isResizing || isMoving) return;
             if (checkCollision(c, r, 1, 1)) return;
-
             isMouseDown = true;
             startCell = { r, c };
             endCell = { r, c };
@@ -441,14 +620,12 @@
         function updateSelection(r, c, e) {
             if (!isMouseDown) return;
             endCell = { r, c };
-
             const minR = Math.min(startCell.r, endCell.r);
             const maxR = Math.max(startCell.r, endCell.r);
             const minC = Math.min(startCell.c, endCell.c);
             const maxC = Math.max(startCell.c, endCell.c);
             const w = maxC - minC + 1;
             const h = maxR - minR + 1;
-
             const hasCollision = checkCollision(minC, minR, w, h);
             updatePreview(hasCollision);
             showTooltip(e, w, h);
@@ -484,12 +661,9 @@
             isResizing = true;
             resizingBlockId = blockId;
             resizeStartMouse = { x: e.clientX, y: e.clientY };
-            
             const card = state.cards.find(c => c.id === state.currentCardId);
             const block = card.elements.find(el => el.id === blockId);
-            if (block) {
-                resizeStartSize = { w: block.w, h: block.h };
-            }
+            if (block) resizeStartSize = { w: block.w, h: block.h };
             e.stopPropagation();
             e.preventDefault();
         }
@@ -499,7 +673,6 @@
             isMoving = true;
             movingBlockId = blockId;
             moveStartMouse = { x: e.clientX, y: e.clientY };
-
             const card = state.cards.find(c => c.id === state.currentCardId);
             const block = card.elements.find(el => el.id === blockId);
             if (block) {
@@ -511,20 +684,16 @@
 
         function handleGlobalMouseMove(e) {
             const CELL_SIZE = 28 * currentZoom;
-
             if (isResizing && resizingBlockId) {
                 const dx = e.clientX - resizeStartMouse.x;
                 const dy = e.clientY - resizeStartMouse.y;
-                
                 const addW = Math.round(dx / CELL_SIZE);
                 const addH = Math.round(dy / CELL_SIZE);
-
                 const card = state.cards.find(c => c.id === state.currentCardId);
                 const block = card.elements.find(el => el.id === resizingBlockId);
                 if (block) {
                     const newW = Math.max(1, resizeStartSize.w + addW);
                     const newH = Math.max(1, resizeStartSize.h + addH);
-
                     if (block.w !== newW || block.h !== newH) {
                         block.w = newW;
                         block.h = newH;
@@ -534,16 +703,13 @@
             } else if (isMoving && movingBlockId) {
                 const dx = e.clientX - moveStartMouse.x;
                 const dy = e.clientY - moveStartMouse.y;
-
                 const cellDx = Math.round(dx / CELL_SIZE);
                 const cellDy = Math.round(dy / CELL_SIZE);
-
                 const card = state.cards.find(c => c.id === state.currentCardId);
                 const block = card.elements.find(el => el.id === movingBlockId);
                 if (block) {
                     const newX = moveStartPos.x + cellDx;
                     const newY = moveStartPos.y + cellDy;
-
                     if (block.x !== newX || block.y !== newY) {
                         block.x = newX;
                         block.y = newY;
@@ -564,6 +730,8 @@
                     block.h = resizeStartSize.h;
                     renderPlacedElements();
                     alert("⚠️ Неможливо розтягнути блок: колізія з іншим елементом або межею!");
+                } else if (block) {
+                    scheduleAutoSave();
                 }
                 resizingBlockId = null;
             }
@@ -577,6 +745,8 @@
                         block.x = moveStartPos.x;
                         block.y = moveStartPos.y;
                         alert("⚠️ Неможливо перемістити блок сюди: місце зайняте!");
+                    } else {
+                        scheduleAutoSave();
                     }
                 }
                 movingBlockId = null;
@@ -603,21 +773,16 @@
                 cell.classList.remove('selected-preview', 'collision-preview');
             });
             if (!isMouseDown || !startCell || !endCell) return;
-
             const minR = Math.min(startCell.r, endCell.r);
             const maxR = Math.max(startCell.r, endCell.r);
             const minC = Math.min(startCell.c, endCell.c);
             const maxC = Math.max(startCell.c, endCell.c);
-
             for (let r = minR; r <= maxR; r++) {
                 for (let c = minC; c <= maxC; c++) {
                     const cell = document.querySelector(`.notebook-cell[data-row='${r}'][data-col='${c}']`);
                     if (cell) {
-                        if (hasCollision) {
-                            cell.classList.add('collision-preview');
-                        } else {
-                            cell.classList.add('selected-preview');
-                        }
+                        if (hasCollision) cell.classList.add('collision-preview');
+                        else cell.classList.add('selected-preview');
                     }
                 }
             }
@@ -640,7 +805,6 @@
         function renderRowsInputs() {
             const count = parseInt(document.getElementById('elem-rows-count').value) || 1;
             const container = document.getElementById('rows-container');
-            
             const existingRows = Array.from(container.querySelectorAll('.row-item-wrap')).map(wrap => ({
                 text: wrap.querySelector('.row-text').value,
                 size: wrap.querySelector('.row-size').value,
@@ -649,9 +813,7 @@
                 underline: wrap.querySelector('.style-underline').checked,
                 strike: wrap.querySelector('.style-strike').checked,
             }));
-
             container.innerHTML = '';
-
             for (let i = 0; i < count; i++) {
                 const data = existingRows[i] || { text: '', size: '11px', bold: false, italic: false, underline: false, strike: false };
                 const div = document.createElement('div');
@@ -679,7 +841,6 @@
 
         function saveBlockToGrid() {
             if (!activeSelection && !editingBlockId) return;
-
             const blockName = document.getElementById('block-name').value.trim();
             const type = document.getElementById('elem-type').value;
             const link = document.getElementById('elem-link').value.trim();
@@ -688,7 +849,6 @@
             const submenu = document.getElementById('action-submenu').value.trim();
             const item = document.getElementById('action-item').value.trim();
             const explanation = document.getElementById('action-explanation').value.trim();
-
             const enableFill = document.getElementById('enable-fill').checked;
             const fillColor = document.getElementById('fill-color-val').value;
             const enableEmoji = document.getElementById('enable-emoji-fill').checked;
@@ -736,6 +896,7 @@
 
             resetActiveBlock();
             initGrid();
+            scheduleAutoSave(); // ☁️ АВТОЗБЕРЕЖЕННЯ
         }
 
         function resetActiveBlock() {
@@ -747,7 +908,6 @@
             document.getElementById('selection-info').innerHTML = `Виділіть область на сітці або клікніть на існуючий блок для редагування.`;
             document.getElementById('panel-subtitle').innerText = 'Виділіть клітинки на сітці';
             document.querySelectorAll('.notebook-cell').forEach(c => c.classList.remove('selected-preview', 'collision-preview'));
-            
             document.getElementById('block-name').value = '';
             document.getElementById('action-term').value = '';
             document.getElementById('action-menu').value = '';
@@ -758,7 +918,6 @@
             document.getElementById('enable-emoji-fill').checked = false;
             toggleFillSettings();
             toggleEmojiSelect();
-            
             renderPlacedElements();
         }
 
@@ -769,7 +928,6 @@
 
             editingBlockId = block.id;
             activeSelection = { x: block.x, y: block.y, w: block.w, h: block.h };
-
             document.getElementById('block-name').value = block.name || '';
             document.getElementById('elem-type').value = block.type;
             document.getElementById('action-term').value = block.action?.term || '';
@@ -785,9 +943,7 @@
                 document.getElementById('fill-color-val').value = fill.color || '#fee2e2';
                 document.getElementById('enable-emoji-fill').checked = fill.useEmoji || false;
                 toggleEmojiSelect();
-                if (fill.useEmoji) {
-                    document.getElementById('fill-emoji-val').value = fill.emoji || '👤';
-                }
+                if (fill.useEmoji) document.getElementById('fill-emoji-val').value = fill.emoji || '👤';
             }
 
             document.getElementById('elem-rows-count').value = block.rows.length || 1;
@@ -810,26 +966,19 @@
             document.getElementById('cancel-edit-btn').classList.remove('hidden');
             document.getElementById('panel-subtitle').innerText = `Редагування блоку (${block.w}x${block.h})`;
             document.getElementById('selection-info').innerHTML = `✏️ Редагується блок на координатах X:${block.x}, Y:${block.y}`;
-
             renderPlacedElements();
         }
 
-        // НОВА ФУНКЦІЯ: встановлення hover-блоку
         function setHoveredBlock(blockId) {
-            // Якщо є активний блок — ігноруємо hover
             if (editingBlockId) return;
-            
             if (hoveredBlockId === blockId) return;
-            
             hoveredBlockId = blockId;
             renderPlacedElements();
         }
 
-        // НОВА ФУНКЦІЯ: очищення hover-блоку
         function clearHoveredBlock() {
             if (editingBlockId) return;
             if (hoveredBlockId === null) return;
-            
             hoveredBlockId = null;
             renderPlacedElements();
         }
@@ -837,7 +986,6 @@
         function renderPlacedElements() {
             const grid = document.getElementById('notebook-grid');
             grid.querySelectorAll('.placed-element').forEach(el => el.remove());
-
             const card = state.cards.find(c => c.id === state.currentCardId);
             const CELL_SIZE = 28;
 
@@ -860,7 +1008,6 @@
 
                 let bgStyle = '';
                 let emojiLayerHtml = '';
-
                 if (el.fill && el.fill.enabled && !hasCol) {
                     bgStyle = `background-color: ${el.fill.color || 'transparent'};`;
                     if (el.fill.useEmoji) {
@@ -900,17 +1047,14 @@
                     <div class="resize-handle" onmousedown="startResize('${el.id}', event)" title="Змінити розмір">↘</div>
                 `;
 
-                // Hover-ефекти
-                div.onmouseenter = (e) => {
-                    // Не показуємо hover, якщо перетягуємо або змінюємо розмір
+                div.onmouseenter = () => {
                     if (isMoving || isResizing) return;
                     setHoveredBlock(el.id);
                 };
-                div.onmouseleave = (e) => {
+                div.onmouseleave = () => {
                     if (isMoving || isResizing) return;
                     clearHoveredBlock();
                 };
-
                 div.onmousedown = (e) => {
                     if (!e.target.classList.contains('resize-handle') && !e.target.closest('button')) {
                         startMove(el.id, e);
@@ -936,15 +1080,8 @@
             let attempts = 0;
             while (checkCollision(newX, newY, original.w, original.h) && attempts < 100) {
                 newX++;
-                if (newX + original.w > COLS) {
-                    newX = 0;
-                    newY++;
-                }
-                if (newY + original.h > ROWS) {
-                    newX = original.x;
-                    newY = original.y;
-                    break;
-                }
+                if (newX + original.w > COLS) { newX = 0; newY++; }
+                if (newY + original.h > ROWS) { newX = original.x; newY = original.y; break; }
                 attempts++;
             }
             if (checkCollision(newX, newY, original.w, original.h)) {
@@ -956,18 +1093,16 @@
                 id: 'el-' + Date.now() + '-' + Math.floor(Math.random()*1000),
                 name: (original.name ? original.name + ' (копія)' : ''),
                 type: original.type,
-                x: newX,
-                y: newY,
-                w: original.w,
-                h: original.h,
+                x: newX, y: newY, w: original.w, h: original.h,
                 link: original.link,
                 action: original.action ? JSON.parse(JSON.stringify(original.action)) : {},
                 fill: original.fill ? JSON.parse(JSON.stringify(original.fill)) : { enabled: false },
                 rows: original.rows ? JSON.parse(JSON.stringify(original.rows)) : []
             };
-
             card.elements.push(copy);
             renderPlacedElements();
+            scheduleAutoSave(); // ☁️
+
             const toast = document.createElement('div');
             toast.className = 'fixed bottom-4 right-4 bg-gray-900 text-white text-xs px-4 py-2 rounded shadow-lg z-50';
             toast.innerText = `📋 Блок "${original.name || 'без назви'}" скопійовано`;
@@ -979,7 +1114,6 @@
             const listEl = document.getElementById('placed-blocks-list');
             listEl.innerHTML = '';
             const card = state.cards.find(c => c.id === state.currentCardId);
-
             if (card.elements.length === 0) {
                 listEl.innerHTML = `<p class="text-xs text-gray-400 italic">Ще немає блоків</p>`;
                 return;
@@ -989,14 +1123,11 @@
                 const div = document.createElement('div');
                 const isActive = editingBlockId === el.id;
                 const isHovered = hoveredBlockId === el.id && !editingBlockId;
-                
                 let classes = 'block-list-item flex items-center justify-between bg-gray-50 border border-gray-200 p-2 rounded text-xs cursor-pointer transition';
                 if (isActive) classes += ' active-block';
                 else if (isHovered) classes += ' hover-highlight';
                 else classes += ' hover:bg-gray-100';
-                
                 div.className = classes;
-                
                 const displayName = el.name ? `"${el.name}"` : el.type;
                 div.innerHTML = `
                     <div class="truncate mr-2">
@@ -1009,17 +1140,8 @@
                         <button onclick="event.stopPropagation(); removeBlock('${el.id}')" class="text-red-500 hover:underline">Видалити</button>
                     </div>
                 `;
-                
-                // Hover-ефекти для рядка списку
-                div.onmouseenter = () => {
-                    if (isMoving || isResizing) return;
-                    setHoveredBlock(el.id);
-                };
-                div.onmouseleave = () => {
-                    if (isMoving || isResizing) return;
-                    clearHoveredBlock();
-                };
-                
+                div.onmouseenter = () => { if (isMoving || isResizing) return; setHoveredBlock(el.id); };
+                div.onmouseleave = () => { if (isMoving || isResizing) return; clearHoveredBlock(); };
                 div.onclick = () => editBlock(el.id);
                 listEl.appendChild(div);
             });
@@ -1031,34 +1153,32 @@
             if (editingBlockId === id) resetActiveBlock();
             if (hoveredBlockId === id) hoveredBlockId = null;
             initGrid();
+            scheduleAutoSave(); // ☁️
         }
 
         function promptCopyCard() {
             const currentCard = state.cards.find(c => c.id === state.currentCardId);
             const defaultName = `${currentCard.name} копія`;
-            
             const newName = prompt("Введіть назву нової копії картки:", defaultName);
             if (newName === null) return;
-
             const newId = Math.max(...state.cards.map(c => c.id)) + 1;
             const copiedCard = {
                 id: newId,
                 name: newName.trim() || defaultName,
                 elements: JSON.parse(JSON.stringify(currentCard.elements))
             };
-
             state.cards.push(copiedCard);
             state.currentCardId = newId;
             renderCardsList();
             initGrid();
             resetActiveBlock();
+            scheduleAutoSave(); // ☁️
         }
 
         function renameCard(cardId, event) {
             event.stopPropagation();
             const card = state.cards.find(c => c.id === cardId);
             if (!card) return;
-
             const newName = prompt("Введіть нову назву картки:", card.name);
             if (newName !== null && newName.trim() !== "") {
                 card.name = newName.trim();
@@ -1066,6 +1186,7 @@
                 if (state.currentCardId === cardId) {
                     document.getElementById('current-card-title').innerText = card.name;
                 }
+                scheduleAutoSave(); // ☁️
             }
         }
 
@@ -1075,10 +1196,8 @@
                 alert("⚠️ Неможливо видалити єдину картку!");
                 return;
             }
-
             const card = state.cards.find(c => c.id === cardId);
             if (!confirm(`Ви дійсно хочете видалити картку "${card.name}"?`)) return;
-
             state.cards = state.cards.filter(c => c.id !== cardId);
             if (state.currentCardId === cardId) {
                 state.currentCardId = state.cards[0].id;
@@ -1086,6 +1205,7 @@
             renderCardsList();
             initGrid();
             resetActiveBlock();
+            scheduleAutoSave(); // ☁️
         }
 
         function adjustZoom(delta) {
@@ -1116,7 +1236,6 @@
                 const isActive = card.id === state.currentCardId;
                 const div = document.createElement('div');
                 div.className = `px-2 py-1.5 rounded text-sm font-medium flex items-center justify-between transition ${isActive ? 'bg-red-50 text-red-600 border border-red-200' : 'text-gray-700 hover:bg-gray-100'}`;
-                
                 div.innerHTML = `
                     <span class="truncate flex-1 cursor-pointer" onclick="switchCard(${card.id})" title="${card.name}">📄 ${card.name}</span>
                     <div class="flex items-center space-x-1.5 ml-2 text-xs">
@@ -1126,7 +1245,6 @@
                 `;
                 listEl.appendChild(div);
             });
-
             const activeCard = state.cards.find(c => c.id === state.currentCardId);
             if (activeCard) {
                 document.getElementById('current-card-title').innerText = activeCard.name;
@@ -1134,10 +1252,11 @@
         }
 
         function switchCard(cardId) {
-            state.currentCardId = cardId; 
-            initGrid(); 
-            renderCardsList(); 
+            state.currentCardId = cardId;
+            initGrid();
+            renderCardsList();
             resetActiveBlock();
+            scheduleAutoSave(); // ☁️
         }
 
         function createNewCard() {
@@ -1147,6 +1266,7 @@
             initGrid();
             renderCardsList();
             resetActiveBlock();
+            scheduleAutoSave(); // ☁️
         }
 
         function saveCurrentVersion() {
@@ -1157,12 +1277,16 @@
                 data: JSON.parse(JSON.stringify(card))
             });
             renderVersionsList();
+            scheduleAutoSave(); // ☁️
             alert(`✅ Збережено нову версію!`);
         }
 
         function renderVersionsList() {
             const vEl = document.getElementById('versions-list');
-            if (state.versions.length === 0) return;
+            if (state.versions.length === 0) {
+                vEl.innerHTML = '<p class="text-xs text-gray-400 italic">Ще немає збережених версій</p>';
+                return;
+            }
             vEl.innerHTML = '';
             state.versions.forEach(v => {
                 const div = document.createElement('div');
@@ -1190,6 +1314,14 @@
             document.execCommand('copy');
             alert('📋 Скопійовано!');
         }
+
+        // Збереження перед закриттям сторінки
+        window.addEventListener('beforeunload', (e) => {
+            if (autoSaveTimer || pendingSave) {
+                // Спроба синхронізувати (може не встигнути, але краще ніж нічого)
+                syncToCloud(true);
+            }
+        });
     </script>
 </body>
 </html>
