@@ -33,6 +33,10 @@
             background-color: rgba(239, 68, 68, 0.15) !important;
             border: 1px dashed #ef4444 !important;
         }
+        .notebook-cell.collision-preview {
+            background-color: rgba(239, 68, 68, 0.35) !important;
+            border: 1px solid #dc2626 !important;
+        }
         .placed-element {
             position: absolute;
             border: 1px dashed #cbd5e1;
@@ -43,12 +47,42 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
-            cursor: pointer;
+            cursor: grab;
             transition: border-color 0.2s;
+            user-select: none;
+        }
+        .placed-element:active {
+            cursor: grabbing;
         }
         .placed-element:hover, .placed-element.active-edit {
             border: 2px solid #ef4444;
             z-index: 10;
+        }
+        .placed-element.collision {
+            border: 2px solid #dc2626 !important;
+            background-color: rgba(254, 202, 202, 0.9) !important;
+            z-index: 30;
+        }
+        /* Маркер ресайзу (дві стрілочки) праворуч внизу */
+        .resize-handle {
+            position: absolute;
+            right: 2px;
+            bottom: 2px;
+            width: 14px;
+            height: 14px;
+            cursor: nwse-resize;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            color: #ef4444;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 2px;
+            z-index: 20;
+        }
+        .placed-element:hover .resize-handle,
+        .placed-element.active-edit .resize-handle {
+            display: flex;
         }
         #drag-tooltip {
             position: fixed;
@@ -188,7 +222,7 @@
                             <textarea id="action-explanation" rows="2" class="w-full text-xs border border-gray-300 rounded px-2 py-1" placeholder="Опис функції блоку..."></textarea>
                         </div>
 
-                        <!-- Заливка та Емодзі (одночасний вибір) -->
+                        <!-- Заливка та Емодзі -->
                         <div class="border-t pt-2 space-y-2">
                             <div class="flex items-center space-x-2">
                                 <input type="checkbox" id="enable-fill" onchange="toggleFillSettings()" class="rounded text-red-500 focus:ring-red-400">
@@ -279,6 +313,19 @@
         let activeSelection = null;
         let editingBlockId = null;
 
+        // Змінні для прямого ресайзу
+        let isResizing = false;
+        let resizingBlockId = null;
+        let resizeStartMouse = { x: 0, y: 0 };
+        let resizeStartSize = { w: 0, h: 0 };
+
+        // Змінні для переміщення (Drag & Drop) блоків
+        let isMoving = false;
+        let movingBlockId = null;
+        let moveStartMouse = { x: 0, y: 0 };
+        let moveStartPos = { x: 0, y: 0 };
+        let blockCurrentPos = { x: 0, y: 0 };
+
         window.onload = function() {
             initGrid();
             renderCardsList();
@@ -303,12 +350,28 @@
                 }
             }
 
-            document.onmouseup = endSelection;
+            document.onmouseup = endGlobalMouseUp;
+            document.onmousemove = handleGlobalMouseMove;
             renderPlacedElements();
         }
 
+        function checkCollision(x, y, w, h, excludeId = null) {
+            if (x < 0 || y < 0 || x + w > COLS || y + h > ROWS) return true;
+            const card = state.cards.find(c => c.id === state.currentCardId);
+            for (let el of card.elements) {
+                if (el.id === excludeId) continue;
+                if (x < el.x + el.w && x + w > el.x && y < el.y + el.h && y + h > el.y) {
+                    return true; // Є перетин
+                }
+            }
+            return false;
+        }
+
         function startSelection(r, c, e) {
-            if (editingBlockId) return;
+            if (editingBlockId || isResizing || isMoving) return;
+            // Перевіряємо, чи клітинка не зайнята іншим блоком
+            if (checkCollision(c, r, 1, 1)) return;
+
             isMouseDown = true;
             startCell = { r, c };
             endCell = { r, c };
@@ -320,7 +383,6 @@
         function updateSelection(r, c, e) {
             if (!isMouseDown) return;
             endCell = { r, c };
-            updatePreview();
 
             const minR = Math.min(startCell.r, endCell.r);
             const maxR = Math.max(startCell.r, endCell.r);
@@ -329,6 +391,8 @@
             const w = maxC - minC + 1;
             const h = maxR - minR + 1;
 
+            const hasCollision = checkCollision(minC, minR, w, h);
+            updatePreview(hasCollision);
             showTooltip(e, w, h);
         }
 
@@ -342,18 +406,127 @@
             const maxR = Math.max(startCell.r, endCell.r);
             const minC = Math.min(startCell.c, endCell.c);
             const maxC = Math.max(startCell.c, endCell.c);
+            const w = maxC - minC + 1;
+            const h = maxR - minR + 1;
 
-            activeSelection = {
-                x: minC,
-                y: minR,
-                w: maxC - minC + 1,
-                h: maxR - minR + 1
-            };
+            if (checkCollision(minC, minR, w, h)) {
+                alert("⚠️ Неможливо створити блок: область перетинається з іншими елементами!");
+                updatePreview(false);
+                return;
+            }
 
-            document.getElementById('selection-info').innerHTML = `✅ Виділено область: <b>${activeSelection.w}×${activeSelection.h}</b> клітинок`;
+            activeSelection = { x: minC, y: minR, w, h };
+            document.getElementById('selection-info').innerHTML = `✅ Виділено область: <b>${w}×${h}</b> клітинок`;
             document.getElementById('block-form').classList.remove('opacity-60', 'pointer-events-none');
             document.getElementById('panel-subtitle').innerText = 'Створення нового блоку';
             renderRowsInputs();
+        }
+
+        function startResize(blockId, e) {
+            isResizing = true;
+            resizingBlockId = blockId;
+            resizeStartMouse = { x: e.clientX, y: e.clientY };
+            
+            const card = state.cards.find(c => c.id === state.currentCardId);
+            const block = card.elements.find(el => el.id === blockId);
+            if (block) {
+                resizeStartSize = { w: block.w, h: block.h };
+            }
+            e.stopPropagation();
+            e.preventDefault();
+        }
+
+        function startMove(blockId, e) {
+            if (isResizing) return;
+            isMoving = true;
+            movingBlockId = blockId;
+            moveStartMouse = { x: e.clientX, y: e.clientY };
+
+            const card = state.cards.find(c => c.id === state.currentCardId);
+            const block = card.elements.find(el => el.id === blockId);
+            if (block) {
+                moveStartPos = { x: block.x, y: block.y };
+                blockCurrentPos = { x: block.x, y: block.y };
+            }
+            e.stopPropagation();
+        }
+
+        function handleGlobalMouseMove(e) {
+            const CELL_SIZE = 28 * currentZoom;
+
+            if (isResizing && resizingBlockId) {
+                const dx = e.clientX - resizeStartMouse.x;
+                const dy = e.clientY - resizeStartMouse.y;
+                
+                const addW = Math.round(dx / CELL_SIZE);
+                const addH = Math.round(dy / CELL_SIZE);
+
+                const card = state.cards.find(c => c.id === state.currentCardId);
+                const block = card.elements.find(el => el.id === resizingBlockId);
+                if (block) {
+                    const newW = Math.max(1, resizeStartSize.w + addW);
+                    const newH = Math.max(1, resizeStartSize.h + addH);
+
+                    if (block.w !== newW || block.h !== newH) {
+                        block.w = newW;
+                        block.h = newH;
+                        renderPlacedElements();
+                    }
+                }
+            } else if (isMoving && movingBlockId) {
+                const dx = e.clientX - moveStartMouse.x;
+                const dy = e.clientY - moveStartMouse.y;
+
+                const cellDx = Math.round(dx / CELL_SIZE);
+                const cellDy = Math.round(dy / CELL_SIZE);
+
+                const card = state.cards.find(c => c.id === state.currentCardId);
+                const block = card.elements.find(el => el.id === movingBlockId);
+                if (block) {
+                    const newX = moveStartPos.x + cellDx;
+                    const newY = moveStartPos.y + cellDy;
+
+                    if (block.x !== newX || block.y !== newY) {
+                        block.x = newX;
+                        block.y = newY;
+                        blockCurrentPos = { x: newX, y: newY };
+                        renderPlacedElements();
+                    }
+                }
+            }
+        }
+
+        function endGlobalMouseUp() {
+            if (isResizing) {
+                isResizing = false;
+                const card = state.cards.find(c => c.id === state.currentCardId);
+                const block = card.elements.find(el => el.id === resizingBlockId);
+                if (block && checkCollision(block.x, block.y, block.w, block.h, block.id)) {
+                    // Якщо вийшли за межі або наклалися — повертаємо старий розмір
+                    block.w = resizeStartSize.w;
+                    block.h = resizeStartSize.h;
+                    renderPlacedElements();
+                    alert("⚠️ Неможливо розтягнути блок: колізія з іншим елементом або межею!");
+                }
+                resizingBlockId = null;
+            }
+
+            if (isMoving) {
+                isMoving = false;
+                const card = state.cards.find(c => c.id === state.currentCardId);
+                const block = card.elements.find(el => el.id === movingBlockId);
+                if (block) {
+                    if (checkCollision(block.x, block.y, block.w, block.h, block.id)) {
+                        block.x = moveStartPos.x;
+                        block.y = moveStartPos.y;
+                        alert("⚠️ Неможливо перемістити блок сюди: місце зайняте!");
+                    }
+                }
+                movingBlockId = null;
+                renderPlacedElements();
+            }
+
+            endSelection();
         }
 
         function showTooltip(e, w, h) {
@@ -368,9 +541,9 @@
             document.getElementById('drag-tooltip').style.display = 'none';
         }
 
-        function updatePreview() {
+        function updatePreview(hasCollision = false) {
             document.querySelectorAll('.notebook-cell').forEach(cell => {
-                cell.classList.remove('selected-preview');
+                cell.classList.remove('selected-preview', 'collision-preview');
             });
             if (!isMouseDown || !startCell || !endCell) return;
 
@@ -382,7 +555,13 @@
             for (let r = minR; r <= maxR; r++) {
                 for (let c = minC; c <= maxC; c++) {
                     const cell = document.querySelector(`.notebook-cell[data-row='${r}'][data-col='${c}']`);
-                    if (cell) cell.classList.add('selected-preview');
+                    if (cell) {
+                        if (hasCollision) {
+                            cell.classList.add('collision-preview');
+                        } else {
+                            cell.classList.add('selected-preview');
+                        }
+                    }
                 }
             }
         }
@@ -468,13 +647,7 @@
             }));
 
             const card = state.cards.find(c => c.id === state.currentCardId);
-
-            const fillConfig = {
-                enabled: enableFill,
-                color: fillColor,
-                useEmoji: enableEmoji,
-                emoji: fillEmoji
-            };
+            const fillConfig = { enabled: enableFill, color: fillColor, useEmoji: enableEmoji, emoji: fillEmoji };
 
             if (editingBlockId) {
                 const block = card.elements.find(el => el.id === editingBlockId);
@@ -512,7 +685,7 @@
             document.getElementById('cancel-edit-btn').classList.add('hidden');
             document.getElementById('selection-info').innerHTML = `Виділіть область на сітці або клікніть на існуючий блок для редагування.`;
             document.getElementById('panel-subtitle').innerText = 'Виділіть клітинки на сітці';
-            document.querySelectorAll('.notebook-cell').forEach(c => c.classList.remove('selected-preview'));
+            document.querySelectorAll('.notebook-cell').forEach(c => c.classList.remove('selected-preview', 'collision-preview'));
             
             document.getElementById('action-term').value = '';
             document.getElementById('action-menu').value = '';
@@ -583,17 +756,18 @@
 
             card.elements.forEach(el => {
                 const div = document.createElement('div');
-                div.className = `placed-element ${editingBlockId === el.id ? 'active-edit' : ''}`;
+                const hasCol = checkCollision(el.x, el.y, el.w, el.h, el.id);
+                
+                div.className = `placed-element ${editingBlockId === el.id ? 'active-edit' : ''} ${hasCol ? 'collision' : ''}`;
                 div.style.left = `${el.x * CELL_SIZE}px`;
                 div.style.top = `${el.y * CELL_SIZE}px`;
                 div.style.width = `${el.w * CELL_SIZE - 1}px`;
                 div.style.height = `${el.h * CELL_SIZE - 1}px`;
 
-                // Формування шарів заливки
                 let bgStyle = '';
                 let emojiLayerHtml = '';
 
-                if (el.fill && el.fill.enabled) {
+                if (el.fill && el.fill.enabled && !hasCol) {
                     bgStyle = `background-color: ${el.fill.color || 'transparent'};`;
                     if (el.fill.useEmoji) {
                         emojiLayerHtml = `<div class="absolute inset-0 flex items-center justify-center text-4xl opacity-25 select-none pointer-events-none z-0">${el.fill.emoji}</div>`;
@@ -616,16 +790,25 @@
                     return `<div class="truncate text-gray-800 relative z-10" style="${styleAttr}">${iconSymbol}${r.text}</div>`;
                 }).join('');
 
-                // Прибрано мітку типу блоку (текстовий/цифровий) — суцільний прозорий/заповнений блок
                 div.innerHTML = `
                     ${emojiLayerHtml}
                     <div class="flex justify-end items-center mb-0.5 relative z-10">
                         <button onclick="event.stopPropagation(); removeBlock('${el.id}')" class="text-red-500 hover:font-bold text-xs">&times;</button>
                     </div>
                     <div class="flex-1 overflow-hidden space-y-0.5 relative z-10">${rowsHtml}</div>
+                    <div class="resize-handle" onmousedown="startResize('${el.id}', event)" title="Змінити розмір">↘</div>
                 `;
 
-                div.onclick = () => editBlock(el.id);
+                div.onmousedown = (e) => {
+                    // Якщо клікнули не на маркер ресайзу — запускаємо переміщення блоку
+                    if (!e.target.classList.contains('resize-handle')) {
+                        startMove(el.id, e);
+                    }
+                };
+                div.onclick = (e) => {
+                    if (!isMoving) editBlock(el.id);
+                };
+
                 grid.appendChild(div);
             });
 
