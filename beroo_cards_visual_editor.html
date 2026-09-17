@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BEROO — Візуальний конструктор карток</title>
+    <!-- Tailwind CSS для швидкого та стильного інтерфейсу -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Стилі для клітинчастої сітки мобільної картки */
+        .grid-board {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            grid-template-rows: repeat(24, minmax(24px, 1fr));
+            gap: 2px;
+            background-color: #e5e7eb;
+            border: 2px solid #d1d5db;
+            border-radius: 8px;
+            padding: 4px;
+            width: 320px;
+            height: 580px;
+            position: relative;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .grid-cell {
+            background-color: #ffffff;
+            border-radius: 2px;
+            transition: background-color 0.15s;
+        }
+        .grid-cell.drag-over-valid {
+            background-color: #bbf7d0 !important; /* Зеленуватий при успішному наведенні */
+        }
+        .grid-cell.drag-over-invalid {
+            background-color: #fecaca !important; /* Червоний при колізії */
+        }
+        .placed-block {
+            position: absolute;
+            background-color: #ef4444;
+            color: white;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: move;
+            user-select: none;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 font-sans text-gray-900 h-screen flex overflow-hidden">
+
+    <!-- ЗЛІВА: Гамбургер-меню (Виїжджаюча панель) -->
+    <div id="sidebar" class="w-72 bg-white border-r border-gray-200 flex flex-col justify-between z-20 transition-all duration-300">
+        <div>
+            <!-- Шапка меню -->
+            <div class="p-4 border-b border-gray-200 flex items-center justify-between bg-gray-50">
+                <div class="flex items-center space-x-2">
+                    <div class="w-7 h-7 bg-red-500 rounded flex items-center justify-center text-white font-bold text-sm">B</div>
+                    <span class="font-bold tracking-wide">BEROO Builder</span>
+                </div>
+            </div>
+
+            <!-- Список карток -->
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500">Картки</h3>
+                    <button onclick="createNewCard()" class="text-xs bg-red-500 hover:bg-red-600 text-white px-2 py-1 rounded font-medium transition">+ Додати картку</button>
+                </div>
+                <div id="cards-list" class="space-y-1 mb-6">
+                    <!-- Динамічний список карток -->
+                </div>
+
+                <!-- Меню Версій -->
+                <div class="mb-6">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Версії та порівняння</h3>
+                    <div id="versions-list" class="space-y-1 text-sm text-gray-700">
+                        <p class="text-xs text-gray-400 italic">Ще немає збережених версій</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Останній пункт меню: Перегляд JSON -->
+        <div class="p-4 border-t border-gray-200 bg-gray-50">
+            <button onclick="openJsonModal()" class="w-full text-left text-sm font-medium text-gray-700 hover:text-red-600 flex items-center justify-between py-2">
+                <span>📦 Переглянути JSON код</span>
+                <span class="text-xs bg-gray-200 px-2 py-0.5 rounded text-gray-600">API</span>
+            </button>
+            <button onclick="saveCurrentVersion()" class="w-full mt-2 bg-gray-900 hover:bg-black text-white text-sm py-2 rounded font-medium transition shadow-sm">
+                💾 Зберегти версію картки
+            </button>
+        </div>
+    </div>
+
+    <!-- ЦЕНТР: Робоча зона конструктора -->
+    <div class="flex-1 flex flex-col h-full overflow-hidden">
+        <!-- Верхня панель навігації робочої зони -->
+        <header class="h-14 bg-white border-b border-gray-200 flex items-center justify-between px-6">
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleSidebar()" class="text-gray-500 hover:text-gray-700 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </button>
+                <h1 id="current-card-title" class="text-base font-semibold text-gray-800">Картка #1 (Магазин)</h1>
+            </div>
+            <div class="flex items-center space-x-3">
+                <span class="text-xs bg-amber-100 text-amber-800 px-2.5 py-1 rounded-full font-medium">Співвідношення: Мобайл (9:19.5)</span>
+            </div>
+        </header>
+
+        <!-- Основний контейнер конструктора -->
+        <div class="flex-1 flex overflow-hidden">
+            <!-- Зона сітки по центру -->
+            <div class="flex-1 bg-slate-100 flex items-center justify-center p-6 overflow-auto">
+                <div class="flex flex-col items-center">
+                    <div class="text-xs text-gray-500 mb-2 font-medium">Мобільний емалятор сітки (12 × 24 клітинок)</div>
+                    <!-- Емулятор телефону -->
+                    <div class="bg-gray-900 p-3 rounded-[36px] shadow-2xl border-4 border-gray-800">
+                        <div class="bg-white rounded-[28px] overflow-hidden relative flex items-center justify-center">
+                            <!-- Сама сітка -->
+                            <div id="grid-board" class="grid-board" 
+                                 ondragover="allowDrop(event)" 
+                                 ondragleave="clearGridHighlight(event)"
+                                 ondrop="dropElement(event)">
+                                <!-- Динамічні клітинки сітки генеруються через JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ПРАВОРУЧ: Операційний блок управління елементами -->
+            <div class="w-96 bg-white border-l border-gray-200 flex flex-col h-full z-10 shadow-sm">
+                <div class="p-4 border-b border-gray-200 bg-gray-50">
+                    <h2 class="text-sm font-bold uppercase tracking-wider text-gray-700">Операційний блок</h2>
+                    <p class="text-xs text-gray-500">Створення та налаштування компонентів</p>
+                </div>
+
+                <!-- Форма створення елемента -->
+                <div class="p-4 border-b border-gray-200 space-y-3 bg-white overflow-y-auto max-h-[350px]">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Назва елемента / блоку</label>
+                        <input type="text" id="elem-name" placeholder="напр. Ранг, Зірочки, Кнопка" class="w-full text-sm border border-gray-300 rounded px-3 py-1.5 focus:ring-1 focus:ring-red-500 focus:outline-none">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Вміст (іконка / текст)</label>
+                            <input type="text" id="elem-content" placeholder="⭐ або 49" class="w-full text-sm border border-gray-300 rounded px-3 py-1.5 focus:ring-1 focus:ring-red-500 focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Тип даних</label>
+                            <select id="elem-type" class="w-full text-sm border border-gray-300 rounded px-2 py-1.5 bg-white focus:ring-1 focus:ring-red-500 focus:outline-none">
+                                <option value="badge">Бейдж / Статус</option>
+                                <option value="counter">Лічильник / Цифра</option>
+                                <option value="button">Кнопка дії</option>
+                                <option value="text">Текстовий рядок</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Ширина (клітинок)</label>
+                            <input type="number" id="elem-w" value="4" min="1" max="12" class="w-full text-sm border border-gray-300 rounded px-3 py-1.5">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Висота (клітинок)</label>
+                            <input type="number" id="elem-h" value="2" min="1" max="4" class="w-full text-sm border border-gray-300 rounded px-3 py-1.5">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Посилання (URL / Дія)</label>
+                        <input type="text" id="elem-link" placeholder="beroo.space/action" class="w-full text-sm border border-gray-300 rounded px-3 py-1.5">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-600 mb-1">Опис функції елемента</label>
+                        <textarea id="elem-desc" rows="2" placeholder="Для чого використовується цей блок..." class="w-full text-sm border border-gray-300 rounded px-3 py-1.5"></textarea>
+                    </div>
+                    <button onclick="addElementToPalette()" class="w-full bg-red-500 hover:bg-red-600 text-white text-sm py-2 rounded font-medium transition shadow-sm">+ Створити блок у палітрі</button>
+                </div>
+
+                <!-- Список створених блоків (Палітра для перетягування) -->
+                <div class="flex-1 p-4 overflow-y-auto bg-gray-50">
+                    <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-3">Доступні блоки (тягни на сітку)</h3>
+                    <div id="palette-list" class="space-y-2">
+                        <!-- Динамічні елементи палітри -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНЕ ВІКНО: Перегляд JSON -->
+    <div id="json-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg w-2/3 max-w-2xl p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-bold text-gray-800">JSON-структура картки та проєкту</h3>
+                <button onclick="closeJsonModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl">&times;</button>
+            </div>
+            <textarea id="json-output" readonly class="w-full h-80 font-mono text-xs bg-gray-900 text-green-400 p-4 rounded border border-gray-700 focus:outline-none"></textarea>
+            <div class="mt-4 flex justify-end space-x-2">
+                <button onclick="copyJson()" class="bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm px-4 py-2 rounded font-medium transition">Скопіювати JSON</button>
+                <button onclick="closeJsonModal()" class="bg-red-500 hover:bg-red-600 text-white text-sm px-4 py-2 rounded font-medium transition">Закрити</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛЬНЕ ВІКНО: Порівняння версій -->
+    <div id="compare-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-lg w-3/4 max-w-4xl p-6 shadow-2xl">
+            <div class="flex justify-between items-center mb-4">
+                <h3 id="compare-title" class="text-lg font-bold text-gray-800">Порівняння версій карток</h3>
+                <button onclick="closeCompareModal()" class="text-gray-400 hover:text-gray-600 font-bold text-xl">&times;</button>
+            </div>
+            <div id="compare-content" class="grid grid-cols-2 gap-4">
+                <!-- Динамічний вміст порівняння -->
+            </div>
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeCompareModal()" class="bg-red-500 hover:bg-red-600 text-white text-sm px-4 py-2 rounded font-medium transition">Закрити порівняння</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- СКРИПТ ЛОГІКИ КОНСТРУКТОРА -->
+    <script>
+        // Глобальний стан додатку
+        let state = {
+            cards: [
+                {
+                    id: 1,
+                    name: "Демо Магазин «Північ»",
+                    type: "shop",
+                    elements: [
+                        { id: 'el-1', name: 'Ранг', content: '⭐ 49', type: 'badge', w: 4, h: 2, x: 0, y: 0, link: '', desc: 'Рейтинг магазину' },
+                        { id: 'el-2', name: 'Товарів', content: '4', type: 'counter', w: 4, h: 3, x: 0, y: 2, link: '', desc: 'Кількість активних лотів' }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Блогер / Стрімер",
+                    type: "blogger",
+                    elements: []
+                }
+            ],
+            currentCardId: 1,
+            palette: [
+                { id: 'pal-1', name: 'Статус', content: '🟢 Новачок', type: 'badge', w: 5, h: 2, link: '', desc: 'Статус активності' },
+                { id: 'pal-2', name: 'Комісія', content: '8-15%', type: 'counter', w: 6, h: 2, link: '', desc: 'Відсоток комісії платформи' },
+                { id: 'pal-3', name: 'Кнопка скарги', content: '⚠️ Скарга', type: 'button', w: 6, h: 2, link: '/report', desc: 'Форма звернення' }
+            ],
+            versions: []
+        };
+
+        const COLS = 12;
+        const ROWS = 24;
+
+        // Ініціалізація інтерфейсу при завантаженні
+        window.onload = function() {
+            renderCardsList();
+            initGridCells();
+            renderPalette();
+            loadCurrentCard();
+        };
+
+        // Генерація клітинок сітки на дошці
+        function initGridCells() {
+            const board = document.getElementById('grid-board');
+            board.innerHTML = '';
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'grid-cell';
+                    cell.dataset.row = r;
+                    cell.dataset.col = c;
+                    board.appendChild(cell);
+                }
+            }
+        }
+
+        // Рендер списку карток у лівому меню
+        function renderCardsList() {
+            const listEl = document.getElementById('cards-list');
+            listEl.innerHTML = '';
+            state.cards.forEach(card => {
+                const isActive = card.id === state.currentCardId;
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left px-3 py-2 rounded text-sm font-medium flex items-center justify-between transition ${isActive ? 'bg-red-50 text-red-600 border border-red-200' : 'text-gray-700 hover:bg-gray-100'}`;
+                btn.innerHTML = `<span>📄 ${card.name}</span> <span class="text-xs text-gray-400">ID: ${card.id}</span>`;
+                btn.onclick = () => switchCard(card.id);
+                listEl.appendChild(btn);
+            });
+        }
+
+        // Перемикання між картками
+        fn_switchCard = function(id) {
+            state.currentCardId = id;
+            renderCardsList();
+            loadCurrentCard();
+        };
+
+        function switchCard(id) {
+            state.currentCardId = id;
+            renderCardsList();
+            loadCurrentCard();
+        }
+
+        // Створення нової картки
+        function createNewCard() {
+            const newId = state.cards.length ? Math.max(...state.cards.map(c => c.id)) + 1 : 1;
+            const newCard = {
+                id: newId,
+                name: `Нова картка #${newId}`,
+                type: 'custom',
+                elements: []
+            };
+            state.cards.push(newCard);
+            switchCard(newId);
+        }
+
+        // Завантаження поточної картки на екран
+        function loadCurrentCard() {
+            const card = state.cards.find(c => c.id === state.currentCardId);
+            if (!card) return;
+            document.getElementById('current-card-title').innerText = `${card.name} (ID: ${card.id})`;
+            renderPlacedElements();
+        }
+
+        // Рендер елементів на сітці поточної картки
+        function renderPlacedElements() {
+            initGridCells();
+            const card = state.cards.find(c => c.id === state.currentCardId);
+            const board = document.getElementById('grid-board');
+
+            // Ширина і висота однієї клітинки у пікселях
+            // Оскільки сітка 320px ширина (-падінги), обчислимо розміри динамічно
+            const cellWidth = board.clientWidth / COLS;
+            const cellHeight = board.clientHeight / ROWS;
+
+            card.elements.forEach(el => {
+                const block = document.createElement('div');
+                block.className = 'placed-block bg-red-500 hover:bg-red-600 transition-colors';
+                block.style.left = `${el.x * cellWidth}px`;
+                block.style.top = `${el.y * cellHeight}px`;
+                block.style.width = `${el.w * cellWidth - 2}px`;
+                block.style.height = `${el.h * cellHeight - 2}px`;
+                block.innerHTML = `
+                    <span class="truncate font-semibold text-xs">${el.name}: ${el.content}</span>
+                    <button onclick="removeElementFromCard('${el.id}')" class="ml-1 text-white hover:text-gray-200 font-bold text-xs">&times;</button>
+                `;
+                board.appendChild(block);
+            });
+        }
+
+        // Створення нового елемента в операційному блоці (палітрі)
+        function addElementToPalette() {
+            const name = document.getElementById('elem-name').value.trim();
+            const content = document.getElementById('elem-content').value.trim();
+            const type = document.getElementById('elem-type').value;
+            const w = parseInt(document.getElementById('elem-w').value) || 4;
+            const h = parseInt(document.getElementById('elem-h').value) || 2;
+            const link = document.getElementById('elem-link').value.trim();
+            const desc = document.getElementById('elem-desc').value.trim();
+
+            if (!name || !content) {
+                alert('Будь ласка, заповніть назву та вміст елемента!');
+                return;
+            }
+
+            const newElem = {
+                id: 'el-' + Date.now(),
+                name, content, type, w, h, link, desc
+            };
+
+            state.palette.push(newElem);
+            renderPalette();
+
+            // Очищення полів форми
+            document.getElementById('elem-name').value = '';
+            document.getElementById('elem-content').value = '';
+            document.getElementById('elem-link').value = '';
+            document.getElementById('elem-desc').value = '';
+        }
+
+        // Рендер палітри елементів праворуч
+        function renderPalette() {
+            const paletteEl = document.getElementById('palette-list');
+            paletteEl.innerHTML = '';
+            state.palette.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'p-3 bg-white border border-gray-200 rounded-lg shadow-sm cursor-grab hover:border-red-400 transition flex items-center justify-between';
+                div.draggable = true;
+                div.onsubmit = (e) => e.preventDefault();
+                div.ondragstart = (e) => {
+                    e.dataTransfer.setData('text/plain', JSON.stringify(item));
+                };
+                div.innerHTML = `
+                    <div>
+                        <div class="font-semibold text-xs text-gray-800">${item.name} <span class="text-gray-400 font-normal">(${item.content})</span></div>
+                        <div class="text-[10px] text-gray-500 truncate max-w-[180px]">${item.desc || 'Без опису'}</div>
+                    </div>
+                    <span class="text-xs bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded font-mono">${item.w}x${item.h}</span>
+                `;
+                paletteEl.appendChild(div);
+            });
+        }
+
+        // Drag and Drop Валідація і перевірка колізій
+        let draggedItemData = null;
+
+        function allowDrop(event) {
+            event.preventDefault();
+            const cell = event.target.closest('.grid-cell');
+            if (!cell) return;
+
+            const targetRow = parseInt(cell.dataset.row);
+            const targetCol = parseInt(cell.dataset.col);
+
+            // Отримуємо дані про розміри елемента, який перетягуємо (можна передати через сховище події)
+            // Для спрощення тут беремо перший елемент з палітри або зберігаємо активний елемент при dragstart
+        }
+
+        // Оновлений обробник dragstart для палітри з фіксацією об'єкта
+        document.addEventListener('dragstart', (e) => {
+            const paletteItemEl = e.target.closest('.cursor-grab');
+            if (paletteItemEl) {
+                // Знаходимо за назвою чи індексом
+            }
+        });
+
+        // Інспекція сітки при наведенні
+        function clearGridHighlight(event) {
+            document.querySelectorAll('.grid-cell').forEach(c => {
+                c.classList.remove('drag-over-valid', 'drag-over-invalid');
+            });
+        }
+
+        // Логіка падіння блоку на сітку з перевіркою виходу за межі та перетину (колізій)
+        function dropElement(event) {
+            event.preventDefault();
+            clearGridHighlight(event);
+
+            const cell = event.target.closest('.grid-cell');
+            if (!cell) return;
+
+            const startRow = parseInt(cell.dataset.row);
+            const startCol = parseInt(cell.dataset.col);
+
+            // Отримуємо дані елемента з dataTransfer
+            try {
+                const rawData = event.dataTransfer.getData('text/plain');
+                const item = JSON.parse(rawData);
+
+                // Перевірка колізій та виходу за межі сітки (12x24)
+                if (startCol + item.w > COLS || startRow + item.h > ROWS) {
+                    alert('⚠️ Помилка: Блок виходить за межі мобільної сітки картки!');
+                    return;
+                }
+
+                const card = state.cards.find(c => c.id === state.currentCardId);
+
+                // Перевірка перетину з іншими елементами картки
+                let hasCollision = false;
+                card.elements.forEach(existing => {
+                    const noOverlap = (
+                        startCol + item.w <= existing.x ||
+                        startCol >= existing.x + existing.w ||
+                        startRow + item.h <= existing.y ||
+                        startRow >= existing.y + existing.h
+                    );
+                    if (!noOverlap) {
+                        hasCollision = true;
+                    }
+                });
+
+                if (hasCollision) {
+                    alert('❌ Колізія: Блок накладається на інший елемент! Оберіть вільну зону.');
+                    return;
+                }
+
+                // Додаємо елемент до поточної картки з новими координатами
+                card.elements.push({
+                    ...item,
+                    id: 'el-' + Date.now(),
+                    x: startCol,
+                    y: startRow
+                });
+
+                loadCurrentCard();
+
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        // Видалення елемента з картки
+        function removeElementFromCard(elemId) {
+            const card = state.cards.find(c => c.id === state.currentCardId);
+            card.elements = card.elements.filter(e => e.id !== elemId);
+            loadCurrentCard();
+        }
+
+        // Збереження версії картки
+        function saveCurrentVersion() {
+            const card = state.cards.find(c => c.id === state.currentCardId);
+            const versionNumber = state.versions.filter(v => v.cardId === card.id).length + 1;
+            
+            const versionSnapshot = {
+                versionId: `v${card.id}.${versionNumber}`,
+                cardId: card.id,
+                cardName: card.name,
+                timestamp: new Date().toLocaleTimeString(),
+                data: JSON.parse(JSON.stringify(card))
+            };
+
+            state.versions.push(versionSnapshot);
+            renderVersionsList();
+            alert(`✅ Успішно збережено: Версія ${versionSnapshot.versionId} для картки "${card.name}"`);
+        }
+
+        // Рендер списку версій у лівому меню
+        function renderVersionsList() {
+            const versionsEl = document.getElementById('versions-list');
+            versionsEl.innerHTML = '';
+
+            if (state.versions.length === 0) {
+                versionsEl.innerHTML = `<p class="text-xs text-gray-400 italic">Ще немає збережених версій</p>`;
+                return;
+            }
+
+            state.versions.forEach((ver, index) => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between text-xs py-1 px-2 hover:bg-gray-100 rounded cursor-pointer';
+                div.innerHTML = `
+                    <span class="font-medium text-gray-700">Версія ${ver.versionId} (${ver.cardName})</span>
+                    <button onclick="compareVersion(${index})" class="text-red-500 hover:underline">Порівняти</button>
+                `;
+                versionsEl.appendChild(div);
+            });
+        }
+
+        // Модальне вікно JSON
+        function openJsonModal() {
+            const modal = document.getElementById('json-modal');
+            const output = document.getElementById('json-output');
+            output.value = JSON.stringify(state, null, 2);
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeJsonModal() {
+            const modal = document.getElementById('json-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        function copyJson() {
+            const output = document.getElementById('json-output');
+            output.select();
+            document.execCommand('copy');
+            alert('📋 JSON успішно скопійовано до буфера обміну!');
+        }
+
+        // Порівняння версій
+        function compareVersion(index) {
+            const ver = state.versions[index];
+            const currentCard = state.cards.find(c => c.id === ver.cardId);
+
+            document.getElementById('compare-title').innerText = `Порівняння: Поточна версія vs Версія ${ver.versionId}`;
+            
+            const compareContent = document.getElementById('compare-content');
+            compareContent.innerHTML = `
+                <div class="border p-3 rounded bg-gray-50">
+                    <h4 class="font-bold text-xs text-gray-600 mb-2">Архівна версія (${ver.versionId} від ${ver.timestamp})</h4>
+                    <pre class="text-[10px] font-mono bg-white p-2 rounded border h-48 overflow-auto">${JSON.stringify(ver.data, null, 2)}</pre>
+                </div>
+                <div class="border p-3 rounded bg-red-50">
+                    <h4 class="font-bold text-xs text-red-600 mb-2">Поточна робоча версія</h4>
+                    <pre class="text-[10px] font-mono bg-white p-2 rounded border h-48 overflow-auto">${JSON.stringify(currentCard, null, 2)}</pre>
+                </div>
+            `;
+
+            const modal = document.getElementById('compare-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeCompareModal() {
+            const modal = document.getElementById('compare-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+
+        // Згортання/розгортання лівого сайдбару
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('w-72');
+            sidebar.classList.toggle('w-16');
+            // Можна додати приховування тексту при мінімізації за потребою
+        }
+    </script>
+</body>
+</html>
