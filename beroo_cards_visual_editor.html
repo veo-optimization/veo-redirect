@@ -63,7 +63,6 @@
             background-color: rgba(254, 202, 202, 0.9) !important;
             z-index: 30;
         }
-        /* Маркер ресайзу (дві стрілочки) праворуч внизу */
         .resize-handle {
             position: absolute;
             right: 2px;
@@ -101,7 +100,6 @@
 </head>
 <body class="bg-gray-100 font-sans text-gray-900 h-screen flex overflow-hidden">
 
-    <!-- Лічильник біля курсора -->
     <div id="drag-tooltip">1 × 1</div>
 
     <!-- ЗЛІВА: Гамбургер-меню -->
@@ -122,7 +120,7 @@
                         <button onclick="promptCopyCard()" class="text-xs bg-gray-800 hover:bg-black text-white px-2 py-1 rounded font-medium transition" title="Копіювати поточну картку">📄 Копіювати</button>
                     </div>
                 </div>
-                <div id="cards-list" class="space-y-1 mb-6 max-h-48 overflow-y-auto"></div>
+                <div id="cards-list" class="space-y-1.5 mb-6 max-h-48 overflow-y-auto"></div>
 
                 <div class="mb-6">
                     <h3 class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-2">Версії</h3>
@@ -196,7 +194,6 @@
                             </select>
                         </div>
 
-                        <!-- Поля дії -->
                         <div class="grid grid-cols-2 gap-2">
                             <div>
                                 <label class="block text-[11px] font-semibold text-gray-600 mb-1">Термін</label>
@@ -222,7 +219,6 @@
                             <textarea id="action-explanation" rows="2" class="w-full text-xs border border-gray-300 rounded px-2 py-1" placeholder="Опис функції блоку..."></textarea>
                         </div>
 
-                        <!-- Заливка та Емодзі -->
                         <div class="border-t pt-2 space-y-2">
                             <div class="flex items-center space-x-2">
                                 <input type="checkbox" id="enable-fill" onchange="toggleFillSettings()" class="rounded text-red-500 focus:ring-red-400">
@@ -313,13 +309,11 @@
         let activeSelection = null;
         let editingBlockId = null;
 
-        // Змінні для прямого ресайзу
         let isResizing = false;
         let resizingBlockId = null;
         let resizeStartMouse = { x: 0, y: 0 };
         let resizeStartSize = { w: 0, h: 0 };
 
-        // Змінні для переміщення (Drag & Drop) блоків
         let isMoving = false;
         let movingBlockId = null;
         let moveStartMouse = { x: 0, y: 0 };
@@ -361,7 +355,7 @@
             for (let el of card.elements) {
                 if (el.id === excludeId) continue;
                 if (x < el.x + el.w && x + w > el.x && y < el.y + el.h && y + h > el.y) {
-                    return true; // Є перетин
+                    return true;
                 }
             }
             return false;
@@ -369,7 +363,6 @@
 
         function startSelection(r, c, e) {
             if (editingBlockId || isResizing || isMoving) return;
-            // Перевіряємо, чи клітинка не зайнята іншим блоком
             if (checkCollision(c, r, 1, 1)) return;
 
             isMouseDown = true;
@@ -502,7 +495,6 @@
                 const card = state.cards.find(c => c.id === state.currentCardId);
                 const block = card.elements.find(el => el.id === resizingBlockId);
                 if (block && checkCollision(block.x, block.y, block.w, block.h, block.id)) {
-                    // Якщо вийшли за межі або наклалися — повертаємо старий розмір
                     block.w = resizeStartSize.w;
                     block.h = resizeStartSize.h;
                     renderPlacedElements();
@@ -800,7 +792,6 @@
                 `;
 
                 div.onmousedown = (e) => {
-                    // Якщо клікнули не на маркер ресайзу — запускаємо переміщення блоку
                     if (!e.target.classList.contains('resize-handle')) {
                         startMove(el.id, e);
                     }
@@ -870,6 +861,42 @@
             resetActiveBlock();
         }
 
+        // Функція перейменування картки
+        function renameCard(cardId, event) {
+            event.stopPropagation();
+            const card = state.cards.find(c => c.id === cardId);
+            if (!card) return;
+
+            const newName = prompt("Введіть нову назву картки:", card.name);
+            if (newName !== null && newName.trim() !== "") {
+                card.name = newName.trim();
+                renderCardsList();
+                if (state.currentCardId === cardId) {
+                    document.getElementById('current-card-title').innerText = card.name;
+                }
+            }
+        }
+
+        // Функція видалення картки
+        function deleteCard(cardId, event) {
+            event.stopPropagation();
+            if (state.cards.length <= 1) {
+                alert("⚠️ Неможливо видалити єдину картку!");
+                return;
+            }
+
+            const card = state.cards.find(c => c.id === cardId);
+            if (!confirm(`Ви дійсно хочете видалити картку "${card.name}"?`)) return;
+
+            state.cards = state.cards.filter(c => c.id !== cardId);
+            if (state.currentCardId === cardId) {
+                state.currentCardId = state.cards[0].id;
+            }
+            renderCardsList();
+            initGrid();
+            resetActiveBlock();
+        }
+
         function adjustZoom(delta) {
             currentZoom = Math.max(0.6, Math.min(1.6, currentZoom + delta));
             applyZoom();
@@ -895,17 +922,31 @@
             const listEl = document.getElementById('cards-list');
             listEl.innerHTML = '';
             state.cards.forEach(card => {
-                const btn = document.createElement('button');
-                btn.className = `w-full text-left px-3 py-1.5 rounded text-sm font-medium flex items-center justify-between transition ${card.id === state.currentCardId ? 'bg-red-50 text-red-600 border border-red-200' : 'text-gray-700 hover:bg-gray-100'}`;
-                btn.innerHTML = `<span>📄 ${card.name}</span>`;
-                btn.onclick = () => { 
-                    state.currentCardId = card.id; 
-                    initGrid(); 
-                    renderCardsList(); 
-                    resetActiveBlock();
-                };
-                listEl.appendChild(btn);
+                const isActive = card.id === state.currentCardId;
+                const div = document.createElement('div');
+                div.className = `px-2 py-1.5 rounded text-sm font-medium flex items-center justify-between transition ${isActive ? 'bg-red-50 text-red-600 border border-red-200' : 'text-gray-700 hover:bg-gray-100'}`;
+                
+                div.innerHTML = `
+                    <span class="truncate flex-1 cursor-pointer" onclick="switchCard(${card.id})" title="${card.name}">📄 ${card.name}</span>
+                    <div class="flex items-center space-x-1.5 ml-2 text-xs">
+                        <button onclick="renameCard(${card.id}, event)" class="text-gray-400 hover:text-blue-600" title="Перейменувати">✏️</button>
+                        <button onclick="deleteCard(${card.id}, event)" class="text-gray-400 hover:text-red-600" title="Видалити">🗑️</button>
+                    </div>
+                `;
+                listEl.appendChild(div);
             });
+
+            const activeCard = state.cards.find(c => c.id === state.currentCardId);
+            if (activeCard) {
+                document.getElementById('current-card-title').innerText = activeCard.name;
+            }
+        }
+
+        function switchCard(cardId) {
+            state.currentCardId = cardId; 
+            initGrid(); 
+            renderCardsList(); 
+            resetActiveBlock();
         }
 
         function createNewCard() {
@@ -927,6 +968,19 @@
             renderVersionsList();
             alert(`✅ Збережено нову версію!`);
         }
+
+        functionVersionsList = function() {
+            const vEl = document.getElementById('versions-list');
+            if (state.versions.length === 0) return;
+            vEl.innerHTML = '';
+            state.versions.type = '';
+            state.versions.forEach(v => {
+                const div = document.createElement('div');
+                div.className = 'text-xs py-1 px-2 hover:bg-gray-100 rounded text-gray-700 font-medium';
+                div.innerText = v.name;
+                vEl.appendChild(div);
+            });
+        };
 
         function renderVersionsList() {
             const vEl = document.getElementById('versions-list');
