@@ -48,7 +48,7 @@
             flex-direction: column;
             justify-content: flex-start;
             cursor: grab;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
             user-select: none;
         }
         .placed-element:active {
@@ -57,6 +57,16 @@
         .placed-element:hover, .placed-element.active-edit {
             border: 2px solid #ef4444;
             z-index: 10;
+        }
+        .placed-element.hover-highlight {
+            border: 2px solid #f59e0b !important;
+            box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.3);
+            z-index: 15;
+        }
+        .placed-element.active-edit {
+            border: 2px solid #ef4444 !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+            z-index: 20;
         }
         .placed-element.collision {
             border: 2px solid #dc2626 !important;
@@ -95,6 +105,54 @@
             z-index: 100;
             display: none;
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        /* Стилі для назви блоку */
+        .block-name-badge {
+            position: absolute;
+            top: -18px;
+            left: 0;
+            background: #1e293b;
+            color: white;
+            font-size: 9px;
+            font-weight: 600;
+            padding: 1px 6px;
+            border-radius: 4px 4px 0 0;
+            white-space: nowrap;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            z-index: 5;
+            pointer-events: none;
+            letter-spacing: 0.3px;
+            border: 1px solid #334155;
+            border-bottom: none;
+        }
+        .placed-element:hover .block-name-badge,
+        .placed-element.active-edit .block-name-badge {
+            background: #b91c1c;
+            border-color: #b91c1c;
+        }
+        .placed-element.hover-highlight .block-name-badge {
+            background: #d97706;
+            border-color: #d97706;
+        }
+        /* Підсвічування активного блоку в списку */
+        .block-list-item.active-block {
+            background-color: #fef2f2 !important;
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 0 1px #ef4444 inset;
+        }
+        .block-list-item.active-block .font-bold {
+            color: #b91c1c;
+        }
+        /* Підсвічування при наведенні в списку */
+        .block-list-item.hover-highlight {
+            background-color: #fffbeb !important;
+            border-color: #f59e0b !important;
+            box-shadow: 0 0 0 1px #f59e0b inset;
+        }
+        .block-list-item.hover-highlight .font-bold {
+            color: #b45309;
         }
     </style>
 </head>
@@ -181,6 +239,12 @@
                     </div>
 
                     <div class="space-y-3 opacity-60 pointer-events-none" id="block-form">
+                        <!-- НОВЕ ПОЛЕ: Назва блоку -->
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-600 mb-1">Назва блоку (відображається над блоком)</label>
+                            <input type="text" id="block-name" class="w-full text-sm border border-gray-300 rounded px-2.5 py-1.5 bg-white focus:ring-1 focus:ring-red-500 focus:outline-none" placeholder="напр. Головний блок, Заголовок, Меню">
+                        </div>
+
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1">Тип елемента</label>
                             <select id="elem-type" class="w-full text-sm border border-gray-300 rounded px-2.5 py-1.5 bg-white focus:ring-1 focus:ring-red-500 focus:outline-none">
@@ -308,6 +372,7 @@
         let endCell = null;
         let activeSelection = null;
         let editingBlockId = null;
+        let hoveredBlockId = null; // НОВЕ: ID блоку, на який наведено мишку
 
         let isResizing = false;
         let resizingBlockId = null;
@@ -615,6 +680,7 @@
         function saveBlockToGrid() {
             if (!activeSelection && !editingBlockId) return;
 
+            const blockName = document.getElementById('block-name').value.trim();
             const type = document.getElementById('elem-type').value;
             const link = document.getElementById('elem-link').value.trim();
             const term = document.getElementById('action-term').value.trim();
@@ -644,6 +710,7 @@
             if (editingBlockId) {
                 const block = card.elements.find(el => el.id === editingBlockId);
                 if (block) {
+                    block.name = blockName;
                     block.type = type;
                     block.link = link;
                     block.action = { term, menu, submenu, item, explanation };
@@ -653,6 +720,7 @@
             } else {
                 const newBlock = {
                     id: 'el-' + Date.now(),
+                    name: blockName,
                     type,
                     x: activeSelection.x,
                     y: activeSelection.y,
@@ -673,12 +741,14 @@
         function resetActiveBlock() {
             editingBlockId = null;
             activeSelection = null;
+            hoveredBlockId = null;
             document.getElementById('block-form').classList.add('opacity-60', 'pointer-events-none');
             document.getElementById('cancel-edit-btn').classList.add('hidden');
             document.getElementById('selection-info').innerHTML = `Виділіть область на сітці або клікніть на існуючий блок для редагування.`;
             document.getElementById('panel-subtitle').innerText = 'Виділіть клітинки на сітці';
             document.querySelectorAll('.notebook-cell').forEach(c => c.classList.remove('selected-preview', 'collision-preview'));
             
+            document.getElementById('block-name').value = '';
             document.getElementById('action-term').value = '';
             document.getElementById('action-menu').value = '';
             document.getElementById('action-submenu').value = '';
@@ -688,6 +758,8 @@
             document.getElementById('enable-emoji-fill').checked = false;
             toggleFillSettings();
             toggleEmojiSelect();
+            
+            renderPlacedElements();
         }
 
         function editBlock(id) {
@@ -698,6 +770,7 @@
             editingBlockId = block.id;
             activeSelection = { x: block.x, y: block.y, w: block.w, h: block.h };
 
+            document.getElementById('block-name').value = block.name || '';
             document.getElementById('elem-type').value = block.type;
             document.getElementById('action-term').value = block.action?.term || '';
             document.getElementById('action-menu').value = block.action?.menu || '';
@@ -737,6 +810,28 @@
             document.getElementById('cancel-edit-btn').classList.remove('hidden');
             document.getElementById('panel-subtitle').innerText = `Редагування блоку (${block.w}x${block.h})`;
             document.getElementById('selection-info').innerHTML = `✏️ Редагується блок на координатах X:${block.x}, Y:${block.y}`;
+
+            renderPlacedElements();
+        }
+
+        // НОВА ФУНКЦІЯ: встановлення hover-блоку
+        function setHoveredBlock(blockId) {
+            // Якщо є активний блок — ігноруємо hover
+            if (editingBlockId) return;
+            
+            if (hoveredBlockId === blockId) return;
+            
+            hoveredBlockId = blockId;
+            renderPlacedElements();
+        }
+
+        // НОВА ФУНКЦІЯ: очищення hover-блоку
+        function clearHoveredBlock() {
+            if (editingBlockId) return;
+            if (hoveredBlockId === null) return;
+            
+            hoveredBlockId = null;
+            renderPlacedElements();
         }
 
         function renderPlacedElements() {
@@ -749,8 +844,15 @@
             card.elements.forEach(el => {
                 const div = document.createElement('div');
                 const hasCol = checkCollision(el.x, el.y, el.w, el.h, el.id);
+                const isActive = editingBlockId === el.id;
+                const isHovered = hoveredBlockId === el.id && !editingBlockId;
                 
-                div.className = `placed-element ${editingBlockId === el.id ? 'active-edit' : ''} ${hasCol ? 'collision' : ''}`;
+                let classes = 'placed-element';
+                if (isActive) classes += ' active-edit';
+                else if (isHovered) classes += ' hover-highlight';
+                if (hasCol) classes += ' collision';
+                
+                div.className = classes;
                 div.style.left = `${el.x * CELL_SIZE}px`;
                 div.style.top = `${el.y * CELL_SIZE}px`;
                 div.style.width = `${el.w * CELL_SIZE - 1}px`;
@@ -766,6 +868,11 @@
                     }
                 }
                 div.style.cssText += bgStyle;
+
+                let nameBadge = '';
+                if (el.name && el.name.trim() !== '') {
+                    nameBadge = `<div class="block-name-badge">📌 ${el.name}</div>`;
+                }
 
                 let iconSymbol = '';
                 if (el.type === 'star-yellow') iconSymbol = '⭐ ';
@@ -783,27 +890,89 @@
                 }).join('');
 
                 div.innerHTML = `
+                    ${nameBadge}
                     ${emojiLayerHtml}
-                    <div class="flex justify-end items-center mb-0.5 relative z-10">
-                        <button onclick="event.stopPropagation(); removeBlock('${el.id}')" class="text-red-500 hover:font-bold text-xs">&times;</button>
+                    <div class="flex justify-end items-center mb-0.5 relative z-10 gap-0.5">
+                        <button onclick="event.stopPropagation(); duplicateBlock('${el.id}')" class="text-blue-500 hover:text-blue-700 text-xs px-0.5" title="Копіювати блок">📋</button>
+                        <button onclick="event.stopPropagation(); removeBlock('${el.id}')" class="text-red-500 hover:font-bold text-xs px-0.5" title="Видалити">&times;</button>
                     </div>
                     <div class="flex-1 overflow-hidden space-y-0.5 relative z-10">${rowsHtml}</div>
                     <div class="resize-handle" onmousedown="startResize('${el.id}', event)" title="Змінити розмір">↘</div>
                 `;
 
+                // Hover-ефекти
+                div.onmouseenter = (e) => {
+                    // Не показуємо hover, якщо перетягуємо або змінюємо розмір
+                    if (isMoving || isResizing) return;
+                    setHoveredBlock(el.id);
+                };
+                div.onmouseleave = (e) => {
+                    if (isMoving || isResizing) return;
+                    clearHoveredBlock();
+                };
+
                 div.onmousedown = (e) => {
-                    if (!e.target.classList.contains('resize-handle')) {
+                    if (!e.target.classList.contains('resize-handle') && !e.target.closest('button')) {
                         startMove(el.id, e);
                     }
                 };
                 div.onclick = (e) => {
-                    if (!isMoving) editBlock(el.id);
+                    if (!isMoving && !e.target.closest('button')) editBlock(el.id);
                 };
 
                 grid.appendChild(div);
             });
 
             renderPlacedBlocksList();
+        }
+
+        function duplicateBlock(id) {
+            const card = state.cards.find(c => c.id === state.currentCardId);
+            const original = card.elements.find(el => el.id === id);
+            if (!original) return;
+
+            let newX = original.x + 1;
+            let newY = original.y + 1;
+            let attempts = 0;
+            while (checkCollision(newX, newY, original.w, original.h) && attempts < 100) {
+                newX++;
+                if (newX + original.w > COLS) {
+                    newX = 0;
+                    newY++;
+                }
+                if (newY + original.h > ROWS) {
+                    newX = original.x;
+                    newY = original.y;
+                    break;
+                }
+                attempts++;
+            }
+            if (checkCollision(newX, newY, original.w, original.h)) {
+                alert("⚠️ Не вдалося знайти вільного місця для копії блоку!");
+                return;
+            }
+
+            const copy = {
+                id: 'el-' + Date.now() + '-' + Math.floor(Math.random()*1000),
+                name: (original.name ? original.name + ' (копія)' : ''),
+                type: original.type,
+                x: newX,
+                y: newY,
+                w: original.w,
+                h: original.h,
+                link: original.link,
+                action: original.action ? JSON.parse(JSON.stringify(original.action)) : {},
+                fill: original.fill ? JSON.parse(JSON.stringify(original.fill)) : { enabled: false },
+                rows: original.rows ? JSON.parse(JSON.stringify(original.rows)) : []
+            };
+
+            card.elements.push(copy);
+            renderPlacedElements();
+            const toast = document.createElement('div');
+            toast.className = 'fixed bottom-4 right-4 bg-gray-900 text-white text-xs px-4 py-2 rounded shadow-lg z-50';
+            toast.innerText = `📋 Блок "${original.name || 'без назви'}" скопійовано`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
         }
 
         function renderPlacedBlocksList() {
@@ -818,17 +987,40 @@
 
             card.elements.forEach(el => {
                 const div = document.createElement('div');
-                div.className = 'flex items-center justify-between bg-gray-50 border border-gray-200 p-2 rounded text-xs';
+                const isActive = editingBlockId === el.id;
+                const isHovered = hoveredBlockId === el.id && !editingBlockId;
+                
+                let classes = 'block-list-item flex items-center justify-between bg-gray-50 border border-gray-200 p-2 rounded text-xs cursor-pointer transition';
+                if (isActive) classes += ' active-block';
+                else if (isHovered) classes += ' hover-highlight';
+                else classes += ' hover:bg-gray-100';
+                
+                div.className = classes;
+                
+                const displayName = el.name ? `"${el.name}"` : el.type;
                 div.innerHTML = `
-                    <div>
-                        <span class="font-bold text-gray-700">${el.type}</span> 
+                    <div class="truncate mr-2">
+                        <span class="font-bold text-gray-700">${displayName}</span> 
                         <span class="text-gray-400">(${el.w}x${el.h})</span>
                     </div>
-                    <div class="space-x-2">
-                        <button onclick="editBlock('${el.id}')" class="text-blue-500 hover:underline">Змінити</button>
-                        <button onclick="removeBlock('${el.id}')" class="text-red-500 hover:underline">Видалити</button>
+                    <div class="space-x-2 flex-shrink-0">
+                        <button onclick="event.stopPropagation(); duplicateBlock('${el.id}')" class="text-green-600 hover:underline" title="Копіювати">📋</button>
+                        <button onclick="event.stopPropagation(); editBlock('${el.id}')" class="text-blue-500 hover:underline">Змінити</button>
+                        <button onclick="event.stopPropagation(); removeBlock('${el.id}')" class="text-red-500 hover:underline">Видалити</button>
                     </div>
                 `;
+                
+                // Hover-ефекти для рядка списку
+                div.onmouseenter = () => {
+                    if (isMoving || isResizing) return;
+                    setHoveredBlock(el.id);
+                };
+                div.onmouseleave = () => {
+                    if (isMoving || isResizing) return;
+                    clearHoveredBlock();
+                };
+                
+                div.onclick = () => editBlock(el.id);
                 listEl.appendChild(div);
             });
         }
@@ -837,6 +1029,7 @@
             const card = state.cards.find(c => c.id === state.currentCardId);
             card.elements = card.elements.filter(e => e.id !== id);
             if (editingBlockId === id) resetActiveBlock();
+            if (hoveredBlockId === id) hoveredBlockId = null;
             initGrid();
         }
 
@@ -861,7 +1054,6 @@
             resetActiveBlock();
         }
 
-        // Функція перейменування картки
         function renameCard(cardId, event) {
             event.stopPropagation();
             const card = state.cards.find(c => c.id === cardId);
@@ -877,7 +1069,6 @@
             }
         }
 
-        // Функція видалення картки
         function deleteCard(cardId, event) {
             event.stopPropagation();
             if (state.cards.length <= 1) {
@@ -968,19 +1159,6 @@
             renderVersionsList();
             alert(`✅ Збережено нову версію!`);
         }
-
-        functionVersionsList = function() {
-            const vEl = document.getElementById('versions-list');
-            if (state.versions.length === 0) return;
-            vEl.innerHTML = '';
-            state.versions.type = '';
-            state.versions.forEach(v => {
-                const div = document.createElement('div');
-                div.className = 'text-xs py-1 px-2 hover:bg-gray-100 rounded text-gray-700 font-medium';
-                div.innerText = v.name;
-                vEl.appendChild(div);
-            });
-        };
 
         function renderVersionsList() {
             const vEl = document.getElementById('versions-list');
