@@ -106,12 +106,22 @@
   .empty{color:var(--muted);font-size:12.5px;font-style:italic;padding:8px 2px;}
   .copy-logs{background:var(--console-bg);color:var(--console-text);border-radius:10px;padding:10px 12px;margin-top:10px;font-family:"SF Mono",Menlo,Consolas,monospace;font-size:11.5px;max-height:220px;overflow:auto;}
   .log-line{padding:3px 0;border-bottom:1px solid #262A33;}
+  .version-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;margin-bottom:9px;overflow:hidden;}
+  .version-card > summary{list-style:none;cursor:pointer;padding:12px 14px;display:flex;align-items:center;gap:10px;}
+  .version-card > summary::-webkit-details-marker{display:none;}
+  .version-badge{font-size:11px;font-weight:700;background:#EDE1FA;color:#6B4A9E;border-radius:999px;padding:3px 10px;}
+  .version-time{font-size:11.5px;color:var(--muted);}
+  .version-card > summary .node-caret{margin-left:auto;}
+  .version-card[open] > summary .node-caret{transform:rotate(90deg);}
+  .version-body{padding:0 14px 14px;}
+  .version-summary-text{font-size:12.5px;color:#3A3F4B;line-height:1.5;background:var(--el-bg);border:1px solid var(--el-border);border-radius:9px;padding:10px 12px;margin-bottom:10px;white-space:pre-wrap;}
   .log-line:last-child{border-bottom:none;}
   .copy-perms{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:flex;flex-direction:column;gap:12px;}
   .node-ro-desc{color:#3A3F4B;font-size:13.5px;line-height:1.55;white-space:pre-wrap;margin:2px 0 8px;}
   .node-ro-elements{margin:0 0 8px;}
   .ro-el-item{font-size:12.5px;color:#4A5063;padding:3px 0;line-height:1.5;}
   .node-ro-links{font-size:12px;color:var(--muted);margin-bottom:4px;}
+  .no-changes-placeholder{background:#FFF9E5;border:1px dashed #E7D06B;border-radius:10px;padding:12px 14px;font-size:12.5px;color:#8A6B1A;margin-bottom:12px;}
   .role-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
   .role-pills.small{margin-top:2px;gap:5px;}
   .role-pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;background:var(--el-bg);border:1px solid var(--el-border);border-radius:999px;padding:4px 10px;cursor:pointer;color:#4A5063;}
@@ -170,6 +180,24 @@
   #autosaveBar select{font-size:12px;padding:5px 7px;border-radius:7px;border:1px solid var(--border);background:#fff;}
   #autosaveBar .btn{padding:6px 10px;font-size:12px;white-space:nowrap;}
 
+  #searchPanelOverlay{display:none;position:fixed;inset:0;background:rgba(20,20,30,.25);z-index:98;}
+  #searchPanel{display:none;position:fixed;top:0;right:0;height:100vh;width:400px;max-width:92vw;background:#fff;border-left:1px solid var(--border);box-shadow:-6px 0 24px rgba(20,20,40,.14);z-index:99;flex-direction:column;}
+  #searchPanel.open, #searchPanelOverlay.open{display:flex;}
+  #searchPanelOverlay.open{display:block;}
+  .search-panel-head{display:flex;align-items:center;gap:8px;padding:16px 18px;border-bottom:1px solid var(--border);}
+  .search-panel-head b{font-size:15px;}
+  .search-panel-body{padding:16px 18px;overflow-y:auto;flex:1;}
+  .search-result-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:8px;}
+  .search-result-card label{cursor:pointer;}
+  .search-snippet mark{background:#FFE066;padding:0 2px;border-radius:2px;}
+  .search-flash{outline:3px solid #F5D400 !important;outline-offset:1px;}
+  .search-field-flash{background:#FFF6C4 !important;transition:background .3s;}
+
+  @media (max-width:640px){
+    #searchPanel{width:100%;max-width:100%;}
+  }
+
+
   @media (max-width:640px){
     #autosaveBar{position:static;width:100%;justify-content:space-between;margin:0 0 16px;box-shadow:none;flex-wrap:wrap;}
     body{padding:18px 14px 60px;}
@@ -197,11 +225,35 @@
     <option value="1800000">30 хв</option>
   </select>
   <button class="btn" id="saveNowBtn">💾 Зберегти зараз</button>
+  <button class="btn" id="openSearchBtn">🔍 Пошук</button>
   <span id="autosaveTick" style="font-size:10.5px;color:var(--muted);"></span>
   <div class="status-row">
     <span class="filter-status" id="syncStatusLabelCorner" style="background:#E5F5E9;color:#2E9D6C;">Ініціалізація…</span>
   </div>
 </div>
+
+<div id="searchPanel">
+  <div class="search-panel-head">
+    <b>🔍 Пошук і заміна</b>
+    <button class="icon-btn" id="closeSearchPanel">×</button>
+  </div>
+  <div class="search-panel-body">
+    <div class="field">
+      <label>Збережені пошуки</label>
+      <select id="searchHistorySelect"><option value="">— обрати збережений пошук —</option></select>
+    </div>
+    <div class="field"><label>Шукати</label><input type="text" id="searchInput" placeholder="Що шукати по всьому документу..." autocomplete="off"></div>
+    <div class="field"><label>Замінити на</label><input type="text" id="replaceInput" placeholder="Текст заміни..." autocomplete="off"></div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+      <button class="btn" id="replaceAllBtn">Замінити все</button>
+      <button class="btn ghost" id="clearSearchBtn">Очистити пошук</button>
+      <button class="btn ghost" id="saveSearchBtn">Зберегти пошук</button>
+    </div>
+    <div id="searchResultsCount" style="font-size:12px;color:var(--muted);margin-bottom:8px;"></div>
+    <div id="searchResultsList"></div>
+  </div>
+</div>
+<div id="searchPanelOverlay"></div>
 
 <div class="wrap">
   <header class="top">
@@ -385,13 +437,27 @@
 
   <div class="part-title" style="display:flex;align-items:center;gap:10px;margin:34px 0 12px;">
     <div style="width:26px;height:26px;min-width:26px;border-radius:8px;background:#191C24;color:var(--console-accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">📋</div>
-    <h2 style="font-size:16px;margin:0;">Лог дій і збережень</h2>
+    <h2 style="font-size:16px;margin:0;">Лог дій і версій</h2>
     <span class="section-count" id="actionLogCount" style="margin-left:8px;"></span>
     <button class="btn ghost" id="clearActionLogBtn" style="margin-left:auto;">Очистити лог</button>
   </div>
   <p class="section-desc">Хто, з якого пристрою і що саме змінював — синхронізується разом з документом, тож видно з будь-якого пристрою після завантаження з хмари.</p>
   <div class="copy-logs" id="actionLogView" style="max-height:340px;"></div>
+
+  <div class="part-title" style="display:flex;align-items:center;gap:10px;margin:26px 0 12px;">
+    <div style="width:26px;height:26px;min-width:26px;border-radius:8px;background:#191C24;color:var(--console-accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">📚</div>
+    <h2 style="font-size:16px;margin:0;">Версії документа</h2>
+    <span class="section-count" id="versionsCount" style="margin-left:8px;"></span>
+  </div>
+  <p class="section-desc">Кожне «Зберегти» створює нову версію з повним знімком стану. Можна повернутись до будь-якої попередньої — блок за блоком, ролі, кольори й порядок відновляться такими, якими були.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+    <button class="btn ghost" id="expandAllVersionsBtn">Розгорнути все</button>
+    <button class="btn ghost" id="collapseAllVersionsBtn">Згорнути все</button>
+    <button class="btn ghost" id="refreshVersionsBtn">↻ Оновити список версій</button>
+  </div>
+  <div id="versionsList"></div>
 </div>
+
 
 <script>
 function escapeHtml(s){ return String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
@@ -423,7 +489,7 @@ const BLOCK_TYPE_LABEL = {}; BLOCK_TYPES.forEach(bt=>BLOCK_TYPE_LABEL[bt.key]=bt
 let ORDER_COUNTER = 0;
 
 function n(title, roles, description, elements, children, color){
-  return {id:uid('b'), title, roles: roles||'', roleIds: [], description: description||'', code:'', elements: elements||[], links:[], children: children||[], color: color||'', order: ORDER_COUNTER++, blockType:'', blockTypeComment:''};
+  return {id:uid('b'), title, roles: roles||'', roleIds: [], description: description||'', code:'', elements: elements||[], links:[], children: children||[], color: color||'', order: ORDER_COUNTER++, blockType:'', blockTypeComment:'', noChanges:false};
 }
 function el(name, type, desc, roleIds){ return {id:uid('e'), name, type: type||EL_TYPES[0], desc: desc||'', code:'', roleIds: roleIds ? roleIds.slice() : []}; }
 
@@ -766,12 +832,14 @@ let simFilterRoleId = '';
 let simFilterObjectType = '';
 let simFilterSearchText = '';
 let actionLog = [];
+let actionsSinceLastVersion = [];
 let DEVICE_LIST = JSON.parse(localStorage.getItem('beroo_device_list') || '["iPhone","MacBook"]');
 let myDevice = localStorage.getItem('beroo_device_name') || DEVICE_LIST[0] || '';
 
 function logAction(action){
   actionLog.push({ts: new Date().toISOString(), device: myDevice || '(пристрій не вказано)', action});
   if(actionLog.length > 400) actionLog = actionLog.slice(-400);
+  actionsSinceLastVersion.push(action);
   renderActionLog();
 }
 function fmtLogDate(iso){ try{ return new Date(iso).toLocaleString('uk-UA'); }catch(e){ return iso; } }
@@ -903,6 +971,25 @@ function removeNode(id, nodes){
   for(const node of nodes){ if(removeNode(id, node.children)) return true; }
   return false;
 }
+function findContainingArray(id, nodes){
+  nodes = nodes || ROOT_NODES;
+  if(nodes.some(n=>n.id===id)) return nodes;
+  for(const node of nodes){
+    const found = findContainingArray(id, node.children);
+    if(found) return found;
+  }
+  return null;
+}
+function moveNodeInPlace(id, dir){
+  const arr = findContainingArray(id);
+  if(!arr) return;
+  const idx = arr.findIndex(n=>n.id===id);
+  const swapIdx = idx + dir;
+  if(swapIdx < 0 || swapIdx >= arr.length) return;
+  const tmp = arr[idx]; arr[idx] = arr[swapIdx]; arr[swapIdx] = tmp;
+  logAction(`Переміщено блок «${tmp.title}» ${dir<0?'вгору':'вниз'}`);
+  renderTree();
+}
 
 function renderTree(){
   const root = document.getElementById('tree');
@@ -983,6 +1070,11 @@ function renderNode(node){
           <div class="role-pills">${roleCheckboxesHtml(node.roleIds||[], 'node', node.id, null)}</div>
         </div>
         <div class="field"><label>Примітка щодо доступу (вільний текст)</label><input type="text" data-f="roles" data-id="${node.id}" value="${escapeHtml(node.roles)}" placeholder="напр.: функціонал обмежений для..." autocomplete="off"></div>
+        <label class="role-pill" style="background:${node.noChanges?'#FFF3C4':'#fff'};border-color:${node.noChanges?'#E7D06B':'var(--border)'};margin-bottom:10px;">
+          <input type="checkbox" data-no-changes="${node.id}" ${node.noChanges?'checked':''}> 🔒 Без змін — не потребує корекції (залишити як у попередній версії)
+        </label>
+        ${node.noChanges ? `<div class="no-changes-placeholder">Вміст приховано з JSON і позначено «без змін». Дані нікуди не поділись — зніми галочку вище, щоб знову побачити й редагувати.</div>` : ''}
+        <div style="${node.noChanges?'display:none;':''}">
         <div class="field">
           <label>Опис — що це і як працює</label>
           <textarea data-f="description" data-id="${node.id}" autocomplete="off">${escapeHtml(node.description)}</textarea>
@@ -1021,6 +1113,7 @@ function renderNode(node){
             </div>
           </div>
         `).join('')}
+        </div>
 
         <div class="children-wrap">
           ${node.children.filter(subtreeVisible).map(c=>renderNode(c)).join('')}
@@ -1028,7 +1121,11 @@ function renderNode(node){
 
         <div class="node-foot">
           <button class="btn ghost" data-add-child="${node.id}">+ Додати дочірній блок</button>
-          <button class="icon-btn${confirmingDeleteId===node.id?' confirming':''}" data-del-node="${node.id}" title="Видалити цей блок">${confirmingDeleteId===node.id?'Підтвердити?':'🗑'}</button>
+          <div style="display:flex;gap:6px;">
+            <button class="icon-btn" data-move-up="${node.id}" title="Перемістити вгору">↑</button>
+            <button class="icon-btn" data-move-down="${node.id}" title="Перемістити вниз">↓</button>
+            <button class="icon-btn${confirmingDeleteId===node.id?' confirming':''}" data-del-node="${node.id}" title="Видалити цей блок">${confirmingDeleteId===node.id?'Підтвердити?':'🗑'}</button>
+          </div>
         </div>
       </div>
     </details>
@@ -1108,6 +1205,22 @@ function wireEvents(root){
       logAction(`Колір блоку «${node.title}» → ${btn.dataset.setColor || 'без кольору'}`);
       renderTree();
     });
+  });
+
+  root.querySelectorAll('[data-no-changes]').forEach(cb=>{
+    cb.addEventListener('change', ()=>{
+      const node = findNode(cb.dataset.noChanges);
+      if(!node) return;
+      node.noChanges = cb.checked;
+      logAction(`«${node.title}» позначено як ${cb.checked?'«Без змін»':'знову потребує змін'}`);
+      renderTree();
+    });
+  });
+  root.querySelectorAll('[data-move-up]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ moveNodeInPlace(btn.dataset.moveUp, -1); });
+  });
+  root.querySelectorAll('[data-move-down]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{ moveNodeInPlace(btn.dataset.moveDown, 1); });
   });
 
   root.querySelectorAll('[data-block-type]').forEach(cb=>{
@@ -1984,6 +2097,15 @@ function simEntryVisible(e){
 function serializeNode(node){
   const flat = flatten(ROOT_NODES);
   const titleById = {}; flat.forEach(f=>titleById[f.id]=f.title);
+  if(node.noChanges){
+    return {
+      title: node.title,
+      blockType: node.blockType ? BLOCK_TYPE_LABEL[node.blockType] || node.blockType : null,
+      noChangesNeeded: true,
+      note: "Цей блок не потребує корекції — залишити як у попередній версії. Вміст навмисно приховано з експорту.",
+      children: node.children.map(serializeNode)
+    };
+  }
   return {
     title: node.title,
     blockType: node.blockType ? BLOCK_TYPE_LABEL[node.blockType] || node.blockType : null,
@@ -2002,8 +2124,8 @@ function countNodes(nodes){
   return nodes.reduce((sum,node)=> sum + 1 + countNodes(node.children), 0);
 }
 
-function updateOutput(){
-  const data = {
+function buildAiPromptContent(){
+  return {
     structure: ROOT_NODES.map(serializeNode),
     terminology: TERMS.map(t=>{
       const role = TERMS.find(x=>x.id===t.parentRole);
@@ -2022,6 +2144,9 @@ function updateOutput(){
       })
     }
   };
+}
+function updateOutput(){
+  const data = buildAiPromptContent();
   document.getElementById('finalOutput').textContent = JSON.stringify(data, null, 2);
   document.getElementById('statsBadge').textContent = countNodes(ROOT_NODES) + ' блоків · ' + TERMS.length + ' термінів · ' + simEntries.length + ' вражень';
 }
@@ -2118,7 +2243,7 @@ function setSyncStatus(text, ok){
   });
 }
 
-function exportState(){
+function buildUiAndStyles(){
   return {
     rootNodes: ROOT_NODES,
     terms: TERMS,
@@ -2126,8 +2251,15 @@ function exportState(){
     scales: SCALES,
     orderCounter: ORDER_COUNTER,
     openNodes: [...openNodes],
+    openTermIds: [...openTermIds],
     activeFilterRole, activeFilterStatus,
     actionLog: actionLog.slice(-300)
+  };
+}
+function exportState(){
+  return {
+    aiPromptContent: buildAiPromptContent(),
+    uiAndStyles: buildUiAndStyles()
   };
 }
 const KNOWN_DUPLICATE_TITLES = ['МАЙБУТНІ НАПРЯМКИ телефон'];
@@ -2140,18 +2272,21 @@ function removeNodesByTitle(nodes, titles){
   return removed;
 }
 function loadState(obj){
+  const ui = obj.uiAndStyles || obj; // ui.uiAndStyles = новий формат; obj сам по собі = старий пласкій формат
   ROOT_NODES.length = 0;
-  (obj.rootNodes || []).forEach(nd => ROOT_NODES.push(nd));
+  (ui.rootNodes || []).forEach(nd => ROOT_NODES.push(nd));
   removeNodesByTitle(ROOT_NODES, KNOWN_DUPLICATE_TITLES);
-  TERMS = obj.terms || TERMS;
-  simEntries = obj.simEntries || [];
+  TERMS = ui.terms || TERMS;
+  simEntries = ui.simEntries || [];
   simEntries.forEach(migrateEntryRatings);
-  SCALES = obj.scales || SCALES;
-  ORDER_COUNTER = obj.orderCounter || ORDER_COUNTER;
-  openNodes = new Set(obj.openNodes || []);
-  activeFilterRole = obj.activeFilterRole || '';
-  activeFilterStatus = obj.activeFilterStatus || '';
-  actionLog = obj.actionLog || [];
+  SCALES = ui.scales || SCALES;
+  ORDER_COUNTER = ui.orderCounter || ORDER_COUNTER;
+  openNodes = new Set(ui.openNodes || []);
+  openTermIds = new Set(ui.openTermIds || []);
+  activeFilterRole = ui.activeFilterRole || '';
+  activeFilterStatus = ui.activeFilterStatus || '';
+  actionLog = ui.actionLog || [];
+  actionsSinceLastVersion = [];
   renderTerms(); renderScalesManage(); renderSimForm(); renderSimList(); renderTree(); renderActionLog();
 }
 
@@ -2191,6 +2326,15 @@ async function cloudUpdatePermissions(docId, allowedRoles, editableBlocks){
 async function cloudGetLogs(docId){
   return cloudCall('GET', {action:'logs', doc: docId});
 }
+async function cloudSaveVersion(docId, changesSummary){
+  return cloudCall('POST', {action:'saveVersion', doc: docId, data: JSON.stringify(exportState()), changesSummary: changesSummary});
+}
+async function cloudListVersions(docId){
+  return cloudCall('GET', {action:'listVersions', doc: docId});
+}
+async function cloudLoadVersion(docId, version){
+  return cloudCall('GET', {action:'loadVersion', doc: docId, version: version});
+}
 
 document.getElementById('saveCloudBtn').addEventListener('click', async ()=>{
   setSyncStatus('Зберігаю…');
@@ -2201,6 +2345,11 @@ document.getElementById('saveCloudBtn').addEventListener('click', async ()=>{
     setSyncStatus('Збережено · ' + new Date(r.updatedAt).toLocaleString('uk-UA'));
     logAction('💾 Збережено в хмару');
     renderCopiesList();
+    const summary = actionsSinceLastVersion.length ? actionsSinceLastVersion.join('; ') : 'Без окремо зафіксованих дій — повторне збереження поточного стану.';
+    try{
+      const vr = await cloudSaveVersion(CURRENT_DOC_ID, summary);
+      if(vr.ok){ actionsSinceLastVersion = []; renderVersionsList(); }
+    }catch(e){ /* версіювання не критичне — основне збереження вже пройшло */ }
   }catch(err){ setSyncStatus('Помилка збереження — перевір деплой Apps Script', false); }
 });
 
@@ -2527,6 +2676,310 @@ autosaveSelect.value = String(savedAutosaveMs);
 setAutosave(savedAutosaveMs);
 autosaveSelect.addEventListener('change', ()=> setAutosave(parseInt(autosaveSelect.value, 10)));
 document.getElementById('saveNowBtn').addEventListener('click', ()=> document.getElementById('saveCloudBtn').click());
+
+/* ======================================================================
+   ПОШУК І ЗАМІНА
+====================================================================== */
+let searchQuery = '';
+let searchResults = [];
+let searchChecked = {};
+let searchHistory = [];
+
+function escapeRegExp(s){ return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+function buildSearchIndex(){
+  const idx = [];
+  function addNodeFields(node, pathLabel){
+    idx.push({key:`node:${node.id}:title`, label:`${pathLabel} — Назва`, nodeId:node.id, kind:'node', field:'title'});
+    if(node.description) idx.push({key:`node:${node.id}:description`, label:`${pathLabel} — Опис`, nodeId:node.id, kind:'node', field:'description'});
+    if(node.roles) idx.push({key:`node:${node.id}:roles`, label:`${pathLabel} — Примітка доступу`, nodeId:node.id, kind:'node', field:'roles'});
+    if(node.blockTypeComment) idx.push({key:`node:${node.id}:blockTypeComment`, label:`${pathLabel} — Коментар типу`, nodeId:node.id, kind:'node', field:'blockTypeComment'});
+    (node.elements||[]).forEach(e=>{
+      if(e.name) idx.push({key:`el:${node.id}:${e.id}:name`, label:`${pathLabel} — Елемент (назва)`, nodeId:node.id, elId:e.id, kind:'el', field:'name'});
+      if(e.desc) idx.push({key:`el:${node.id}:${e.id}:desc`, label:`${pathLabel} — Елемент «${e.name||'?'}» (опис)`, nodeId:node.id, elId:e.id, kind:'el', field:'desc'});
+    });
+    (node.links||[]).forEach(l=>{
+      if(l.reason) idx.push({key:`link:${node.id}:${l.id}:reason`, label:`${pathLabel} — Звʼязок (причина)`, nodeId:node.id, linkId:l.id, kind:'link', field:'reason'});
+    });
+    (node.children||[]).forEach(c=> addNodeFields(c, pathLabel + ' → ' + c.title));
+  }
+  ROOT_NODES.forEach(n=> addNodeFields(n, n.title));
+  TERMS.forEach(t=>{
+    idx.push({key:`term:${t.id}:term`, label:`Термін — Назва`, termId:t.id, kind:'term', field:'term'});
+    if(t.explanation) idx.push({key:`term:${t.id}:explanation`, label:`Термін «${t.term}» — Пояснення`, termId:t.id, kind:'term', field:'explanation'});
+  });
+  return idx;
+}
+function resultText(r){
+  if(r.kind==='node'){ const node = findNode(r.nodeId); return node ? (node[r.field]||'') : ''; }
+  if(r.kind==='el'){ const node = findNode(r.nodeId); const e = node && node.elements.find(x=>x.id===r.elId); return e ? (e[r.field]||'') : ''; }
+  if(r.kind==='link'){ const node = findNode(r.nodeId); const l = node && node.links.find(x=>x.id===r.linkId); return l ? (l[r.field]||'') : ''; }
+  if(r.kind==='term'){ const t = TERMS.find(x=>x.id===r.termId); return t ? (t[r.field]||'') : ''; }
+  return '';
+}
+function setResultText(r, val){
+  if(r.kind==='node'){ const node = findNode(r.nodeId); if(node) node[r.field] = val; }
+  else if(r.kind==='el'){ const node = findNode(r.nodeId); const e = node && node.elements.find(x=>x.id===r.elId); if(e) e[r.field] = val; }
+  else if(r.kind==='link'){ const node = findNode(r.nodeId); const l = node && node.links.find(x=>x.id===r.linkId); if(l) l[r.field] = val; }
+  else if(r.kind==='term'){ const t = TERMS.find(x=>x.id===r.termId); if(t) t[r.field] = val; }
+}
+function runSearch(){
+  if(!searchQuery){ searchResults = []; renderSearchResults(); return; }
+  const idx = buildSearchIndex();
+  const q = searchQuery.toLowerCase();
+  searchResults = idx.filter(r => resultText(r).toLowerCase().includes(q));
+  renderSearchResults();
+}
+function highlightSnippet(text, query){
+  if(!query) return escapeHtml(text.slice(0,150));
+  const idx = text.toLowerCase().indexOf(query.toLowerCase());
+  if(idx===-1) return escapeHtml(text.slice(0,150));
+  const start = Math.max(0, idx-40);
+  const end = Math.min(text.length, idx+query.length+70);
+  const before = escapeHtml(text.slice(start, idx));
+  const match = escapeHtml(text.slice(idx, idx+query.length));
+  const after = escapeHtml(text.slice(idx+query.length, end));
+  return (start>0?'…':'') + before + `<mark>${match}</mark>` + after + (end<text.length?'…':'');
+}
+function renderSearchResults(){
+  const listEl = document.getElementById('searchResultsList');
+  document.getElementById('searchResultsCount').textContent = searchQuery ? (searchResults.length + (searchResults.length===1?' результат':' результатів')) : '';
+  listEl.innerHTML = searchResults.map(r=>{
+    const text = resultText(r);
+    return `
+    <div class="search-result-card" data-result="${r.key}">
+      <label style="display:flex;gap:8px;align-items:flex-start;">
+        <input type="checkbox" data-search-check="${r.key}" ${searchChecked[r.key]?'checked':''}>
+        <span style="flex:1;">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:3px;">${escapeHtml(r.label)}</div>
+          <div class="search-snippet" style="font-size:12.5px;line-height:1.4;">${highlightSnippet(text, searchQuery)}</div>
+        </span>
+      </label>
+      <div style="display:flex;gap:6px;margin-top:7px;">
+        <button class="btn ghost" data-goto="${r.key}" style="font-size:11px;padding:4px 9px;">Перейти</button>
+        <button class="btn ghost" data-replace-one="${r.key}" style="font-size:11px;padding:4px 9px;">Замінити тут</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  listEl.querySelectorAll('[data-search-check]').forEach(cb=>{
+    cb.addEventListener('change', ()=>{ searchChecked[cb.dataset.searchCheck] = cb.checked; });
+  });
+  listEl.querySelectorAll('[data-goto]').forEach(btn=>{
+    btn.addEventListener('click', ()=> gotoSearchResult(btn.dataset.goto));
+  });
+  listEl.querySelectorAll('[data-replace-one]').forEach(btn=>{
+    btn.addEventListener('click', ()=> replaceOneResult(btn.dataset.replaceOne));
+  });
+}
+function gotoSearchResult(key){
+  const r = searchResults.find(x=>x.key===key);
+  if(!r) return;
+  if(r.kind==='term'){
+    openTermIds.add(r.termId);
+    renderTerms();
+  } else {
+    expandAncestorsOf(r.nodeId);
+    renderTree();
+  }
+  setTimeout(()=>{
+    let el = r.kind==='term' ? document.querySelector(`[data-term="${r.termId}"]`) : document.querySelector(`[data-id="${r.nodeId}"]`);
+    if(!el) return;
+    el.scrollIntoView({behavior:'smooth', block:'center'});
+    el.classList.add('search-flash');
+    setTimeout(()=>el.classList.remove('search-flash'), 1700);
+    let fieldSelector = '';
+    if(r.kind==='node') fieldSelector = `[data-f="${r.field}"]`;
+    else if(r.kind==='el') fieldSelector = `[data-ef="${r.field}"]`;
+    else if(r.kind==='link') fieldSelector = `[data-lf="${r.field}"]`;
+    else if(r.kind==='term') fieldSelector = `[data-tf="${r.field}"]`;
+    const fieldEl = fieldSelector ? el.querySelector(fieldSelector) : null;
+    if(fieldEl){ fieldEl.classList.add('search-field-flash'); fieldEl.focus({preventScroll:true}); setTimeout(()=>fieldEl.classList.remove('search-field-flash'), 1700); }
+  }, 60);
+}
+function expandAncestorsOf(nodeId){
+  function walk(nodes, path){
+    for(const nd of nodes){
+      const newPath = [...path, nd.id];
+      if(nd.id === nodeId){ newPath.forEach(id=>openNodes.add(id)); return true; }
+      if(walk(nd.children, newPath)){ newPath.forEach(id=>openNodes.add(id)); return true; }
+    }
+    return false;
+  }
+  walk(ROOT_NODES, []);
+}
+function replaceOneResult(key){
+  const r = searchResults.find(x=>x.key===key);
+  if(!r || !searchQuery) return;
+  const replacement = document.getElementById('replaceInput').value;
+  const re = new RegExp(escapeRegExp(searchQuery), 'i');
+  const current = resultText(r);
+  setResultText(r, current.replace(re, replacement));
+  logAction(`Заміна «${searchQuery}» → «${replacement}» у: ${r.label}`);
+  renderTree(); renderTerms(); updateOutput();
+  runSearch();
+}
+document.getElementById('replaceAllBtn').addEventListener('click', ()=>{
+  if(!searchQuery || !searchResults.length) return;
+  const replacement = document.getElementById('replaceInput').value;
+  const re = new RegExp(escapeRegExp(searchQuery), 'gi');
+  let count = 0;
+  searchResults.slice().forEach(r=>{
+    const current = resultText(r);
+    if(current.toLowerCase().includes(searchQuery.toLowerCase())){
+      setResultText(r, current.replace(re, replacement));
+      count++;
+    }
+  });
+  logAction(`Масова заміна «${searchQuery}» → «${replacement}» — ${count} місць`);
+  renderTree(); renderTerms(); updateOutput();
+  runSearch();
+});
+
+document.getElementById('openSearchBtn').addEventListener('click', ()=>{
+  document.getElementById('searchPanel').classList.add('open');
+  document.getElementById('searchPanelOverlay').classList.add('open');
+  loadSearchHistory();
+});
+document.getElementById('closeSearchPanel').addEventListener('click', closeSearchPanel);
+document.getElementById('searchPanelOverlay').addEventListener('click', closeSearchPanel);
+function closeSearchPanel(){
+  document.getElementById('searchPanel').classList.remove('open');
+  document.getElementById('searchPanelOverlay').classList.remove('open');
+}
+document.getElementById('searchInput').addEventListener('input', (e)=>{
+  searchQuery = e.target.value;
+  runSearch();
+});
+document.getElementById('clearSearchBtn').addEventListener('click', ()=>{
+  searchQuery = ''; searchResults = []; searchChecked = {};
+  document.getElementById('searchInput').value = '';
+  document.getElementById('replaceInput').value = '';
+  document.getElementById('searchHistorySelect').value = '';
+  renderSearchResults();
+});
+
+function searchHistoryKey(){ return 'beroo_search_history_' + CURRENT_DOC_ID; }
+function loadSearchHistory(){
+  try{ searchHistory = JSON.parse(localStorage.getItem(searchHistoryKey()) || '[]'); }catch(e){ searchHistory = []; }
+  const sel = document.getElementById('searchHistorySelect');
+  sel.innerHTML = '<option value="">— обрати збережений пошук —</option>' +
+    searchHistory.map(h=>`<option value="${h.id}">${escapeHtml(h.query)} → ${escapeHtml(h.replacement||'')} (${fmtLogDate(h.savedAt)})</option>`).join('');
+}
+document.getElementById('saveSearchBtn').addEventListener('click', ()=>{
+  if(!searchQuery) return;
+  const entry = {
+    id: uid('sh'),
+    query: searchQuery,
+    replacement: document.getElementById('replaceInput').value,
+    savedAt: new Date().toISOString(),
+    checkedKeys: Object.keys(searchChecked).filter(k=>searchChecked[k])
+  };
+  searchHistory.push(entry);
+  localStorage.setItem(searchHistoryKey(), JSON.stringify(searchHistory));
+  loadSearchHistory();
+  document.getElementById('searchHistorySelect').value = entry.id;
+  setSyncStatus('Пошук збережено локально в цьому браузері');
+});
+document.getElementById('searchHistorySelect').addEventListener('change', (e)=>{
+  const entry = searchHistory.find(h=>h.id===e.target.value);
+  if(!entry) return;
+  searchQuery = entry.query;
+  document.getElementById('searchInput').value = entry.query;
+  document.getElementById('replaceInput').value = entry.replacement || '';
+  runSearch();
+  searchChecked = {};
+  (entry.checkedKeys||[]).forEach(k=>{ searchChecked[k] = true; });
+  renderSearchResults();
+});
+
+/* ======================================================================
+   ВЕРСІЇ ДОКУМЕНТА
+====================================================================== */
+let openVersionKeys = new Set();
+let confirmingRollbackVersion = null;
+
+async function renderVersionsList(){
+  const root = document.getElementById('versionsList');
+  if(!root) return;
+  root.innerHTML = '<div class="empty">Завантаження…</div>';
+  let items = [];
+  try{
+    const r = await cloudListVersions(CURRENT_DOC_ID);
+    items = r.items || [];
+  }catch(err){
+    root.innerHTML = '<div class="empty">Не вдалось завантажити версії — перевір деплой Apps Script.</div>';
+    document.getElementById('versionsCount').textContent = '';
+    return;
+  }
+  document.getElementById('versionsCount').textContent = items.length + (items.length===1?' версія':' версій');
+  if(!items.length){ root.innerHTML = '<div class="empty">Версій ще немає — перше «Зберегти» створить версію 1.</div>'; return; }
+  root.innerHTML = items.map(it=>{
+    const key = String(it.version);
+    return `
+    <details class="version-card" ${openVersionKeys.has(key)?'open':''} data-version="${key}">
+      <summary>
+        <span class="version-badge">v${it.version}</span>
+        <span class="version-time">${fmtLogDate(it.timestamp)}</span>
+        <span class="node-caret">▸</span>
+      </summary>
+      <div class="version-body">
+        <div class="version-summary-text">${escapeHtml(it.changesSummary || '(без опису змін)')}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn" data-rollback="${key}">${confirmingRollbackVersion===key?'Підтвердити відновлення?':'↺ Відновити цю копію'}</button>
+          <button class="btn ghost" data-copy-version="${key}">📋 Копіювати JSON</button>
+        </div>
+      </div>
+    </details>`;
+  }).join('');
+
+  root.querySelectorAll('details.version-card').forEach(det=>{
+    det.addEventListener('toggle', ()=>{
+      const key = det.dataset.version;
+      if(det.open) openVersionKeys.add(key); else openVersionKeys.delete(key);
+    });
+  });
+  root.querySelectorAll('[data-rollback]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const key = btn.dataset.rollback;
+      if(confirmingRollbackVersion !== key){
+        confirmingRollbackVersion = key;
+        renderVersionsList();
+        setTimeout(()=>{ if(confirmingRollbackVersion===key){ confirmingRollbackVersion=null; renderVersionsList(); } }, 5000);
+        return;
+      }
+      confirmingRollbackVersion = null;
+      setSyncStatus('Відновлюю версію ' + key + '…');
+      try{
+        const r = await cloudLoadVersion(CURRENT_DOC_ID, key);
+        if(!r.ok){ setSyncStatus('Не вдалось знайти цю версію на сервері', false); return; }
+        loadState(JSON.parse(r.data));
+        logAction(`↺ Відновлено версію ${key} (${fmtLogDate(r.timestamp)})`);
+        setSyncStatus(`Відновлено версію ${key} — тисни «Зберегти», щоб закріпити`);
+      }catch(err){ setSyncStatus('Помилка відновлення версії', false); }
+    });
+  });
+  root.querySelectorAll('[data-copy-version]').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const key = btn.dataset.copyVersion;
+      try{
+        const r = await cloudLoadVersion(CURRENT_DOC_ID, key);
+        if(!r.ok){ setSyncStatus('Не вдалось завантажити цю версію', false); return; }
+        copyText(r.data, btn, '📋 Копіювати JSON');
+      }catch(err){ setSyncStatus('Помилка копіювання версії', false); }
+    });
+  });
+}
+document.getElementById('expandAllVersionsBtn').addEventListener('click', async ()=>{
+  const r = await cloudListVersions(CURRENT_DOC_ID).catch(()=>({items:[]}));
+  openVersionKeys = new Set((r.items||[]).map(it=>String(it.version)));
+  renderVersionsList();
+});
+document.getElementById('collapseAllVersionsBtn').addEventListener('click', ()=>{
+  openVersionKeys = new Set();
+  renderVersionsList();
+});
+document.getElementById('refreshVersionsBtn').addEventListener('click', renderVersionsList);
 
 renderTerms();
 renderScalesManage();
