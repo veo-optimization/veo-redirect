@@ -23,6 +23,11 @@
 
   .tree{margin-top:28px;}
   .node-block{background:var(--panel);border:1px solid var(--border);border-radius:14px;margin-bottom:10px;overflow:hidden;}
+  .drag-handle{cursor:grab;font-size:16px;color:var(--muted);padding:0 2px;user-select:none;line-height:1;}
+  .drag-handle:active{cursor:grabbing;}
+  .node-block.dragging-source{opacity:.35;}
+  .node-block.drag-over-top{box-shadow:inset 0 3px 0 0 #8558C9;}
+  .node-block.drag-over-bottom{box-shadow:inset 0 -3px 0 0 #8558C9;}
   .node-block > summary{list-style:none;cursor:pointer;padding:13px 16px;display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;}
   .node-block > summary::-webkit-details-marker{display:none;}
   .node-role-tag{font-size:10.5px;font-weight:600;color:#5C6376;background:var(--accent-soft);border-radius:999px;padding:3px 9px;}
@@ -991,6 +996,27 @@ function moveNodeInPlace(id, dir){
   renderTree();
 }
 
+let draggingNodeId = null;
+function dropNodeRelative(draggedId, targetId, insertBefore){
+  const sourceArr = findContainingArray(draggedId);
+  const targetArr = findContainingArray(targetId);
+  if(!sourceArr || !targetArr) return;
+  if(sourceArr !== targetArr){
+    setSyncStatus('Перетягувати можна лише в межах одного рівня (той самий батьківський блок)', false);
+    return;
+  }
+  const fromIdx = sourceArr.findIndex(n=>n.id===draggedId);
+  if(fromIdx === -1) return;
+  const [moved] = sourceArr.splice(fromIdx, 1);
+  let toIdx = sourceArr.findIndex(n=>n.id===targetId);
+  if(toIdx === -1){ sourceArr.splice(fromIdx, 0, moved); return; }
+  const insertAt = insertBefore ? toIdx : toIdx + 1;
+  sourceArr.splice(insertAt, 0, moved);
+  const targetNode = findNode(targetId);
+  logAction(`Перетягуванням переміщено «${moved.title}» ${insertBefore?'перед':'після'} «${targetNode?targetNode.title:targetId}»`);
+  renderTree();
+}
+
 function renderTree(){
   const root = document.getElementById('tree');
   const nodesToRender = ROOT_NODES.filter(subtreeVisible);
@@ -1047,6 +1073,7 @@ function renderNode(node){
   return `
     <details class="node-block${node.color?' c-'+node.color:''}" data-id="${node.id}" ${openNodes.has(node.id)?'open':''}>
       <summary>
+        <span class="drag-handle" draggable="true" data-drag-handle="${node.id}" title="Перетягнути для зміни порядку">⠿</span>
         ${node.color ? `<span class="color-dot" style="background:${COLOR_DOT[node.color]}"></span>` : ''}
         <span>${escapeHtml(node.title || '(без назви)')}</span>
         ${node.roles ? `<span class="node-role-tag">${escapeHtml(node.roles)}</span>` : ''}
@@ -1221,6 +1248,46 @@ function wireEvents(root){
   });
   root.querySelectorAll('[data-move-down]').forEach(btn=>{
     btn.addEventListener('click', ()=>{ moveNodeInPlace(btn.dataset.moveDown, 1); });
+  });
+
+  root.querySelectorAll('[data-drag-handle]').forEach(handle=>{
+    handle.addEventListener('dragstart', (e)=>{
+      draggingNodeId = handle.dataset.dragHandle;
+      e.dataTransfer.effectAllowed = 'move';
+      try{ e.dataTransfer.setData('text/plain', draggingNodeId); }catch(err){}
+      const block = handle.closest('.node-block');
+      if(block) block.classList.add('dragging-source');
+    });
+    handle.addEventListener('dragend', ()=>{
+      root.querySelectorAll('.dragging-source').forEach(el=>el.classList.remove('dragging-source'));
+      root.querySelectorAll('.drag-over-top,.drag-over-bottom').forEach(el=>el.classList.remove('drag-over-top','drag-over-bottom'));
+      draggingNodeId = null;
+    });
+  });
+  root.querySelectorAll('.node-block').forEach(block=>{
+    block.addEventListener('dragover', (e)=>{
+      if(!draggingNodeId || draggingNodeId === block.dataset.id) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const rect = block.getBoundingClientRect();
+      const isTop = (e.clientY - rect.top) < rect.height / 2;
+      block.classList.toggle('drag-over-top', isTop);
+      block.classList.toggle('drag-over-bottom', !isTop);
+    });
+    block.addEventListener('dragleave', (e)=>{
+      e.stopPropagation();
+      block.classList.remove('drag-over-top','drag-over-bottom');
+    });
+    block.addEventListener('drop', (e)=>{
+      if(!draggingNodeId || draggingNodeId === block.dataset.id) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const rect = block.getBoundingClientRect();
+      const isTop = (e.clientY - rect.top) < rect.height / 2;
+      block.classList.remove('drag-over-top','drag-over-bottom');
+      dropNodeRelative(draggingNodeId, block.dataset.id, isTop);
+      draggingNodeId = null;
+    });
   });
 
   root.querySelectorAll('[data-block-type]').forEach(cb=>{
