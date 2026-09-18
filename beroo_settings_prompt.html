@@ -1076,6 +1076,11 @@ function renderNode(node){
         <span class="drag-handle" draggable="true" data-drag-handle="${node.id}" title="Перетягнути для зміни порядку">⠿</span>
         ${node.color ? `<span class="color-dot" style="background:${COLOR_DOT[node.color]}"></span>` : ''}
         <span class="node-title-text">${escapeHtml(node.title || '(без назви)')}</span>
+        ${node.roles ? `<span class="node-role-tag">${escapeHtml(node.roles)}</span>` : ''}
+        <span class="node-caret">▸</span>
+      </summary>
+      <div class="node-body">
+        <div class="color-swatches" data-color-for="${node.id}">
           ${COLORS.map(c=>`<button type="button" class="color-swatch${node.color===c?' active':''}" data-set-color="${c}" style="background:${COLOR_DOT[c]}" title="${c}"></button>`).join('')}
           <button type="button" class="color-swatch none-swatch${!node.color?' active':''}" data-set-color="" title="Без кольору">×</button>
         </div>
