@@ -1075,12 +1075,7 @@ function renderNode(node){
       <summary>
         <span class="drag-handle" draggable="true" data-drag-handle="${node.id}" title="Перетягнути для зміни порядку">⠿</span>
         ${node.color ? `<span class="color-dot" style="background:${COLOR_DOT[node.color]}"></span>` : ''}
-        <span>${escapeHtml(node.title || '(без назви)')}</span>
-        ${node.roles ? `<span class="node-role-tag">${escapeHtml(node.roles)}</span>` : ''}
-        <span class="node-caret">▸</span>
-      </summary>
-      <div class="node-body">
-        <div class="color-swatches" data-color-for="${node.id}">
+        <span class="node-title-text">${escapeHtml(node.title || '(без назви)')}</span>
           ${COLORS.map(c=>`<button type="button" class="color-swatch${node.color===c?' active':''}" data-set-color="${c}" style="background:${COLOR_DOT[c]}" title="${c}"></button>`).join('')}
           <button type="button" class="color-swatch none-swatch${!node.color?' active':''}" data-set-color="" title="Без кольору">×</button>
         </div>
@@ -1185,6 +1180,11 @@ function wireEvents(root){
       const node = findNode(input.dataset.id);
       if(node) node[input.dataset.f] = input.value;
       if(input.tagName==='TEXTAREA') autosize(input);
+      if(input.dataset.f === 'title'){
+        const block = input.closest('.node-block');
+        const titleSpan = block && block.querySelector(':scope > summary .node-title-text');
+        if(titleSpan) titleSpan.textContent = input.value || '(без назви)';
+      }
       updateOutput();
     });
     if(FIELD_LOG_LABELS[input.dataset.f]){
