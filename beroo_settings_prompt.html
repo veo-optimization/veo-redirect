@@ -120,6 +120,13 @@
   .version-card[open] > summary .node-caret{transform:rotate(90deg);}
   .version-body{padding:0 14px 14px;}
   .version-summary-text{font-size:12.5px;color:#3A3F4B;line-height:1.5;background:var(--el-bg);border:1px solid var(--el-border);border-radius:9px;padding:10px 12px;margin-bottom:10px;white-space:pre-wrap;}
+  .overview-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:13px 15px;margin-bottom:10px;}
+  .overview-row{display:flex;align-items:center;gap:10px;}
+  .overview-row .btn{font-size:11px;padding:4px 10px;margin-left:auto;flex:none;}
+  .overview-desc{font-size:12.5px;color:#3A3F4B;margin:5px 0 0;line-height:1.5;}
+  .overview-children{margin-top:10px;padding-left:14px;border-left:2px solid var(--border);}
+  .overview-sub{margin-top:8px;font-size:13px;}
+  .overview-sub-desc{font-size:12px;margin-top:3px;}
   .log-line:last-child{border-bottom:none;}
   .copy-perms{margin-top:10px;padding-top:10px;border-top:1px dashed var(--border);display:flex;flex-direction:column;gap:12px;}
   .node-ro-desc{color:#3A3F4B;font-size:13.5px;line-height:1.55;white-space:pre-wrap;margin:2px 0 8px;}
@@ -148,12 +155,16 @@
   .color-swatches{display:flex;gap:9px;align-items:center;margin:6px 0 16px;flex-wrap:wrap;}
   .color-swatch{width:23px;height:23px;border-radius:50%;cursor:pointer;border:2px solid transparent;padding:0;}
   .color-swatch.active{border-color:#161A22;}
+  .color-swatch[data-set-color="black"].active{border-color:#fff;box-shadow:0 0 0 1px #161A22;}
   .color-swatch.none-swatch{background:#fff;border:1.5px dashed #C9CEDA;display:flex;align-items:center;justify-content:center;font-size:11px;color:#8A90A0;line-height:1;}
   .node-block.c-red{border-left:4px solid #F3AAB4;} .node-block.c-red > summary{background:#FFEDEF;}
   .node-block.c-orange{border-left:4px solid #F5C08A;} .node-block.c-orange > summary{background:#FFF1E2;}
   .node-block.c-yellow{border-left:4px solid #E7D06B;} .node-block.c-yellow > summary{background:#FFF9DA;}
   .node-block.c-green{border-left:4px solid #A9E0BE;} .node-block.c-green > summary{background:#E8F8EE;}
   .node-block.c-purple{border-left:4px solid #CBB2F0;} .node-block.c-purple > summary{background:#F3EBFC;}
+  .node-block.c-black{border-left:4px solid #1A1A1A;} .node-block.c-black > summary{background:#1A1A1A;}
+  .node-block.c-black > summary .node-title-text, .node-block.c-black > summary .node-role-tag, .node-block.c-black > summary .drag-handle, .node-block.c-black > summary .node-caret{color:#fff;}
+  .node-block.c-black > summary .node-role-tag{background:rgba(255,255,255,.15);}
 
   .btn{font-family:inherit;font-size:12.5px;font-weight:600;padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:#fff;color:var(--text);cursor:pointer;}
   .btn:hover{background:var(--accent-soft);}
@@ -185,10 +196,10 @@
   #autosaveBar select{font-size:12px;padding:5px 7px;border-radius:7px;border:1px solid var(--border);background:#fff;}
   #autosaveBar .btn{padding:6px 10px;font-size:12px;white-space:nowrap;}
 
-  #searchPanelOverlay{display:none;position:fixed;inset:0;background:rgba(20,20,30,.25);z-index:98;}
-  #searchPanel{display:none;position:fixed;top:0;right:0;height:100vh;width:400px;max-width:92vw;background:#fff;border-left:1px solid var(--border);box-shadow:-6px 0 24px rgba(20,20,40,.14);z-index:99;flex-direction:column;}
-  #searchPanel.open, #searchPanelOverlay.open{display:flex;}
-  #searchPanelOverlay.open{display:block;}
+  #searchPanelOverlay, #updatesPanelOverlay{display:none;position:fixed;inset:0;background:rgba(20,20,30,.25);z-index:98;}
+  #searchPanel, #updatesPanel{display:none;position:fixed;top:0;right:0;height:100vh;width:400px;max-width:92vw;background:#fff;border-left:1px solid var(--border);box-shadow:-6px 0 24px rgba(20,20,40,.14);z-index:99;flex-direction:column;}
+  #searchPanel.open, #updatesPanel.open{display:flex;}
+  #searchPanelOverlay.open, #updatesPanelOverlay.open{display:block;}
   .search-panel-head{display:flex;align-items:center;gap:8px;padding:16px 18px;border-bottom:1px solid var(--border);}
   .search-panel-head b{font-size:15px;}
   .search-panel-body{padding:16px 18px;overflow-y:auto;flex:1;}
@@ -197,9 +208,11 @@
   .search-snippet mark{background:#FFE066;padding:0 2px;border-radius:2px;}
   .search-flash{outline:3px solid #F5D400 !important;outline-offset:1px;}
   .search-field-flash{background:#FFF6C4 !important;transition:background .3s;}
+  .diff-old{font-size:12px;color:#B3324A;text-decoration:line-through;margin-bottom:3px;line-height:1.4;}
+  .diff-new{font-size:12px;color:#2E9D6C;line-height:1.4;}
 
   @media (max-width:640px){
-    #searchPanel{width:100%;max-width:100%;}
+    #searchPanel, #updatesPanel{width:100%;max-width:100%;}
   }
 
 
@@ -260,6 +273,23 @@
 </div>
 <div id="searchPanelOverlay"></div>
 
+<div id="updatesPanel">
+  <div class="search-panel-head">
+    <b>🆕 Оновлення з коду</b>
+    <button class="icon-btn" id="closeUpdatesPanel">×</button>
+  </div>
+  <div class="search-panel-body">
+    <p class="section-desc" style="margin-top:0;">Звірка йде за назвою блоку — справжніх сталих ID між завантаженнями сторінки немає. Тому перейменування код не розпізнає як той самий блок (зʼявиться новим через «Підтягнути нове»). Якщо ти сам змінював опис цього блоку — застосування перепише саме твою правку версією з коду, тож перевіряй кожен пункт.</p>
+    <div style="display:flex;gap:6px;margin-bottom:10px;">
+      <button class="btn" id="applySelectedUpdatesBtn">Застосувати обрані</button>
+      <button class="btn ghost" id="selectAllUpdatesBtn">Обрати всі</button>
+    </div>
+    <div id="updatesCount" style="font-size:12px;color:var(--muted);margin-bottom:8px;"></div>
+    <div id="updatesList"></div>
+  </div>
+</div>
+<div id="updatesPanelOverlay"></div>
+
 <div class="wrap">
   <header class="top">
     <h1>BEROO · Блоковий редактор структури</h1>
@@ -277,6 +307,11 @@
       <button class="btn" id="loadCloudBtn">⤓ Завантажити з хмари</button>
       <button class="btn" id="copyLinkBtn">🔗 Копіювати посилання на цю версію</button>
       <button class="btn" id="mergeSeedBtn" title="Додає нові блоки і терміни, яких немає в поточному документі, з коду сторінки — нічого наявного не чіпає">🔄 Підтягнути нове з коду</button>
+      <button class="btn" id="previewUpdatesBtn" title="Показує, де опис/тип наявного блоку в коді відрізняється від документа — можна вибірково застосувати">🆕 Оновлення з коду</button>
+      <div>
+        <label style="display:block;font-size:11px;color:var(--muted);font-weight:600;margin-bottom:4px;">Ваше ім'я</label>
+        <input type="text" id="myNameInputTop" placeholder="напр. Олексій" style="font-size:12px;padding:6px 8px;border-radius:7px;border:1px solid var(--border);" autocomplete="off">
+      </div>
       <div style="margin-left:auto;">
         <label style="display:block;font-size:11px;color:var(--muted);font-weight:600;margin-bottom:4px;">Пристрій</label>
         <select id="deviceSelect" style="font-size:12px;padding:6px 8px;border-radius:7px;border:1px solid var(--border);"></select>
@@ -325,7 +360,7 @@
     <button class="btn" id="sortColorBtn">🎨 Сортувати за кольором</button>
     <button class="btn" id="restoreOrderBtn">↺ Початковий порядок</button>
     <button class="btn" id="applyDefaultRolesBtn" title="Ставить усі ролі/статуси крім «Покупець» на всіх блоках; для «САЙТ (публічна частина)» — навпаки, лише «Покупець»">🎯 Дефолтні ролі на всі блоки</button>
-    <span style="font-size:12px;color:var(--muted);">Фіолетовий = моє бачення/припущення (можна перефарбувати)</span>
+    <span style="font-size:12px;color:var(--muted);">Фіолетовий = нове від мене (можна перефарбувати) · Чорний = застарілий блок, замінений новим — можна видалити</span>
   </div>
   <div class="tree" id="tree"></div>
   <div class="add-root-row" id="treeAddRootRow"><button class="btn ghost" id="addRootBtn">+ Додати новий кореневий блок</button></div>
@@ -461,6 +496,13 @@
     <button class="btn ghost" id="refreshVersionsBtn">↻ Оновити список версій</button>
   </div>
   <div id="versionsList"></div>
+
+  <div class="part-title" style="display:flex;align-items:center;gap:10px;margin:26px 0 12px;">
+    <div style="width:26px;height:26px;min-width:26px;border-radius:8px;background:#191C24;color:var(--console-accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">📑</div>
+    <h2 style="font-size:16px;margin:0;">Огляд пунктів меню</h2>
+  </div>
+  <p class="section-desc">Короткий перелік усіх пунктів меню і підпунктів з описом, який вписано вище в робочих блоках. «Редагувати» одразу переносить до потрібного блоку нагорі, щоб внести корективи.</p>
+  <div id="menuOverviewList"></div>
 </div>
 
 
@@ -481,8 +523,8 @@ function fallbackCopy(text, done){
 function autosize(t){ if(!t) return; t.style.height='auto'; t.style.height=(t.scrollHeight+2)+'px'; }
 function autosizeAll(root){ root.querySelectorAll('textarea').forEach(autosize); }
 const EL_TYPES = ['Кнопка','Поле введення','Перемикач (toggle)','Випадаючий список','Текст / напис','Іконка / зображення','Інше'];
-const COLORS = ['red','orange','yellow','green','purple'];
-const COLOR_DOT = {red:'#F3AAB4', orange:'#F5C08A', yellow:'#E7D06B', green:'#A9E0BE', purple:'#CBB2F0'};
+const COLORS = ['red','orange','yellow','green','purple','black'];
+const COLOR_DOT = {red:'#F3AAB4', orange:'#F5C08A', yellow:'#E7D06B', green:'#A9E0BE', purple:'#CBB2F0', black:'#1A1A1A'};
 const BLOCK_TYPES = [
   {key:'crm', label:'CRM-кабінет'},
   {key:'site', label:'Сайт-магазин'},
@@ -842,7 +884,7 @@ let DEVICE_LIST = JSON.parse(localStorage.getItem('beroo_device_list') || '["iPh
 let myDevice = localStorage.getItem('beroo_device_name') || DEVICE_LIST[0] || '';
 
 function logAction(action){
-  actionLog.push({ts: new Date().toISOString(), device: myDevice || '(пристрій не вказано)', action});
+  actionLog.push({ts: new Date().toISOString(), device: myDevice || '(пристрій не вказано)', author: myName || '', action});
   if(actionLog.length > 400) actionLog = actionLog.slice(-400);
   actionsSinceLastVersion.push(action);
   renderActionLog();
@@ -855,7 +897,7 @@ function renderActionLog(){
   if(!root) return;
   if(!actionLog.length){ root.innerHTML = '<div class="empty" style="color:#7A8399;">Поки немає записів у логу.</div>'; return; }
   root.innerHTML = actionLog.slice().reverse().map(l=>
-    `<div class="log-line"><b>${fmtLogDate(l.ts)}</b> · <span style="color:#7FB8F5;">${escapeHtml(l.device)}</span> — ${escapeHtml(l.action)}</div>`
+    `<div class="log-line"><b>${fmtLogDate(l.ts)}</b> · <span style="color:#7FB8F5;">${l.author?escapeHtml(l.author)+' · ':''}${escapeHtml(l.device)}</span> — ${escapeHtml(l.action)}</div>`
   ).join('');
 }
 document.getElementById('clearActionLogBtn').addEventListener('click', ()=>{
@@ -1035,6 +1077,50 @@ function renderTree(){
   autosizeAll(root);
   updateOutput();
   if(typeof updateFilterLabel === 'function' && document.getElementById('filterStatusLabel')) updateFilterLabel();
+  if(typeof renderMenuOverview === 'function') renderMenuOverview();
+}
+function renderMenuOverview(){
+  const root = document.getElementById('menuOverviewList');
+  if(!root) return;
+  function descHtml(nd){
+    if(nd.noChanges) return `<div class="overview-desc" style="opacity:.6;">🔒 Без змін — залишити як у попередній версії</div>`;
+    if(nd.description) return `<div class="overview-desc">${escapeHtml(nd.description)}</div>`;
+    return `<div class="overview-desc" style="opacity:.5;font-style:italic;">Опис ще не заповнено</div>`;
+  }
+  root.innerHTML = ROOT_NODES.map(top=>`
+    <div class="overview-card">
+      <div class="overview-row">
+        <b>${escapeHtml(top.title || '(без назви)')}</b>
+        ${IS_OWNER ? `<button class="btn ghost" data-overview-edit="${top.id}">Редагувати</button>` : ''}
+      </div>
+      ${descHtml(top)}
+      ${top.children.length ? `<div class="overview-children">
+        ${top.children.map(c=>`
+          <div class="overview-row overview-sub">
+            <span>${escapeHtml(c.title || '(без назви)')}</span>
+            ${IS_OWNER ? `<button class="btn ghost" data-overview-edit="${c.id}">Редагувати</button>` : ''}
+          </div>
+          <div class="overview-sub-desc">${descHtml(c)}</div>
+        `).join('')}
+      </div>` : ''}
+    </div>
+  `).join('');
+  root.querySelectorAll('[data-overview-edit]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.dataset.overviewEdit;
+      expandAncestorsOf(id);
+      renderTree();
+      setTimeout(()=>{
+        const el = document.querySelector(`[data-id="${id}"]`);
+        if(!el) return;
+        el.scrollIntoView({behavior:'smooth', block:'center'});
+        el.classList.add('search-flash');
+        setTimeout(()=>el.classList.remove('search-flash'), 1700);
+        const titleInput = el.querySelector(':scope > summary ~ .node-body [data-f="title"], .node-body [data-f="title"]');
+        if(titleInput) titleInput.focus({preventScroll:true});
+      }, 60);
+    });
+  });
 }
 function renderNodeReadonly(node){
   const childrenHtml = node.children.filter(subtreeVisible).map(renderNodeReadonly).join('');
@@ -2408,11 +2494,11 @@ async function cloudLoadVersion(docId, version){
   return cloudCall('GET', {action:'loadVersion', doc: docId, version: version});
 }
 
-document.getElementById('saveCloudBtn').addEventListener('click', async ()=>{
+async function performCloudSave(){
   setSyncStatus('Зберігаю…');
   try{
     const r = await cloudSave(CURRENT_DOC_ID);
-    if(!r.ok){ setSyncStatus('Сервер відхилив збереження: ' + (r.error||'невідома помилка'), false); return; }
+    if(!r.ok){ setSyncStatus('Сервер відхилив збереження: ' + (r.error||'невідома помилка'), false); return false; }
     if(!HAD_DOC_IN_URL){ const url = new URL(location.href); url.searchParams.set('doc', CURRENT_DOC_ID); history.replaceState(null,'',url); }
     setSyncStatus('Збережено · ' + new Date(r.updatedAt).toLocaleString('uk-UA'));
     logAction('💾 Збережено в хмару');
@@ -2422,8 +2508,10 @@ document.getElementById('saveCloudBtn').addEventListener('click', async ()=>{
       const vr = await cloudSaveVersion(CURRENT_DOC_ID, summary);
       if(vr.ok){ actionsSinceLastVersion = []; renderVersionsList(); }
     }catch(e){ /* версіювання не критичне — основне збереження вже пройшло */ }
-  }catch(err){ setSyncStatus('Помилка збереження — перевір деплой Apps Script', false); }
-});
+    return true;
+  }catch(err){ setSyncStatus('Помилка збереження — перевір деплой Apps Script', false); return false; }
+}
+document.getElementById('saveCloudBtn').addEventListener('click', ()=> performCloudSave());
 
 document.getElementById('loadCloudBtn').addEventListener('click', async ()=>{
   setSyncStatus('Завантажую…');
@@ -2439,9 +2527,14 @@ document.getElementById('loadCloudBtn').addEventListener('click', async ()=>{
 document.getElementById('saveCloudBtnBottom').addEventListener('click', ()=> document.getElementById('saveCloudBtn').click());
 document.getElementById('loadCloudBtnBottom').addEventListener('click', ()=> document.getElementById('loadCloudBtn').click());
 
-document.getElementById('copyLinkBtn').addEventListener('click', ()=>{
+document.getElementById('copyLinkBtn').addEventListener('click', async ()=>{
   const btn = document.getElementById('copyLinkBtn');
-  copyText(shareLink(CURRENT_DOC_ID), btn, '🔗 Копіювати посилання на цю версію');
+  const orig = btn.textContent;
+  btn.disabled = true; btn.textContent = 'Зберігаю перед копіюванням…';
+  const ok = await performCloudSave();
+  btn.disabled = false; btn.textContent = orig;
+  if(!ok){ setSyncStatus('Не вдалось зберегти — посилання не скопійовано, спробуй ще раз', false); return; }
+  copyText(shareLink(CURRENT_DOC_ID), btn, orig);
 });
 
 document.getElementById('mergeSeedBtn').addEventListener('click', ()=>{
@@ -2457,6 +2550,96 @@ document.getElementById('mergeSeedBtn').addEventListener('click', ()=>{
     renderSimForm();
     logAction(`Підтягнуто з коду: ${addedNodes} блоків, ${addedTerms} термінів, ${linksResult.added} нових зв'язків, ${linksResult.fixed} виправлено`);
     setSyncStatus(`Додано ${addedNodes} блоків, ${addedTerms} термінів, ${linksResult.added} нових і ${linksResult.fixed} виправлених зв'язків — тепер тисни «Зберегти»`);
+  }
+});
+
+/* ======================================================================
+   ОНОВЛЕННЯ З КОДУ (звірка за назвою блоку, вибіркове застосування)
+====================================================================== */
+let currentUpdatesList = [];
+let updatesChecked = {};
+
+function computeContentUpdates(){
+  const updates = [];
+  function walk(seedNodes, liveNodes, pathLabel){
+    seedNodes.forEach(seedNode=>{
+      const liveNode = liveNodes.find(n=>n.title === seedNode.title);
+      if(!liveNode) return; // немає збігу за назвою — це справа "Підтягнути нове", не цієї панелі
+      const label = pathLabel ? pathLabel + ' → ' + liveNode.title : liveNode.title;
+      if((seedNode.description||'') !== (liveNode.description||'') && seedNode.description){
+        updates.push({key:`upd:${liveNode.id}:description`, nodeId:liveNode.id, field:'description',
+          label: label + ' — Опис', oldVal: liveNode.description||'', newVal: seedNode.description});
+      }
+      if((seedNode.blockTypeComment||'') !== (liveNode.blockTypeComment||'') && seedNode.blockTypeComment){
+        updates.push({key:`upd:${liveNode.id}:blockTypeComment`, nodeId:liveNode.id, field:'blockTypeComment',
+          label: label + ' — Коментар типу', oldVal: liveNode.blockTypeComment||'', newVal: seedNode.blockTypeComment});
+      }
+      if(seedNode.blockType && seedNode.blockType !== liveNode.blockType){
+        updates.push({key:`upd:${liveNode.id}:blockType`, nodeId:liveNode.id, field:'blockType',
+          label: label + ' — Тип блоку',
+          oldVal: liveNode.blockType ? (BLOCK_TYPE_LABEL[liveNode.blockType]||liveNode.blockType) : '(не обрано)',
+          newVal: BLOCK_TYPE_LABEL[seedNode.blockType]||seedNode.blockType});
+      }
+      walk(seedNode.children, liveNode.children, label);
+    });
+  }
+  walk(CODE_SEED_TREE, ROOT_NODES, '');
+  return updates;
+}
+function renderUpdatesList(){
+  currentUpdatesList = computeContentUpdates();
+  const root = document.getElementById('updatesList');
+  document.getElementById('updatesCount').textContent = currentUpdatesList.length + (currentUpdatesList.length===1?' відмінність':' відмінностей');
+  updatesChecked = {};
+  currentUpdatesList.forEach(u=>{ updatesChecked[u.key] = true; });
+  if(!currentUpdatesList.length){
+    root.innerHTML = '<div class="empty">Розбіжностей не знайдено — вміст наявних блоків збігається з кодом.</div>';
+    return;
+  }
+  root.innerHTML = currentUpdatesList.map(u=>`
+    <div class="search-result-card" data-update="${u.key}">
+      <label style="display:flex;gap:8px;align-items:flex-start;">
+        <input type="checkbox" data-update-check="${u.key}" checked>
+        <span style="flex:1;">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:5px;">${escapeHtml(u.label)}</div>
+          <div class="diff-old">${escapeHtml((u.oldVal||'(порожньо)').slice(0,160))}</div>
+          <div class="diff-new">${escapeHtml(u.newVal.slice(0,160))}</div>
+        </span>
+      </label>
+    </div>
+  `).join('');
+  root.querySelectorAll('[data-update-check]').forEach(cb=>{
+    cb.addEventListener('change', ()=>{ updatesChecked[cb.dataset.updateCheck] = cb.checked; });
+  });
+}
+document.getElementById('previewUpdatesBtn').addEventListener('click', ()=>{
+  document.getElementById('updatesPanel').classList.add('open');
+  document.getElementById('updatesPanelOverlay').classList.add('open');
+  renderUpdatesList();
+});
+function closeUpdatesPanel(){
+  document.getElementById('updatesPanel').classList.remove('open');
+  document.getElementById('updatesPanelOverlay').classList.remove('open');
+}
+document.getElementById('closeUpdatesPanel').addEventListener('click', closeUpdatesPanel);
+document.getElementById('updatesPanelOverlay').addEventListener('click', closeUpdatesPanel);
+document.getElementById('selectAllUpdatesBtn').addEventListener('click', ()=>{
+  document.querySelectorAll('[data-update-check]').forEach(cb=>{ cb.checked = true; updatesChecked[cb.dataset.updateCheck] = true; });
+});
+document.getElementById('applySelectedUpdatesBtn').addEventListener('click', ()=>{
+  let count = 0;
+  currentUpdatesList.forEach(u=>{
+    if(!updatesChecked[u.key]) return;
+    const node = findNode(u.nodeId);
+    if(node){ node[u.field] = u.newVal; count++; }
+  });
+  if(count > 0){
+    logAction(`Застосовано ${count} оновлень з коду (вміст наявних блоків)`);
+    renderTree(); renderTerms();
+    closeUpdatesPanel();
+    setSyncStatus(`Застосовано ${count} оновлень — тепер тисни «Зберегти»`);
+  } else {
+    setSyncStatus('Нічого не вибрано для застосування');
   }
 });
 
@@ -3061,8 +3244,17 @@ renderTree();
 renderCopiesList();
 
 const myNameInput = document.getElementById('myNameInput');
+const myNameInputTop = document.getElementById('myNameInputTop');
 myNameInput.value = myName;
-myNameInput.addEventListener('input', ()=>{ myName = myNameInput.value; localStorage.setItem('beroo_my_name', myName); });
+myNameInputTop.value = myName;
+function setMyName(val){
+  myName = val;
+  localStorage.setItem('beroo_my_name', myName);
+  myNameInput.value = myName;
+  myNameInputTop.value = myName;
+}
+myNameInput.addEventListener('input', ()=> setMyName(myNameInput.value));
+myNameInputTop.addEventListener('input', ()=> setMyName(myNameInputTop.value));
 
 if(HAD_DOC_IN_URL){
   setSyncStatus('Завантажую збережену версію…');
