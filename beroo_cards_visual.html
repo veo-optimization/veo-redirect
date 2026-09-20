@@ -342,6 +342,13 @@ const DEMO_REVIEWS = [
   {shop:'Urban Line', rating:5, text:'Чітко дотримується домовлених термінів, контент завжди у стилі бренду.'},
   {shop:'SkinLab UA', rating:4, text:'Гарна якість роликів, іноді трохи затримує з публікацією.'},
   {shop:'TechDrop', rating:5, text:'Дуже прискіпливо готується до огляду — видно, що дійсно тестує товар.'},
+  {shop:'Bags & Co', rating:5, text:'Найкраща співпраця за останній рік. Комунікація на найвищому рівні.'},
+  {shop:'Затишно', rating:4, text:'Красиві кадри, але просила додаткову оплату за зйомку в студії.'},
+  {shop:'CapStreet', rating:3, text:'Матеріал вийшов пізніше обіцяного терміну на кілька днів.'},
+  {shop:'Пасіка Карпат', rating:5, text:'Щиро і з душею розповідає про продукт, аудиторія довіряє.'},
+  {shop:'Silver&Co', rating:5, text:'Чесно попереджає, якщо щось не встигає — цінуємо прозорість.'},
+  {shop:'SkinLab UA', rating:5, text:'Друга кампанія поспіль — результат стабільно високий.'},
+  {shop:'Urban Line', rating:4, text:'Гарна робота, хотілося б трохи частіші звіти про хід зйомок.'},
 ];
 
 const BLOGGERS = [
@@ -930,6 +937,7 @@ function renderList(){
         e.stopPropagation();
         const id = btn.dataset.tileFav;
         state.fav[id] = !state.fav[id];
+        if(state.type==='blogger') renderToolbar();
         renderList();
       });
     });
@@ -944,6 +952,7 @@ function wireCardEvents(root, isModal){
     btn.addEventListener('click', ()=>{
       const id = btn.dataset.fav;
       state.fav[id] = !state.fav[id];
+      if(state.type==='blogger') renderToolbar();
       if(isModal) renderModal(); else renderList();
     });
   });
