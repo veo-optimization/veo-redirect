@@ -10,26 +10,27 @@
 <style>
   :root{
     --ink:#181A1F; --ink-soft:#565B66; --ink-faint:#8C919C;
-    --paper:#F6F4EF; --card:#FFFFFF; --line:#E7E3D9;
-    --gold:#C8912A; --gold-bg:#FBF1DD;
+    --paper:#F7F5F2; --card:#FFFFFF; --line:#E9E5DC;
+    --primary:#E8505B; --primary-bg:#FDEAEC; --primary-dark:#C93E49;
+    --gold:#B8860B; --gold-bg:#FBF1DD;
     --grey-star:#9AA0AC; --grey-star-bg:#EEF0F3;
-    --purple:#6E4FA6; --purple-bg:#F1EBFB;
+    --violet:#7C5CBF; --violet-bg:#F1EBFB;
     --green:#2E7D32; --green-bg:#E8F5E9;
-    --orange:#EF6C00; --orange-bg:#FFF3E0;
+    --orange:#B8720A; --orange-bg:#FFF3E0;
     --black-zone:#1A1A1A; --black-zone-bg:#EDEDED;
-    --radius:18px;
+    --radius:20px;
     --font:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
     --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px);
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
       --ink:#F3F1EC; --ink-soft:#A8ADB8; --ink-faint:#767B85; --paper:#131418; --card:#1E2026; --line:#31333B;
-      --gold-bg:#332A16; --grey-star-bg:#2A2C33; --purple-bg:#2A2338; --green-bg:#16261A; --orange-bg:#2E2013; --black-zone-bg:#2A2A2A;
+      --primary-bg:#3A1B1E; --gold-bg:#332A16; --grey-star-bg:#2A2C33; --violet-bg:#2A2338; --green-bg:#16261A; --orange-bg:#2E2013; --black-zone-bg:#2A2A2A;
     }
   }
   :root[data-theme="dark"]{
     --ink:#F3F1EC; --ink-soft:#A8ADB8; --ink-faint:#767B85; --paper:#131418; --card:#1E2026; --line:#31333B;
-    --gold-bg:#332A16; --grey-star-bg:#2A2C33; --purple-bg:#2A2338; --green-bg:#16261A; --orange-bg:#2E2013; --black-zone-bg:#2A2A2A;
+    --primary-bg:#3A1B1E; --gold-bg:#332A16; --grey-star-bg:#2A2C33; --violet-bg:#2A2338; --green-bg:#16261A; --orange-bg:#2E2013; --black-zone-bg:#2A2A2A;
   }
 
   *{box-sizing:border-box;}
@@ -64,11 +65,18 @@
     width:100%; border:1px solid var(--line); background:var(--card); color:var(--ink);
     border-radius:12px; padding:10px 12px 10px 34px; font-size:13.5px; outline:none;
   }
-  .search-row input:focus{border-color:var(--purple);}
+  .search-row input:focus{border-color:var(--primary);}
   .search-row .icon{position:absolute; left:11px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--ink-faint);}
 
-  .counts-row{font-size:11.5px; color:var(--ink-faint); margin-bottom:8px;}
-  .counts-row b{color:var(--ink-soft); font-weight:700;}
+  .counts-row{display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px;}
+  .count-chip{font-size:11.5px; font-weight:700; padding:6px 12px; border-radius:999px;}
+  .count-chip.fill{background:var(--ink); color:var(--paper);}
+  .count-chip.outline{background:var(--card); color:var(--ink-soft); border:1px solid var(--line);}
+  .count-chip.tint{background:var(--primary-bg); color:var(--primary-dark); border:1px solid transparent;}
+  .count-chip.outline.gold{background:var(--gold-bg); color:var(--gold); border:1px solid #EAD9A8;}
+  .count-chip.zone-chip.zone-green{background:var(--green-bg); color:var(--green); border:1px solid transparent;}
+  .count-chip.zone-chip.zone-orange{background:var(--orange-bg); color:var(--orange); border:1px solid transparent;}
+  .count-chip.zone-chip.zone-black{background:var(--black-zone-bg); color:var(--black-zone); border:1px solid transparent;}
 
   .chip-scroll{display:flex; gap:6px; overflow-x:auto; padding-bottom:2px; margin-bottom:8px; scrollbar-width:none;}
   .chip-scroll::-webkit-scrollbar{display:none;}
@@ -76,15 +84,18 @@
     flex:none; font-size:11.5px; font-weight:600; padding:6px 12px; border-radius:999px;
     background:var(--card); border:1px solid var(--line); color:var(--ink-soft); cursor:pointer; white-space:nowrap;
   }
-  .chip.active{background:var(--purple); border-color:var(--purple); color:#fff;}
+  .chip.active{background:var(--primary); border-color:var(--primary); color:#fff;}
 
   .util-row{display:flex; gap:8px;}
+  .search-filter-row{display:flex; gap:8px; margin-bottom:8px;}
+  .filter-section-title{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); margin:12px 0 4px;}
+  .filter-drawer .filter-section-title:first-child{margin-top:0;}
   .util-btn{
     flex:1; display:flex; align-items:center; justify-content:center; gap:5px;
     border:1px solid var(--line); background:var(--card); color:var(--ink-soft);
     border-radius:11px; padding:9px 8px; font-size:11.5px; font-weight:600; cursor:pointer;
   }
-  .util-btn.on{background:var(--purple-bg); border-color:var(--purple); color:var(--purple);}
+  .util-btn.on{background:var(--primary-bg); border-color:var(--primary); color:var(--primary);}
   .util-btn .spin{display:inline-block;}
   .util-btn .spin.spinning{animation:spin .6s linear;}
   @keyframes spin{to{transform:rotate(360deg);}}
@@ -92,7 +103,7 @@
   .filter-drawer{display:none; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:8px; font-size:12.5px;}
   .filter-drawer.open{display:block;}
   .filter-drawer label{display:flex; align-items:center; gap:8px; padding:5px 0; color:var(--ink-soft); cursor:pointer;}
-  .filter-drawer input[type="checkbox"]{width:16px;height:16px;accent-color:var(--purple);}
+  .filter-drawer input[type="checkbox"]{width:16px;height:16px;accent-color:var(--primary);}
 
   /* ---------- list area ---------- */
   .list-wrap{padding:2px 14px 40px;}
@@ -106,9 +117,10 @@
   }
   .tile .photo{
     width:100%; aspect-ratio:1.4/1; border-radius:12px; display:flex; align-items:center; justify-content:center;
-    font-size:26px; background:linear-gradient(155deg,var(--purple-bg),var(--card)); border:1px solid var(--line);
+    font-size:26px; background:var(--grey-star-bg); border:1px solid var(--line);
   }
-  .tile .t-name{font-size:12.5px; font-weight:700; line-height:1.3; margin:0; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden;}
+  .tile .photo.avatar-shop{border-radius:999px; background:linear-gradient(155deg,#FBD7DE,var(--card));}
+  .tile .photo.avatar-blogger{border-radius:999px; background:linear-gradient(155deg,#D9E4FB,var(--card));}  .tile .t-name{font-size:12.5px; font-weight:700; line-height:1.3; margin:0; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden;}
   .tile .t-stat{font-size:12px; color:var(--ink-soft); font-weight:600;}
   .tile .t-foot-row{display:flex; align-items:center; justify-content:space-between; margin-top:2px;}
   .tile .t-code{font-size:9.5px; color:var(--ink-faint);}
@@ -116,6 +128,11 @@
     border:none; background:var(--ink); color:var(--paper); width:26px; height:26px; border-radius:50%;
     font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center;
   }
+  .tile-fav{
+    border:1px solid var(--line); background:var(--card); color:var(--ink-soft); width:26px; height:26px; border-radius:50%;
+    font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .tile-fav.on{color:#D1495B; border-color:#F1C6CD;}
 
   /* Розширений: full cards feed */
   .feed{display:flex; flex-direction:column; gap:14px;}
@@ -123,7 +140,14 @@
   /* ---------- full card component (shared by modal + feed) ---------- */
   .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;}
   .card-head{display:flex; gap:14px; padding:16px 16px 12px; align-items:flex-start; position:relative;}
-  .photo-lg{width:70px;height:70px;border-radius:15px;flex:none;display:flex;align-items:center;justify-content:center;font-size:28px;background:linear-gradient(155deg,var(--purple-bg),var(--card));border:1px solid var(--line);}
+  .card-head.centered{align-items:center;}
+  .head-photo-col{display:flex; flex-direction:column; align-items:center; gap:5px; flex:none;}
+  .code-under{font-size:10px;}
+  .code-link{color:var(--primary); text-decoration:none; font-weight:600;}
+  .code-link:hover{text-decoration:underline;}
+  .photo-lg{width:70px;height:70px;border-radius:15px;flex:none;display:flex;align-items:center;justify-content:center;font-size:28px;background:var(--grey-star-bg);border:1px solid var(--line);}
+  .photo-lg.avatar-shop{border-radius:999px; background:linear-gradient(155deg,#FBD7DE,var(--card));}
+  .photo-lg.avatar-blogger{border-radius:999px; background:linear-gradient(155deg,#D9E4FB,var(--card));}
   .head-main{flex:1;min-width:0;}
   .name{font-size:16px;font-weight:700;line-height:1.25;margin:0;letter-spacing:-0.005em;}
   .fav{margin-left:auto;flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--ink-soft);}
@@ -131,25 +155,41 @@
   .meta-line{font-size:12px;color:var(--ink-soft);margin:4px 0 0;line-height:1.5;}
   .badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
   .badge{font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;}
-  .badge.gold{background:var(--gold-bg);color:var(--gold);}
-  .badge.grey{background:var(--grey-star-bg);color:var(--grey-star);}
-  .badge.purple{background:var(--purple-bg);color:var(--purple);}
-  .badge.status{background:var(--black-zone-bg);color:var(--ink);}
+  .badge.gold{background:var(--gold-bg);color:var(--gold);border:1px solid #EAD9A8;}
+  .badge.grey{background:var(--grey-star-bg);color:var(--grey-star);border:1px solid var(--line);}
+  .badge.violet{background:var(--violet-bg);color:var(--violet);border:1px solid transparent;}
+  .badge.status{background:var(--grey-star-bg);color:var(--ink-soft);border:1px solid var(--line);}
   .code{position:absolute; top:14px; right:50px; font-size:10px; color:var(--ink-faint);}
 
   .panels{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
   .panel{background:var(--card); padding:10px 6px; text-align:center;}
   .panel .val{font-size:14px;font-weight:800;letter-spacing:-0.01em;}
-  .panel .lab{font-size:9.5px;color:var(--ink-soft);margin-top:2px;line-height:1.25;}
+  .panel .lab{font-size:9px;color:var(--ink-faint);margin-top:3px;line-height:1.25;text-transform:uppercase;letter-spacing:.04em;}
   .panel.zone-green{background:var(--green-bg);} .panel.zone-green .val{color:var(--green);}
   .panel.zone-orange{background:var(--orange-bg);} .panel.zone-orange .val{color:var(--orange);}
   .panel.zone-black{background:var(--black-zone-bg);} .panel.zone-black .val{color:var(--black-zone);}
   .panel.gold .val{color:var(--gold);}
   .panel.grey .val{color:var(--grey-star);}
 
+  .risk-row{display:flex; align-items:center; justify-content:space-between; padding:12px 16px 4px;}
+  .risk-row .risk-name{font-size:10px; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.04em; font-weight:700;}
+  .risk-pill{display:inline-flex; align-items:center; gap:6px; padding:5px 12px; border-radius:999px; font-size:12px; font-weight:700;}
+  .risk-pill .dot{width:7px;height:7px;border-radius:50%;flex:none;}
+  .risk-pill.zone-green{background:var(--green-bg);color:var(--green);} .risk-pill.zone-green .dot{background:var(--green);}
+  .risk-pill.zone-orange{background:var(--orange-bg);color:var(--orange);} .risk-pill.zone-orange .dot{background:var(--orange);}
+  .risk-pill.zone-black{background:var(--black-zone-bg);color:var(--black-zone);} .risk-pill.zone-black .dot{background:var(--black-zone);}
+  .risk-bar{height:4px; border-radius:99px; background:linear-gradient(90deg,var(--green) 0%, var(--orange) 55%, var(--black-zone) 100%); margin:8px 16px 4px; position:relative;}
+  .risk-bar .marker{position:absolute; top:-3px; width:10px; height:10px; border-radius:50%; background:var(--card); border:2px solid var(--ink); transform:translateX(-50%);}
+
+  .earn-box{margin:2px 16px 4px; padding:11px 13px; background:var(--gold-bg); border-radius:13px;}
+  .earn-box .earn-top{display:flex; align-items:center; justify-content:space-between;}
+  .earn-box .earn-label{font-size:10px; color:var(--gold); text-transform:uppercase; letter-spacing:.04em; font-weight:700;}
+  .earn-box .earn-val{font-size:15px; font-weight:800; color:var(--ink);}
+  .earn-box .earn-formula{font-size:10.5px; color:var(--ink-soft); margin-top:4px;}
+
   .foot{padding:12px 16px; font-size:12.5px; line-height:1.5; color:var(--ink-soft);}
 
-  .expand-toggle{width:100%; border:none; background:var(--card); border-top:1px dashed var(--line); padding:9px; font-size:11.5px; font-weight:600; color:var(--purple); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;}
+  .expand-toggle{width:calc(100% - 32px); margin:0 16px 10px; border:1px solid var(--line); background:var(--card); border-radius:12px; padding:10px; font-size:12px; font-weight:700; color:var(--ink); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;}
   .expand-body{display:none; padding:2px 16px 14px; font-size:12px; color:var(--ink-soft); line-height:1.6; border-top:1px solid var(--line);}
   .expand-body.open{display:block;}
   .expand-body dl{margin:8px 0 0;display:grid;grid-template-columns:auto 1fr;gap:5px 10px;}
@@ -159,9 +199,9 @@
 
   .actions{display:flex; gap:7px; padding:12px 16px 16px;}
   .btn{flex:1; border:none; border-radius:11px; padding:10px 8px; font-size:11.5px; font-weight:700; cursor:pointer; text-align:center;}
-  .btn.ghost{background:var(--paper); color:var(--ink); border:1px solid var(--line);}
-  .btn.primary{background:var(--ink); color:var(--paper);}
-  .btn.warn{background:transparent; color:var(--ink-soft); border:1px solid var(--line);}
+  .btn.ghost{background:var(--card); color:var(--ink); border:1px solid var(--line);}
+  .btn.primary{background:var(--primary); color:#fff;}
+  .btn.warn{background:var(--card); color:var(--primary); border:1px solid var(--primary-bg);}
 
   /* ---------- modal ---------- */
   .modal-backdrop{
@@ -246,15 +286,60 @@ const SHOPS = [
   {id:'s8', icon:'💍', code:'80112', name:'Silver&Co', cats:'Прикраси', status:'eq', items:112, stockSum:410700, greyMirrors:19, goldMirrors:11, requests:6, returns:5, foot:'Срібні прикраси власного дизайну.'},
 ];
 
+const SAMPLE_TYPES = [
+  {id:'free', label:'Тільки безкоштовні зразки'},
+  {id:'buy', label:'Купівля зразка'},
+  {id:'discount', label:'Купівля зі знижкою'},
+  {id:'return', label:'Купівля з можливістю повернути'},
+  {id:'freeReturn', label:'Безкоштовно із подальшим поверненням'},
+];
+const PLATFORMS = [
+  {id:'tiktok', label:'ТікТок'},
+  {id:'instagram', label:'Інстаграм'},
+  {id:'facebook', label:'Фейсбук'},
+  {id:'youtube', label:'Ютуб'},
+  {id:'telegram', label:'Телеграм-канали'},
+];
+const FORMATS = [
+  {id:'video', label:'Відео'},
+  {id:'live', label:'Ефір'},
+  {id:'post', label:'Пост'},
+];
+const UA_REGIONS = ['Київська','Львівська','Одеська','Харківська','Дніпропетровська','Закарпатська','Івано-Франківська'];
+
 const BLOGGERS = [
-  {id:'b1', icon:'🎬', code:'55210', name:'Мар’яна Кіт', cat:'Мода', stars:1240, mirrorShops:14, mirrorItems:63, followers:38000, returns:3, hasShop:true, foot:'Огляди одягу та побуту, 2–3 інтеграції на тиждень.'},
-  {id:'b2', icon:'💅', code:'61044', name:'Оля Бʼюті', cat:'Косметика', stars:2870, mirrorShops:9, mirrorItems:41, followers:112000, returns:1, hasShop:false, foot:'Бʼюті-огляди та тести косметики в форматі Live.'},
-  {id:'b3', icon:'🎮', code:'70125', name:'Данило Tech', cat:'Електроніка', stars:640, mirrorShops:5, mirrorItems:18, followers:25000, returns:6, hasShop:false, foot:'Розпаковки гаджетів, порівняння характеристик.'},
-  {id:'b4', icon:'🏠', code:'44982', name:'Дім із Настею', cat:'Дім', stars:980, mirrorShops:11, mirrorItems:52, followers:47000, returns:2, hasShop:true, foot:'Затишні інтер’єрні рішення й декор.'},
-  {id:'b5', icon:'👟', code:'33217', name:'Стріт Кулс', cat:'Взуття', stars:1560, mirrorShops:7, mirrorItems:29, followers:64000, returns:4, hasShop:false, foot:'Огляди кросівок і стрітвіру.'},
-  {id:'b6', icon:'💍', code:'90441', name:'Ювелір Аня', cat:'Прикраси', stars:3200, mirrorShops:3, mirrorItems:14, followers:88000, returns:0, hasShop:false, foot:'Преміум-прикраси, естетичний контент.'},
-  {id:'b7', icon:'🍯', code:'20873', name:'Смачно Просто', cat:'Продукти', stars:410, mirrorShops:6, mirrorItems:22, followers:18000, returns:5, hasShop:false, foot:'Огляди українських фермерських продуктів.'},
-  {id:'b8', icon:'🎒', code:'11209', name:'Мандрівний Кіт', cat:'Аксесуари', stars:1980, mirrorShops:16, mirrorItems:70, followers:71000, returns:2, hasShop:true, foot:'Огляди спорядження для подорожей.'},
+  {id:'b1', icon:'🎬', code:'55210', name:'Мар’яна Кіт', cats:['Мода','Взуття'], stars:145600, mirrorShops:14, mirrorItems:63, followers:38000, returns:3, hasShop:true, conversion:4.8,
+    platforms:['tiktok','instagram'], formats:['video','live'], samples:['discount','return'], onSiteVisit:true, region:'Київська', regDate:'2025-02-14',
+    complaints:0, commRating:4.9, topCategory10d:{name:'Мода', count:57}, responseTime:'до 2 год', languages:'укр, англ',
+    foot:'Показую одяг так, як ношу сама — без фільтрів і зайвого пафосу.'},
+  {id:'b2', icon:'💅', code:'61044', name:'Оля Бʼюті', cats:['Косметика','Догляд'], stars:12300000, mirrorShops:9, mirrorItems:41, followers:112000, returns:1, hasShop:false, conversion:7.2,
+    platforms:['instagram','youtube'], formats:['live','video'], samples:['free','discount'], onSiteVisit:false, region:null, regDate:'2024-06-02',
+    complaints:1, commRating:4.7, topCategory10d:{name:'Косметика', count:214}, responseTime:'до 1 год', languages:'укр',
+    foot:'Тестую косметику 5 років поспіль — чесно про те, що працює, а що ні.'},
+  {id:'b3', icon:'🎮', code:'70125', name:'Данило Tech', cats:['Електроніка'], stars:9834, mirrorShops:5, mirrorItems:18, followers:25000, returns:6, hasShop:false, conversion:2.1,
+    platforms:['youtube','tiktok'], formats:['video'], samples:['buy'], onSiteVisit:false, region:null, regDate:'2025-07-19',
+    complaints:2, commRating:4.1, topCategory10d:{name:'Електроніка', count:19}, responseTime:'до 6 год', languages:'укр, рос',
+    foot:'Розбираю гаджети на деталі, щоб ти не переплачував за маркетинг.'},
+  {id:'b4', icon:'🏠', code:'44982', name:'Дім із Настею', cats:['Дім','Декор'], stars:98000, mirrorShops:11, mirrorItems:52, followers:47000, returns:2, hasShop:true, conversion:5.4,
+    platforms:['instagram','facebook'], formats:['post','video'], samples:['free','freeReturn'], onSiteVisit:true, region:'Львівська', regDate:'2024-11-30',
+    complaints:0, commRating:5.0, topCategory10d:{name:'Декор', count:33}, responseTime:'до 3 год', languages:'укр',
+    foot:'Створюю затишок у маленьких квартирах — крок за кроком, без ремонту.'},
+  {id:'b5', icon:'👟', code:'33217', name:'Стріт Кулс', cats:['Взуття','Мода'], stars:156000, mirrorShops:7, mirrorItems:29, followers:64000, returns:4, hasShop:false, conversion:3.9,
+    platforms:['tiktok'], formats:['video','live'], samples:['discount'], onSiteVisit:false, region:null, regDate:'2025-01-08',
+    complaints:1, commRating:4.4, topCategory10d:{name:'Взуття', count:41}, responseTime:'до 4 год', languages:'укр, англ',
+    foot:'Стрітвір і кросівки — знаю, що зараз в тренді, а що вже ні.'},
+  {id:'b6', icon:'💍', code:'90441', name:'Ювелір Аня', cats:['Прикраси'], stars:320000, mirrorShops:3, mirrorItems:14, followers:88000, returns:0, hasShop:false, conversion:6.6,
+    platforms:['instagram'], formats:['post'], samples:['buy','discount'], onSiteVisit:false, region:null, regDate:'2023-09-21',
+    complaints:0, commRating:4.95, topCategory10d:{name:'Прикраси', count:22}, responseTime:'до 1 год', languages:'укр, англ',
+    foot:'Естетика й деталі — прикраси, які хочеться розглядати довго.'},
+  {id:'b7', icon:'🍯', code:'20873', name:'Смачно Просто', cats:['Продукти'], stars:41000, mirrorShops:6, mirrorItems:22, followers:18000, returns:5, hasShop:false, conversion:2.8,
+    platforms:['tiktok','telegram'], formats:['video','post'], samples:['free'], onSiteVisit:true, region:'Закарпатська', regDate:'2025-04-11',
+    complaints:3, commRating:3.8, topCategory10d:{name:'Продукти', count:12}, responseTime:'до 8 год', languages:'укр',
+    foot:'Шукаю чесних українських фермерів і показую їх продукт наживо.'},
+  {id:'b8', icon:'🎒', code:'11209', name:'Мандрівний Кіт', cats:['Аксесуари','Спорядження'], stars:198000, mirrorShops:16, mirrorItems:70, followers:71000, returns:2, hasShop:true, conversion:4.2,
+    platforms:['youtube','instagram','tiktok'], formats:['video','live'], samples:['buy','return'], onSiteVisit:true, region:'Одеська', regDate:'2024-03-05',
+    complaints:0, commRating:4.6, topCategory10d:{name:'Спорядження', count:26}, responseTime:'до 3 год', languages:'укр, англ',
+    foot:'Тестую спорядження в реальних подорожах, не в студії.'},
 ];
 
 const SORTS = {
@@ -280,12 +365,20 @@ const SORTS = {
     {id:'new', label:'Нові', key:i=>-parseInt(i.code)},
   ],
   blogger: [
-    {id:'stars', label:'За зірочками', key:i=>-i.stars},
-    {id:'followers', label:'За підписниками', key:i=>-i.followers},
-    {id:'cat', label:'Категорія', key:i=>i.cat},
-    {id:'new', label:'Нові', key:i=>-parseInt(i.code)},
+    {id:'stars', label:'Зірок', key:i=>i.stars},
+    {id:'conversion', label:'Конверсія', key:i=>i.conversion},
+    {id:'items', label:'Товарів', key:i=>i.mirrorItems},
+    {id:'shops', label:'Магазини', key:i=>i.mirrorShops},
+    {id:'returns', label:'Повернень', key:i=>i.returns},
+    {id:'regdate', label:'Дата реєстрації', key:i=>new Date(i.regDate).getTime()},
   ]
 };
+
+function formatStars(n){
+  if(n>=1000000) return '★ '+(n/1000000).toLocaleString('uk-UA',{maximumFractionDigits:1})+' млн';
+  if(n>=1000) return '★ '+(n/1000).toLocaleString('uk-UA',{maximumFractionDigits:1})+' тис';
+  return '★ '+n.toLocaleString('uk-UA');
+}
 
 /* ============ STATE ============ */
 let state = {
@@ -293,10 +386,19 @@ let state = {
   density: 'simple',
   search: '',
   sortId: null,
+  sortDir: 'desc',
   filterOpen: false,
   filterOnlyStock: false,
   filterOnlyEq: false,
   filterOnlyShop: false,
+  platformFilter: new Set(),
+  formatFilter: new Set(),
+  categoryFilter: new Set(),
+  sampleFilter: new Set(),
+  convMin: '',
+  convMax: '',
+  onSiteOnly: false,
+  regionFilter: '',
   fav: {},
   expandedFeed: {},
   modalId: null,
@@ -317,9 +419,11 @@ function cardModel(type, item){
         {val:item.sold3d, lab:'продано за 3 дні', cls:''},
         {val:item.comm+'%', lab:'комісія (тільки PRO)', cls:'gold'},
         {val:item.stock+' шт', lab:'залишок', cls:''},
-        {val:item.shopRating+'%', lab:'рейтинг магазину', cls: item.shopRating>=95?'zone-green':(item.shopRating>=90?'zone-orange':'zone-black')},
+        {val:item.shopStatus==='eq'?'Екваєр':'Іван', lab:'статус магазину', cls:''},
         {val:item.top?'🔥':'—', lab:'у топі', cls:''}
       ],
+      risk:{pct:100-item.shopRating, label:'ризик повернень', zone: item.shopRating>=95?'green':(item.shopRating>=90?'orange':'black')},
+      earnings:{price:item.price, comm:item.comm, stars: Math.round(item.price*item.comm/100)},
       foot:item.foot,
       expand:[
         ['Категорія', item.cat],
@@ -341,8 +445,9 @@ function cardModel(type, item){
         {val:'★ '+item.greyMirrors, lab:'Оглядачів-дзеркал', cls:'grey'},
         {val:'★ '+item.goldMirrors, lab:'PRO-дзеркал', cls:'gold'},
         {val:item.requests, lab:'нових запитів', cls:''},
-        {val:item.returns+'%', lab:'повернень', cls: item.returns<=5?'zone-green':(item.returns<=15?'zone-orange':'zone-black')}
+        {val:Math.min(100,80+item.goldMirrors)+'%', lab:'виплачено комісій', cls:''}
       ],
+      risk:{pct:item.returns, label:'ризик повернень', zone: item.returns<=5?'green':(item.returns<=15?'orange':'black')},
       foot:item.foot,
       expand:[
         ['Категорії', item.cats],
@@ -354,24 +459,33 @@ function cardModel(type, item){
     };
   }
   // blogger
+  const platformLabels = item.platforms.map(p=>PLATFORMS.find(x=>x.id===p).label).join(', ');
+  const formatLabels = item.formats.map(f=>FORMATS.find(x=>x.id===f).label).join(', ');
+  const mainPlatform = PLATFORMS.find(x=>x.id===item.platforms[0]).label;
+  const returnsZone = item.returns<=5?'zone-green':(item.returns<=15?'zone-orange':'zone-black');
   return {
-    icon:item.icon, code:'код '+item.code, name:item.name,
-    meta:item.cat+' · формати: Reels, Live',
-    badges:[{cls:'gold', text:'★ Блогер PRO'}].concat(item.hasShop?[{cls:'purple', text:'🏬 має Магазин'}]:[]),
+    icon:item.icon, code:item.code, name:item.name,
+    metaLines:[platformLabels, formatLabels],
+    badges:[{cls:'gold', text:'★ Блогер PRO'}].concat(item.hasShop?[{cls:'violet', text:'має Магазин'}]:[]),
     panels:[
-      {val:'★ '+item.stars.toLocaleString('uk-UA'), lab:'золотих зірочок', cls:'gold'},
-      {val:item.cat, lab:'топ-категорія', cls:''},
+      {val:formatStars(item.stars), lab:'золотих зірочок', cls:'gold'},
       {val:item.mirrorShops, lab:'дзеркалить магазинів', cls:''},
       {val:item.mirrorItems, lab:'дзеркалить товарів', cls:''},
-      {val:(item.followers/1000).toFixed(0)+' тис', lab:'підписників', cls:''},
-      {val:item.returns+'%', lab:'повернень', cls: item.returns<=5?'zone-green':(item.returns<=15?'zone-orange':'zone-black')}
+      {val:item.conversion+'%', lab:'конверсія', cls:''},
+      {val:item.returns+'%', lab:'% повернень', cls:returnsZone},
+      {val:mainPlatform, lab:'основна платформа', cls:''}
     ],
     foot:item.foot,
     expand:[
-      ['Формати контенту','Reels, розпаковки, Live'],
-      ['Відео-оглядів', item.mirrorItems],
+      ['Категорії', item.cats.join(', ')],
+      ['Топ-категорія за 10 днів', `${item.topCategory10d.name} — ${item.topCategory10d.count} продажів`],
+      ['Кількість скарг', item.complaints],
+      ['Рейтинг комунікації', '★ '+item.commRating.toFixed(1)+' / 5 — оцінка від Магазинів'],
+      ['Середній час відповіді', item.responseTime],
+      ['Мови спілкування', item.languages],
+      ['Виїзд на об\'єкт', item.onSiteVisit ? ('Так, '+item.region) : 'Ні'],
+      ['Дата реєстрації', new Date(item.regDate).toLocaleDateString('uk-UA')],
       ['Власний магазин', item.hasShop?'Так — дивитись картку':'Немає'],
-      ['Скарг','0'],
     ],
     buttons:[{label:'Анкета',kind:'ghost'},{label:'Запросити',kind:'primary'},{label:'Скарга',kind:'warn'}]
   };
@@ -386,19 +500,45 @@ function renderFullCard(type, item, opts){
   const panelsHtml = m.panels.map(p=>`<div class="panel ${p.cls}"><div class="val">${p.val}</div><div class="lab">${p.lab}</div></div>`).join('');
   const expandRows = m.expand.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('');
   const buttonsHtml = m.buttons.map(b=>`<button class="btn ${b.kind}">${b.label}</button>`).join('');
+  const photoClass = type==='shop' ? 'avatar-shop' : (type==='blogger' ? 'avatar-blogger' : '');
+  const riskZoneCls = m.risk ? 'zone-'+m.risk.zone : '';
+  const riskLabelText = m.risk ? (m.risk.zone==='green'?'Безпечна':(m.risk.zone==='orange'?'Увага':'Критична')) : '';
+  const riskHtml = m.risk ? `
+    <div class="risk-row">
+      <span class="risk-name">${m.risk.label}</span>
+      <span class="risk-pill ${riskZoneCls}"><span class="dot"></span>${m.risk.pct}% · ${riskLabelText}</span>
+    </div>
+    <div class="risk-bar"><span class="marker" style="left:${Math.min(96,Math.max(4,m.risk.pct))}%;"></span></div>
+  ` : '';
+  const earnHtml = m.earnings ? `
+    <div class="earn-box">
+      <div class="earn-top"><span class="earn-label">Заробіток за 1 продаж</span><span class="earn-val">★ ${m.earnings.stars}</span></div>
+      <div class="earn-formula">Ціна ${m.earnings.price} ₴ × комісія ${m.earnings.comm}% = ${m.earnings.stars} зірочок (1★ = 1₴)</div>
+    </div>
+  ` : '';
+  const metaHtml = m.metaLines
+    ? m.metaLines.map(l=>`<p class="meta-line">${l}</p>`).join('')
+    : `<p class="meta-line">${m.meta}</p>`;
+  const codeLinkHtml = `<a href="https://${m.code}.beroo.online" target="_blank" rel="noopener" class="code-link" onclick="event.stopPropagation()">${m.code}.beroo.online</a>`;
+  const isBloggerCard = type==='blogger';
   return `
     <div class="card" data-id="${item.id}">
-      <div class="card-head">
-        <div class="photo-lg">${m.icon}</div>
+      <div class="card-head ${isBloggerCard?'centered':''}">
+        <div class="head-photo-col">
+          <div class="photo-lg ${photoClass}">${m.icon}</div>
+          ${isBloggerCard ? `<div class="code-under">${codeLinkHtml}</div>` : ''}
+        </div>
         <div class="head-main">
           <p class="name">${m.name}</p>
-          <p class="meta-line">${m.meta}</p>
+          ${metaHtml}
           ${badgesHtml?`<div class="badges">${badgesHtml}</div>`:''}
         </div>
         <button class="fav ${isFav?'on':''}" data-fav="${item.id}" aria-label="В обране">${isFav?'♥':'♡'}</button>
-        <span class="code">${m.code}</span>
+        ${!isBloggerCard ? `<span class="code">${m.code}</span>` : ''}
       </div>
       <div class="panels">${panelsHtml}</div>
+      ${earnHtml}
+      ${riskHtml}
       <div class="foot">${m.foot}</div>
       <button class="expand-toggle" data-expand="${item.id}">
         <span>${isOpen?'Згорнути':'Детальніше'}</span>
@@ -415,12 +555,32 @@ function renderFullCard(type, item, opts){
 
 function renderTile(type, item){
   const m = cardModel(type, item);
-  const stat = type==='product' ? item.price+' ₴'
-             : type==='shop' ? (item.status==='eq'?'⚡ Екваєр':'🏦 Іван')
-             : '★ '+item.stars.toLocaleString('uk-UA');
+  const photoClass = type==='shop' ? 'avatar-shop' : (type==='blogger' ? 'avatar-blogger' : '');
+  const isFav = !!state.fav[item.id];
+
+  if(type==='blogger'){
+    const codeLinkHtml = `<a href="https://${item.code}.beroo.online" target="_blank" rel="noopener" class="code-link" onclick="event.stopPropagation()">${item.code}</a>`;
+    return `
+      <div class="tile" data-id="${item.id}">
+        <div class="photo ${photoClass}">${m.icon}</div>
+        <p class="t-name">${m.name}</p>
+        <div class="t-stat">${formatStars(item.stars)}</div>
+        <div class="t-stat" style="color:var(--ink-faint);font-weight:600;">${item.returns}% повернень</div>
+        <div class="t-foot-row">
+          <span class="t-code">${codeLinkHtml}</span>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <button class="tile-fav ${isFav?'on':''}" data-tile-fav="${item.id}" aria-label="В обране">${isFav?'♥':'♡'}</button>
+            <button class="t-more" data-open-modal="${item.id}" aria-label="Детальніше">···</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  const stat = type==='product' ? item.price+' ₴' : (item.status==='eq'?'⚡ Екваєр':'🏦 Іван');
   return `
     <div class="tile" data-id="${item.id}">
-      <div class="photo">${m.icon}</div>
+      <div class="photo ${photoClass}">${m.icon}</div>
       <p class="t-name">${m.name}</p>
       <div class="t-stat">${stat}</div>
       <div class="t-foot-row">
@@ -431,40 +591,106 @@ function renderTile(type, item){
   `;
 }
 
+function zoneOf(type, item){
+  if(type==='product') return item.shopRating>=95?'green':(item.shopRating>=90?'orange':'black');
+  return item.returns<=5?'green':(item.returns<=15?'orange':'black');
+}
+
 /* ============ TOOLBAR ============ */
 function renderToolbar(){
+  const isBlogger = state.type === 'blogger';
   const sorts = SORTS[state.type];
-  const chips = sorts.map(s=>`<button class="chip ${state.sortId===s.id?'active':''}" data-sort="${s.id}">${s.label}</button>`).join('');
-  const total = dataFor(state.type).length;
-  const countsLabel = state.type==='product' ? `<b>${total}</b> товарів · <b>${new Set(dataFor('product').map(p=>p.shop)).size}</b> магазинів`
-    : state.type==='shop' ? `<b>${total}</b> магазинів · <b>${dataFor('shop').reduce((a,s)=>a+s.greyMirrors+s.goldMirrors,0)}</b> дзеркал`
-    : `<b>${total}</b> блогерів PRO`;
+  const chips = isBlogger
+    ? sorts.map(s=>{
+        const active = state.sortId===s.id;
+        const arrow = active ? (state.sortDir==='desc' ? ' ↓' : ' ↑') : '';
+        return `<button class="chip ${active?'active':''}" data-sort="${s.id}">${s.label}${arrow}</button>`;
+      }).join('')
+    : sorts.map(s=>`<button class="chip ${state.sortId===s.id?'active':''}" data-sort="${s.id}">${s.label}</button>`).join('');
+
+  const all = dataFor(state.type);
+  const total = all.length;
+
+  let countsHtml = '';
+  if(state.type==='product'){
+    const shopsN = new Set(all.map(p=>p.shop)).size;
+    const mirrorsN = all.reduce((a,p)=>a+p.mirrors,0);
+    countsHtml = `<span class="count-chip fill">${total} товарів</span><span class="count-chip outline">${shopsN} магазинів</span><span class="count-chip tint">${mirrorsN} дзеркал</span>`;
+  } else if(state.type==='shop'){
+    const itemsN = all.reduce((a,s)=>a+s.items,0);
+    const mirrorsN = all.reduce((a,s)=>a+s.greyMirrors+s.goldMirrors,0);
+    countsHtml = `<span class="count-chip fill">${total} магазинів</span><span class="count-chip outline">${itemsN} товарів</span><span class="count-chip tint">${mirrorsN} дзеркал</span>`;
+  } else {
+    countsHtml = `<span class="count-chip fill">${total} блогерів</span><span class="count-chip outline gold">Усі з ФОП ★</span>`;
+  }
+  const zones = all.map(i=>zoneOf(state.type,i));
+  const gN = zones.filter(z=>z==='green').length, oN = zones.filter(z=>z==='orange').length, bN = zones.filter(z=>z==='black').length;
+  const riskChipsHtml = `<span class="count-chip zone-chip zone-green">${gN} безпечних</span><span class="count-chip zone-chip zone-orange">${oN} увага</span><span class="count-chip zone-chip zone-black">${bN} критичних</span>`;
+
+  let platformRow = '', formatRow = '';
+  if(isBlogger){
+    const pAll = state.platformFilter.size===0;
+    platformRow = `<button class="chip ${pAll?'active':''}" data-platform="__all__">Усі</button>` +
+      PLATFORMS.map(p=>`<button class="chip ${state.platformFilter.has(p.id)?'active':''}" data-platform="${p.id}">${p.label}</button>`).join('');
+    const fAll = state.formatFilter.size===0;
+    formatRow = `<button class="chip ${fAll?'active':''}" data-format="__all__">Усі</button>` +
+      FORMATS.map(f=>`<button class="chip ${state.formatFilter.has(f.id)?'active':''}" data-format="${f.id}">${f.label}</button>`).join('');
+  }
 
   const filterOptions = state.type==='product'
     ? `<label><input type="checkbox" id="fStock" ${state.filterOnlyStock?'checked':''}> Лише в наявності</label>
        <label><input type="checkbox" id="fEq" ${state.filterOnlyEq?'checked':''}> Лише магазини з еквайрингом</label>`
     : state.type==='shop'
     ? `<label><input type="checkbox" id="fEq" ${state.filterOnlyEq?'checked':''}> Лише з еквайрингом (Екваєр)</label>`
-    : `<label><input type="checkbox" id="fShop" ${state.filterOnlyShop?'checked':''}> Лише з власним Магазином</label>`;
+    : renderBloggerFilterDrawer();
 
   document.getElementById('toolbar').innerHTML = `
     ${state.type==='product' ? `<div class="chip-scroll" style="margin-bottom:8px;"><button class="chip" id="myCatalogBtn">🎥 Мій каталог для блогерів</button></div>` : ''}
     <div class="chip-scroll">${chips}</div>
-    <div class="counts-row">${countsLabel}</div>
-    <div class="search-row">
-      <span class="icon">🔍</span>
-      <input type="text" id="searchInput" placeholder="Пошук…" value="${state.search}">
+    ${isBlogger ? `<div class="chip-scroll">${platformRow}</div><div class="chip-scroll">${formatRow}</div>` : ''}
+    <div class="counts-row">${countsHtml}</div>
+    <div class="counts-row">${riskChipsHtml}</div>
+    <div class="search-filter-row">
+      <div class="search-row" style="margin-bottom:0;flex:1;">
+        <span class="icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Пошук…" value="${state.search}">
+      </div>
+      <button class="util-btn ${state.filterOpen?'on':''}" id="filtersBtn" style="flex:none;width:auto;padding:10px 14px;">🔍 Фільтри</button>
     </div>
     <div class="filter-drawer ${state.filterOpen?'open':''}" id="filterDrawer">${filterOptions}</div>
     <div class="util-row">
-      <button class="util-btn ${state.filterOpen?'on':''}" id="filtersBtn">🔍 Фільтри</button>
       <button class="util-btn" id="refreshBtn"><span class="spin" id="refreshSpin">↻</span> Оновити</button>
     </div>
   `;
 
   document.querySelectorAll('.chip[data-sort]').forEach(el=>{
     el.addEventListener('click', ()=>{
-      state.sortId = state.sortId===el.dataset.sort ? null : el.dataset.sort;
+      if(isBlogger){
+        if(state.sortId === el.dataset.sort){
+          state.sortDir = state.sortDir==='desc' ? 'asc' : 'desc';
+        } else {
+          state.sortId = el.dataset.sort;
+          state.sortDir = 'desc';
+        }
+      } else {
+        state.sortId = state.sortId===el.dataset.sort ? null : el.dataset.sort;
+      }
+      renderAll();
+    });
+  });
+  document.querySelectorAll('.chip[data-platform]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const id = el.dataset.platform;
+      if(id==='__all__') state.platformFilter.clear();
+      else { state.platformFilter.has(id) ? state.platformFilter.delete(id) : state.platformFilter.add(id); }
+      renderAll();
+    });
+  });
+  document.querySelectorAll('.chip[data-format]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const id = el.dataset.format;
+      if(id==='__all__') state.formatFilter.clear();
+      else { state.formatFilter.has(id) ? state.formatFilter.delete(id) : state.formatFilter.add(id); }
       renderAll();
     });
   });
@@ -480,19 +706,71 @@ function renderToolbar(){
     const s = document.getElementById('refreshSpin');
     s.classList.remove('spinning'); void s.offsetWidth; s.classList.add('spinning');
   });
-  ['fStock','fEq','fShop'].forEach(id=>{
+  ['fStock','fEq','fShop','fOnSite'].forEach(id=>{
     const el = document.getElementById(id);
     if(!el) return;
     el.addEventListener('change', e=>{
       if(id==='fStock') state.filterOnlyStock = e.target.checked;
       if(id==='fEq') state.filterOnlyEq = e.target.checked;
       if(id==='fShop') state.filterOnlyShop = e.target.checked;
+      if(id==='fOnSite') state.onSiteOnly = e.target.checked;
       renderList();
     });
   });
+  if(isBlogger){
+    document.querySelectorAll('[data-cat-f]').forEach(el=>{
+      el.addEventListener('change', e=>{
+        const c = el.dataset.catF;
+        e.target.checked ? state.categoryFilter.add(c) : state.categoryFilter.delete(c);
+        renderList();
+      });
+    });
+    document.querySelectorAll('[data-sample-f]').forEach(el=>{
+      el.addEventListener('change', e=>{
+        const s = el.dataset.sampleF;
+        e.target.checked ? state.sampleFilter.add(s) : state.sampleFilter.delete(s);
+        renderList();
+      });
+    });
+    const convMinEl = document.getElementById('fConvMin'), convMaxEl = document.getElementById('fConvMax');
+    if(convMinEl) convMinEl.addEventListener('input', e=>{ state.convMin = e.target.value; renderList(); });
+    if(convMaxEl) convMaxEl.addEventListener('input', e=>{ state.convMax = e.target.value; renderList(); });
+    const regionEl = document.getElementById('fRegion');
+    if(regionEl) regionEl.addEventListener('change', e=>{ state.regionFilter = e.target.value; renderList(); });
+  }
   if(document.getElementById('myCatalogBtn')){
     document.getElementById('myCatalogBtn').addEventListener('click', ()=> alert('Веде на «Каталог → Товари/Послуги» цього блогера-продавця.'));
   }
+}
+
+function renderBloggerFilterDrawer(){
+  const allCats = [...new Set(BLOGGERS.flatMap(b=>b.cats))].sort();
+  const platformChecks = PLATFORMS.map(p=>`<label><input type="checkbox" data-platform-f="${p.id}" ${state.platformFilter.has(p.id)?'checked':''} disabled> ${p.label}</label>`).join('');
+  const formatChecks = FORMATS.map(f=>`<label><input type="checkbox" data-format-f="${f.id}" ${state.formatFilter.has(f.id)?'checked':''} disabled> ${f.label}</label>`).join('');
+  const catChecks = allCats.map(c=>`<label><input type="checkbox" data-cat-f="${c}" ${state.categoryFilter.has(c)?'checked':''}> ${c}</label>`).join('');
+  const sampleChecks = SAMPLE_TYPES.map(s=>`<label><input type="checkbox" data-sample-f="${s.id}" ${state.sampleFilter.has(s.id)?'checked':''}> ${s.label}</label>`).join('');
+  const regionOptions = ['<option value="">Будь-яка область</option>'].concat(UA_REGIONS.map(r=>`<option value="${r}" ${state.regionFilter===r?'selected':''}>${r}</option>`)).join('');
+  return `
+    <div class="filter-section-title">Платформи <span style="opacity:.55;font-weight:400;text-transform:none;">(кнопки вище)</span></div>
+    ${platformChecks}
+    <div class="filter-section-title">Формати контенту <span style="opacity:.55;font-weight:400;text-transform:none;">(кнопки вище)</span></div>
+    ${formatChecks}
+    <div class="filter-section-title">Категорії</div>
+    ${catChecks}
+    <div class="filter-section-title">Конверсія, %</div>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <input type="number" id="fConvMin" placeholder="від" value="${state.convMin}" style="width:70px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;">
+      <span style="color:var(--ink-faint);">—</span>
+      <input type="number" id="fConvMax" placeholder="до" value="${state.convMax}" style="width:70px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;">
+    </div>
+    <div class="filter-section-title">Продавець і Блогер одночасно</div>
+    <label><input type="checkbox" id="fShop" ${state.filterOnlyShop?'checked':''}> Має власний магазин у системі</label>
+    <div class="filter-section-title">Тип роботи зі зразками</div>
+    ${sampleChecks}
+    <div class="filter-section-title">Виїзд на об'єкт</div>
+    <label><input type="checkbox" id="fOnSite" ${state.onSiteOnly?'checked':''}> Лише з можливістю виїзду</label>
+    <select id="fRegion" style="width:100%;margin-top:6px;padding:8px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);">${regionOptions}</select>
+  `;
 }
 
 /* ============ LIST ============ */
@@ -507,16 +785,31 @@ function currentItems(){
     if(state.filterOnlyEq) items = items.filter(i=>i.shopStatus==='eq');
   }
   if(state.type==='shop' && state.filterOnlyEq) items = items.filter(i=>i.status==='eq');
-  if(state.type==='blogger' && state.filterOnlyShop) items = items.filter(i=>i.hasShop);
+  if(state.type==='blogger'){
+    if(state.filterOnlyShop) items = items.filter(i=>i.hasShop);
+    if(state.platformFilter.size) items = items.filter(i=>i.platforms.some(p=>state.platformFilter.has(p)));
+    if(state.formatFilter.size) items = items.filter(i=>i.formats.some(f=>state.formatFilter.has(f)));
+    if(state.categoryFilter.size) items = items.filter(i=>i.cats.some(c=>state.categoryFilter.has(c)));
+    if(state.sampleFilter.size) items = items.filter(i=>i.samples.some(s=>state.sampleFilter.has(s)));
+    if(state.convMin !== '') items = items.filter(i=>i.conversion >= parseFloat(state.convMin));
+    if(state.convMax !== '') items = items.filter(i=>i.conversion <= parseFloat(state.convMax));
+    if(state.onSiteOnly) items = items.filter(i=>i.onSiteVisit);
+    if(state.regionFilter) items = items.filter(i=>i.region===state.regionFilter);
+  }
 
   const sortDef = SORTS[state.type].find(s=>s.id===state.sortId);
   if(sortDef){
     if(sortDef.filter) items = items.filter(sortDef.filter);
-    items.sort((a,b)=>{
-      const ka = sortDef.key(a), kb = sortDef.key(b);
-      if(typeof ka === 'string') return ka.localeCompare(kb);
-      return ka - kb;
-    });
+    if(state.type==='blogger'){
+      const dir = state.sortDir==='asc' ? 1 : -1;
+      items.sort((a,b)=> dir * (sortDef.key(a) - sortDef.key(b)));
+    } else {
+      items.sort((a,b)=>{
+        const ka = sortDef.key(a), kb = sortDef.key(b);
+        if(typeof ka === 'string') return ka.localeCompare(kb);
+        return ka - kb;
+      });
+    }
   }
   return items;
 }
@@ -535,6 +828,13 @@ function renderList(){
         state.modalId = btn.dataset.openModal;
         state.modalExpanded = false;
         renderModal();
+      });
+    });
+    wrap.querySelectorAll('[data-tile-fav]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const id = btn.dataset.tileFav;
+        state.fav[id] = !state.fav[id];
+        renderList();
       });
     });
   } else {
@@ -593,8 +893,10 @@ document.querySelectorAll('#typeSwitch button').forEach(btn=>{
     document.querySelectorAll('#typeSwitch button').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     state.type = btn.dataset.type;
-    state.sortId = null; state.search=''; state.filterOpen=false;
+    state.sortId = null; state.sortDir='desc'; state.search=''; state.filterOpen=false;
     state.filterOnlyStock=false; state.filterOnlyEq=false; state.filterOnlyShop=false;
+    state.platformFilter=new Set(); state.formatFilter=new Set(); state.categoryFilter=new Set(); state.sampleFilter=new Set();
+    state.convMin=''; state.convMax=''; state.onSiteOnly=false; state.regionFilter='';
     renderAll();
   });
 });
