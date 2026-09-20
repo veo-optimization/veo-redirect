@@ -653,7 +653,7 @@ function renderToolbar(){
     const notCoopN = total - coopN;
     coopRow = `
       <button class="chip coop-all ${state.coopFilter==='all'?'active':''}" data-coop="all">Усі ${total}</button>
-      <button class="chip coop-fav ${state.favOnlyBlogger?'active':''}" data-coop="fav" aria-label="Обрані">${state.favOnlyBlogger?'♥':'♡'}</button>
+      <button class="chip coop-fav ${state.favOnlyBlogger?'active':''}" data-coop="fav" aria-label="Обрані">${state.favOnlyBlogger?'♥':'♡'} ${all.filter(b=>state.fav[b.id]).length}</button>
       <button class="chip coop-yes ${state.coopFilter==='cooperating'?'active':''}" data-coop="cooperating">Співпрацюю ${coopN}</button>
       <button class="chip coop-no ${state.coopFilter==='not_cooperating'?'active':''}" data-coop="not_cooperating">Не співпрацюю ${notCoopN}</button>
     `;
