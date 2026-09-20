@@ -294,7 +294,7 @@
   <header class="top">
     <h1>BEROO · Блоковий редактор структури</h1>
     <p>Материнські й дочірні блоки — без візуальної карти й ниточок. Кожен блок (пункт меню, підпункт, сторінка сайту, ідея) має опис, перелік кнопок/полів із функціоналом, і список пов'язаних блоків (текстом: хто з ким і чому пов'язаний). Внизу — живий JSON.</p>
-    <div class="hint">💡 <span><b>Як користуватись:</b> клік по заголовку розкриває блок. «+ Додати дочірній блок» — вкладений підпункт. «+ Додати елемент» — кнопка/поле з описом. «+ Додати зв'язок» — посилання на інший блок з поясненням, чому вони пов'язані.</span></div>
+    <div class="hint">💡 <span><b>Як користуватись системою:</b> клік по заголовку розкриває блок. «+ Додати дочірній блок» — вкладений підпункт. «+ Додати елемент» — кнопка/поле з описом. «+ Додати зв'язок» — посилання на інший блок з поясненням, чому вони пов'язані.</span></div>
   </header>
 
   <div class="panel filter-panel" id="syncPanel" style="border-color:#DCEFE1;background:linear-gradient(180deg,#FAFFFB,#F2FBF5);">
@@ -451,6 +451,20 @@
     </div>
   </details>
 
+  <div class="console-wrap" style="background:#fff;border:1px solid var(--border);">
+    <div style="padding:16px 18px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+        <div style="width:26px;height:26px;min-width:26px;border-radius:8px;background:#191C24;color:var(--console-accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">📥</div>
+        <h2 style="font-size:16px;margin:0;">Застосувати новий JSON</h2>
+      </div>
+      <p class="section-desc" style="margin-top:0;">Встав сюди повний JSON (структура + термінологія) — наприклад, той, що дав Клод у чаті. Кнопка повністю перебудує документ і одразу збереже нову версію.</p>
+      <div class="field"><label>JSON</label><textarea id="importJsonInput" placeholder='{"structure": [...], "terminology": [...]}' style="min-height:110px;font-family:ui-monospace,monospace;font-size:12px;" autocomplete="off"></textarea></div>
+      <div class="field"><label>Короткий опис змін (для версії)</label><input type="text" id="importJsonDesc" placeholder="напр.: розгорнули логіку Дашборду" autocomplete="off"></div>
+      <button class="btn" id="applyImportedJsonBtn">Застосувати новий JSON</button>
+      <span id="importJsonStatus" style="font-size:12px;color:var(--muted);margin-left:8px;"></span>
+    </div>
+  </div>
+
   <div class="console-wrap">
     <div class="console-head">
       <div class="dots"><div class="dot" style="background:#EB6259"></div><div class="dot" style="background:#F4BF50"></div><div class="dot" style="background:#5FC258"></div></div>
@@ -479,7 +493,8 @@
     <div style="width:26px;height:26px;min-width:26px;border-radius:8px;background:#191C24;color:var(--console-accent);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;">📋</div>
     <h2 style="font-size:16px;margin:0;">Лог дій і версій</h2>
     <span class="section-count" id="actionLogCount" style="margin-left:8px;"></span>
-    <button class="btn ghost" id="clearActionLogBtn" style="margin-left:auto;">Очистити лог</button>
+    <button class="btn ghost" id="copyRecentChangesBtn" style="margin-left:auto;">📋 Копіювати зміни з останнього збереження</button>
+    <button class="btn ghost" id="clearActionLogBtn">Очистити лог</button>
   </div>
   <p class="section-desc">Хто, з якого пристрою і що саме змінював — синхронізується разом з документом, тож видно з будь-якого пристрою після завантаження з хмари.</p>
   <div class="copy-logs" id="actionLogView" style="max-height:340px;"></div>
@@ -2945,6 +2960,89 @@ document.getElementById('collapseAllVersionsBtn').addEventListener('click', ()=>
   renderVersionsList();
 });
 document.getElementById('refreshVersionsBtn').addEventListener('click', renderVersionsList);
+
+/* ======================================================================
+   ЗАСТОСУВАННЯ НОВОГО JSON (від Клода в чаті)
+====================================================================== */
+function buildFromImportedJSON(data){
+  let newTerms = [];
+  (data.terminology||[]).forEach(t=>{
+    const parentRole = t.role ? newTerms.find(x=>x.term===t.role) : null;
+    newTerms.push({ id: uid('t'), term: t.term, funcType: t.function || 'Інше', explanation: t.explanation||'', parentRole: parentRole?parentRole.id:'', synonyms: t.synonyms||[], code: t.codeExample||'' });
+  });
+  function mkElFromImport(e){
+    return { id: uid('e'), name: e.name||'', type: e.type||EL_TYPES[0], desc: e.description||'', code: e.codeExample||'', roleIds: [], _roleNames: e.rolesFromTerminology||[] };
+  }
+  function mkNodeFromImport(n){
+    const blockTypeKey = Object.keys(BLOCK_TYPE_LABEL).find(k=>BLOCK_TYPE_LABEL[k]===n.blockType) || '';
+    return {
+      id: uid('b'), title: n.title||'(без назви)', roles: n.rolesNote||'', roleIds: [], _roleNames: n.rolesFromTerminology||[],
+      description: n.noChangesNeeded ? '' : (n.description||''), code: n.codeExample||'',
+      elements: (n.elements||[]).map(mkElFromImport),
+      links: (n.links||[]).map(l=>({id:uid('l'), targetId:'', _targetTitle:l.target, reason:l.reason||'', code:l.codeExample||'', roleIds:[], _roleNames:l.rolesFromTerminology||[]})),
+      children: (n.children||[]).map(mkNodeFromImport),
+      color: n.color||'', order: ORDER_COUNTER++, blockType: blockTypeKey, blockTypeComment: n.blockTypeComment||'', noChanges: !!n.noChangesNeeded
+    };
+  }
+  const newRoots = (data.structure||[]).map(mkNodeFromImport);
+  const flat = flatten(newRoots);
+  function resolveRoles(namesArr){
+    return (namesArr||[]).map(name=>{ const t=newTerms.find(x=>x.term===name); return t?t.id:null; }).filter(Boolean);
+  }
+  function walk(nodes){
+    nodes.forEach(nd=>{
+      nd.roleIds = resolveRoles(nd._roleNames); delete nd._roleNames;
+      nd.elements.forEach(e=>{ e.roleIds = resolveRoles(e._roleNames); delete e._roleNames; });
+      nd.links.forEach(l=>{
+        l.roleIds = resolveRoles(l._roleNames); delete l._roleNames;
+        const target = flat.find(f=>f.title===l._targetTitle);
+        if(target) l.targetId = target.id;
+        delete l._targetTitle;
+      });
+      walk(nd.children);
+    });
+  }
+  walk(newRoots);
+  return {roots: newRoots, terms: newTerms};
+}
+document.getElementById('applyImportedJsonBtn').addEventListener('click', async ()=>{
+  const statusEl = document.getElementById('importJsonStatus');
+  const raw = document.getElementById('importJsonInput').value.trim();
+  if(!raw){ statusEl.textContent = 'Встав JSON у поле вище'; statusEl.style.color = '#C0394B'; return; }
+  let data;
+  try{ data = JSON.parse(raw); }
+  catch(err){ statusEl.textContent = 'Некоректний JSON: ' + err.message; statusEl.style.color = '#C0394B'; return; }
+  if(!data.structure || !Array.isArray(data.structure)){ statusEl.textContent = 'У JSON немає поля "structure"'; statusEl.style.color = '#C0394B'; return; }
+  let built;
+  try{ built = buildFromImportedJSON(data); }
+  catch(err){ statusEl.textContent = 'Помилка обробки JSON: ' + err.message; statusEl.style.color = '#C0394B'; return; }
+  ROOT_NODES.length = 0;
+  built.roots.forEach(n=>ROOT_NODES.push(n));
+  TERMS = built.terms;
+  const desc = document.getElementById('importJsonDesc').value.trim() || 'Застосовано новий JSON (без опису)';
+  logAction('📥 Застосовано новий JSON: ' + desc);
+  renderTree(); renderTerms(); renderScalesManage();
+  statusEl.style.color = 'var(--muted)';
+  statusEl.textContent = 'Зберігаю…';
+  const btn = document.getElementById('applyImportedJsonBtn');
+  btn.disabled = true;
+  const ok = await performCloudSave();
+  btn.disabled = false;
+  if(ok){
+    document.getElementById('importJsonInput').value = '';
+    document.getElementById('importJsonDesc').value = '';
+    statusEl.textContent = 'Застосовано і збережено як нову версію ✓';
+    statusEl.style.color = '#2E9D6C';
+  } else {
+    statusEl.textContent = 'Застосовано локально, але збереження не вдалось — спробуй «Зберегти» вручну';
+    statusEl.style.color = '#C0394B';
+  }
+});
+document.getElementById('copyRecentChangesBtn').addEventListener('click', ()=>{
+  const btn = document.getElementById('copyRecentChangesBtn');
+  const text = actionsSinceLastVersion.length ? actionsSinceLastVersion.join('\n') : 'Змін після останнього збереження немає.';
+  copyText(text, btn, '📋 Копіювати зміни з останнього збереження');
+});
 
 renderTerms();
 renderScalesManage();
