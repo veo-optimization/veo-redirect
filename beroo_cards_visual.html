@@ -241,6 +241,9 @@
   .review-add-box{background:var(--gold-bg); border-radius:14px; padding:13px; margin-bottom:16px;}
   .review-add-label{font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:8px;}
   .review-add-box textarea{width:100%; border:1px solid var(--line); border-radius:10px; padding:9px 10px; font-family:var(--font); font-size:13px; color:var(--ink); background:var(--card); resize:vertical;}
+  .star-picker{display:flex; gap:4px; margin-bottom:9px;}
+  .star-pick{border:none; background:transparent; font-size:22px; line-height:1; color:var(--ink-faint); cursor:pointer; padding:2px;}
+  .star-pick.on{color:var(--gold);}
   .review-lock-box{background:var(--grey-star-bg); border-radius:14px; padding:13px; margin-bottom:16px;}
   .review-lock-text{font-size:12.5px; color:var(--ink-soft); line-height:1.5;}
   .review-list-label{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); margin-bottom:8px;}
@@ -446,6 +449,8 @@ let state = {
   coopFilter: 'all',
   favOnlyBlogger: false,
   reviewsFor: null,
+  draftRating: 0,
+  draftText: '',
   _filterSnapshot: null,
   fav: {},
   expandedFeed: {},
@@ -974,6 +979,8 @@ function wireCardEvents(root, isModal){
     btn.addEventListener('click', (e)=>{
       e.stopPropagation();
       state.reviewsFor = btn.dataset.target;
+      state.draftRating = 0;
+      state.draftText = '';
       renderReviews();
     });
   });
@@ -1011,10 +1018,15 @@ function renderReviews(){
     </div>
   `).join('');
 
+  const starsPickerHtml = [1,2,3,4,5].map(n=>
+    `<button class="star-pick ${n<=state.draftRating?'on':''}" data-star-pick="${n}" aria-label="${n} зірок">${n<=state.draftRating?'★':'☆'}</button>`
+  ).join('');
+
   const topSectionHtml = item.cooperating ? `
     <div class="review-add-box">
       <div class="review-add-label">Залишити відгук про «${item.name}»</div>
-      <textarea id="reviewText" placeholder="Опишіть, як пройшла співпраця…" rows="3"></textarea>
+      <div class="star-picker">${starsPickerHtml}</div>
+      <textarea id="reviewText" placeholder="Опишіть, як пройшла співпраця…" rows="3">${state.draftText}</textarea>
       <button class="btn primary" id="submitReviewBtn" style="width:100%;margin-top:8px;">Опублікувати відгук</button>
     </div>
   ` : `
@@ -1036,10 +1048,21 @@ function renderReviews(){
   `;
   backdrop.classList.add('open');
   document.getElementById('reviewsCloseBtn').addEventListener('click', closeReviews);
+  document.querySelectorAll('[data-star-pick]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      state.draftRating = parseInt(el.dataset.starPick);
+      renderReviews();
+    });
+  });
+  const textEl = document.getElementById('reviewText');
+  if(textEl) textEl.addEventListener('input', e=>{ state.draftText = e.target.value; });
   const submitBtn = document.getElementById('submitReviewBtn');
   if(submitBtn) submitBtn.addEventListener('click', ()=>{
-    const txt = document.getElementById('reviewText').value.trim();
-    alert(txt ? 'Відгук опубліковано: «'+txt+'»' : 'Спершу напишіть текст відгуку.');
+    if(!state.draftRating){ alert('Оберіть оцінку (від 1 до 5 зірок).'); return; }
+    if(!state.draftText.trim()){ alert('Спершу напишіть текст відгуку.'); return; }
+    alert('Відгук опубліковано: '+'★'.repeat(state.draftRating)+'☆'.repeat(5-state.draftRating)+' — «'+state.draftText.trim()+'»');
+    state.draftRating = 0; state.draftText = '';
+    renderReviews();
   });
   const inviteBtn = document.getElementById('inviteFromReviewsBtn');
   if(inviteBtn) inviteBtn.addEventListener('click', ()=>{
