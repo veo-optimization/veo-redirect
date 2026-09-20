@@ -165,6 +165,7 @@
   .node-block.c-black{border-left:4px solid #1A1A1A;} .node-block.c-black > summary{background:#1A1A1A;}
   .node-block.c-black > summary .node-title-text, .node-block.c-black > summary .node-role-tag, .node-block.c-black > summary .drag-handle, .node-block.c-black > summary .node-caret{color:#fff;}
   .node-block.c-black > summary .node-role-tag{background:rgba(255,255,255,.15);}
+  .node-block.c-brown{border-left:4px solid #8B5E3C;} .node-block.c-brown > summary{background:#F0E2D6;}
 
   .btn{font-family:inherit;font-size:12.5px;font-weight:600;padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:#fff;color:var(--text);cursor:pointer;}
   .btn:hover{background:var(--accent-soft);}
@@ -360,7 +361,7 @@
     <button class="btn" id="sortColorBtn">🎨 Сортувати за кольором</button>
     <button class="btn" id="restoreOrderBtn">↺ Початковий порядок</button>
     <button class="btn" id="applyDefaultRolesBtn" title="Ставить усі ролі/статуси крім «Покупець» на всіх блоках; для «САЙТ (публічна частина)» — навпаки, лише «Покупець»">🎯 Дефолтні ролі на всі блоки</button>
-    <span style="font-size:12px;color:var(--muted);">Фіолетовий = нове від мене (можна перефарбувати) · Чорний = застарілий блок, замінений новим — можна видалити</span>
+    <span style="font-size:12px;color:var(--muted);">Фіолетовий = нове від мене · Чорний = я вніс корективи в наявний блок · Коричневий = застарілий блок, замінений новим — можна видалити (усе можна перефарбувати)</span>
   </div>
   <div class="tree" id="tree"></div>
   <div class="add-root-row" id="treeAddRootRow"><button class="btn ghost" id="addRootBtn">+ Додати новий кореневий блок</button></div>
@@ -538,8 +539,8 @@ function fallbackCopy(text, done){
 function autosize(t){ if(!t) return; t.style.height='auto'; t.style.height=(t.scrollHeight+2)+'px'; }
 function autosizeAll(root){ root.querySelectorAll('textarea').forEach(autosize); }
 const EL_TYPES = ['Кнопка','Поле введення','Перемикач (toggle)','Випадаючий список','Текст / напис','Іконка / зображення','Розділ / картка','Інше'];
-const COLORS = ['red','orange','yellow','green','purple','black'];
-const COLOR_DOT = {red:'#F3AAB4', orange:'#F5C08A', yellow:'#E7D06B', green:'#A9E0BE', purple:'#CBB2F0', black:'#1A1A1A'};
+const COLORS = ['red','orange','yellow','green','purple','black','brown'];
+const COLOR_DOT = {red:'#F3AAB4', orange:'#F5C08A', yellow:'#E7D06B', green:'#A9E0BE', purple:'#CBB2F0', black:'#1A1A1A', brown:'#8B5E3C'};
 const BLOCK_TYPES = [
   {key:'crm', label:'CRM-кабінет'},
   {key:'site', label:'Сайт-магазин'},
