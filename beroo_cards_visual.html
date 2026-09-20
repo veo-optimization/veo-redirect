@@ -217,6 +217,7 @@
   .btn.primary{background:var(--primary); color:#fff;}
   .btn.warn{background:var(--card); color:var(--primary); border:1px solid var(--primary-bg);}
   .btn.muted{background:var(--grey-star-bg); color:var(--ink-soft); cursor:pointer;}
+  .btn.yellow{background:var(--card); color:var(--gold); border:1px solid #EAD9A8; cursor:pointer;}
 
   /* ---------- modal ---------- */
   .modal-backdrop{
@@ -236,6 +237,18 @@
   .modal-inner{padding:0 14px 18px; position:relative;}
 
   .page-note{font-size:11.5px; color:var(--ink-faint); line-height:1.6; padding:2px 2px 16px;}
+
+  .review-add-box{background:var(--gold-bg); border-radius:14px; padding:13px; margin-bottom:16px;}
+  .review-add-label{font-size:12.5px; font-weight:700; color:var(--ink); margin-bottom:8px;}
+  .review-add-box textarea{width:100%; border:1px solid var(--line); border-radius:10px; padding:9px 10px; font-family:var(--font); font-size:13px; color:var(--ink); background:var(--card); resize:vertical;}
+  .review-lock-box{background:var(--grey-star-bg); border-radius:14px; padding:13px; margin-bottom:16px;}
+  .review-lock-text{font-size:12.5px; color:var(--ink-soft); line-height:1.5;}
+  .review-list-label{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); margin-bottom:8px;}
+  .review-row{border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin-bottom:8px;}
+  .review-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;}
+  .review-shop{font-size:12.5px; font-weight:700; color:var(--ink);}
+  .review-stars{font-size:12px; color:var(--gold);}
+  .review-text{font-size:12.5px; color:var(--ink-soft); line-height:1.5;}
 
   @media (min-width:460px){
     .tile-grid{grid-template-columns:repeat(3,1fr);}
@@ -275,6 +288,10 @@
 
 <div class="modal-backdrop" id="modalBackdrop">
   <div class="modal-sheet" id="modalSheet"></div>
+</div>
+
+<div class="modal-backdrop" id="reviewsBackdrop" style="z-index:200;">
+  <div class="modal-sheet" id="reviewsSheet" style="max-width:420px;"></div>
 </div>
 
 <script>
@@ -321,6 +338,11 @@ const FORMATS = [
   {id:'post', label:'Пост'},
 ];
 const UA_REGIONS = ['Київська','Львівська','Одеська','Харківська','Дніпропетровська','Закарпатська','Івано-Франківська'];
+const DEMO_REVIEWS = [
+  {shop:'Urban Line', rating:5, text:'Чітко дотримується домовлених термінів, контент завжди у стилі бренду.'},
+  {shop:'SkinLab UA', rating:4, text:'Гарна якість роликів, іноді трохи затримує з публікацією.'},
+  {shop:'TechDrop', rating:5, text:'Дуже прискіпливо готується до огляду — видно, що дійсно тестує товар.'},
+];
 
 const BLOGGERS = [
   {id:'b1', icon:'🎬', code:'55210', name:'Мар’яна Кіт', cats:['Мода','Взуття'], stars:145600, mirrorShops:14, mirrorItems:63, followers:38000, returns:3, hasShop:true, conversion:4.8, cooperating:true, yourStars:12500,
@@ -416,6 +438,7 @@ let state = {
   regionFilter: '',
   coopFilter: 'all',
   favOnlyBlogger: false,
+  reviewsFor: null,
   _filterSnapshot: null,
   fav: {},
   expandedFeed: {},
@@ -508,7 +531,7 @@ function cardModel(type, item){
       ['Дата реєстрації', new Date(item.regDate).toLocaleDateString('uk-UA')],
       ['Власний магазин', item.hasShop?'Так — дивитись картку':'Немає'],
     ],
-    buttons:[{label:'Анкета',kind:'ghost'}, middleBtn, {label:'Скарга',kind:'warn'}]
+    buttons:[{label:'Анкета',kind:'ghost'}, middleBtn, {label:'Відгуки',kind:'yellow',action:'openReviews',targetId:item.id}]
   };
 }
 
@@ -938,6 +961,13 @@ function wireCardEvents(root, isModal){
       alert('Веде на «Дзеркало → Мене дзеркалять», прокручує і розгортає картку «'+(b?b.name:'')+'» з кнопками Аналітика / Виплати.');
     });
   });
+  root.querySelectorAll('[data-action="openReviews"]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      state.reviewsFor = btn.dataset.target;
+      renderReviews();
+    });
+  });
 }
 
 /* ============ MODAL ============ */
@@ -958,6 +988,57 @@ function renderModal(){
   wireCardEvents(sheet, true);
 }
 function closeModal(){ state.modalId = null; document.getElementById('modalBackdrop').classList.remove('open'); }
+
+/* ============ REVIEWS POPUP ============ */
+function renderReviews(){
+  const backdrop = document.getElementById('reviewsBackdrop');
+  if(!state.reviewsFor){ backdrop.classList.remove('open'); return; }
+  const item = BLOGGERS.find(b=>b.id===state.reviewsFor);
+  const sheet = document.getElementById('reviewsSheet');
+  const reviewsListHtml = DEMO_REVIEWS.map(r=>`
+    <div class="review-row">
+      <div class="review-top"><span class="review-shop">${r.shop}</span><span class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span></div>
+      <div class="review-text">${r.text}</div>
+    </div>
+  `).join('');
+
+  const topSectionHtml = item.cooperating ? `
+    <div class="review-add-box">
+      <div class="review-add-label">Залишити відгук про «${item.name}»</div>
+      <textarea id="reviewText" placeholder="Опишіть, як пройшла співпраця…" rows="3"></textarea>
+      <button class="btn primary" id="submitReviewBtn" style="width:100%;margin-top:8px;">Опублікувати відгук</button>
+    </div>
+  ` : `
+    <div class="review-lock-box">
+      <div class="review-lock-text">Залишити відгук про «${item.name}» можна лише після співпраці.</div>
+      <button class="btn primary" id="inviteFromReviewsBtn" style="width:100%;margin-top:8px;">Запросити</button>
+    </div>
+  `;
+
+  sheet.innerHTML = `
+    <div class="modal-handle"></div>
+    <div class="modal-inner">
+      <p class="name" style="margin-bottom:12px;">Відгуки</p>
+      ${topSectionHtml}
+      <div class="review-list-label">Відгуки інших магазинів</div>
+      ${reviewsListHtml}
+      <button class="modal-close" id="reviewsCloseBtn">✕</button>
+    </div>
+  `;
+  backdrop.classList.add('open');
+  document.getElementById('reviewsCloseBtn').addEventListener('click', closeReviews);
+  const submitBtn = document.getElementById('submitReviewBtn');
+  if(submitBtn) submitBtn.addEventListener('click', ()=>{
+    const txt = document.getElementById('reviewText').value.trim();
+    alert(txt ? 'Відгук опубліковано: «'+txt+'»' : 'Спершу напишіть текст відгуку.');
+  });
+  const inviteBtn = document.getElementById('inviteFromReviewsBtn');
+  if(inviteBtn) inviteBtn.addEventListener('click', ()=>{
+    alert('Запрошення надіслано «'+item.name+'» — щойно погодиться, зможете залишити відгук.');
+  });
+}
+function closeReviews(){ state.reviewsFor = null; document.getElementById('reviewsBackdrop').classList.remove('open'); }
+document.getElementById('reviewsBackdrop').addEventListener('click', e=>{ if(e.target.id==='reviewsBackdrop') closeReviews(); });
 document.getElementById('modalBackdrop').addEventListener('click', e=>{ if(e.target.id==='modalBackdrop') closeModal(); });
 
 /* ============ SWITCHES ============ */
