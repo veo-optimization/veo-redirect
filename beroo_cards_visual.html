@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BEROO — Маркетплейс</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#181A1F; --ink-soft:#565B66; --ink-faint:#8C919C;
+    --paper:#F6F4EF; --card:#FFFFFF; --line:#E7E3D9;
+    --gold:#C8912A; --gold-bg:#FBF1DD;
+    --grey-star:#9AA0AC; --grey-star-bg:#EEF0F3;
+    --purple:#6E4FA6; --purple-bg:#F1EBFB;
+    --green:#2E7D32; --green-bg:#E8F5E9;
+    --orange:#EF6C00; --orange-bg:#FFF3E0;
+    --black-zone:#1A1A1A; --black-zone-bg:#EDEDED;
+    --radius:18px;
+    --font:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+    --safe-t:env(safe-area-inset-top,0px); --safe-b:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#F3F1EC; --ink-soft:#A8ADB8; --ink-faint:#767B85; --paper:#131418; --card:#1E2026; --line:#31333B;
+      --gold-bg:#332A16; --grey-star-bg:#2A2C33; --purple-bg:#2A2338; --green-bg:#16261A; --orange-bg:#2E2013; --black-zone-bg:#2A2A2A;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#F3F1EC; --ink-soft:#A8ADB8; --ink-faint:#767B85; --paper:#131418; --card:#1E2026; --line:#31333B;
+    --gold-bg:#332A16; --grey-star-bg:#2A2C33; --purple-bg:#2A2338; --green-bg:#16261A; --orange-bg:#2E2013; --black-zone-bg:#2A2A2A;
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;}
+  html{scroll-padding-top:calc(var(--safe-t) + 8px);}
+  body{
+    background:var(--paper); color:var(--ink); font-family:var(--font);
+    padding-top:var(--safe-t); padding-bottom:var(--safe-b);
+    -webkit-font-smoothing:antialiased; overscroll-behavior-y:none;
+  }
+  button,input{font-family:var(--font);}
+
+  /* ---------- shell ---------- */
+  .topbar{position:sticky; top:var(--safe-t); z-index:20; background:var(--paper); padding:14px 14px 0;}
+  .masthead{display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:10px;}
+  .masthead h1{font-size:18px; font-weight:800; margin:0; letter-spacing:-0.01em;}
+  .masthead .sub{font-size:11px; color:var(--ink-faint);}
+
+  .switch-row{display:flex; gap:6px; margin-bottom:10px;}
+  .pillset{display:flex; gap:4px; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:4px; flex:1;}
+  .pillset button{
+    flex:1; appearance:none; border:none; background:transparent; color:var(--ink-soft);
+    font-size:12.5px; font-weight:600; padding:8px 6px; border-radius:999px; cursor:pointer;
+    transition:background .15s ease, color .15s ease; white-space:nowrap;
+  }
+  .pillset button.active{background:var(--ink); color:var(--paper);}
+
+  /* toolbar (Блок керування мобільна версія) */
+  .toolbar{padding:2px 0 10px;}
+  .search-row{position:relative; margin-bottom:8px;}
+  .search-row input{
+    width:100%; border:1px solid var(--line); background:var(--card); color:var(--ink);
+    border-radius:12px; padding:10px 12px 10px 34px; font-size:13.5px; outline:none;
+  }
+  .search-row input:focus{border-color:var(--purple);}
+  .search-row .icon{position:absolute; left:11px; top:50%; transform:translateY(-50%); font-size:13px; color:var(--ink-faint);}
+
+  .counts-row{font-size:11.5px; color:var(--ink-faint); margin-bottom:8px;}
+  .counts-row b{color:var(--ink-soft); font-weight:700;}
+
+  .chip-scroll{display:flex; gap:6px; overflow-x:auto; padding-bottom:2px; margin-bottom:8px; scrollbar-width:none;}
+  .chip-scroll::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:none; font-size:11.5px; font-weight:600; padding:6px 12px; border-radius:999px;
+    background:var(--card); border:1px solid var(--line); color:var(--ink-soft); cursor:pointer; white-space:nowrap;
+  }
+  .chip.active{background:var(--purple); border-color:var(--purple); color:#fff;}
+
+  .util-row{display:flex; gap:8px;}
+  .util-btn{
+    flex:1; display:flex; align-items:center; justify-content:center; gap:5px;
+    border:1px solid var(--line); background:var(--card); color:var(--ink-soft);
+    border-radius:11px; padding:9px 8px; font-size:11.5px; font-weight:600; cursor:pointer;
+  }
+  .util-btn.on{background:var(--purple-bg); border-color:var(--purple); color:var(--purple);}
+  .util-btn .spin{display:inline-block;}
+  .util-btn .spin.spinning{animation:spin .6s linear;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  .filter-drawer{display:none; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px; margin-bottom:8px; font-size:12.5px;}
+  .filter-drawer.open{display:block;}
+  .filter-drawer label{display:flex; align-items:center; gap:8px; padding:5px 0; color:var(--ink-soft); cursor:pointer;}
+  .filter-drawer input[type="checkbox"]{width:16px;height:16px;accent-color:var(--purple);}
+
+  /* ---------- list area ---------- */
+  .list-wrap{padding:2px 14px 40px;}
+  .empty{text-align:center; padding:40px 20px; color:var(--ink-faint); font-size:13px;}
+
+  /* Спрощений: tile grid */
+  .tile-grid{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .tile{
+    background:var(--card); border:1px solid var(--line); border-radius:16px; padding:12px;
+    display:flex; flex-direction:column; gap:6px; position:relative;
+  }
+  .tile .photo{
+    width:100%; aspect-ratio:1.4/1; border-radius:12px; display:flex; align-items:center; justify-content:center;
+    font-size:26px; background:linear-gradient(155deg,var(--purple-bg),var(--card)); border:1px solid var(--line);
+  }
+  .tile .t-name{font-size:12.5px; font-weight:700; line-height:1.3; margin:0; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden;}
+  .tile .t-stat{font-size:12px; color:var(--ink-soft); font-weight:600;}
+  .tile .t-foot-row{display:flex; align-items:center; justify-content:space-between; margin-top:2px;}
+  .tile .t-code{font-size:9.5px; color:var(--ink-faint);}
+  .tile .t-more{
+    border:none; background:var(--ink); color:var(--paper); width:26px; height:26px; border-radius:50%;
+    font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+
+  /* Розширений: full cards feed */
+  .feed{display:flex; flex-direction:column; gap:14px;}
+
+  /* ---------- full card component (shared by modal + feed) ---------- */
+  .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;}
+  .card-head{display:flex; gap:14px; padding:16px 16px 12px; align-items:flex-start; position:relative;}
+  .photo-lg{width:70px;height:70px;border-radius:15px;flex:none;display:flex;align-items:center;justify-content:center;font-size:28px;background:linear-gradient(155deg,var(--purple-bg),var(--card));border:1px solid var(--line);}
+  .head-main{flex:1;min-width:0;}
+  .name{font-size:16px;font-weight:700;line-height:1.25;margin:0;letter-spacing:-0.005em;}
+  .fav{margin-left:auto;flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--ink-soft);}
+  .fav.on{color:#D1495B;border-color:#F1C6CD;}
+  .meta-line{font-size:12px;color:var(--ink-soft);margin:4px 0 0;line-height:1.5;}
+  .badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
+  .badge{font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;}
+  .badge.gold{background:var(--gold-bg);color:var(--gold);}
+  .badge.grey{background:var(--grey-star-bg);color:var(--grey-star);}
+  .badge.purple{background:var(--purple-bg);color:var(--purple);}
+  .badge.status{background:var(--black-zone-bg);color:var(--ink);}
+  .code{position:absolute; top:14px; right:50px; font-size:10px; color:var(--ink-faint);}
+
+  .panels{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .panel{background:var(--card); padding:10px 6px; text-align:center;}
+  .panel .val{font-size:14px;font-weight:800;letter-spacing:-0.01em;}
+  .panel .lab{font-size:9.5px;color:var(--ink-soft);margin-top:2px;line-height:1.25;}
+  .panel.zone-green{background:var(--green-bg);} .panel.zone-green .val{color:var(--green);}
+  .panel.zone-orange{background:var(--orange-bg);} .panel.zone-orange .val{color:var(--orange);}
+  .panel.zone-black{background:var(--black-zone-bg);} .panel.zone-black .val{color:var(--black-zone);}
+  .panel.gold .val{color:var(--gold);}
+  .panel.grey .val{color:var(--grey-star);}
+
+  .foot{padding:12px 16px; font-size:12.5px; line-height:1.5; color:var(--ink-soft);}
+
+  .expand-toggle{width:100%; border:none; background:var(--card); border-top:1px dashed var(--line); padding:9px; font-size:11.5px; font-weight:600; color:var(--purple); cursor:pointer; display:flex; align-items:center; justify-content:center; gap:6px;}
+  .expand-body{display:none; padding:2px 16px 14px; font-size:12px; color:var(--ink-soft); line-height:1.6; border-top:1px solid var(--line);}
+  .expand-body.open{display:block;}
+  .expand-body dl{margin:8px 0 0;display:grid;grid-template-columns:auto 1fr;gap:5px 10px;}
+  .expand-body dt{color:var(--ink);font-weight:600;white-space:nowrap;}
+  .expand-body dd{margin:0;}
+  .complaint{margin-top:10px; font-size:11px; color:var(--ink-faint); display:flex; align-items:center; gap:5px; cursor:pointer; width:fit-content;}
+
+  .actions{display:flex; gap:7px; padding:12px 16px 16px;}
+  .btn{flex:1; border:none; border-radius:11px; padding:10px 8px; font-size:11.5px; font-weight:700; cursor:pointer; text-align:center;}
+  .btn.ghost{background:var(--paper); color:var(--ink); border:1px solid var(--line);}
+  .btn.primary{background:var(--ink); color:var(--paper);}
+  .btn.warn{background:transparent; color:var(--ink-soft); border:1px solid var(--line);}
+
+  /* ---------- modal ---------- */
+  .modal-backdrop{
+    position:fixed; inset:0; background:rgba(10,10,14,.55); z-index:100;
+    display:none; align-items:flex-end; justify-content:center;
+    padding-bottom:calc(var(--safe-b) + 0px);
+  }
+  .modal-backdrop.open{display:flex;}
+  .modal-sheet{
+    width:100%; max-width:440px; max-height:88vh; overflow-y:auto;
+    background:var(--paper); border-radius:22px 22px 0 0; padding:10px 0 0;
+    animation:slideUp .22s ease;
+  }
+  @keyframes slideUp{from{transform:translateY(30px); opacity:.4;} to{transform:translateY(0); opacity:1;}}
+  .modal-handle{width:38px;height:4px;border-radius:99px;background:var(--line);margin:0 auto 10px;}
+  .modal-close{position:absolute; top:10px; right:14px; width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);font-size:15px;cursor:pointer;}
+  .modal-inner{padding:0 14px 18px; position:relative;}
+
+  .page-note{font-size:11.5px; color:var(--ink-faint); line-height:1.6; padding:2px 2px 16px;}
+
+  @media (min-width:460px){
+    .tile-grid{grid-template-columns:repeat(3,1fr);}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="masthead">
+    <div>
+      <h1>BEROO Маркетплейс</h1>
+      <div class="sub">Тюнінг під iPhone 14 Pro · 393×852</div>
+    </div>
+  </div>
+
+  <div class="switch-row">
+    <div class="pillset" id="typeSwitch" role="tablist" aria-label="Сторінка">
+      <button class="active" data-type="product">🛒 Товар</button>
+      <button data-type="shop">🏬 Магазин</button>
+      <button data-type="blogger">🎥 Блогер</button>
+    </div>
+  </div>
+  <div class="switch-row">
+    <div class="pillset" id="densitySwitch" role="tablist" aria-label="Режим показу">
+      <button class="active" data-density="simple">▦ Спрощений</button>
+      <button data-density="expanded">☰ Розширений</button>
+    </div>
+  </div>
+
+  <div class="toolbar" id="toolbar"></div>
+</div>
+
+<div class="list-wrap" id="listWrap"></div>
+
+<p class="page-note" id="pageNote" style="padding-left:14px;padding-right:14px;"></p>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal-sheet" id="modalSheet"></div>
+</div>
+
+<script>
+/* ============ DATA ============ */
+const PRODUCTS = [
+  {id:'p1', icon:'👟', code:'214', name:'Кросівки Street Runner', price:899, shop:'Urban Line', cat:'Взуття', mirrors:7, sold3d:32, comm:12, stock:48, shopRating:96, top:true, foot:'Легкі кросівки на щодень. 5 кольорів, розміри 36–45. Магазин з еквайрингом.', shopStatus:'eq'},
+  {id:'p2', icon:'🧴', code:'118', name:'Сироватка з вітаміном C', price:349, shop:'SkinLab UA', cat:'Косметика', mirrors:22, sold3d:81, comm:18, stock:210, shopRating:99, top:true, foot:'Бестселер весни. Дозволено автоматичне дзеркалення без підтвердження.', shopStatus:'eq'},
+  {id:'p3', icon:'🎧', code:'305', name:'Бездротові навушники Air Pulse', price:1290, shop:'TechDrop', cat:'Електроніка', mirrors:14, sold3d:19, comm:10, stock:33, shopRating:91, top:false, foot:'До 28 год від батареї. Гарантія 12 місяців.', shopStatus:'eq'},
+  {id:'p4', icon:'👜', code:'077', name:'Сумка крос-боді Mira', price:749, shop:'Bags & Co', cat:'Аксесуари', mirrors:5, sold3d:6, comm:15, stock:12, shopRating:88, top:false, foot:'Екошкіра, 4 кольори. Обмежена партія.', shopStatus:'iban'},
+  {id:'p5', icon:'🕯️', code:'432', name:'Свічка соєва «Дім»', price:259, shop:'Затишно', cat:'Дім', mirrors:9, sold3d:14, comm:20, stock:76, shopRating:97, top:false, foot:'Ручна робота, аромат кедра й ванілі.', shopStatus:'eq'},
+  {id:'p6', icon:'👕', code:'190', name:'Худі оверсайз «Kyiv»', price:1099, shop:'Urban Line', cat:'Одяг', mirrors:31, sold3d:44, comm:12, stock:60, shopRating:96, top:true, foot:'Топ продажів місяця. Унісекс, S–XXL.', shopStatus:'eq'},
+  {id:'p7', icon:'💄', code:'261', name:'Помада матова Velvet', price:229, shop:'SkinLab UA', cat:'Косметика', mirrors:11, sold3d:27, comm:18, stock:140, shopRating:99, top:false, foot:'10 відтінків. Стійкість до 8 годин.', shopStatus:'eq'},
+  {id:'p8', icon:'⌚', code:'508', name:'Смарт-годинник Pulse Mini', price:1890, shop:'TechDrop', cat:'Електроніка', mirrors:3, sold3d:4, comm:8, stock:9, shopRating:91, top:false, foot:'Новинка тижня. Залишок обмежений.', shopStatus:'eq'},
+];
+
+const SHOPS = [
+  {id:'s1', icon:'🏬', code:'30841', name:'Urban Line', cats:'Взуття · Одяг · Аксесуари', status:'eq', items:186, stockSum:312400, greyMirrors:41, goldMirrors:9, requests:5, returns:4, foot:'Український бренд вуличного одягу, 3 роки на ринку.'},
+  {id:'s2', icon:'🧪', code:'11290', name:'SkinLab UA', cats:'Косметика · Догляд', status:'eq', items:94, stockSum:158900, greyMirrors:63, goldMirrors:21, requests:12, returns:2, foot:'Власне виробництво, сертифікована косметика.'},
+  {id:'s3', icon:'📱', code:'50231', name:'TechDrop', cats:'Електроніка · Гаджети', status:'eq', items:58, stockSum:640200, greyMirrors:15, goldMirrors:6, requests:3, returns:9, foot:'Офіційний імпортер аудіо- та носимої техніки.'},
+  {id:'s4', icon:'👜', code:'77410', name:'Bags & Co', cats:'Сумки · Аксесуари', status:'iban', items:41, stockSum:52300, greyMirrors:6, goldMirrors:1, requests:1, returns:15, foot:'Невеликий сімейний бренд, без еквайрингу — лише ручна оплата.'},
+  {id:'s5', icon:'🕯️', code:'99012', name:'Затишно', cats:'Дім · Декор', status:'eq', items:73, stockSum:88100, greyMirrors:28, goldMirrors:5, requests:4, returns:3, foot:'Товари для дому ручної роботи.'},
+  {id:'s6', icon:'🧢', code:'40218', name:'CapStreet', cats:'Аксесуари · Одяг', status:'eq', items:29, stockSum:41200, greyMirrors:9, goldMirrors:2, requests:2, returns:7, foot:'Кепки та стрітвір власного виробництва.'},
+  {id:'s7', icon:'🍯', code:'60533', name:'Пасіка Карпат', cats:'Продукти', status:'iban', items:17, stockSum:23900, greyMirrors:4, goldMirrors:0, requests:0, returns:1, foot:'Натуральний мед прямо з пасіки, без посередників.'},
+  {id:'s8', icon:'💍', code:'80112', name:'Silver&Co', cats:'Прикраси', status:'eq', items:112, stockSum:410700, greyMirrors:19, goldMirrors:11, requests:6, returns:5, foot:'Срібні прикраси власного дизайну.'},
+];
+
+const BLOGGERS = [
+  {id:'b1', icon:'🎬', code:'55210', name:'Мар’яна Кіт', cat:'Мода', stars:1240, mirrorShops:14, mirrorItems:63, followers:38000, returns:3, hasShop:true, foot:'Огляди одягу та побуту, 2–3 інтеграції на тиждень.'},
+  {id:'b2', icon:'💅', code:'61044', name:'Оля Бʼюті', cat:'Косметика', stars:2870, mirrorShops:9, mirrorItems:41, followers:112000, returns:1, hasShop:false, foot:'Бʼюті-огляди та тести косметики в форматі Live.'},
+  {id:'b3', icon:'🎮', code:'70125', name:'Данило Tech', cat:'Електроніка', stars:640, mirrorShops:5, mirrorItems:18, followers:25000, returns:6, hasShop:false, foot:'Розпаковки гаджетів, порівняння характеристик.'},
+  {id:'b4', icon:'🏠', code:'44982', name:'Дім із Настею', cat:'Дім', stars:980, mirrorShops:11, mirrorItems:52, followers:47000, returns:2, hasShop:true, foot:'Затишні інтер’єрні рішення й декор.'},
+  {id:'b5', icon:'👟', code:'33217', name:'Стріт Кулс', cat:'Взуття', stars:1560, mirrorShops:7, mirrorItems:29, followers:64000, returns:4, hasShop:false, foot:'Огляди кросівок і стрітвіру.'},
+  {id:'b6', icon:'💍', code:'90441', name:'Ювелір Аня', cat:'Прикраси', stars:3200, mirrorShops:3, mirrorItems:14, followers:88000, returns:0, hasShop:false, foot:'Преміум-прикраси, естетичний контент.'},
+  {id:'b7', icon:'🍯', code:'20873', name:'Смачно Просто', cat:'Продукти', stars:410, mirrorShops:6, mirrorItems:22, followers:18000, returns:5, hasShop:false, foot:'Огляди українських фермерських продуктів.'},
+  {id:'b8', icon:'🎒', code:'11209', name:'Мандрівний Кіт', cat:'Аксесуари', stars:1980, mirrorShops:16, mirrorItems:70, followers:71000, returns:2, hasShop:true, foot:'Огляди спорядження для подорожей.'},
+];
+
+const SORTS = {
+  product: [
+    {id:'top3d', label:'🔥 Топ продажів за 3 дні', key:i=>-i.sold3d},
+    {id:'price_up', label:'Ціна ↗', key:i=>i.price},
+    {id:'price_down', label:'Ціна ↘', key:i=>-i.price},
+    {id:'cat', label:'Категорія', key:i=>i.cat},
+    {id:'mirrors', label:'Кількість дзеркал', key:i=>-i.mirrors},
+    {id:'stock', label:'Залишки', key:i=>-i.stock},
+    {id:'new', label:'Нові надходження', key:i=>-parseInt(i.code)},
+    {id:'old', label:'Давні позиції', key:i=>parseInt(i.code)},
+    {id:'safe', label:'🟢 Безпечні', key:i=>-i.shopRating, filter:i=>i.shopRating>=95},
+    {id:'warn', label:'🟠 Увага', key:i=>-i.shopRating, filter:i=>i.shopRating<95&&i.shopRating>=90},
+    {id:'crit', label:'🔴 Критичні', key:i=>-i.shopRating, filter:i=>i.shopRating<90},
+  ],
+  shop: [
+    {id:'items', label:'За кількістю товарів', key:i=>-i.items},
+    {id:'requests', label:'За запитами', key:i=>-i.requests},
+    {id:'green', label:'🟢 Безпечні', key:i=>i.returns, filter:i=>i.returns<=5},
+    {id:'orange', label:'🟠 Увага', key:i=>i.returns, filter:i=>i.returns>5&&i.returns<=15},
+    {id:'black', label:'⚫ Критичні', key:i=>i.returns, filter:i=>i.returns>15},
+    {id:'new', label:'Нові', key:i=>-parseInt(i.code)},
+  ],
+  blogger: [
+    {id:'stars', label:'За зірочками', key:i=>-i.stars},
+    {id:'followers', label:'За підписниками', key:i=>-i.followers},
+    {id:'cat', label:'Категорія', key:i=>i.cat},
+    {id:'new', label:'Нові', key:i=>-parseInt(i.code)},
+  ]
+};
+
+/* ============ STATE ============ */
+let state = {
+  type: 'product',
+  density: 'simple',
+  search: '',
+  sortId: null,
+  filterOpen: false,
+  filterOnlyStock: false,
+  filterOnlyEq: false,
+  filterOnlyShop: false,
+  fav: {},
+  expandedFeed: {},
+  modalId: null,
+  modalExpanded: false,
+};
+
+function dataFor(type){ return type==='product'?PRODUCTS : type==='shop'?SHOPS : BLOGGERS; }
+
+/* ============ CARD CONTENT BUILDERS ============ */
+function cardModel(type, item){
+  if(type==='product'){
+    return {
+      icon:item.icon, code:'код '+item.code, name:item.name,
+      meta:`${item.price} ₴ · ${item.cat} · Магазин «${item.shop}»`,
+      badges: item.top ? [{cls:'gold', text:'🔥 Топ'}] : [],
+      panels:[
+        {val:item.mirrors, lab:'дзеркал', cls:''},
+        {val:item.sold3d, lab:'продано за 3 дні', cls:''},
+        {val:item.comm+'%', lab:'комісія (тільки PRO)', cls:'gold'},
+        {val:item.stock+' шт', lab:'залишок', cls:''},
+        {val:item.shopRating+'%', lab:'рейтинг магазину', cls: item.shopRating>=95?'zone-green':(item.shopRating>=90?'zone-orange':'zone-black')},
+        {val:item.top?'🔥':'—', lab:'у топі', cls:''}
+      ],
+      foot:item.foot,
+      expand:[
+        ['Категорія', item.cat],
+        ['Статус магазину', item.shopStatus==='eq'?'Екваєр (з еквайрингом)':'Іван (лише IBAN)'],
+        ['Умови дзеркалення', item.shopStatus==='eq'?'Автоматично, без підтвердження':'Потрібне підтвердження'],
+        ['Магазини, що дзеркалять', item.mirrors],
+      ],
+      buttons:[{label:'Переглянути',kind:'ghost'},{label:'Віддзеркалити',kind:'primary'},{label:'До сайту магазину',kind:'warn'}]
+    };
+  }
+  if(type==='shop'){
+    return {
+      icon:item.icon, code:'код '+item.code, name:item.name,
+      meta:item.cats,
+      badges:[{cls:'status', text: item.status==='eq'?'⚡ Екваєр':'🏦 Іван'}],
+      panels:[
+        {val:item.items, lab:'товарів', cls:''},
+        {val:item.stockSum.toLocaleString('uk-UA')+' ₴', lab:'сума залишків', cls:''},
+        {val:'★ '+item.greyMirrors, lab:'Оглядачів-дзеркал', cls:'grey'},
+        {val:'★ '+item.goldMirrors, lab:'PRO-дзеркал', cls:'gold'},
+        {val:item.requests, lab:'нових запитів', cls:''},
+        {val:item.returns+'%', lab:'повернень', cls: item.returns<=5?'zone-green':(item.returns<=15?'zone-orange':'zone-black')}
+      ],
+      foot:item.foot,
+      expand:[
+        ['Категорії', item.cats],
+        ['Умови дзеркалення', item.status==='eq'?'Автоматично':'Потрібне підтвердження'],
+        ['Зона ризику', item.returns<=5?'🟢 Безпечна':(item.returns<=15?'🟠 Увага':'⚫ Критична')],
+        ['Активних запитів', item.requests],
+      ],
+      buttons:[{label:'Переглянути каталог',kind:'ghost'},{label:'Віддзеркалити магазин',kind:'primary'},{label:'Скарга',kind:'warn'}]
+    };
+  }
+  // blogger
+  return {
+    icon:item.icon, code:'код '+item.code, name:item.name,
+    meta:item.cat+' · формати: Reels, Live',
+    badges:[{cls:'gold', text:'★ Блогер PRO'}].concat(item.hasShop?[{cls:'purple', text:'🏬 має Магазин'}]:[]),
+    panels:[
+      {val:'★ '+item.stars.toLocaleString('uk-UA'), lab:'золотих зірочок', cls:'gold'},
+      {val:item.cat, lab:'топ-категорія', cls:''},
+      {val:item.mirrorShops, lab:'дзеркалить магазинів', cls:''},
+      {val:item.mirrorItems, lab:'дзеркалить товарів', cls:''},
+      {val:(item.followers/1000).toFixed(0)+' тис', lab:'підписників', cls:''},
+      {val:item.returns+'%', lab:'повернень', cls: item.returns<=5?'zone-green':(item.returns<=15?'zone-orange':'zone-black')}
+    ],
+    foot:item.foot,
+    expand:[
+      ['Формати контенту','Reels, розпаковки, Live'],
+      ['Відео-оглядів', item.mirrorItems],
+      ['Власний магазин', item.hasShop?'Так — дивитись картку':'Немає'],
+      ['Скарг','0'],
+    ],
+    buttons:[{label:'Анкета',kind:'ghost'},{label:'Запросити',kind:'primary'},{label:'Скарга',kind:'warn'}]
+  };
+}
+
+function renderFullCard(type, item, opts){
+  opts = opts || {};
+  const m = cardModel(type, item);
+  const isFav = !!state.fav[item.id];
+  const isOpen = !!opts.expanded;
+  const badgesHtml = m.badges.map(b=>`<span class="badge ${b.cls}">${b.text}</span>`).join('');
+  const panelsHtml = m.panels.map(p=>`<div class="panel ${p.cls}"><div class="val">${p.val}</div><div class="lab">${p.lab}</div></div>`).join('');
+  const expandRows = m.expand.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('');
+  const buttonsHtml = m.buttons.map(b=>`<button class="btn ${b.kind}">${b.label}</button>`).join('');
+  return `
+    <div class="card" data-id="${item.id}">
+      <div class="card-head">
+        <div class="photo-lg">${m.icon}</div>
+        <div class="head-main">
+          <p class="name">${m.name}</p>
+          <p class="meta-line">${m.meta}</p>
+          ${badgesHtml?`<div class="badges">${badgesHtml}</div>`:''}
+        </div>
+        <button class="fav ${isFav?'on':''}" data-fav="${item.id}" aria-label="В обране">${isFav?'♥':'♡'}</button>
+        <span class="code">${m.code}</span>
+      </div>
+      <div class="panels">${panelsHtml}</div>
+      <div class="foot">${m.foot}</div>
+      <button class="expand-toggle" data-expand="${item.id}">
+        <span>${isOpen?'Згорнути':'Детальніше'}</span>
+        <span style="transition:transform .2s ease; transform:rotate(${isOpen?180:0}deg);">▾</span>
+      </button>
+      <div class="expand-body ${isOpen?'open':''}">
+        <dl>${expandRows}</dl>
+        <div class="complaint">🚩 Подати скаргу</div>
+      </div>
+      <div class="actions">${buttonsHtml}</div>
+    </div>
+  `;
+}
+
+function renderTile(type, item){
+  const m = cardModel(type, item);
+  const stat = type==='product' ? item.price+' ₴'
+             : type==='shop' ? (item.status==='eq'?'⚡ Екваєр':'🏦 Іван')
+             : '★ '+item.stars.toLocaleString('uk-UA');
+  return `
+    <div class="tile" data-id="${item.id}">
+      <div class="photo">${m.icon}</div>
+      <p class="t-name">${m.name}</p>
+      <div class="t-stat">${stat}</div>
+      <div class="t-foot-row">
+        <span class="t-code">${m.code}</span>
+        <button class="t-more" data-open-modal="${item.id}" aria-label="Детальніше">···</button>
+      </div>
+    </div>
+  `;
+}
+
+/* ============ TOOLBAR ============ */
+function renderToolbar(){
+  const sorts = SORTS[state.type];
+  const chips = sorts.map(s=>`<button class="chip ${state.sortId===s.id?'active':''}" data-sort="${s.id}">${s.label}</button>`).join('');
+  const total = dataFor(state.type).length;
+  const countsLabel = state.type==='product' ? `<b>${total}</b> товарів · <b>${new Set(dataFor('product').map(p=>p.shop)).size}</b> магазинів`
+    : state.type==='shop' ? `<b>${total}</b> магазинів · <b>${dataFor('shop').reduce((a,s)=>a+s.greyMirrors+s.goldMirrors,0)}</b> дзеркал`
+    : `<b>${total}</b> блогерів PRO`;
+
+  const filterOptions = state.type==='product'
+    ? `<label><input type="checkbox" id="fStock" ${state.filterOnlyStock?'checked':''}> Лише в наявності</label>
+       <label><input type="checkbox" id="fEq" ${state.filterOnlyEq?'checked':''}> Лише магазини з еквайрингом</label>`
+    : state.type==='shop'
+    ? `<label><input type="checkbox" id="fEq" ${state.filterOnlyEq?'checked':''}> Лише з еквайрингом (Екваєр)</label>`
+    : `<label><input type="checkbox" id="fShop" ${state.filterOnlyShop?'checked':''}> Лише з власним Магазином</label>`;
+
+  document.getElementById('toolbar').innerHTML = `
+    ${state.type==='product' ? `<div class="chip-scroll" style="margin-bottom:8px;"><button class="chip" id="myCatalogBtn">🎥 Мій каталог для блогерів</button></div>` : ''}
+    <div class="chip-scroll">${chips}</div>
+    <div class="counts-row">${countsLabel}</div>
+    <div class="search-row">
+      <span class="icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Пошук…" value="${state.search}">
+    </div>
+    <div class="filter-drawer ${state.filterOpen?'open':''}" id="filterDrawer">${filterOptions}</div>
+    <div class="util-row">
+      <button class="util-btn ${state.filterOpen?'on':''}" id="filtersBtn">🔍 Фільтри</button>
+      <button class="util-btn" id="refreshBtn"><span class="spin" id="refreshSpin">↻</span> Оновити</button>
+    </div>
+  `;
+
+  document.querySelectorAll('.chip[data-sort]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      state.sortId = state.sortId===el.dataset.sort ? null : el.dataset.sort;
+      renderAll();
+    });
+  });
+  document.getElementById('searchInput').addEventListener('input', e=>{
+    state.search = e.target.value;
+    renderList();
+  });
+  document.getElementById('filtersBtn').addEventListener('click', ()=>{
+    state.filterOpen = !state.filterOpen;
+    renderToolbar();
+  });
+  document.getElementById('refreshBtn').addEventListener('click', ()=>{
+    const s = document.getElementById('refreshSpin');
+    s.classList.remove('spinning'); void s.offsetWidth; s.classList.add('spinning');
+  });
+  ['fStock','fEq','fShop'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.addEventListener('change', e=>{
+      if(id==='fStock') state.filterOnlyStock = e.target.checked;
+      if(id==='fEq') state.filterOnlyEq = e.target.checked;
+      if(id==='fShop') state.filterOnlyShop = e.target.checked;
+      renderList();
+    });
+  });
+  if(document.getElementById('myCatalogBtn')){
+    document.getElementById('myCatalogBtn').addEventListener('click', ()=> alert('Веде на «Каталог → Товари/Послуги» цього блогера-продавця.'));
+  }
+}
+
+/* ============ LIST ============ */
+function currentItems(){
+  let items = dataFor(state.type).slice();
+  if(state.search.trim()){
+    const q = state.search.trim().toLowerCase();
+    items = items.filter(i => i.name.toLowerCase().includes(q));
+  }
+  if(state.type==='product'){
+    if(state.filterOnlyStock) items = items.filter(i=>i.stock>0);
+    if(state.filterOnlyEq) items = items.filter(i=>i.shopStatus==='eq');
+  }
+  if(state.type==='shop' && state.filterOnlyEq) items = items.filter(i=>i.status==='eq');
+  if(state.type==='blogger' && state.filterOnlyShop) items = items.filter(i=>i.hasShop);
+
+  const sortDef = SORTS[state.type].find(s=>s.id===state.sortId);
+  if(sortDef){
+    if(sortDef.filter) items = items.filter(sortDef.filter);
+    items.sort((a,b)=>{
+      const ka = sortDef.key(a), kb = sortDef.key(b);
+      if(typeof ka === 'string') return ka.localeCompare(kb);
+      return ka - kb;
+    });
+  }
+  return items;
+}
+
+function renderList(){
+  const items = currentItems();
+  const wrap = document.getElementById('listWrap');
+  if(!items.length){
+    wrap.innerHTML = `<div class="empty">Нічого не знайдено — спробуй інший запит або скинь фільтри.</div>`;
+    return;
+  }
+  if(state.density === 'simple'){
+    wrap.innerHTML = `<div class="tile-grid">${items.map(i=>renderTile(state.type,i)).join('')}</div>`;
+    wrap.querySelectorAll('[data-open-modal]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        state.modalId = btn.dataset.openModal;
+        state.modalExpanded = false;
+        renderModal();
+      });
+    });
+  } else {
+    wrap.innerHTML = `<div class="feed">${items.map(i=>renderFullCard(state.type,i,{expanded:!!state.expandedFeed[i.id]})).join('')}</div>`;
+    wireCardEvents(wrap, false);
+  }
+}
+
+function wireCardEvents(root, isModal){
+  root.querySelectorAll('[data-fav]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.dataset.fav;
+      state.fav[id] = !state.fav[id];
+      if(isModal) renderModal(); else renderList();
+    });
+  });
+  root.querySelectorAll('[data-expand]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.dataset.expand;
+      if(isModal){ state.modalExpanded = !state.modalExpanded; renderModal(); }
+      else { state.expandedFeed[id] = !state.expandedFeed[id]; renderList(); }
+    });
+  });
+}
+
+/* ============ MODAL ============ */
+function renderModal(){
+  const backdrop = document.getElementById('modalBackdrop');
+  if(!state.modalId){ backdrop.classList.remove('open'); return; }
+  const item = dataFor(state.type).find(i=>i.id===state.modalId);
+  const sheet = document.getElementById('modalSheet');
+  sheet.innerHTML = `
+    <div class="modal-handle"></div>
+    <div class="modal-inner">
+      <button class="modal-close" id="modalCloseBtn">✕</button>
+      ${renderFullCard(state.type, item, {expanded: state.modalExpanded})}
+    </div>
+  `;
+  backdrop.classList.add('open');
+  document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+  wireCardEvents(sheet, true);
+}
+function closeModal(){ state.modalId = null; document.getElementById('modalBackdrop').classList.remove('open'); }
+document.getElementById('modalBackdrop').addEventListener('click', e=>{ if(e.target.id==='modalBackdrop') closeModal(); });
+
+/* ============ SWITCHES ============ */
+const NOTES = {
+  product: 'Вітрина: рішення приймає Блогер — дзеркалити товар чи ні. «Комісія» бачить лише Блогер PRO.',
+  shop: 'Магазини: рішення приймає Блогер — чи дзеркалити весь магазин. Статус Іван/Екваєр підказує, чи будуть зірочки.',
+  blogger: 'Блогери: рішення приймає Магазин — кого запросити. Тут завжди лише Блогери PRO.'
+};
+function setNote(){ document.getElementById('pageNote').textContent = NOTES[state.type]; }
+
+document.querySelectorAll('#typeSwitch button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#typeSwitch button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    state.type = btn.dataset.type;
+    state.sortId = null; state.search=''; state.filterOpen=false;
+    state.filterOnlyStock=false; state.filterOnlyEq=false; state.filterOnlyShop=false;
+    renderAll();
+  });
+});
+document.querySelectorAll('#densitySwitch button').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#densitySwitch button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    state.density = btn.dataset.density;
+    renderList();
+  });
+});
+
+function renderAll(){
+  renderToolbar();
+  renderList();
+  setNote();
+}
+renderAll();
+</script>
+</body>
+</html>
