@@ -45,7 +45,9 @@
 
   /* ---------- shell ---------- */
   .topbar{background:var(--paper); padding:14px 14px 0;}
-  .masthead{display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:10px;}
+  .masthead{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px;}
+  .info-btn{flex:none; display:flex; align-items:center; gap:5px; border:1px solid var(--line); background:var(--card); color:var(--ink-soft); border-radius:999px; padding:6px 12px 6px 10px; font-size:11.5px; font-weight:600; cursor:pointer;}
+  .info-btn span{font-size:13px; color:var(--primary);}
   .masthead h1{font-size:18px; font-weight:800; margin:0; letter-spacing:-0.01em;}
   .masthead .sub{font-size:11px; color:var(--ink-faint);}
 
@@ -252,6 +254,8 @@
   .review-shop{font-size:12.5px; font-weight:700; color:var(--ink);}
   .review-stars{font-size:12px; color:var(--gold);}
   .review-text{font-size:12.5px; color:var(--ink-soft); line-height:1.5;}
+  .info-text p{font-size:12.5px; color:var(--ink-soft); line-height:1.6; margin:0 0 12px;}
+  .info-text b{color:var(--ink);}
 
   @media (min-width:460px){
     .tile-grid{grid-template-columns:repeat(3,1fr);}
@@ -266,6 +270,7 @@
       <h1>BEROO Маркетплейс</h1>
       <div class="sub">Тюнінг під iPhone 14 Pro · 393×852</div>
     </div>
+    <button class="info-btn" id="infoBtn"><span>ⓘ</span> Як це працює</button>
   </div>
 
   <div class="switch-row">
@@ -297,17 +302,21 @@
   <div class="modal-sheet" id="reviewsSheet" style="max-width:420px;"></div>
 </div>
 
+<div class="modal-backdrop" id="infoBackdrop" style="z-index:200;">
+  <div class="modal-sheet" id="infoSheet" style="max-width:420px;"></div>
+</div>
+
 <script>
 /* ============ DATA ============ */
 const PRODUCTS = [
-  {id:'p1', icon:'👟', code:'214', name:'Кросівки Street Runner', price:899, shop:'Urban Line', cat:'Взуття', mirrors:7, sold3d:32, comm:12, stock:48, shopRating:96, top:true, foot:'Легкі кросівки на щодень. 5 кольорів, розміри 36–45. Магазин з еквайрингом.', shopStatus:'eq'},
-  {id:'p2', icon:'🧴', code:'118', name:'Сироватка з вітаміном C', price:349, shop:'SkinLab UA', cat:'Косметика', mirrors:22, sold3d:81, comm:18, stock:210, shopRating:99, top:true, foot:'Бестселер весни. Дозволено автоматичне дзеркалення без підтвердження.', shopStatus:'eq'},
-  {id:'p3', icon:'🎧', code:'305', name:'Бездротові навушники Air Pulse', price:1290, shop:'TechDrop', cat:'Електроніка', mirrors:14, sold3d:19, comm:10, stock:33, shopRating:91, top:false, foot:'До 28 год від батареї. Гарантія 12 місяців.', shopStatus:'eq'},
-  {id:'p4', icon:'👜', code:'077', name:'Сумка крос-боді Mira', price:749, shop:'Bags & Co', cat:'Аксесуари', mirrors:5, sold3d:6, comm:15, stock:12, shopRating:88, top:false, foot:'Екошкіра, 4 кольори. Обмежена партія.', shopStatus:'iban'},
-  {id:'p5', icon:'🕯️', code:'432', name:'Свічка соєва «Дім»', price:259, shop:'Затишно', cat:'Дім', mirrors:9, sold3d:14, comm:20, stock:76, shopRating:97, top:false, foot:'Ручна робота, аромат кедра й ванілі.', shopStatus:'eq'},
-  {id:'p6', icon:'👕', code:'190', name:'Худі оверсайз «Kyiv»', price:1099, shop:'Urban Line', cat:'Одяг', mirrors:31, sold3d:44, comm:12, stock:60, shopRating:96, top:true, foot:'Топ продажів місяця. Унісекс, S–XXL.', shopStatus:'eq'},
-  {id:'p7', icon:'💄', code:'261', name:'Помада матова Velvet', price:229, shop:'SkinLab UA', cat:'Косметика', mirrors:11, sold3d:27, comm:18, stock:140, shopRating:99, top:false, foot:'10 відтінків. Стійкість до 8 годин.', shopStatus:'eq'},
-  {id:'p8', icon:'⌚', code:'508', name:'Смарт-годинник Pulse Mini', price:1890, shop:'TechDrop', cat:'Електроніка', mirrors:3, sold3d:4, comm:8, stock:9, shopRating:91, top:false, foot:'Новинка тижня. Залишок обмежений.', shopStatus:'eq'},
+  {id:'p1', icon:'👟', code:'214', name:'Кросівки Street Runner', price:899, shop:'Urban Line', cat:'Взуття', mirrors:7, sold3d:32, sold10d:88, sold30d:240, soldTotal:1120, comm:12, stock:48, shopRating:96, top:true, foot:'Легкі кросівки на щодень. 5 кольорів, розміри 36–45. Магазин з еквайрингом.', shopStatus:'eq', paymentMethod:'eq', views:14200, carrier:'Нова Пошта', shippingDays:1, productReturns:3, conversion:4.1, topRank:12, publishedDaysAgo:340, soldByShop:true, exchangeDays:14, favoritesCount:212, mirroring:true},
+  {id:'p2', icon:'🧴', code:'118', name:'Сироватка з вітаміном C', price:349, shop:'SkinLab UA', cat:'Косметика', mirrors:22, sold3d:81, sold10d:260, sold30d:790, soldTotal:5400, comm:18, stock:210, shopRating:99, top:true, foot:'Бестселер весни. Дозволено автоматичне дзеркалення без підтвердження.', shopStatus:'eq', paymentMethod:'both', views:38900, carrier:'Нова Пошта', shippingDays:1, productReturns:1, conversion:6.8, topRank:3, publishedDaysAgo:180, soldByShop:true, exchangeDays:7, favoritesCount:640, mirroring:true},
+  {id:'p3', icon:'🎧', code:'305', name:'Бездротові навушники Air Pulse', price:1290, shop:'TechDrop', cat:'Електроніка', mirrors:14, sold3d:19, sold10d:52, sold30d:150, soldTotal:2100, comm:10, stock:33, shopRating:91, top:false, foot:'До 28 год від батареї. Гарантія 12 місяців.', shopStatus:'eq', paymentMethod:'eq', views:22100, carrier:'Укрпошта', shippingDays:2, productReturns:9, conversion:2.9, topRank:44, publishedDaysAgo:95, soldByShop:false, exchangeDays:14, favoritesCount:98},
+  {id:'p4', icon:'👜', code:'077', name:'Сумка крос-боді Mira', price:749, shop:'Bags & Co', cat:'Аксесуари', mirrors:5, sold3d:6, sold10d:15, sold30d:38, soldTotal:410, comm:15, stock:12, shopRating:88, top:false, foot:'Екошкіра, 4 кольори. Обмежена партія.', shopStatus:'iban', paymentMethod:'iban', views:5600, carrier:'Нова Пошта', shippingDays:3, productReturns:15, conversion:2.1, topRank:null, publishedDaysAgo:12, soldByShop:true, exchangeDays:0, favoritesCount:31},
+  {id:'p5', icon:'🕯️', code:'432', name:'Свічка соєва «Дім»', price:259, shop:'Затишно', cat:'Дім', mirrors:9, sold3d:14, sold10d:40, sold30d:120, soldTotal:960, comm:20, stock:76, shopRating:97, top:false, foot:'Ручна робота, аромат кедра й ванілі.', shopStatus:'eq', paymentMethod:'eq', views:9100, carrier:'Meest', shippingDays:2, productReturns:2, conversion:5.0, topRank:67, publishedDaysAgo:210, soldByShop:true, exchangeDays:10, favoritesCount:150},
+  {id:'p6', icon:'👕', code:'190', name:'Худі оверсайз «Kyiv»', price:1099, shop:'Urban Line', cat:'Одяг', mirrors:31, sold3d:44, sold10d:130, sold30d:410, soldTotal:3300, comm:12, stock:60, shopRating:96, top:true, foot:'Топ продажів місяця. Унісекс, S–XXL.', shopStatus:'eq', paymentMethod:'eq', views:41200, carrier:'Нова Пошта', shippingDays:1, productReturns:4, conversion:5.7, topRank:1, publishedDaysAgo:60, soldByShop:true, exchangeDays:14, favoritesCount:890},
+  {id:'p7', icon:'💄', code:'261', name:'Помада матова Velvet', price:229, shop:'SkinLab UA', cat:'Косметика', mirrors:11, sold3d:27, sold10d:75, sold30d:230, soldTotal:1980, comm:18, stock:140, shopRating:99, top:false, foot:'10 відтінків. Стійкість до 8 годин.', shopStatus:'eq', paymentMethod:'both', views:16700, carrier:'Нова Пошта', shippingDays:1, productReturns:2, conversion:4.4, topRank:28, publishedDaysAgo:150, soldByShop:false, exchangeDays:7, favoritesCount:205},
+  {id:'p8', icon:'⌚', code:'508', name:'Смарт-годинник Pulse Mini', price:1890, shop:'TechDrop', cat:'Електроніка', mirrors:3, sold3d:4, sold10d:9, sold30d:22, soldTotal:60, comm:8, stock:9, shopRating:91, top:false, foot:'Новинка тижня. Залишок обмежений.', shopStatus:'eq', paymentMethod:'eq', views:3800, carrier:'Укрпошта', shippingDays:2, productReturns:11, conversion:1.8, topRank:null, publishedDaysAgo:3, soldByShop:false, exchangeDays:14, favoritesCount:19},
 ];
 
 const SHOPS = [
@@ -391,17 +400,10 @@ const BLOGGERS = [
 
 const SORTS = {
   product: [
-    {id:'top3d', label:'🔥 Топ продажів за 3 дні', key:i=>-i.sold3d},
-    {id:'price_up', label:'Ціна ↗', key:i=>i.price},
-    {id:'price_down', label:'Ціна ↘', key:i=>-i.price},
-    {id:'cat', label:'Категорія', key:i=>i.cat},
-    {id:'mirrors', label:'Кількість дзеркал', key:i=>-i.mirrors},
-    {id:'stock', label:'Залишки', key:i=>-i.stock},
-    {id:'new', label:'Нові надходження', key:i=>-parseInt(i.code)},
-    {id:'old', label:'Давні позиції', key:i=>parseInt(i.code)},
-    {id:'safe', label:'🟢 Безпечні', key:i=>-i.shopRating, filter:i=>i.shopRating>=95},
-    {id:'warn', label:'🟠 Увага', key:i=>-i.shopRating, filter:i=>i.shopRating<95&&i.shopRating>=90},
-    {id:'crit', label:'🔴 Критичні', key:i=>-i.shopRating, filter:i=>i.shopRating<90},
+    {id:'sold', label:'Продано', key:i=> state.productPeriod==='3d'?i.sold3d:(state.productPeriod==='10d'?i.sold10d:(state.productPeriod==='30d'?i.sold30d:i.soldTotal))},
+    {id:'stock', label:'Кількість', key:i=>i.stock},
+    {id:'mirrors', label:'Дзеркал', key:i=>i.mirrors},
+    {id:'favorites', label:'Обрано', key:i=>i.favoritesCount},
   ],
   shop: [
     {id:'items', label:'За кількістю товарів', key:i=>-i.items},
@@ -448,6 +450,13 @@ let state = {
   regionFilter: '',
   coopFilter: 'all',
   favOnlyBlogger: false,
+  productPeriod: 'all',
+  mirrorFilter: 'all',
+  favOnlyProduct: false,
+  productCategoryFilter: new Set(),
+  priceMin: '', priceMax: '',
+  viewsMin: '', viewsMax: '',
+  productReturnsMin: '', productReturnsMax: '',
   reviewsFor: null,
   draftRating: 0,
   draftText: '',
@@ -463,26 +472,36 @@ function dataFor(type){ return type==='product'?PRODUCTS : type==='shop'?SHOPS :
 /* ============ CARD CONTENT BUILDERS ============ */
 function cardModel(type, item){
   if(type==='product'){
+    const paymentLabel = item.paymentMethod==='iban' ? 'Лише IBAN' : (item.paymentMethod==='eq' ? 'Є ЕКВАЙРИНГ' : 'IBAN + Екваєр');
+    const shippingLabel = item.shippingDays<=1 ? 'День в день' : item.shippingDays+' дні';
     return {
       icon:item.icon, code:'код '+item.code, name:item.name,
       meta:`${item.price} ₴ · ${item.cat} · Магазин «${item.shop}»`,
       badges: item.top ? [{cls:'gold', text:'🔥 Топ'}] : [],
       panels:[
-        {val:item.mirrors, lab:'дзеркал', cls:''},
-        {val:item.sold3d, lab:'продано за 3 дні', cls:''},
-        {val:item.comm+'%', lab:'комісія (тільки PRO)', cls:'gold'},
-        {val:item.stock+' шт', lab:'залишок', cls:''},
-        {val:item.shopStatus==='eq'?'Екваєр':'Іван', lab:'статус магазину', cls:''},
-        {val:item.top?'🔥':'—', lab:'у топі', cls:''}
+        {val:item.stock+' шт', lab:'кількість в наявності', cls:''},
+        {val:item.soldTotal.toLocaleString('uk-UA'), lab:'кількість проданих', cls:''},
+        {val:item.mirrors, lab:'скільки дзеркалять', cls:''},
+        {val:paymentLabel, lab:'метод оплати', cls:''},
+        {val:item.productReturns+'%', lab:'% повернень', cls: item.productReturns<=5?'zone-green':(item.productReturns<=15?'zone-orange':'zone-black')},
+        {val:shippingLabel, lab:'терміни відправки', cls:''}
       ],
-      risk:{pct:100-item.shopRating, label:'ризик повернень', zone: item.shopRating>=95?'green':(item.shopRating>=90?'orange':'black')},
+      risk:{pct:item.productReturns, label:'ризик повернень', zone: item.productReturns<=5?'green':(item.productReturns<=15?'orange':'black')},
       earnings:{price:item.price, comm:item.comm, stars: Math.round(item.price*item.comm/100)},
       foot:item.foot,
       expand:[
         ['Категорія', item.cat],
+        ['Продано за період', `3 дні: ${item.sold3d} · 10 днів: ${item.sold10d} · 30 днів: ${item.sold30d}`],
+        ['Переглядів картки', item.views.toLocaleString('uk-UA')],
+        ['Додано в обране блогерами', item.favoritesCount+' раз(ів)'],
+        ['Конверсія товару', item.conversion+'%'],
+        ['Місце в топ-100 за місяць', item.topRank ? '#'+item.topRank : 'поза топ-100'],
+        ['Опубліковано', item.publishedDaysAgo+' дн. тому'],
+        ['Продає сам магазин', item.soldByShop ? 'Так' : 'Ні, лише через дзеркала'],
+        ['Поштовий відправник', item.carrier],
+        ['Обмін і повернення', item.exchangeDays>0 ? `Так, ${item.exchangeDays} дн.` : 'Немає'],
         ['Статус магазину', item.shopStatus==='eq'?'Екваєр (з еквайрингом)':'Іван (лише IBAN)'],
         ['Умови дзеркалення', item.shopStatus==='eq'?'Автоматично, без підтвердження':'Потрібне підтвердження'],
-        ['Магазини, що дзеркалять', item.mirrors],
       ],
       buttons:[{label:'Переглянути',kind:'ghost'},{label:'Віддзеркалити',kind:'primary'},{label:'До сайту магазину',kind:'warn'}]
     };
@@ -631,14 +650,15 @@ function renderTile(type, item){
   }
 
   const stat = type==='product' ? item.price+' ₴' : (item.status==='eq'?'⚡ Екваєр':'🏦 Іван');
+  const isFav2 = !!state.fav[item.id];
   return `
-    <div class="tile" data-id="${item.id}">
+    <div class="tile" data-id="${item.id}" data-open-modal="${item.id}" style="cursor:pointer;">
       <div class="photo ${photoClass}">${m.icon}</div>
       <p class="t-name">${m.name}</p>
       <div class="t-stat">${stat}</div>
       <div class="t-foot-row">
         <span class="t-code">${m.code}</span>
-        <button class="t-more" data-open-modal="${item.id}" aria-label="Детальніше">···</button>
+        <button class="tile-fav ${isFav2?'on':''}" data-tile-fav="${item.id}" aria-label="В обране">${isFav2?'♥':'♡'}</button>
       </div>
     </div>
   `;
@@ -653,7 +673,8 @@ function zoneOf(type, item){
 function renderToolbar(){
   const isBlogger = state.type === 'blogger';
   const sorts = SORTS[state.type];
-  const chips = isBlogger
+  const isProduct = state.type === 'product';
+  const chips = (isBlogger || isProduct)
     ? sorts.map(s=>{
         const active = state.sortId===s.id;
         const arrow = active ? (state.sortDir==='desc' ? ' ↓' : ' ↑') : '';
@@ -694,6 +715,27 @@ function renderToolbar(){
     `;
   }
 
+  let periodRow = '';
+  if(isProduct){
+    periodRow = `
+      <button class="chip coop-all ${state.productPeriod==='all'?'active':''}" data-period="all">Усі</button>
+      <button class="chip coop-all ${state.productPeriod==='3d'?'active':''}" data-period="3d">3 дні</button>
+      <button class="chip coop-all ${state.productPeriod==='10d'?'active':''}" data-period="10d">10 днів</button>
+      <button class="chip coop-all ${state.productPeriod==='30d'?'active':''}" data-period="30d">30 днів</button>
+    `;
+  }
+  let mirrorRow = '';
+  if(isProduct){
+    const mirroringN = all.filter(p=>p.mirroring).length;
+    const notMirroringN = total - mirroringN;
+    mirrorRow = `
+      <button class="chip coop-all ${state.mirrorFilter==='all'?'active':''}" data-mirror="all">Усі ${total}</button>
+      <button class="chip coop-fav ${state.favOnlyProduct?'active':''}" data-mirror="fav" aria-label="Обрані">${state.favOnlyProduct?'♥':'♡'} ${all.filter(p=>state.fav[p.id]).length}</button>
+      <button class="chip coop-yes ${state.mirrorFilter==='mirroring'?'active':''}" data-mirror="mirroring">Дзеркалю ${mirroringN}</button>
+      <button class="chip coop-no ${state.mirrorFilter==='not_mirroring'?'active':''}" data-mirror="not_mirroring">Не дзеркалю ${notMirroringN}</button>
+    `;
+  }
+
   let platformRow = '', formatRow = '';
   if(isBlogger){
     const pAll = state.platformFilter.size===0;
@@ -705,8 +747,7 @@ function renderToolbar(){
   }
 
   const filterOptions = state.type==='product'
-    ? `<label><input type="checkbox" id="fStock" ${state.filterOnlyStock?'checked':''}> Лише в наявності</label>
-       <label><input type="checkbox" id="fEq" ${state.filterOnlyEq?'checked':''}> Лише магазини з еквайрингом</label>`
+    ? renderProductFilterDrawer()
     : state.type==='shop'
     ? `<label><input type="checkbox" id="fEq" ${state.filterOnlyEq?'checked':''}> Лише з еквайрингом (Екваєр)</label>`
     : renderBloggerFilterDrawer();
@@ -715,6 +756,7 @@ function renderToolbar(){
 
   document.getElementById('toolbar').innerHTML = `
     ${state.type==='product' ? `<div class="chip-scroll" style="margin-bottom:8px;"><button class="chip" id="myCatalogBtn">🎥 Мій каталог для блогерів</button></div>` : ''}
+    ${isProduct ? `<div class="chip-scroll">${periodRow}</div><div class="chip-scroll">${mirrorRow}</div>` : ''}
     <div class="chip-scroll">${chips}</div>
     ${isBlogger ? `<div class="chip-scroll">${coopRow}</div><div class="chip-scroll">${platformRow}</div><div class="chip-scroll">${formatRow}</div>` : ''}
     ${countsHtml ? `<div class="counts-row">${countsHtml}</div>` : ''}
@@ -735,7 +777,7 @@ function renderToolbar(){
 
   document.querySelectorAll('.chip[data-sort]').forEach(el=>{
     el.addEventListener('click', ()=>{
-      if(isBlogger){
+      if(isBlogger || isProduct){
         if(state.sortId === el.dataset.sort){
           state.sortDir = state.sortDir==='desc' ? 'asc' : 'desc';
         } else {
@@ -753,6 +795,20 @@ function renderToolbar(){
       const v = el.dataset.coop;
       if(v==='fav'){ state.favOnlyBlogger = !state.favOnlyBlogger; }
       else { state.coopFilter = v; }
+      renderAll();
+    });
+  });
+  document.querySelectorAll('.chip[data-period]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      state.productPeriod = el.dataset.period;
+      renderAll();
+    });
+  });
+  document.querySelectorAll('.chip[data-mirror]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const v = el.dataset.mirror;
+      if(v==='fav'){ state.favOnlyProduct = !state.favOnlyProduct; }
+      else { state.mirrorFilter = v; }
       renderAll();
     });
   });
@@ -782,7 +838,11 @@ function renderToolbar(){
       state._filterSnapshot = {
         filterOnlyStock: state.filterOnlyStock, filterOnlyEq: state.filterOnlyEq, filterOnlyShop: state.filterOnlyShop,
         categoryFilter: new Set(state.categoryFilter), sampleFilter: new Set(state.sampleFilter),
-        convMin: state.convMin, convMax: state.convMax, onSiteOnly: state.onSiteOnly, regionFilter: state.regionFilter
+        convMin: state.convMin, convMax: state.convMax, onSiteOnly: state.onSiteOnly, regionFilter: state.regionFilter,
+        productCategoryFilter: new Set(state.productCategoryFilter),
+        priceMin: state.priceMin, priceMax: state.priceMax,
+        viewsMin: state.viewsMin, viewsMax: state.viewsMax,
+        productReturnsMin: state.productReturnsMin, productReturnsMax: state.productReturnsMax
       };
       state.filterOpen = true;
     } else {
@@ -801,6 +861,10 @@ function renderToolbar(){
       state.filterOnlyStock = snap.filterOnlyStock; state.filterOnlyEq = snap.filterOnlyEq; state.filterOnlyShop = snap.filterOnlyShop;
       state.categoryFilter = snap.categoryFilter; state.sampleFilter = snap.sampleFilter;
       state.convMin = snap.convMin; state.convMax = snap.convMax; state.onSiteOnly = snap.onSiteOnly; state.regionFilter = snap.regionFilter;
+      state.productCategoryFilter = snap.productCategoryFilter;
+      state.priceMin = snap.priceMin; state.priceMax = snap.priceMax;
+      state.viewsMin = snap.viewsMin; state.viewsMax = snap.viewsMax;
+      state.productReturnsMin = snap.productReturnsMin; state.productReturnsMax = snap.productReturnsMax;
     }
     state.filterOpen = false;
     renderAll();
@@ -842,11 +906,47 @@ function renderToolbar(){
     const regionEl = document.getElementById('fRegion');
     if(regionEl) regionEl.addEventListener('change', e=>{ state.regionFilter = e.target.value; renderList(); });
   }
+  if(isProduct){
+    document.querySelectorAll('[data-pcat-f]').forEach(el=>{
+      el.addEventListener('change', e=>{
+        const c = el.dataset.pcatF;
+        e.target.checked ? state.productCategoryFilter.add(c) : state.productCategoryFilter.delete(c);
+        renderList();
+      });
+    });
+    const pairs = [['fPriceMin','priceMin'],['fPriceMax','priceMax'],['fViewsMin','viewsMin'],['fViewsMax','viewsMax'],['fReturnsMin','productReturnsMin'],['fReturnsMax','productReturnsMax']];
+    pairs.forEach(([elId, stateKey])=>{
+      const el = document.getElementById(elId);
+      if(el) el.addEventListener('input', e=>{ state[stateKey] = e.target.value; renderList(); });
+    });
+  }
   if(document.getElementById('myCatalogBtn')){
     document.getElementById('myCatalogBtn').addEventListener('click', ()=> alert('Веде на «Каталог → Товари/Послуги» цього блогера-продавця.'));
   }
 }
 
+function renderProductFilterDrawer(){
+  const allCats = [...new Set(PRODUCTS.map(p=>p.cat))].sort();
+  const catChecks = allCats.map(c=>`<label><input type="checkbox" data-pcat-f="${c}" ${state.productCategoryFilter.has(c)?'checked':''}> ${c}</label>`).join('');
+  const rangeRow = (idMin, idMax, valMin, valMax) => `
+    <div style="display:flex;gap:8px;align-items:center;">
+      <input type="number" id="${idMin}" placeholder="від" value="${valMin}" style="width:80px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;">
+      <span style="color:var(--ink-faint);">—</span>
+      <input type="number" id="${idMax}" placeholder="до" value="${valMax}" style="width:80px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;">
+    </div>`;
+  return `
+    <label><input type="checkbox" id="fStock" ${state.filterOnlyStock?'checked':''}> Лише в наявності</label>
+    <label><input type="checkbox" id="fEq" ${state.filterOnlyEq?'checked':''}> Лише магазини з еквайрингом</label>
+    <div class="filter-section-title">Категорія</div>
+    ${catChecks}
+    <div class="filter-section-title">Ціна, ₴</div>
+    ${rangeRow('fPriceMin','fPriceMax', state.priceMin, state.priceMax)}
+    <div class="filter-section-title">Переглядів</div>
+    ${rangeRow('fViewsMin','fViewsMax', state.viewsMin, state.viewsMax)}
+    <div class="filter-section-title">% повернень</div>
+    ${rangeRow('fReturnsMin','fReturnsMax', state.productReturnsMin, state.productReturnsMax)}
+  `;
+}
 function renderBloggerFilterDrawer(){
   const allCats = [...new Set(BLOGGERS.flatMap(b=>b.cats))].sort();
   const platformChecks = PLATFORMS.map(p=>`<label><input type="checkbox" data-platform-f="${p.id}" ${state.platformFilter.has(p.id)?'checked':''} disabled> ${p.label}</label>`).join('');
@@ -887,6 +987,16 @@ function currentItems(){
   if(state.type==='product'){
     if(state.filterOnlyStock) items = items.filter(i=>i.stock>0);
     if(state.filterOnlyEq) items = items.filter(i=>i.shopStatus==='eq');
+    if(state.mirrorFilter==='mirroring') items = items.filter(i=>i.mirroring);
+    if(state.mirrorFilter==='not_mirroring') items = items.filter(i=>!i.mirroring);
+    if(state.favOnlyProduct) items = items.filter(i=>state.fav[i.id]);
+    if(state.productCategoryFilter.size) items = items.filter(i=>state.productCategoryFilter.has(i.cat));
+    if(state.priceMin !== '') items = items.filter(i=>i.price >= parseFloat(state.priceMin));
+    if(state.priceMax !== '') items = items.filter(i=>i.price <= parseFloat(state.priceMax));
+    if(state.viewsMin !== '') items = items.filter(i=>i.views >= parseFloat(state.viewsMin));
+    if(state.viewsMax !== '') items = items.filter(i=>i.views <= parseFloat(state.viewsMax));
+    if(state.productReturnsMin !== '') items = items.filter(i=>i.productReturns >= parseFloat(state.productReturnsMin));
+    if(state.productReturnsMax !== '') items = items.filter(i=>i.productReturns <= parseFloat(state.productReturnsMax));
   }
   if(state.type==='shop' && state.filterOnlyEq) items = items.filter(i=>i.status==='eq');
   if(state.type==='blogger'){
@@ -907,9 +1017,13 @@ function currentItems(){
   const sortDef = SORTS[state.type].find(s=>s.id===state.sortId);
   if(sortDef){
     if(sortDef.filter) items = items.filter(sortDef.filter);
-    if(state.type==='blogger'){
+    if(state.type==='blogger' || state.type==='product'){
       const dir = state.sortDir==='asc' ? 1 : -1;
-      items.sort((a,b)=> dir * (sortDef.key(a) - sortDef.key(b)));
+      items.sort((a,b)=>{
+        const ka=sortDef.key(a), kb=sortDef.key(b);
+        if(typeof ka==='string') return dir*ka.localeCompare(kb);
+        return dir*(ka-kb);
+      });
     } else {
       items.sort((a,b)=>{
         const ka = sortDef.key(a), kb = sortDef.key(b);
@@ -942,7 +1056,7 @@ function renderList(){
         e.stopPropagation();
         const id = btn.dataset.tileFav;
         state.fav[id] = !state.fav[id];
-        if(state.type==='blogger') renderToolbar();
+        if(state.type==='blogger' || state.type==='product') renderToolbar();
         renderList();
       });
     });
@@ -957,7 +1071,7 @@ function wireCardEvents(root, isModal){
     btn.addEventListener('click', ()=>{
       const id = btn.dataset.fav;
       state.fav[id] = !state.fav[id];
-      if(state.type==='blogger') renderToolbar();
+      if(state.type==='blogger' || state.type==='product') renderToolbar();
       if(isModal) renderModal(); else renderList();
     });
   });
@@ -1070,6 +1184,47 @@ function renderReviews(){
   });
 }
 function closeReviews(){ state.reviewsFor = null; document.getElementById('reviewsBackdrop').classList.remove('open'); }
+
+/* ============ INFO POPUP ============ */
+const INFO_TEXT = {
+  product: `
+    <p><b>Період (Усі · 3 дні · 10 днів · 30 днів)</b> — обирає, за яке вікно рахувати «Продано» в сортуванні нижче. Не фільтрує список, лише змінює, які цифри порівнюються при сортуванні за «Продано».</p>
+    <p><b>Усі / ♡ Обрані / Дзеркалю / Не дзеркалю</b> — показує товари залежно від твоїх стосунків із ними: чи вже дзеркалиш, чи додав у обране. ♡ можна вмикати одночасно з будь-якою з трьох інших.</p>
+    <p><b>Сортування</b> (Продано · Кількість · Дзеркал · Обрано) — клік активує за спаданням (найбільше вгорі), повторний клік перемикає на зростання.</p>
+    <p><b>Фільтри</b> — тут ще й Ціна, Категорія, Перегляди та % повернень (діапазонами «від–до»), щоб не захаращувати рядок сортування рідше вживаними критеріями.</p>
+    <p><b>6 панелей картки:</b> кількість в наявності, кількість проданих (всього), скільки Блогерів дзеркалять, метод оплати магазину (лише IBAN / є Екваєр / обидва), % повернень цього товару, терміни відправки.</p>
+  `,
+  shop: `
+    <p><b>Сортування</b> — за кількістю товарів або за кількістю нових запитів на дзеркалення.</p>
+    <p><b>🟢🟠⚫ Зведення</b> — скільки магазинів у кожній зоні ризику (за % повернень), налаштованій у Рейтингах.</p>
+    <p><b>6 панелей картки:</b> товарів у каталозі, сума залишків у гривнях, кількість Оглядачів-дзеркал (сірі зірки) і PRO-дзеркал (золоті зірки), нових запитів, % повернень магазину.</p>
+    <p>Статус «⚡ Екваєр» чи «🏦 Іван» одразу підказує, чи фіксуватимуться Зірочки при дзеркаленні цього магазину.</p>
+  `,
+  blogger: `
+    <p><b>Сортування</b> (Зірок · Конверсія · Товарів · Магазини · Повернень · Дата реєстрації) — за замовчуванням активне «Зірок» за спаданням (найбільше вгорі). Клік по активній кнопці перемикає напрям.</p>
+    <p><b>Усі / ♡ Обрані / Співпрацюю / Не співпрацюю</b> — показує блогерів залежно від того, чи вже працюєш із ними. ♡ комбінується з будь-якою з трьох інших.</p>
+    <p><b>Платформи / Формати контенту</b> — множинний вибір, показує лише блогерів, які працюють хоча б в одному з обраних.</p>
+    <p><b>6 панелей картки:</b> золоті зірочки (заробіток-орієнтир), скільки магазинів дзеркалить, скільки товарів дзеркалить, конверсія, % повернень (кольором — зелений/жовтий/чорний за твоїми Рейтингами), основна платформа. Якщо вже співпрацюєте — додається жовтий рядок «ВАШИХ: ★ N».</p>
+  `,
+};
+function openInfo(){
+  const backdrop = document.getElementById('infoBackdrop');
+  const sheet = document.getElementById('infoSheet');
+  const titles = {product:'Як працює сторінка «Товар»', shop:'Як працює сторінка «Магазин»', blogger:'Як працює сторінка «Блогер»'};
+  sheet.innerHTML = `
+    <div class="modal-handle"></div>
+    <div class="modal-inner">
+      <p class="name" style="margin-bottom:12px;">${titles[state.type]}</p>
+      <div class="info-text">${INFO_TEXT[state.type]}</div>
+      <button class="modal-close" id="infoCloseBtn">✕</button>
+    </div>
+  `;
+  backdrop.classList.add('open');
+  document.getElementById('infoCloseBtn').addEventListener('click', closeInfo);
+}
+function closeInfo(){ document.getElementById('infoBackdrop').classList.remove('open'); }
+document.getElementById('infoBackdrop').addEventListener('click', e=>{ if(e.target.id==='infoBackdrop') closeInfo(); });
+document.getElementById('infoBtn').addEventListener('click', openInfo);
 document.getElementById('reviewsBackdrop').addEventListener('click', e=>{ if(e.target.id==='reviewsBackdrop') closeReviews(); });
 document.getElementById('modalBackdrop').addEventListener('click', e=>{ if(e.target.id==='modalBackdrop') closeModal(); });
 
@@ -1091,6 +1246,9 @@ document.querySelectorAll('#typeSwitch button').forEach(btn=>{
     state.platformFilter=new Set(); state.formatFilter=new Set(); state.categoryFilter=new Set(); state.sampleFilter=new Set();
     state.convMin=''; state.convMax=''; state.onSiteOnly=false; state.regionFilter='';
     state.coopFilter='all'; state.favOnlyBlogger=false;
+    state.productPeriod='all'; state.mirrorFilter='all'; state.favOnlyProduct=false;
+    state.productCategoryFilter=new Set(); state.priceMin=''; state.priceMax='';
+    state.viewsMin=''; state.viewsMax=''; state.productReturnsMin=''; state.productReturnsMax='';
     renderAll();
   });
 });
