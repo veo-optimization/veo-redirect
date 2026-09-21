@@ -441,12 +441,12 @@ const SORTS = {
   ],
   shop: [
     {id:'rating', label:'Рейтинг', key:i=>i.rating},
-    {id:'mirrors', label:'Дзеркал', key:i=>i.greyMirrors+i.goldMirrors},
     {id:'returns', label:'Повернень', key:i=>i.returns},
     {id:'payouts', label:'Виплат', key:i=>i.payoutsCount},
-    {id:'items', label:'Товарів', key:i=>i.items},
-    {id:'variations', label:'Варіацій', key:i=>i.variations},
     {id:'units', label:'Одиниць', key:i=>i.units},
+    {id:'variations', label:'Варіацій', key:i=>i.variations},
+    {id:'items', label:'Товарів', key:i=>i.items},
+    {id:'mirrors', label:'Дзеркал', key:i=>i.greyMirrors+i.goldMirrors},
   ],
   blogger: [
     {id:'stars', label:'Зірок', key:i=>i.stars},
@@ -458,8 +458,8 @@ const SORTS = {
     {id:'regdate', label:'Дата реєстрації', key:i=>new Date(i.regDate).getTime()},
   ]
 };
-const SHOP_SORT_ROW1_IDS = ['rating','mirrors','returns','payouts'];
-const SHOP_SORT_ROW2_IDS = ['items','variations','units'];
+const SHOP_SORT_ROW1_IDS = ['rating','returns','payouts'];
+const SHOP_SORT_ROW2_IDS = ['units','variations','items','mirrors'];
 
 function formatStars(n){
   if(n>=1000000) return '★ '+(n/1000000).toLocaleString('uk-UA',{maximumFractionDigits:1})+' млн';
@@ -566,7 +566,7 @@ function cardModel(type, item){
     return {
       icon:item.icon, code:'код '+item.code, name:item.name,
       meta:item.cats,
-      badges:[{cls:'status', text: item.status==='eq'?'⚡ Платіжна система':'🏦 Ручна оплата'}],
+      badges:[{cls:'status', text: item.status==='eq'?'Платіжна система':'Ручна оплата'}],
       rating:item.rating,
       siteDomain: item.code+'.beroo.online',
       siteUrl: `https://${item.code}.beroo.online`,
@@ -583,7 +583,7 @@ function cardModel(type, item){
       expand:[
         ['Категорії', item.cats],
         ['Умови дзеркалення', 'Завжди потрібне ручне підтвердження Магазину (автоматичного схвалення в системі немає)'],
-        ['Зона ризику', item.returns<=5?'🟢 Безпечна':(item.returns<=15?'🟠 Увага':'⚫ Критична')],
+        ['Зона ризику', item.returns<=5?'Безпечна':(item.returns<=15?'Увага':'Критична')],
         ['Активних запитів', item.requests],
         ['Оглядачів-дзеркал', '★ '+item.greyMirrors],
         ['PRO-дзеркал', '★ '+item.goldMirrors],
@@ -699,7 +699,7 @@ function renderFullCard(type, item, opts){
           </div>
         ` : ''}
         <dl>${expandRows}</dl>
-        <div class="complaint">🚩 Подати скаргу</div>
+        <div class="complaint">Подати скаргу</div>
       </div>
       <div class="actions">${buttonsHtml}</div>
     </div>
@@ -727,7 +727,7 @@ function renderTile(type, item){
     `;
   }
 
-  const stat = type==='product' ? item.price+' ₴' : (item.status==='eq'?'⚡ Платіжна система':'🏦 Ручна оплата');
+  const stat = type==='product' ? item.price+' ₴' : (item.status==='eq'?'Платіжна система':'Ручна оплата');
   const isFav2 = !!state.fav[item.id];
   let activeMetricHtml = '';
   if(type==='product'){
@@ -788,7 +788,7 @@ function renderToolbar(){
     return `<button class="chip ${active?'active':''}" data-sort="${s.id}">${s.label}${arrow}</button>`;
   }).join('');
   const chips = dirAware
-    ? renderSortChips(sorts)
+    ? renderSortChips(isProduct && state.productPaymentFilter==='iban' ? sorts.filter(s=>s.id!=='sold') : sorts)
     : sorts.map(s=>`<button class="chip ${state.sortId===s.id?'active':''}" data-sort="${s.id}">${s.label}</button>`).join('');
   const shopRow1Html = isShop ? renderSortChips(sorts.filter(s=>SHOP_SORT_ROW1_IDS.includes(s.id))) : '';
   const shopRow2Html = isShop ? renderSortChips(sorts.filter(s=>SHOP_SORT_ROW2_IDS.includes(s.id))) : '';
@@ -844,17 +844,17 @@ function renderToolbar(){
   let shopPaymentRow = '';
   if(isShop){
     shopPaymentRow = `
-      <button class="chip coop-all ${state.shopPaymentFilter==='all'?'active':''}" data-shoppay="all">Усі</button>
-      <button class="chip coop-all ${state.shopPaymentFilter==='eq'?'active':''}" data-shoppay="eq">Платіжна система</button>
-      <button class="chip coop-all ${state.shopPaymentFilter==='iban'?'active':''}" data-shoppay="iban">Ручна оплата</button>
+      <button class="chip ${state.shopPaymentFilter==='all'?'active':''}" data-shoppay="all">Усі</button>
+      <button class="chip ${state.shopPaymentFilter==='eq'?'active':''}" data-shoppay="eq">Платіжна система</button>
+      <button class="chip ${state.shopPaymentFilter==='iban'?'active':''}" data-shoppay="iban">Ручна оплата</button>
     `;
   }
   let productPaymentRow = '';
   if(isProduct){
     productPaymentRow = `
-      <button class="chip coop-all ${state.productPaymentFilter==='all'?'active':''}" data-prodpay="all">Усі</button>
-      <button class="chip coop-all ${state.productPaymentFilter==='eq'?'active':''}" data-prodpay="eq">Платіжна система</button>
-      <button class="chip coop-all ${state.productPaymentFilter==='iban'?'active':''}" data-prodpay="iban">Ручна оплата</button>
+      <button class="chip ${state.productPaymentFilter==='all'?'active':''}" data-prodpay="all">Усі</button>
+      <button class="chip ${state.productPaymentFilter==='eq'?'active':''}" data-prodpay="eq">Платіжна система</button>
+      <button class="chip ${state.productPaymentFilter==='iban'?'active':''}" data-prodpay="iban">Ручна оплата</button>
     `;
   }
 
@@ -878,9 +878,11 @@ function renderToolbar(){
 
   document.getElementById('toolbar').innerHTML = `
     ${state.type==='product' ? `<div class="chip-scroll" style="margin-bottom:8px;"><button class="chip" id="myCatalogBtn">🎥 Мій каталог для блогерів</button></div>` : ''}
-    ${isProduct ? `<div class="chip-scroll ${topActive?'dimmed':''}">${productPaymentRow}</div><div class="chip-scroll">${periodRow}</div><div class="chip-scroll ${topActive?'dimmed':''}">${mirrorRow}</div>` : ''}
-    ${isShop ? `<div class="chip-scroll">${shopPaymentRow}</div><div class="chip-scroll">${shopRow1Html}</div><div class="chip-scroll">${shopRow2Html}</div><div class="chip-scroll">${shopCoopRow}</div>` : `<div class="chip-scroll ${(isProduct&&topActive)?'dimmed':''}">${chips}</div>`}
-    ${isBlogger ? `<div class="chip-scroll">${coopRow}</div><div class="chip-scroll">${platformRow}</div><div class="chip-scroll">${formatRow}</div>` : ''}
+    ${isProduct ? `<div class="chip-scroll ${topActive?'dimmed':''}">${productPaymentRow}</div>${state.productPaymentFilter==='iban' ? '' : `<div class="chip-scroll">${periodRow}</div>`}` : ''}
+    ${isShop ? `<div class="chip-scroll">${shopPaymentRow}</div>${state.shopPaymentFilter==='iban' ? '' : `<div class="chip-scroll">${shopRow1Html}</div>`}<div class="chip-scroll">${shopRow2Html}</div>` : `<div class="chip-scroll ${(isProduct&&topActive)?'dimmed':''}">${chips}</div>`}
+    ${isProduct ? `<div class="chip-scroll ${topActive?'dimmed':''}">${mirrorRow}</div>` : ''}
+    ${isShop ? `<div class="chip-scroll">${shopCoopRow}</div>` : ''}
+    ${isBlogger ? `<div class="chip-scroll">${platformRow}</div><div class="chip-scroll">${formatRow}</div><div class="chip-scroll">${coopRow}</div>` : ''}
     <div class="search-filter-row">
       <div class="search-row" style="margin-bottom:0;flex:1;">
         <span class="icon">🔍</span>
@@ -924,6 +926,7 @@ function renderToolbar(){
     el.addEventListener('click', ()=>{
       const v = el.dataset.top;
       state.topMode = state.topMode===v ? null : v;
+      state.productPaymentFilter = 'all';
       renderAll();
     });
   });
@@ -947,6 +950,7 @@ function renderToolbar(){
   document.querySelectorAll('.chip[data-shoppay]').forEach(el=>{
     el.addEventListener('click', ()=>{
       state.shopPaymentFilter = el.dataset.shoppay;
+      if(state.shopPaymentFilter==='iban' && SHOP_SORT_ROW1_IDS.includes(state.sortId)){ state.sortId = null; }
       renderAll();
     });
   });
@@ -954,6 +958,7 @@ function renderToolbar(){
     el.addEventListener('click', ()=>{
       state.topMode = null;
       state.productPaymentFilter = el.dataset.prodpay;
+      if(state.productPaymentFilter==='iban' && state.sortId==='sold'){ state.sortId = null; }
       renderAll();
     });
   });
