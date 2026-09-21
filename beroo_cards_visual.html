@@ -104,7 +104,49 @@
   }
   .chip.active{background:var(--primary); border-color:var(--primary); color:#fff;}
   .chip-scroll.dimmed{opacity:.4;}
-  .payment-warning{font-size:10.5px; color:#C93E49; line-height:1.4; margin:0 0 8px; padding:0 2px;}
+  .payment-warning{font-size:10.5px; color:#C93E49; line-height:1.4; margin:0 0 8px; padding:0 2px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .payment-note-green{font-size:10.5px; color:#2E7D32; line-height:1.4; margin:0 0 8px; padding:0 2px;}
+  .payment-note-btn{flex:none; font-size:10px; font-weight:700; color:#fff; background:#C93E49; border:none; border-radius:999px; padding:4px 10px; cursor:pointer; white-space:nowrap;}
+
+  /* ---------- micro table ---------- */
+  .micro-table{width:96%; margin:0 auto 14px; border:1px solid var(--line); border-radius:10px; overflow:hidden; background:var(--card);}
+  .micro-header{display:flex; padding:8px 4px;}
+  .micro-header::after{content:none;}
+  .micro-th{flex:1; min-width:0; background:none; border:none; border-right:1px solid var(--line); padding:2px 1px; font-size:9px; font-weight:700; color:var(--ink-faint); text-transform:uppercase; letter-spacing:.01em; cursor:pointer; text-align:center; line-height:1.15;}
+  .micro-th:last-child{border-right:none;}
+  .micro-th.active{color:var(--primary);}
+  .micro-table > .micro-header{border-bottom:1.5px solid var(--ink);}
+  .micro-body{display:flex; flex-direction:column;}
+  .micro-item{border-bottom:1px solid var(--line); cursor:pointer; padding:8px 8px 7px;}
+  .micro-item:last-child{border-bottom:none;}
+  .micro-item:active{background:var(--paper);}
+  .micro-item-top{display:flex; align-items:flex-start; gap:8px;}
+  .micro-photo{flex:none; width:34px; height:34px; border-radius:9px; background:var(--grey-star-bg); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:15px;}
+  .micro-photo.avatar-shop, .micro-photo.avatar-blogger{border-radius:50%;}
+  .micro-info-text{min-width:0; flex:1; padding-top:1px;}
+  .micro-name-line{font-size:12.5px; font-weight:800; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .micro-meta-line{font-size:10px; color:var(--ink-faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:1px;}
+  .micro-badges{flex:none; display:flex; flex-direction:column; align-items:flex-end; gap:4px;}
+  .micro-badges-row2{display:flex; align-items:center; gap:6px;}
+  .micro-top-badge{font-size:8.5px; font-weight:700; color:var(--gold); background:var(--gold-bg); border:1px solid #EAD9A8; border-radius:999px; padding:2px 8px; white-space:nowrap;}
+  .micro-star{font-size:11.5px; font-weight:800; color:var(--gold);}
+  .micro-fav{flex:none; border:1px solid var(--line); background:var(--card); border-radius:999px; font-size:10px; font-weight:700; color:var(--ink-soft); padding:2px 8px; cursor:pointer;}
+  .micro-fav.on{color:#D1495B; border-color:#F1C6CD;}
+  .micro-item-panels{display:flex; gap:5px; margin-top:7px; align-items:stretch;}
+  .micro-first-col{flex:1; min-width:0; display:flex; flex-direction:column; align-items:flex-start; justify-content:center; padding:2px 2px 2px 0;}
+  .micro-first-val{font-size:12.5px; font-weight:800; color:var(--ink); line-height:1.2;}
+  .micro-first-lab{font-size:7.5px; font-weight:700; text-transform:uppercase; letter-spacing:.02em; color:var(--ink-faint); margin-top:1px;}
+  .micro-td{flex:1; min-width:0; border-radius:10px; background:var(--paper); border:1px solid var(--line); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:6px 2px; text-align:center; overflow:hidden;}
+  .micro-td-val{font-size:12.5px; font-weight:800; color:var(--ink); line-height:1.2; overflow-wrap:anywhere; word-break:break-word; max-width:100%;}
+  .micro-td-lab{font-size:7.5px; font-weight:700; text-transform:uppercase; letter-spacing:.02em; color:var(--ink-faint); margin-top:2px;}
+  .micro-td-extra{font-size:9px; font-weight:800; color:var(--gold); line-height:1.2; margin-top:1px;}
+  .micro-td-lab-top{order:-1; font-size:7.5px; font-weight:700; text-transform:none; letter-spacing:0; color:var(--ink-faint); margin-bottom:2px;}
+  .micro-td-val-small{font-size:10.5px; font-weight:800; color:var(--ink); line-height:1.25;}
+  .micro-td-extra-inline{color:var(--gold);}
+  .micro-td-comm{background:var(--orange-bg); border-color:#F5D9B8;}
+  .micro-td-comm .micro-td-val, .micro-td-comm .micro-td-lab{color:var(--orange);}
+  .micro-td-returns{background:var(--green-bg); border-color:#BFE3C6;}
+  .micro-td-returns .micro-td-val, .micro-td-returns .micro-td-lab{color:var(--green);}
 
   .chip.coop-all.active{background:#fff; color:var(--ink); border:1px solid var(--ink);}
   .chip.coop-all:not(.active){background:transparent; color:var(--ink-soft); border:1px solid var(--line);}
@@ -114,6 +156,8 @@
   .chip.coop-fav.active{color:#D1495B; background:var(--card); border-color:#F1C6CD;}
 
   .util-btn.icon-only{flex:none; width:40px; padding:0; height:40px; display:flex; align-items:center; justify-content:center; font-size:15px;}
+  .fav-mini-btn{flex:none; width:auto; padding:0 12px; font-size:12.5px; font-weight:700; color:var(--ink-soft);}
+  .fav-mini-btn.on{color:#D1495B; border-color:#F1C6CD;}
   .filter-dot{position:absolute; top:6px; right:6px; width:7px; height:7px; border-radius:50%; background:var(--primary);}
   .filter-actions{display:flex; gap:8px; margin-top:14px; padding-top:12px; border-top:1px solid var(--line);}
   .filter-actions .btn{padding:10px;}
@@ -229,6 +273,7 @@
 
   .earn-box{margin:2px 16px 4px; padding:11px 13px; background:var(--gold-bg); border-radius:13px;}
   .earn-box-warning{background:var(--grey-star-bg); color:#C93E49; font-size:11.5px; line-height:1.5; font-weight:600;}
+  .earn-box-green{background:var(--green-bg); color:#2E7D32; font-size:11.5px; line-height:1.5; font-weight:600;}
   .earn-box .earn-top{display:flex; align-items:center; justify-content:space-between;}
   .earn-box .earn-label{font-size:10px; color:var(--gold); text-transform:uppercase; letter-spacing:.04em; font-weight:700;}
   .earn-box .earn-val{font-size:15px; font-weight:800; color:var(--ink);}
@@ -320,6 +365,7 @@
     <div class="pillset" id="densitySwitch" role="tablist" aria-label="Режим показу">
       <button class="active" data-density="simple">▦ Спрощений</button>
       <button data-density="expanded">▤ Розширений</button>
+      <button data-density="micro">▥ Мікро</button>
     </div>
   </div>
 
@@ -480,12 +526,14 @@ const SORTS = {
     {id:'stock', label:'Лишилось', key:i=>i.stock},
     {id:'mirrors', label:'Дзеркал', key:i=>i.mirrors},
     {id:'favorites', label:'Обрано', key:i=>i.favoritesCount},
+    {id:'returns', label:'Повернень', key:i=>i.productReturns},
   ],
   shop: [
     {id:'rating', label:'Рейтинг', key:i=>i.rating},
     {id:'returns', label:'Повернень', key:i=>i.returns},
     {id:'payouts', label:'Виплат', key:i=>i.payoutsCount},
     {id:'units', label:'Одиниць', key:i=>i.units},
+    {id:'comm', label:'Комісія', key:i=>i.commMin},
     {id:'variations', label:'Варіацій', key:i=>i.variations},
     {id:'items', label:'Товарів', key:i=>i.items},
     {id:'mirrors', label:'Дзеркал', key:i=>i.greyMirrors+i.goldMirrors},
@@ -514,11 +562,18 @@ function carriersDisplay(carriers){
   if(carriers.length>=3) return carriers.map(c=>CARRIER_ABBR[c]||c).join(', ');
   return carriers.map(c=>CARRIER_NBSP[c]||c).join(', ');
 }
+function carriersDisplayMicro(carriers){
+  // Компактний варіант для вузьких клітинок Мікро-режиму: завжди скорочено, максимум 2 перевізники
+  return carriers.slice(0,2).map(c=>CARRIER_ABBR[c]||c).join(', ') + (carriers.length>2 ? '…' : '');
+}
 
 /* ============ STATE ============ */
 let state = {
   type: 'product',
   density: 'simple',
+  // Демо-стан ПОТОЧНОГО користувача (не картки, що переглядається) — для умови кнопки «Налаштувати»
+  userHasShop: true,
+  userShopHasEquiring: false,
   search: '',
   sortId: null,
   sortDir: 'desc',
@@ -567,7 +622,6 @@ function dataFor(type){ return type==='product'?PRODUCTS : type==='shop'?SHOPS :
 function cardModel(type, item){
   if(type==='product'){
     const isIban = item.paymentMethod === 'iban';
-    const isBoth = item.paymentMethod === 'both';
     const shippingLabel = item.shippingDays<=1 ? 'День в день' : item.shippingDays+' дні';
     const shopEntry = SHOPS.find(s=>s.name===item.shop);
     const shopLink = shopEntry ? {
@@ -584,14 +638,12 @@ function cardModel(type, item){
       ? {val:clickVal.toLocaleString('uk-UA'), lab:'кліків', cls:''}
       : {val:item.soldTotal.toLocaleString('uk-UA'), lab:'кількість проданих', cls:''};
 
-    // Panel 4: метод оплати / нарахування / 0% комісії
+    // Panel 4: комісія (зірочки нарахування) — завжди, якщо є Платіжна система (eq або both); 0% якщо лише Ручна
     let panel4;
     if(isIban){
       panel4 = {val:'0% комісії', lab:'фіксація неможлива', cls:''};
-    } else if(isBoth){
-      panel4 = {val:formatStars(Math.round(item.price*item.comm/100)), lab:'нарахувань', cls:'gold'};
     } else {
-      panel4 = {val:'Платіжна<br>система', lab:'метод оплати', cls:''};
+      panel4 = {val:formatStars(Math.round(item.price*item.comm/100)), lab:'нарахувань', cls:'gold'};
     }
 
     // Panel 5: % повернень — потребує ТТН-підтвердження через API; без ТТН показуємо перевізників
@@ -610,15 +662,16 @@ function cardModel(type, item){
       siteUrl: shopEntry ? `https://${shopEntry.code}.beroo.online/p/${item.code}` : null,
       totalFavorites: item.favoritesCount,
       panels:[
-        {val:item.stock+' шт', lab:'лишилось', cls:''},
+        {val:item.stock+' од', lab:'лишилось', cls:''},
         panel2,
         {val:item.mirrors, lab:'скільки дзеркалять', cls:''},
         panel4,
         panel5,
         {val:shippingLabel, lab:'терміни відправки', cls:''}
       ],
-      earnings: isIban ? null : {price:item.price, comm:item.comm, stars: Math.round(item.price*item.comm/100)},
-      paymentWarning: isIban,
+      paymentNote: isIban
+        ? {type:'red', text:'Відсутність у магазину підʼєднаних платіжних систем робить неможливою фіксацію та нарахування блогеру зірочок за продажі. Рахуються лише кліки.'}
+        : {type:'green', text:`Підключена Платіжна система дозволяє фіксувати оплати автоматично — нарахування зірочок Блогеру та виплати працюють коректно. Ціна ${item.price} ₴ × комісія ${item.comm}% = ${Math.round(item.price*item.comm/100)} зірочок (1★ = 1₴).`},
       foot:item.foot,
       expand:[
         ['Категорія', item.cat],
@@ -676,6 +729,9 @@ function cardModel(type, item){
         panel5,
         panel6
       ],
+      paymentNote: isIban
+        ? {type:'red', text:'Відсутність у магазину підʼєднаних платіжних систем робить неможливою фіксацію та нарахування блогеру зірочок за продажі. Рахуються лише кліки.'}
+        : {type:'green', text:`Підключена Платіжна система дозволяє фіксувати оплати автоматично — нарахування зірочок Блогеру та виплати працюють коректно. Комісія: ${item.commMin}–${item.commMax}%.`},
       foot:item.foot,
       expand:[
         ['Категорії', item.cats],
@@ -688,6 +744,7 @@ function cardModel(type, item){
         ['Поштовий відправник', carriersDisplay(item.carriers) + (item.hasTTN ? '' : ' (без API-трекінгу)')],
         ['Дата реєстрації', item.regDaysAgo+' дн. тому'],
         ['Додано в обране', (item.requests*9 + item.goldMirrors*4)+' раз(ів)'],
+        ['Сумарна кількість відзеркалених товарів', (item.items * (item.greyMirrors + item.goldMirrors))+' од. (по всіх Блогерах разом)'],
       ],
       buttons:[{label:'Переглянути каталог',kind:'ghost'},{label:'Віддзеркалити магазин',kind:'primary'},{label:'Відгуки',kind:'yellow',action:'openReviews',targetId:item.id,reviewType:'shop'}]
     };
@@ -754,16 +811,11 @@ function renderFullCard(type, item, opts){
     </div>
     <div class="risk-bar"><span class="marker" style="left:${Math.min(96,Math.max(4,m.risk.pct))}%;"></span></div>
   ` : '';
-  const earnHtml = m.paymentWarning ? `
-    <div class="earn-box earn-box-warning">
-      Відсутність у магазину підʼєднаних платіжних систем робить неможливою фіксацію та нарахування блогеру зірочок за продажі. Рахуються лише кліки.
+  const paymentNoteHtml = m.paymentNote ? `
+    <div class="earn-box ${m.paymentNote.type==='red' ? 'earn-box-warning' : 'earn-box-green'}">
+      ${m.paymentNote.text}
     </div>
-  ` : (m.earnings ? `
-    <div class="earn-box">
-      <div class="earn-top"><span class="earn-label">Нарахувань за 1 продану одиницю</span><span class="earn-val">★ ${m.earnings.stars}</span></div>
-      <div class="earn-formula">Ціна ${m.earnings.price} ₴ × комісія ${m.earnings.comm}% = ${m.earnings.stars} зірочок (1★ = 1₴)</div>
-    </div>
-  ` : '');
+  ` : '';
   const metaHtml = m.metaLines
     ? m.metaLines.map(l=>`<p class="meta-line">${l}</p>`).join('')
     : `<p class="meta-line">${m.meta}</p>`;
@@ -788,9 +840,8 @@ function renderFullCard(type, item, opts){
           <span class="fav-count">${m.totalFavorites}</span>${isFav?'♥':'♡'}
         </button>
       </div>
-      ${(type==='product' && (item.paymentMethod==='eq' || item.paymentMethod==='both'))
-        ? `${earnHtml}<div class="panels">${panelsHtml}</div>`
-        : `<div class="panels">${panelsHtml}</div>${earnHtml}`}
+      <div class="panels">${panelsHtml}</div>
+      ${paymentNoteHtml}
       ${riskHtml}
       <div class="foot">${m.foot}</div>
       <button class="expand-toggle" data-expand="${item.id}">
@@ -843,8 +894,8 @@ function renderTile(type, item){
   if(type==='product'){
     const METRIC_INFO = {
       comm: {label:'Комісія', get:i=>i.comm, unit:'%'},
-      sold: {label:'Продано', get:i=>state.productPeriod==='3d'?i.sold3d:(state.productPeriod==='10d'?i.sold10d:(state.productPeriod==='30d'?i.sold30d:i.soldTotal)), unit:' шт'},
-      stock: {label:'Лишилось', get:i=>i.stock, unit:' шт'},
+      sold: {label:'Продано', get:i=>state.productPeriod==='3d'?i.sold3d:(state.productPeriod==='10d'?i.sold10d:(state.productPeriod==='30d'?i.sold30d:i.soldTotal)), unit:' од'},
+      stock: {label:'Лишилось', get:i=>i.stock, unit:' од'},
       mirrors: {label:'Дзеркал', get:i=>i.mirrors, unit:''},
       favorites: {label:'Обрано', get:i=>i.favoritesCount, unit:''},
     };
@@ -885,6 +936,16 @@ function zoneOf(type, item){
   return item.returns<=5?'green':(item.returns<=15?'orange':'black');
 }
 
+function renderPaymentToolbarNote(filterValue){
+  if(filterValue==='iban'){
+    const showSettingsBtn = state.userHasShop && !state.userShopHasEquiring;
+    return `<p class="payment-warning">Відсутність у магазину підʼєднаних платіжних систем робить неможливою фіксацію та нарахування блогеру зірочок за продажі. Рахуються лише кліки.${showSettingsBtn ? '<button class="payment-note-btn" id="paymentSettingsBtn">Налаштувати</button>' : ''}</p>`;
+  }
+  if(filterValue==='eq'){
+    return `<p class="payment-note-green">Підключена Платіжна система дозволяє фіксувати оплати автоматично — нарахування зірочок Блогеру та виплати працюють коректно.</p>`;
+  }
+  return '';
+}
 function hasActiveDrawerFilters(){
   if(state.type==='product'){
     return state.filterOnlyStock || state.filterOnlyEq || state.productCategoryFilter.size>0 ||
@@ -907,6 +968,7 @@ function renderToolbar(){
   const isShop = state.type === 'shop';
   const sorts = SORTS[state.type];
   const isProduct = state.type === 'product';
+  const isMicro = state.density === 'micro';
   const dirAware = isBlogger || isProduct || isShop;
   const renderSortChips = (list) => list.map(s=>{
     const active = state.sortId===s.id;
@@ -1004,16 +1066,18 @@ function renderToolbar(){
 
   document.getElementById('toolbar').innerHTML = `
     ${state.type==='product' ? `<div class="chip-scroll" style="margin-bottom:8px;"><button class="chip" id="myCatalogBtn">🎥 Мій каталог для блогерів</button></div>` : ''}
-    ${isProduct ? `<div class="chip-scroll ${topActive?'dimmed':''}">${productPaymentRow}</div>${state.productPaymentFilter==='iban' ? '<p class="payment-warning">Відсутність у магазину підʼєднаних платіжних систем робить неможливою фіксацію та нарахування блогеру зірочок за продажі. Рахуються лише кліки.</p>' : ''}${state.productPaymentFilter==='iban' ? '' : `<div class="chip-scroll">${periodRow}</div>`}` : ''}
-    ${isShop ? `<div class="chip-scroll">${shopPaymentRow}</div>${state.shopPaymentFilter==='iban' ? '<p class="payment-warning">Відсутність у магазину підʼєднаних платіжних систем робить неможливою фіксацію та нарахування блогеру зірочок за продажі. Рахуються лише кліки.</p>' : ''}${state.shopPaymentFilter==='iban' ? '' : `<div class="chip-scroll">${shopRow1Html}</div>`}<div class="chip-scroll">${shopRow2Html}</div>` : `<div class="chip-scroll ${(isProduct&&topActive)?'dimmed':''}">${chips}</div>`}
-    ${isProduct ? `<div class="chip-scroll ${topActive?'dimmed':''}">${mirrorRow}</div>` : ''}
-    ${isShop ? `<div class="chip-scroll">${shopCoopRow}</div>` : ''}
-    ${isBlogger ? `<div class="chip-scroll">${platformRow}</div><div class="chip-scroll">${formatRow}</div><div class="chip-scroll">${coopRow}</div>` : ''}
+    ${isProduct ? `<div class="chip-scroll ${topActive?'dimmed':''}">${productPaymentRow}</div>${renderPaymentToolbarNote(state.productPaymentFilter)}${state.productPaymentFilter==='iban' ? '' : `<div class="chip-scroll">${periodRow}</div>`}` : ''}
+    ${isShop ? `<div class="chip-scroll">${shopPaymentRow}</div>${renderPaymentToolbarNote(state.shopPaymentFilter)}` : ''}
+    ${isShop ? `${state.shopPaymentFilter==='iban' ? '' : `<div class="chip-scroll">${shopRow1Html}</div>`}<div class="chip-scroll">${shopRow2Html}</div>` : `<div class="chip-scroll ${(isProduct&&topActive)?'dimmed':''}">${chips}</div>`}
+    ${isMicro ? '' : (isProduct ? `<div class="chip-scroll ${topActive?'dimmed':''}">${mirrorRow}</div>` : '')}
+    ${isMicro ? '' : (isShop ? `<div class="chip-scroll">${shopCoopRow}</div>` : '')}
+    ${isMicro ? '' : (isBlogger ? `<div class="chip-scroll">${platformRow}</div><div class="chip-scroll">${formatRow}</div><div class="chip-scroll">${coopRow}</div>` : '')}
     <div class="search-filter-row">
       <div class="search-row" style="margin-bottom:0;flex:1;">
         <span class="icon">🔍</span>
         <input type="text" id="searchInput" placeholder="Пошук…" value="${state.search}">
       </div>
+      ${isMicro ? `<button class="util-btn fav-mini-btn ${((state.type==='product'&&state.favOnlyProduct)||(state.type==='shop'&&state.favOnlyShop)||(state.type==='blogger'&&state.favOnlyBlogger))?'on':''}" id="favMiniBtn">♡ ${Object.keys(state.fav).filter(k=>state.fav[k]).length}</button>` : ''}
       <button class="util-btn ${state.filterOpen?'on':''}" id="filtersBtn" style="flex:none;width:auto;padding:10px 14px;position:relative;">🔍 Фільтри${hasActiveDrawerFilters()?'<span class="filter-dot"></span>':''}</button>
       <button class="util-btn icon-only" id="refreshBtn" aria-label="Оновити"><span class="spin" id="refreshSpin">↻</span></button>
     </div>
@@ -1022,6 +1086,16 @@ function renderToolbar(){
       ${showDrawerButtons ? `<div class="filter-actions"><button class="btn ghost" id="filterCancelBtn">Скасувати</button><button class="btn primary" id="filterApplyBtn">Застосувати</button></div>` : ''}
     </div>
   `;
+
+  if(isMicro){
+    const favBtn = document.getElementById('favMiniBtn');
+    if(favBtn) favBtn.addEventListener('click', ()=>{
+      if(state.type==='product') state.favOnlyProduct = !state.favOnlyProduct;
+      if(state.type==='shop') state.favOnlyShop = !state.favOnlyShop;
+      if(state.type==='blogger') state.favOnlyBlogger = !state.favOnlyBlogger;
+      renderList();
+    });
+  }
 
   document.querySelectorAll('.chip[data-sort]').forEach(el=>{
     el.addEventListener('click', ()=>{
@@ -1132,6 +1206,11 @@ function renderToolbar(){
   document.getElementById('refreshBtn').addEventListener('click', ()=>{
     const s = document.getElementById('refreshSpin');
     s.classList.remove('spinning'); void s.offsetWidth; s.classList.add('spinning');
+  });
+  const paymentSettingsBtn = document.getElementById('paymentSettingsBtn');
+  if(paymentSettingsBtn) paymentSettingsBtn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    alert('Веде на «Налаштування → Магазини → Оплата» — підключення платіжної системи.');
   });
   const cancelBtn = document.getElementById('filterCancelBtn');
   if(cancelBtn) cancelBtn.addEventListener('click', ()=>{
@@ -1371,10 +1450,143 @@ function renderList(){
         renderModal();
       });
     });
+  } else if(state.density === 'micro'){
+    renderMicroTable(wrap, items);
   } else {
     wrap.innerHTML = `<div class="feed">${items.map(i=>renderFullCard(state.type,i,{expanded:!!state.expandedFeed[i.id]})).join('')}</div>`;
     wireCardEvents(wrap, false);
   }
+}
+
+const MICRO_COLUMNS = {
+  product: [
+    {id:'stock', label:'Лишилось', get:i=>i.stock, unit:' од'},
+    {id:'sold', label:'Продано', get:i=>{
+      const v = state.productPeriod==='3d'?i.sold3d:(state.productPeriod==='10d'?i.sold10d:(state.productPeriod==='30d'?i.sold30d:i.soldTotal));
+      const c = state.productPeriod==='3d'?i.click3d:(state.productPeriod==='10d'?i.click10d:(state.productPeriod==='30d'?i.click30d:i.clickTotal));
+      return i.paymentMethod==='iban' ? c : v;
+    }, unit:''},
+    {id:'mirrors', label:'Дзеркал', get:i=>i.mirrors, unit:''},
+    {id:'comm', label:'Комісія', get:i=> i.paymentMethod==='iban' ? '0%' : i.comm+'%', unit:''},
+    {id:'returns', label:'Повернень', get:i=> i.hasTTN ? i.productReturns+'%' : carriersDisplayMicro(i.carriers), unit:''},
+    {id:'favorites', label:'Обрано', get:i=>i.favoritesCount, unit:'', extra:i=> i.paymentMethod!=='iban' ? ('★'+Math.round(i.price*i.comm/100)) : null},
+  ],
+  shop: [
+    {id:'items', label:'Товарів', get:i=>i.items, unit:''},
+    {id:'variations', label:'Варіацій', get:i=>i.variations, unit:''},
+    {id:'units', label:'Одиниць', get:i=>i.units, unit:''},
+    {id:'comm', label:'Комісія', get:i=> i.status==='iban' ? '0%' : (i.commMin+'–'+i.commMax+'%'), unit:''},
+    {id:'returns', label:'Повернень', get:i=> i.hasTTN ? i.returns+'%' : carriersDisplayMicro(i.carriers), unit:''},
+    {id:'payouts', label:'Виплат', get:i=> i.status==='iban' ? (i.shippingDays<=1?'День в день':i.shippingDays+' дн.') : i.payoutsCount, unit:''},
+  ],
+  blogger: [
+    {id:'stars', label:'Зірок', get:i=>formatStars(i.stars).replace('★ ',''), unit:''},
+    {id:'rating', label:'Балів', get:i=>i.commRating.toFixed(1).replace('.',','), unit:''},
+    {id:'conversion', label:'Конверсія', get:i=>i.conversion, unit:'%'},
+    {id:'items', label:'Товарів', get:i=>i.mirrorItems, unit:''},
+    {id:'shops', label:'Магазини', get:i=>i.mirrorShops, unit:''},
+    {id:'returns', label:'Повернень', get:i=>i.returns, unit:'%'},
+  ],
+};
+
+function microTopBadge(item){
+  const labels = ['Топ за 3 дні','Топ за 10 днів','Топ за 30 днів','Топ загалом'];
+  const idx = (parseInt(String(item.id).replace(/\D/g,''),10) || 0) % 4;
+  return `<span class="micro-top-badge">🔥 ${labels[idx]}</span>`;
+}
+
+function renderMicroTable(wrap, items){
+  const cols = MICRO_COLUMNS[state.type];
+  const headerCells = cols.map(c=>{
+    const active = state.sortId===c.id;
+    const arrow = active ? (state.sortDir==='desc'?' ↓':' ↑') : '';
+    return `<button class="micro-th ${active?'active':''}" data-sort="${c.id}">${c.label}${arrow}</button>`;
+  }).join('');
+
+  const isFavKey = it => !!state.fav[it.id];
+  const rows = items.map(item=>{
+    const m = cardModel(state.type, item);
+    const photoClass = state.type==='shop' ? 'avatar-shop' : (state.type==='blogger' ? 'avatar-blogger' : '');
+    const metaBits = state.type==='product'
+      ? `${item.price} ₴ · ${item.cat} · Магазин «${item.shop}»`
+      : state.type==='shop' ? item.cats : (item.platforms ? item.platforms.map(p=>PLATFORMS.find(x=>x.id===p).enLabel).join(', ') : '');
+    const starVal = (state.type==='product' && item.paymentMethod!=='iban') ? Math.round(item.price*item.comm/100) : null;
+
+    // Клітинки 2–6 (Продано/Дзеркал/Комісія/Повернень/Обрано) — з боксами; перша (Лишилось) — без боксу
+    const boxCells = cols.slice(1).map(c=>{
+      if(state.type==='product' && c.id==='favorites'){
+        // Буквально як на скріні: остання клітинка показує зведення по комісії магазину, а не власне "Обрано"
+        const shopStars = Math.round(item.comm/2) || 1;
+        return `<div class="micro-td"><span class="micro-td-lab micro-td-lab-top">Комісія магазину:</span><span class="micro-td-val micro-td-val-small">${item.comm}% <span class="micro-td-extra-inline">★${shopStars}</span></span></div>`;
+      }
+      const val = c.get(item);
+      const extra = c.extra ? c.extra(item) : null;
+      const tone = (c.id==='comm') ? 'micro-td-comm' : (c.id==='returns') ? 'micro-td-returns' : '';
+      const isCarrierText = typeof val === 'string' && val.includes(',');
+      return `<div class="micro-td ${tone}"><span class="micro-td-val ${isCarrierText?'micro-td-val-small':''}">${typeof val==='number'?val.toLocaleString('uk-UA'):val}${c.unit}</span><span class="micro-td-lab">${c.label}</span>${extra?`<span class="micro-td-extra">${extra}</span>`:''}</div>`;
+    }).join('');
+    const firstCol = cols[0];
+    const firstVal = firstCol.get(item);
+
+    return `
+      <div class="micro-item" data-id="${item.id}" data-open-modal="${item.id}">
+        <div class="micro-item-top">
+          <div class="micro-photo ${photoClass}">${m.icon}</div>
+          <div class="micro-info-text">
+            <div class="micro-name-line">${m.name}</div>
+            <div class="micro-meta-line">${metaBits}</div>
+          </div>
+          <div class="micro-badges">
+            ${microTopBadge(item)}
+            <div class="micro-badges-row2">
+              ${starVal!=null ? `<span class="micro-star">★ ${starVal}</span>` : ''}
+              <button class="micro-fav ${isFavKey(item)?'on':''}" data-tile-fav="${item.id}" aria-label="В обране">${isFavKey(item)?'♥':'♡'} ${m.totalFavorites}</button>
+            </div>
+          </div>
+        </div>
+        <div class="micro-item-panels">
+          <div class="micro-first-col"><span class="micro-first-val">${typeof firstVal==='number'?firstVal.toLocaleString('uk-UA'):firstVal}${firstCol.unit}</span><span class="micro-first-lab">${firstCol.label}</span></div>
+          ${boxCells}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  wrap.innerHTML = `
+    <div class="micro-table">
+      <div class="micro-header">${headerCells}</div>
+      <div class="micro-body">${rows}</div>
+    </div>
+  `;
+
+  wrap.querySelectorAll('.micro-th[data-sort]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      if(state.type==='product') state.topMode = null;
+      if(state.sortId === el.dataset.sort){
+        state.sortDir = state.sortDir==='desc' ? 'asc' : 'desc';
+      } else {
+        state.sortId = el.dataset.sort;
+        state.sortDir = 'desc';
+      }
+      renderList();
+    });
+  });
+  wrap.querySelectorAll('[data-open-modal]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      state.modalId = btn.dataset.openModal;
+      state.modalExpanded = false;
+      renderModal();
+    });
+  });
+  wrap.querySelectorAll('[data-tile-fav]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const id = btn.dataset.tileFav;
+      state.fav[id] = !state.fav[id];
+      renderToolbar();
+      renderList();
+    });
+  });
 }
 
 function wireCardEvents(root, isModal){
@@ -1649,7 +1861,7 @@ document.querySelectorAll('#densitySwitch button').forEach(btn=>{
     document.querySelectorAll('#densitySwitch button').forEach(b=>b.classList.remove('active'));
     btn.classList.add('active');
     state.density = btn.dataset.density;
-    renderList();
+    renderAll();
   });
 });
 
