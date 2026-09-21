@@ -87,17 +87,17 @@
     background:var(--card); border:1px solid var(--line); color:var(--ink-soft); cursor:pointer; white-space:nowrap;
   }
   .chip.active{background:var(--primary); border-color:var(--primary); color:#fff;}
+  .chip-scroll.dimmed{opacity:.4;}
 
   .chip.coop-all.active{background:#fff; color:var(--ink); border:1px solid var(--ink);}
   .chip.coop-all:not(.active){background:transparent; color:var(--ink-soft); border:1px solid var(--line);}
   .chip.coop-yes.active{background:var(--gold-bg); color:var(--gold); border:1px solid #EAD9A8;}
   .chip.coop-yes:not(.active){background:var(--card); color:var(--ink-soft); border:1px solid var(--line);}
-  .chip.coop-no.active{background:#fff; color:var(--ink); border:1px solid var(--ink);}
-  .chip.coop-no:not(.active){background:transparent; color:var(--ink-faint); border:1px solid transparent;}
   .chip.coop-fav{padding:6px 11px; font-size:14px;}
   .chip.coop-fav.active{color:#D1495B; background:var(--card); border-color:#F1C6CD;}
 
   .util-btn.icon-only{flex:none; width:40px; padding:0; height:40px; display:flex; align-items:center; justify-content:center; font-size:15px;}
+  .filter-dot{position:absolute; top:6px; right:6px; width:7px; height:7px; border-radius:50%; background:var(--primary);}
   .filter-actions{display:flex; gap:8px; margin-top:14px; padding-top:12px; border-top:1px solid var(--line);}
   .filter-actions .btn{padding:10px;}
 
@@ -138,7 +138,7 @@
   .tile .photo.avatar-blogger{border-radius:999px; background:linear-gradient(155deg,#D9E4FB,var(--card));}  .tile .t-name{font-size:12.5px; font-weight:700; line-height:1.3; margin:0; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden;}
   .tile .t-stat{font-size:12px; color:var(--ink-soft); font-weight:600;}
   .tile .t-foot-row{display:flex; align-items:center; justify-content:space-between; margin-top:2px;}
-  .tile .t-code{font-size:9.5px; color:var(--ink-faint);}
+  .tile .t-code{font-size:9.5px; color:var(--ink-faint); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:66%;}
   .tile .t-more{
     border:none; background:var(--ink); color:var(--paper); width:26px; height:26px; border-radius:50%;
     font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center;
@@ -154,7 +154,7 @@
 
   /* ---------- full card component (shared by modal + feed) ---------- */
   .card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;}
-  .card-head{display:flex; gap:14px; padding:16px 16px 12px; align-items:flex-start; position:relative;}
+  .card-head{display:flex; gap:14px; padding:16px 44px 20px 16px; align-items:flex-start; position:relative;}
   .card-head.centered{align-items:center;}
   .head-photo-col{display:flex; flex-direction:column; align-items:center; gap:5px; flex:none;}
   .code-under{font-size:10px;}
@@ -174,7 +174,14 @@
   .badge.grey{background:var(--grey-star-bg);color:var(--grey-star);border:1px solid var(--line);}
   .badge.violet{background:var(--violet-bg);color:var(--violet);border:1px solid transparent;}
   .badge.status{background:var(--grey-star-bg);color:var(--ink-soft);border:1px solid var(--line);}
-  .code{position:absolute; top:14px; right:50px; font-size:10px; color:var(--ink-faint);}
+  .card-top-right{position:absolute; top:12px; right:14px; display:flex; align-items:center; gap:6px; max-width:calc(100% - 90px);}
+  .site-addr-link{font-size:10px; color:var(--primary); text-decoration:none; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .site-addr-link:hover{text-decoration:underline;}
+  .rating-badge{flex:none; font-size:10.5px; font-weight:700; padding:4px 10px; border-radius:999px; white-space:nowrap;}
+  .rating-badge.zone-green{background:var(--green-bg); color:var(--green);}
+  .rating-badge.zone-orange{background:var(--orange-bg); color:var(--orange);}
+  .rating-badge.zone-black{background:var(--black-zone-bg); color:var(--black-zone);}
+  .fav-corner{position:absolute; bottom:6px; right:14px;}
 
   .panels{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
   .panel{background:var(--card); padding:10px 6px; text-align:center;}
@@ -224,16 +231,18 @@
   /* ---------- modal ---------- */
   .modal-backdrop{
     position:fixed; inset:0; background:rgba(10,10,14,.55); z-index:100;
-    display:none; align-items:flex-end; justify-content:center;
-    padding-bottom:calc(var(--safe-b) + 0px);
+    display:none; align-items:center; justify-content:center;
+    padding:20px;
   }
   .modal-backdrop.open{display:flex;}
   .modal-sheet{
-    width:100%; max-width:440px; max-height:88vh; overflow-y:auto;
-    background:var(--paper); border-radius:22px 22px 0 0; padding:10px 0 0;
-    animation:slideUp .22s ease;
+    width:100%; max-width:440px; max-height:85vh; overflow-y:auto;
+    background:var(--paper); border-radius:22px; padding:10px 0 0;
+    animation:popIn .18s ease;
   }
   @keyframes slideUp{from{transform:translateY(30px); opacity:.4;} to{transform:translateY(0); opacity:1;}}
+  .info-centered{animation:popIn .18s ease;}
+  @keyframes popIn{from{transform:scale(.94); opacity:0;} to{transform:scale(1); opacity:1;}}
   .modal-handle{width:38px;height:4px;border-radius:99px;background:var(--line);margin:0 auto 10px;}
   .modal-close{position:absolute; top:10px; right:14px; width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink-soft);font-size:15px;cursor:pointer; z-index:20; box-shadow:0 1px 4px rgba(0,0,0,.15);}
   .modal-inner{padding:0 14px 18px; position:relative;}
@@ -254,6 +263,10 @@
   .review-shop{font-size:12.5px; font-weight:700; color:var(--ink);}
   .review-stars{font-size:12px; color:var(--gold);}
   .review-text{font-size:12.5px; color:var(--ink-soft); line-height:1.5;}
+  .shop-link-row{width:100%; display:flex; align-items:center; justify-content:space-between; background:var(--paper); border:1px solid var(--line); border-radius:11px; padding:10px 12px; margin-bottom:6px; font-size:12.5px; color:var(--ink); cursor:pointer;}
+  .shop-link-row b{font-weight:700;}
+  .shop-link-arrow{color:var(--ink-faint); font-size:15px;}
+  .shop-link-stats{font-size:11px; color:var(--ink-faint); margin-bottom:12px; line-height:1.5;}
   .info-text p{font-size:12.5px; color:var(--ink-soft); line-height:1.6; margin:0 0 12px;}
   .info-text b{color:var(--ink);}
 
@@ -275,9 +288,9 @@
 
   <div class="switch-row">
     <div class="pillset" id="typeSwitch" role="tablist" aria-label="Сторінка">
-      <button class="active" data-type="product">🛒 Товар</button>
-      <button data-type="shop">🏬 Магазин</button>
-      <button data-type="blogger">🎥 Блогер</button>
+      <button class="active" data-type="product">🛒 Вітрина</button>
+      <button data-type="shop">🏬 Магазини</button>
+      <button data-type="blogger">🎥 Блогери</button>
     </div>
   </div>
   <div class="switch-row">
@@ -302,8 +315,8 @@
   <div class="modal-sheet" id="reviewsSheet" style="max-width:420px;"></div>
 </div>
 
-<div class="modal-backdrop" id="infoBackdrop" style="z-index:200;">
-  <div class="modal-sheet" id="infoSheet" style="max-width:420px;"></div>
+<div class="modal-backdrop" id="infoBackdrop" style="z-index:200; align-items:center;">
+  <div class="modal-sheet info-centered" id="infoSheet" style="max-width:400px; border-radius:22px; max-height:80vh;"></div>
 </div>
 
 <script>
@@ -320,14 +333,14 @@ const PRODUCTS = [
 ];
 
 const SHOPS = [
-  {id:'s1', icon:'🏬', code:'30841', name:'Urban Line', cats:'Взуття · Одяг · Аксесуари', status:'eq', items:186, stockSum:312400, greyMirrors:41, goldMirrors:9, requests:5, returns:4, foot:'Український бренд вуличного одягу, 3 роки на ринку.'},
-  {id:'s2', icon:'🧪', code:'11290', name:'SkinLab UA', cats:'Косметика · Догляд', status:'eq', items:94, stockSum:158900, greyMirrors:63, goldMirrors:21, requests:12, returns:2, foot:'Власне виробництво, сертифікована косметика.'},
-  {id:'s3', icon:'📱', code:'50231', name:'TechDrop', cats:'Електроніка · Гаджети', status:'eq', items:58, stockSum:640200, greyMirrors:15, goldMirrors:6, requests:3, returns:9, foot:'Офіційний імпортер аудіо- та носимої техніки.'},
-  {id:'s4', icon:'👜', code:'77410', name:'Bags & Co', cats:'Сумки · Аксесуари', status:'iban', items:41, stockSum:52300, greyMirrors:6, goldMirrors:1, requests:1, returns:15, foot:'Невеликий сімейний бренд, без еквайрингу — лише ручна оплата.'},
-  {id:'s5', icon:'🕯️', code:'99012', name:'Затишно', cats:'Дім · Декор', status:'eq', items:73, stockSum:88100, greyMirrors:28, goldMirrors:5, requests:4, returns:3, foot:'Товари для дому ручної роботи.'},
-  {id:'s6', icon:'🧢', code:'40218', name:'CapStreet', cats:'Аксесуари · Одяг', status:'eq', items:29, stockSum:41200, greyMirrors:9, goldMirrors:2, requests:2, returns:7, foot:'Кепки та стрітвір власного виробництва.'},
-  {id:'s7', icon:'🍯', code:'60533', name:'Пасіка Карпат', cats:'Продукти', status:'iban', items:17, stockSum:23900, greyMirrors:4, goldMirrors:0, requests:0, returns:1, foot:'Натуральний мед прямо з пасіки, без посередників.'},
-  {id:'s8', icon:'💍', code:'80112', name:'Silver&Co', cats:'Прикраси', status:'eq', items:112, stockSum:410700, greyMirrors:19, goldMirrors:11, requests:6, returns:5, foot:'Срібні прикраси власного дизайну.'},
+  {id:'s1', icon:'🏬', code:'30841', name:'Urban Line', cats:'Взуття · Одяг · Аксесуари', status:'eq', items:186, variations:640, units:9200, greyMirrors:41, goldMirrors:9, requests:5, returns:4, rating:4.7, payoutsCount:212, regDaysAgo:1100, mirroring:true, foot:'Український бренд вуличного одягу, 3 роки на ринку.'},
+  {id:'s2', icon:'🧪', code:'11290', name:'SkinLab UA', cats:'Косметика · Догляд', status:'eq', items:94, variations:310, units:15400, greyMirrors:63, goldMirrors:21, requests:12, returns:2, rating:4.9, payoutsCount:480, regDaysAgo:640, mirroring:true, foot:'Власне виробництво, сертифікована косметика.'},
+  {id:'s3', icon:'📱', code:'50231', name:'TechDrop', cats:'Електроніка · Гаджети', status:'eq', items:58, variations:140, units:2100, greyMirrors:15, goldMirrors:6, requests:3, returns:9, rating:4.1, payoutsCount:96, regDaysAgo:520, foot:'Офіційний імпортер аудіо- та носимої техніки.'},
+  {id:'s4', icon:'👜', code:'77410', name:'Bags & Co', cats:'Сумки · Аксесуари', status:'iban', items:41, variations:98, units:610, greyMirrors:6, goldMirrors:1, requests:1, returns:15, rating:3.4, payoutsCount:9, regDaysAgo:70, foot:'Невеликий сімейний бренд, без еквайрингу — лише ручна оплата.'},
+  {id:'s5', icon:'🕯️', code:'99012', name:'Затишно', cats:'Дім · Декор', status:'eq', items:73, variations:150, units:3300, greyMirrors:28, goldMirrors:5, requests:4, returns:3, rating:4.6, payoutsCount:140, regDaysAgo:900, foot:'Товари для дому ручної роботи.'},
+  {id:'s6', icon:'🧢', code:'40218', name:'CapStreet', cats:'Аксесуари · Одяг', status:'eq', items:29, variations:80, units:1450, greyMirrors:9, goldMirrors:2, requests:2, returns:7, rating:3.9, payoutsCount:37, regDaysAgo:210, foot:'Кепки та стрітвір власного виробництва.'},
+  {id:'s7', icon:'🍯', code:'60533', name:'Пасіка Карпат', cats:'Продукти', status:'iban', items:17, variations:22, units:340, greyMirrors:4, goldMirrors:0, requests:0, returns:1, rating:4.8, payoutsCount:3, regDaysAgo:40, foot:'Натуральний мед прямо з пасіки, без посередників.'},
+  {id:'s8', icon:'💍', code:'80112', name:'Silver&Co', cats:'Прикраси', status:'eq', items:112, variations:260, units:1900, greyMirrors:19, goldMirrors:11, requests:6, returns:5, rating:4.3, payoutsCount:165, regDaysAgo:760, foot:'Срібні прикраси власного дизайну.'},
 ];
 
 const SAMPLE_TYPES = [
@@ -350,6 +363,9 @@ const FORMATS = [
   {id:'post', label:'Пост'},
 ];
 const UA_REGIONS = ['Київська','Львівська','Одеська','Харківська','Дніпропетровська','Закарпатська','Івано-Франківська'];
+// У реальній системі це значення бере з Налаштувань користувача (кастомна назва замість «Обмежено»)
+const LIMITED_LABEL = 'Обмежено';
+
 const DEMO_REVIEWS = [
   {shop:'Urban Line', rating:5, text:'Чітко дотримується домовлених термінів, контент завжди у стилі бренду.'},
   {shop:'SkinLab UA', rating:4, text:'Гарна якість роликів, іноді трохи затримує з публікацією.'},
@@ -375,6 +391,7 @@ const BLOGGERS = [
   {id:'b3', icon:'🎮', code:'70125', name:'Данило Tech', cats:['Електроніка'], stars:9834, mirrorShops:5, mirrorItems:18, followers:25000, returns:6, hasShop:false, conversion:2.1,
     platforms:['youtube','tiktok'], formats:['video'], samples:['buy'], onSiteVisit:false, region:null, regDate:'2025-07-19',
     complaints:2, commRating:4.1, topCategory10d:{name:'Електроніка', count:19}, responseTime:'до 6 год', languages:'укр, рос',
+    requestBlocked:true, requestRetryable:true,
     foot:'Розбираю гаджети на деталі, щоб ти не переплачував за маркетинг.'},
   {id:'b4', icon:'🏠', code:'44982', name:'Дім із Настею', cats:['Дім','Декор'], stars:98000, mirrorShops:11, mirrorItems:52, followers:47000, returns:2, hasShop:true, conversion:5.4,
     platforms:['instagram','facebook'], formats:['post','video'], samples:['free','freeReturn'], onSiteVisit:true, region:'Львівська', regDate:'2024-11-30',
@@ -391,6 +408,7 @@ const BLOGGERS = [
   {id:'b7', icon:'🍯', code:'20873', name:'Смачно Просто', cats:['Продукти'], stars:41000, mirrorShops:6, mirrorItems:22, followers:18000, returns:5, hasShop:false, conversion:2.8,
     platforms:['tiktok','telegram'], formats:['video','post'], samples:['free'], onSiteVisit:true, region:'Закарпатська', regDate:'2025-04-11',
     complaints:3, commRating:3.8, topCategory10d:{name:'Продукти', count:12}, responseTime:'до 8 год', languages:'укр',
+    requestBlocked:true, requestRetryable:false,
     foot:'Шукаю чесних українських фермерів і показую їх продукт наживо.'},
   {id:'b8', icon:'🎒', code:'11209', name:'Мандрівний Кіт', cats:['Аксесуари','Спорядження'], stars:198000, mirrorShops:16, mirrorItems:70, followers:71000, returns:2, hasShop:true, conversion:4.2,
     platforms:['youtube','instagram','tiktok'], formats:['video','live'], samples:['buy','return'], onSiteVisit:true, region:'Одеська', regDate:'2024-03-05',
@@ -406,15 +424,17 @@ const SORTS = {
     {id:'favorites', label:'Обрано', key:i=>i.favoritesCount},
   ],
   shop: [
-    {id:'items', label:'За кількістю товарів', key:i=>-i.items},
-    {id:'requests', label:'За запитами', key:i=>-i.requests},
-    {id:'green', label:'🟢 Безпечні', key:i=>i.returns, filter:i=>i.returns<=5},
-    {id:'orange', label:'🟠 Увага', key:i=>i.returns, filter:i=>i.returns>5&&i.returns<=15},
-    {id:'black', label:'⚫ Критичні', key:i=>i.returns, filter:i=>i.returns>15},
-    {id:'new', label:'Нові', key:i=>-parseInt(i.code)},
+    {id:'rating', label:'Рейтинг', key:i=>i.rating},
+    {id:'mirrors', label:'Дзеркал', key:i=>i.greyMirrors+i.goldMirrors},
+    {id:'returns', label:'Повернень', key:i=>i.returns},
+    {id:'payouts', label:'Виплат', key:i=>i.payoutsCount},
+    {id:'items', label:'Товарів', key:i=>i.items},
+    {id:'variations', label:'Варіацій', key:i=>i.variations},
+    {id:'units', label:'Одиниць', key:i=>i.units},
   ],
   blogger: [
     {id:'stars', label:'Зірок', key:i=>i.stars},
+    {id:'rating', label:'Балів', key:i=>i.commRating},
     {id:'conversion', label:'Конверсія', key:i=>i.conversion},
     {id:'items', label:'Товарів', key:i=>i.mirrorItems},
     {id:'shops', label:'Магазини', key:i=>i.mirrorShops},
@@ -422,6 +442,8 @@ const SORTS = {
     {id:'regdate', label:'Дата реєстрації', key:i=>new Date(i.regDate).getTime()},
   ]
 };
+const SHOP_SORT_ROW1_IDS = ['rating','mirrors','returns','payouts'];
+const SHOP_SORT_ROW2_IDS = ['items','variations','units'];
 
 function formatStars(n){
   if(n>=1000000) return '★ '+(n/1000000).toLocaleString('uk-UA',{maximumFractionDigits:1})+' млн';
@@ -451,8 +473,11 @@ let state = {
   coopFilter: 'all',
   favOnlyBlogger: false,
   productPeriod: 'all',
+  topMode: null,
   mirrorFilter: 'all',
   favOnlyProduct: false,
+  shopMirrorFilter: 'all',
+  favOnlyShop: false,
   productCategoryFilter: new Set(),
   priceMin: '', priceMax: '',
   viewsMin: '', viewsMax: '',
@@ -474,12 +499,22 @@ function cardModel(type, item){
   if(type==='product'){
     const paymentLabel = item.paymentMethod==='iban' ? 'Лише IBAN' : (item.paymentMethod==='eq' ? 'Є ЕКВАЙРИНГ' : 'IBAN + Екваєр');
     const shippingLabel = item.shippingDays<=1 ? 'День в день' : item.shippingDays+' дні';
+    const shopEntry = SHOPS.find(s=>s.name===item.shop);
+    const shopLink = shopEntry ? {
+      id: shopEntry.id, name: shopEntry.name,
+      rating: shopEntry.rating, items: shopEntry.items,
+      avgCheck: Math.round(400 + shopEntry.rating*150),
+      samplesPolicy: shopEntry.status==='eq' ? 'Купівля зі знижкою' : 'Тільки безкоштовні зразки'
+    } : null;
     return {
       icon:item.icon, code:'код '+item.code, name:item.name,
       meta:`${item.price} ₴ · ${item.cat} · Магазин «${item.shop}»`,
       badges: item.top ? [{cls:'gold', text:'🔥 Топ'}] : [],
+      shopLink,
+      siteDomain: shopEntry ? shopEntry.code+'.beroo.online' : null,
+      siteUrl: shopEntry ? `https://${shopEntry.code}.beroo.online/p/${item.code}` : null,
       panels:[
-        {val:item.stock+' шт', lab:'кількість в наявності', cls:''},
+        {val:item.stock+' шт', lab:'лишилось', cls:''},
         {val:item.soldTotal.toLocaleString('uk-UA'), lab:'кількість проданих', cls:''},
         {val:item.mirrors, lab:'скільки дзеркалять', cls:''},
         {val:paymentLabel, lab:'метод оплати', cls:''},
@@ -507,25 +542,32 @@ function cardModel(type, item){
     };
   }
   if(type==='shop'){
+    const totalMirrors = item.greyMirrors + item.goldMirrors;
     return {
       icon:item.icon, code:'код '+item.code, name:item.name,
       meta:item.cats,
       badges:[{cls:'status', text: item.status==='eq'?'⚡ Екваєр':'🏦 Іван'}],
+      rating:item.rating,
+      siteDomain: item.code+'.beroo.online',
+      siteUrl: `https://${item.code}.beroo.online`,
       panels:[
         {val:item.items, lab:'товарів', cls:''},
-        {val:item.stockSum.toLocaleString('uk-UA')+' ₴', lab:'сума залишків', cls:''},
-        {val:'★ '+item.greyMirrors, lab:'Оглядачів-дзеркал', cls:'grey'},
-        {val:'★ '+item.goldMirrors, lab:'PRO-дзеркал', cls:'gold'},
-        {val:item.requests, lab:'нових запитів', cls:''},
-        {val:Math.min(100,80+item.goldMirrors)+'%', lab:'виплачено комісій', cls:''}
+        {val:item.variations, lab:'варіацій', cls:''},
+        {val:item.units.toLocaleString('uk-UA'), lab:'одиниць', cls:''},
+        {val:totalMirrors, lab:'дзеркал', cls:''},
+        {val:item.returns+'%', lab:'повернень', cls: item.returns<=5?'zone-green':(item.returns<=15?'zone-orange':'zone-black')},
+        {val:item.payoutsCount, lab:'виплат', cls:''}
       ],
       risk:{pct:item.returns, label:'ризик повернень', zone: item.returns<=5?'green':(item.returns<=15?'orange':'black')},
       foot:item.foot,
       expand:[
         ['Категорії', item.cats],
-        ['Умови дзеркалення', item.status==='eq'?'Автоматично':'Потрібне підтвердження'],
+        ['Умови дзеркалення', 'Завжди потрібне ручне підтвердження Магазину (автоматичного схвалення в системі немає)'],
         ['Зона ризику', item.returns<=5?'🟢 Безпечна':(item.returns<=15?'🟠 Увага':'⚫ Критична')],
         ['Активних запитів', item.requests],
+        ['Оглядачів-дзеркал', '★ '+item.greyMirrors],
+        ['PRO-дзеркал', '★ '+item.goldMirrors],
+        ['Дата реєстрації', item.regDaysAgo+' дн. тому'],
       ],
       buttons:[{label:'Переглянути каталог',kind:'ghost'},{label:'Віддзеркалити магазин',kind:'primary'},{label:'Скарга',kind:'warn'}]
     };
@@ -537,11 +579,16 @@ function cardModel(type, item){
   const returnsZone = item.returns<=5?'zone-green':(item.returns<=15?'zone-orange':'zone-black');
   const middleBtn = item.cooperating
     ? {label:'Переглянути', kind:'muted', action:'goToMirrorsMe', targetId:item.id}
+    : item.requestBlocked
+    ? {label:LIMITED_LABEL, kind:'muted', action:'limitedRequest', targetId:item.id}
     : {label:'Запросити', kind:'primary'};
   return {
     icon:item.icon, code:item.code, name:item.name,
     metaLines:[platformLabels, formatLabels],
     badges: item.hasShop ? [{cls:'violet', text:'має Магазин'}] : [],
+    rating:item.commRating,
+    siteDomain: item.code+'.beroo.online',
+    siteUrl: `https://${item.code}.beroo.online/dzerkalo`,
     panels:[
       {val:formatStars(item.stars), lab:'золотих зірочок', cls:'gold', extra: item.cooperating ? ('ВАШИХ: ★ '+formatStars(item.yourStars).replace('★ ','')) : null},
       {val:item.mirrorShops, lab:'дзеркалить магазинів', cls:''},
@@ -594,22 +641,24 @@ function renderFullCard(type, item, opts){
   const metaHtml = m.metaLines
     ? m.metaLines.map(l=>`<p class="meta-line">${l}</p>`).join('')
     : `<p class="meta-line">${m.meta}</p>`;
-  const codeLinkHtml = `<a href="https://${m.code}.beroo.online" target="_blank" rel="noopener" class="code-link" onclick="event.stopPropagation()">${m.code}.beroo.online</a>`;
   const isBloggerCard = type==='blogger';
+  const ratingZone = m.rating==null ? null : (m.rating>=4.5?'green':(m.rating>=3.5?'orange':'black'));
+  const ratingHtml = m.rating!=null ? `<span class="rating-badge zone-${ratingZone}">Рейтинг: ${m.rating.toFixed(1).replace('.',',')} бала</span>` : '';
+  const siteAddrHtml = m.siteUrl ? `<a href="${m.siteUrl}" target="_blank" rel="noopener" class="site-addr-link" onclick="event.stopPropagation()">${m.siteDomain}</a>` : '';
+  const topRightHtml = (siteAddrHtml || ratingHtml) ? `<div class="card-top-right">${siteAddrHtml}${ratingHtml}</div>` : '';
   return `
     <div class="card" data-id="${item.id}">
       <div class="card-head ${isBloggerCard?'centered':''}">
+        ${topRightHtml}
         <div class="head-photo-col">
           <div class="photo-lg ${photoClass}">${m.icon}</div>
-          ${isBloggerCard ? `<div class="code-under">${codeLinkHtml}</div>` : ''}
         </div>
         <div class="head-main">
           <p class="name">${m.name}</p>
           ${metaHtml}
           ${badgesHtml?`<div class="badges">${badgesHtml}</div>`:''}
         </div>
-        <button class="fav ${isFav?'on':''}" data-fav="${item.id}" aria-label="В обране">${isFav?'♥':'♡'}</button>
-        ${!isBloggerCard ? `<span class="code">${m.code}</span>` : ''}
+        <button class="fav fav-corner ${isFav?'on':''}" data-fav="${item.id}" aria-label="В обране">${isFav?'♥':'♡'}</button>
       </div>
       <div class="panels">${panelsHtml}</div>
       ${earnHtml}
@@ -620,6 +669,15 @@ function renderFullCard(type, item, opts){
         <span style="transition:transform .2s ease; transform:rotate(${isOpen?180:0}deg);">▾</span>
       </button>
       <div class="expand-body ${isOpen?'open':''}">
+        ${m.shopLink ? `
+          <button class="shop-link-row" data-action="openShopFromProduct" data-target="${m.shopLink.id}">
+            <span>Магазин: <b>${m.shopLink.name}</b></span>
+            <span class="shop-link-arrow">›</span>
+          </button>
+          <div class="shop-link-stats">
+            Рейтинг: ${m.shopLink.rating.toFixed(1).replace('.',',')} бала · ${m.shopLink.items} товарів · середній чек ≈ ${m.shopLink.avgCheck} ₴ · зразки: ${m.shopLink.samplesPolicy}
+          </div>
+        ` : ''}
         <dl>${expandRows}</dl>
         <div class="complaint">🚩 Подати скаргу</div>
       </div>
@@ -632,9 +690,9 @@ function renderTile(type, item){
   const m = cardModel(type, item);
   const photoClass = type==='shop' ? 'avatar-shop' : (type==='blogger' ? 'avatar-blogger' : '');
   const isFav = !!state.fav[item.id];
+  const addrLinkHtml = m.siteUrl ? `<a href="${m.siteUrl}" target="_blank" rel="noopener" class="code-link" onclick="event.stopPropagation()">${m.siteDomain}</a>` : '';
 
   if(type==='blogger'){
-    const codeLinkHtml = `<a href="https://${item.code}.beroo.online" target="_blank" rel="noopener" class="code-link" onclick="event.stopPropagation()">${item.code}</a>`;
     return `
       <div class="tile" data-id="${item.id}" data-open-modal="${item.id}" style="cursor:pointer;">
         <div class="photo ${photoClass}">${m.icon}</div>
@@ -642,7 +700,7 @@ function renderTile(type, item){
         <div class="t-stat">${formatStars(item.stars)}</div>
         <div class="t-stat" style="color:var(--ink-faint);font-weight:600;">${item.returns}% повернень</div>
         <div class="t-foot-row">
-          <span class="t-code">${codeLinkHtml}</span>
+          <span class="t-code">${addrLinkHtml}</span>
           <button class="tile-fav ${isFav?'on':''}" data-tile-fav="${item.id}" aria-label="В обране">${isFav?'♥':'♡'}</button>
         </div>
       </div>
@@ -657,7 +715,7 @@ function renderTile(type, item){
       <p class="t-name">${m.name}</p>
       <div class="t-stat">${stat}</div>
       <div class="t-foot-row">
-        <span class="t-code">${m.code}</span>
+        <span class="t-code">${addrLinkHtml}</span>
         <button class="tile-fav ${isFav2?'on':''}" data-tile-fav="${item.id}" aria-label="В обране">${isFav2?'♥':'♡'}</button>
       </div>
     </div>
@@ -669,39 +727,43 @@ function zoneOf(type, item){
   return item.returns<=5?'green':(item.returns<=15?'orange':'black');
 }
 
+function hasActiveDrawerFilters(){
+  if(state.type==='product'){
+    return state.filterOnlyStock || state.filterOnlyEq || state.productCategoryFilter.size>0 ||
+      state.priceMin!=='' || state.priceMax!=='' || state.viewsMin!=='' || state.viewsMax!=='' ||
+      state.productReturnsMin!=='' || state.productReturnsMax!=='';
+  }
+  if(state.type==='shop'){
+    return state.filterOnlyEq;
+  }
+  if(state.type==='blogger'){
+    return state.filterOnlyShop || state.categoryFilter.size>0 || state.sampleFilter.size>0 ||
+      state.convMin!=='' || state.convMax!=='' || state.onSiteOnly || !!state.regionFilter;
+  }
+  return false;
+}
+
 /* ============ TOOLBAR ============ */
 function renderToolbar(){
   const isBlogger = state.type === 'blogger';
+  const isShop = state.type === 'shop';
   const sorts = SORTS[state.type];
   const isProduct = state.type === 'product';
-  const chips = (isBlogger || isProduct)
-    ? sorts.map(s=>{
-        const active = state.sortId===s.id;
-        const arrow = active ? (state.sortDir==='desc' ? ' ↓' : ' ↑') : '';
-        return `<button class="chip ${active?'active':''}" data-sort="${s.id}">${s.label}${arrow}</button>`;
-      }).join('')
+  const dirAware = isBlogger || isProduct || isShop;
+  const renderSortChips = (list) => list.map(s=>{
+    const active = state.sortId===s.id;
+    const arrow = active ? (state.sortDir==='desc' ? ' ↓' : ' ↑') : '';
+    return `<button class="chip ${active?'active':''}" data-sort="${s.id}">${s.label}${arrow}</button>`;
+  }).join('');
+  const chips = dirAware
+    ? renderSortChips(sorts)
     : sorts.map(s=>`<button class="chip ${state.sortId===s.id?'active':''}" data-sort="${s.id}">${s.label}</button>`).join('');
+  const shopRow1Html = isShop ? renderSortChips(sorts.filter(s=>SHOP_SORT_ROW1_IDS.includes(s.id))) : '';
+  const shopRow2Html = isShop ? renderSortChips(sorts.filter(s=>SHOP_SORT_ROW2_IDS.includes(s.id))) : '';
 
   const all = dataFor(state.type);
   const total = all.length;
 
-  let countsHtml = '';
-  if(state.type==='product'){
-    const shopsN = new Set(all.map(p=>p.shop)).size;
-    const mirrorsN = all.reduce((a,p)=>a+p.mirrors,0);
-    countsHtml = `<span class="count-chip fill">${total} товарів</span><span class="count-chip outline">${shopsN} магазинів</span><span class="count-chip tint">${mirrorsN} дзеркал</span>`;
-  } else if(state.type==='shop'){
-    const itemsN = all.reduce((a,s)=>a+s.items,0);
-    const mirrorsN = all.reduce((a,s)=>a+s.greyMirrors+s.goldMirrors,0);
-    countsHtml = `<span class="count-chip fill">${total} магазинів</span><span class="count-chip outline">${itemsN} товарів</span><span class="count-chip tint">${mirrorsN} дзеркал</span>`;
-  }
-
-  let riskChipsHtml = '';
-  if(!isBlogger){
-    const zones = all.map(i=>zoneOf(state.type,i));
-    const gN = zones.filter(z=>z==='green').length, oN = zones.filter(z=>z==='orange').length, bN = zones.filter(z=>z==='black').length;
-    riskChipsHtml = `<span class="count-chip zone-chip zone-green">${gN} безпечних</span><span class="count-chip zone-chip zone-orange">${oN} увага</span><span class="count-chip zone-chip zone-black">${bN} критичних</span>`;
-  }
 
   let coopRow = '';
   if(isBlogger){
@@ -715,13 +777,14 @@ function renderToolbar(){
     `;
   }
 
+  const topActive = !!state.topMode;
   let periodRow = '';
   if(isProduct){
     periodRow = `
-      <button class="chip coop-all ${state.productPeriod==='all'?'active':''}" data-period="all">Усі</button>
-      <button class="chip coop-all ${state.productPeriod==='3d'?'active':''}" data-period="3d">3 дні</button>
-      <button class="chip coop-all ${state.productPeriod==='10d'?'active':''}" data-period="10d">10 днів</button>
-      <button class="chip coop-all ${state.productPeriod==='30d'?'active':''}" data-period="30d">30 днів</button>
+      <button class="chip coop-yes ${state.topMode==='3d'?'active':''}" data-top="3d">Топ 3 дні</button>
+      <button class="chip coop-yes ${state.topMode==='10d'?'active':''}" data-top="10d">Топ 10 днів</button>
+      <button class="chip coop-yes ${state.topMode==='30d'?'active':''}" data-top="30d">Топ 30 днів</button>
+      <button class="chip coop-yes ${state.topMode==='all'?'active':''}" data-top="all">Топ загалом</button>
     `;
   }
   let mirrorRow = '';
@@ -733,6 +796,17 @@ function renderToolbar(){
       <button class="chip coop-fav ${state.favOnlyProduct?'active':''}" data-mirror="fav" aria-label="Обрані">${state.favOnlyProduct?'♥':'♡'} ${all.filter(p=>state.fav[p.id]).length}</button>
       <button class="chip coop-yes ${state.mirrorFilter==='mirroring'?'active':''}" data-mirror="mirroring">Дзеркалю ${mirroringN}</button>
       <button class="chip coop-no ${state.mirrorFilter==='not_mirroring'?'active':''}" data-mirror="not_mirroring">Не дзеркалю ${notMirroringN}</button>
+    `;
+  }
+  let shopCoopRow = '';
+  if(isShop){
+    const mirroringN = all.filter(s=>s.mirroring).length;
+    const notMirroringN = total - mirroringN;
+    shopCoopRow = `
+      <button class="chip coop-all ${state.shopMirrorFilter==='all'?'active':''}" data-shopmirror="all">Усі ${total}</button>
+      <button class="chip coop-fav ${state.favOnlyShop?'active':''}" data-shopmirror="fav" aria-label="Обрані">${state.favOnlyShop?'♥':'♡'} ${all.filter(s=>state.fav[s.id]).length}</button>
+      <button class="chip coop-yes ${state.shopMirrorFilter==='mirroring'?'active':''}" data-shopmirror="mirroring">Дзеркалю ${mirroringN}</button>
+      <button class="chip coop-no ${state.shopMirrorFilter==='not_mirroring'?'active':''}" data-shopmirror="not_mirroring">Не дзеркалю ${notMirroringN}</button>
     `;
   }
 
@@ -756,17 +830,15 @@ function renderToolbar(){
 
   document.getElementById('toolbar').innerHTML = `
     ${state.type==='product' ? `<div class="chip-scroll" style="margin-bottom:8px;"><button class="chip" id="myCatalogBtn">🎥 Мій каталог для блогерів</button></div>` : ''}
-    ${isProduct ? `<div class="chip-scroll">${periodRow}</div><div class="chip-scroll">${mirrorRow}</div>` : ''}
-    <div class="chip-scroll">${chips}</div>
+    ${isProduct ? `<div class="chip-scroll">${periodRow}</div><div class="chip-scroll ${topActive?'dimmed':''}">${mirrorRow}</div>` : ''}
+    ${isShop ? `<div class="chip-scroll">${shopRow1Html}</div><div class="chip-scroll">${shopRow2Html}</div><div class="chip-scroll">${shopCoopRow}</div>` : `<div class="chip-scroll ${(isProduct&&topActive)?'dimmed':''}">${chips}</div>`}
     ${isBlogger ? `<div class="chip-scroll">${coopRow}</div><div class="chip-scroll">${platformRow}</div><div class="chip-scroll">${formatRow}</div>` : ''}
-    ${countsHtml ? `<div class="counts-row">${countsHtml}</div>` : ''}
-    ${riskChipsHtml ? `<div class="counts-row">${riskChipsHtml}</div>` : ''}
     <div class="search-filter-row">
       <div class="search-row" style="margin-bottom:0;flex:1;">
         <span class="icon">🔍</span>
         <input type="text" id="searchInput" placeholder="Пошук…" value="${state.search}">
       </div>
-      <button class="util-btn ${state.filterOpen?'on':''}" id="filtersBtn" style="flex:none;width:auto;padding:10px 14px;">🔍 Фільтри</button>
+      <button class="util-btn ${state.filterOpen?'on':''}" id="filtersBtn" style="flex:none;width:auto;padding:10px 14px;position:relative;">🔍 Фільтри${hasActiveDrawerFilters()?'<span class="filter-dot"></span>':''}</button>
       <button class="util-btn icon-only" id="refreshBtn" aria-label="Оновити"><span class="spin" id="refreshSpin">↻</span></button>
     </div>
     <div class="filter-drawer ${state.filterOpen?'open':''}" id="filterDrawer">
@@ -777,9 +849,11 @@ function renderToolbar(){
 
   document.querySelectorAll('.chip[data-sort]').forEach(el=>{
     el.addEventListener('click', ()=>{
-      if(isBlogger || isProduct){
+      if(isProduct) state.topMode = null;
+      if(isBlogger || isProduct || isShop){
         if(state.sortId === el.dataset.sort){
-          state.sortDir = state.sortDir==='desc' ? 'asc' : 'desc';
+          if(state.sortDir==='desc'){ state.sortDir = 'asc'; }
+          else { state.sortId = null; state.sortDir = 'desc'; }
         } else {
           state.sortId = el.dataset.sort;
           state.sortDir = 'desc';
@@ -798,17 +872,27 @@ function renderToolbar(){
       renderAll();
     });
   });
-  document.querySelectorAll('.chip[data-period]').forEach(el=>{
+  document.querySelectorAll('.chip[data-top]').forEach(el=>{
     el.addEventListener('click', ()=>{
-      state.productPeriod = el.dataset.period;
+      const v = el.dataset.top;
+      state.topMode = state.topMode===v ? null : v;
       renderAll();
     });
   });
   document.querySelectorAll('.chip[data-mirror]').forEach(el=>{
     el.addEventListener('click', ()=>{
+      state.topMode = null;
       const v = el.dataset.mirror;
       if(v==='fav'){ state.favOnlyProduct = !state.favOnlyProduct; }
       else { state.mirrorFilter = v; }
+      renderAll();
+    });
+  });
+  document.querySelectorAll('.chip[data-shopmirror]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const v = el.dataset.shopmirror;
+      if(v==='fav'){ state.favOnlyShop = !state.favOnlyShop; }
+      else { state.shopMirrorFilter = v; }
       renderAll();
     });
   });
@@ -829,10 +913,12 @@ function renderToolbar(){
     });
   });
   document.getElementById('searchInput').addEventListener('input', e=>{
+    if(isProduct) state.topMode = null;
     state.search = e.target.value;
     renderList();
   });
   document.getElementById('filtersBtn').addEventListener('click', ()=>{
+    if(isProduct) state.topMode = null;
     if(!state.filterOpen){
       // opening — snapshot current filter state so Скасувати can restore it
       state._filterSnapshot = {
@@ -980,6 +1066,12 @@ function renderBloggerFilterDrawer(){
 /* ============ LIST ============ */
 function currentItems(){
   let items = dataFor(state.type).slice();
+
+  if(state.type==='product' && state.topMode){
+    const key = state.topMode==='3d' ? i=>i.sold3d : state.topMode==='10d' ? i=>i.sold10d : state.topMode==='30d' ? i=>i.sold30d : i=>i.soldTotal;
+    return items.sort((a,b)=>key(b)-key(a));
+  }
+
   if(state.search.trim()){
     const q = state.search.trim().toLowerCase();
     items = items.filter(i => i.name.toLowerCase().includes(q));
@@ -998,7 +1090,12 @@ function currentItems(){
     if(state.productReturnsMin !== '') items = items.filter(i=>i.productReturns >= parseFloat(state.productReturnsMin));
     if(state.productReturnsMax !== '') items = items.filter(i=>i.productReturns <= parseFloat(state.productReturnsMax));
   }
-  if(state.type==='shop' && state.filterOnlyEq) items = items.filter(i=>i.status==='eq');
+  if(state.type==='shop'){
+    if(state.filterOnlyEq) items = items.filter(i=>i.status==='eq');
+    if(state.shopMirrorFilter==='mirroring') items = items.filter(i=>i.mirroring);
+    if(state.shopMirrorFilter==='not_mirroring') items = items.filter(i=>!i.mirroring);
+    if(state.favOnlyShop) items = items.filter(i=>state.fav[i.id]);
+  }
   if(state.type==='blogger'){
     if(state.coopFilter==='cooperating') items = items.filter(i=>i.cooperating);
     if(state.coopFilter==='not_cooperating') items = items.filter(i=>!i.cooperating);
@@ -1017,7 +1114,7 @@ function currentItems(){
   const sortDef = SORTS[state.type].find(s=>s.id===state.sortId);
   if(sortDef){
     if(sortDef.filter) items = items.filter(sortDef.filter);
-    if(state.type==='blogger' || state.type==='product'){
+    if(state.type==='blogger' || state.type==='product' || state.type==='shop'){
       const dir = state.sortDir==='asc' ? 1 : -1;
       items.sort((a,b)=>{
         const ka=sortDef.key(a), kb=sortDef.key(b);
@@ -1087,6 +1184,31 @@ function wireCardEvents(root, isModal){
       e.stopPropagation();
       const b = BLOGGERS.find(x=>x.id===btn.dataset.target);
       alert('Веде на «Дзеркало → Мене дзеркалять», прокручує і розгортає картку «'+(b?b.name:'')+'» з кнопками Аналітика / Виплати.');
+    });
+  });
+  root.querySelectorAll('[data-action="limitedRequest"]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const b = BLOGGERS.find(x=>x.id===btn.dataset.target);
+      if(b && b.requestRetryable){
+        if(confirm('Цей блогер не відповідає вашим поточним критеріям запиту.\n\nСпробувати ще раз?')){
+          alert('Запит надіслано повторно.');
+        }
+      } else {
+        alert('Цей блогер не відповідає вашим поточним критеріям запиту.');
+      }
+    });
+  });
+  root.querySelectorAll('[data-action="openShopFromProduct"]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const shopId = btn.dataset.target;
+      state.type = 'shop';
+      state.density = 'expanded';
+      state.modalId = shopId;
+      state.modalExpanded = false;
+      renderAll();
+      renderModal();
     });
   });
   root.querySelectorAll('[data-action="openReviews"]').forEach(btn=>{
@@ -1188,29 +1310,32 @@ function closeReviews(){ state.reviewsFor = null; document.getElementById('revie
 /* ============ INFO POPUP ============ */
 const INFO_TEXT = {
   product: `
-    <p><b>Період (Усі · 3 дні · 10 днів · 30 днів)</b> — обирає, за яке вікно рахувати «Продано» в сортуванні нижче. Не фільтрує список, лише змінює, які цифри порівнюються при сортуванні за «Продано».</p>
-    <p><b>Усі / ♡ Обрані / Дзеркалю / Не дзеркалю</b> — показує товари залежно від твоїх стосунків із ними: чи вже дзеркалиш, чи додав у обране. ♡ можна вмикати одночасно з будь-якою з трьох інших.</p>
-    <p><b>Сортування</b> (Продано · Кількість · Дзеркал · Обрано) — клік активує за спаданням (найбільше вгорі), повторний клік перемикає на зростання.</p>
-    <p><b>Фільтри</b> — тут ще й Ціна, Категорія, Перегляди та % повернень (діапазонами «від–до»), щоб не захаращувати рядок сортування рідше вживаними критеріями.</p>
-    <p><b>6 панелей картки:</b> кількість в наявності, кількість проданих (всього), скільки Блогерів дзеркалять, метод оплати магазину (лише IBAN / є Екваєр / обидва), % повернень цього товару, терміни відправки.</p>
+    <p><b>Топ 3 дні / 10 днів / 30 днів / загалом</b> — ексклюзивний режим: показує топ товарів за продажами в обраному вікні. Поки він активний, решта фільтрів і сортувань не спрацьовують і візуально тьмяніють. Натиснувши будь-яку іншу кнопку, ви скидаєте «Топ» і повертаєтесь до звичайного перегляду.</p>
+    <p><b>Усі / ♡ Обрані / Дзеркалю / Не дзеркалю</b> — показує товари залежно від ваших стосунків із ними: чи ви вже дзеркалите, чи додали в обране. ♡ можна вмикати одночасно з будь-якою з трьох інших.</p>
+    <p><b>Сортування</b> (Продано · Кількість · Дзеркал · Обрано) — клік активує за спаданням (найбільше вгорі), повторний клік перемикає на зростання, третій клік вимикає сортування.</p>
+    <p><b>Фільтри</b> — тут ще й Ціна, Категорія, Перегляди та % повернень (діапазонами «від–до»). Фільтри доповнюють обрані сортування, а не скасовують їх. Крапка на кнопці «Фільтри» означає, що якийсь із цих фільтрів зараз активний.</p>
+    <p><b>6 панелей картки:</b> лишилось, кількість проданих (всього), скільки Блогерів дзеркалять, метод оплати магазину (лише IBAN / є Екваєр / обидва), % повернень цього товару, терміни відправки.</p>
+    <p>У розгорнутій картці рядок «Магазин: …» відкриває картку цього Магазину на сторінці Магазини.</p>
   `,
   shop: `
-    <p><b>Сортування</b> — за кількістю товарів або за кількістю нових запитів на дзеркалення.</p>
-    <p><b>🟢🟠⚫ Зведення</b> — скільки магазинів у кожній зоні ризику (за % повернень), налаштованій у Рейтингах.</p>
-    <p><b>6 панелей картки:</b> товарів у каталозі, сума залишків у гривнях, кількість Оглядачів-дзеркал (сірі зірки) і PRO-дзеркал (золоті зірки), нових запитів, % повернень магазину.</p>
-    <p>Статус «⚡ Екваєр» чи «🏦 Іван» одразу підказує, чи фіксуватимуться Зірочки при дзеркаленні цього магазину.</p>
+    <p><b>Рейтинг · Дзеркал · Повернень · Виплат</b> і <b>Товарів · Варіацій · Одиниць</b> — два незалежні рядки сортування; активний вибір в одному автоматично знімає вибір в іншому. Клік активує за спаданням, повторний — за зростанням, третій — вимикає.</p>
+    <p><b>Усі / ♡ Обрані / Дзеркалю / Не дзеркалю</b> — показує магазини залежно від того, чи ви вже їх дзеркалите.</p>
+    <p><b>6 панелей картки:</b> товарів, варіацій, одиниць, дзеркал, % повернень, кількість виплат. Жодних сум у гривнях на картці немає навмисно.</p>
+    <p>Плашка «Рейтинг: X,X бала» у правому верхньому куті картки — це «Рейтинг комунікації», який магазини й блогери виставляють одне одному при закритті угоди на сторінці Фінанси → Комісійні.</p>
   `,
   blogger: `
-    <p><b>Сортування</b> (Зірок · Конверсія · Товарів · Магазини · Повернень · Дата реєстрації) — за замовчуванням активне «Зірок» за спаданням (найбільше вгорі). Клік по активній кнопці перемикає напрям.</p>
-    <p><b>Усі / ♡ Обрані / Співпрацюю / Не співпрацюю</b> — показує блогерів залежно від того, чи вже працюєш із ними. ♡ комбінується з будь-якою з трьох інших.</p>
+    <p><b>Сортування</b> (Зірок · Балів · Конверсія · Товарів · Магазини · Повернень · Дата реєстрації) — за замовчуванням активне «Зірок» за спаданням. Клік по активній кнопці перемикає напрям, третій клік вимикає сортування.</p>
+    <p><b>«Балів»</b> — той самий «Рейтинг комунікації», що й на картках Магазинів: скільки балів (1,0–5,0) заробив цей блогер за ввічливість і чіткість у співпраці.</p>
+    <p><b>Усі / ♡ Обрані / Співпрацюю / Не співпрацюю</b> — показує блогерів залежно від того, чи ви вже працюєте з ними. ♡ комбінується з будь-якою з трьох інших.</p>
     <p><b>Платформи / Формати контенту</b> — множинний вибір, показує лише блогерів, які працюють хоча б в одному з обраних.</p>
-    <p><b>6 панелей картки:</b> золоті зірочки (заробіток-орієнтир), скільки магазинів дзеркалить, скільки товарів дзеркалить, конверсія, % повернень (кольором — зелений/жовтий/чорний за твоїми Рейтингами), основна платформа. Якщо вже співпрацюєте — додається жовтий рядок «ВАШИХ: ★ N».</p>
+    <p><b>6 панелей картки:</b> золоті зірочки (заробіток-орієнтир), скільки магазинів дзеркалить, скільки товарів дзеркалить, конверсія, % повернень (кольором — за вашими Рейтингами), основна платформа. Якщо ви вже співпрацюєте — додається жовтий рядок «ВАШИХ: ★ N».</p>
+    <p>Якщо блогер не відповідає вашим критеріям запиту, кнопка запрошення покаже «Обмежено» замість причини.</p>
   `,
 };
 function openInfo(){
   const backdrop = document.getElementById('infoBackdrop');
   const sheet = document.getElementById('infoSheet');
-  const titles = {product:'Як працює сторінка «Товар»', shop:'Як працює сторінка «Магазин»', blogger:'Як працює сторінка «Блогер»'};
+  const titles = {product:'Як працює сторінка «Вітрина»', shop:'Як працює сторінка «Магазини»', blogger:'Як працює сторінка «Блогери»'};
   sheet.innerHTML = `
     <div class="modal-handle"></div>
     <div class="modal-inner">
@@ -1230,8 +1355,8 @@ document.getElementById('modalBackdrop').addEventListener('click', e=>{ if(e.tar
 
 /* ============ SWITCHES ============ */
 const NOTES = {
-  product: 'Вітрина: рішення приймає Блогер — дзеркалити товар чи ні. «Комісія» бачить лише Блогер PRO.',
-  shop: 'Магазини: рішення приймає Блогер — чи дзеркалити весь магазин. Статус Іван/Екваєр підказує, чи будуть зірочки.',
+  product: 'Вітрина: рішення приймаєте ви (Блогер) — дзеркалити товар чи ні. «Комісія» бачить лише Блогер PRO.',
+  shop: 'Магазини: рішення приймаєте ви (Блогер) — чи дзеркалити весь магазин. Статус Іван/Екваєр підказує, чи будуть зірочки.',
   blogger: 'Блогери: рішення приймає Магазин — кого запросити. Тут завжди лише Блогери PRO.'
 };
 function setNote(){ document.getElementById('pageNote').textContent = NOTES[state.type]; }
