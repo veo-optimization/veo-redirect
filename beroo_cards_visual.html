@@ -147,10 +147,12 @@
     font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center;
   }
   .tile-fav{
-    border:1px solid var(--line); background:var(--card); color:var(--ink-soft); width:26px; height:26px; border-radius:50%;
-    font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    border:1px solid var(--line); background:var(--card); color:var(--ink-soft); height:22px; border-radius:999px;
+    font-size:12px; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:4px; padding:0 8px 0 9px;
   }
   .tile-fav.on{color:#D1495B; border-color:#F1C6CD;}
+  .tile-fav.on .fav-count{color:var(--ink-soft);}
+  .tile-fav .fav-count{font-size:9.5px; font-weight:700; color:var(--ink-soft);}
 
   /* Розширений: full cards feed */
   .feed{display:flex; flex-direction:column; gap:14px;}
@@ -210,6 +212,7 @@
   .risk-bar .marker{position:absolute; top:-3px; width:10px; height:10px; border-radius:50%; background:var(--card); border:2px solid var(--ink); transform:translateX(-50%);}
 
   .earn-box{margin:2px 16px 4px; padding:11px 13px; background:var(--gold-bg); border-radius:13px;}
+  .earn-box-warning{background:var(--grey-star-bg); color:#C93E49; font-size:11.5px; line-height:1.5; font-weight:600;}
   .earn-box .earn-top{display:flex; align-items:center; justify-content:space-between;}
   .earn-box .earn-label{font-size:10px; color:var(--gold); text-transform:uppercase; letter-spacing:.04em; font-weight:700;}
   .earn-box .earn-val{font-size:15px; font-weight:800; color:var(--ink);}
@@ -291,7 +294,6 @@
   <div class="masthead">
     <div>
       <h1>BEROO Маркетплейс</h1>
-      <div class="sub">Тюнінг під iPhone 14 Pro · 393×852</div>
     </div>
     <button class="info-btn" id="infoBtn"><span>ⓘ</span> Як це працює</button>
   </div>
@@ -332,25 +334,25 @@
 <script>
 /* ============ DATA ============ */
 const PRODUCTS = [
-  {id:'p1', icon:'👟', code:'214', name:'Кросівки Street Runner', price:899, shop:'Urban Line', cat:'Взуття', mirrors:7, sold3d:32, sold10d:88, sold30d:240, soldTotal:1120, comm:12, stock:48, shopRating:96, top:true, foot:'Легкі кросівки на щодень. 5 кольорів, розміри 36–45. Магазин з еквайрингом.', shopStatus:'eq', paymentMethod:'eq', views:14200, carrier:'Нова Пошта', shippingDays:1, productReturns:3, conversion:4.1, topRank:12, publishedDaysAgo:340, soldByShop:true, exchangeDays:14, favoritesCount:212, mirroring:true},
-  {id:'p2', icon:'🧴', code:'118', name:'Сироватка з вітаміном C', price:349, shop:'SkinLab UA', cat:'Косметика', mirrors:22, sold3d:81, sold10d:260, sold30d:790, soldTotal:5400, comm:18, stock:210, shopRating:99, top:true, foot:'Бестселер весни. Швидко підтверджує запити на дзеркалення.', shopStatus:'eq', paymentMethod:'both', views:38900, carrier:'Нова Пошта', shippingDays:1, productReturns:1, conversion:6.8, topRank:3, publishedDaysAgo:180, soldByShop:true, exchangeDays:7, favoritesCount:640, mirroring:true},
-  {id:'p3', icon:'🎧', code:'305', name:'Бездротові навушники Air Pulse', price:1290, shop:'TechDrop', cat:'Електроніка', mirrors:14, sold3d:19, sold10d:52, sold30d:150, soldTotal:2100, comm:10, stock:33, shopRating:91, top:false, foot:'До 28 год від батареї. Гарантія 12 місяців.', shopStatus:'eq', paymentMethod:'eq', views:22100, carrier:'Укрпошта', shippingDays:2, productReturns:9, conversion:2.9, topRank:44, publishedDaysAgo:95, soldByShop:false, exchangeDays:14, favoritesCount:98},
-  {id:'p4', icon:'👜', code:'077', name:'Сумка крос-боді Mira', price:749, shop:'Bags & Co', cat:'Аксесуари', mirrors:5, sold3d:6, sold10d:15, sold30d:38, soldTotal:410, comm:15, stock:12, shopRating:88, top:false, foot:'Екошкіра, 4 кольори. Обмежена партія.', shopStatus:'iban', paymentMethod:'iban', views:5600, carrier:'Нова Пошта', shippingDays:3, productReturns:15, conversion:2.1, topRank:null, publishedDaysAgo:12, soldByShop:true, exchangeDays:0, favoritesCount:31},
-  {id:'p5', icon:'🕯️', code:'432', name:'Свічка соєва «Дім»', price:259, shop:'Затишно', cat:'Дім', mirrors:9, sold3d:14, sold10d:40, sold30d:120, soldTotal:960, comm:20, stock:76, shopRating:97, top:false, foot:'Ручна робота, аромат кедра й ванілі.', shopStatus:'eq', paymentMethod:'eq', views:9100, carrier:'Meest', shippingDays:2, productReturns:2, conversion:5.0, topRank:67, publishedDaysAgo:210, soldByShop:true, exchangeDays:10, favoritesCount:150},
-  {id:'p6', icon:'👕', code:'190', name:'Худі оверсайз «Kyiv»', price:1099, shop:'Urban Line', cat:'Одяг', mirrors:31, sold3d:44, sold10d:130, sold30d:410, soldTotal:3300, comm:12, stock:60, shopRating:96, top:true, foot:'Топ продажів місяця. Унісекс, S–XXL.', shopStatus:'eq', paymentMethod:'eq', views:41200, carrier:'Нова Пошта', shippingDays:1, productReturns:4, conversion:5.7, topRank:1, publishedDaysAgo:60, soldByShop:true, exchangeDays:14, favoritesCount:890},
-  {id:'p7', icon:'💄', code:'261', name:'Помада матова Velvet', price:229, shop:'SkinLab UA', cat:'Косметика', mirrors:11, sold3d:27, sold10d:75, sold30d:230, soldTotal:1980, comm:18, stock:140, shopRating:99, top:false, foot:'10 відтінків. Стійкість до 8 годин.', shopStatus:'eq', paymentMethod:'both', views:16700, carrier:'Нова Пошта', shippingDays:1, productReturns:2, conversion:4.4, topRank:28, publishedDaysAgo:150, soldByShop:false, exchangeDays:7, favoritesCount:205},
-  {id:'p8', icon:'⌚', code:'508', name:'Смарт-годинник Pulse Mini', price:1890, shop:'TechDrop', cat:'Електроніка', mirrors:3, sold3d:4, sold10d:9, sold30d:22, soldTotal:60, comm:8, stock:9, shopRating:91, top:false, foot:'Новинка тижня. Залишок обмежений.', shopStatus:'eq', paymentMethod:'eq', views:3800, carrier:'Укрпошта', shippingDays:2, productReturns:11, conversion:1.8, topRank:null, publishedDaysAgo:3, soldByShop:false, exchangeDays:14, favoritesCount:19},
+  {id:'p1', icon:'👟', code:'214', name:'Кросівки Street Runner', price:899, shop:'Urban Line', cat:'Взуття', mirrors:7, sold3d:32, sold10d:88, sold30d:240, soldTotal:1120, click3d:140, click10d:410, click30d:1150, clickTotal:5200, comm:12, stock:48, shopRating:96, top:true, foot:'Легкі кросівки на щодень. 5 кольорів, розміри 36–45. Магазин з еквайрингом.', shopStatus:'eq', paymentMethod:'eq', views:14200, carriers:['Нова Пошта'], hasTTN:true, shippingDays:1, productReturns:3, conversion:4.1, topRank:12, publishedDaysAgo:340, soldByShop:true, exchangeDays:14, favoritesCount:212, mirroring:true},
+  {id:'p2', icon:'🧴', code:'118', name:'Сироватка з вітаміном C', price:349, shop:'SkinLab UA', cat:'Косметика', mirrors:22, sold3d:81, sold10d:260, sold30d:790, soldTotal:5400, click3d:310, click10d:980, click30d:2900, clickTotal:19000, comm:18, stock:210, shopRating:99, top:true, foot:'Бестселер весни. Швидко підтверджує запити на дзеркалення.', shopStatus:'eq', paymentMethod:'both', views:38900, carriers:['Нова Пошта'], hasTTN:true, shippingDays:1, productReturns:1, conversion:6.8, topRank:3, publishedDaysAgo:180, soldByShop:true, exchangeDays:7, favoritesCount:640, mirroring:true},
+  {id:'p3', icon:'🎧', code:'305', name:'Бездротові навушники Air Pulse', price:1290, shop:'TechDrop', cat:'Електроніка', mirrors:14, sold3d:19, sold10d:52, sold30d:150, soldTotal:2100, click3d:95, click10d:260, click30d:760, clickTotal:4100, comm:10, stock:33, shopRating:91, top:false, foot:'До 28 год від батареї. Гарантія 12 місяців.', shopStatus:'eq', paymentMethod:'eq', views:22100, carriers:['Укрпошта','Нова Пошта','Міст Експрес'], hasTTN:false, shippingDays:2, productReturns:9, conversion:2.9, topRank:44, publishedDaysAgo:95, soldByShop:false, exchangeDays:14, favoritesCount:98},
+  {id:'p4', icon:'👜', code:'077', name:'Сумка крос-боді Mira', price:749, shop:'Bags & Co', cat:'Аксесуари', mirrors:5, sold3d:6, sold10d:15, sold30d:38, soldTotal:410, click3d:44, click10d:120, click30d:310, clickTotal:1600, comm:15, stock:12, shopRating:88, top:false, foot:'Екошкіра, 4 кольори. Обмежена партія.', shopStatus:'iban', paymentMethod:'iban', views:5600, carriers:['Нова Пошта'], hasTTN:false, shippingDays:3, productReturns:15, conversion:2.1, topRank:null, publishedDaysAgo:12, soldByShop:true, exchangeDays:0, favoritesCount:31},
+  {id:'p5', icon:'🕯️', code:'432', name:'Свічка соєва «Дім»', price:259, shop:'Затишно', cat:'Дім', mirrors:9, sold3d:14, sold10d:40, sold30d:120, soldTotal:960, click3d:60, click10d:175, click30d:520, clickTotal:2800, comm:20, stock:76, shopRating:97, top:false, foot:'Ручна робота, аромат кедра й ванілі.', shopStatus:'eq', paymentMethod:'eq', views:9100, carriers:['Meest'], hasTTN:true, shippingDays:2, productReturns:2, conversion:5.0, topRank:67, publishedDaysAgo:210, soldByShop:true, exchangeDays:10, favoritesCount:150},
+  {id:'p6', icon:'👕', code:'190', name:'Худі оверсайз «Kyiv»', price:1099, shop:'Urban Line', cat:'Одяг', mirrors:31, sold3d:44, sold10d:130, sold30d:410, soldTotal:3300, click3d:180, click10d:560, click30d:1700, clickTotal:9200, comm:12, stock:60, shopRating:96, top:true, foot:'Топ продажів місяця. Унісекс, S–XXL.', shopStatus:'eq', paymentMethod:'eq', views:41200, carriers:['Нова Пошта'], hasTTN:true, shippingDays:1, productReturns:4, conversion:5.7, topRank:1, publishedDaysAgo:60, soldByShop:true, exchangeDays:14, favoritesCount:890},
+  {id:'p7', icon:'💄', code:'261', name:'Помада матова Velvet', price:229, shop:'SkinLab UA', cat:'Косметика', mirrors:11, sold3d:27, sold10d:75, sold30d:230, soldTotal:1980, click3d:120, click10d:340, click30d:990, clickTotal:6100, comm:18, stock:140, shopRating:99, top:false, foot:'10 відтінків. Стійкість до 8 годин.', shopStatus:'eq', paymentMethod:'both', views:16700, carriers:['Нова Пошта'], hasTTN:true, shippingDays:1, productReturns:2, conversion:4.4, topRank:28, publishedDaysAgo:150, soldByShop:false, exchangeDays:7, favoritesCount:205},
+  {id:'p8', icon:'⌚', code:'508', name:'Смарт-годинник Pulse Mini', price:1890, shop:'TechDrop', cat:'Електроніка', mirrors:3, sold3d:4, sold10d:9, sold30d:22, soldTotal:60, click3d:20, click10d:55, click30d:140, clickTotal:410, comm:8, stock:9, shopRating:91, top:false, foot:'Новинка тижня. Залишок обмежений.', shopStatus:'eq', paymentMethod:'eq', views:3800, carriers:['Нова Пошта','Укрпошта','Міст Експрес','Делівері'], hasTTN:false, shippingDays:2, productReturns:11, conversion:1.8, topRank:null, publishedDaysAgo:3, soldByShop:false, exchangeDays:14, favoritesCount:19},
 ];
 
 const SHOPS = [
-  {id:'s1', icon:'🏬', code:'30841', name:'Urban Line', cats:'Взуття · Одяг · Аксесуари', status:'eq', items:186, variations:640, units:9200, greyMirrors:41, goldMirrors:9, requests:5, returns:4, rating:4.7, payoutsCount:212, regDaysAgo:1100, mirroring:true, foot:'Український бренд вуличного одягу, 3 роки на ринку.'},
-  {id:'s2', icon:'🧪', code:'11290', name:'SkinLab UA', cats:'Косметика · Догляд', status:'eq', items:94, variations:310, units:15400, greyMirrors:63, goldMirrors:21, requests:12, returns:2, rating:4.9, payoutsCount:480, regDaysAgo:640, mirroring:true, foot:'Власне виробництво, сертифікована косметика.'},
-  {id:'s3', icon:'📱', code:'50231', name:'TechDrop', cats:'Електроніка · Гаджети', status:'eq', items:58, variations:140, units:2100, greyMirrors:15, goldMirrors:6, requests:3, returns:9, rating:4.1, payoutsCount:96, regDaysAgo:520, foot:'Офіційний імпортер аудіо- та носимої техніки.'},
-  {id:'s4', icon:'👜', code:'77410', name:'Bags & Co', cats:'Сумки · Аксесуари', status:'iban', items:41, variations:98, units:610, greyMirrors:6, goldMirrors:1, requests:1, returns:15, rating:3.4, payoutsCount:9, regDaysAgo:70, foot:'Невеликий сімейний бренд, без еквайрингу — лише ручна оплата.'},
-  {id:'s5', icon:'🕯️', code:'99012', name:'Затишно', cats:'Дім · Декор', status:'eq', items:73, variations:150, units:3300, greyMirrors:28, goldMirrors:5, requests:4, returns:3, rating:4.6, payoutsCount:140, regDaysAgo:900, foot:'Товари для дому ручної роботи.'},
-  {id:'s6', icon:'🧢', code:'40218', name:'CapStreet', cats:'Аксесуари · Одяг', status:'eq', items:29, variations:80, units:1450, greyMirrors:9, goldMirrors:2, requests:2, returns:7, rating:3.9, payoutsCount:37, regDaysAgo:210, foot:'Кепки та стрітвір власного виробництва.'},
-  {id:'s7', icon:'🍯', code:'60533', name:'Пасіка Карпат', cats:'Продукти', status:'iban', items:17, variations:22, units:340, greyMirrors:4, goldMirrors:0, requests:0, returns:1, rating:4.8, payoutsCount:3, regDaysAgo:40, foot:'Натуральний мед прямо з пасіки, без посередників.'},
-  {id:'s8', icon:'💍', code:'80112', name:'Silver&Co', cats:'Прикраси', status:'eq', items:112, variations:260, units:1900, greyMirrors:19, goldMirrors:11, requests:6, returns:5, rating:4.3, payoutsCount:165, regDaysAgo:760, foot:'Срібні прикраси власного дизайну.'},
+  {id:'s1', icon:'🏬', code:'30841', name:'Urban Line', cats:'Взуття · Одяг · Аксесуари', status:'eq', items:186, variations:640, units:9200, greyMirrors:41, goldMirrors:9, requests:5, returns:4, rating:4.7, payoutsCount:212, regDaysAgo:1100, mirroring:true, commMin:8, commMax:15, hasTTN:true, carriers:['Нова Пошта'], shippingDays:1, foot:'Український бренд вуличного одягу, 3 роки на ринку.'},
+  {id:'s2', icon:'🧪', code:'11290', name:'SkinLab UA', cats:'Косметика · Догляд', status:'eq', items:94, variations:310, units:15400, greyMirrors:63, goldMirrors:21, requests:12, returns:2, rating:4.9, payoutsCount:480, regDaysAgo:640, mirroring:true, commMin:12, commMax:20, hasTTN:true, carriers:['Нова Пошта'], shippingDays:1, foot:'Власне виробництво, сертифікована косметика.'},
+  {id:'s3', icon:'📱', code:'50231', name:'TechDrop', cats:'Електроніка · Гаджети', status:'eq', items:58, variations:140, units:2100, greyMirrors:15, goldMirrors:6, requests:3, returns:9, rating:4.1, payoutsCount:96, regDaysAgo:520, commMin:6, commMax:12, hasTTN:false, carriers:['Укрпошта','Нова Пошта','Міст Експрес'], shippingDays:2, foot:'Офіційний імпортер аудіо- та носимої техніки.'},
+  {id:'s4', icon:'👜', code:'77410', name:'Bags & Co', cats:'Сумки · Аксесуари', status:'iban', items:41, variations:98, units:610, greyMirrors:6, goldMirrors:1, requests:1, returns:15, rating:3.4, payoutsCount:9, regDaysAgo:70, commMin:0, commMax:0, hasTTN:false, carriers:['Нова Пошта'], shippingDays:3, foot:'Невеликий сімейний бренд — лише ручна оплата.'},
+  {id:'s5', icon:'🕯️', code:'99012', name:'Затишно', cats:'Дім · Декор', status:'eq', items:73, variations:150, units:3300, greyMirrors:28, goldMirrors:5, requests:4, returns:3, rating:4.6, payoutsCount:140, regDaysAgo:900, commMin:15, commMax:25, hasTTN:true, carriers:['Meest'], shippingDays:2, foot:'Товари для дому ручної роботи.'},
+  {id:'s6', icon:'🧢', code:'40218', name:'CapStreet', cats:'Аксесуари · Одяг', status:'eq', items:29, variations:80, units:1450, greyMirrors:9, goldMirrors:2, requests:2, returns:7, rating:3.9, payoutsCount:37, regDaysAgo:210, commMin:10, commMax:18, hasTTN:true, carriers:['Нова Пошта'], shippingDays:1, foot:'Кепки та стрітвір власного виробництва.'},
+  {id:'s7', icon:'🍯', code:'60533', name:'Пасіка Карпат', cats:'Продукти', status:'iban', items:17, variations:22, units:340, greyMirrors:4, goldMirrors:0, requests:0, returns:1, rating:4.8, payoutsCount:3, regDaysAgo:40, commMin:0, commMax:0, hasTTN:false, carriers:['Нова Пошта','Укрпошта'], shippingDays:2, foot:'Натуральний мед прямо з пасіки, без посередників.'},
+  {id:'s8', icon:'💍', code:'80112', name:'Silver&Co', cats:'Прикраси', status:'eq', items:112, variations:260, units:1900, greyMirrors:19, goldMirrors:11, requests:6, returns:5, rating:4.3, payoutsCount:165, regDaysAgo:760, commMin:9, commMax:16, hasTTN:false, carriers:['Нова Пошта','Укрпошта','Міст Експрес','Делівері'], shippingDays:1, foot:'Срібні прикраси власного дизайну.'},
 ];
 
 const SAMPLE_TYPES = [
@@ -470,6 +472,12 @@ function formatStars(n){
   if(n>=1000) return '★ '+(n/1000).toLocaleString('uk-UA',{maximumFractionDigits:1})+' тис';
   return '★ '+n.toLocaleString('uk-UA');
 }
+const CARRIER_NBSP = {'Нова Пошта':'Нова\u00A0Пошта', 'Міст Експрес':'Міст\u00A0Експрес'};
+const CARRIER_ABBR = {'Нова Пошта':'НП', 'Укрпошта':'УкрП', 'Міст Експрес':'Міст', 'Делівері':'Дел', 'Meest':'Meest'};
+function carriersDisplay(carriers){
+  if(carriers.length>=3) return carriers.map(c=>CARRIER_ABBR[c]||c).join(', ');
+  return carriers.map(c=>CARRIER_NBSP[c]||c).join(', ');
+}
 
 /* ============ STATE ============ */
 let state = {
@@ -504,6 +512,7 @@ let state = {
   priceMin: '', priceMax: '',
   viewsMin: '', viewsMax: '',
   productReturnsMin: '', productReturnsMax: '',
+  commMin: '', commMax: '',
   reviewsFor: null,
   reviewsForType: null,
   likedReviews: new Set(),
@@ -521,7 +530,8 @@ function dataFor(type){ return type==='product'?PRODUCTS : type==='shop'?SHOPS :
 /* ============ CARD CONTENT BUILDERS ============ */
 function cardModel(type, item){
   if(type==='product'){
-    const paymentLabel = item.paymentMethod==='iban' ? 'Ручна<br>оплата' : (item.paymentMethod==='eq' ? 'Платіжна<br>система' : 'Ручна оплата +<br>Платіжна система');
+    const isIban = item.paymentMethod === 'iban';
+    const isBoth = item.paymentMethod === 'both';
     const shippingLabel = item.shippingDays<=1 ? 'День в день' : item.shippingDays+' дні';
     const shopEntry = SHOPS.find(s=>s.name===item.shop);
     const shopLink = shopEntry ? {
@@ -530,6 +540,31 @@ function cardModel(type, item){
       avgCheck: Math.round(400 + shopEntry.rating*150),
       samplesPolicy: shopEntry.status==='eq' ? 'Купівля зі знижкою' : 'Тільки безкоштовні зразки'
     } : null;
+
+    // Panel 2: кількість проданих — якщо оплату неможливо підтвердити (лише Ручна), показуємо кліки замість продажів
+    const soldVal = state.productPeriod==='3d'?item.sold3d:(state.productPeriod==='10d'?item.sold10d:(state.productPeriod==='30d'?item.sold30d:item.soldTotal));
+    const clickVal = state.productPeriod==='3d'?item.click3d:(state.productPeriod==='10d'?item.click10d:(state.productPeriod==='30d'?item.click30d:item.clickTotal));
+    const panel2 = isIban
+      ? {val:clickVal.toLocaleString('uk-UA'), lab:'кліків', cls:''}
+      : {val:item.soldTotal.toLocaleString('uk-UA'), lab:'кількість проданих', cls:''};
+
+    // Panel 4: метод оплати / нарахування / 0% комісії
+    let panel4;
+    if(isIban){
+      panel4 = {val:'0% комісії', lab:'фіксація неможлива', cls:''};
+    } else if(isBoth){
+      panel4 = {val:formatStars(Math.round(item.price*item.comm/100)), lab:'нарахувань', cls:'gold'};
+    } else {
+      panel4 = {val:'Платіжна<br>система', lab:'метод оплати', cls:''};
+    }
+
+    // Panel 5: % повернень — потребує ТТН-підтвердження через API; без ТТН показуємо перевізників
+    const panel5 = item.hasTTN
+      ? {val:item.productReturns+'%', lab:'% повернень', cls: item.productReturns<=5?'zone-green':(item.productReturns<=15?'zone-orange':'zone-black')}
+      : {val:carriersDisplay(item.carriers), lab:'перевізник', cls:''};
+
+    const earnHtml_iban = isIban;
+
     return {
       icon:item.icon, code:'код '+item.code, name:item.name,
       meta:`${item.price} ₴ · ${item.cat} · Магазин «${item.shop}»`,
@@ -540,24 +575,27 @@ function cardModel(type, item){
       totalFavorites: item.favoritesCount,
       panels:[
         {val:item.stock+' шт', lab:'лишилось', cls:''},
-        {val:item.soldTotal.toLocaleString('uk-UA'), lab:'кількість проданих', cls:''},
+        panel2,
         {val:item.mirrors, lab:'скільки дзеркалять', cls:''},
-        {val:paymentLabel, lab:'метод оплати', cls:''},
-        {val:item.productReturns+'%', lab:'% повернень', cls: item.productReturns<=5?'zone-green':(item.productReturns<=15?'zone-orange':'zone-black')},
+        panel4,
+        panel5,
         {val:shippingLabel, lab:'терміни відправки', cls:''}
       ],
-      earnings:{price:item.price, comm:item.comm, stars: Math.round(item.price*item.comm/100)},
+      earnings: isIban ? null : {price:item.price, comm:item.comm, stars: Math.round(item.price*item.comm/100)},
+      paymentWarning: isIban,
       foot:item.foot,
       expand:[
         ['Категорія', item.cat],
-        ['Продано за період', `3 дні: ${item.sold3d} · 10 днів: ${item.sold10d} · 30 днів: ${item.sold30d}`],
+        [isIban?'Кліків за період':'Продано за період', isIban
+          ? `3 дні: ${item.click3d} · 10 днів: ${item.click10d} · 30 днів: ${item.click30d}`
+          : `3 дні: ${item.sold3d} · 10 днів: ${item.sold10d} · 30 днів: ${item.sold30d}`],
         ['Переглядів картки', item.views.toLocaleString('uk-UA')],
         ['Додано в обране блогерами', item.favoritesCount+' раз(ів)'],
-        ['Конверсія товару', item.conversion+'%'],
+        ...(isIban ? [] : [['Конверсія товару', item.conversion+'%']]),
         ['Місце в топ-100 за місяць', item.topRank ? '#'+item.topRank : 'поза топ-100'],
         ['Опубліковано', item.publishedDaysAgo+' дн. тому'],
         ['Продає сам магазин', item.soldByShop ? 'Так' : 'Ні, лише через дзеркала'],
-        ['Поштовий відправник', item.carrier],
+        ['Поштовий відправник', item.hasTTN ? carriersDisplay(item.carriers) : carriersDisplay(item.carriers)+' (без API-трекінгу)'],
         ['Обмін і повернення', item.exchangeDays>0 ? `Так, ${item.exchangeDays} дн.` : 'Немає'],
         ['Статус магазину', item.shopStatus==='eq'?'Платіжна система':'Ручна оплата'],
         ['Умови дзеркалення', 'Завжди потрібне ручне підтвердження Магазину (автоматичного схвалення в системі немає)'],
@@ -567,6 +605,24 @@ function cardModel(type, item){
   }
   if(type==='shop'){
     const totalMirrors = item.greyMirrors + item.goldMirrors;
+    const isIban = item.status === 'iban';
+    const shippingLabel = item.shippingDays<=1 ? 'День в день' : item.shippingDays+' дні';
+
+    // Panel 4: комісія завжди показується для магазинів з платіжною системою; для Ручної оплати — 0%/неможливо
+    const panel4 = isIban
+      ? {val:'0% комісії', lab:'фіксація неможлива', cls:''}
+      : {val:'★ '+item.commMin+'–'+item.commMax+'%', lab:'комісія (діапазон)', cls:'gold'};
+
+    // Panel 5: % повернень потребує ТТН; без ТТН — перевізники
+    const panel5 = item.hasTTN
+      ? {val:item.returns+'%', lab:'повернень', cls: item.returns<=5?'zone-green':(item.returns<=15?'zone-orange':'zone-black')}
+      : {val:carriersDisplay(item.carriers), lab:'перевізник', cls:''};
+
+    // Panel 6: для Ручної оплати — термін відправки замість Виплат (виплати неможливо порахувати без підтвердженої оплати)
+    const panel6 = isIban
+      ? {val:shippingLabel, lab:'термін відправки', cls:''}
+      : {val:item.payoutsCount, lab:'виплат', cls:''};
+
     return {
       icon:item.icon, code:'код '+item.code, name:item.name,
       meta:item.cats,
@@ -575,25 +631,27 @@ function cardModel(type, item){
       siteDomain: item.code+'.beroo.online',
       siteUrl: `https://${item.code}.beroo.online`,
       totalFavorites: item.requests*9 + item.goldMirrors*4,
+      commRangeLabel: isIban ? null : ('★ '+item.commMin+'–'+item.commMax+'%'),
       panels:[
         {val:item.items, lab:'товарів', cls:''},
         {val:item.variations, lab:'варіацій', cls:''},
         {val:item.units.toLocaleString('uk-UA'), lab:'одиниць', cls:''},
-        {val:totalMirrors, lab:'дзеркал', cls:''},
-        {val:item.returns+'%', lab:'повернень', cls: item.returns<=5?'zone-green':(item.returns<=15?'zone-orange':'zone-black')},
-        {val:item.payoutsCount, lab:'виплат', cls:''}
+        panel4,
+        panel5,
+        panel6
       ],
       foot:item.foot,
       expand:[
         ['Категорії', item.cats],
         ['Умови дзеркалення', 'Завжди потрібне ручне підтвердження Магазину (автоматичного схвалення в системі немає)'],
-        ['Зона ризику', item.returns<=5?'Безпечна':(item.returns<=15?'Увага':'Критична')],
+        ...(item.hasTTN ? [['Зона ризику', item.returns<=5?'Безпечна':(item.returns<=15?'Увага':'Критична')]] : []),
         ['Активних запитів', item.requests],
+        ['Дзеркал (сумарно)', totalMirrors],
         ['Оглядачів-дзеркал', '★ '+item.greyMirrors],
         ['PRO-дзеркал', '★ '+item.goldMirrors],
+        ['Поштовий відправник', carriersDisplay(item.carriers) + (item.hasTTN ? '' : ' (без API-трекінгу)')],
         ['Дата реєстрації', item.regDaysAgo+' дн. тому'],
         ['Додано в обране', (item.requests*9 + item.goldMirrors*4)+' раз(ів)'],
-
       ],
       buttons:[{label:'Переглянути каталог',kind:'ghost'},{label:'Віддзеркалити магазин',kind:'primary'},{label:'Відгуки',kind:'yellow',action:'openReviews',targetId:item.id,reviewType:'shop'}]
     };
@@ -660,12 +718,16 @@ function renderFullCard(type, item, opts){
     </div>
     <div class="risk-bar"><span class="marker" style="left:${Math.min(96,Math.max(4,m.risk.pct))}%;"></span></div>
   ` : '';
-  const earnHtml = m.earnings ? `
+  const earnHtml = m.paymentWarning ? `
+    <div class="earn-box earn-box-warning">
+      Відсутність у магазину підʼєднаних платіжних систем робить неможливою фіксацію та нарахування блогеру зірочок за продажі. Рахуються лише кліки.
+    </div>
+  ` : (m.earnings ? `
     <div class="earn-box">
       <div class="earn-top"><span class="earn-label">Нарахувань за 1 продану одиницю</span><span class="earn-val">★ ${m.earnings.stars}</span></div>
       <div class="earn-formula">Ціна ${m.earnings.price} ₴ × комісія ${m.earnings.comm}% = ${m.earnings.stars} зірочок (1★ = 1₴)</div>
     </div>
-  ` : '';
+  ` : '');
   const metaHtml = m.metaLines
     ? m.metaLines.map(l=>`<p class="meta-line">${l}</p>`).join('')
     : `<p class="meta-line">${m.meta}</p>`;
@@ -731,7 +793,7 @@ function renderTile(type, item){
         <div class="t-stat" style="color:var(--ink-faint);font-weight:600;">${item.returns}% повернень</div>
         <div class="t-foot-row">
           <span class="t-code">${addrLinkHtml}</span>
-          <button class="tile-fav ${isFav?'on':''}" data-tile-fav="${item.id}" aria-label="В обране">${isFav?'♥':'♡'}</button>
+          <button class="tile-fav ${isFav?'on':''}" data-tile-fav="${item.id}" aria-label="В обране, загалом ${m.totalFavorites}"><span class="fav-count">${m.totalFavorites}</span>${isFav?'♥':'♡'}</button>
         </div>
       </div>
     `;
@@ -750,6 +812,9 @@ function renderTile(type, item){
     const mi = METRIC_INFO[state.sortId];
     if(mi) activeMetricHtml = `<div class="t-stat t-stat-metric">${mi.label}: ${mi.get(item).toLocaleString('uk-UA')}${mi.unit}</div>`;
   }
+  if(type==='shop' && m.commRangeLabel){
+    activeMetricHtml = `<div class="t-stat t-stat-metric">Комісія: ${m.commRangeLabel}</div>`;
+  }
   const shopNameHtml = (type==='product' && m.shopLink)
     ? (() => {
         const truncated = m.shopLink.name.length > 14 ? m.shopLink.name.slice(0,14)+'…' : m.shopLink.name;
@@ -764,7 +829,7 @@ function renderTile(type, item){
       ${activeMetricHtml}
       <div class="t-foot-row">
         ${type==='product' ? shopNameHtml : `<span class="t-code">${addrLinkHtml}</span>`}
-        <button class="tile-fav ${isFav2?'on':''}" data-tile-fav="${item.id}" aria-label="В обране">${isFav2?'♥':'♡'}</button>
+        <button class="tile-fav ${isFav2?'on':''}" data-tile-fav="${item.id}" aria-label="В обране, загалом ${m.totalFavorites}"><span class="fav-count">${m.totalFavorites}</span>${isFav2?'♥':'♡'}</button>
       </div>
     </div>
   `;
@@ -779,7 +844,7 @@ function hasActiveDrawerFilters(){
   if(state.type==='product'){
     return state.filterOnlyStock || state.filterOnlyEq || state.productCategoryFilter.size>0 ||
       state.priceMin!=='' || state.priceMax!=='' || state.viewsMin!=='' || state.viewsMax!=='' ||
-      state.productReturnsMin!=='' || state.productReturnsMax!=='';
+      state.productReturnsMin!=='' || state.productReturnsMax!=='' || state.commMin!=='' || state.commMax!=='';
   }
   if(state.type==='shop'){
     return state.filterOnlyEq;
@@ -1010,7 +1075,8 @@ function renderToolbar(){
         productCategoryFilter: new Set(state.productCategoryFilter),
         priceMin: state.priceMin, priceMax: state.priceMax,
         viewsMin: state.viewsMin, viewsMax: state.viewsMax,
-        productReturnsMin: state.productReturnsMin, productReturnsMax: state.productReturnsMax
+        productReturnsMin: state.productReturnsMin, productReturnsMax: state.productReturnsMax,
+        commMin: state.commMin, commMax: state.commMax
       };
       state.filterOpen = true;
     } else {
@@ -1033,6 +1099,7 @@ function renderToolbar(){
       state.priceMin = snap.priceMin; state.priceMax = snap.priceMax;
       state.viewsMin = snap.viewsMin; state.viewsMax = snap.viewsMax;
       state.productReturnsMin = snap.productReturnsMin; state.productReturnsMax = snap.productReturnsMax;
+      state.commMin = snap.commMin; state.commMax = snap.commMax;
     }
     state.filterOpen = false;
     renderAll();
@@ -1082,7 +1149,7 @@ function renderToolbar(){
         renderList();
       });
     });
-    const pairs = [['fPriceMin','priceMin'],['fPriceMax','priceMax'],['fViewsMin','viewsMin'],['fViewsMax','viewsMax'],['fReturnsMin','productReturnsMin'],['fReturnsMax','productReturnsMax']];
+    const pairs = [['fPriceMin','priceMin'],['fPriceMax','priceMax'],['fViewsMin','viewsMin'],['fViewsMax','viewsMax'],['fReturnsMin','productReturnsMin'],['fReturnsMax','productReturnsMax'],['fCommMin','commMin'],['fCommMax','commMax']];
     pairs.forEach(([elId, stateKey])=>{
       const el = document.getElementById(elId);
       if(el) el.addEventListener('input', e=>{ state[stateKey] = e.target.value; renderList(); });
@@ -1113,6 +1180,8 @@ function renderProductFilterDrawer(){
     ${rangeRow('fViewsMin','fViewsMax', state.viewsMin, state.viewsMax)}
     <div class="filter-section-title">% повернень</div>
     ${rangeRow('fReturnsMin','fReturnsMax', state.productReturnsMin, state.productReturnsMax)}
+    <div class="filter-section-title">Комісія, %</div>
+    ${rangeRow('fCommMin','fCommMax', state.commMin, state.commMax)}
   `;
 }
 function renderBloggerFilterDrawer(){
@@ -1173,6 +1242,8 @@ function currentItems(){
     if(state.viewsMax !== '') items = items.filter(i=>i.views <= parseFloat(state.viewsMax));
     if(state.productReturnsMin !== '') items = items.filter(i=>i.productReturns >= parseFloat(state.productReturnsMin));
     if(state.productReturnsMax !== '') items = items.filter(i=>i.productReturns <= parseFloat(state.productReturnsMax));
+    if(state.commMin !== '') items = items.filter(i=>i.comm >= parseFloat(state.commMin));
+    if(state.commMax !== '') items = items.filter(i=>i.comm <= parseFloat(state.commMax));
   }
   if(state.type==='shop'){
     if(state.filterOnlyEq) items = items.filter(i=>i.status==='eq');
