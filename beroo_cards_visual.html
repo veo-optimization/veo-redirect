@@ -475,6 +475,7 @@ const BLOGGERS = [
 
 const SORTS = {
   product: [
+    {id:'comm', label:'Комісія', key:i=>i.comm},
     {id:'sold', label:'Продано', key:i=> state.productPeriod==='3d'?i.sold3d:(state.productPeriod==='10d'?i.sold10d:(state.productPeriod==='30d'?i.sold30d:i.soldTotal))},
     {id:'stock', label:'Лишилось', key:i=>i.stock},
     {id:'mirrors', label:'Дзеркал', key:i=>i.mirrors},
@@ -787,8 +788,9 @@ function renderFullCard(type, item, opts){
           <span class="fav-count">${m.totalFavorites}</span>${isFav?'♥':'♡'}
         </button>
       </div>
-      <div class="panels">${panelsHtml}</div>
-      ${earnHtml}
+      ${(type==='product' && (item.paymentMethod==='eq' || item.paymentMethod==='both'))
+        ? `${earnHtml}<div class="panels">${panelsHtml}</div>`
+        : `<div class="panels">${panelsHtml}</div>${earnHtml}`}
       ${riskHtml}
       <div class="foot">${m.foot}</div>
       <button class="expand-toggle" data-expand="${item.id}">
@@ -837,8 +839,10 @@ function renderTile(type, item){
   const stat = type==='product' ? item.price+' ₴' : (item.status==='eq'?'Платіжна система':'Ручна оплата');
   const isFav2 = !!state.fav[item.id];
   let activeMetricHtml = '';
+  let commissionLineHtml = '';
   if(type==='product'){
     const METRIC_INFO = {
+      comm: {label:'Комісія', get:i=>i.comm, unit:'%'},
       sold: {label:'Продано', get:i=>state.productPeriod==='3d'?i.sold3d:(state.productPeriod==='10d'?i.sold10d:(state.productPeriod==='30d'?i.sold30d:i.soldTotal)), unit:' шт'},
       stock: {label:'Лишилось', get:i=>i.stock, unit:' шт'},
       mirrors: {label:'Дзеркал', get:i=>i.mirrors, unit:''},
@@ -846,6 +850,11 @@ function renderTile(type, item){
     };
     const mi = METRIC_INFO[state.sortId];
     if(mi) activeMetricHtml = `<div class="t-stat t-stat-metric">${mi.label}: ${mi.get(item).toLocaleString('uk-UA')}${mi.unit}</div>`;
+    // Та сама логіка, що на плитках Магазинів: якщо є Платіжна система — завжди показуємо комісію
+    if((item.paymentMethod==='eq' || item.paymentMethod==='both') && state.sortId!=='comm'){
+      const stars = Math.round(item.price*item.comm/100);
+      commissionLineHtml = `<div class="t-stat t-stat-metric">Комісія: ${item.comm}% = ★${stars}</div>`;
+    }
   }
   if(type==='shop' && m.commRangeLabel){
     activeMetricHtml = `<div class="t-stat t-stat-metric">Комісія: ${m.commRangeLabel}</div>`;
@@ -862,6 +871,7 @@ function renderTile(type, item){
       <p class="t-name">${m.name}</p>
       <div class="t-stat">${stat}</div>
       ${activeMetricHtml}
+      ${commissionLineHtml}
       <div class="t-foot-row">
         ${type==='product' ? shopNameHtml : `<span class="t-code">${addrLinkHtml}</span>`}
         <button class="tile-fav ${isFav2?'on':''}" data-tile-fav="${item.id}" aria-label="В обране, загалом ${m.totalFavorites}"><span class="fav-count">${m.totalFavorites}</span>${isFav2?'♥':'♡'}</button>
