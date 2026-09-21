@@ -168,8 +168,10 @@
   .photo-lg.avatar-blogger{border-radius:999px; background:linear-gradient(155deg,#D9E4FB,var(--card));}
   .head-main{flex:1;min-width:0;}
   .name{font-size:16px;font-weight:700;line-height:1.25;margin:0;letter-spacing:-0.005em;}
-  .fav{margin-left:auto;flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--ink-soft);}
+  .fav{margin-left:auto;flex:none;height:26px;border-radius:999px;border:1px solid var(--line);background:var(--card);display:flex;align-items:center;justify-content:center;gap:5px;cursor:pointer;font-size:14px;color:var(--ink-soft);padding:0 10px 0 12px;}
+  .fav-count{font-size:11px;font-weight:700;color:var(--ink-soft);}
   .fav.on{color:#D1495B;border-color:#F1C6CD;}
+  .fav.on .fav-count{color:var(--ink-soft);}
   .meta-line{font-size:12px;color:var(--ink-soft);margin:4px 0 0;line-height:1.5;}
   .badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
   .badge{font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:999px;display:inline-flex;align-items:center;gap:4px;}
@@ -177,7 +179,7 @@
   .badge.grey{background:var(--grey-star-bg);color:var(--grey-star);border:1px solid var(--line);}
   .badge.violet{background:var(--violet-bg);color:var(--violet);border:1px solid transparent;}
   .badge.status{background:var(--grey-star-bg);color:var(--ink-soft);border:1px solid var(--line);}
-  .card-top-right{position:absolute; top:12px; right:14px; display:flex; align-items:center; gap:6px; max-width:calc(100% - 90px);}
+  .card-top-right{position:absolute; top:12px; right:14px; display:flex; flex-direction:column; align-items:flex-end; gap:4px; max-width:calc(100% - 90px);}
   .site-addr-link{font-size:10px; color:var(--primary); text-decoration:none; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .site-addr-link:hover{text-decoration:underline;}
   .rating-badge{flex:none; font-size:10.5px; font-weight:700; padding:4px 10px; border-radius:999px; white-space:nowrap;}
@@ -359,11 +361,11 @@ const SAMPLE_TYPES = [
   {id:'freeReturn', label:'Безкоштовно із подальшим поверненням'},
 ];
 const PLATFORMS = [
-  {id:'tiktok', label:'ТікТок'},
-  {id:'instagram', label:'Інстаграм'},
-  {id:'facebook', label:'Фейсбук'},
-  {id:'youtube', label:'Ютуб'},
-  {id:'telegram', label:'Телеграм-канали'},
+  {id:'tiktok', label:'ТікТок', enLabel:'TikTok'},
+  {id:'instagram', label:'Інстаграм', enLabel:'Instagram'},
+  {id:'facebook', label:'Фейсбук', enLabel:'Facebook'},
+  {id:'youtube', label:'Ютуб', enLabel:'YouTube'},
+  {id:'telegram', label:'Телеграм-канали', enLabel:'Telegram'},
 ];
 const FORMATS = [
   {id:'video', label:'Відео'},
@@ -535,6 +537,7 @@ function cardModel(type, item){
       shopLink,
       siteDomain: shopEntry ? shopEntry.code+'.beroo.online' : null,
       siteUrl: shopEntry ? `https://${shopEntry.code}.beroo.online/p/${item.code}` : null,
+      totalFavorites: item.favoritesCount,
       panels:[
         {val:item.stock+' шт', lab:'лишилось', cls:''},
         {val:item.soldTotal.toLocaleString('uk-UA'), lab:'кількість проданих', cls:''},
@@ -571,6 +574,7 @@ function cardModel(type, item){
       rating:item.rating,
       siteDomain: item.code+'.beroo.online',
       siteUrl: `https://${item.code}.beroo.online`,
+      totalFavorites: item.requests*9 + item.goldMirrors*4,
       panels:[
         {val:item.items, lab:'товарів', cls:''},
         {val:item.variations, lab:'варіацій', cls:''},
@@ -589,6 +593,7 @@ function cardModel(type, item){
         ['PRO-дзеркал', '★ '+item.goldMirrors],
         ['Дата реєстрації', item.regDaysAgo+' дн. тому'],
         ['Додано в обране', (item.requests*9 + item.goldMirrors*4)+' раз(ів)'],
+
       ],
       buttons:[{label:'Переглянути каталог',kind:'ghost'},{label:'Віддзеркалити магазин',kind:'primary'},{label:'Відгуки',kind:'yellow',action:'openReviews',targetId:item.id,reviewType:'shop'}]
     };
@@ -596,7 +601,7 @@ function cardModel(type, item){
   // blogger
   const platformLabels = item.platforms.map(p=>PLATFORMS.find(x=>x.id===p).label).join(', ');
   const formatLabels = item.formats.map(f=>FORMATS.find(x=>x.id===f).label).join(', ');
-  const mainPlatform = PLATFORMS.find(x=>x.id===item.platforms[0]).label;
+  const mainPlatform = PLATFORMS.find(x=>x.id===item.platforms[0]).enLabel;
   const returnsZone = item.returns<=5?'zone-green':(item.returns<=15?'zone-orange':'zone-black');
   const middleBtn = item.cooperating
     ? {label:'Переглянути', kind:'muted', action:'goToMirrorsMe', targetId:item.id}
@@ -610,6 +615,7 @@ function cardModel(type, item){
     rating:item.commRating,
     siteDomain: item.code+'.beroo.online',
     siteUrl: `https://${item.code}.beroo.online/dzerkalo`,
+    totalFavorites: item.mirrorShops*11 + item.complaints*2 + 6,
     panels:[
       {val:formatStars(item.stars), lab:'золотих зірочок', cls:'gold', extra: item.cooperating ? ('ВАШИХ: ★ '+formatStars(item.yourStars).replace('★ ','')) : null},
       {val:item.mirrorShops, lab:'дзеркалить магазинів', cls:''},
@@ -680,7 +686,9 @@ function renderFullCard(type, item, opts){
           ${metaHtml}
           ${badgesHtml?`<div class="badges">${badgesHtml}</div>`:''}
         </div>
-        <button class="fav fav-corner ${isFav?'on':''}" data-fav="${item.id}" aria-label="В обране">${isFav?'♥':'♡'}</button>
+        <button class="fav fav-corner ${isFav?'on':''}" data-fav="${item.id}" aria-label="В обране, загалом ${m.totalFavorites}">
+          <span class="fav-count">${m.totalFavorites}</span>${isFav?'♥':'♡'}
+        </button>
       </div>
       <div class="panels">${panelsHtml}</div>
       ${earnHtml}
