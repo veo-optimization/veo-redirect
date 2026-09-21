@@ -46,10 +46,26 @@
   /* ---------- shell ---------- */
   .topbar{background:var(--paper); padding:14px 14px 0;}
   .masthead{display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px;}
+  .hamburger-btn{flex:none; width:36px; height:36px; border-radius:10px; border:1px solid var(--line); background:var(--card); color:var(--ink); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center;}
+  .masthead-brand{flex:1; display:flex; align-items:center; justify-content:center; gap:8px;}
+  .brand-logo{flex:none; width:24px; height:24px; border-radius:7px; background:var(--primary); color:#fff; font-weight:800; font-size:14px; display:flex; align-items:center; justify-content:center;}
   .info-btn{flex:none; display:flex; align-items:center; gap:5px; border:1px solid var(--line); background:var(--card); color:var(--ink-soft); border-radius:999px; padding:6px 12px 6px 10px; font-size:11.5px; font-weight:600; cursor:pointer;}
   .info-btn span{font-size:13px; color:var(--primary);}
   .masthead h1{font-size:18px; font-weight:800; margin:0; letter-spacing:-0.01em;}
   .masthead .sub{font-size:11px; color:var(--ink-faint);}
+
+  .sidebar-backdrop{position:fixed; inset:0; background:rgba(10,10,14,.5); z-index:300; display:none;}
+  .sidebar-backdrop.open{display:block;}
+  .sidebar{position:fixed; top:0; left:0; bottom:0; width:78%; max-width:300px; background:var(--paper); box-shadow:2px 0 20px rgba(0,0,0,.15); transform:translateX(-100%); transition:transform .22s ease; padding:calc(var(--safe-t) + 14px) 0 14px; overflow-y:auto;}
+  .sidebar-backdrop.open .sidebar{transform:translateX(0);}
+  .sidebar-header{display:flex; align-items:center; gap:8px; padding:0 16px 16px; position:relative;}
+  .sidebar-title{font-size:16px; font-weight:800; color:var(--ink);}
+  .sidebar-close{position:absolute; top:-2px; right:14px; width:28px; height:28px; border-radius:50%; border:1px solid var(--line); background:var(--card); color:var(--ink-soft); font-size:13px; cursor:pointer;}
+  .sidebar-section{padding:10px 0; border-top:1px solid var(--line);}
+  .sidebar-section:first-of-type{border-top:none;}
+  .sidebar-section-title{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-faint); padding:6px 16px;}
+  .sidebar-item{display:block; width:100%; text-align:left; border:none; background:none; padding:11px 16px; font-family:var(--font); font-size:14px; color:var(--ink-soft); cursor:pointer;}
+  .sidebar-item.active{color:var(--primary); font-weight:700; background:var(--primary-bg);}
 
   .switch-row{display:flex; gap:6px; margin-bottom:10px;}
   .pillset{display:flex; gap:4px; background:var(--card); border:1px solid var(--line); border-radius:999px; padding:4px; flex:1;}
@@ -292,23 +308,18 @@
 
 <div class="topbar">
   <div class="masthead">
-    <div>
-      <h1>BEROO Маркетплейс</h1>
+    <button class="hamburger-btn" id="hamburgerBtn" aria-label="Меню">☰</button>
+    <div class="masthead-brand">
+      <span class="brand-logo">B</span>
+      <h1>BEROO</h1>
     </div>
     <button class="info-btn" id="infoBtn"><span>ⓘ</span> Як це працює</button>
   </div>
 
   <div class="switch-row">
-    <div class="pillset" id="typeSwitch" role="tablist" aria-label="Сторінка">
-      <button class="active" data-type="product">🛒 Вітрина</button>
-      <button data-type="shop">🏬 Магазини</button>
-      <button data-type="blogger">🎥 Блогери</button>
-    </div>
-  </div>
-  <div class="switch-row">
     <div class="pillset" id="densitySwitch" role="tablist" aria-label="Режим показу">
       <button class="active" data-density="simple">▦ Спрощений</button>
-      <button data-density="expanded">☰ Розширений</button>
+      <button data-density="expanded">▤ Розширений</button>
     </div>
   </div>
 
@@ -329,6 +340,30 @@
 
 <div class="modal-backdrop" id="infoBackdrop" style="z-index:200; align-items:center;">
   <div class="modal-sheet info-centered" id="infoSheet" style="max-width:400px; border-radius:22px; max-height:80vh;"></div>
+</div>
+
+<div class="sidebar-backdrop" id="sidebarBackdrop">
+  <nav class="sidebar" id="sidebar" aria-label="Головне меню">
+    <div class="sidebar-header">
+      <span class="brand-logo">B</span>
+      <span class="sidebar-title">BEROO</span>
+      <button class="sidebar-close" id="sidebarCloseBtn" aria-label="Закрити меню">✕</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Маркетплейс</div>
+      <button class="sidebar-item" data-menu-type="product">Вітрина</button>
+      <button class="sidebar-item" data-menu-type="shop">Магазини</button>
+      <button class="sidebar-item" data-menu-type="blogger">Блогери</button>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-section-title">Дзеркало</div>
+      <button class="sidebar-item" data-menu-stub="Я дзеркалю">Я дзеркалю</button>
+      <button class="sidebar-item" data-menu-stub="Мене дзеркалять">Мене дзеркалять</button>
+      <button class="sidebar-item" data-menu-stub="Запити">Запити</button>
+      <button class="sidebar-item" data-menu-stub="Виплати">Виплати</button>
+      <button class="sidebar-item" data-menu-stub="Аналітика">Аналітика</button>
+    </div>
+  </nav>
 </div>
 
 <script>
@@ -1561,20 +1596,42 @@ const NOTES = {
 };
 function setNote(){ document.getElementById('pageNote').textContent = NOTES[state.type]; }
 
-document.querySelectorAll('#typeSwitch button').forEach(btn=>{
+function resetPageFiltersFor(type){
+  state.type = type;
+  state.sortId = type==='blogger' ? 'stars' : null; state.sortDir='desc'; state.search=''; state.filterOpen=false;
+  state.filterOnlyStock=false; state.filterOnlyEq=false; state.filterOnlyShop=false;
+  state.platformFilter=new Set(); state.formatFilter=new Set(); state.categoryFilter=new Set(); state.sampleFilter=new Set();
+  state.convMin=''; state.convMax=''; state.onSiteOnly=false; state.regionFilter='';
+  state.coopFilter='all'; state.favOnlyBlogger=false;
+  state.productPeriod='all'; state.topMode=null; state.mirrorFilter='all'; state.favOnlyProduct=false;
+  state.shopMirrorFilter='all'; state.favOnlyShop=false;
+  state.shopPaymentFilter='all'; state.productPaymentFilter='all';
+  state.productCategoryFilter=new Set(); state.priceMin=''; state.priceMax='';
+  state.viewsMin=''; state.viewsMax=''; state.productReturnsMin=''; state.productReturnsMax='';
+  state.commMin=''; state.commMax='';
+}
+function syncSidebarActiveItem(){
+  document.querySelectorAll('.sidebar-item[data-menu-type]').forEach(b=>{
+    b.classList.toggle('active', b.dataset.menuType === state.type);
+  });
+}
+function openSidebar(){ document.getElementById('sidebarBackdrop').classList.add('open'); syncSidebarActiveItem(); }
+function closeSidebar(){ document.getElementById('sidebarBackdrop').classList.remove('open'); }
+document.getElementById('hamburgerBtn').addEventListener('click', openSidebar);
+document.getElementById('sidebarCloseBtn').addEventListener('click', closeSidebar);
+document.getElementById('sidebarBackdrop').addEventListener('click', e=>{ if(e.target.id==='sidebarBackdrop') closeSidebar(); });
+document.querySelectorAll('.sidebar-item[data-menu-type]').forEach(btn=>{
   btn.addEventListener('click', ()=>{
-    document.querySelectorAll('#typeSwitch button').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active');
-    state.type = btn.dataset.type;
-    state.sortId = state.type==='blogger' ? 'stars' : null; state.sortDir='desc'; state.search=''; state.filterOpen=false;
-    state.filterOnlyStock=false; state.filterOnlyEq=false; state.filterOnlyShop=false;
-    state.platformFilter=new Set(); state.formatFilter=new Set(); state.categoryFilter=new Set(); state.sampleFilter=new Set();
-    state.convMin=''; state.convMax=''; state.onSiteOnly=false; state.regionFilter='';
-    state.coopFilter='all'; state.favOnlyBlogger=false;
-    state.productPeriod='all'; state.mirrorFilter='all'; state.favOnlyProduct=false;
-    state.productCategoryFilter=new Set(); state.priceMin=''; state.priceMax='';
-    state.viewsMin=''; state.viewsMax=''; state.productReturnsMin=''; state.productReturnsMax='';
+    resetPageFiltersFor(btn.dataset.menuType);
     renderAll();
+    syncSidebarActiveItem();
+    closeSidebar();
+  });
+});
+document.querySelectorAll('.sidebar-item[data-menu-stub]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    alert('Сторінка «Дзеркало → ' + btn.dataset.menuStub + '» — поза межами цього макета (він охоплює лише сторінки Маркетплейсу).');
+    closeSidebar();
   });
 });
 document.querySelectorAll('#densitySwitch button').forEach(btn=>{
