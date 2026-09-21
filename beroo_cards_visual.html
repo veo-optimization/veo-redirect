@@ -88,6 +88,7 @@
   }
   .chip.active{background:var(--primary); border-color:var(--primary); color:#fff;}
   .chip-scroll.dimmed{opacity:.4;}
+  .payment-warning{font-size:10.5px; color:#C93E49; line-height:1.4; margin:0 0 8px; padding:0 2px;}
 
   .chip.coop-all.active{background:#fff; color:var(--ink); border:1px solid var(--ink);}
   .chip.coop-all:not(.active){background:transparent; color:var(--ink-soft); border:1px solid var(--line);}
@@ -140,6 +141,7 @@
   .tile .t-stat-metric{color:var(--primary); font-size:11px;}
   .tile .t-foot-row{display:flex; align-items:center; justify-content:space-between; margin-top:2px;}
   .tile .t-code{font-size:9.5px; color:var(--ink-faint); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:66%;}
+  .tile .t-shop-name{background:none; border:none; padding:0; font-family:var(--font); font-size:9.5px; color:var(--primary); font-weight:600; cursor:pointer; text-align:left;}
   .tile .t-more{
     border:none; background:var(--ink); color:var(--paper); width:26px; height:26px; border-radius:50%;
     font-size:13px; cursor:pointer; display:flex; align-items:center; justify-content:center;
@@ -329,7 +331,7 @@
 /* ============ DATA ============ */
 const PRODUCTS = [
   {id:'p1', icon:'👟', code:'214', name:'Кросівки Street Runner', price:899, shop:'Urban Line', cat:'Взуття', mirrors:7, sold3d:32, sold10d:88, sold30d:240, soldTotal:1120, comm:12, stock:48, shopRating:96, top:true, foot:'Легкі кросівки на щодень. 5 кольорів, розміри 36–45. Магазин з еквайрингом.', shopStatus:'eq', paymentMethod:'eq', views:14200, carrier:'Нова Пошта', shippingDays:1, productReturns:3, conversion:4.1, topRank:12, publishedDaysAgo:340, soldByShop:true, exchangeDays:14, favoritesCount:212, mirroring:true},
-  {id:'p2', icon:'🧴', code:'118', name:'Сироватка з вітаміном C', price:349, shop:'SkinLab UA', cat:'Косметика', mirrors:22, sold3d:81, sold10d:260, sold30d:790, soldTotal:5400, comm:18, stock:210, shopRating:99, top:true, foot:'Бестселер весни. Дозволено автоматичне дзеркалення без підтвердження.', shopStatus:'eq', paymentMethod:'both', views:38900, carrier:'Нова Пошта', shippingDays:1, productReturns:1, conversion:6.8, topRank:3, publishedDaysAgo:180, soldByShop:true, exchangeDays:7, favoritesCount:640, mirroring:true},
+  {id:'p2', icon:'🧴', code:'118', name:'Сироватка з вітаміном C', price:349, shop:'SkinLab UA', cat:'Косметика', mirrors:22, sold3d:81, sold10d:260, sold30d:790, soldTotal:5400, comm:18, stock:210, shopRating:99, top:true, foot:'Бестселер весни. Швидко підтверджує запити на дзеркалення.', shopStatus:'eq', paymentMethod:'both', views:38900, carrier:'Нова Пошта', shippingDays:1, productReturns:1, conversion:6.8, topRank:3, publishedDaysAgo:180, soldByShop:true, exchangeDays:7, favoritesCount:640, mirroring:true},
   {id:'p3', icon:'🎧', code:'305', name:'Бездротові навушники Air Pulse', price:1290, shop:'TechDrop', cat:'Електроніка', mirrors:14, sold3d:19, sold10d:52, sold30d:150, soldTotal:2100, comm:10, stock:33, shopRating:91, top:false, foot:'До 28 год від батареї. Гарантія 12 місяців.', shopStatus:'eq', paymentMethod:'eq', views:22100, carrier:'Укрпошта', shippingDays:2, productReturns:9, conversion:2.9, topRank:44, publishedDaysAgo:95, soldByShop:false, exchangeDays:14, favoritesCount:98},
   {id:'p4', icon:'👜', code:'077', name:'Сумка крос-боді Mira', price:749, shop:'Bags & Co', cat:'Аксесуари', mirrors:5, sold3d:6, sold10d:15, sold30d:38, soldTotal:410, comm:15, stock:12, shopRating:88, top:false, foot:'Екошкіра, 4 кольори. Обмежена партія.', shopStatus:'iban', paymentMethod:'iban', views:5600, carrier:'Нова Пошта', shippingDays:3, productReturns:15, conversion:2.1, topRank:null, publishedDaysAgo:12, soldByShop:true, exchangeDays:0, favoritesCount:31},
   {id:'p5', icon:'🕯️', code:'432', name:'Свічка соєва «Дім»', price:259, shop:'Затишно', cat:'Дім', mirrors:9, sold3d:14, sold10d:40, sold30d:120, soldTotal:960, comm:20, stock:76, shopRating:97, top:false, foot:'Ручна робота, аромат кедра й ванілі.', shopStatus:'eq', paymentMethod:'eq', views:9100, carrier:'Meest', shippingDays:2, productReturns:2, conversion:5.0, topRank:67, publishedDaysAgo:210, soldByShop:true, exchangeDays:10, favoritesCount:150},
@@ -541,7 +543,6 @@ function cardModel(type, item){
         {val:item.productReturns+'%', lab:'% повернень', cls: item.productReturns<=5?'zone-green':(item.productReturns<=15?'zone-orange':'zone-black')},
         {val:shippingLabel, lab:'терміни відправки', cls:''}
       ],
-      risk:{pct:item.productReturns, label:'ризик повернень', zone: item.productReturns<=5?'green':(item.productReturns<=15?'orange':'black')},
       earnings:{price:item.price, comm:item.comm, stars: Math.round(item.price*item.comm/100)},
       foot:item.foot,
       expand:[
@@ -556,7 +557,7 @@ function cardModel(type, item){
         ['Поштовий відправник', item.carrier],
         ['Обмін і повернення', item.exchangeDays>0 ? `Так, ${item.exchangeDays} дн.` : 'Немає'],
         ['Статус магазину', item.shopStatus==='eq'?'Платіжна система':'Ручна оплата'],
-        ['Умови дзеркалення', item.shopStatus==='eq'?'Автоматично, без підтвердження':'Потрібне підтвердження'],
+        ['Умови дзеркалення', 'Завжди потрібне ручне підтвердження Магазину (автоматичного схвалення в системі немає)'],
       ],
       buttons:[{label:'Переглянути',kind:'ghost'},{label:'Віддзеркалити',kind:'primary'},{label:'До сайту магазину',kind:'warn'}]
     };
@@ -578,7 +579,6 @@ function cardModel(type, item){
         {val:item.returns+'%', lab:'повернень', cls: item.returns<=5?'zone-green':(item.returns<=15?'zone-orange':'zone-black')},
         {val:item.payoutsCount, lab:'виплат', cls:''}
       ],
-      risk:{pct:item.returns, label:'ризик повернень', zone: item.returns<=5?'green':(item.returns<=15?'orange':'black')},
       foot:item.foot,
       expand:[
         ['Категорії', item.cats],
@@ -588,6 +588,7 @@ function cardModel(type, item){
         ['Оглядачів-дзеркал', '★ '+item.greyMirrors],
         ['PRO-дзеркал', '★ '+item.goldMirrors],
         ['Дата реєстрації', item.regDaysAgo+' дн. тому'],
+        ['Додано в обране', (item.requests*9 + item.goldMirrors*4)+' раз(ів)'],
       ],
       buttons:[{label:'Переглянути каталог',kind:'ghost'},{label:'Віддзеркалити магазин',kind:'primary'},{label:'Відгуки',kind:'yellow',action:'openReviews',targetId:item.id,reviewType:'shop'}]
     };
@@ -628,6 +629,7 @@ function cardModel(type, item){
       ['Виїзд на об\'єкт', item.onSiteVisit ? ('Так, '+item.region) : 'Ні'],
       ['Дата реєстрації', new Date(item.regDate).toLocaleDateString('uk-UA')],
       ['Власний магазин', item.hasShop?'Так — дивитись картку':'Немає'],
+      ['Додано в обране', (item.mirrorShops*11 + item.complaints*2 + 6)+' раз(ів)'],
     ],
     buttons:[{label:'Анкета',kind:'ghost'}, middleBtn, {label:'Відгуки',kind:'yellow',action:'openReviews',targetId:item.id,reviewType:'blogger'}]
   };
@@ -654,7 +656,7 @@ function renderFullCard(type, item, opts){
   ` : '';
   const earnHtml = m.earnings ? `
     <div class="earn-box">
-      <div class="earn-top"><span class="earn-label">Заробіток за 1 продаж</span><span class="earn-val">★ ${m.earnings.stars}</span></div>
+      <div class="earn-top"><span class="earn-label">Нарахувань за 1 продану одиницю</span><span class="earn-val">★ ${m.earnings.stars}</span></div>
       <div class="earn-formula">Ціна ${m.earnings.price} ₴ × комісія ${m.earnings.comm}% = ${m.earnings.stars} зірочок (1★ = 1₴)</div>
     </div>
   ` : '';
@@ -740,6 +742,12 @@ function renderTile(type, item){
     const mi = METRIC_INFO[state.sortId];
     if(mi) activeMetricHtml = `<div class="t-stat t-stat-metric">${mi.label}: ${mi.get(item).toLocaleString('uk-UA')}${mi.unit}</div>`;
   }
+  const shopNameHtml = (type==='product' && m.shopLink)
+    ? (() => {
+        const truncated = m.shopLink.name.length > 14 ? m.shopLink.name.slice(0,14)+'…' : m.shopLink.name;
+        return `<button class="t-code t-shop-name" data-action="openShopFromProduct" data-target="${m.shopLink.id}" title="${m.shopLink.name}">${truncated}</button>`;
+      })()
+    : `<span class="t-code">${addrLinkHtml}</span>`;
   return `
     <div class="tile" data-id="${item.id}" data-open-modal="${item.id}" style="cursor:pointer;">
       <div class="photo ${photoClass}">${m.icon}</div>
@@ -747,7 +755,7 @@ function renderTile(type, item){
       <div class="t-stat">${stat}</div>
       ${activeMetricHtml}
       <div class="t-foot-row">
-        <span class="t-code">${addrLinkHtml}</span>
+        ${type==='product' ? shopNameHtml : `<span class="t-code">${addrLinkHtml}</span>`}
         <button class="tile-fav ${isFav2?'on':''}" data-tile-fav="${item.id}" aria-label="В обране">${isFav2?'♥':'♡'}</button>
       </div>
     </div>
@@ -878,8 +886,8 @@ function renderToolbar(){
 
   document.getElementById('toolbar').innerHTML = `
     ${state.type==='product' ? `<div class="chip-scroll" style="margin-bottom:8px;"><button class="chip" id="myCatalogBtn">🎥 Мій каталог для блогерів</button></div>` : ''}
-    ${isProduct ? `<div class="chip-scroll ${topActive?'dimmed':''}">${productPaymentRow}</div>${state.productPaymentFilter==='iban' ? '' : `<div class="chip-scroll">${periodRow}</div>`}` : ''}
-    ${isShop ? `<div class="chip-scroll">${shopPaymentRow}</div>${state.shopPaymentFilter==='iban' ? '' : `<div class="chip-scroll">${shopRow1Html}</div>`}<div class="chip-scroll">${shopRow2Html}</div>` : `<div class="chip-scroll ${(isProduct&&topActive)?'dimmed':''}">${chips}</div>`}
+    ${isProduct ? `<div class="chip-scroll ${topActive?'dimmed':''}">${productPaymentRow}</div>${state.productPaymentFilter==='iban' ? '<p class="payment-warning">Відсутність у магазину підʼєднаних платіжних систем робить неможливою фіксацію та нарахування блогеру зірочок за продажі. Рахуються лише кліки.</p>' : ''}${state.productPaymentFilter==='iban' ? '' : `<div class="chip-scroll">${periodRow}</div>`}` : ''}
+    ${isShop ? `<div class="chip-scroll">${shopPaymentRow}</div>${state.shopPaymentFilter==='iban' ? '<p class="payment-warning">Відсутність у магазину підʼєднаних платіжних систем робить неможливою фіксацію та нарахування блогеру зірочок за продажі. Рахуються лише кліки.</p>' : ''}${state.shopPaymentFilter==='iban' ? '' : `<div class="chip-scroll">${shopRow1Html}</div>`}<div class="chip-scroll">${shopRow2Html}</div>` : `<div class="chip-scroll ${(isProduct&&topActive)?'dimmed':''}">${chips}</div>`}
     ${isProduct ? `<div class="chip-scroll ${topActive?'dimmed':''}">${mirrorRow}</div>` : ''}
     ${isShop ? `<div class="chip-scroll">${shopCoopRow}</div>` : ''}
     ${isBlogger ? `<div class="chip-scroll">${platformRow}</div><div class="chip-scroll">${formatRow}</div><div class="chip-scroll">${coopRow}</div>` : ''}
@@ -1073,7 +1081,7 @@ function renderToolbar(){
     });
   }
   if(document.getElementById('myCatalogBtn')){
-    document.getElementById('myCatalogBtn').addEventListener('click', ()=> alert('Веде на «Каталог → Товари/Послуги» цього блогера-продавця.'));
+    document.getElementById('myCatalogBtn').addEventListener('click', ()=> alert('Веде на «Каталог → Товари/Послуги», одразу відкриває вкладку «Відзеркалення».'));
   }
 }
 
@@ -1225,6 +1233,18 @@ function renderList(){
         state.fav[id] = !state.fav[id];
         if(state.type==='blogger' || state.type==='product') renderToolbar();
         renderList();
+      });
+    });
+    wrap.querySelectorAll('[data-action="openShopFromProduct"]').forEach(btn=>{
+      btn.addEventListener('click', (e)=>{
+        e.stopPropagation();
+        const shopId = btn.dataset.target;
+        state.type = 'shop';
+        state.density = 'expanded';
+        state.modalId = shopId;
+        state.modalExpanded = false;
+        renderAll();
+        renderModal();
       });
     });
   } else {
