@@ -137,6 +137,7 @@
   .tile .photo.avatar-shop{border-radius:999px; background:linear-gradient(155deg,#FBD7DE,var(--card));}
   .tile .photo.avatar-blogger{border-radius:999px; background:linear-gradient(155deg,#D9E4FB,var(--card));}  .tile .t-name{font-size:12.5px; font-weight:700; line-height:1.3; margin:0; display:-webkit-box; -webkit-line-clamp:1; -webkit-box-orient:vertical; overflow:hidden;}
   .tile .t-stat{font-size:12px; color:var(--ink-soft); font-weight:600;}
+  .tile .t-stat-metric{color:var(--primary); font-size:11px;}
   .tile .t-foot-row{display:flex; align-items:center; justify-content:space-between; margin-top:2px;}
   .tile .t-code{font-size:9.5px; color:var(--ink-faint); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:66%;}
   .tile .t-more{
@@ -185,7 +186,7 @@
 
   .panels{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
   .panel{background:var(--card); padding:10px 6px; text-align:center;}
-  .panel .val{font-size:14px;font-weight:800;letter-spacing:-0.01em;}
+  .panel .val{font-size:13px;font-weight:800;letter-spacing:-0.01em;line-height:1.25;}
   .panel .lab{font-size:9px;color:var(--ink-faint);margin-top:3px;line-height:1.25;text-transform:uppercase;letter-spacing:.04em;}
   .panel-extra{font-size:10px;font-weight:800;color:var(--gold);margin-top:4px;letter-spacing:.01em;}
   .panel.zone-green{background:var(--green-bg);} .panel.zone-green .val{color:var(--green);}
@@ -258,10 +259,15 @@
   .review-lock-box{background:var(--grey-star-bg); border-radius:14px; padding:13px; margin-bottom:16px;}
   .review-lock-text{font-size:12.5px; color:var(--ink-soft); line-height:1.5;}
   .review-list-label{font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-faint); margin-bottom:8px;}
-  .review-row{border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin-bottom:8px;}
-  .review-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;}
+  .review-row{border:1px solid var(--line); border-radius:12px; padding:10px 12px; margin-bottom:8px; display:flex; gap:10px;}
+  .review-avatar-col{flex:none; width:46px; display:flex; flex-direction:column; align-items:center; gap:3px;}
+  .review-avatar{width:36px; height:36px; border-radius:50%; background:var(--grey-star-bg); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; font-size:16px;}
+  .review-author-stat{font-size:9px; font-weight:700; color:var(--gold); text-align:center; line-height:1.2;}
+  .review-body{flex:1; min-width:0;}
+  .review-top{display:flex; align-items:center; justify-content:space-between; margin-bottom:4px; gap:6px;}
   .review-shop{font-size:12.5px; font-weight:700; color:var(--ink);}
-  .review-stars{font-size:12px; color:var(--gold);}
+  .review-like{flex:none; border:1px solid var(--line); background:var(--card); border-radius:999px; padding:3px 9px; font-size:11px; color:var(--ink-soft); cursor:pointer;}
+  .review-like.liked{color:#D1495B; border-color:#F1C6CD;}
   .review-text{font-size:12.5px; color:var(--ink-soft); line-height:1.5;}
   .shop-link-row{width:100%; display:flex; align-items:center; justify-content:space-between; background:var(--paper); border:1px solid var(--line); border-radius:11px; padding:10px 12px; margin-bottom:6px; font-size:12.5px; color:var(--ink); cursor:pointer;}
   .shop-link-row b{font-weight:700;}
@@ -366,17 +372,27 @@ const UA_REGIONS = ['Київська','Львівська','Одеська','Х
 // У реальній системі це значення бере з Налаштувань користувача (кастомна назва замість «Обмежено»)
 const LIMITED_LABEL = 'Обмежено';
 
-const DEMO_REVIEWS = [
-  {shop:'Urban Line', rating:5, text:'Чітко дотримується домовлених термінів, контент завжди у стилі бренду.'},
-  {shop:'SkinLab UA', rating:4, text:'Гарна якість роликів, іноді трохи затримує з публікацією.'},
-  {shop:'TechDrop', rating:5, text:'Дуже прискіпливо готується до огляду — видно, що дійсно тестує товар.'},
-  {shop:'Bags & Co', rating:5, text:'Найкраща співпраця за останній рік. Комунікація на найвищому рівні.'},
-  {shop:'Затишно', rating:4, text:'Красиві кадри, але просила додаткову оплату за зйомку в студії.'},
-  {shop:'CapStreet', rating:3, text:'Матеріал вийшов пізніше обіцяного терміну на кілька днів.'},
-  {shop:'Пасіка Карпат', rating:5, text:'Щиро і з душею розповідає про продукт, аудиторія довіряє.'},
-  {shop:'Silver&Co', rating:5, text:'Чесно попереджає, якщо щось не встигає — цінуємо прозорість.'},
-  {shop:'SkinLab UA', rating:5, text:'Друга кампанія поспіль — результат стабільно високий.'},
-  {shop:'Urban Line', rating:4, text:'Гарна робота, хотілося б трохи частіші звіти про хід зйомок.'},
+// Відгуки ПРО Блогера — завжди пишуть Магазини (автор = Магазин, показуємо його бал рейтингу)
+const DEMO_REVIEWS_FOR_BLOGGER = [
+  {id:'rb1', authorName:'Urban Line', authorIcon:'🏬', authorRating:4.7, likes:12, text:'Чітко дотримується домовлених термінів, контент завжди у стилі бренду.'},
+  {id:'rb2', authorName:'SkinLab UA', authorIcon:'🧪', authorRating:4.9, likes:8, text:'Гарна якість роликів, іноді трохи затримує з публікацією.'},
+  {id:'rb3', authorName:'TechDrop', authorIcon:'📱', authorRating:4.1, likes:5, text:'Дуже прискіпливо готується до огляду — видно, що дійсно тестує товар.'},
+  {id:'rb4', authorName:'Bags & Co', authorIcon:'👜', authorRating:3.4, likes:3, text:'Найкраща співпраця за останній рік. Комунікація на найвищому рівні.'},
+  {id:'rb5', authorName:'Затишно', authorIcon:'🕯️', authorRating:4.6, likes:9, text:'Красиві кадри, але просила додаткову оплату за зйомку в студії.'},
+  {id:'rb6', authorName:'CapStreet', authorIcon:'🧢', authorRating:3.9, likes:1, text:'Матеріал вийшов пізніше обіцяного терміну на кілька днів.'},
+  {id:'rb7', authorName:'Пасіка Карпат', authorIcon:'🍯', authorRating:4.8, likes:14, text:'Щиро і з душею розповідає про продукт, аудиторія довіряє.'},
+  {id:'rb8', authorName:'Silver&Co', authorIcon:'💍', authorRating:4.3, likes:6, text:'Чесно попереджає, якщо щось не встигає — цінуємо прозорість.'},
+];
+// Відгуки ПРО Магазин — завжди пишуть Блогери PRO (автор = Блогер, показуємо кількість його золотих зірочок)
+const DEMO_REVIEWS_FOR_SHOP = [
+  {id:'rs1', authorName:'Мар’яна Кіт', authorIcon:'🎬', authorStars:145600, likes:18, text:'Магазин завжди оперативно готує зразки і чітко узгоджує знижки.'},
+  {id:'rs2', authorName:'Оля Бʼюті', authorIcon:'💅', authorStars:12300000, likes:21, text:'Виплати приходять день у день, без жодних затримок.'},
+  {id:'rs3', authorName:'Стріт Кулс', authorIcon:'👟', authorStars:156000, likes:7, text:'Один раз змінили ціну без попередження — довелось перезнімати відео.'},
+  {id:'rs4', authorName:'Мандрівний Кіт', authorIcon:'🎒', authorStars:198000, likes:11, text:'Дуже гнучкі щодо умов повернення зразків, приємно працювати.'},
+  {id:'rs5', authorName:'Дім із Настею', authorIcon:'🏠', authorStars:98000, likes:5, text:'Якість товару відповідає опису на 100%, аудиторія задоволена.'},
+  {id:'rs6', authorName:'Ювелір Аня', authorIcon:'💍', authorStars:320000, likes:9, text:'Комунікація трохи повільна, але по суті питань немає.'},
+  {id:'rs7', authorName:'Данило Tech', authorIcon:'🎮', authorStars:9834, likes:2, text:'Перша співпраця пройшла добре, буду продовжувати.'},
+  {id:'rs8', authorName:'Смачно Просто', authorIcon:'🍯', authorStars:41000, likes:4, text:'Магазин відкритий до нових форматів контенту, це цінно.'},
 ];
 
 const BLOGGERS = [
@@ -419,7 +435,7 @@ const BLOGGERS = [
 const SORTS = {
   product: [
     {id:'sold', label:'Продано', key:i=> state.productPeriod==='3d'?i.sold3d:(state.productPeriod==='10d'?i.sold10d:(state.productPeriod==='30d'?i.sold30d:i.soldTotal))},
-    {id:'stock', label:'Кількість', key:i=>i.stock},
+    {id:'stock', label:'Лишилось', key:i=>i.stock},
     {id:'mirrors', label:'Дзеркал', key:i=>i.mirrors},
     {id:'favorites', label:'Обрано', key:i=>i.favoritesCount},
   ],
@@ -478,11 +494,15 @@ let state = {
   favOnlyProduct: false,
   shopMirrorFilter: 'all',
   favOnlyShop: false,
+  shopPaymentFilter: 'all',
+  productPaymentFilter: 'all',
   productCategoryFilter: new Set(),
   priceMin: '', priceMax: '',
   viewsMin: '', viewsMax: '',
   productReturnsMin: '', productReturnsMax: '',
   reviewsFor: null,
+  reviewsForType: null,
+  likedReviews: new Set(),
   draftRating: 0,
   draftText: '',
   _filterSnapshot: null,
@@ -497,7 +517,7 @@ function dataFor(type){ return type==='product'?PRODUCTS : type==='shop'?SHOPS :
 /* ============ CARD CONTENT BUILDERS ============ */
 function cardModel(type, item){
   if(type==='product'){
-    const paymentLabel = item.paymentMethod==='iban' ? 'Лише IBAN' : (item.paymentMethod==='eq' ? 'Є ЕКВАЙРИНГ' : 'IBAN + Екваєр');
+    const paymentLabel = item.paymentMethod==='iban' ? 'Ручна<br>оплата' : (item.paymentMethod==='eq' ? 'Платіжна<br>система' : 'Ручна оплата +<br>Платіжна система');
     const shippingLabel = item.shippingDays<=1 ? 'День в день' : item.shippingDays+' дні';
     const shopEntry = SHOPS.find(s=>s.name===item.shop);
     const shopLink = shopEntry ? {
@@ -535,7 +555,7 @@ function cardModel(type, item){
         ['Продає сам магазин', item.soldByShop ? 'Так' : 'Ні, лише через дзеркала'],
         ['Поштовий відправник', item.carrier],
         ['Обмін і повернення', item.exchangeDays>0 ? `Так, ${item.exchangeDays} дн.` : 'Немає'],
-        ['Статус магазину', item.shopStatus==='eq'?'Екваєр (з еквайрингом)':'Іван (лише IBAN)'],
+        ['Статус магазину', item.shopStatus==='eq'?'Платіжна система':'Ручна оплата'],
         ['Умови дзеркалення', item.shopStatus==='eq'?'Автоматично, без підтвердження':'Потрібне підтвердження'],
       ],
       buttons:[{label:'Переглянути',kind:'ghost'},{label:'Віддзеркалити',kind:'primary'},{label:'До сайту магазину',kind:'warn'}]
@@ -546,7 +566,7 @@ function cardModel(type, item){
     return {
       icon:item.icon, code:'код '+item.code, name:item.name,
       meta:item.cats,
-      badges:[{cls:'status', text: item.status==='eq'?'⚡ Екваєр':'🏦 Іван'}],
+      badges:[{cls:'status', text: item.status==='eq'?'⚡ Платіжна система':'🏦 Ручна оплата'}],
       rating:item.rating,
       siteDomain: item.code+'.beroo.online',
       siteUrl: `https://${item.code}.beroo.online`,
@@ -569,7 +589,7 @@ function cardModel(type, item){
         ['PRO-дзеркал', '★ '+item.goldMirrors],
         ['Дата реєстрації', item.regDaysAgo+' дн. тому'],
       ],
-      buttons:[{label:'Переглянути каталог',kind:'ghost'},{label:'Віддзеркалити магазин',kind:'primary'},{label:'Скарга',kind:'warn'}]
+      buttons:[{label:'Переглянути каталог',kind:'ghost'},{label:'Віддзеркалити магазин',kind:'primary'},{label:'Відгуки',kind:'yellow',action:'openReviews',targetId:item.id,reviewType:'shop'}]
     };
   }
   // blogger
@@ -609,7 +629,7 @@ function cardModel(type, item){
       ['Дата реєстрації', new Date(item.regDate).toLocaleDateString('uk-UA')],
       ['Власний магазин', item.hasShop?'Так — дивитись картку':'Немає'],
     ],
-    buttons:[{label:'Анкета',kind:'ghost'}, middleBtn, {label:'Відгуки',kind:'yellow',action:'openReviews',targetId:item.id}]
+    buttons:[{label:'Анкета',kind:'ghost'}, middleBtn, {label:'Відгуки',kind:'yellow',action:'openReviews',targetId:item.id,reviewType:'blogger'}]
   };
 }
 
@@ -621,7 +641,7 @@ function renderFullCard(type, item, opts){
   const badgesHtml = m.badges.map(b=>`<span class="badge ${b.cls}">${b.text}</span>`).join('');
   const panelsHtml = m.panels.map(p=>`<div class="panel ${p.cls}"><div class="val">${p.val}</div><div class="lab">${p.lab}</div>${p.extra?`<div class="panel-extra">${p.extra}</div>`:''}</div>`).join('');
   const expandRows = m.expand.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('');
-  const buttonsHtml = m.buttons.map(b=>`<button class="btn ${b.kind}" ${b.action?`data-action="${b.action}" data-target="${b.targetId}"`:''}>${b.label}</button>`).join('');
+  const buttonsHtml = m.buttons.map(b=>`<button class="btn ${b.kind}" ${b.action?`data-action="${b.action}" data-target="${b.targetId}"${b.reviewType?` data-review-type="${b.reviewType}"`:''}`:''}>${b.label}</button>`).join('');
   const photoClass = type==='shop' ? 'avatar-shop' : (type==='blogger' ? 'avatar-blogger' : '');
   const riskZoneCls = m.risk ? 'zone-'+m.risk.zone : '';
   const riskLabelText = m.risk ? (m.risk.zone==='green'?'Безпечна':(m.risk.zone==='orange'?'Увага':'Критична')) : '';
@@ -707,13 +727,25 @@ function renderTile(type, item){
     `;
   }
 
-  const stat = type==='product' ? item.price+' ₴' : (item.status==='eq'?'⚡ Екваєр':'🏦 Іван');
+  const stat = type==='product' ? item.price+' ₴' : (item.status==='eq'?'⚡ Платіжна система':'🏦 Ручна оплата');
   const isFav2 = !!state.fav[item.id];
+  let activeMetricHtml = '';
+  if(type==='product'){
+    const METRIC_INFO = {
+      sold: {label:'Продано', get:i=>state.productPeriod==='3d'?i.sold3d:(state.productPeriod==='10d'?i.sold10d:(state.productPeriod==='30d'?i.sold30d:i.soldTotal)), unit:' шт'},
+      stock: {label:'Лишилось', get:i=>i.stock, unit:' шт'},
+      mirrors: {label:'Дзеркал', get:i=>i.mirrors, unit:''},
+      favorites: {label:'Обрано', get:i=>i.favoritesCount, unit:''},
+    };
+    const mi = METRIC_INFO[state.sortId];
+    if(mi) activeMetricHtml = `<div class="t-stat t-stat-metric">${mi.label}: ${mi.get(item).toLocaleString('uk-UA')}${mi.unit}</div>`;
+  }
   return `
     <div class="tile" data-id="${item.id}" data-open-modal="${item.id}" style="cursor:pointer;">
       <div class="photo ${photoClass}">${m.icon}</div>
       <p class="t-name">${m.name}</p>
       <div class="t-stat">${stat}</div>
+      ${activeMetricHtml}
       <div class="t-foot-row">
         <span class="t-code">${addrLinkHtml}</span>
         <button class="tile-fav ${isFav2?'on':''}" data-tile-fav="${item.id}" aria-label="В обране">${isFav2?'♥':'♡'}</button>
@@ -809,6 +841,22 @@ function renderToolbar(){
       <button class="chip coop-no ${state.shopMirrorFilter==='not_mirroring'?'active':''}" data-shopmirror="not_mirroring">Не дзеркалю ${notMirroringN}</button>
     `;
   }
+  let shopPaymentRow = '';
+  if(isShop){
+    shopPaymentRow = `
+      <button class="chip coop-all ${state.shopPaymentFilter==='all'?'active':''}" data-shoppay="all">Усі</button>
+      <button class="chip coop-all ${state.shopPaymentFilter==='eq'?'active':''}" data-shoppay="eq">Платіжна система</button>
+      <button class="chip coop-all ${state.shopPaymentFilter==='iban'?'active':''}" data-shoppay="iban">Ручна оплата</button>
+    `;
+  }
+  let productPaymentRow = '';
+  if(isProduct){
+    productPaymentRow = `
+      <button class="chip coop-all ${state.productPaymentFilter==='all'?'active':''}" data-prodpay="all">Усі</button>
+      <button class="chip coop-all ${state.productPaymentFilter==='eq'?'active':''}" data-prodpay="eq">Платіжна система</button>
+      <button class="chip coop-all ${state.productPaymentFilter==='iban'?'active':''}" data-prodpay="iban">Ручна оплата</button>
+    `;
+  }
 
   let platformRow = '', formatRow = '';
   if(isBlogger){
@@ -823,15 +871,15 @@ function renderToolbar(){
   const filterOptions = state.type==='product'
     ? renderProductFilterDrawer()
     : state.type==='shop'
-    ? `<label><input type="checkbox" id="fEq" ${state.filterOnlyEq?'checked':''}> Лише з еквайрингом (Екваєр)</label>`
+    ? `<label><input type="checkbox" id="fEq" ${state.filterOnlyEq?'checked':''}> Лише з платіжною системою</label>`
     : renderBloggerFilterDrawer();
 
   const showDrawerButtons = state.filterOpen;
 
   document.getElementById('toolbar').innerHTML = `
     ${state.type==='product' ? `<div class="chip-scroll" style="margin-bottom:8px;"><button class="chip" id="myCatalogBtn">🎥 Мій каталог для блогерів</button></div>` : ''}
-    ${isProduct ? `<div class="chip-scroll">${periodRow}</div><div class="chip-scroll ${topActive?'dimmed':''}">${mirrorRow}</div>` : ''}
-    ${isShop ? `<div class="chip-scroll">${shopRow1Html}</div><div class="chip-scroll">${shopRow2Html}</div><div class="chip-scroll">${shopCoopRow}</div>` : `<div class="chip-scroll ${(isProduct&&topActive)?'dimmed':''}">${chips}</div>`}
+    ${isProduct ? `<div class="chip-scroll ${topActive?'dimmed':''}">${productPaymentRow}</div><div class="chip-scroll">${periodRow}</div><div class="chip-scroll ${topActive?'dimmed':''}">${mirrorRow}</div>` : ''}
+    ${isShop ? `<div class="chip-scroll">${shopPaymentRow}</div><div class="chip-scroll">${shopRow1Html}</div><div class="chip-scroll">${shopRow2Html}</div><div class="chip-scroll">${shopCoopRow}</div>` : `<div class="chip-scroll ${(isProduct&&topActive)?'dimmed':''}">${chips}</div>`}
     ${isBlogger ? `<div class="chip-scroll">${coopRow}</div><div class="chip-scroll">${platformRow}</div><div class="chip-scroll">${formatRow}</div>` : ''}
     <div class="search-filter-row">
       <div class="search-row" style="margin-bottom:0;flex:1;">
@@ -893,6 +941,19 @@ function renderToolbar(){
       const v = el.dataset.shopmirror;
       if(v==='fav'){ state.favOnlyShop = !state.favOnlyShop; }
       else { state.shopMirrorFilter = v; }
+      renderAll();
+    });
+  });
+  document.querySelectorAll('.chip[data-shoppay]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      state.shopPaymentFilter = el.dataset.shoppay;
+      renderAll();
+    });
+  });
+  document.querySelectorAll('.chip[data-prodpay]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      state.topMode = null;
+      state.productPaymentFilter = el.dataset.prodpay;
       renderAll();
     });
   });
@@ -1079,6 +1140,8 @@ function currentItems(){
   if(state.type==='product'){
     if(state.filterOnlyStock) items = items.filter(i=>i.stock>0);
     if(state.filterOnlyEq) items = items.filter(i=>i.shopStatus==='eq');
+    if(state.productPaymentFilter==='eq') items = items.filter(i=>i.paymentMethod==='eq'||i.paymentMethod==='both');
+    if(state.productPaymentFilter==='iban') items = items.filter(i=>i.paymentMethod==='iban'||i.paymentMethod==='both');
     if(state.mirrorFilter==='mirroring') items = items.filter(i=>i.mirroring);
     if(state.mirrorFilter==='not_mirroring') items = items.filter(i=>!i.mirroring);
     if(state.favOnlyProduct) items = items.filter(i=>state.fav[i.id]);
@@ -1092,6 +1155,8 @@ function currentItems(){
   }
   if(state.type==='shop'){
     if(state.filterOnlyEq) items = items.filter(i=>i.status==='eq');
+    if(state.shopPaymentFilter==='eq') items = items.filter(i=>i.status==='eq');
+    if(state.shopPaymentFilter==='iban') items = items.filter(i=>i.status==='iban');
     if(state.shopMirrorFilter==='mirroring') items = items.filter(i=>i.mirroring);
     if(state.shopMirrorFilter==='not_mirroring') items = items.filter(i=>!i.mirroring);
     if(state.favOnlyShop) items = items.filter(i=>state.fav[i.id]);
@@ -1215,6 +1280,7 @@ function wireCardEvents(root, isModal){
     btn.addEventListener('click', (e)=>{
       e.stopPropagation();
       state.reviewsFor = btn.dataset.target;
+      state.reviewsForType = btn.dataset.reviewType;
       state.draftRating = 0;
       state.draftText = '';
       renderReviews();
@@ -1245,20 +1311,40 @@ function closeModal(){ state.modalId = null; document.getElementById('modalBackd
 function renderReviews(){
   const backdrop = document.getElementById('reviewsBackdrop');
   if(!state.reviewsFor){ backdrop.classList.remove('open'); return; }
-  const item = BLOGGERS.find(b=>b.id===state.reviewsFor);
+  const isForBlogger = state.reviewsForType === 'blogger';
+  const item = isForBlogger ? BLOGGERS.find(b=>b.id===state.reviewsFor) : SHOPS.find(s=>s.id===state.reviewsFor);
+  const list = isForBlogger ? DEMO_REVIEWS_FOR_BLOGGER : DEMO_REVIEWS_FOR_SHOP;
+  const canReview = isForBlogger ? item.cooperating : item.mirroring;
   const sheet = document.getElementById('reviewsSheet');
-  const reviewsListHtml = DEMO_REVIEWS.map(r=>`
+
+  const reviewsListHtml = list.map(r=>{
+    const liked = state.likedReviews.has(r.id);
+    const authorStatHtml = isForBlogger
+      ? `<div class="review-author-stat">${r.authorRating.toFixed(1).replace('.',',')} бала</div>`
+      : `<div class="review-author-stat">${formatStars(r.authorStars)}</div>`;
+    return `
     <div class="review-row">
-      <div class="review-top"><span class="review-shop">${r.shop}</span><span class="review-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span></div>
-      <div class="review-text">${r.text}</div>
+      <div class="review-avatar-col">
+        <div class="review-avatar">${r.authorIcon}</div>
+        ${authorStatHtml}
+      </div>
+      <div class="review-body">
+        <div class="review-top">
+          <span class="review-shop">${r.authorName}</span>
+          <button class="review-like ${liked?'liked':''}" data-review-like="${r.id}">${liked?'❤':'🤍'} ${r.likes}</button>
+        </div>
+        <div class="review-text">${r.text}</div>
+      </div>
     </div>
-  `).join('');
+  `;}).join('');
 
   const starsPickerHtml = [1,2,3,4,5].map(n=>
     `<button class="star-pick ${n<=state.draftRating?'on':''}" data-star-pick="${n}" aria-label="${n} зірок">${n<=state.draftRating?'★':'☆'}</button>`
   ).join('');
 
-  const topSectionHtml = item.cooperating ? `
+  const targetLabel = isForBlogger ? 'Магазин може залишити відгук про Блогера лише під час активної співпраці.' : 'Блогер PRO може залишити відгук про Магазин лише під час активної співпраці.';
+
+  const topSectionHtml = canReview ? `
     <div class="review-add-box">
       <div class="review-add-label">Залишити відгук про «${item.name}»</div>
       <div class="star-picker">${starsPickerHtml}</div>
@@ -1267,8 +1353,8 @@ function renderReviews(){
     </div>
   ` : `
     <div class="review-lock-box">
-      <div class="review-lock-text">Залишити відгук про «${item.name}» можна лише після співпраці.</div>
-      <button class="btn primary" id="inviteFromReviewsBtn" style="width:100%;margin-top:8px;">Запросити</button>
+      <div class="review-lock-text">Залишити відгук про «${item.name}» можна лише після співпраці. ${targetLabel}</div>
+      ${isForBlogger ? '' : `<button class="btn primary" id="inviteFromReviewsBtn" style="width:100%;margin-top:8px;">Запросити</button>`}
     </div>
   `;
 
@@ -1277,13 +1363,23 @@ function renderReviews(){
     <div class="modal-inner">
       <p class="name" style="margin-bottom:12px;">Відгуки</p>
       ${topSectionHtml}
-      <div class="review-list-label">Відгуки інших магазинів</div>
+      <div class="review-list-label">${isForBlogger ? 'Відгуки Магазинів' : 'Відгуки Блогерів PRO'}</div>
       ${reviewsListHtml}
       <button class="modal-close" id="reviewsCloseBtn">✕</button>
     </div>
   `;
   backdrop.classList.add('open');
   document.getElementById('reviewsCloseBtn').addEventListener('click', closeReviews);
+  document.querySelectorAll('[data-review-like]').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      const rid = el.dataset.reviewLike;
+      const r = list.find(x=>x.id===rid);
+      if(!r) return;
+      if(state.likedReviews.has(rid)){ state.likedReviews.delete(rid); r.likes--; }
+      else { state.likedReviews.add(rid); r.likes++; }
+      renderReviews();
+    });
+  });
   document.querySelectorAll('[data-star-pick]').forEach(el=>{
     el.addEventListener('click', ()=>{
       state.draftRating = parseInt(el.dataset.starPick);
@@ -1314,7 +1410,7 @@ const INFO_TEXT = {
     <p><b>Усі / ♡ Обрані / Дзеркалю / Не дзеркалю</b> — показує товари залежно від ваших стосунків із ними: чи ви вже дзеркалите, чи додали в обране. ♡ можна вмикати одночасно з будь-якою з трьох інших.</p>
     <p><b>Сортування</b> (Продано · Кількість · Дзеркал · Обрано) — клік активує за спаданням (найбільше вгорі), повторний клік перемикає на зростання, третій клік вимикає сортування.</p>
     <p><b>Фільтри</b> — тут ще й Ціна, Категорія, Перегляди та % повернень (діапазонами «від–до»). Фільтри доповнюють обрані сортування, а не скасовують їх. Крапка на кнопці «Фільтри» означає, що якийсь із цих фільтрів зараз активний.</p>
-    <p><b>6 панелей картки:</b> лишилось, кількість проданих (всього), скільки Блогерів дзеркалять, метод оплати магазину (лише IBAN / є Екваєр / обидва), % повернень цього товару, терміни відправки.</p>
+    <p><b>6 панелей картки:</b> лишилось, кількість проданих (всього), скільки Блогерів дзеркалять, метод оплати магазину (Ручна оплата / Платіжна система / обидва), % повернень цього товару, терміни відправки.</p>
     <p>У розгорнутій картці рядок «Магазин: …» відкриває картку цього Магазину на сторінці Магазини.</p>
   `,
   shop: `
@@ -1356,7 +1452,7 @@ document.getElementById('modalBackdrop').addEventListener('click', e=>{ if(e.tar
 /* ============ SWITCHES ============ */
 const NOTES = {
   product: 'Вітрина: рішення приймаєте ви (Блогер) — дзеркалити товар чи ні. «Комісія» бачить лише Блогер PRO.',
-  shop: 'Магазини: рішення приймаєте ви (Блогер) — чи дзеркалити весь магазин. Статус Іван/Екваєр підказує, чи будуть зірочки.',
+  shop: 'Магазини: рішення приймаєте ви (Блогер) — чи дзеркалити весь магазин. Платіжна система/Ручна оплата підказує, чи будуть зірочки.',
   blogger: 'Блогери: рішення приймає Магазин — кого запросити. Тут завжди лише Блогери PRO.'
 };
 function setNote(){ document.getElementById('pageNote').textContent = NOTES[state.type]; }
