@@ -105,6 +105,8 @@
   .chip.active{background:var(--primary); border-color:var(--primary); color:#fff;}
   .chip-scroll.dimmed{opacity:.4;}
   .payment-warning{font-size:10.5px; color:#C93E49; line-height:1.4; margin:0 0 8px; padding:0 2px; display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+  .micro-placeholder{display:flex; align-items:center; justify-content:center; min-height:60vh; text-align:center;}
+  .micro-placeholder span{font-size:20px; font-weight:800; color:var(--ink-faint); letter-spacing:-.01em;}
   .payment-note-green{font-size:10.5px; color:#2E7D32; line-height:1.4; margin:0 0 8px; padding:0 2px;}
   .payment-note-btn{flex:none; font-size:10px; font-weight:700; color:#fff; background:#C93E49; border:none; border-radius:999px; padding:4px 10px; cursor:pointer; white-space:nowrap;}
 
@@ -641,7 +643,7 @@ function cardModel(type, item){
     // Panel 4: комісія (зірочки нарахування) — завжди, якщо є Платіжна система (eq або both); 0% якщо лише Ручна
     let panel4;
     if(isIban){
-      panel4 = {val:'0% комісії', lab:'фіксація неможлива', cls:''};
+      panel4 = {val:'Без комісії', lab:'фіксація неможлива', cls:''};
     } else {
       panel4 = {val:formatStars(Math.round(item.price*item.comm/100)), lab:'нарахувань', cls:'gold'};
     }
@@ -715,7 +717,7 @@ function cardModel(type, item){
     return {
       icon:item.icon, code:'код '+item.code, name:item.name,
       meta:item.cats,
-      badges:[{cls:'status', text: item.status==='eq'?'Платіжна система':'Ручна оплата'}],
+      badges:[{cls:'status', text: item.status==='eq'?'Платіжна система':'0% комісії'}],
       rating:item.rating,
       siteDomain: item.code+'.beroo.online',
       siteUrl: `https://${item.code}.beroo.online`,
@@ -887,7 +889,7 @@ function renderTile(type, item){
     `;
   }
 
-  const stat = type==='product' ? item.price+' ₴' : (item.status==='eq'?'Платіжна система':'Ручна оплата');
+  const stat = type==='product' ? item.price+' ₴' : (item.status==='eq'?'Платіжна система':'0% комісії');
   const isFav2 = !!state.fav[item.id];
   let activeMetricHtml = '';
   let commissionLineHtml = '';
@@ -942,7 +944,7 @@ function renderPaymentToolbarNote(filterValue){
     return `<p class="payment-warning">Відсутність у магазину підʼєднаних платіжних систем робить неможливою фіксацію та нарахування блогеру зірочок за продажі. Рахуються лише кліки.${showSettingsBtn ? '<button class="payment-note-btn" id="paymentSettingsBtn">Налаштувати</button>' : ''}</p>`;
   }
   if(filterValue==='eq'){
-    return `<p class="payment-note-green">Підключена Платіжна система дозволяє фіксувати оплати автоматично — нарахування зірочок Блогеру та виплати працюють коректно.</p>`;
+    return `<p class="payment-note-green">Підключена Платіжна система дозволяє фіксувати оплати автоматично — нарахування зірочок Блогеру працює коректно.</p>`;
   }
   return '';
 }
@@ -964,11 +966,15 @@ function hasActiveDrawerFilters(){
 
 /* ============ TOOLBAR ============ */
 function renderToolbar(){
+  const isMicro = state.density === 'micro';
+  if(isMicro){
+    document.getElementById('toolbar').innerHTML = '';
+    return;
+  }
   const isBlogger = state.type === 'blogger';
   const isShop = state.type === 'shop';
   const sorts = SORTS[state.type];
   const isProduct = state.type === 'product';
-  const isMicro = state.density === 'micro';
   const dirAware = isBlogger || isProduct || isShop;
   const renderSortChips = (list) => list.map(s=>{
     const active = state.sortId===s.id;
@@ -1355,7 +1361,7 @@ function currentItems(){
     if(state.filterOnlyStock) items = items.filter(i=>i.stock>0);
     if(state.filterOnlyEq) items = items.filter(i=>i.shopStatus==='eq');
     if(state.productPaymentFilter==='eq') items = items.filter(i=>i.paymentMethod==='eq'||i.paymentMethod==='both');
-    if(state.productPaymentFilter==='iban') items = items.filter(i=>i.paymentMethod==='iban'||i.paymentMethod==='both');
+    if(state.productPaymentFilter==='iban') items = items.filter(i=>i.paymentMethod==='iban');
     if(state.mirrorFilter==='mirroring') items = items.filter(i=>i.mirroring);
     if(state.mirrorFilter==='not_mirroring') items = items.filter(i=>!i.mirroring);
     if(state.favOnlyProduct) items = items.filter(i=>state.fav[i.id]);
@@ -1458,6 +1464,320 @@ function renderList(){
   }
 }
 
+/* ============ ДУБЛЬОВАНИЙ КОД ДЛЯ РЕЖИМУ МІКРО ============ */
+/* Навмисна копія cardModel/renderFullCard/wireCardEvents — НЕ посилання на оригінал. */
+/* Редагування дизайну Мікро-режиму відбувається тут і НЕ впливає на Розширений режим (і навпаки). */
+
+function cardModelMicro(type, item){
+  if(type==='product'){
+    const isIban = item.paymentMethod === 'iban';
+    const shippingLabel = item.shippingDays<=1 ? 'День в день' : item.shippingDays+' дні';
+    const shopEntry = SHOPS.find(s=>s.name===item.shop);
+    const shopLink = shopEntry ? {
+      id: shopEntry.id, name: shopEntry.name,
+      rating: shopEntry.rating, items: shopEntry.items,
+      avgCheck: Math.round(400 + shopEntry.rating*150),
+      samplesPolicy: shopEntry.status==='eq' ? 'Купівля зі знижкою' : 'Тільки безкоштовні зразки'
+    } : null;
+
+    // Panel 2: кількість проданих — якщо оплату неможливо підтвердити (лише Ручна), показуємо кліки замість продажів
+    const soldVal = state.productPeriod==='3d'?item.sold3d:(state.productPeriod==='10d'?item.sold10d:(state.productPeriod==='30d'?item.sold30d:item.soldTotal));
+    const clickVal = state.productPeriod==='3d'?item.click3d:(state.productPeriod==='10d'?item.click10d:(state.productPeriod==='30d'?item.click30d:item.clickTotal));
+    const panel2 = isIban
+      ? {val:clickVal.toLocaleString('uk-UA'), lab:'кліків', cls:''}
+      : {val:item.soldTotal.toLocaleString('uk-UA'), lab:'кількість проданих', cls:''};
+
+    // Panel 4: комісія (зірочки нарахування) — завжди, якщо є Платіжна система (eq або both); 0% якщо лише Ручна
+    let panel4;
+    if(isIban){
+      panel4 = {val:'Без комісії', lab:'фіксація неможлива', cls:''};
+    } else {
+      panel4 = {val:formatStars(Math.round(item.price*item.comm/100)), lab:'нарахувань', cls:'gold'};
+    }
+
+    // Panel 5: % повернень — потребує ТТН-підтвердження через API; без ТТН показуємо перевізників
+    const panel5 = item.hasTTN
+      ? {val:item.productReturns+'%', lab:'% повернень', cls: item.productReturns<=5?'zone-green':(item.productReturns<=15?'zone-orange':'zone-black')}
+      : {val:carriersDisplay(item.carriers), lab:'перевізник', cls:''};
+
+    const earnHtml_iban = isIban;
+
+    return {
+      icon:item.icon, code:'код '+item.code, name:item.name,
+      meta:`${item.price} ₴ · ${item.cat} · Магазин «${item.shop}»`,
+      badges: item.top ? [{cls:'gold', text:'🔥 Топ'}] : [],
+      shopLink,
+      siteDomain: shopEntry ? shopEntry.code+'.beroo.online' : null,
+      siteUrl: shopEntry ? `https://${shopEntry.code}.beroo.online/p/${item.code}` : null,
+      totalFavorites: item.favoritesCount,
+      panels:[
+        {val:item.stock+' од', lab:'лишилось', cls:''},
+        panel2,
+        {val:item.mirrors, lab:'скільки дзеркалять', cls:''},
+        panel4,
+        panel5,
+        {val:shippingLabel, lab:'терміни відправки', cls:''}
+      ],
+      paymentNote: isIban
+        ? {type:'red', text:'Відсутність у магазину підʼєднаних платіжних систем робить неможливою фіксацію та нарахування блогеру зірочок за продажі. Рахуються лише кліки.'}
+        : {type:'green', text:`Підключена Платіжна система дозволяє фіксувати оплати автоматично — нарахування зірочок Блогеру та виплати працюють коректно. Ціна ${item.price} ₴ × комісія ${item.comm}% = ${Math.round(item.price*item.comm/100)} зірочок (1★ = 1₴).`},
+      foot:item.foot,
+      expand:[
+        ['Категорія', item.cat],
+        [isIban?'Кліків за період':'Продано за період', isIban
+          ? `3 дні: ${item.click3d} · 10 днів: ${item.click10d} · 30 днів: ${item.click30d}`
+          : `3 дні: ${item.sold3d} · 10 днів: ${item.sold10d} · 30 днів: ${item.sold30d}`],
+        ['Переглядів картки', item.views.toLocaleString('uk-UA')],
+        ['Додано в обране блогерами', item.favoritesCount+' раз(ів)'],
+        ...(isIban ? [] : [['Конверсія товару', item.conversion+'%']]),
+        ['Місце в топ-100 за місяць', item.topRank ? '#'+item.topRank : 'поза топ-100'],
+        ['Опубліковано', item.publishedDaysAgo+' дн. тому'],
+        ['Продає сам магазин', item.soldByShop ? 'Так' : 'Ні, лише через дзеркала'],
+        ['Поштовий відправник', item.hasTTN ? carriersDisplay(item.carriers) : carriersDisplay(item.carriers)+' (без API-трекінгу)'],
+        ['Обмін і повернення', item.exchangeDays>0 ? `Так, ${item.exchangeDays} дн.` : 'Немає'],
+        ['Статус магазину', item.shopStatus==='eq'?'Платіжна система':'Ручна оплата'],
+        ['Умови дзеркалення', 'Завжди потрібне ручне підтвердження Магазину (автоматичного схвалення в системі немає)'],
+      ],
+      buttons:[{label:'Переглянути',kind:'ghost'},{label:'Віддзеркалити',kind:'primary'},{label:'До сайту магазину',kind:'warn'}]
+    };
+  }
+  if(type==='shop'){
+    const totalMirrors = item.greyMirrors + item.goldMirrors;
+    const isIban = item.status === 'iban';
+    const shippingLabel = item.shippingDays<=1 ? 'День в день' : item.shippingDays+' дні';
+
+    // Panel 4: комісія завжди показується для магазинів з платіжною системою; для Ручної оплати — 0%/неможливо
+    const panel4 = isIban
+      ? {val:'0% комісії', lab:'фіксація неможлива', cls:''}
+      : {val:'★ '+item.commMin+'–'+item.commMax+'%', lab:'комісія (діапазон)', cls:'gold'};
+
+    // Panel 5: % повернень потребує ТТН; без ТТН — перевізники
+    const panel5 = item.hasTTN
+      ? {val:item.returns+'%', lab:'повернень', cls: item.returns<=5?'zone-green':(item.returns<=15?'zone-orange':'zone-black')}
+      : {val:carriersDisplay(item.carriers), lab:'перевізник', cls:''};
+
+    // Panel 6: для Ручної оплати — термін відправки замість Виплат (виплати неможливо порахувати без підтвердженої оплати)
+    const panel6 = isIban
+      ? {val:shippingLabel, lab:'термін відправки', cls:''}
+      : {val:item.payoutsCount, lab:'виплат', cls:''};
+
+    return {
+      icon:item.icon, code:'код '+item.code, name:item.name,
+      meta:item.cats,
+      badges:[{cls:'status', text: item.status==='eq'?'Платіжна система':'0% комісії'}],
+      rating:item.rating,
+      siteDomain: item.code+'.beroo.online',
+      siteUrl: `https://${item.code}.beroo.online`,
+      totalFavorites: item.requests*9 + item.goldMirrors*4,
+      commRangeLabel: isIban ? null : ('★ '+item.commMin+'–'+item.commMax+'%'),
+      panels:[
+        {val:item.items, lab:'товарів', cls:''},
+        {val:item.variations, lab:'варіацій', cls:''},
+        {val:item.units.toLocaleString('uk-UA'), lab:'одиниць', cls:''},
+        panel4,
+        panel5,
+        panel6
+      ],
+      paymentNote: isIban
+        ? {type:'red', text:'Відсутність у магазину підʼєднаних платіжних систем робить неможливою фіксацію та нарахування блогеру зірочок за продажі. Рахуються лише кліки.'}
+        : {type:'green', text:`Підключена Платіжна система дозволяє фіксувати оплати автоматично — нарахування зірочок Блогеру та виплати працюють коректно. Комісія: ${item.commMin}–${item.commMax}%.`},
+      foot:item.foot,
+      expand:[
+        ['Категорії', item.cats],
+        ['Умови дзеркалення', 'Завжди потрібне ручне підтвердження Магазину (автоматичного схвалення в системі немає)'],
+        ...(item.hasTTN ? [['Зона ризику', item.returns<=5?'Безпечна':(item.returns<=15?'Увага':'Критична')]] : []),
+        ['Активних запитів', item.requests],
+        ['Дзеркал (сумарно)', totalMirrors],
+        ['Оглядачів-дзеркал', '★ '+item.greyMirrors],
+        ['PRO-дзеркал', '★ '+item.goldMirrors],
+        ['Поштовий відправник', carriersDisplay(item.carriers) + (item.hasTTN ? '' : ' (без API-трекінгу)')],
+        ['Дата реєстрації', item.regDaysAgo+' дн. тому'],
+        ['Додано в обране', (item.requests*9 + item.goldMirrors*4)+' раз(ів)'],
+        ['Сумарна кількість відзеркалених товарів', (item.items * (item.greyMirrors + item.goldMirrors))+' од. (по всіх Блогерах разом)'],
+      ],
+      buttons:[{label:'Переглянути каталог',kind:'ghost'},{label:'Віддзеркалити магазин',kind:'primary'},{label:'Відгуки',kind:'yellow',action:'openReviews',targetId:item.id,reviewType:'shop'}]
+    };
+  }
+  // blogger
+  const platformLabels = item.platforms.map(p=>PLATFORMS.find(x=>x.id===p).label).join(', ');
+  const formatLabels = item.formats.map(f=>FORMATS.find(x=>x.id===f).label).join(', ');
+  const mainPlatform = PLATFORMS.find(x=>x.id===item.platforms[0]).enLabel;
+  const returnsZone = item.returns<=5?'zone-green':(item.returns<=15?'zone-orange':'zone-black');
+  const middleBtn = item.cooperating
+    ? {label:'Переглянути', kind:'muted', action:'goToMirrorsMe', targetId:item.id}
+    : item.requestBlocked
+    ? {label:LIMITED_LABEL, kind:'muted', action:'limitedRequest', targetId:item.id}
+    : {label:'Запросити', kind:'primary'};
+  return {
+    icon:item.icon, code:item.code, name:item.name,
+    metaLines:[platformLabels, formatLabels],
+    badges: item.hasShop ? [{cls:'violet', text:'має Магазин'}] : [],
+    rating:item.commRating,
+    siteDomain: item.code+'.beroo.online',
+    siteUrl: `https://${item.code}.beroo.online/dzerkalo`,
+    totalFavorites: item.mirrorShops*11 + item.complaints*2 + 6,
+    panels:[
+      {val:formatStars(item.stars), lab:'золотих зірочок', cls:'gold', extra: item.cooperating ? ('ВАШИХ: ★ '+formatStars(item.yourStars).replace('★ ','')) : null},
+      {val:item.mirrorShops, lab:'дзеркалить магазинів', cls:''},
+      {val:item.mirrorItems, lab:'дзеркалить товарів', cls:''},
+      {val:item.conversion+'%', lab:'конверсія', cls:''},
+      {val:item.returns+'%', lab:'% повернень', cls:returnsZone},
+      {val:mainPlatform, lab:'основна платформа', cls:''}
+    ],
+    foot:item.foot,
+    expand:[
+      ['Категорії', item.cats.join(', ')],
+      ['Топ-категорія за 10 днів', `${item.topCategory10d.name} — ${item.topCategory10d.count} продажів`],
+      ['Кількість скарг', item.complaints],
+      ['Рейтинг комунікації', '★ '+item.commRating.toFixed(1)+' / 5 — оцінка від Магазинів'],
+      ['Середній час відповіді', item.responseTime],
+      ['Мови спілкування', item.languages],
+      ['Виїзд на об\'єкт', item.onSiteVisit ? ('Так, '+item.region) : 'Ні'],
+      ['Дата реєстрації', new Date(item.regDate).toLocaleDateString('uk-UA')],
+      ['Власний магазин', item.hasShop?'Так — дивитись картку':'Немає'],
+      ['Додано в обране', (item.mirrorShops*11 + item.complaints*2 + 6)+' раз(ів)'],
+    ],
+    buttons:[{label:'Анкета',kind:'ghost'}, middleBtn, {label:'Відгуки',kind:'yellow',action:'openReviews',targetId:item.id,reviewType:'blogger'}]
+  };
+}
+
+function renderFullCardMicro(type, item, opts){
+  opts = opts || {};
+  const m = cardModelMicro(type, item);
+  const isFav = !!state.fav[item.id];
+  const isOpen = !!opts.expanded;
+  const badgesHtml = m.badges.map(b=>`<span class="badge ${b.cls}">${b.text}</span>`).join('');
+  const panelsHtml = m.panels.map(p=>`<div class="panel ${p.cls}"><div class="val">${p.val}</div><div class="lab">${p.lab}</div>${p.extra?`<div class="panel-extra">${p.extra}</div>`:''}</div>`).join('');
+  const expandRows = m.expand.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join('');
+  const buttonsHtml = m.buttons.map(b=>`<button class="btn ${b.kind}" ${b.action?`data-action="${b.action}" data-target="${b.targetId}"${b.reviewType?` data-review-type="${b.reviewType}"`:''}`:''}>${b.label}</button>`).join('');
+  const photoClass = type==='shop' ? 'avatar-shop' : (type==='blogger' ? 'avatar-blogger' : '');
+  const riskZoneCls = m.risk ? 'zone-'+m.risk.zone : '';
+  const riskLabelText = m.risk ? (m.risk.zone==='green'?'Безпечна':(m.risk.zone==='orange'?'Увага':'Критична')) : '';
+  const riskHtml = m.risk ? `
+    <div class="risk-row">
+      <span class="risk-name">${m.risk.label}</span>
+      <span class="risk-pill ${riskZoneCls}"><span class="dot"></span>${m.risk.pct}% · ${riskLabelText}</span>
+    </div>
+    <div class="risk-bar"><span class="marker" style="left:${Math.min(96,Math.max(4,m.risk.pct))}%;"></span></div>
+  ` : '';
+  const paymentNoteHtml = m.paymentNote ? `
+    <div class="earn-box ${m.paymentNote.type==='red' ? 'earn-box-warning' : 'earn-box-green'}">
+      ${m.paymentNote.text}
+    </div>
+  ` : '';
+  const metaHtml = m.metaLines
+    ? m.metaLines.map(l=>`<p class="meta-line">${l}</p>`).join('')
+    : `<p class="meta-line">${m.meta}</p>`;
+  const isBloggerCard = type==='blogger';
+  const ratingZone = m.rating==null ? null : (m.rating>=4.5?'green':(m.rating>=3.5?'orange':'black'));
+  const ratingHtml = m.rating!=null ? `<span class="rating-badge zone-${ratingZone}">Рейтинг: ${m.rating.toFixed(1).replace('.',',')} бала</span>` : '';
+  const siteAddrHtml = m.siteUrl ? `<a href="${m.siteUrl}" target="_blank" rel="noopener" class="site-addr-link" onclick="event.stopPropagation()">${m.siteDomain}</a>` : '';
+  const topRightHtml = (siteAddrHtml || ratingHtml) ? `<div class="card-top-right">${siteAddrHtml}${ratingHtml}</div>` : '';
+  return `
+    <div class="card" data-id="${item.id}">
+      <div class="card-head ${isBloggerCard?'centered':''}">
+        ${topRightHtml}
+        <div class="head-photo-col">
+          <div class="photo-lg ${photoClass}">${m.icon}</div>
+        </div>
+        <div class="head-main">
+          <p class="name">${m.name}</p>
+          ${metaHtml}
+          ${badgesHtml?`<div class="badges">${badgesHtml}</div>`:''}
+        </div>
+        <button class="fav fav-corner ${isFav?'on':''}" data-fav="${item.id}" aria-label="В обране, загалом ${m.totalFavorites}">
+          <span class="fav-count">${m.totalFavorites}</span>${isFav?'♥':'♡'}
+        </button>
+      </div>
+      <div class="panels">${panelsHtml}</div>
+      ${paymentNoteHtml}
+      ${riskHtml}
+      <div class="foot">${m.foot}</div>
+      <button class="expand-toggle" data-expand="${item.id}">
+        <span>${isOpen?'Згорнути':'Детальніше'}</span>
+        <span style="transition:transform .2s ease; transform:rotate(${isOpen?180:0}deg);">▾</span>
+      </button>
+      <div class="expand-body ${isOpen?'open':''}">
+        ${m.shopLink ? `
+          <button class="shop-link-row" data-action="openShopFromProduct" data-target="${m.shopLink.id}">
+            <span>Магазин: <b>${m.shopLink.name}</b></span>
+            <span class="shop-link-arrow">›</span>
+          </button>
+          <div class="shop-link-stats">
+            Рейтинг: ${m.shopLink.rating.toFixed(1).replace('.',',')} бала · ${m.shopLink.items} товарів · середній чек ≈ ${m.shopLink.avgCheck} ₴ · зразки: ${m.shopLink.samplesPolicy}
+          </div>
+        ` : ''}
+        <dl>${expandRows}</dl>
+        <div class="complaint">Подати скаргу</div>
+      </div>
+      <div class="actions">${buttonsHtml}</div>
+    </div>
+  `;
+}
+
+
+function wireCardEventsMicro(root, isModal){
+  root.querySelectorAll('[data-fav]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.dataset.fav;
+      state.fav[id] = !state.fav[id];
+      if(state.type==='blogger' || state.type==='product') renderToolbar();
+      if(isModal) renderModal(); else renderList();
+    });
+  });
+  root.querySelectorAll('[data-expand]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const id = btn.dataset.expand;
+      if(isModal){ state.modalExpanded = !state.modalExpanded; renderModal(); }
+      else { state.expandedFeed[id] = !state.expandedFeed[id]; renderList(); }
+    });
+  });
+  root.querySelectorAll('[data-action="goToMirrorsMe"]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const b = BLOGGERS.find(x=>x.id===btn.dataset.target);
+      alert('Веде на «Дзеркало → Мене дзеркалять», прокручує і розгортає картку «'+(b?b.name:'')+'» з кнопками Аналітика / Виплати.');
+    });
+  });
+  root.querySelectorAll('[data-action="limitedRequest"]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const b = BLOGGERS.find(x=>x.id===btn.dataset.target);
+      if(b && b.requestRetryable){
+        if(confirm('Цей блогер не відповідає вашим поточним критеріям запиту.\n\nСпробувати ще раз?')){
+          alert('Запит надіслано повторно.');
+        }
+      } else {
+        alert('Цей блогер не відповідає вашим поточним критеріям запиту.');
+      }
+    });
+  });
+  root.querySelectorAll('[data-action="openShopFromProduct"]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      const shopId = btn.dataset.target;
+      state.type = 'shop';
+      state.density = 'expanded';
+      state.modalId = shopId;
+      state.modalExpanded = false;
+      renderAll();
+      renderModal();
+    });
+  });
+  root.querySelectorAll('[data-action="openReviews"]').forEach(btn=>{
+    btn.addEventListener('click', (e)=>{
+      e.stopPropagation();
+      state.reviewsFor = btn.dataset.target;
+      state.reviewsForType = btn.dataset.reviewType;
+      state.draftRating = 0;
+      state.draftText = '';
+      renderReviews();
+    });
+  });
+}
+
+/* ============ MODAL ============ */
+
 const MICRO_COLUMNS = {
   product: [
     {id:'stock', label:'Лишилось', get:i=>i.stock, unit:' од'},
@@ -1496,97 +1816,11 @@ function microTopBadge(item){
 }
 
 function renderMicroTable(wrap, items){
-  const cols = MICRO_COLUMNS[state.type];
-  const headerCells = cols.map(c=>{
-    const active = state.sortId===c.id;
-    const arrow = active ? (state.sortDir==='desc'?' ↓':' ↑') : '';
-    return `<button class="micro-th ${active?'active':''}" data-sort="${c.id}">${c.label}${arrow}</button>`;
-  }).join('');
-
-  const isFavKey = it => !!state.fav[it.id];
-  const rows = items.map(item=>{
-    const m = cardModel(state.type, item);
-    const photoClass = state.type==='shop' ? 'avatar-shop' : (state.type==='blogger' ? 'avatar-blogger' : '');
-    const metaBits = state.type==='product'
-      ? `${item.price} ₴ · ${item.cat} · Магазин «${item.shop}»`
-      : state.type==='shop' ? item.cats : (item.platforms ? item.platforms.map(p=>PLATFORMS.find(x=>x.id===p).enLabel).join(', ') : '');
-    const starVal = (state.type==='product' && item.paymentMethod!=='iban') ? Math.round(item.price*item.comm/100) : null;
-
-    // Клітинки 2–6 (Продано/Дзеркал/Комісія/Повернень/Обрано) — з боксами; перша (Лишилось) — без боксу
-    const boxCells = cols.slice(1).map(c=>{
-      if(state.type==='product' && c.id==='favorites'){
-        // Буквально як на скріні: остання клітинка показує зведення по комісії магазину, а не власне "Обрано"
-        const shopStars = Math.round(item.comm/2) || 1;
-        return `<div class="micro-td"><span class="micro-td-lab micro-td-lab-top">Комісія магазину:</span><span class="micro-td-val micro-td-val-small">${item.comm}% <span class="micro-td-extra-inline">★${shopStars}</span></span></div>`;
-      }
-      const val = c.get(item);
-      const extra = c.extra ? c.extra(item) : null;
-      const tone = (c.id==='comm') ? 'micro-td-comm' : (c.id==='returns') ? 'micro-td-returns' : '';
-      const isCarrierText = typeof val === 'string' && val.includes(',');
-      return `<div class="micro-td ${tone}"><span class="micro-td-val ${isCarrierText?'micro-td-val-small':''}">${typeof val==='number'?val.toLocaleString('uk-UA'):val}${c.unit}</span><span class="micro-td-lab">${c.label}</span>${extra?`<span class="micro-td-extra">${extra}</span>`:''}</div>`;
-    }).join('');
-    const firstCol = cols[0];
-    const firstVal = firstCol.get(item);
-
-    return `
-      <div class="micro-item" data-id="${item.id}" data-open-modal="${item.id}">
-        <div class="micro-item-top">
-          <div class="micro-photo ${photoClass}">${m.icon}</div>
-          <div class="micro-info-text">
-            <div class="micro-name-line">${m.name}</div>
-            <div class="micro-meta-line">${metaBits}</div>
-          </div>
-          <div class="micro-badges">
-            ${microTopBadge(item)}
-            <div class="micro-badges-row2">
-              ${starVal!=null ? `<span class="micro-star">★ ${starVal}</span>` : ''}
-              <button class="micro-fav ${isFavKey(item)?'on':''}" data-tile-fav="${item.id}" aria-label="В обране">${isFavKey(item)?'♥':'♡'} ${m.totalFavorites}</button>
-            </div>
-          </div>
-        </div>
-        <div class="micro-item-panels">
-          <div class="micro-first-col"><span class="micro-first-val">${typeof firstVal==='number'?firstVal.toLocaleString('uk-UA'):firstVal}${firstCol.unit}</span><span class="micro-first-lab">${firstCol.label}</span></div>
-          ${boxCells}
-        </div>
-      </div>
-    `;
-  }).join('');
-
-  wrap.innerHTML = `
-    <div class="micro-table">
-      <div class="micro-header">${headerCells}</div>
-      <div class="micro-body">${rows}</div>
-    </div>
-  `;
-
-  wrap.querySelectorAll('.micro-th[data-sort]').forEach(el=>{
-    el.addEventListener('click', ()=>{
-      if(state.type==='product') state.topMode = null;
-      if(state.sortId === el.dataset.sort){
-        state.sortDir = state.sortDir==='desc' ? 'asc' : 'desc';
-      } else {
-        state.sortId = el.dataset.sort;
-        state.sortDir = 'desc';
-      }
-      renderList();
-    });
-  });
-  wrap.querySelectorAll('[data-open-modal]').forEach(btn=>{
-    btn.addEventListener('click', ()=>{
-      state.modalId = btn.dataset.openModal;
-      state.modalExpanded = false;
-      renderModal();
-    });
-  });
-  wrap.querySelectorAll('[data-tile-fav]').forEach(btn=>{
-    btn.addEventListener('click', (e)=>{
-      e.stopPropagation();
-      const id = btn.dataset.tileFav;
-      state.fav[id] = !state.fav[id];
-      renderToolbar();
-      renderList();
-    });
-  });
+  // Мікро-режим наразі демонструє товари так само, як Розширений режим —
+  // окремим, дубльованим рендер-шляхом (renderFullCardMicro/wireCardEventsMicro),
+  // щоб дизайн таблиці можна було переробляти тут, не займаючи Розширений режим.
+  wrap.innerHTML = `<div class="feed">${items.map(i=>renderFullCardMicro(state.type,i,{expanded:!!state.expandedFeed[i.id]})).join('')}</div>`;
+  wireCardEventsMicro(wrap, false);
 }
 
 function wireCardEvents(root, isModal){
