@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#ffffff">
+<title>Анкета для міні-сайту</title>
+<style>
+:root{--ac:#fe2c55;--ac2:#ffe4ea;--tx:#1f2937;--t2:#6b7280;--t3:#9ca3af;--bd:#e5e7eb;--bg:#f6f7f9;--ok:#16a34a}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 -apple-system,system-ui,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif}
+.w{max-width:560px;margin:0 auto;padding:16px 16px calc(110px + env(safe-area-inset-bottom))}
+h1{font-size:24px;line-height:1.2;margin:8px 0 6px}
+.lead{color:var(--t2);font-size:15px;margin:0 0 14px}
+.pg{position:sticky;top:0;z-index:5;background:var(--bg);padding:8px 0 10px;margin:0 -2px}
+.pg div{display:flex;justify-content:space-between;font-size:13px;color:var(--t2);margin-bottom:6px}.pg b{color:var(--tx)}
+.pg i{display:block;height:6px;border-radius:9px;background:#e9ebef;overflow:hidden}.pg em{display:block;height:100%;width:0;background:var(--ac);border-radius:9px;transition:width .25s}
+.card{scroll-margin-top:64px;background:#fff;border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:12px}
+.card.ok{border-color:#bfe8cf}.card.bad{border-color:var(--ac);box-shadow:0 0 0 3px rgba(254,44,85,.08)}
+.ch{display:flex;align-items:center;gap:10px;margin-bottom:2px}.ch b{font-size:17px}
+.n{flex:0 0 28px;width:28px;height:28px;border-radius:50%;background:#f1f2f4;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.card.ok .n{background:var(--ok);color:#fff;font-size:0}.card.ok .n:after{content:"✓";font-size:15px}
+.sub{color:var(--t2);font-size:13px;margin:2px 0 4px 38px}
+label.l{display:block;font-size:13.5px;font-weight:700;margin:14px 0 6px}
+label.l small{font-weight:500;color:var(--t3)}
+.req:after{content:" *";color:var(--ac)}
+input[type=text],input[type=tel],input[type=email],input[type=url],input[type=password],input[type=number],textarea{width:100%;min-height:48px;border:1px solid #d1d5db;border-radius:12px;padding:12px;font:inherit;font-size:16px;background:#fff;color:var(--tx);outline:none;transition:border-color .15s,box-shadow .15s}
+textarea{min-height:96px;resize:vertical}
+input:focus,textarea:focus{border-color:var(--ac);box-shadow:0 0 0 3px rgba(254,44,85,.12)}
+input.bad{border-color:var(--ac);background:#fff8f9}
+.err{color:var(--ac);font-size:12.5px;font-weight:600;margin-top:4px}
+.hint{color:var(--t2);font-size:12.5px;margin-top:5px}
+.hint.good{color:var(--ok);font-weight:600}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid #d1d5db;background:#fff;border-radius:999px;padding:0 14px;min-height:42px;font:inherit;font-size:14.5px;font-weight:600;color:var(--tx);cursor:pointer;display:inline-flex;align-items:center;gap:6px;-webkit-tap-highlight-color:transparent}
+.chip.on{background:var(--ac2);border-color:var(--ac);color:var(--ac)}
+.chip.m.on:before{content:"✓";font-weight:800}
+.pre{display:flex;align-items:stretch;border:1px solid #d1d5db;border-radius:12px;overflow:hidden;background:#fff}
+.pre span{display:flex;align-items:center;padding:0 4px 0 12px;color:var(--t2);font-size:15px;white-space:nowrap}
+.pre input{border:0;border-radius:0;box-shadow:none!important;padding-left:2px}
+.pre:focus-within{border-color:var(--ac);box-shadow:0 0 0 3px rgba(254,44,85,.12)}
+.pre.bad{border-color:var(--ac)}.pre.bad~#slugHint{display:none}
+.suf{position:relative}.suf input{padding-right:64px}.suf span{position:absolute;right:14px;top:0;height:48px;display:flex;align-items:center;color:var(--t2);pointer-events:none}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.pw{position:relative}.pw input{padding-right:96px}
+.pw button{position:absolute;right:6px;top:6px;height:36px;border:0;background:#f1f2f4;border-radius:9px;padding:0 10px;font:inherit;font-size:13px;font-weight:700;color:var(--tx);cursor:pointer}
+.rules{display:flex;flex-wrap:wrap;gap:6px 12px;margin-top:6px;font-size:12.5px;color:var(--t3)}.rules span.on{color:var(--ok);font-weight:700}
+.rules span:before{content:"○ "}.rules span.on:before{content:"✓ "}
+.warn{background:#fff7ed;border:1px solid #fed7aa;color:#9a3412;border-radius:12px;padding:10px 12px;font-size:13.5px;margin-top:10px}
+.logo{display:flex;align-items:center;gap:12px}
+.logo .pv{width:64px;height:64px;border-radius:50%;background:#f1f2f4 center/cover no-repeat;border:1px dashed #cbd0d8;flex:0 0 64px;display:flex;align-items:center;justify-content:center;color:var(--t3);font-size:24px}
+.logo .pv.has{border-style:solid;font-size:0}
+.btn2{border:1px solid #d1d5db;background:#fff;border-radius:12px;min-height:44px;padding:0 14px;font:inherit;font-size:14.5px;font-weight:700;color:var(--tx);cursor:pointer}
+.lnk{background:none;border:0;color:var(--t2);text-decoration:underline;font:inherit;font-size:13px;cursor:pointer;padding:6px 0}
+.ck{display:flex;align-items:center;gap:10px;margin-top:8px;font-size:14.5px;cursor:pointer}.ck input{width:20px;height:20px;accent-color:var(--ac)}
+.out{white-space:pre-wrap;font-size:14px;line-height:1.5;background:#f8f9fb;border:1px solid var(--bd);border-radius:12px;padding:12px;max-height:360px;overflow:auto;margin-top:8px}
+.bar{position:fixed;left:0;right:0;bottom:0;z-index:10;background:rgba(255,255,255,.96);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-top:1px solid var(--bd);padding:10px 16px calc(10px + env(safe-area-inset-bottom))}
+.bar div{max-width:560px;margin:0 auto;display:flex;gap:10px}
+.bar button{flex:1;min-height:50px;border-radius:14px;font:inherit;font-size:16px;font-weight:800;cursor:pointer}
+#copy{background:#fff;border:1px solid #d1d5db;color:var(--tx)}
+#share{background:var(--ac);border:0;color:#fff}
+.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);opacity:0;background:#1f2937;color:#fff;border-radius:12px;padding:11px 16px;font-size:14px;transition:.2s;pointer-events:none;z-index:20;max-width:calc(100% - 32px)}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.foot{text-align:center;color:var(--t3);font-size:12.5px;margin:6px 0 0}
+
+.rep{display:flex;flex-direction:column;gap:8px}
+.ri{display:flex;gap:8px;align-items:flex-start}.ri>.grow{flex:1;min-width:0}
+.ri .x{flex:0 0 48px;height:48px;border:1px solid #e5e7eb;background:#fff;border-radius:12px;font-size:20px;line-height:1;color:var(--t3);cursor:pointer}
+.add{margin-top:8px;border:1px dashed #cbd0d8;background:#fff;border-radius:12px;min-height:44px;width:100%;font:inherit;font-size:14.5px;font-weight:700;color:var(--ac);cursor:pointer}
+.box{position:relative;border:1px solid #eceef1;border-radius:14px;padding:10px;background:#fbfbfc}
+.box .chips{margin-top:8px}.box .chip{min-height:36px;font-size:13.5px;padding:0 12px}
+.box .hint{margin-top:6px}
+.box .x{position:absolute;top:4px;right:4px;width:34px;height:34px;flex:none;font-size:18px;border:0;background:none}
+input[data-f=iban]{padding:12px 8px;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
+.qa{margin:0 0 8px;font-size:13.5px;color:#374151}.qa summary{cursor:pointer;color:var(--ac);font-weight:700;list-style:none;display:inline-flex;align-items:center;gap:6px;min-height:32px}.qa summary::-webkit-details-marker{display:none}.qa summary:before{content:"?";width:18px;height:18px;border-radius:50%;background:var(--ac2);color:var(--ac);font-size:12px;display:inline-flex;align-items:center;justify-content:center}
+.qa[open] summary{margin-bottom:4px}.qa p{margin:0 0 8px;line-height:1.45;background:#f8f9fb;border-radius:10px;padding:8px 10px}
+.bt{min-height:24px;font-size:12.5px;font-weight:700;color:var(--t2);margin:0 0 6px}
+</style>
+</head>
+<body>
+<div class="w">
+  <h1>Анкета для вашого міні-сайту</h1>
+  <p class="lead">Заповніть поля — це займе 5–7 хвилин. Поля із <span style="color:var(--ac)">*</span> обов’язкові, решту можна пропустити. Де потрібно більше одного запису — натисніть «+ Додати ще». Внизу натисніть «Поділитись» або «Скопіювати» і надішліть нам. Дані зберігаються лише у вашому браузері, доки ви їх не надішлете.</p>
+
+  <div class="pg"><div><span><b id="pgN">0</b> з 7 обов’язкових блоків</span><span id="pgP">0%</span></div><i><em id="pgB"></em></i></div>
+
+  <form id="f" autocomplete="on" novalidate>
+
+  <section class="card" data-g="1">
+    <div class="ch"><span class="n">1</span><b>Магазин</b></div>
+    <label class="l req" for="shop">Назва магазину</label>
+    <input type="text" id="shop" placeholder="Наприклад, VEO Demo Shop">
+    <label class="l req" for="slug">Назва в кінці посилання</label>
+    <div class="pre" id="slugBox"><span>beacons.ai/</span><input type="text" id="slug" placeholder="veo_me" autocapitalize="off" autocorrect="off" spellcheck="false"></div>
+    <div class="hint" id="slugHint">Латиниця, цифри, крапка або _ (3–30 символів).</div>
+    <label class="l" for="what">Що продаєте <small>коротко</small></label>
+    <input type="text" id="what" placeholder="Наприклад, жіночий одяг, сумки">
+  </section>
+
+  <section class="card" data-g="2">
+    <div class="ch"><span class="n">2</span><b>Реквізити ФОП</b></div>
+    <div class="sub">Сюди покупці переказуватимуть оплату.</div>
+    <label class="l req" for="fop">ПІБ ФОП</label>
+    <input type="text" id="fop" placeholder="Шевченко Тарас Григорович" autocomplete="name">
+    <label class="l req" for="edrpou">ЄДРПОУ / РНОКПП</label>
+    <input type="text" id="edrpou" placeholder="10 цифр" inputmode="numeric" maxlength="10">
+    <label class="l req">Рахунки IBAN <small>можна кілька</small></label>
+    <div class="rep" id="L_acc"></div>
+    <button type="button" class="add" data-add="acc">+ Додати ще рахунок</button>
+  </section>
+
+  <section class="card" data-g="3">
+    <div class="ch"><span class="n">3</span><b>Контакти для покупців</b></div>
+    <label class="l req">Телефони <small>можна кілька</small></label>
+    <div class="rep" id="L_ph"></div>
+    <button type="button" class="add" data-add="ph">+ Додати ще номер</button>
+    <label class="l">Telegram username <small>необов’язково, можна кілька</small></label>
+    <details class="qa"><summary>Що це і як створити?</summary>
+      <p><b>Username</b> — іменне посилання в Telegram, наприклад <b>@veo_shop</b> → <b>t.me/veo_shop</b>. За ним вам можуть написати, не знаючи номера телефону. Таке посилання буває в особистого акаунту, каналу, групи чи бота.</p>
+      <p><b>Для особистого акаунту:</b><br>1. Telegram → <b>Налаштування</b>.<br>2. Натисніть <b>Ім’я користувача</b> (на iPhone — спершу «Редагувати»).<br>3. Придумайте ім’я: латиниця, цифри або _, від 5 символів.<br>4. Натисніть ✓ / «Готово».</p>
+      <p><b>Для каналу чи групи:</b><br>1. Відкрийте канал або групу → натисніть на назву вгорі.<br>2. <b>Редагувати</b> (олівець) → <b>Тип каналу</b> / <b>Тип групи</b>.<br>3. Оберіть <b>Публічний</b> і впишіть посилання t.me/…<br>4. Збережіть.</p>
+      <p>Немає username — просто залиште поле порожнім.</p>
+    </details>
+    <div class="rep" id="L_tg"></div>
+    <button type="button" class="add" data-add="tg">+ Додати ще</button>
+    <label class="l" for="hours">Коли відповідаєте <small>необов’язково</small></label>
+    <input type="text" id="hours" placeholder="Наприклад, Пн–Сб 9:00–20:00">
+  </section>
+
+  <section class="card" data-g="4">
+    <div class="ch"><span class="n">4</span><b>Соцмережі та спільноти</b></div>
+    <div class="sub">Залиште порожнім, якщо немає. Кожне поле можна повторити.</div>
+    <div id="socials"></div>
+  </section>
+
+  <section class="card" data-g="5">
+    <div class="ch"><span class="n">5</span><b>Доставка</b></div>
+    <label class="l req">Як відправляєте? <small>можна кілька</small></label>
+    <div class="chips" data-multi="ship"><button type="button" class="chip m" data-v="Нова пошта">Нова пошта</button><button type="button" class="chip m" data-v="Укрпошта">Укрпошта</button><button type="button" class="chip m" data-v="Meest">Meest</button><button type="button" class="chip m" data-v="Самовивіз">Самовивіз</button></div>
+    <div id="pickBox" hidden><label class="l req" for="pick">Адреса самовивозу</label><input type="text" id="pick" placeholder="Місто, вулиця, будинок"></div>
+    <label class="l req">Відправка протягом</label>
+    <div class="chips" data-one="when"><button type="button" class="chip" data-v="у день замовлення (до 16:00)">У день замовлення (до 16:00)</button><button type="button" class="chip" data-v="1 дня після оформлення замовлення">1 день</button><button type="button" class="chip" data-v="1–3 днів">1–3 дні</button><button type="button" class="chip" data-v="до 7 днів">До 7 днів</button><button type="button" class="chip" data-v="other">Інше</button></div>
+    <div id="whenBox" hidden><label class="l" for="whenD">Скільки днів?</label><div class="suf"><input type="number" id="whenD" inputmode="numeric" min="1" max="60" placeholder="5"><span>днів</span></div></div>
+  </section>
+
+  <section class="card" data-g="6">
+    <div class="ch"><span class="n">6</span><b>Оплата</b></div>
+    <label class="l req">Як можна оплатити? <small>можна кілька</small></label>
+    <div class="chips" data-multi="pay"><button type="button" class="chip m" data-v="full">Повна оплата 100%</button><button type="button" class="chip m" data-v="cod">Накладений платіж</button></div>
+    <div id="codBox" hidden><label class="l" for="prepay">Передплата при накладеному платежі</label><div class="suf"><input type="number" id="prepay" inputmode="numeric" min="0" placeholder="200"><span>грн</span></div><div class="hint">Залиште порожнім, якщо без передплати.</div></div>
+  </section>
+
+  <section class="card" data-g="7">
+    <div class="ch"><span class="n">7</span><b>Обмін і повернення</b></div>
+    <label class="l req">Обмін</label>
+    <div class="chips" data-one="ex"><button type="button" class="chip" data-v="yes">Є</button><button type="button" class="chip" data-v="no">Немає</button></div>
+    <div id="exBox" hidden><label class="l" for="exD">Протягом скількох днів?</label><div class="suf"><input type="number" id="exD" inputmode="numeric" min="1" placeholder="14"><span>днів</span></div></div>
+    <label class="l req">Повернення</label>
+    <div class="chips" data-one="ret"><button type="button" class="chip" data-v="yes">Є</button><button type="button" class="chip" data-v="no">Немає</button></div>
+    <div id="retBox" hidden>
+      <label class="l" for="retD">Протягом скількох днів після отримання?</label><div class="suf"><input type="number" id="retD" inputmode="numeric" min="1" placeholder="14"><span>днів</span></div>
+      <label class="l">Гроші повертаєте протягом</label>
+      <div class="chips" data-one="refund"><button type="button" class="chip" data-v="1–3 днів">1–3 дні</button><button type="button" class="chip" data-v="7 днів">До 7 днів</button><button type="button" class="chip" data-v="14 днів">До 14 днів</button></div>
+    </div>
+    <div id="payBox" hidden>
+      <label class="l">Доставку до магазину (обмін / повернення) оплачує</label>
+      <div class="chips" data-one="payTo"><button type="button" class="chip" data-v="покупець">Покупець</button><button type="button" class="chip" data-v="магазин">Магазин</button></div>
+      <div id="payBackBox" hidden><label class="l">Доставку назад покупцю (після обміну) оплачує</label>
+      <div class="chips" data-one="payBack"><button type="button" class="chip" data-v="покупець">Покупець</button><button type="button" class="chip" data-v="магазин">Магазин</button></div></div>
+    </div>
+  </section>
+
+  <section class="card" data-g="8">
+    <div class="ch"><span class="n">8</span><b>Додатково від себе</b></div>
+    <div class="sub">Що ще варто знати покупцям: наприклад, нюанси доставки чи відправки, розмірна сітка, акції, часті питання.</div>
+    <label class="l" for="extra">Текст <small>необов’язково</small></label>
+    <textarea id="extra" placeholder="Наприклад: відправляємо щодня, крім неділі; при замовленні від 1500 грн доставка безкоштовна…"></textarea>
+  </section>
+
+  <section class="card" data-g="9">
+    <div class="ch"><span class="n">9</span><b>Доступ до сервісу link-in-bio</b></div>
+    <div class="sub">На цю пошту ми зареєструємо ваш міні-сайт.</div>
+    <label class="l req" for="email">Електронна пошта</label>
+    <input type="email" id="email" placeholder="you@gmail.com" autocomplete="email" autocapitalize="off">
+    <label class="l req" for="pass">Новий пароль</label>
+    <div class="pw"><input type="password" id="pass" autocomplete="new-password" placeholder="Наприклад, Mysite@2025"><button type="button" id="gen">Створити</button></div>
+    <div class="rules" id="rules"><span data-r="len">8+ символів</span><span data-r="up">велика літера</span><span data-r="sp">спецсимвол</span><span data-r="lat">лише латиниця</span></div>
+    <label class="ck"><input type="checkbox" id="showPw"> Показати пароль</label>
+    <div class="warn">⛔️ Не використовуйте пароль від інших акаунтів — придумайте новий. Пароль не зберігається на цій сторінці.</div>
+  </section>
+
+  <section class="card">
+    <div class="ch"><b>Що ви надішлете</b></div>
+    <div class="out" id="out"></div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px"><span class="hint">Логотип надішліть окремим повідомленням.</span><button type="button" class="lnk" id="clear">Очистити форму</button></div>
+  </section>
+  </form>
+  <p class="foot">Дякуємо! ✅</p>
+</div>
+
+<div class="bar"><div><button type="button" id="copy">Скопіювати</button><button type="button" id="share">Поділитись</button></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+var $=function(i){return document.getElementById(i)},KEY='veo_client_form_v2';
+var BANKS={'305299':'ПриватБанк','322001':'monobank','300465':'Ощадбанк','334851':'ПУМБ','351005':'Укрсиббанк','380805':'Райффайзен Банк','307770':'А-Банк','300346':'Sense Bank','320478':'Укргазбанк','300528':'ОТП Банк','300614':'Креді Агріколь','339500':'Таскомбанк','322313':'Укрексімбанк'};
+var SOC=[['tiktok','TikTok','https://www.tiktok.com/@…'],['insta','Instagram','https://www.instagram.com/…'],['fb','Facebook','https://www.facebook.com/…'],['yt','YouTube','https://www.youtube.com/@…'],['vbg','Група / спільнота Viber','https://invite.viber.com/…'],['tgc','Канал або група Telegram','https://t.me/…']];
+var FIELDS=['shop','slug','what','fop','edrpou','hours','pick','whenD','prepay','exD','retD','extra','email'];
+function DEF(){var L={acc:[{iban:'',bank:'',auto:true}],ph:[{n:'',m:[]}],tg:['']};SOC.forEach(function(s){L[s[0]]=['']});return{ship:[],pay:[],when:'',ex:'',ret:'',refund:'',payTo:'',payBack:'',L:L}}
+var S=DEF();
+
+function v(id){return ($(id).value||'').trim()}
+function esc(x){return String(x==null?'':x).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function save(){var o={s:S};FIELDS.forEach(function(k){o[k]=$(k).value});try{localStorage.setItem(KEY,JSON.stringify(o))}catch(e){}}
+function load(){try{var o=JSON.parse(localStorage.getItem(KEY)||'null');if(!o)return;FIELDS.forEach(function(k){if(o[k]!=null)$(k).value=o[k]});if(o.s){var d=DEF();for(var k in d)if(o.s[k]!=null)S[k]=o.s[k];for(var l in d.L)if(!Array.isArray(S.L[l])||!S.L[l].length)S.L[l]=d.L[l];}}catch(e){}}
+
+function digits(x){return String(x||'').replace(/\D/g,'')}
+function ibanN(x){return String(x||'').replace(/\s/g,'').toUpperCase()}
+function ibanOk(x){return /^UA\d{27}$/.test(ibanN(x))}
+function slugOk(x){return /^[a-z0-9._]{3,30}$/.test(x)}
+function pwRules(p){return{len:p.length>=8,up:/[A-Z]/.test(p),sp:/[^A-Za-z0-9]/.test(p),lat:p.length>0&&/^[\x21-\x7E]+$/.test(p)}}
+function pwOk(p){var r=pwRules(p);return r.len&&r.up&&r.sp&&r.lat}
+function emailOk(x){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(x)}
+function has(a,x){return a.indexOf(x)>=0}
+function fmtPhone(x){var d=digits(x);if(d.indexOf('380380')===0)d=d.slice(3);if(d.length===13&&d.indexOf('3800')===0)d='380'+d.slice(4);if(d.length===10&&d[0]==='0')d='38'+d;if(d.length===9)d='380'+d;if(d.length===12&&d.indexOf('380')===0)return '+380 '+d.slice(3,5)+' '+d.slice(5,8)+' '+d.slice(8,10)+' '+d.slice(10);var t=String(x||'').trim();return t==='+380'?'':t}
+function filled(a){return a.filter(function(x){return String(x).trim()})}
+
+/* ---------- повторювані списки ---------- */
+function xBtn(l,i){return S.L[l].length>1?'<button type="button" class="x" data-del="'+l+'" data-i="'+i+'" aria-label="Видалити">×</button>':''}
+function renderList(l){
+ var el=$('L_'+l)||$('L_soc_'+l),h='';
+ if(l==='acc')h=S.L.acc.map(function(a,i){return '<div class="ri"><div class="grow box">'+(S.L.acc.length>1?'<div class="bt">Рахунок '+(i+1)+'</div>':'')+xBtn('acc',i)+'<input type="text" data-l="acc" data-i="'+i+'" data-f="iban" value="'+esc(a.iban)+'" placeholder="UA + 27 цифр" autocapitalize="characters" autocorrect="off" spellcheck="false" maxlength="34"><div class="hint" data-ih="'+i+'"></div><input type="text" style="margin-top:8px" data-l="acc" data-i="'+i+'" data-f="bank" value="'+esc(a.bank)+'" placeholder="Банк (визначиться за IBAN)"></div></div>'}).join('');
+ else if(l==='ph')h=S.L.ph.map(function(p,i){return '<div class="ri"><div class="grow box">'+(S.L.ph.length>1?'<div class="bt">Номер '+(i+1)+'</div>'+xBtn('ph',i):'')+'<input type="tel" data-l="ph" data-i="'+i+'" data-f="n" value="'+esc(p.n)+'" placeholder="+380 XX XXX XX XX" autocomplete="tel"><div class="chips" data-pm="'+i+'">'+['Viber','Telegram','WhatsApp'].map(function(m){return '<button type="button" class="chip m'+(has(p.m,m)?' on':'')+'" data-v="'+m+'">'+m+'</button>'}).join('')+'</div><div class="hint">Відмітьте, де цей номер є в месенджерах.</div></div></div>'}).join('');
+ else{var ph=l==='tg'?'@username':(SOC.filter(function(s){return s[0]===l})[0]||[])[2];h=S.L[l].map(function(x,i){return '<div class="ri"><input class="grow" type="'+(l==='tg'?'text':'url')+'" data-l="'+l+'" data-i="'+i+'" value="'+esc(x)+'" placeholder="'+ph+'" autocapitalize="off" autocorrect="off" spellcheck="false"'+(l==='tg'?'':' inputmode="url"')+'>'+xBtn(l,i)+'</div>'}).join('')}
+ el.innerHTML=h;
+}
+function renderAll(){$('socials').innerHTML=SOC.map(function(s){return '<label class="l">'+s[1]+'</label><div class="rep" id="L_soc_'+s[0]+'"></div><button type="button" class="add" data-add="'+s[0]+'">+ Додати ще</button>'}).join('');Object.keys(S.L).forEach(renderList)}
+
+function groups(){
+ var accs=S.L.acc.filter(function(a){return ibanN(a.iban)});
+ return [
+  !!v('shop')&&slugOk(v('slug')),
+  !!v('fop')&&/^(\d{8}|\d{10})$/.test(digits(v('edrpou')))&&accs.length>0&&accs.every(function(a){return ibanOk(a.iban)}),
+  S.L.ph.some(function(p){return digits(p.n).length>=10}),
+  true,
+  S.ship.length>0&&(!has(S.ship,'Самовивіз')||v('pick').length>3)&&!!S.when&&(S.when!=='other'||+v('whenD')>0),
+  S.pay.length>0,
+  !!S.ex&&!!S.ret&&(S.ex!=='yes'&&S.ret!=='yes'||!!S.payTo)&&(S.ex!=='yes'||!!S.payBack),
+  true,
+  emailOk(v('email'))&&pwOk($('pass').value)
+ ];
+}
+
+function sync(){
+ document.querySelectorAll('[data-multi]').forEach(function(box){var k=box.dataset.multi;box.querySelectorAll('.chip').forEach(function(c){c.classList.toggle('on',has(S[k],c.dataset.v))})});
+ document.querySelectorAll('[data-one]').forEach(function(box){var k=box.dataset.one;box.querySelectorAll('.chip').forEach(function(c){c.classList.toggle('on',S[k]===c.dataset.v)})});
+ $('pickBox').hidden=!has(S.ship,'Самовивіз');$('whenBox').hidden=S.when!=='other';$('codBox').hidden=!has(S.pay,'cod');
+ $('exBox').hidden=S.ex!=='yes';$('retBox').hidden=S.ret!=='yes';$('payBox').hidden=!(S.ex==='yes'||S.ret==='yes');$('payBackBox').hidden=S.ex!=='yes';
+ S.L.acc.forEach(function(a,i){var h=document.querySelector('[data-ih="'+i+'"]');if(!h)return;var ib=ibanN(a.iban);
+  if(ibanOk(ib)){var b=BANKS[ib.slice(4,10)];h.textContent=b?'✓ IBAN правильний · '+b:'✓ IBAN правильний';h.className='hint good';if(b&&(a.auto||!a.bank)){a.bank=b;a.auto=true;var bi=document.querySelector('[data-l=acc][data-i="'+i+'"][data-f=bank]');if(bi&&bi!==document.activeElement)bi.value=b}}
+  else{h.textContent=ib.length>2?'UA і ще 27 цифр (зараз '+Math.max(0,ib.length-2)+')':'';h.className='hint'}});
+ var s=v('slug'),sh=$('slugHint');sh.textContent=!s?'Латиниця, цифри, крапка або _ (3–30 символів).':slugOk(s)?'✓ Ваше посилання: beacons.ai/'+s:'Лише латиниця, цифри, крапка або _ (3–30 символів).';sh.className='hint'+(s&&slugOk(s)?' good':'');
+ var r=pwRules($('pass').value);document.querySelectorAll('#rules span').forEach(function(e){e.classList.toggle('on',!!r[e.dataset.r])});
+ var G=groups();document.querySelectorAll('.card[data-g]').forEach(function(c){var g=c.dataset.g,opt=g==='4'||g==='8';var ok=opt?[].some.call(c.querySelectorAll('input,textarea'),function(i){return i.value.trim()}):G[+g-1];c.classList.toggle('ok',!!ok)});
+ var n=[G[0],G[1],G[2],G[4],G[5],G[6],G[8]].filter(Boolean).length,pc=Math.round(n/7*100);
+ $('pgN').textContent=n;$('pgB').style.width=pc+'%';$('pgP').textContent=pc+'%';
+ $('out').textContent=text();
+}
+
+function many(label,arr){arr=filled(arr);if(!arr.length)return [label+':'];if(arr.length===1)return [label+': '+arr[0]];return [label+':'].concat(arr.map(function(x){return '  • '+x}))}
+function text(){
+ var L=[],ship=S.ship.map(function(x){return x==='Самовивіз'&&v('pick')?'самовивіз ('+v('pick')+')':x==='Нова пошта'?'НП':x}).join(', ');
+ var when=S.when==='other'?(v('whenD')?v('whenD')+' днів':''):S.when;
+ L.push('🛍 Магазин: '+v('shop'));
+ L.push('🔗 Посилання: '+(v('slug')?'beacons.ai/'+v('slug'):''));
+ if(v('what'))L.push('Що продаємо: '+v('what'));
+ L.push('');
+ L.push('ФОП: '+v('fop'));L.push('ЄДРПОУ: '+digits(v('edrpou')));
+ var accs=S.L.acc.filter(function(a){return ibanN(a.iban)});
+ if(accs.length<=1){var a=accs[0]||{iban:'',bank:''};L.push('IBAN: '+ibanN(a.iban));L.push('Банк: '+(a.bank||'').trim())}
+ else accs.forEach(function(a,i){L.push('IBAN '+(i+1)+': '+ibanN(a.iban)+((a.bank||'').trim()?' ('+a.bank.trim()+')':''))});
+ L.push('');
+ var phs=S.L.ph.filter(function(p){return digits(p.n).length}).map(function(p){return p.n.trim()+(p.m.length?' ('+p.m.join(', ')+')':'')});
+ L=L.concat(many(phs.length>1?'Телефони':'Телефон',phs));
+ if(v('hours'))L.push('Відповідаємо: '+v('hours'));
+ L.push('');
+ L.push('Посилання на соцмережі:');
+ SOC.slice(0,4).forEach(function(s){L=L.concat(many(s[1],S.L[s[0]]))});
+ L.push('');
+ var vb=S.L.ph.filter(function(p){return has(p.m,'Viber')&&digits(p.n).length}).map(function(p){return p.n.trim()});
+ L=L.concat(many('Номер Viber',vb));L=L.concat(many('Група/спільнота Viber',S.L.vbg));
+ L.push('');
+ L=L.concat(many('Telegram username',S.L.tg));L=L.concat(many('Канал або група Telegram',S.L.tgc));
+ L.push('');
+ L.push('Умови продажу та відправки:');
+ if(ship)L.push('- відправка '+ship);
+ if(when)L.push('- відправка протягом '+when);
+ if(S.ex)L.push(S.ex==='yes'?'- обмін є'+(v('exD')?', протягом '+v('exD')+' днів':''):'- обміну немає');
+ if(S.ret)L.push(S.ret==='yes'?'- повернення є'+(v('retD')?', протягом '+v('retD')+' днів після отримання':'')+(S.refund?'; гроші повертаємо протягом '+S.refund:''):'- повернення немає');
+ if((S.ex==='yes'||S.ret==='yes')&&S.payTo)L.push('- доставку до магазину (обмін/повернення) оплачує '+S.payTo);
+ if(S.ex==='yes'&&S.payBack)L.push('- доставку назад покупцю оплачує '+S.payBack);
+ if(has(S.pay,'full'))L.push('- повна оплата 100%');
+ if(has(S.pay,'cod'))L.push('- є накладений платіж'+(v('prepay')?', передплата '+v('prepay')+' грн':''));
+ L.push('');
+ L.push('Додатково:');L.push(v('extra')||'—');
+ L.push('');
+ L.push('1️⃣ Пошта для link-in-bio: '+v('email'));
+ L.push('2️⃣ Пароль: '+($('pass').value||''));
+ return L.join('\n');
+}
+
+/* ---------- перевірка ---------- */
+function after(el){return el.closest('.pre')||el.closest('.suf')||el.closest('.pw')||el}
+function err(el,m){after(el).classList.add('bad');if(el.tagName==='INPUT')el.classList.add('bad');var n=document.createElement('div');n.className='err';n.textContent=m;after(el).insertAdjacentElement('afterend',n)}
+function errBox(box,m){var n=document.createElement('div');n.className='err';n.textContent=m;box.insertAdjacentElement('afterend',n)}
+function validate(){
+ document.querySelectorAll('.err').forEach(function(e){e.remove()});document.querySelectorAll('.bad').forEach(function(e){e.classList.remove('bad')});
+ var bad=[];function B(card,fn){bad.push(card);fn()}
+ if(!v('shop'))B(1,function(){err($('shop'),'Вкажіть назву магазину')});
+ if(!slugOk(v('slug')))B(1,function(){err($('slug'),'Латиниця, цифри, крапка або _ (3–30 символів)')});
+ if(!v('fop'))B(2,function(){err($('fop'),'Вкажіть ПІБ ФОП')});
+ if(!/^(\d{8}|\d{10})$/.test(digits(v('edrpou'))))B(2,function(){err($('edrpou'),'8 або 10 цифр')});
+ var anyAcc=false;S.L.acc.forEach(function(a,i){var el=document.querySelector('[data-l=acc][data-i="'+i+'"][data-f=iban]');if(!ibanN(a.iban))return;anyAcc=true;if(!ibanOk(a.iban))B(2,function(){err(el,'UA і 27 цифр')})});
+ if(!anyAcc)B(2,function(){err(document.querySelector('[data-l=acc][data-f=iban]'),'Вкажіть хоча б один IBAN')});
+ if(!S.L.ph.some(function(p){return digits(p.n).length>=10}))B(3,function(){err(document.querySelector('[data-l=ph][data-f=n]'),'Вкажіть номер телефону')});
+ if(!S.ship.length)B(5,function(){errBox(document.querySelector('[data-multi=ship]'),'Оберіть хоча б один спосіб')});
+ if(has(S.ship,'Самовивіз')&&v('pick').length<4)B(5,function(){err($('pick'),'Вкажіть адресу самовивозу')});
+ if(!S.when)B(5,function(){errBox(document.querySelector('[data-one=when]'),'Оберіть термін відправки')});
+ if(!S.pay.length)B(6,function(){errBox(document.querySelector('[data-multi=pay]'),'Оберіть спосіб оплати')});
+ if(!S.ex)B(7,function(){errBox(document.querySelector('[data-one=ex]'),'Оберіть «Є» або «Немає»')});
+ if(!S.ret)B(7,function(){errBox(document.querySelector('[data-one=ret]'),'Оберіть «Є» або «Немає»')});
+ if((S.ex==='yes'||S.ret==='yes')&&!S.payTo)B(7,function(){errBox(document.querySelector('[data-one=payTo]'),'Оберіть, хто оплачує')});
+ if(S.ex==='yes'&&!S.payBack)B(7,function(){errBox(document.querySelector('[data-one=payBack]'),'Оберіть, хто оплачує')});
+ if(!emailOk(v('email')))B(9,function(){err($('email'),'Перевірте пошту')});
+ if(!pwOk($('pass').value))B(9,function(){err($('pass'),'Пароль не відповідає вимогам нижче')});
+ document.querySelectorAll('.card[data-g]').forEach(function(c){c.classList.toggle('bad',has(bad,+c.dataset.g))});
+ if(bad.length){document.querySelector('.card.bad').scrollIntoView({behavior:'smooth',block:'start'});toast('Заповніть позначені поля');return false}
+ return true;
+}
+
+var tt;function toast(m){var t=$('toast');t.textContent=m;t.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){t.classList.remove('on')},2400)}
+function copyFb(s){return new Promise(function(res,rej){var a=document.createElement('textarea');a.value=s;a.setAttribute('readonly','');a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();try{document.execCommand('copy')?res():rej()}catch(e){rej(e)}a.remove()})}
+function copyText(s){if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(s).catch(function(){return copyFb(s)});return copyFb(s)}
+function clrErr(t){after(t).classList.remove('bad');t.classList.remove('bad');var w=after(t).nextElementSibling;if(w&&w.classList.contains('err'))w.remove()}
+
+/* ---------- події ---------- */
+document.addEventListener('click',function(e){
+ var ad=e.target.closest('[data-add]');if(ad){var l=ad.dataset.add;S.L[l].push(l==='acc'?{iban:'',bank:'',auto:true}:l==='ph'?{n:'',m:[]}:'');renderList(l);var ins=($('L_'+l)||$('L_soc_'+l)).querySelectorAll('input');var last=l==='acc'?ins[ins.length-2]:ins[ins.length-1];if(last)last.focus();sync();save();return}
+ var dl=e.target.closest('[data-del]');if(dl){var k=dl.dataset.del;S.L[k].splice(+dl.dataset.i,1);renderList(k);sync();save();return}
+ var c=e.target.closest('.chip');if(!c)return;var box=c.parentNode,val=c.dataset.v;
+ if(box.dataset.pm!=null){var p=S.L.ph[+box.dataset.pm],j=p.m.indexOf(val);if(j>=0)p.m.splice(j,1);else p.m.push(val);c.classList.toggle('on',j<0)}
+ else if(box.dataset.multi){var a=S[box.dataset.multi],i=a.indexOf(val);if(i>=0)a.splice(i,1);else a.push(val)}
+ else if(box.dataset.one){var k2=box.dataset.one;S[k2]=S[k2]===val?'':val;
+  if(k2==='ex'&&S.ex==='yes'&&!v('exD'))$('exD').value='14';
+  if(k2==='ret'&&S.ret==='yes'&&!v('retD'))$('retD').value='14';}
+ var n=box.nextElementSibling;if(n&&n.classList.contains('err'))n.remove();
+ sync();save();
+});
+$('f').addEventListener('input',function(e){var t=e.target;
+ if(t.dataset.l){var l=t.dataset.l,i=+t.dataset.i;if(l==='acc'){S.L.acc[i][t.dataset.f]=t.value;if(t.dataset.f==='bank')S.L.acc[i].auto=false}else if(l==='ph')S.L.ph[i].n=t.value;else S.L[l][i]=t.value}
+ if(t.id==='slug'){var x=t.value.toLowerCase().replace(/\s+/g,'_').replace(/[^a-z0-9._]/g,'');if(x!==t.value)t.value=x}
+ if(t.id==='edrpou'){var d=digits(t.value);if(d!==t.value)t.value=d}
+ clrErr(t);sync();save();
+});
+document.addEventListener('focusin',function(e){var t=e.target;if(t.type==='tel'&&!t.value){t.value='+380 ';if(t.dataset.l==='ph')S.L.ph[+t.dataset.i].n=t.value}});
+document.addEventListener('focusout',function(e){var t=e.target;
+ if(t.type==='tel'){t.value=fmtPhone(t.value);if(t.dataset.l==='ph')S.L.ph[+t.dataset.i].n=t.value;sync();save()}
+ if(t.dataset.l==='tg'){var x=t.value.trim();if(x&&!/^(@|http|t\.me)/i.test(x)){t.value='@'+x;S.L.tg[+t.dataset.i]=t.value;sync();save()}}
+});
+document.addEventListener('paste',function(e){var t=e.target;if(t.type!=='tel')return;var x=(e.clipboardData||window.clipboardData).getData('text');if(!x)return;e.preventDefault();t.value=fmtPhone(x);if(t.dataset.l==='ph')S.L.ph[+t.dataset.i].n=t.value;clrErr(t);sync();save()});
+$('showPw').addEventListener('change',function(){$('pass').type=this.checked?'text':'password'});
+$('gen').addEventListener('click',function(){var w=['Sun','Sea','Star','Leaf','Moon','Wave','Rose','Sky'],sp='@#!$%&*';var p=w[Math.floor(Math.random()*w.length)]+w[Math.floor(Math.random()*w.length)].toLowerCase()+sp[Math.floor(Math.random()*sp.length)]+(1000+Math.floor(Math.random()*9000));$('pass').value=p;$('pass').type='text';$('showPw').checked=true;clrErr($('pass'));sync();toast('Пароль створено — збережіть його собі')});
+$('copy').addEventListener('click',function(){if(!validate())return;copyText(text()).then(function(){toast('Скопійовано — вставте в повідомлення')},function(){toast('Не вдалося скопіювати — виділіть текст вручну')})});
+$('share').addEventListener('click',function(){if(!validate())return;var t=text();
+ if(navigator.share){navigator.share({title:'Анкета: '+v('shop'),text:t}).catch(function(e){if(e&&e.name==='AbortError')return;copyText(t).then(function(){toast('Скопійовано — вставте в повідомлення')})})}
+ else copyText(t).then(function(){toast('Поділитись тут недоступно — текст скопійовано')});
+});
+$('clear').addEventListener('click',function(){if(this.dataset.ask!=='1'){this.dataset.ask='1';this.textContent='Точно очистити? Натисніть ще раз';var b=this;setTimeout(function(){b.dataset.ask='';b.textContent='Очистити форму'},3000);return}
+ try{localStorage.removeItem(KEY)}catch(e){}location.reload()});
+
+load();renderAll();sync();
+})();
+</script>
+</body>
+</html>
