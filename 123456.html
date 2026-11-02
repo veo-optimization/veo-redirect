@@ -7,7 +7,7 @@
     <style>
         :root {
             --bg-color: #f4f6f8;
-            --text-color: #333;
+            --text-color: #2c3e50;
             --primary: #3498db;
             --primary-hover: #2980b9;
             --success: #27ae60;
@@ -17,34 +17,36 @@
             --darker-bg: #1a252f;
         }
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
             padding: 20px;
             padding-bottom: 400px; /* Відступ для нижніх блоків */
+            line-height: 1.6;
         }
-        h1 { text-align: center; color: var(--dark-bg); margin-bottom: 20px; }
+        h1 { text-align: center; color: var(--dark-bg); margin-bottom: 25px; font-weight: 600; font-size: 28px;}
         
-        .controls { text-align: center; margin-bottom: 20px; }
+        .controls { text-align: center; margin-bottom: 25px; }
         button {
             background-color: var(--primary);
             color: white;
             border: none;
             padding: 10px 20px;
-            font-size: 15px;
-            border-radius: 5px;
+            font-size: 16px;
+            border-radius: 6px;
             cursor: pointer;
             transition: background-color 0.3s;
             margin: 0 5px;
+            font-weight: 500;
         }
         button:hover { background-color: var(--primary-hover); }
         button.add-btn { background-color: var(--success); }
         button.add-btn:hover { background-color: var(--success-hover); }
         button.del-btn { 
             background-color: var(--danger); 
-            padding: 5px 10px; 
-            font-size: 12px; 
+            padding: 6px 12px; 
+            font-size: 13px; 
         }
         button.del-btn:hover { background-color: #c0392b; }
 
@@ -52,35 +54,47 @@
             width: 100%;
             border-collapse: collapse;
             background-color: #fff;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
             border-radius: 8px;
             overflow: hidden;
             margin-bottom: 20px;
             table-layout: fixed;
         }
         th, td {
-            padding: 12px;
+            padding: 16px 20px; /* Більше повітря */
             text-align: left;
             vertical-align: top;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid #eaeaea;
             outline: none;
             word-wrap: break-word;
+            font-size: 16px; /* Більший шрифт */
         }
         th {
             background-color: var(--dark-bg);
             color: #fff;
             font-weight: 600;
-            font-size: 14px;
+            font-size: 15px;
             position: sticky;
             top: 0;
             z-index: 10;
+            letter-spacing: 0.5px;
         }
         td[contenteditable="true"]:focus {
             background-color: #f0f8ff;
             box-shadow: inset 0 0 0 2px var(--primary);
         }
-        .user-col { width: 45%; background-color: #fafafa; border-right: 2px solid #ecf0f1; font-weight: 500;}
-        .ai-col { width: 50%; color: var(--dark-bg); }
+        .user-col { 
+            width: 45%; 
+            background-color: #fcfcfc; 
+            border-right: 2px solid #f0f0f0; 
+            font-weight: 400;
+            color: #34495e;
+        }
+        .ai-col { 
+            width: 50%; 
+            color: #2c3e50; 
+            font-weight: 400;
+        }
         .action-col { width: 5%; text-align: center; }
 
         /* Стилі для вмісту в клітинках */
@@ -88,11 +102,12 @@
             display: inline-block;
             background-color: var(--danger);
             color: white;
-            padding: 3px 8px;
+            padding: 4px 10px;
             border-radius: 12px;
-            font-size: 11px;
-            font-weight: bold;
-            margin-bottom: 5px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            margin-right: 4px;
             user-select: none;
         }
         .tag.crm { background-color: var(--primary); }
@@ -100,7 +115,20 @@
         .tag.mini { background-color: #9b59b6; }
         .tag.reg { background-color: #f39c12; }
         .tag.ux { background-color: #1abc9c; }
-        .ai-col ul { padding-left: 20px; margin-top: 5px; margin-bottom: 5px; }
+        
+        /* Покращення читабельності списків */
+        .ai-col ul { 
+            padding-left: 22px; 
+            margin-top: 8px; 
+            margin-bottom: 8px; 
+        }
+        .ai-col li {
+            margin-bottom: 6px;
+        }
+        .ai-col strong {
+            font-weight: 600;
+            color: #1a252f;
+        }
 
         /* Нижні блоки */
         .output-container {
@@ -110,7 +138,7 @@
             width: 100%;
             display: flex;
             background-color: var(--dark-bg);
-            box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.2);
             z-index: 100;
         }
         .output-box {
@@ -124,11 +152,12 @@
         .output-box:last-child { border-right: none; }
         .output-box h3 {
             margin: 0 0 10px 0;
-            font-size: 14px;
+            font-size: 15px;
             color: #ecf0f1;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            font-weight: 500;
         }
         textarea {
             width: 100%;
@@ -137,21 +166,22 @@
             color: #2ecc71;
             border: 1px solid #34495e;
             border-radius: 4px;
-            padding: 10px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 12px;
+            padding: 12px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px; /* Читабельний код */
+            line-height: 1.5;
             resize: none;
             outline: none;
         }
-        .btn-group { display: flex; gap: 5px; }
+        .btn-group { display: flex; gap: 8px; }
         .btn-small {
-            padding: 3px 10px;
-            font-size: 12px;
-            border-radius: 3px;
+            padding: 5px 12px;
+            font-size: 13px;
+            border-radius: 4px;
         }
         .btn-copy { background-color: #f1c40f; color: #333; }
         .btn-copy:hover { background-color: #f39c12; }
-        .btn-download { background-color: #2ecc71; }
+        .btn-download { background-color: #2ecc71; color: #fff;}
         .btn-download:hover { background-color: #27ae60; }
     </style>
 </head>
