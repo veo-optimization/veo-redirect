@@ -22,7 +22,7 @@
             color: var(--text-color);
             margin: 0;
             padding: 20px;
-            padding-bottom: 450px; /* Відступ для нижніх блоків */
+            padding-bottom: 400px; /* Відступ для нижніх блоків */
         }
         h1 { text-align: center; color: var(--dark-bg); margin-bottom: 20px; }
         
@@ -98,6 +98,8 @@
         .tag.crm { background-color: var(--primary); }
         .tag.site { background-color: var(--success); }
         .tag.mini { background-color: #9b59b6; }
+        .tag.reg { background-color: #f39c12; }
+        .tag.ux { background-color: #1abc9c; }
         .ai-col ul { padding-left: 20px; margin-top: 5px; margin-bottom: 5px; }
 
         /* Нижні блоки */
@@ -130,7 +132,7 @@
         }
         textarea {
             width: 100%;
-            height: 150px;
+            height: 120px;
             background-color: var(--darker-bg);
             color: #2ecc71;
             border: 1px solid #34495e;
@@ -243,75 +245,75 @@
                 <td class="action-col"><button class="del-btn" onclick="deleteRow(this)">Видалити</button></td>
             </tr>
 
-            <!-- Нові дані з файлу -->
+            <!-- Нові заповнені дані -->
             <tr>
                 <td class="user-col" contenteditable="true">при налаштуванні дерева категорій (наприклад, на сторінці Каталог-Категорії" та інші місця - у вспливаючому вікні зʼявляється це дерево категорій. Для прогортування дерева використовується свайп, який закриває вікно - це незрунчо. Ігнорувати свайп на закриття вікна (закривати лице кнопкою), якщо на вікні містяться елементи по типу випадаючих довгих списків або дерев категорій тощо) - там де треба свайп, закривати кнокою. Там де нема необхідності скролити всередині вікна - можна закривати свайпом. Перевірити всі вікна в системі (для моб версії), привести це під це правило і всі подальші вікна створювати із цим правилом.&nbsp;</td>
-                <td class="ai-col" contenteditable="true">Введіть відповідь АІ тут...</td>
+                <td class="ai-col" contenteditable="true"><span class="tag crm">СРМ</span> <span class="tag ux">UX/UI</span> <strong>Правило закриття модальних вікон (свайп vs кнопка)</strong><br>Якщо всередині вікна є елементи, які вимагають скролу (дерева категорій, довгі списки), свайп на закриття має бути заблокований. Закриття лише кнопкою. Якщо скролу немає — свайп дозволено.<br><em>Перевірити всі наявні вікна в системі (мобільна версія) та застосовувати правило до всіх нових.</em></td>
                 <td class="action-col"><button class="del-btn" onclick="deleteRow(this)">Видалити</button></td>
             </tr>
             <tr>
                 <td class="user-col" contenteditable="true">там де дерево категорій - маленькі трикутники ліворуч (які вказують на розгортання) - незрозумілі деяким користувачам - вони їх не бачать і не розуміють, шо цей пунк можна розгорнути. Зробити трикутринки більшими на 80%</td>
-                <td class="ai-col" contenteditable="true">Введіть відповідь АІ тут...</td>
+                <td class="ai-col" contenteditable="true"><span class="tag crm">СРМ</span> <span class="tag ux">UX/UI</span> <strong>Дерево категорій: розмір трикутників</strong><br>Збільшити розмір трикутників-вказівників (які розгортають вузли дерева) на <strong>80%</strong>, щоб зробити їх помітнішими для користувачів та підкреслити можливість розгортання.</td>
                 <td class="action-col"><button class="del-btn" onclick="deleteRow(this)">Видалити</button></td>
             </tr>
             <tr>
                 <td class="user-col" contenteditable="true">перевірити - при реєстрації і підтвердженні користувача через адмінку Django не&nbsp; зникає попередження про неоюбхідність верифікувати пошту. Якщо є баг - виправити.</td>
-                <td class="ai-col" contenteditable="true">Введіть відповідь АІ тут...</td>
+                <td class="ai-col" contenteditable="true"><span class="tag crm">СРМ (Адмінка)</span> <span class="tag site">Багфікс</span> <strong>Django Admin: Попередження про верифікацію пошти</strong><br>Перевірити сценарій: після підтвердження користувача через адмінку Django, попередження про необхідність верифікації email не зникає.<br>Якщо підтверджено — виправити логіку відображення (попередження має зникати після верифікації).</td>
                 <td class="action-col"><button class="del-btn" onclick="deleteRow(this)">Видалити</button></td>
             </tr>
             <tr>
                 <td class="user-col" contenteditable="true">сторінка перегляду і редагування товару в СРМ (Каталог - ТОвари/Послуги - тиць на товар - вспливаюче вікно знизу - тиць на фото (перегляд) - має бути можливість не тільки кнопками перемикатись, а і свайпом ліворуч праворуч</td>
-                <td class="ai-col" contenteditable="true">Введіть відповідь АІ тут...</td>
+                <td class="ai-col" contenteditable="true"><span class="tag crm">СРМ</span> <span class="tag ux">UX/UI</span> <strong>Перегляд фото товару: свайп</strong><br>На екрані перегляду фото товару (Каталог → Товари/Послуги → картка товару → фото) додати можливість перемикання зображень свайпом ліворуч/праворуч (не тільки кнопками).</td>
                 <td class="action-col"><button class="del-btn" onclick="deleteRow(this)">Видалити</button></td>
             </tr>
             <tr>
                 <td class="user-col" contenteditable="true">після натискання на кнопку "Збергти і створити" придумати анімацію, яка буде нову форму додавання наступного товару показувати наче заміщуючи (старе йде ліворуч, нове зʼявляється праворуч - анімація повинна бути сучасна, але легко для сторінки. Швидко, але щоб зрозуміло, можливо із затемненнями на вхід і вихід)<br><br><p data-path-to-node="0" class="first-token"><span class="">Такий тип анімації переходів називається </span><b data-path-to-node="0" data-index-in-node="41" class="">Slide</b> (Слайд) або <b data-path-to-node="0" data-index-in-node="59">Push</b> (Виткання / Зсув).</p><p data-path-to-node="1">Залежно від термінології у дизайн-системах (Figma, iOS, Android, CSS):</p><ul data-path-to-node="2"><li><p data-path-to-node="2,0,0"><b data-path-to-node="2,0,0" data-index-in-node="0">Slide Left / Slide In Right</b> — найпопулярніша назва в UI/UX дизайні та прототипуванні (наприклад, у Figma це варіант анімації <i data-path-to-node="2,0,0" data-index-in-node="125">Smart Animate</i> або <i data-path-to-node="2,0,0" data-index-in-node="143">Slide in/out</i>).</p></li><li><p data-path-to-node="2,1,0"><b data-path-to-node="2,1,0" data-index-in-node="0">Push</b> — класичний термін у мобільній розробці (наприклад, стандартний перехід між екранами в <b data-path-to-node="2,1,0" data-index-in-node="92">iOS Navigation Controller</b>, коли новий екран виштовхує поточний ліворуч).</p></li><li><p data-path-to-node="2,2,0"><b data-path-to-node="2,2,0" data-index-in-node="0">Carousel Effect / Carousel Transition</b> — якщо мова йде про слайдери товарів чи банери.</p></li><li><p data-path-to-node="2,3,0"><b data-path-to-node="2,3,0" data-index-in-node="0">Horizontal Page Transition</b> — у веб-розробці та фреймворках для анімації сторінок.</p></li></ul><p data-path-to-node="3">Якщо ви шукаєте назву для ТЗ розробникові або для налаштування у Figma, використовуйте <b data-path-to-node="3" data-index-in-node="87">«Slide Left»</b> або <b data-path-to-node="3" data-index-in-node="104">«Push»</b>.</p></td>
-                <td class="ai-col" contenteditable="true">Введіть відповідь АІ тут...</td>
+                <td class="ai-col" contenteditable="true"><span class="tag crm">СРМ</span> <span class="tag ux">UX/UI</span> <strong>Анімація переходу після «Зберегти і створити»</strong><br>Після натискання кнопки додати анімацію переходу до нової форми (наступний товар):<br>Тип: <strong>Slide Left</strong> (або Push). Стара форма йде ліворуч, нова з'являється праворуч.<br>Стиль: сучасний, швидкий, з ефектом затемнення (fade) на вході/виході. Легкий для продуктивності сторінки.</td>
                 <td class="action-col"><button class="del-btn" onclick="deleteRow(this)">Видалити</button></td>
             </tr>
             <tr>
                 <td class="user-col" contenteditable="true">налаштування форми додавання товару - створення гарячих кннопок для опису товару - прибрати обмеження 50 символів для значення кнопки - дозволити 300 символів.</td>
-                <td class="ai-col" contenteditable="true">Введіть відповідь АІ тут...</td>
+                <td class="ai-col" contenteditable="true"><span class="tag crm">СРМ</span> <span class="tag crm">Валідація</span> <strong>Гарячі кнопки в описі товару: ліміт символів</strong><br>У формі додавання/редагування товару, у блоці створення гарячих кнопок для опису:<br>Збільшити обмеження довжини значення кнопки з 50 до <strong>300 символів</strong>.</td>
                 <td class="action-col"><button class="del-btn" onclick="deleteRow(this)">Видалити</button></td>
             </tr>
             <tr>
                 <td class="user-col" contenteditable="true">умови магазину - прийняти і зберегти дуже високо відображаються у спливаючому вікні, показувати вікно на висоту вмісту</td>
-                <td class="ai-col" contenteditable="true">Введіть відповідь АІ тут...</td>
+                <td class="ai-col" contenteditable="true"><span class="tag crm">СРМ</span> <span class="tag ux">UX/UI</span> <strong>Вікно «Умови магазину»: висота</strong><br>Наразі елемент «Прийняти і зберегти» відображається занадто високо у спливаючому вікні.<br>Необхідно: змінити відображення вікна так, щоб його висота відповідала висоті вмісту (без зайвого пустого простору зверху/знизу).</td>
                 <td class="action-col"><button class="del-btn" onclick="deleteRow(this)">Видалити</button></td>
             </tr>
             <tr>
                 <td class="user-col" contenteditable="true">натискаючи на "Прийняти і застосувати" в умовах магазину, пункт має "схлопуватись"</td>
-                <td class="ai-col" contenteditable="true">Введіть відповідь АІ тут...</td>
+                <td class="ai-col" contenteditable="true"><span class="tag crm">СРМ</span> <span class="tag ux">UX/UI</span> <strong>Умови магазину: поведінка акордеону</strong><br>Після натискання кнопки «Прийняти і застосувати» відповідний пункт (акордеон) має автоматично «схлопуватись» (закриватися).</td>
                 <td class="action-col"><button class="del-btn" onclick="deleteRow(this)">Видалити</button></td>
             </tr>
             <tr>
                 <td class="user-col" contenteditable="true"><p class="p1" style="margin: 0px; font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 13px; line-height: normal; font-family: &quot;Helvetica Neue&quot;; color: rgb(0, 0, 0);">Міні-сайт: оформлення замовлення скрін-айбан:</p><p class="p1" style="margin: 0px; font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 13px; line-height: normal; font-family: &quot;Helvetica Neue&quot;; color: rgb(0, 0, 0);">- перенести поле введення суми вниз під скрін гами</p><p class="p1" style="margin: 0px; font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 13px; line-height: normal; font-family: &quot;Helvetica Neue&quot;; color: rgb(0, 0, 0);">- ображаючи відділення - воно має чітко бути видним<span class="Apple-converted-space">&nbsp;</span></p><p class="p1" style="margin: 0px; font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 13px; line-height: normal; font-family: &quot;Helvetica Neue&quot;; color: rgb(0, 0, 0);">- написати магазину (кнопка соцмережі)&nbsp; після оформлення замовлення на сторінці сповіщення про успішне замовлення - не дзвінок, а саме написати (і соцмережу іконку)</p></td>
-                <td class="ai-col" contenteditable="true">Введіть відповідь АІ тут...</td>
+                <td class="ai-col" contenteditable="true"><span class="tag mini">Міні-сайт</span> <strong>Оформлення замовлення (Скрін-IBAN) — 3 правки</strong><br>1. <strong>Поле суми:</strong> перенести вниз під скріншоти.<br>2. <strong>Вибір відділення:</strong> має бути чітко видним.<br>3. <strong>Сповіщення про успішне замовлення:</strong> додати кнопку «Написати магазину» (з іконкою соцмережі) — саме написати, а не зателефонувати.</td>
                 <td class="action-col"><button class="del-btn" onclick="deleteRow(this)">Видалити</button></td>
             </tr>
             <tr>
                 <td class="user-col" contenteditable="true"><p class="p1" style="margin: 0px; font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 13px; line-height: normal; font-family: &quot;Helvetica Neue&quot;; color: rgb(0, 0, 0);">Етап Реєстрація - роль Магазин - прибрати поле для введення пошуку категорії (залишити лише ті кнопки категорій, які є, без можливості шукати по пошуку - це зайве і плутає)</p></td>
-                <td class="ai-col" contenteditable="true">Введіть відповідь АІ тут...</td>
+                <td class="ai-col" contenteditable="true"><span class="tag reg">Реєстрація</span> <span class="tag ux">UX/UI</span> <strong>Реєстрація Магазину: пошук категорій</strong><br>Прибрати поле для введення пошуку категорії. Залишити лише кнопки/список наявних категорій без можливості пошуку (щоб не плутати користувача).</td>
                 <td class="action-col"><button class="del-btn" onclick="deleteRow(this)">Видалити</button></td>
             </tr>
             <tr>
                 <td class="user-col" contenteditable="true"><p class="p1" style="margin: 0px; font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 13px; line-height: normal; font-family: &quot;Helvetica Neue&quot;; color: rgb(0, 0, 0);">Етап реєстрації - Додати окрім нової пошти ще поштові служби</p></td>
-                <td class="ai-col" contenteditable="true">Введіть відповідь АІ тут...</td>
+                <td class="ai-col" contenteditable="true"><span class="tag reg">Реєстрація</span> <strong>Додавання перевізників</strong><br>Додати до вибору на етапі реєстрації (окрім Нової пошти) інші поштові служби (Укрпошта, Делівері, Міст Експрес, Кур'єрська доставка).</td>
                 <td class="action-col"><button class="del-btn" onclick="deleteRow(this)">Видалити</button></td>
             </tr>
             <tr>
                 <td class="user-col" contenteditable="true"><p class="p1" style="margin: 0px; font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 13px; line-height: normal; font-family: &quot;Helvetica Neue&quot;; color: rgb(0, 0, 0);">Налаштування сторінки Внфо магазину (зДашборду) - натискаючи на «наступний крок» і ввівши дані - зберігаємо - знову показує «опис магазину» треба подбати про те, щоб в підказках на дашборді завжди показувало актуальні кнопки, які треба виконати, не дублювати те, що вже пророблено (це плутає користувача)</p></td>
-                <td class="ai-col" contenteditable="true">Введіть відповідь АІ тут...</td>
+                <td class="ai-col" contenteditable="true"><span class="tag crm">СРМ</span> <span class="tag ux">UX/UI</span> <strong>Дашборд: актуалізація підказок</strong><br>Після збереження даних на кроці «Опис магазину» (через «Наступний крок»), дашборд продовжує показувати вже виконані кроки.<br>Необхідно: оновлювати список підказок на дашборді, щоб показувалися лише актуальні (невиконані) кроки. Уникати дублювання.</td>
                 <td class="action-col"><button class="del-btn" onclick="deleteRow(this)">Видалити</button></td>
             </tr>
             <tr>
                 <td class="user-col" contenteditable="true"><p class="p1" style="margin: 0px; font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 13px; line-height: normal; font-family: &quot;Helvetica Neue&quot;; color: rgb(0, 0, 0);">Умови магазину - користувач не розуміє, що треба розгортати акордеон - опрацювати, реоргагнізувати стиль моб відображення під зрозуміліший (використати інший модуль чи інструментарій, наявний в системі на схохих кроках)</p></td>
-                <td class="ai-col" contenteditable="true">Введіть відповідь АІ тут...</td>
+                <td class="ai-col" contenteditable="true"><span class="tag crm">СРМ</span> <span class="tag ux">UX/UI</span> <strong>Умови магазину: візуалізація акордеону</strong><br>Користувачі не розуміють, що акордеон треба розгортати.<br>Необхідно: реорганізувати стиль відображення для мобільної версії (зробити зрозумілішим). Використати наявні в системі модулі/інструментарій, які вже застосовуються на схожих кроках.</td>
                 <td class="action-col"><button class="del-btn" onclick="deleteRow(this)">Видалити</button></td>
             </tr>
             <tr>
                 <td class="user-col" contenteditable="true"><p class="p1" style="margin: 0px; font-style: normal; font-variant: normal; font-size-adjust: none; font-language-override: normal; font-kerning: auto; font-optical-sizing: auto; font-feature-settings: normal; font-variation-settings: normal; font-stretch: normal; font-size: 13px; line-height: normal; font-family: &quot;Helvetica Neue&quot;; color: rgb(0, 0, 0);">Непомітно, дуже незрозуміло умови магазину- хоче вийти і "не збережені сторінки" видає. Тобто користувачу ця сторінка складна - спростити і зробити логічною по правилам UX</p></td>
-                <td class="ai-col" contenteditable="true">Введіть відповідь АІ тут...</td>
+                <td class="ai-col" contenteditable="true"><span class="tag crm">СРМ</span> <span class="tag ux">UX/UI</span> <strong>Умови магазину: загальне спрощення UX</strong><br>Сторінка умов магазину складна для сприйняття. Виникає плутанина при спробі вийти («не збережені сторінки»).<br>Необхідно: спростити сторінку, зробити її логічною та зрозумілою згідно з правилами UX.</td>
                 <td class="action-col"><button class="del-btn" onclick="deleteRow(this)">Видалити</button></td>
             </tr>
         </tbody>
